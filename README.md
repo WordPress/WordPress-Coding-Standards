@@ -20,8 +20,6 @@ Then run the PHP code sniffer commandline tool on a given file, for example `wp-
 
     phpcs --standard=Wordpress -s wp-cron.php
 
-(Check your PATH if it includes new binaries added into the pear directories. I had to add `:/usr/local/php/bin` before I could call `phpcs` on the command line).
-
 You can use this to sniff individual files, or use different flags to recursively scan all the directories in a project. This command will show you each file it's scanning, and how many errors it's finding:
 
     phpcs -p -s -v --standard=Wordpress .  
@@ -49,6 +47,15 @@ Output will like this:
 ### Caveats
 
 Right now, this standard is so pedantic it's almost useless, but over the coming weeks, I'm hoping to work out how to make it more reasonable, so can serve a useful purpose on future coding projects.
+
+
+### Troubleshooting
+
+
+Check your PATH if it includes new binaries added into the pear directories. I had to add `:/usr/local/php/bin` before I could call `phpcs` on the command line.
+
+Remember that you can see where pear is looking for stuff, and putting things, by calling `pear config-show`. This is how I found out where the Codesniffer binary was added, and where the pear library is by default.
+
 
 [pear.php.net]: http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php
 [Urban Giraffe]: http://urbangiraffe.com/articles/wordpress-codesniffer-standard/
