@@ -12,9 +12,9 @@ Once you've installed PEAR, install Codesniffer:
 
 Then install Wordpress standards
 
-    wget https://github.com/mrchrisadams/Wordpress-Coding-Standards/tarball/master
+git clone git@github.com:mrchrisadams/Wordpress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/Wordpress    
 
-Untar the content and put it into `$pear_prefix/PHP/CodeSniffer/Standards/WordPress` as an example, I put mine to `/usr/local/php/share/pear/PHP/CodeSniffer/Standards/WordPress`. We'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command.
+Normally when working with PEAR, we'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command, so we're falling back to git instead.
 
 Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`. 
 
