@@ -12,12 +12,15 @@ Once you've installed PEAR, install Codesniffer:
 
 Then install Wordpress standards
 
-    pear install pear install http://github.com/mrchrisadams/PATH_TO_TARFILE.tar.gz
+    wget https://github.com/mrchrisadams/Wordpress-Coding-Standards/tarball/master
 
-Then run the PHP code sniffer commandline tool on a given file, for
-example `wp-cron.php`
+Untar the content and put it into `$pear_prefix/PHP/CodeSniffer/Standards/WordPress` as an example, I put mine to `/usr/local/php/share/pear/PHP/CodeSniffer/Standards/WordPress`. We'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command.
+
+Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`. 
 
     phpcs --standard=Wordpress -s wp-cron.php
+
+(Check your PATH if it includes new binaries added into the pear directories. I had to add `:/usr/local/php/bin` before I could call `phpcs` on the command line).
 
 You can use this to sniff individual files, or use different flags to recursively scan all the directories in a project. This command will show you each file it's scanning, and how many errors it's finding:
 
@@ -45,7 +48,7 @@ Output will like this:
 
 ### Caveats
 
-Right now, this standard is so pedantic it's almost useless. Over the coming weeks, I'm hoping to work out how to make it more reasonable, so can serve a useful purpose on future coding projects.
+Right now, this standard is so pedantic it's almost useless, but over the coming weeks, I'm hoping to work out how to make it more reasonable, so can serve a useful purpose on future coding projects.
 
 [pear.php.net]: http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php
 [Urban Giraffe]: http://urbangiraffe.com/articles/wordpress-codesniffer-standard/
