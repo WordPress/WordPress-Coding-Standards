@@ -44,10 +44,20 @@ Output will like this:
 
     ... and so on...
 
-### Caveats
+### Using the Wordpress standard on projects
 
-Right now, this standard is so pedantic it's almost useless, but over the coming weeks, I'm hoping to work out how to make it more reasonable, so can serve a useful purpose on future coding projects.
+Lots of Wordpress's own code doesn't conform to these standards, so running this on your entire codebase will generate lots, and lots of errors. 
 
+Instead, try installing the Wordpress standard, then invoking it from a project specific codesniffer ruleset instead, like in the supplied example file.
+
+Remove the `.example` suffix from project.ruleset.xml and run it in your
+project root, pointing at a given file:
+
+    mv project.ruleset.xml.example project.ruleset.xml
+    phpcs -s -v -p --standard=./project.ruleset.xml a-sample-file.php
+
+I've used a tiny subset of the options available to codesniffer in this
+example check the documentation site to see a [fully annotated example to build upon][]
 
 ### Troubleshooting
 
@@ -59,3 +69,4 @@ Remember that you can see where pear is looking for stuff, and putting things, b
 
 [pear.php.net]: http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php
 [Urban Giraffe]: http://urbangiraffe.com/articles/wordpress-codesniffer-standard/
+[fully annotated example to build upon]: http://pear.php.net/manual/en/package.php.php-codesniffer.annotated-ruleset.php
