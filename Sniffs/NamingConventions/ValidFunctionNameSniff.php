@@ -110,11 +110,11 @@ class Wordpress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
         }
 
 		if (strtolower($testMethodName) != $testMethodName) {
-			$suggested = preg_replace('/([A-Z])/', '_$1', $functionName);
+			$suggested = preg_replace('/([A-Z])/', '_$1', $methodName);
 			$suggested = strtolower ($suggested);
 			$suggested = str_replace ('__', '_', $suggested);
 			
-            $error = "Function name \"$functionName\" is in camel caps format, try '".$suggested."'";
+            $error = "Function name \"$methodName\" is in camel caps format, try '".$suggested."'";
             $phpcsFile->addError($error, $stackPtr);
         }
     }//end processTokenWithinScope()
