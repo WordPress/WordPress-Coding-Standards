@@ -56,8 +56,7 @@ project root, pointing at a given file:
     mv project.ruleset.xml.example project.ruleset.xml
     phpcs -s -v -p --standard=./project.ruleset.xml a-sample-file.php
 
-I've used a tiny subset of the options available to codesniffer in this
-example check the documentation site to see a [fully annotated example to build upon][]
+I've used a tiny subset of the options available to codesniffer in this example, and there's much more you can do here in a `ruleset.xml` file. Check the documentation site to see a [fully annotated example to build upon][] (which is where I started initially).
 
 ### Troubleshooting
 
