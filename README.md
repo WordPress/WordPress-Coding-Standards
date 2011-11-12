@@ -12,7 +12,7 @@ Once you've installed PEAR, install Codesniffer:
 
 Then install Wordpress standards
 
-    git clone git@github.com:mrchrisadams/Wordpress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/Wordpress    
+    git clone git://github.com/mrchrisadams/Wordpress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/Wordpress
 
 Normally when working with PEAR, we'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command, so we're falling back to git instead.
 
