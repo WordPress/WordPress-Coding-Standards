@@ -1,6 +1,6 @@
-### Wordpress Coding Standards for Codesniffer 1.3.0
+### WordPress Coding Standards for Codesniffer 1.3.0
 
-This is an version of the Coding Standards available at [Urban Giraffe][], which were missing a `ruleset.xml` file, that stopped them being detected when I downloaded them and tried passing some Wordpress core code through them. 
+This is an version of the Coding Standards available at [Urban Giraffe][], which were missing a `ruleset.xml` file, that stopped them being detected when I downloaded them and tried passing some WordPress core code through them. 
 
 I know very little about Codesniffer beyond what I picked up in the last hour or two of reading the docs but I'm aiming to find a happy medium between letting developers stay productive, but stopping really shocking code being committed on projects, and me stumbling through this CodeSniffer tutorial here on [pear.php.net][]
 
@@ -10,23 +10,23 @@ Once you've installed PEAR, install Codesniffer:
 
     pear install --alldeps PHP_CodeSniffer
 
-Then install Wordpress standards
+Then install WordPress standards
 
-    git clone git://github.com/mrchrisadams/Wordpress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/Wordpress
+    git clone git://github.com/mrchrisadams/Wordpress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/WordPress
 
 Normally when working with PEAR, we'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command, so we're falling back to git instead.
 
 Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`. 
 
-    phpcs --standard=Wordpress -s wp-cron.php
+    phpcs --standard=WordPress -s wp-cron.php
 
 You can use this to sniff individual files, or use different flags to recursively scan all the directories in a project. This command will show you each file it's scanning, and how many errors it's finding:
 
-    phpcs -p -s -v --standard=Wordpress .  
+    phpcs -p -s -v --standard=WordPress .  
 
 Output will like this:
 
-    Registering sniffs in Wordpress standard... DONE (11 sniffs registered)
+    Registering sniffs in WordPress standard... DONE (11 sniffs registered)
     Creating file list... DONE (705 files in queue)
     Processing index.php [47 tokens in 31 lines]... DONE in < 1 second (2 errors, 0 warnings)
     Processing wp-activate.php [750 tokens in 102 lines]... DONE in < 1 second (47 errors, 2 warnings)
@@ -44,11 +44,11 @@ Output will like this:
 
     ... and so on...
 
-### Using the Wordpress standard on projects
+### Using the WordPress standard on projects
 
-Lots of Wordpress's own code doesn't conform to these standards, so running this on your entire codebase will generate lots, and lots of errors. 
+Lots of WordPress's own code doesn't conform to these standards, so running this on your entire codebase will generate lots, and lots of errors. 
 
-Instead, try installing the Wordpress standard, then invoking it from a project specific codesniffer ruleset instead, like in the supplied example file.
+Instead, try installing the WordPress standard, then invoking it from a project specific codesniffer ruleset instead, like in the supplied example file.
 
 Remove the `.example` suffix from project.ruleset.xml and run it in your
 project root, pointing at a given file:

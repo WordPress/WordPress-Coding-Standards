@@ -16,7 +16,7 @@
  * @package   PHP_CodeSniffer
  * @author    John Godley <john@urbangiraffe.com>
  */
-class Wordpress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff
+class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff
 {
     private $_magicMethods = array(
                               'construct',

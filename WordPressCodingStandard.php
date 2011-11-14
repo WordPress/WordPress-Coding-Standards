@@ -14,7 +14,7 @@ if (class_exists( 'PHP_CodeSniffer_Standards_CodingStandard', true ) === false) 
 }
 
 /**
- * Wordpress Coding Standard
+ * WordPress Coding Standard
  *
  * Return a selection of default sniffs, followed by everything in the WordPress directory
  *
@@ -69,7 +69,7 @@ class PHP_CodeSniffer_Standards_WordPress_WordPressCodingStandard extends PHP_Co
 
                 'PEAR/Sniffs/Classes/ClassDeclarationSniff.php',
 
-                'Wordpress/Sniffs'
+                'WordPress/Sniffs'
                 );
     }
 }

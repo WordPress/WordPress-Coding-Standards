@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Wordpress">
+<ruleset name="WordPress">
  <description>A custom coding standard.</description>
 </ruleset>
 
