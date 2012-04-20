@@ -33,45 +33,43 @@ class PHP_CodeSniffer_Standards_WordPress_WordPressCodingStandard extends PHP_Co
             'Squiz/Sniffs/WhiteSpace/LanguageConstructSpacingSniff.php',
             'Squiz/Sniffs/WhiteSpace/FunctionSpacingSniff.php',
             'Squiz/Sniffs/WhiteSpace/FunctionClosingBraceSpaceSniff.php',
-			'Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php',
-			'Squiz/Sniffs/WhiteSpace/MemberVarSpacingSniff.php'
+            'Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php',
+            'Squiz/Sniffs/WhiteSpace/MemberVarSpacingSniff.php',
         );
     }
 
     public function getIncludedSniffs()
     {
         return array(
-//                'Generic/Sniffs/Classes/DuplicateClassNameSniff.php',
-                'Generic/Sniffs/Functions/OpeningFunctionBraceKernighanRitchieSniff.php',
-                'Generic/Sniffs/PHP/DisallowShortOpenTagSniff.php',
-                'Generic/Sniffs/PHP/ForbiddenFunctionsSniff.php',
-                'Generic/Sniffs/PHP/LowerCaseConstantSniff.php',
-                'Generic/Sniffs/CodeAnalysis',
-                'Generic/Sniffs/Metrics',
-//                'Generic/Sniffs/Strings',
-                'Generic/Sniffs/Formatting/NoSpaceAfterCastSniff.php',
-                'Generic/Sniffs/NamingConventions/UpperCaseConstantNameSniff.php',
+            //'Generic/Sniffs/Classes/DuplicateClassNameSniff.php',
+            'Generic/Sniffs/Functions/OpeningFunctionBraceKernighanRitchieSniff.php',
+            'Generic/Sniffs/PHP/DisallowShortOpenTagSniff.php',
+            'Generic/Sniffs/PHP/ForbiddenFunctionsSniff.php',
+            'Generic/Sniffs/PHP/LowerCaseConstantSniff.php',
+            'Generic/Sniffs/CodeAnalysis',
+            'Generic/Sniffs/Metrics',
+            //'Generic/Sniffs/Strings',
+            'Generic/Sniffs/Formatting/NoSpaceAfterCastSniff.php',
+            'Generic/Sniffs/NamingConventions/UpperCaseConstantNameSniff.php',
 
-                'PEAR/Sniffs/Files/IncludingFileSniff.php',
-                'PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php',
-//                'PEAR/Sniffs/Formatting',
+            'PEAR/Sniffs/Files/IncludingFileSniff.php',
+            'PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php',
+            //'PEAR/Sniffs/Formatting',
 
-                'Squiz/Sniffs/Strings/EchoedStringsSniff.php',
-                'Squiz/Sniffs/WhiteSpace',
-                'Squiz/Sniffs/PHP/DisallowObEndFlushSniff.php',
-                'Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php',
-                'Squiz/Sniffs/PHP/EvalSniff.php',
-//                'Squiz/Sniffs/PHP/DiscouragedFunctionsSniff.php',
-                'Squiz/Sniffs/PHP/ForbiddenFunctionsSniff.php',
-                'Squiz/Sniffs/Operators/ValidLogicalOperatorsSniff.php',
-                'Squiz/Sniffs/Functions/LowercaseFunctionKeywordsSniff.php',
-                'Squiz/Sniffs/Functions/FunctionDuplicateArgumentSniff.php',
+            'Squiz/Sniffs/Strings/EchoedStringsSniff.php',
+            'Squiz/Sniffs/WhiteSpace',
+            'Squiz/Sniffs/PHP/DisallowObEndFlushSniff.php',
+            'Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php',
+            'Squiz/Sniffs/PHP/EvalSniff.php',
+            //'Squiz/Sniffs/PHP/DiscouragedFunctionsSniff.php',
+            'Squiz/Sniffs/PHP/ForbiddenFunctionsSniff.php',
+            'Squiz/Sniffs/Operators/ValidLogicalOperatorsSniff.php',
+            'Squiz/Sniffs/Functions/LowercaseFunctionKeywordsSniff.php',
+            'Squiz/Sniffs/Functions/FunctionDuplicateArgumentSniff.php',
 
-                'PEAR/Sniffs/Classes/ClassDeclarationSniff.php',
+            'PEAR/Sniffs/Classes/ClassDeclarationSniff.php',
 
-                'WordPress/Sniffs'
-                );
+            'WordPress/Sniffs',
+        );
     }
 }
-
-?>
