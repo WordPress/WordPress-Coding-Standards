@@ -102,7 +102,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                 $phpcsFile->addError($error, $closer);
             }
         }
-		
+
             // Single line array.
             // Check if there are multiple values. If so, then it has to be multiple lines
             // unless it is contained inside a function call or condition.
@@ -387,16 +387,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                 }
 
                 continue;
-            }
-
-            if (isset($index['index_content']) === true) {
-                $indexContent = trim($index['index_content'], "'");
-                if (preg_match('|^[a-zA-Z0-9_]+$|', $indexContent) === 1) {
-                    if (strtolower($indexContent) !== $indexContent) {
-                        $error = 'Array index "'.$indexContent.'" should not contain uppercase characters';
-                        $phpcsFile->addError($error, $index['index']);
-                    }
-                }
             }
 
             if (($tokens[$index['index']]['line'] === $tokens[$stackPtr]['line'])) {
