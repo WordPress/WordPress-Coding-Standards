@@ -40,6 +40,7 @@ class PHP_CodeSniffer_Standards_WordPress_WordPressCodingStandard extends PHP_Co
 
     public function getIncludedSniffs()
     {
+        // @todo Can we verify that returning the sniffs here actually does something? It seems project.ruleset.xml only has an effect
         return array(
             //'Generic/Sniffs/Classes/DuplicateClassNameSniff.php',
             'Generic/Sniffs/Functions/OpeningFunctionBraceKernighanRitchieSniff.php',
@@ -58,6 +59,7 @@ class PHP_CodeSniffer_Standards_WordPress_WordPressCodingStandard extends PHP_Co
 
             'Squiz/Sniffs/Strings/EchoedStringsSniff.php',
             'Squiz/Sniffs/WhiteSpace',
+            'Squiz/Sniffs/WhiteSpace/SuperfluousWhitespaceSniff.php',
             'Squiz/Sniffs/PHP/DisallowObEndFlushSniff.php',
             'Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php',
             'Squiz/Sniffs/PHP/EvalSniff.php',
