@@ -305,14 +305,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             }
         }
 
-        if ($singleValue === true) {
-            // Array cannot be empty, so this is a multi-line array with
-            // a single value. It should be defined on single line.
-            $error = 'Multi-line array contains a single value; use single-line array instead';
-            $phpcsFile->addError($error, $stackPtr);
-            return;
-        }
-
         /*
             This section checks for arrays that don't specify keys.
 
