@@ -145,13 +145,15 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
                 }
             }
 
-            if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
-                $error = "Expected 1 space after \"$operator\"; 0 found";
-                $phpcsFile->addError($error, $stackPtr);
-            } else if (strlen($tokens[($stackPtr + 1)]['content']) !== 1) {
-                $found = strlen($tokens[($stackPtr + 1)]['content']);
-                $error = "Expected 1 space after \"$operator\"; $found found";
-                $phpcsFile->addError($error, $stackPtr);
+            if($operator !== '-'){
+                if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
+                    $error = "Expected 1 space after \"$operator\"; 0 found";
+                    $phpcsFile->addError($error, $stackPtr);
+                } else if (strlen($tokens[($stackPtr + 1)]['content']) !== 1) {
+                    $found = strlen($tokens[($stackPtr + 1)]['content']);
+                    $error = "Expected 1 space after \"$operator\"; $found found";
+                    $phpcsFile->addError($error, $stackPtr);
+                }
             }
 
         }//end if
