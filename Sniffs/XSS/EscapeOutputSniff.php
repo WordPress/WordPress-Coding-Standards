@@ -193,6 +193,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
         'walk_nav_menu_tree',
         'get_term_link',
         'get_category_link',
+        'get_the_title',
     );
     
     public $sanitizing_functions = array(
