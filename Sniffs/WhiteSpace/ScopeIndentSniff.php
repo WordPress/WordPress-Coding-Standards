@@ -1,33 +1,26 @@
 <?php
 /**
- * Generic_Sniffs_Whitespace_ScopeIndentSniff.
+ * WordPress_Sniffs_Whitespace_ScopeIndentSniff.
  *
  * PHP version 5
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
- * @author	Greg Sherwood <gsherwood@squiz.net>
- * @author	Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @link	  http://pear.php.net/package/PHP_CodeSniffer
+ * @author	Eric Andrew Lewis <eric.andrew.lewis@gmail.com>
  */
 
 /**
- * Generic_Sniffs_Whitespace_ScopeIndentSniff.
+ * WordPress_Sniffs_WhiteSpace_ScopeIndentSniff.
  *
  * Checks that control structures are structured correctly, and their content
- * is indented correctly. This sniff will throw errors if tabs are used
- * for indentation rather than spaces.
+ * is indented correctly. 
+ *
+ * Based on the Generic_Sniffs_WhiteSpace_ScopeIndentSniff, with a few
+ * modifications for our purposes here.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
- * @author	Greg Sherwood <gsherwood@squiz.net>
- * @author	Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.3.6
- * @link	  http://pear.php.net/package/PHP_CodeSniffer
+ * @author	Eric Andrew Lewis <eric.andrew.lewis@gmail.com>
  */
 class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sniff
 {
