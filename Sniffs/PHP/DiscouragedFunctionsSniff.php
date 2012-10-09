@@ -33,14 +33,14 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
      *
      * @var array(string => string|null)
      */
-    protected $forbiddenFunctions = array(
-                                     'error_log'     => null,
-                                     'print_r'       => null,
+									 'error_log'     => null,
+									 'print_r'       => null,
 									 'ereg_replace'  => 'preg_replace',
 									 'ereg'          => null,
 									 'eregi_replace' => 'preg_replace',
 									 'split'         => null,
 									 'spliti'        => null,
+									 'var_dump'      => null,
 									 
 									 // WordPress
 									 'find_base_dir'            => 'WP_Filesystem::abspath',
@@ -57,6 +57,8 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 									 'get_attachment_icon_src'  => 'wp_get_attachment_image_src',
 									 'get_attachment_icon'      => 'wp_get_attachment_image',
 									 'get_attachment_innerHTML' => 'wp_get_attachment_image',
+									 'query_posts'              => 'WP_Query',
+									 'wp_reset_query'           => 'wp_reset_postdata',
 
                                     );
 
@@ -65,7 +67,7 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
      *
      * @var bool
      */
-    protected $error = false;
+    public $error = true;
 
 }//end class
 
