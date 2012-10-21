@@ -211,7 +211,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
                 if ($keyUsed === true && $lastToken === T_COMMA) {
                     $error = 'No key specified for array entry; first entry specifies key';
-                    $phpcsFile->addError($error, $nextToken);
+                    $phpcsFile->addWarning($error, $nextToken);
                     return;
                 }
 

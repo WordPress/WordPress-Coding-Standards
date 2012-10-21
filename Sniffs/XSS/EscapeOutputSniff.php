@@ -194,6 +194,9 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
         'get_term_link',
         'get_category_link',
         'get_the_title',
+        'get_comment_author_link',
+        'get_comment_date',
+        'get_comment_time',
     );
     
     public $sanitizing_functions = array(
