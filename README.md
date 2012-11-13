@@ -2,7 +2,7 @@ _This is a fork of [mrchrisadams's repo](https://github.com/mrchrisadams/WordPre
 
 ### WordPress Coding Standards for Codesniffer 1.3.0
 
-This is an version of the Coding Standards available at Urban Giraffe, which were missing a `ruleset.xml` file, that stopped them being detected when I downloaded them and tried passing some WordPress core code through them.
+This is an version of the Coding Standards available at [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/), which were missing a `ruleset.xml` file, that stopped them being detected when I downloaded them and tried passing some WordPress core code through them.
 
 I know very little about Codesniffer beyond what I picked up in the last hour or two of reading the docs but I'm aiming to find a happy medium between letting developers stay productive, but stopping really shocking code being committed on projects, and me stumbling through this CodeSniffer tutorial here on [pear.php.net][]
 
