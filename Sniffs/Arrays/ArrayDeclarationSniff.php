@@ -79,29 +79,29 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
         }
 
         if ($tokens[$arrayStart]['line'] === $tokens[$arrayEnd]['line']) {
-		        $openBracket = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
-		        if ($tokens[($openBracket + 1)]['code'] !== T_WHITESPACE && $tokens[($openBracket + 1)]['code'] !== T_CLOSE_PARENTHESIS) {
-            // Checking this: $value = my_function([*]...).
-            $error = 'No space after opening parenthesis of array prohibited';
-            $phpcsFile->addError($error, $stackPtr);
-        }
-		        $closer = $tokens[$openBracket]['parenthesis_closer'];
-
-        if ($tokens[($closer - 1)]['code'] !== T_WHITESPACE) {
-            // Checking this: $value = my_function(...[*]).
-            $between = $phpcsFile->findNext(T_WHITESPACE, ($openBracket + 1), null, true);
-
-            // Only throw an error if there is some content between the parenthesis.
-            // i.e., Checking for this: $value = my_function().
-            // If there is no content, then we would have thrown an error in the
-            // previous IF statement because it would look like this:
-            // $value = my_function( ).
-
-            if ($between !== $closer) {
-                $error = 'No space before closing parenthesis of array prohibited';
-                $phpcsFile->addError($error, $closer);
+            $openBracket = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
+            if ($tokens[($openBracket + 1)]['code'] !== T_WHITESPACE && $tokens[($openBracket + 1)]['code'] !== T_CLOSE_PARENTHESIS) {
+                // Checking this: $value = my_function([*]...).
+                $warning = 'No space after opening parenthesis of array is bad style';
+                $phpcsFile->addWarning($warning, $stackPtr);
             }
-        }
+            $closer = $tokens[$openBracket]['parenthesis_closer'];
+
+            if ($tokens[($closer - 1)]['code'] !== T_WHITESPACE) {
+                // Checking this: $value = my_function(...[*]).
+                $between = $phpcsFile->findNext(T_WHITESPACE, ($openBracket + 1), null, true);
+    
+                // Only throw an error if there is some content between the parenthesis.
+                // i.e., Checking for this: $value = my_function().
+                // If there is no content, then we would have thrown an error in the
+                // previous IF statement because it would look like this:
+                // $value = my_function( ).
+
+                if ($between !== $closer) {
+                    $warning = 'No space before closing parenthesis of array is bad style';
+                    $phpcsFile->addWarning($warning, $closer);
+                }
+            }
 
             // Single line array.
             // Check if there are multiple values. If so, then it has to be multiple lines
