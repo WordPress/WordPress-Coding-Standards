@@ -20,7 +20,7 @@ Then install WordPress standards
 
     git clone git://github.com/x-team/WordPress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/WordPress
 
-Normally when working with PEAR, we'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command, so we're falling back to git instead.
+Normally when working with PEAR, the `pear install` command is used, but GitHub automatically names the files in a way that will confuse the `pear install`, so we're falling back to git instead.
 
 Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`.
 
@@ -62,16 +62,10 @@ project root, pointing at a given file:
     mv project.ruleset.xml.example project.ruleset.xml
     phpcs -s -v -p --standard=./project.ruleset.xml a-sample-file.php
 
-I've used a tiny subset of the options available to codesniffer in this example, and there's much more you can do here in a `ruleset.xml` file. Check the documentation site to see a [fully annotated example to build upon][] (which is where I started initially).
+A tiny subset of the options available to codesniffer have been used in this example, and there's much more that can be done in a `ruleset.xml` file. Check the [phpcs documentation](http://pear.php.net/manual/en/package.php.php-codesniffer.php) to see a [fully annotated example to build upon](http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php).
 
 ### Troubleshooting
 
+Check your `PATH` if it includes new binaries added into the pear directories. You may have to add `:/usr/local/php/bin` before you can call `phpcs` on the command line.
 
-Check your PATH if it includes new binaries added into the pear directories. I had to add `:/usr/local/php/bin` before I could call `phpcs` on the command line.
-
-Remember that you can see where pear is looking for stuff, and putting things, by calling `pear config-show`. This is how I found out where the Codesniffer binary was added, and where the pear library is by default.
-
-
-[pear.php.net]: http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php
-[Urban Giraffe]: http://urbangiraffe.com/articles/wordpress-codesniffer-standard/
-[fully annotated example to build upon]: http://pear.php.net/manual/en/package.php.php-codesniffer.annotated-ruleset.php
+Remember that you can see where PEAR is looking for stuff, and putting things, by calling `pear config-show`. This is how to find where the `phpcs` binary was added, and where the PEAR library is by default.
