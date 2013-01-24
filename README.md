@@ -1,10 +1,14 @@
-_This is a fork of [mrchrisadams's repo](https://github.com/mrchrisadams/WordPress-Coding-Standards); we hope to not diverge too much, but to make perioidic pull requests._
+### WordPress Coding Standards for PHP_CodeSniffer
 
-### WordPress Coding Standards for Codesniffer 1.3.0
+From the [PHP_CodeSniffer](http://pear.php.net/package/PHP_CodeSniffer) (phpcs) package informmation on PEAR:
 
-This is an version of the Coding Standards available at [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/), which were missing a `ruleset.xml` file, that stopped them being detected when I downloaded them and tried passing some WordPress core code through them.
+    PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.
 
-I know very little about Codesniffer beyond what I picked up in the last hour or two of reading the docs but I'm aiming to find a happy medium between letting developers stay productive, but stopping really shocking code being committed on projects, and me stumbling through this CodeSniffer tutorial here on [pear.php.net][]
+This project is a collection of PHP_CodeSniffer rules (sniffs) to validate code developed for WordPress.
+
+This is a fork of the WordPress Coding Standards project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) published in 2009, at which time Matt Mullenweg gave it a [shoutout](http://ma.tt/2009/04/wordpress-codesniffer/). A couple years later, the project was picked up by [Chris Adams](http://chrisadams.me.uk/) who published it to a [repo](https://github.com/mrchrisadams/WordPress-Coding-Standards) on GitHub in May 2011. Initially Chris added a missing `ruleset.xml` file which prevented the rules from being detected by phpcs. Since that time there have been around a dozen [contributions](https://github.com/mrchrisadams/WordPress-Coding-Standards/commits/master) to improve the project. It is surprising that there has not been more community involvement in developing these sniffs, as it is a very useful tool to ensure code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards) which are currently only partially accounted for by the sniffs. [X-Team](http://x-team.com/) has forked the project and is dedicating resources to further develop it and make it even more useful to the WordPress community at large.
+
+The sniffs were developed for phpcs 1.3; work will be done to ensure compatibility with the latest version, which is 1.4.
 
 ### How to use this
 
