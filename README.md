@@ -10,6 +10,8 @@ This is a fork of the WordPress Coding Standards project from [Urban Giraffe](h
 
 The sniffs were developed for phpcs 1.3; work will be done to ensure compatibility with the latest version, which is 1.4.
 
+Ongoing development will be done in the `development` with merges done into `master` once considered stable. Development of unit tests is needed, per [issue 21](https://github.com/x-team/WordPress-Coding-Standards/issues/21).
+
 ### How to use this
 
 Once you've installed PEAR, install Codesniffer:
