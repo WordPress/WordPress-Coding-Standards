@@ -268,7 +268,7 @@ class WordPress_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP
                     if ($found === 1)
                         $found .= ' space';
                     else
-                        ' spaces';
+                        $found .= ' spaces';
                 }
 
                 if (count($assignments) === 1) {
