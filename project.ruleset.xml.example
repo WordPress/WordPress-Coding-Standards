@@ -1,37 +1,34 @@
 <?xml version="1.0"?>
-<ruleset name="A Sample WordPress project">
- <description>A custom set of rules to check for a given WordPress project</description>
+<ruleset name="WPized Project">
+	<description>A custom set of rules to check for a WPized WordPress project</description>
 
- <!--
-    You can hard-code ignore patterns directly into your
-    custom standard so you don't have to specify the
-    patterns on the command line.
-    
-    The following two tags are equivalent to the command line
-    argument: \-\-ignore=*/tests/*,*/data/*
- -->
- <exclude-pattern>*/tests/*</exclude-pattern>
- <exclude-pattern>*/data/*</exclude-pattern>
+	<exclude-pattern>/docroot/wp-admin/*</exclude-pattern>
+	<exclude-pattern>/docroot/wp-includes/*</exclude-pattern>
+	<exclude-pattern>/docroot/wp-*.php</exclude-pattern>
+	<exclude-pattern>/docroot/index.php</exclude-pattern>
+	<exclude-pattern>/docroot/xmlrpc.php</exclude-pattern>
+	<exclude-pattern>/docroot/wp-content/plugins/*</exclude-pattern>
 
- <!--
-      If we only want to include one rule from a standard, we point to the specific class we want to use. 
+	<rule ref="Squiz.PHP.CommentedOutCode"/>
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<rule ref="Generic.Commenting.Todo"/>
+	<rule ref="Generic.ControlStructures.InlineControlStructure"/>
 
--->
- <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<!--
+	We may also want to to include all the rules in a standard
+	-->
+	<rule ref="WordPress">
+		<!--
+		We may want a middle ground though. The best way to do this is add the
+		entire ruleset, then rule by rule, remove ones that don't suit a project. We
+		can do this by running `phpc ` with the '-s' flag, to see the names of the
+		different Sniffs, as their rules are broken. From here, we can opt to
+		exclude problematic sniffs like so.
+		-->
 
- <!-- 
-      We may also want to to include all the rules in a standard 
- -->
- <rule ref="WordPress" />
-
- <!-- 
-      We may want a middle ground though. The best way to do this is add the entire ruleset, then rule by rule, remove ones that don't suit a project. We can do this by running `phpc ` with the '-s' flag, to see the names of the different Sniffs, as their rules are broken. From here, we can opt to exclude problematic sniffs like so. 
-
- -->
-  
-   <exclude name="WordPress.WhiteSpace.ControlStructureSpacing" />
-   <exclude name="WordPress.Functions.FunctionCallSignature" />
-   <!-- <exclude name="WordPress.Arrays.ArrayDeclaration" />-->
- </rule>
+		<exclude name="WordPress.Formatting.MultipleStatementAlignment" />
+		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing" />
+		<exclude name="WordPress.Functions.FunctionCallSignature" />
+	</rule>
 </ruleset>
-

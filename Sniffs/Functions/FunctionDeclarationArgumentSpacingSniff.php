@@ -4,21 +4,21 @@
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 
 /**
  * Enforces WordPress array format
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff implements PHP_CodeSniffer_Sniff
 {
@@ -57,8 +57,8 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
 
         $nextParam = $openBracket;
         $params    = array();
-        while (($nextParam = $phpcsFile->findNext(T_VARIABLE, ($nextParam + 1), $closeBracket)) !== false) {
 
+        while (($nextParam = $phpcsFile->findNext(T_VARIABLE, ($nextParam + 1), $closeBracket)) !== false) {
             $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($nextParam + 1), ($closeBracket + 1), true);
             if ($nextToken === false) {
                 break;
@@ -68,7 +68,7 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
 
             if ($nextCode === T_EQUAL) {
                 // Check parameter default spacing.
-                if (($nextToken - $nextParam) != 2) {
+                if (($nextToken - $nextParam) !== 2) {
                     $gap   = strlen($tokens[($nextParam + 1)]['content']);
                     $arg   = $tokens[$nextParam]['content'];
                     $error = "Expected 1 space between argument \"$arg\" and equals sign; ".($gap - 1)." found";
@@ -174,9 +174,7 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
             }//end if
 
             $params[] = $nextParam;
-
         }//end while
-
 
     }//end process()
 
