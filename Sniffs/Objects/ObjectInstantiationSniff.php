@@ -66,7 +66,7 @@ class WordPress_Sniffs_Objects_ObjectInstantiationSniff implements PHP_CodeSniff
                           T_EQUAL,
                           T_DOUBLE_ARROW,
                           T_THROW,
-						  T_RETURN
+                          T_RETURN,
                          );
 
         if (in_array($tokens[$prev]['code'], $allowedTokens) === false) {
