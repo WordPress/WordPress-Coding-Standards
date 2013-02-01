@@ -258,11 +258,17 @@ class WordPress_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP
                     continue;
                 }
 
-                $expected .= ($expected === 1) ? ' space' : ' spaces';
+                if ($expected === 1)
+                    $expected .= ' space';
+                else
+                    $expected .= ' spaces';
                 if ($found === null) {
                     $found = 'a new line';
                 } else {
-                    $found .= ($found === 1) ? ' space' : ' spaces';
+                    if ($found === 1)
+                        $found .= ' space';
+                    else
+                        $found .= ' spaces';
                 }
 
                 if (count($assignments) === 1) {
@@ -270,17 +276,16 @@ class WordPress_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP
                 } else if ($expected < 6) {
                     $error = "Equals sign not aligned with surrounding assignments; expected $expected but found $found";
                 }
-				else
-					$error = false;
+                else
+                    $error = false;
 
-				if ($error !== false)
-				{
-					if ($this->error === true) {
-						$phpcsFile->addError($error, $assignment);
-					} else {
-						$phpcsFile->addWarning($error, $assignment);
-					}
-				}
+                if ($error !== false) {
+                    if ($this->error === true) {
+                        $phpcsFile->addError($error, $assignment);
+                    } else {
+                        $phpcsFile->addWarning($error, $assignment);
+                    }
+                }
             }//end if
         }//end foreach
 

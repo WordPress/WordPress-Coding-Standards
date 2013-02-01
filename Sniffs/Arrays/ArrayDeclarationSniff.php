@@ -4,21 +4,21 @@
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 
 /**
  * Enforces WordPress array format
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sniff
 {
@@ -85,18 +85,18 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                 $warning = 'No space after opening parenthesis of array is bad style';
                 $phpcsFile->addWarning($warning, $stackPtr);
             }
+
             $closer = $tokens[$openBracket]['parenthesis_closer'];
 
             if ($tokens[($closer - 1)]['code'] !== T_WHITESPACE) {
                 // Checking this: $value = my_function(...[*]).
                 $between = $phpcsFile->findNext(T_WHITESPACE, ($openBracket + 1), null, true);
-    
+
                 // Only throw an error if there is some content between the parenthesis.
                 // i.e., Checking for this: $value = my_function().
                 // If there is no content, then we would have thrown an error in the
                 // previous IF statement because it would look like this:
                 // $value = my_function( ).
-
                 if ($between !== $closer) {
                     $warning = 'No space before closing parenthesis of array is bad style';
                     $phpcsFile->addWarning($warning, $closer);
@@ -189,9 +189,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
             if ($tokens[$nextToken]['code'] === T_ARRAY) {
                 // Let subsequent calls of this test handle nested arrays.
-                $indices[] = array(
-                              'value' => $nextToken,
-                             );
+                $indices[] = array( 'value' => $nextToken );
                 $nextToken = $tokens[$tokens[$nextToken]['parenthesis_opener']]['parenthesis_closer'];
                 continue;
             }
@@ -333,15 +331,18 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     // Other parts of this sniff will correct the error.
                     continue;
                 }
-/*
-                if ($tokens[($value['value'] - 1)]['code'] === T_WHITESPACE) {
-                    // A whitespace token before this value means that the value
-                    // was indented and not flush with the opening parenthesis.
-                    if ($tokens[$value['value']]['column'] !== ($keywordStart + 1)) {
-                        $error = 'Array value not aligned correctly; expected '.($keywordStart + 1).' spaces but found '.$tokens[$value['value']]['column'];
-                        $phpcsFile->addError($error, $value['value']);
+
+                /*
+                    if ($tokens[($value['value'] - 1)]['code'] === T_WHITESPACE) {
+                        // A whitespace token before this value means that the value
+                        // was indented and not flush with the opening parenthesis.
+                        if ($tokens[$value['value']]['column'] !== ($keywordStart + 1)) {
+                            $error = 'Array value not aligned correctly; expected '.($keywordStart + 1).' spaces but found '.$tokens[$value['value']]['column'];
+                            $phpcsFile->addError($error, $value['value']);
+                        }
                     }
-                }*/
+                */
+
             }
         }//end if
 
@@ -385,27 +386,29 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                 $phpcsFile->addError('The first index in a multi-value array must be on a new line', $stackPtr);
                 continue;
             }
-/*
-            if ($tokens[$index['index']]['column'] !== $indicesStart) {
-                $phpcsFile->addError('Array key not aligned correctly; expected '.$indicesStart.' spaces but found '.$tokens[$index['index']]['column'], $index['index']);
-                continue;
-            }
 
-            if ($tokens[$index['arrow']]['column'] !== $arrowStart) {
-                $expected  = ($arrowStart - (strlen($index['index_content']) + $tokens[$index['index']]['column']));
-                $expected .= ($expected === 1) ? ' space' : ' spaces';
-                $found     = ($tokens[$index['arrow']]['column'] - (strlen($index['index_content']) + $tokens[$index['index']]['column']));
-                $phpcsFile->addError("Array double arrow not aligned correctly; expected $expected but found $found", $index['arrow']);
-                continue;
-            }
+            /*
+                if ($tokens[$index['index']]['column'] !== $indicesStart) {
+                    $phpcsFile->addError('Array key not aligned correctly; expected '.$indicesStart.' spaces but found '.$tokens[$index['index']]['column'], $index['index']);
+                    continue;
+                }
 
-            if ($tokens[$index['value']]['column'] !== $valueStart) {
-                $expected  = ($valueStart - (strlen($tokens[$index['arrow']]['content']) + $tokens[$index['arrow']]['column']));
-                $expected .= ($expected === 1) ? ' space' : ' spaces';
-                $found     = ($tokens[$index['value']]['column'] - (strlen($tokens[$index['arrow']]['content']) + $tokens[$index['arrow']]['column']));
-                $phpcsFile->addError("Array value not aligned correctly; expected $expected but found $found", $index['arrow']);
-            }
-*/
+                if ($tokens[$index['arrow']]['column'] !== $arrowStart) {
+                    $expected  = ($arrowStart - (strlen($index['index_content']) + $tokens[$index['index']]['column']));
+                    $expected .= ($expected === 1) ? ' space' : ' spaces';
+                    $found     = ($tokens[$index['arrow']]['column'] - (strlen($index['index_content']) + $tokens[$index['index']]['column']));
+                    $phpcsFile->addError("Array double arrow not aligned correctly; expected $expected but found $found", $index['arrow']);
+                    continue;
+                }
+
+                if ($tokens[$index['value']]['column'] !== $valueStart) {
+                    $expected  = ($valueStart - (strlen($tokens[$index['arrow']]['content']) + $tokens[$index['arrow']]['column']));
+                    $expected .= ($expected === 1) ? ' space' : ' spaces';
+                    $found     = ($tokens[$index['value']]['column'] - (strlen($tokens[$index['arrow']]['content']) + $tokens[$index['arrow']]['column']));
+                    $phpcsFile->addError("Array value not aligned correctly; expected $expected but found $found", $index['arrow']);
+                }
+            */
+
             // Check each line ends in a comma.
             if ($tokens[$index['value']]['code'] !== T_ARRAY) {
                 $nextComma = $phpcsFile->findNext(array(T_COMMA), ($index['value'] + 1));
