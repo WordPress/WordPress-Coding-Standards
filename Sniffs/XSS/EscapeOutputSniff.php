@@ -259,8 +259,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                 return;
             }
         }
-        
-        // @todo Allow T_CONSTANT_ENCAPSED_STRING?
+
+	    // Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
+	    if ( in_array( $tokens[$stackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING ) ) )
+		    return;
         
         // Now check that next token is a function call
         if ( ! in_array($tokens[$stackPtr]['code'], array(T_STRING)) ) {
