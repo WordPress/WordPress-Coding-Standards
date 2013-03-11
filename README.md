@@ -1,10 +1,16 @@
-_This is a fork of [mrchrisadams's repo](https://github.com/mrchrisadams/WordPress-Coding-Standards); we hope to not diverge too much, but to make perioidic pull requests._
+### WordPress Coding Standards for PHP_CodeSniffer
 
-### WordPress Coding Standards for Codesniffer 1.3.0
+From the [PHP_CodeSniffer](http://pear.php.net/package/PHP_CodeSniffer) (phpcs) package information on PEAR:
 
-This is an version of the Coding Standards available at [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/), which were missing a `ruleset.xml` file, that stopped them being detected when I downloaded them and tried passing some WordPress core code through them.
+    PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.
 
-I know very little about Codesniffer beyond what I picked up in the last hour or two of reading the docs but I'm aiming to find a happy medium between letting developers stay productive, but stopping really shocking code being committed on projects, and me stumbling through this CodeSniffer tutorial here on [pear.php.net][]
+This project is a collection of PHP_CodeSniffer rules (sniffs) to validate code developed for WordPress.
+
+This is a fork of the WordPress Coding Standards project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) published in 2009, at which time Matt Mullenweg gave it a [shoutout](http://ma.tt/2009/04/wordpress-codesniffer/). A couple years later, the project was picked up by [Chris Adams](http://chrisadams.me.uk/) who published it to a [repo](https://github.com/mrchrisadams/WordPress-Coding-Standards) on GitHub in May 2011. Initially Chris added a missing `ruleset.xml` file which prevented the rules from being detected by phpcs. Since that time there have been around a dozen [contributions](https://github.com/mrchrisadams/WordPress-Coding-Standards/commits/master) to improve the project. It is surprising that there has not been more community involvement in developing these sniffs, as it is a very useful tool to ensure code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards) which are currently only partially accounted for by the sniffs. [X-Team](http://x-team.com/) has forked the project and is dedicating resources to further develop it and make it even more useful to the WordPress community at large.
+
+The sniffs were developed for phpcs 1.3; work will be done to ensure compatibility with the latest version, which is 1.4.
+
+Ongoing development will be done in the `development` with merges done into `master` once considered stable. Development of unit tests is needed, per [issue 21](https://github.com/x-team/WordPress-Coding-Standards/issues/21).
 
 ### How to use this
 
@@ -16,7 +22,7 @@ Then install WordPress standards
 
     git clone git://github.com/x-team/WordPress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/WordPress
 
-Normally when working with PEAR, we'd use the pear install command, but github automatically names the files, in a way that think will confuse the pear install command, so we're falling back to git instead.
+Normally when working with PEAR, the `pear install` command is used, but GitHub automatically names the files in a way that will confuse the `pear install`, so we're falling back to git instead.
 
 Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`.
 
@@ -58,16 +64,10 @@ project root, pointing at a given file:
     mv project.ruleset.xml.example project.ruleset.xml
     phpcs -s -v -p --standard=./project.ruleset.xml a-sample-file.php
 
-I've used a tiny subset of the options available to codesniffer in this example, and there's much more you can do here in a `ruleset.xml` file. Check the documentation site to see a [fully annotated example to build upon][] (which is where I started initially).
+A tiny subset of the options available to codesniffer have been used in this example, and there's much more that can be done in a `ruleset.xml` file. Check the [phpcs documentation](http://pear.php.net/manual/en/package.php.php-codesniffer.php) to see a [fully annotated example to build upon](http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php).
 
 ### Troubleshooting
 
+Check your `PATH` if it includes new binaries added into the pear directories. You may have to add `:/usr/local/php/bin` before you can call `phpcs` on the command line.
 
-Check your PATH if it includes new binaries added into the pear directories. I had to add `:/usr/local/php/bin` before I could call `phpcs` on the command line.
-
-Remember that you can see where pear is looking for stuff, and putting things, by calling `pear config-show`. This is how I found out where the Codesniffer binary was added, and where the pear library is by default.
-
-
-[pear.php.net]: http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php
-[Urban Giraffe]: http://urbangiraffe.com/articles/wordpress-codesniffer-standard/
-[fully annotated example to build upon]: http://pear.php.net/manual/en/package.php.php-codesniffer.annotated-ruleset.php
+Remember that you can see where PEAR is looking for stuff, and putting things, by calling `pear config-show`. This is how to find where the `phpcs` binary was added, and where the PEAR library is by default.

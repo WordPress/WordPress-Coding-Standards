@@ -217,7 +217,9 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
 
                 if ($expectedIndent !== $foundIndent) {
                     $error = "Multi-line function ".$this->_type." not indented correctly; expected $expectedIndent spaces but found $foundIndent";
-                    $phpcsFile->addError($error, $i);
+                    //If indented with tab spaces don't throw error!
+                    if ( false === strpos( $tokens[$i]['content'], "\t" ) )
+                        $phpcsFile->addError($error, $i);
                 }
             }//end if
         }//end for
