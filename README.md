@@ -10,7 +10,7 @@ This is a fork of the WordPress Coding Standards project from [Urban Giraffe](h
 
 The sniffs were developed for phpcs 1.3; work will be done to ensure compatibility with the latest version, which is 1.4.
 
-Ongoing development will be done in the `develop` with merges done into `master` once considered stable. Development of unit tests is needed, per [issue 21](https://github.com/x-team/WordPress-Coding-Standards/issues/21).
+Ongoing development will be done in the `develop` with merges done into `master` once considered stable. Development of unit tests is needed, per [x-team/#21](https://github.com/x-team/WordPress-Coding-Standards/issues/21).
 
 ### How to use this
 
@@ -20,7 +20,7 @@ Once you've installed PEAR, install Codesniffer:
 
 Then install WordPress standards
 
-    git clone git://github.com/x-team/WordPress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/WordPress
+    git clone git://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/WordPress
 
 Normally when working with PEAR, the `pear install` command is used, but GitHub automatically names the files in a way that will confuse the `pear install`, so we're falling back to git instead.
 
