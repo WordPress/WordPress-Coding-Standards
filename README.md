@@ -84,7 +84,7 @@ $ cd phpcs
 $ git clone git@github.com:squizlabs/PHP_CodeSniffer.git .
 $ git checkout 1.4.4
 $ git clone git@github.com:x-team/WordPress-Coding-Standards.git CodeSniffer/Standards/WordPress
-$ phpunit tests/AllTests.php
+$ phpunit --filter WordPress tests/AllTests.php
 ~~~
 
 Expected output:
@@ -92,15 +92,11 @@ Expected output:
 ~~~text
 PHPUnit 3.7.18 by Sebastian Bergmann.
 
-...............................................................  63 / 246 ( 25%)
-............................................................... 126 / 246 ( 51%)
-........SS..................................................... 189 / 246 ( 76%)
-.......................S.﻿................................
+...............
 
-Time: 8 seconds, Memory: 29.75Mb
+Time: 1 second, Memory: 37.00Mb
 
-OK, but incomplete or skipped tests!
-Tests: 246, Assertions: 150, Skipped: 3.
+OK (15 tests, 0 assertions)
 ~~~
 
 You can ignore any skipped tests as these are for `PHP_CodeSniffer` external tools.
