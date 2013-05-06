@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Modified version of Squiz operator white spacing, based upon Squiz code
  *
