@@ -4,20 +4,21 @@
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
  */
 
 /**
  * Enforces WordPress array format
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff
 {
+
     private $_magicMethods = array(
                               'construct',
                               'destruct',
@@ -34,6 +35,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
                               'clone',
                              );
 
+
     /**
      * Processes the tokens outside the scope.
      *
@@ -47,16 +49,17 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
     {
         $functionName = $phpcsFile->getDeclarationName($stackPtr);
 
-        if (strtolower($functionName) != $functionName) {
-			$suggested = preg_replace('/([A-Z])/', '_$1', $functionName);
-			$suggested = strtolower ($suggested);
-			$suggested = str_replace ('__', '_', $suggested);
-			
+        if (strtolower($functionName) !== $functionName) {
+            $suggested = preg_replace('/([A-Z])/', '_$1', $functionName);
+            $suggested = strtolower($suggested);
+            $suggested = str_replace('__', '_', $suggested);
+
             $error = "Function name \"$functionName\" is in camel caps format, try '".$suggested."'";
             $phpcsFile->addError($error, $stackPtr);
         }
 
     }//end processTokenOutsideScope()
+
 
     /**
      * Processes the tokens within the scope.
@@ -95,29 +98,35 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
         }
 
         $methodProps    = $phpcsFile->getMethodProperties($stackPtr);
-        $isPublic       = ($methodProps['scope'] === 'private') ? false : true;
         $scope          = $methodProps['scope'];
         $scopeSpecified = $methodProps['scope_specified'];
+
+        if ($methodProps['scope'] === 'private')
+            $isPublic = false;
+        else
+            $isPublic = true;
 
         // If the scope was specified on the method, then the method must be
         // camel caps and an underscore should be checked for. If it wasn't
         // specified, treat it like a public method and remove the underscore
-        // prefix if there is one because we cant determine if it is private or
+        // prefix if there is one because we can't determine if it is private or
         // public.
         $testMethodName = $methodName;
         if ($scopeSpecified === false && $methodName{0} === '_') {
             $testMethodName = substr($methodName, 1);
         }
 
-		if (strtolower($testMethodName) != $testMethodName) {
-			$suggested = preg_replace('/([A-Z])/', '_$1', $methodName);
-			$suggested = strtolower ($suggested);
-			$suggested = str_replace ('__', '_', $suggested);
-			
+        if (strtolower($testMethodName) !== $testMethodName) {
+            $suggested = preg_replace('/([A-Z])/', '_$1', $methodName);
+            $suggested = strtolower($suggested);
+            $suggested = str_replace('__', '_', $suggested);
+
             $error = "Function name \"$methodName\" is in camel caps format, try '".$suggested."'";
             $phpcsFile->addError($error, $stackPtr);
         }
+
     }//end processTokenWithinScope()
+
 
 }//end class
 
