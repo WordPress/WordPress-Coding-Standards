@@ -4,11 +4,11 @@
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 
 /**
@@ -16,11 +16,11 @@
  *
  * Checks that any array declarations are lower case.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley <john@urbangiraffe.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley <john@urbangiraffe.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff
 {
@@ -30,9 +30,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
      *
      * @var array
      */
-    public $supportedTokenizers = array(
-                                   'PHP',
-                                  );
+    public $supportedTokenizers = array( 'PHP' );
 
 
     /**
@@ -68,8 +66,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        
-        if ($tokens[$stackPtr + 1]['code'] !== T_WHITESPACE ) {
+
+        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
             $error = 'Space after opening control structure is required';
             $phpcsFile->addError($error, $stackPtr);
         }
@@ -80,7 +78,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $scopeCloser = $tokens[$stackPtr]['scope_closer'];
         $scopeOpener = $tokens[$stackPtr]['scope_opener'];
-        
+
         $openBracket = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
 
         if (($stackPtr + 1) === $openBracket) {
@@ -88,34 +86,32 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             $error = 'No space before opening parenthesis is prohibited';
             $phpcsFile->addError($error, $stackPtr);
         }
-        
+
         if ($tokens[($openBracket + 1)]['code'] !== T_WHITESPACE && $tokens[($openBracket + 1)]['code'] !== T_CLOSE_PARENTHESIS) {
             // Checking this: $value = my_function([*]...).
             $error = 'No space after opening parenthesis is prohibited';
             $phpcsFile->addError($error, $stackPtr);
         }
 
-        if (isset ($tokens[$openBracket]['parenthesis_closer']))
-        {
+        if (isset($tokens[$openBracket]['parenthesis_closer']) === true) {
             $closer = $tokens[$openBracket]['parenthesis_closer'];
 
             if ($tokens[($closer - 1)]['code'] !== T_WHITESPACE) {
                     $error = 'No space before closing parenthesis is prohibited';
                     $phpcsFile->addError($error, $closer);
             }
-            
+
             $arrayLine = $tokens[$scopeOpener]['line'];
 
-            if (isset ($tokens[$arrayLine]['scope_opener']) && $tokens[$arrayLine]['line'] != $tokens[$tokens[$arrayLine]['scope_opener']]['line']) {
+            if (isset($tokens[$arrayLine]['scope_opener']) === true && $tokens[$arrayLine]['line'] !== $tokens[$tokens[$arrayLine]['scope_opener']]['line']) {
                 $error = 'Opening brace should be on the same line as the declaration';
                 $phpcsFile->addError($error, $openBracket);
                 return;
             }
         }
-        
 
         $firstContent = $phpcsFile->findNext(T_WHITESPACE, ($scopeOpener + 1), null, true);
-        if ($tokens[$firstContent]['line'] !== ($tokens[$scopeOpener]['line'] + 1) && $tokens[$firstContent]['code'] != T_CLOSE_TAG) {
+        if ($tokens[$firstContent]['line'] !== ($tokens[$scopeOpener]['line'] + 1) && $tokens[$firstContent]['code'] !== T_CLOSE_TAG) {
             $error = 'Blank line found at start of control structure';
             $phpcsFile->addError($error, $scopeOpener);
         }
@@ -124,14 +120,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
         if ($tokens[$lastContent]['line'] !== ($tokens[$scopeCloser]['line'] - 1)) {
             $errorToken = $scopeCloser;
             for ($i = ($scopeCloser - 1); $i > $lastContent; $i--) {
-                if ($tokens[$i]['line'] < $tokens[$scopeCloser]['line'] && $tokens[$firstContent]['code'] != T_OPEN_TAG) {
-
+                if ($tokens[$i]['line'] < $tokens[$scopeCloser]['line'] && $tokens[$firstContent]['code'] !== T_OPEN_TAG) {
                     $error = 'Blank line found at end of control structure';
                     $phpcsFile->addError($error, $i);
                     break;
                 }
             }
-
         }
 
         $trailingContent = $phpcsFile->findNext(T_WHITESPACE, ($scopeCloser + 1), null, true);

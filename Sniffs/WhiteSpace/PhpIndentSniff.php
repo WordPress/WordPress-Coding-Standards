@@ -15,9 +15,9 @@
  */
 class WordPress_Sniffs_WhiteSpace_PhpIndentSniff implements PHP_CodeSniffer_Sniff
 {
-    public $supportedTokenizers = array(
-        'PHP',
-    );
+
+    public $supportedTokenizers = array( 'PHP' );
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -45,25 +45,27 @@ class WordPress_Sniffs_WhiteSpace_PhpIndentSniff implements PHP_CodeSniffer_Snif
         $tokens = $phpcsFile->getTokens();
 
         if ($tokens[$stackPtr]['column'] === 1) {
-            $line_content = '';
-            for ($i = 0; $stackPtr+$i < count($tokens); $i += 1) {
-                $token_content = $tokens[$stackPtr + $i]['content'];
-                $line_content .= $token_content;
+            $lineContent = '';
+            $tokensCount = count($tokens);
+            for ($i = 0; ($stackPtr + $i) < $tokensCount; $i++) {
+                $tokenContent = $tokens[($stackPtr + $i)]['content'];
+                $lineContent .= $tokenContent;
 
-                if ($tokens[$stackPtr + $i]['code'] !== T_WHITESPACE) {
+                if ($tokens[($stackPtr + $i)]['code'] !== T_WHITESPACE) {
                     break;
                 }
 
-                $space_pos = strpos($token_content, ' ');
-                if ($space_pos !== false) {
+                $spacePos = strpos($tokenContent, ' ');
+                if ($spacePos !== false) {
                     $error = 'Line is indented with space not tab';
-                    $phpcsFile->addWarning($error, $stackPtr + $i, 'Incorrect', $token_content . '<');
+                    $phpcsFile->addWarning($error, ($stackPtr + $i), 'Incorrect', $tokenContent.'<');
                     break;
                 }
             }
         }
 
     }//end process()
+
 
 }//end class
 

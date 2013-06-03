@@ -4,19 +4,19 @@
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 
 /**
  * Enforces WordPress array format
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff
 {
@@ -83,7 +83,6 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
             // If its not a reference, then we expect one space either side of the
             // bitwise operator.
             if ($phpcsFile->isReference($stackPtr) === false) {
-
             }//end if
         } else {
             if ($tokens[$stackPtr]['code'] === T_MINUS) {
@@ -145,7 +144,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
                 }
             }
 
-            if($operator !== '-'){
+            if ($operator !== '-') {
                 if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
                     $error = "Expected 1 space after \"$operator\"; 0 found";
                     $phpcsFile->addError($error, $stackPtr);
@@ -155,7 +154,6 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
                     $phpcsFile->addError($error, $stackPtr);
                 }
             }
-
         }//end if
 
     }//end process()
