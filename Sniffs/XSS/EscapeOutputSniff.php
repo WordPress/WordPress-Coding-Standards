@@ -197,6 +197,19 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                    );
 
     public $sanitizingFunctions = array(
+                                   'wp_kses_post',
+                                   'wp_kses_data',
+                                   'wp_kses_allowed_html',
+                                   'esc_sql',
+                                   'like_escape',
+                                   'validate_file',
+                                   'wp_redirect',
+                                   'wp_safe_redirect',
+                                   'sanitize_title',
+                                   'sanitize_user',
+                                   'balanceTags',
+                                   'sanitize_html_class',
+                                   'is_email',
                                    'intval',
                                    'absint',
                                    'wp_kses',
