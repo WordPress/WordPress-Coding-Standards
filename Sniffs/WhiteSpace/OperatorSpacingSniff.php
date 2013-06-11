@@ -83,6 +83,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
             // If its not a reference, then we expect one space either side of the
             // bitwise operator.
             if ($phpcsFile->isReference($stackPtr) === false) {
+
             }//end if
         } else {
             if ($tokens[$stackPtr]['code'] === T_MINUS) {
@@ -154,6 +155,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
                     $phpcsFile->addError($error, $stackPtr);
                 }
             }
+
         }//end if
 
     }//end process()
