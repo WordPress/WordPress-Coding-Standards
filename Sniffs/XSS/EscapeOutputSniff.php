@@ -197,6 +197,19 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                    );
 
     public $sanitizingFunctions = array(
+                                   'wp_kses_post',
+                                   'wp_kses_data',
+                                   'wp_kses_allowed_html',
+                                   'esc_sql',
+                                   'like_escape',
+                                   'validate_file',
+                                   'wp_redirect',
+                                   'wp_safe_redirect',
+                                   'sanitize_title',
+                                   'sanitize_user',
+                                   'balanceTags',
+                                   'sanitize_html_class',
+                                   'is_email',
                                    'intval',
                                    'absint',
                                    'wp_kses',
@@ -218,6 +231,21 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                    'sanitize_title',
                                    'sanitize_user',
                                    'tag_escape',
+                                   //other
+                                   'sanitize_email',
+                                   'sanitize_file_name',
+                                   'sanitize_html_class',
+                                   'sanitize_key',
+                                   'sanitize_mime_type',
+                                   'sanitize_option',
+                                   'sanitize_sql_orderby',
+                                   'sanitize_text_field',
+                                   'sanitize_title_for_query',
+                                   'sanitize_title_with_dashes',
+                                   'sanitize_user',
+                                   'sanitize_meta',
+                                   'sanitize_term',
+                                   'sanitize_term_field',
                                   );
 
 
