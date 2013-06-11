@@ -8,9 +8,7 @@ This project is a collection of PHP_CodeSniffer rules (sniffs) to validate code 
 
 This is a fork of the WordPress Coding Standards project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) published in 2009, at which time Matt Mullenweg gave it a [shoutout](http://ma.tt/2009/04/wordpress-codesniffer/). A couple years later, the project was picked up by [Chris Adams](http://chrisadams.me.uk/) who published it to a [repo](https://github.com/mrchrisadams/WordPress-Coding-Standards) on GitHub in May 2011. Initially Chris added a missing `ruleset.xml` file which prevented the rules from being detected by phpcs. Since that time there have been around a dozen [contributions](https://github.com/mrchrisadams/WordPress-Coding-Standards/commits/master) to improve the project. It is surprising that there has not been more community involvement in developing these sniffs, as it is a very useful tool to ensure code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards) which are currently only partially accounted for by the sniffs. [X-Team](http://x-team.com/) has forked the project and is dedicating resources to further develop it and make it even more useful to the WordPress community at large.
 
-The sniffs were developed for phpcs 1.3; work will be done to ensure compatibility with the latest version, which is 1.4.
-
-Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
+See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing).
 
 ### How to use this
 
@@ -71,104 +69,3 @@ A tiny subset of the options available to codesniffer have been used in this exa
 Check your `PATH` if it includes new binaries added into the pear directories. You may have to add `:/usr/local/php/bin` before you can call `phpcs` on the command line.
 
 Remember that you can see where PEAR is looking for stuff, and putting things, by calling `pear config-show`. This is how to find where the `phpcs` binary was added, and where the PEAR library is by default.
-
-### Unit Testing
-
-TL;DR
-
-Make sure you have `phpunit` installed and available in your `PATH`.
-
-~~~text
-$ mkdir phpcs
-$ cd phpcs
-$ git clone git@github.com:squizlabs/PHP_CodeSniffer.git .
-$ git checkout 1.4.4
-$ git clone git@github.com:x-team/WordPress-Coding-Standards.git CodeSniffer/Standards/WordPress
-$ phpunit --filter WordPress tests/AllTests.php
-~~~
-
-Expected output:
-
-~~~text
-PHPUnit 3.7.18 by Sebastian Bergmann.
-
-...............
-
-Time: 1 second, Memory: 37.00Mb
-
-OK (15 tests, 0 assertions)
-~~~
-
-You can ignore any skipped tests as these are for `PHP_CodeSniffer` external tools.
-
-The reason why we need to checkout from `PHP_CodeSniffer` git repo to run the tests is because
-PEAR installation is intended for ready-to-use not for development. At some point `WordPress-Coding-Standards`
-might be submitted to `PHP_CodeSniffer` repo and using their existing convention for unit tests
-will eventually help them to test the code before merging in.
-
-#### Unit Testing conventions
-
-If you see inside the `WordPress/Tests`, the structure mimics the `WordPress/Sniffs`. For example,
-the `WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php` sniff has unit test class defined in
-`WordPress/Tests/Arrays/ArrayDeclarationUnitTest.php` that check `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`
-file. See the file naming convention? Lets take a look what inside `ArrayDeclarationUnitTest.php`:
-
-~~~php
-...
-class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitTest
-{
-    public function getErrorList()
-    {
-        return array(
-                3 => 1,
-                7 => 1,
-                9 => 1,
-                16 => 1,
-                31 => 2,
-               );
-
-    }//end getErrorList()
-}
-...
-~~~
-
-Also note the class name convention. The method `getErrorList` MUST return an array of line numbers
-indicating errors (when running `phpcs`) found in `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`.
-If you run:
-
-~~~text
-$ cd /path-to-cloned/phpcs
-$ ./scripts/phpcs --standard=Wordpress -s CodeSniffer/Standards/WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc
-...
---------------------------------------------------------------------------------
-FOUND 8 ERROR(S) AND 2 WARNING(S) AFFECTING 6 LINE(S)
---------------------------------------------------------------------------------
-  3 | ERROR   | Array keyword should be lower case; expected "array" but found
-    |         | "Array" (WordPress.Arrays.ArrayDeclaration)
-  7 | ERROR   | There must be no space between the Array keyword and the
-    |         | opening parenthesis (WordPress.Arrays.ArrayDeclaration)
-  9 | ERROR   | Empty array declaration must have no space between the
-    |         | parentheses (WordPress.Arrays.ArrayDeclaration)
- 12 | WARNING | No space after opening parenthesis of array is bad style
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 12 | WARNING | No space before closing parenthesis of array is bad style
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 16 | ERROR   | Each line in an array declaration must end in a comma
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 31 | ERROR   | Expected 1 space between "'type'" and double arrow; 0 found
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 31 | ERROR   | Expected 1 space between double arrow and "'post'"; 0 found
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 31 | ERROR   | Expected 1 space before "=>"; 0 found
-    |         | (WordPress.WhiteSpace.OperatorSpacing)
- 31 | ERROR   | Expected 1 space after "=>"; 0 found
-    |         | (WordPress.WhiteSpace.OperatorSpacing)
---------------------------------------------------------------------------------
-....
-~~~
-
-You'll see the line number and number of ERRORs we need to return in `getErrorList` method.
-In line #31 there are two ERRORs belong to `WordPress.WhiteSpace.OperatorSpacing` sniff and
-it MUST not included in `ArrayDeclarationUnitTest` (that's why we only return 2 errros for line #31).
-Also there's `getWarningList` method in unit test class that returns an array of line numbers
-indicating WARNINGs. 
