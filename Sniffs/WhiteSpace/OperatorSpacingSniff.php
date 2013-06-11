@@ -1,22 +1,22 @@
-<?php
+﻿<?php
 /**
  * Modified version of Squiz operator white spacing, based upon Squiz code
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 
 /**
  * Enforces WordPress array format
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff
 {
@@ -145,7 +145,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
                 }
             }
 
-            if($operator !== '-'){
+            if ($operator !== '-') {
                 if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
                     $error = "Expected 1 space after \"$operator\"; 0 found";
                     $phpcsFile->addError($error, $stackPtr);

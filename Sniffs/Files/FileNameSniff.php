@@ -5,9 +5,10 @@
  *
  * PHP version 5
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley
+ * @link     http://codex.wordpress.org/WordPress_Coding_Standards
  */
 
 /**
@@ -15,13 +16,14 @@
  *
  * Ensures filenames do not contain underscores
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    John Godley
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   John Godley
  */
- 
 class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -29,9 +31,7 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
      */
     public function register()
     {
-        return array(
-                T_OPEN_TAG,
-               );
+        return array( T_OPEN_TAG );
 
     }//end register()
 
@@ -56,10 +56,10 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
             return;
         }
 
-        $fileName  = basename($phpcsFile->getFileName());
+        $fileName = basename($phpcsFile->getFileName());
         if (strpos($fileName, '_') !== false) {
-				$expected = str_replace('_', '-', $fileName);
-                $error = ucfirst('Filename "'.$fileName.'" with underscores found; use '.$expected.' instead');
+                $expected = str_replace('_', '-', $fileName);
+                $error    = ucfirst('Filename "'.$fileName.'" with underscores found; use '.$expected.' instead');
                 $phpcsFile->addError($error, $stackPtr);
         }
 
@@ -67,6 +67,5 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
 
 
 }//end class
-
 
 ?>
