@@ -23,8 +23,6 @@
  */
 class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffer_Sniff
 {
-	private $type;
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -62,7 +60,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
             // Not a function call.
             return;
         }
-		
+
         // Find the previous non-empty token.
         $previous = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($tokens[$previous]['code'] === T_FUNCTION)
