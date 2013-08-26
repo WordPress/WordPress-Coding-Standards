@@ -23,6 +23,8 @@
  */
 class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffer_Sniff
 {
+    private $positionType;
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -64,7 +66,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
         // Find the previous non-empty token.
         $previous = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($tokens[$previous]['code'] === T_FUNCTION)
-			$this->type = 'definition';
+			$this->positionType = 'definition';
 
 /*        if ($tokens[$previous]['code'] === T_NEW) {
             // We are creating an object, not calling a function.
@@ -75,14 +77,14 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
 
         if (($stackPtr + 1) !== $openBracket) {
             // Checking this: $value = my_function[*](...).
-            $error = 'Space before opening parenthesis of function '.$this->type.' prohibited';
+            $error = 'Space before opening parenthesis of function '.$this->positionType.' prohibited';
             $phpcsFile->addError($error, $stackPtr);
         }
 
         $next = $phpcsFile->findNext(T_WHITESPACE, ($closeBracket + 1), null, true);
         if ($tokens[$next]['code'] === T_SEMICOLON) {
             if (in_array($tokens[($closeBracket + 1)]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === true) {
-                $error = 'Space after closing parenthesis of function '.$this->type.' prohibited';
+                $error = 'Space after closing parenthesis of function '.$this->positionType.' prohibited';
                 $phpcsFile->addError($error, $closeBracket);
             }
         }
@@ -114,7 +116,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
     {
         if ($tokens[($openBracket + 1)]['code'] !== T_WHITESPACE && $tokens[($openBracket + 1)]['code'] !== T_CLOSE_PARENTHESIS) {
             // Checking this: $value = my_function([*]...).
-            $error = 'No space after opening parenthesis of function '.$this->type.' prohibited';
+            $error = 'No space after opening parenthesis of function '.$this->positionType.' prohibited';
             $phpcsFile->addError($error, $stackPtr);
         }
 
@@ -131,7 +133,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
             // $value = my_function( ).
 
             if ($between !== $closer) {
-                $error = 'No space before closing parenthesis of function '.$this->type.' prohibited';
+                $error = 'No space before closing parenthesis of function '.$this->positionType.' prohibited';
                 $phpcsFile->addError($error, $closer);
             }
         }
@@ -211,7 +213,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
                 }
 
                 if ($expectedIndent !== $foundIndent) {
-                    $error = "Multi-line function ".$this->type." not indented correctly; expected $expectedIndent spaces but found $foundIndent";
+                    $error = "Multi-line function ".$this->positionType." not indented correctly; expected $expectedIndent spaces but found $foundIndent";
 	                //If indented with tab spaces don't throw error!
 	                if ( false === strpos( $tokens[$i]['content'], "\t" ) )
                         $phpcsFile->addError($error, $i);
@@ -226,7 +228,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
 
         $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($closeBracket - 1), null, true);
         if ($tokens[$prev]['line'] === $tokens[$closeBracket]['line']) {
-            $error = 'Closing parenthesis of a multi-line function '.$this->type.' must be on a line by itself';
+            $error = 'Closing parenthesis of a multi-line function '.$this->positionType.' must be on a line by itself';
             $phpcsFile->addError($error, $closeBracket);
         }
 
