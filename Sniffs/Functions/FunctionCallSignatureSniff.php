@@ -203,7 +203,7 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
                     // as the function call.
                     $expectedIndent = $functionIndent;
                 } else {
-                    $expectedIndent = ($functionIndent + 4);
+                    $expectedIndent = ($functionIndent + 1);
                 }
 
                 if ($tokens[$i]['code'] !== T_WHITESPACE) {
