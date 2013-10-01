@@ -30,6 +30,8 @@
  */
 class WordPress_Sniffs_Strings_DoubleQuoteUsageSniff implements PHP_CodeSniffer_Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -63,7 +65,7 @@ class WordPress_Sniffs_Strings_DoubleQuoteUsageSniff implements PHP_CodeSniffer_
             $stringTokens = token_get_all('<?php '.$tokens[$stackPtr]['content']);
             foreach ($stringTokens as $token) {
                 if (is_array($token) === true && $token[0] === T_VARIABLE) {
-					return;
+                    return;
                 }
             }
 
