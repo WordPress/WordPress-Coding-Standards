@@ -110,11 +110,13 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             }
         }
 
+/*
         $firstContent = $phpcsFile->findNext(T_WHITESPACE, ($scopeOpener + 1), null, true);
         if ($tokens[$firstContent]['line'] !== ($tokens[$scopeOpener]['line'] + 1) && $tokens[$firstContent]['code'] !== T_CLOSE_TAG) {
             $error = 'Blank line found at start of control structure';
             $phpcsFile->addError($error, $scopeOpener);
         }
+*/
 
         $lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($scopeCloser - 1), null, true);
         if ($tokens[$lastContent]['line'] !== ($tokens[$scopeCloser]['line'] - 1)) {
