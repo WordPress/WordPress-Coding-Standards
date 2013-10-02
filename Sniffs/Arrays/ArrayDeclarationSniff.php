@@ -411,7 +411,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
             // Check each line ends in a comma.
             if ($tokens[$index['value']]['code'] !== T_ARRAY) {
-                $nextComma = $phpcsFile->findNext(array(T_COMMA), ($index['value'] + 1));
+                $nextComma = $phpcsFile->findNext(array(T_COMMA, T_OPEN_PARENTHESIS), ($index['value'] + 1));
                 if (($nextComma === false) || ($tokens[$nextComma]['line'] !== $tokens[$index['value']]['line'])) {
                     $error = 'Each line in an array declaration must end in a comma';
                     $phpcsFile->addError($error, $index['value']);
