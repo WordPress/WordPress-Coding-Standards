@@ -65,7 +65,7 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
      *
      * @var bool
      */
-    public $error = true;
+    public $error = false;
 
 }//end class
 
