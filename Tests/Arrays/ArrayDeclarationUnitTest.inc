@@ -23,7 +23,16 @@ $query_vars = array_merge(
 	// ...
 	array(
 		'post_status' => 'private',
-		'orderby' => 'title', // Good
+		'orderby'     => 'title', // Good
+	),
+	array(
+		'closure' => function () { // Good, Closures allowed
+			return array();
+		},
+	),
+	bar( // Good, Functions allowed
+		1,
+		2
 	)
 );
 $query = new WP_Query( $query_vars );
