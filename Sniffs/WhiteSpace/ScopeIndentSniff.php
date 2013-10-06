@@ -108,6 +108,11 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
             }
         }
 
+        // If the line starts with inline HTML (like we're in a template tag), all bets are off
+        if ( T_INLINE_HTML === $tokens[$firstToken]['code'] ) {
+            return;
+        }
+
         // Based on the conditions that surround this token, determine the
         // indent that we expect this current content to be.
         $expectedIndent = $this->calculateExpectedIndent($tokens, $firstToken);
@@ -311,7 +316,6 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
      */
     protected function calculateExpectedIndent(array $tokens, $stackPtr)
     {
-        $conditionStack = array();
 
         $inParenthesis = false;
         if (isset($tokens[$stackPtr]['nested_parenthesis']) === true

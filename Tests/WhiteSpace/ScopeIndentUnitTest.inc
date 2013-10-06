@@ -51,3 +51,16 @@ $string_spans_multiple_lines = 'First line.' .
 	'Second line' .
 		'Third line' .
 			'second line'; // The sniff pass this though it's not indented properly.
+
+function f(){
+	global $wp_widget_factory;
+	?>
+	<div>
+		<div>
+			<?php foreach ( $wp_widget_factory->widgets as $class_name => $widget ): ?>
+				<option value="<?php echo esc_attr( $class_name ) ?>"><?php echo esc_html( $widget->name ) ?></option>
+			<?php endforeach; ?>
+		</div>
+	</div>
+	<?php
+}
