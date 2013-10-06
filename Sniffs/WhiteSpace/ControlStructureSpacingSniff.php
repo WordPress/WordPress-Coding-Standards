@@ -32,6 +32,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
      */
     public $supportedTokenizers = array( 'PHP' );
 
+    /**
+     * Check for blank lines on start/end of control structures
+     * @var boolean
+     */
+    public $blank_line_check = false;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -110,20 +116,22 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             }
         }
 
-        $firstContent = $phpcsFile->findNext(T_WHITESPACE, ($scopeOpener + 1), null, true);
-        if ($tokens[$firstContent]['line'] !== ($tokens[$scopeOpener]['line'] + 1) && $tokens[$firstContent]['code'] !== T_CLOSE_TAG) {
-            $error = 'Blank line found at start of control structure';
-            $phpcsFile->addError($error, $scopeOpener);
-        }
+        if ( $this->blank_line_check ) {
+            $firstContent = $phpcsFile->findNext(T_WHITESPACE, ($scopeOpener + 1), null, true);
+            if ($tokens[$firstContent]['line'] !== ($tokens[$scopeOpener]['line'] + 1) && ! in_array($tokens[$firstContent]['code'], array(T_CLOSE_TAG, T_COMMENT))) {
+                $error = 'Blank line found at start of control structure';
+                $phpcsFile->addError($error, $scopeOpener);
+            }
 
-        $lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($scopeCloser - 1), null, true);
-        if ($tokens[$lastContent]['line'] !== ($tokens[$scopeCloser]['line'] - 1)) {
-            $errorToken = $scopeCloser;
-            for ($i = ($scopeCloser - 1); $i > $lastContent; $i--) {
-                if ($tokens[$i]['line'] < $tokens[$scopeCloser]['line'] && $tokens[$firstContent]['code'] !== T_OPEN_TAG) {
-                    $error = 'Blank line found at end of control structure';
-                    $phpcsFile->addError($error, $i);
-                    break;
+            $lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($scopeCloser - 1), null, true);
+            if ($tokens[$lastContent]['line'] !== ($tokens[$scopeCloser]['line'] - 1)) {
+                $errorToken = $scopeCloser;
+                for ($i = ($scopeCloser - 1); $i > $lastContent; $i--) {
+                    if ($tokens[$i]['line'] < $tokens[$scopeCloser]['line'] && $tokens[$firstContent]['code'] !== T_OPEN_TAG) {
+                        $error = 'Blank line found at end of control structure';
+                        $phpcsFile->addError($error, $i);
+                        break;
+                    }
                 }
             }
         }
