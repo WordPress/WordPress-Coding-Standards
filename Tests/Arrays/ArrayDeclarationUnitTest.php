@@ -47,7 +47,7 @@ class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitT
                 7 => 1,
                 9 => 1,
                 16 => 1,
-                38 => 2,
+                40 => 2,
                );
 
     }//end getErrorList()

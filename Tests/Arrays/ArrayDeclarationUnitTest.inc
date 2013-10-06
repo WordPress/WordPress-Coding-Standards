@@ -25,13 +25,15 @@ $query_vars = array_merge(
 		'post_status' => 'private',
 		'orderby'     => 'title', // Good
 	),
-	foo() { // Good, Enclosures allowed
-		return array();
-	},
-	bar( // Good, Functions allowed
-		$bar,
-		$taz
+	array(
+		'closure' => function () { // Good, Closures allowed
+			return array();
+		},
 	),
+	bar( // Good, Functions allowed
+		1,
+		2
+	)
 );
 $query = new WP_Query( $query_vars );
 
