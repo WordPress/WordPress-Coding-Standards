@@ -42,30 +42,7 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
      */
     public function getErrorList()
     {
-        return array(
-                8 => 1,
-                9 => 1,
-                17 => 1,
-                20 => 1,
-                23 => 1,
-                25 => 1,
-                27 => 1,
-                33 => 1,
-                35 => 1,
-                37 => 1,
-                39 => 1,
-                41 => 1,
-                43 => 1,
-                45 => 1,
-                47 => 1,
-                49 => 1,
-                51 => 1,
-                53 => 1,
-                55 => 1,
-                63 => 1,
-                65 => 1,
-                70 => 1,
-               );
+        return array();
 
     }//end getErrorList()
 
@@ -80,7 +57,30 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
      */
     public function getWarningList()
     {
-        return array();
+        return array(
+            8 => 1,
+            9 => 1,
+            17 => 1,
+            20 => 1,
+            23 => 1,
+            25 => 1,
+            27 => 1,
+            33 => 1,
+            35 => 1,
+            37 => 1,
+            39 => 1,
+            41 => 1,
+            43 => 1,
+            45 => 1,
+            47 => 1,
+            49 => 1,
+            51 => 1,
+            53 => 1,
+            55 => 1,
+            63 => 1,
+            65 => 1,
+            70 => 1,
+        );
 
     }//end getWarningList()
 
