@@ -9,4 +9,6 @@ while( have_posts() ) { // Okay, comments are okay here
 if ( true ) {
 
 	// code
+} else { //Are we allowed to comment here? If not, message is wrong
+	// ...
 }
