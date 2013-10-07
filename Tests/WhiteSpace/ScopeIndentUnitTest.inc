@@ -64,3 +64,32 @@ function f(){
 	</div>
 	<?php
 }
+
+
+
+class WordPress_Readme_Parser {
+
+	/**
+	 * Convert the parsed readme.txt into Markdown
+	 * @param array|string [$params]
+	 * @return string
+	 */
+	function to_markdown( $params = array() ) {
+
+		// Parse sections
+		$section_formatters = array(
+			// Good
+			'a' => function ( $body ) use ( $params ) {
+				if ( isset( $params['travis_ci_url'] ) ) {
+					$body .= sprintf( "\n\n[![Build Status](%s.png)](%s)", $params['travis_ci_url'], $params['travis_ci_url'] );
+				}
+				return $body;
+			},
+			// Bad
+			'b' => function ( $body ) use ( $params ) {
+			return $body;
+			},
+		);
+		return $section_formatters;
+	}
+}
