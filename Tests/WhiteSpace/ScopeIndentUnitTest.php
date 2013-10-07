@@ -45,6 +45,7 @@ class WordPress_Tests_WhiteSpace_ScopeIndentUnitTest extends AbstractSniffUnitTe
         return array(
                 9 => 1,
                 13 => 1,
+                90 => 1,
                );
 
     }//end getErrorList()
