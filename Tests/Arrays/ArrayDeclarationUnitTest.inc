@@ -39,3 +39,22 @@ $query = new WP_Query( $query_vars );
 
 $defaults = array( 'type'=>'post' ), // Bad, no sapces before and after double arrow
 wp_parse_args( $args, $defaults );
+
+class Foo {
+	function to_markdown( $params = array() ) {
+		// Parse sections
+		$section_formatters = array(
+			'Description' => function ( $body ) use ( $params ) {
+				if ( isset( $params['travis_ci_url'] ) ) {
+					$body .= sprintf( "\n\n[![Build Status](%s.png)](%s)", $params['travis_ci_url'], $params['travis_ci_url'] );
+				}
+				return $body;
+			},
+			'Screenshots' => function ( $body ) {
+				foreach ( $screenshot_matches as $i => $screenshot_match ) {
+					print $i;
+				}
+			}
+		);
+	}
+}

@@ -51,3 +51,45 @@ $string_spans_multiple_lines = 'First line.' .
 	'Second line' .
 		'Third line' .
 			'second line'; // The sniff pass this though it's not indented properly.
+
+function f(){
+	global $wp_widget_factory;
+	?>
+	<div>
+		<div>
+			<?php foreach ( $wp_widget_factory->widgets as $class_name => $widget ): ?>
+				<option value="<?php echo esc_attr( $class_name ) ?>"><?php echo esc_html( $widget->name ) ?></option>
+			<?php endforeach; ?>
+		</div>
+	</div>
+	<?php
+}
+
+
+
+class WordPress_Readme_Parser {
+
+	/**
+	 * Convert the parsed readme.txt into Markdown
+	 * @param array|string [$params]
+	 * @return string
+	 */
+	function to_markdown( $params = array() ) {
+
+		// Parse sections
+		$section_formatters = array(
+			// Good
+			'a' => function ( $body ) use ( $params ) {
+				if ( isset( $params['travis_ci_url'] ) ) {
+					$body .= sprintf( "\n\n[![Build Status](%s.png)](%s)", $params['travis_ci_url'], $params['travis_ci_url'] );
+				}
+				return $body;
+			},
+			// Bad
+			'b' => function ( $body ) use ( $params ) {
+			return $body;
+			},
+		);
+		return $section_formatters;
+	}
+}

@@ -10,3 +10,11 @@ for ( $i=0; $i<sizeof( $posts ); $i++ ) {
 for ( $i = 0; $i < sizeof( $posts ); $i++ ) {
 	// ...
 }
+// Good
+if ( ! $var ) {
+	// ...
+}
+// Bad
+if ( !$var ) {
+	// ...
+}
