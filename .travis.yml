@@ -12,4 +12,4 @@ before_script:
 
 script:
     - find . \( -name '*.php' \) -exec php -lf {} \;
-    - cd /tmp/phpcs && phpunit --filter WordPress tests/AllTests.php && cd -
+    - cd /tmp/phpcs && phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php && cd -
