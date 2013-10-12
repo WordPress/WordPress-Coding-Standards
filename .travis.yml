@@ -1,0 +1,15 @@
+language:
+    - php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+
+before_script:
+    - mkdir /tmp/phpcs && curl -GL https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz | tar -xvz -C /tmp/phpcs --strip 1
+    - project_dir=$(pwd) && cd /tmp/phpcs/CodeSniffer/Standards && ln -s $project_dir ./WordPress && cd $project_dir
+
+script:
+    - find . \( -name '*.php' \) -exec php -lf {} \;
+    - cd /tmp/phpcs && phpunit --filter WordPress tests/AllTests.php && cd -
