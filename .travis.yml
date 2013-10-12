@@ -7,9 +7,9 @@ php:
     - 5.5
 
 before_script:
-    - curl -GL https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz | tar -xvz -C /tmp
-    - project_dir=$(pwd) && cd /tmp/PHP_CodeSniffer-master/CodeSniffer/Standards && ln -s $project_dir ./WordPress && cd $project_dir
+    - git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git /tmp/phpcs
+    - project_dir=$(pwd) && cd /tmp/phpcs/CodeSniffer/Standards && ln -s $project_dir ./WordPress && cd $project_dir
 
 script:
     - find . \( -name '*.php' \) -exec php -lf {} \;
-    - cd /tmp/PHP_CodeSniffer-master && phpunit --filter WordPress tests/AllTests.php && cd -
+    - cd /tmp/phpcs && phpunit --filter WordPress tests/AllTests.php && cd -
