@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $(dirname $0)/..
+
+if [ ! -e ../../../CodeSniffer.php ]; then
+	echo "You must clone the WordPress standard inside of the phpcs CodeSniffer/Standards directory; could not find ../../../CodeSniffer.php" 1>&2
+	exit 1
+fi
+
+find . \( -name '*.php' \) -exec php -lf {} \;
+
+phpunit --filter WordPress ../../../tests/AllTests.php
