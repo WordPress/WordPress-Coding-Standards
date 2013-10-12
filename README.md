@@ -10,6 +10,8 @@ This is a fork of the WordPress Coding Standards project from [Urban Giraffe](h
 
 See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing).
 
+[![Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+
 ### How to use this
 
 Once you've installed PEAR, install Codesniffer:
