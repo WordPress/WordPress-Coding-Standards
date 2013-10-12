@@ -8,8 +8,8 @@ php:
 
 before_script:
     - git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git /tmp/phpcs
-    - project_dir=$(pwd) && cd /tmp/phpcs/CodeSniffer/Standards && ln -s $project_dir ./WordPress && cd $project_dir
+    - project_dir=$(pwd) && cd /tmp/phpcs/CodeSniffer/Standards && mv $project_dir ./WordPress && cd WordPress
 
 script:
     - find . \( -name '*.php' \) -exec php -lf {} \;
-    - cd /tmp/phpcs && phpunit --filter WordPress tests/AllTests.php && cd -
+    - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
