@@ -7,7 +7,7 @@ php:
     - 5.5
 
 before_script:
-    - mkdir /tmp/PHP_CodeSniffer-master && curl -GL https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz | tar -xvz -C /tmp/PHP_CodeSniffer-master
+    - curl -GL https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz | tar -xvz -C /tmp
     - project_dir=$(pwd) && cd /tmp/PHP_CodeSniffer-master/CodeSniffer/Standards && ln -s $project_dir ./WordPress && cd $project_dir
 
 script:
