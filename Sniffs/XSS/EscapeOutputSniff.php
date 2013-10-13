@@ -307,6 +307,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
         if ( in_array( $tokens[$stackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING ) ) )
             return;
 
+        // Allow int/double/bool casted variables
+        if ( in_array( $tokens[$stackPtr]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) )
+            return;
+
         // Now check that next token is a function call.
         if (in_array($tokens[$stackPtr]['code'], array(T_STRING)) === false) {
             $error = sprintf("Expected next thing to be a escaping function, not '%s'", $tokens[$stackPtr]['content']);
