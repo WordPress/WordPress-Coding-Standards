@@ -30,4 +30,6 @@ function custom_column_display( $column, $post_id )
         break;
     }
 }
-?>
+
+echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
+echo filter_input( INPUT_GET, $bar );
