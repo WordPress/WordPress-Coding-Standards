@@ -248,6 +248,16 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                    'sanitize_term_field',
                                   );
 
+        public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
+                                   '__',
+                                   '_x',
+                                   '_n',
+                                   '_nx',
+                                   '_e',
+                                   '_ex',
+                                   '_ngettext',
+                                  );
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -259,6 +269,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
         return array(
                 T_ECHO,
                 T_PRINT,
+                T_STRING,
                );
 
     }//end register()
@@ -278,6 +289,16 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
+
+        // If function, not T_ECHO nor T_PRINT
+        if ( $tokens[$stackPtr]['code'] == T_STRING ) {
+            // Skip if it is a function but is not of the printing functions ( self::needSanitizingFunctions )
+            if ( ! in_array( $tokens[$stackPtr]['content'], $this->needSanitizingFunctions ) ) {
+                return;
+            }
+
+            $stackPtr++; // Ignore the starting bracket
+        }
 
         // Ensure that the next token is a whitespace.
         $stackPtr++;
@@ -370,7 +391,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                     elseif ( $tokens[$_pos]['code'] == T_CLOSE_PARENTHESIS )
                         $openedBrackets--;
 
-                    if ( $openedBrackets == 0 ) {
+                    if ( $openedBrackets < 1 ) {
                         $i = $_pos + 1;
                         break;
                     }
