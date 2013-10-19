@@ -20,3 +20,7 @@ function bar() {
 
 	return $listofthings;
 }
+
+function dummy() {
+
+}

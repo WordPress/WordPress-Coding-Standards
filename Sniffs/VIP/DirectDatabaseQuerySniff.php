@@ -67,8 +67,12 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( $whitelisted )
 			return;
 
+		// Get start of the function/method
+		$funcStart = $phpcsFile->findPrevious( array( T_FUNCTION ), $stackPtr );
+
 		// Check presense of wp_cache_set / wp_cache_get
-		$scopeStart = $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET ), $stackPtr );
+		$scopeStart = $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET ), $funcStart, $stackPtr );
+		// @Question: Should we check for wp_cache_set in the same scope, ex: if block, or in whole function scope ?
 		$scopeEnd   = $phpcsFile->findNext( array( T_CLOSE_CURLY_BRACKET ), $stackPtr );
 
 		$wpcacheget = $phpcsFile->findNext( array( T_STRING ), $scopeStart + 1, $stackPtr - 1, null, 'wp_cache_get' );
