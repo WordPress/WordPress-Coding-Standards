@@ -285,6 +285,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
             $stackPtr++;
         }
 
+        // Checking for the ignore comment, ex: //xss ok
         $isAtEndOfStatement = false;
         $commentOkRegex     = '/xss\W*(ok|pass|clear|whitelist)/i';
         $tokensCount        = count($tokens);
@@ -303,30 +304,79 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
             }
         }
 
-        // Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
-        if ( in_array( $tokens[$stackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING ) ) )
-            return;
 
-        // Allow int/double/bool casted variables
-        if ( in_array( $tokens[$stackPtr]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) )
-            return;
+        // looping through echo'd components
+        $watch = true;
+        for( $i = $stackPtr; $i < count( $tokens ); $i++ ) {
 
-        // Now check that next token is a function call.
-        if (in_array($tokens[$stackPtr]['code'], array(T_STRING)) === false) {
-            $error = sprintf("Expected next thing to be a escaping function, not '%s'", $tokens[$stackPtr]['content']);
-            $phpcsFile->addError($error, $stackPtr);
-            return;
-        }
+            // End processing if found the end of statement
+            if ( $tokens[$i]['code'] == T_SEMICOLON ) {
+                return;
+            }
 
-        $functionName = $tokens[$stackPtr]['content'];
-        if (in_array($functionName, $this->autoEscapedFunctions) === true) {
-            return;
-        }
+            // Ignore whitespaces
+            if ( $tokens[$i]['code'] == T_WHITESPACE )
+                continue;
 
-        if (in_array($functionName, $this->sanitizingFunctions) === false) {
-            $error = sprintf("Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $tokens[$stackPtr]['content']);
-            $phpcsFile->addError($error, $stackPtr);
-            return;
+            // Wake up on concatenation characters, another part to check
+            if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {
+                $watch = true;
+                continue;
+            }
+
+            if ( $watch === false )
+                continue;
+
+            $watch = false;
+
+            // Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
+            if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING ) ) ) {
+                continue;
+            }
+
+            // Allow int/double/bool casted variables
+            if ( in_array( $tokens[$i]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) ) {
+                continue;
+            }
+
+            // Now check that next token is a function call.
+            if ( in_array($tokens[$i]['code'], array(T_STRING)) === false ) {
+                $error = sprintf("Expected next thing to be a escaping function, not '%s'", $tokens[$i]['content']);
+                $phpcsFile->addError($error, $i);
+                continue;
+            }
+
+            // This is a function
+            else {
+                $functionName = $tokens[$i]['content'];
+                if (
+                    in_array($functionName, $this->autoEscapedFunctions) === false
+                    &&
+                    in_array($functionName, $this->sanitizingFunctions) === false
+                    ) {
+
+                    $error = sprintf("Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $tokens[$i]['content']);
+                    $phpcsFile->addError($error, $i);
+                }
+
+                // Skip pointer to after the function
+                $openedBrackets = 0;
+                $_pos = $i;
+                while ( $_pos = $phpcsFile->findNext( array( T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS ), $_pos + 1, null, null, null, true ) ) {
+
+
+                    if ( $tokens[$_pos]['code'] == T_OPEN_PARENTHESIS )
+                        $openedBrackets++;
+                    elseif ( $tokens[$_pos]['code'] == T_CLOSE_PARENTHESIS )
+                        $openedBrackets--;
+
+                    if ( $openedBrackets == 0 ) {
+                        $i = $_pos + 1;
+                        break;
+                    }
+                }
+                continue;
+            }
         }
 
     }//end process()

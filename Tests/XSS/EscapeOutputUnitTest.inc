@@ -30,4 +30,13 @@ function custom_column_display( $column, $post_id )
         break;
     }
 }
-?>
+
+$foo = 'abc';
+echo $foo; // Bad, should have escaping function
+echo 'Some Raw String';  // Good
+
+
+echo '' . $bad; // Bad, should not validate
+echo "this is $bad"; // Bad
+echo esc_html( $good . $better ) . $foo; // Bad, should escape all concatenated elements
+echo esc_html( $food . 'include'  ); // Good, eveything inside the escaping/sanitizing function should pass
