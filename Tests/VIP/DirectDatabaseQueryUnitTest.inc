@@ -22,5 +22,19 @@ function bar() {
 }
 
 function dummy() {
+}
 
+function bar() {
+	// global $wpdb;
+	wp_cache_get();
+
+	$wpdb->query( 'ALTER TABLE TO ADD SOME FIELDS' ); // db call okay
+
+	$wpdb->query( $wpdb->prepare( 'CREATE TABLE ' ) ); // db call okay
+
+	$wpdb->query( $wpdb->prepare( 'SELECT X FROM Y ' ) );
+
+	$wpdb->query( 'SELECT QUERY' ); // db call okay
+	
+	wp_cache_set();
 }

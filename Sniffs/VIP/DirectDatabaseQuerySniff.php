@@ -63,6 +63,15 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 			}
 		}
 
+		// Check for Database Schema Changes
+		$_pos = $stackPtr;
+		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $_pos + 1, $endOfStatement, null, null, true ) ) {
+			if ( preg_match( '#(ALTER|CREATE|DROP)+ #i', $tokens[$_pos]['content'], $matches ) > 0 ) {
+				$message = 'Attempting a database schema change is highly discouraged.';
+				$this->add_unique_message( $phpcsFile, 'error', $_pos, $tokens[$_pos]['line'], $message );
+			}
+		}
+
 		// Flag instance if not whitelisted
 		if ( $whitelisted )
 			return;
@@ -79,13 +88,39 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$wpcacheset = $phpcsFile->findNext( array( T_STRING ), $stackPtr + 1, $scopeEnd - 1, null, 'wp_cache_set' );
 
 		if ( $wpcacheget === false || $wpcacheset === false ) {
-			$phpcsFile->addError( 'Usage of a direct $wpdb should be accompanied with a wp_cache_get / wp_cache_set.', $stackPtr );
+			$message = 'Usage of a direct $wpdb should be accompanied with a wp_cache_get / wp_cache_set.';
+			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		} else {
-			$phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr );
+			$message = 'Usage of a direct database call is discouraged.';
+			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
 
 
+
 	}//end process()
+
+	/**
+	 * Add unique message per line
+	 * @param PHP_CodeSniffer_File $phpcsFile
+	 * @param string $type      (error|warning)
+	 * @param int    $pointer
+	 * @param int    $line
+	 * @param string $message
+	 */
+	function add_unique_message( PHP_CodeSniffer_File $phpcsFile, $type, $pointer, $line, $message ) {
+		$messages = call_user_func( array( $phpcsFile, 'get' . ucfirst( $type . 's' ) ) );
+		if ( isset( $messages[$line] ) ) {
+			foreach ( $messages[$line] as $idx => $events ) {
+				foreach ( $events as $arr ) {
+					if ( $arr['message'] == $message ) {
+						return false;
+					}
+				}
+			}
+		}
+
+		call_user_func( array( $phpcsFile, 'add' . ucfirst( $type ) ), $message, $pointer );
+	}
 
 
 }//end class
