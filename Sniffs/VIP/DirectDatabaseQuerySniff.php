@@ -46,8 +46,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( false == $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), $stackPtr + 1, null, null, null, true ) )
 			return; // This is not a call to the wpdb object
 
-		
-
 		// Check for whitelisting comment
 		$whitelisted = false;
 		$whitelist_pattern = '/db call\W*(ok|pass|clear|whitelist)/i';
@@ -68,7 +66,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		// Flag instance if not whitelisted
 		if ( $whitelisted )
 			return;
-
 
 		// Check presense of wp_cache_set / wp_cache_get
 		$scopeStart = $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET ), $stackPtr );
