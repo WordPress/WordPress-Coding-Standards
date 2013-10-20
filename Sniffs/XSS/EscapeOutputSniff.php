@@ -20,7 +20,7 @@
 class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 {
 
-    public $autoEscapedFunctions = array(
+    public static $autoEscapedFunctions = array(
                                     'get_header',
                                     'get_footer',
                                     'get_sidebar',
@@ -196,7 +196,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                     'do_shortcode_tag',
                                    );
 
-    public $sanitizingFunctions = array(
+    public static $sanitizingFunctions = array(
                                    'wp_kses_post',
                                    'wp_kses_data',
                                    'wp_kses_allowed_html',
@@ -319,11 +319,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
         }
 
         $functionName = $tokens[$stackPtr]['content'];
-        if (in_array($functionName, $this->autoEscapedFunctions) === true) {
+        if (in_array($functionName, self::$autoEscapedFunctions) === true) {
             return;
         }
 
-        if (in_array($functionName, $this->sanitizingFunctions) === false) {
+        if (in_array($functionName, self::$sanitizingFunctions) === false) {
             $error = sprintf("Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $tokens[$stackPtr]['content']);
             $phpcsFile->addError($error, $stackPtr);
             return;
