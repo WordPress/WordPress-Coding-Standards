@@ -10,7 +10,7 @@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
-class WordPress_Tests_VIP_PHPSessionsUsageUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_VIP_SessionFunctionsUsageUnitTest extends AbstractSniffUnitTest
 {
 
 

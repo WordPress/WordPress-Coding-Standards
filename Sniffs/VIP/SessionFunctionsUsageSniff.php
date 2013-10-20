@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress_Sniffs_VIP_PHPSessionsUsageSniff.
+ * WordPress_Sniffs_VIP_SessionFunctionsUsageSniff.
  *
  * Discourages the use of session functions
  *
@@ -9,7 +9,7 @@
  * @author   Shady Sharaf <shady@x-team.com>
  * @see  https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
  */
-class WordPress_Sniffs_VIP_PHPSessionsUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff
+class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff
 {
 
     /**
