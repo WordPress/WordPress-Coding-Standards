@@ -40,5 +40,7 @@ echo '' . $bad; // Bad, should not validate
 echo "this is $bad"; // Bad
 echo esc_html( $good . $better ) . $foo; // Bad, should escape all concatenated elements
 echo esc_html( $food . 'include'  ); // Good, eveything inside the escaping/sanitizing function should pass
+echo esc_html( strtoupper( $ok ) ) . $foo; // Bad, again
+echo esc_html( strtoupper( $ok ) ) . ' ' . esc_html( strtolower( $ok ) ); // OK
 
-_e( $some_nasty_var );
+_e( $some_nasty_var ); // Bad

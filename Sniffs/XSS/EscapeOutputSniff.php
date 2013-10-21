@@ -248,15 +248,15 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                    'sanitize_term_field',
                                   );
 
-        public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
-                                   '__',
-                                   '_x',
-                                   '_n',
-                                   '_nx',
-                                   '_e',
-                                   '_ex',
-                                   '_ngettext',
-                                  );
+    public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
+                                           '__',
+                                           '_x',
+                                           '_n',
+                                           '_nx',
+                                           '_e',
+                                           '_ex',
+                                           '_ngettext',
+                                          );
 
 
     /**
