@@ -26,7 +26,9 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 	{
 		return array(
 			3  => 1,
+			9  => 1,
 			10 => 1,
+			12 => 1,
 			);
 
 	}//end getErrorList()
