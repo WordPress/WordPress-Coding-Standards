@@ -1,6 +1,6 @@
 <?php
 
-function bar() {
+function foo() {
 	global $wpdb;
 
 	$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Error
@@ -24,17 +24,30 @@ function bar() {
 function dummy() {
 }
 
-function bar() {
-	// global $wpdb;
-	wp_cache_get();
+function baz() {
+	global $wpdb;
+	$baz = wp_cache_get( 'baz' );
+	if ( false !== $baz ) {
 
-	$wpdb->query( 'ALTER TABLE TO ADD SOME FIELDS' ); // db call okay
+		$wpdb->query( 'ALTER TABLE TO ADD SOME FIELDS' ); // db call okay (but not really because ALTER TABLE!)
 
-	$wpdb->query( $wpdb->prepare( 'CREATE TABLE ' ) ); // db call okay
+		$wpdb->query( $wpdb->prepare( 'CREATE TABLE ' ) ); // db call okay (but not really because CREATE TABLE!)
 
-	$wpdb->query( $wpdb->prepare( 'SELECT X FROM Y ' ) );
+		$wpdb->query( 'SELECT QUERY' ); // db call okay
 
-	$wpdb->query( 'SELECT QUERY' ); // db call okay
-	
-	wp_cache_set();
+		$baz = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) );
+
+		wp_cache_set( 'baz', $baz );
+	}
+
+
+}
+
+function quux() {
+	global $wpdb;
+	$quux = wp_cache_get( 'quux' );
+	if ( false !== $quux ) {
+		$quux = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // db call okay (but not really because no wp_cache_set later!)
+	}
+
 }

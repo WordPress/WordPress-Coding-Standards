@@ -79,7 +79,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		// Get start of the function/method
 		$funcStart = $phpcsFile->findPrevious( array( T_FUNCTION ), $stackPtr );
 
-		// Check presense of wp_cache_set / wp_cache_get
+		// Check presence of wp_cache_set / wp_cache_get
 		$scopeStart = $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET ), $funcStart, $stackPtr );
 		// @Question: Should we check for wp_cache_set in the same scope, ex: if block, or in whole function scope ?
 		$scopeEnd   = $phpcsFile->findNext( array( T_CLOSE_CURLY_BRACKET ), $stackPtr );
@@ -95,8 +95,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
 
-
-
 	}//end process()
 
 	/**
@@ -106,6 +104,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 * @param int    $pointer
 	 * @param int    $line
 	 * @param string $message
+     * @return void
 	 */
 	function add_unique_message( PHP_CodeSniffer_File $phpcsFile, $type, $pointer, $line, $message ) {
 		$messages = call_user_func( array( $phpcsFile, 'get' . ucfirst( $type . 's' ) ) );
