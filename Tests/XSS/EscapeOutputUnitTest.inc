@@ -32,4 +32,4 @@ function custom_column_display( $column, $post_id )
 }
 
 echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
-echo filter_input( INPUT_GET, $bar );
+echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
