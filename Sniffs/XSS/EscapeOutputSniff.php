@@ -362,8 +362,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
             // Now check that next token is a function call.
             if ( in_array($tokens[$i]['code'], array(T_STRING)) === false ) {
-                $error = sprintf("Expected next thing to be a escaping function, not '%s'", $tokens[$i]['content']);
-                $phpcsFile->addError($error, $i);
+                $phpcsFile->addError( "Expected next thing to be a escaping function, not '%s'", $i, null, $tokens[$i]['content'] );
                 continue;
             }
 
@@ -376,8 +375,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                     in_array($functionName, $this->sanitizingFunctions) === false
                     ) {
 
-                    $error = sprintf("Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $tokens[$i]['content']);
-                    $phpcsFile->addError($error, $i);
+                    $phpcsFile->addError( "Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $i, null, $tokens[$i]['content'] );
                 }
 
                 // Skip pointer to after the function
