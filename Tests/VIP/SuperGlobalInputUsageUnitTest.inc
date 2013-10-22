@@ -7,3 +7,7 @@ foo( $_GET['whitelisted'] ); // input var okay
 if ( $_GET['test'] && foo() && $bar ) { // input var okay
 	taz();
 }
+
+bar( $_POST['foo'] ); // warning
+
+quux( $_REQUEST['quux'] ); // warning

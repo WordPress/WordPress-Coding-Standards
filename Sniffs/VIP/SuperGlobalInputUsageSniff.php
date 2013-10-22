@@ -37,7 +37,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		// Check for $wpdb variable
+		// Check for global input variable
 		if ( ! in_array( $tokens[$stackPtr]['content'], array( '$_GET', '$_POST', '$_REQUEST' ) ) )
 			return;
 

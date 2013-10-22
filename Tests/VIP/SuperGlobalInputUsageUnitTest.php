@@ -42,6 +42,8 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 	{
 		return array(
 			3 => 1,
+			11 => 1,
+			13 => 1,
 			);
 
 	}//end getWarningList()
