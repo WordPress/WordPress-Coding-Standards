@@ -66,7 +66,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		// Check for Database Schema Changes
 		$_pos = $stackPtr;
 		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $_pos + 1, $endOfStatement, null, null, true ) ) {
-			if ( preg_match( '#(ALTER|CREATE|DROP)+ #i', $tokens[$_pos]['content'], $matches ) > 0 ) {
+			if ( preg_match( '#\b(ALTER|CREATE|DROP)\b#i', $tokens[$_pos]['content'], $matches ) > 0 ) {
 				$message = 'Attempting a database schema change is highly discouraged.';
 				$this->add_unique_message( $phpcsFile, 'error', $_pos, $tokens[$_pos]['line'], $message );
 			}
