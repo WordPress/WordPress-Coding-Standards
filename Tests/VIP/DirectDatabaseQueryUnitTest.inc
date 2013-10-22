@@ -3,9 +3,9 @@
 function foo() {
 	global $wpdb;
 
-	$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Error
+	$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Error + Warning
 
-	$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); //db call okay
+	$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); //db call okay ( No Warning, but Error for not caching! )
 
 	return $listofthings;
 }
@@ -47,7 +47,7 @@ function quux() {
 	global $wpdb;
 	$quux = wp_cache_get( 'quux' );
 	if ( false !== $quux ) {
-		$quux = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // Bad, no wp_cache_set
+		$quux = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // Bad, no wp_cache_set, results in Error + Warning
 	}
 
 }

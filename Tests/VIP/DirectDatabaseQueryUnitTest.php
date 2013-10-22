@@ -26,6 +26,7 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 	{
 		return array(
 			6  => 1,
+			8  => 1,
 			32 => 1,
 			34 => 1,
 			50 => 1,
@@ -45,8 +46,10 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 	public function getWarningList()
 	{
 		return array(
+			6  => 1,
 			17 => 1,
 			38 => 1,
+			50 => 1,
 			);
 
 	}//end getWarningList()

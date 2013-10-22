@@ -52,11 +52,13 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$endOfStatement = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
 		for ( $i = $endOfStatement + 1; $i < count( $tokens ); $i++ ) {
 
-			if ( in_array( $tokens[$i]['code'], array( T_WHITESPACE ) ) )
+			if ( in_array( $tokens[$i]['code'], array( T_WHITESPACE ) ) ) {
 				continue;
+			}
 
-			if ( $tokens[$i]['code'] != T_COMMENT )
+			if ( $tokens[$i]['code'] != T_COMMENT ) {
 				break;
+			}
 
 			if ( preg_match( $whitelist_pattern, $tokens[$i]['content'], $matches ) > 0 ) {
 				$whitelisted = true;
@@ -73,8 +75,10 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		}
 
 		// Flag instance if not whitelisted
-		if ( $whitelisted )
-			return;
+		if ( ! $whitelisted ) {
+			$message = 'Usage of a direct database call is discouraged.';
+			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
+		}
 
 		$cached = false;
 		if ( ! empty( $tokens[$stackPtr]['conditions'] ) ) {
@@ -103,10 +107,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( ! $cached ) {
 			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
 			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message );
-		}
-		else {
-			$message = 'Usage of a direct database call is discouraged.';
-			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
 
 	}//end process()
