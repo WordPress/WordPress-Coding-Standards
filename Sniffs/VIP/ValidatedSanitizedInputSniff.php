@@ -49,8 +49,8 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$nested = $instance['nested_parenthesis'];
 
 		// Ignore if wrapped inside ISSET
-		end($nested); // Get closest parenthesis
-		if ( T_ISSET === $tokens[ key( $nested ) - 1 ]['code'] )
+		end( $nested ); // Get closest parenthesis
+		if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY ) ) )
 			return;
 
 		$varKey = $this->getArrayIndexKey( $phpcsFile, $tokens, $stackPtr );
