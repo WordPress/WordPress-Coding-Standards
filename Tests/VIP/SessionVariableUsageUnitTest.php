@@ -25,7 +25,7 @@ class WordPress_Tests_VIP_SessionVariableUsageUnitTest extends AbstractSniffUnit
 	public function getErrorList()
 	{
 		return array(
-			3  => 1,
+			3 => 1,
 			4 => 1,
 			);
 
