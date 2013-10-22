@@ -381,20 +381,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                 }
 
                 // Skip pointer to after the function
-                $openedBrackets = 0;
-                $_pos = $i;
-                while ( $_pos = $phpcsFile->findNext( array( T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS ), $_pos + 1, null, null, null, true ) ) {
-
-
-                    if ( $tokens[$_pos]['code'] == T_OPEN_PARENTHESIS )
-                        $openedBrackets++;
-                    elseif ( $tokens[$_pos]['code'] == T_CLOSE_PARENTHESIS )
-                        $openedBrackets--;
-
-                    if ( $openedBrackets < 1 ) {
-                        $i = $_pos + 1;
-                        break;
-                    }
+                if ( $_pos = $phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i, null, null, null, true ) ) {
+                    $i = $tokens[$_pos]['parenthesis_closer'];
                 }
                 continue;
             }
