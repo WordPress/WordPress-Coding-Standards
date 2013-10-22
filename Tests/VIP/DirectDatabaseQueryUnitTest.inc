@@ -47,7 +47,7 @@ function quux() {
 	global $wpdb;
 	$quux = wp_cache_get( 'quux' );
 	if ( false !== $quux ) {
-		$quux = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // db call okay (but not really because no wp_cache_set later!)
+		$quux = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // Bad, no wp_cache_set
 	}
 
 }
