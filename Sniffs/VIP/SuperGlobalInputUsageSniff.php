@@ -46,7 +46,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 		// Check for whitelisting comment
 		$currentLine = $tokens[$stackPtr]['line'];
 		$nextPtr = $stackPtr;
-		while ( $tokens[$nextPtr + 1]['line'] == $currentLine ) {
+		while ( isset( $tokens[$nextPtr + 1]['line'] ) && $tokens[$nextPtr + 1]['line'] == $currentLine ) {
 			$nextPtr++;
 			// Do nothing, we just want the last token of the line
 		}
