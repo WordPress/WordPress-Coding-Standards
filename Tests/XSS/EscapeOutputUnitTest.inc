@@ -31,10 +31,10 @@ function custom_column_display( $column, $post_id )
     }
 }
 
+
 $foo = 'abc';
 echo $foo; // Bad, should have escaping function
 echo 'Some Raw String';  // Good
-
 
 echo '' . $bad; // Bad, should not validate
 echo "this is $bad"; // Bad
@@ -44,3 +44,6 @@ echo esc_html( strtoupper( $ok ) ) . $foo; // Bad, again
 echo esc_html( strtoupper( $ok ) ) . ' ' . esc_html( strtolower( $ok ) ); // OK
 
 _e( $some_nasty_var ); // Bad
+
+echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
+echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );

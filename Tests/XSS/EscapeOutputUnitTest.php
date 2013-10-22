@@ -45,7 +45,7 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest
         return array(
                 17 => 1,
                 19 => 1,
-                35 => 1,
+                36 => 1,
                 39 => 1,
                 40 => 1,
                 41 => 1,
