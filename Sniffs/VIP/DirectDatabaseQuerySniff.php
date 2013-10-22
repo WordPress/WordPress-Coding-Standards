@@ -76,21 +76,35 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( $whitelisted )
 			return;
 
-		// Get start of the function/method
-		$funcStart = $phpcsFile->findPrevious( array( T_FUNCTION ), $stackPtr );
+		$cached = false;
+		if ( ! empty( $tokens[$stackPtr]['conditions'] ) ) {
+			$conditions = $tokens[$stackPtr]['conditions'];
+			$scope_function = null;
+			foreach ( $conditions  as $condPtr => $condType ) {
+				if ( $condType == T_FUNCTION ) {
+					$scope_function = $condPtr;
+				}
+			}
 
-		// Check presence of wp_cache_set / wp_cache_get
-		$scopeStart = $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET ), $funcStart, $stackPtr );
-		// @Question: Should we check for wp_cache_set in the same scope, ex: if block, or in whole function scope ?
-		$scopeEnd   = $phpcsFile->findNext( array( T_CLOSE_CURLY_BRACKET ), $stackPtr );
+			$scopeStart = $tokens[$scope_function]['scope_opener'];
+			$scopeEnd = $tokens[$scope_function]['scope_closer'];
 
-		$wpcacheget = $phpcsFile->findNext( array( T_STRING ), $scopeStart + 1, $stackPtr - 1, null, 'wp_cache_get' );
-		$wpcacheset = $phpcsFile->findNext( array( T_STRING ), $stackPtr + 1, $scopeEnd - 1, null, 'wp_cache_set' );
+			if ( $scope_function ) {
+				$wpcacheget = $phpcsFile->findNext( array( T_STRING ), $scopeStart + 1, $stackPtr - 1, null, 'wp_cache_get' );
+				$wpcacheset = $phpcsFile->findNext( array( T_STRING ), $stackPtr + 1, $scopeEnd - 1, null, 'wp_cache_set' );
 
-		if ( $wpcacheget === false || $wpcacheset === false ) {
-			$message = 'Usage of a direct $wpdb should be accompanied with a wp_cache_get / wp_cache_set.';
+				if ( $wpcacheget && $wpcacheset ) {
+					$cached = true;
+				}
+			}
+
+		}
+
+		if ( ! $cached ) {
+			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
 			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message );
-		} else {
+		}
+		else {
 			$message = 'Usage of a direct database call is discouraged.';
 			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
