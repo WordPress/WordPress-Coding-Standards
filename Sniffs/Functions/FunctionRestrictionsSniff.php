@@ -4,31 +4,17 @@
  *
  * @category PHP
  * @package  PHP_CodeSniffer
- * @author   Weston Ruter <weston@x-team.com>
- * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
+ * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_FunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff
+abstract class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff
 {
-
-	public $groups = array(
-		'switch_to_blog' => array(
-			'type'      => 'error',
-			'message'   => '%s is not something you should ever need to do in a VIP theme context. Instead use an API (XML-RPC, REST) to interact with other sites if needed.',
-			'functions' => array( 'switch_to_blog' ),
-			),
-		'lambda' => array(
-			'type' => 'error',
-			'message' => '%s is prohibited, please use Anonymous functions instead.',
-			'functions' => array( 
-				'eval', 
-				'create_function',
-				),
-			),
-		);
 
 	/**
 	 * Exclude groups
-	 * @var string Comma-delimited group list, ie: switch_to_blog,user_meta
+	 *
+	 * Example: 'switch_to_blog,user_meta'
+	 * 
+	 * @var string Comma-delimited group list 
 	 */
 	public $exclude = '';
 
@@ -46,6 +32,23 @@ class WordPress_Sniffs_VIP_FunctionRestrictionsSniff implements PHP_CodeSniffer_
 
 	}//end register()
 
+	/**
+	 * Groups of functions to restrict
+	 *
+	 * Example: groups => array(
+	 * 	'lambda' => array(
+	 * 		'type' => 'error' | 'warning',
+	 * 		'message' => 'Use anonymous functions instead please!',
+	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 	)
+	 * )
+	 * 
+	 * @return array
+	 */
+	public function getGroups() {
+		return array();
+	}
+
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -53,8 +56,6 @@ class WordPress_Sniffs_VIP_FunctionRestrictionsSniff implements PHP_CodeSniffer_
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
-	 *
-	 * @todo Allow T_CONSTANT_ENCAPSED_STRING?
 	 *
 	 * @return void
 	 */
@@ -66,14 +67,22 @@ class WordPress_Sniffs_VIP_FunctionRestrictionsSniff implements PHP_CodeSniffer_
 
 		$exclude = explode( ',', $this->exclude );
 
+		$groups = $this->getGroups();
 
-		foreach ( $this->groups as $groupName => $group ) {
+		if ( empty( $groups ) ) {
+			return;
+		}
+
+		foreach ( $groups as $groupName => $group ) {
 			
 			if ( in_array( $groupName, $exclude ) ) {
 				continue;
 			}
 
-			if ( ! in_array( $token['content'], $group['functions'] ) ) {
+			$functions = implode( '|', $group['functions'] );
+			$functions = preg_replace( '#[^\.]\*#', '.*', $functions ); // So you can use * instead of .*
+
+			if ( preg_match( '#\b(' . $functions . ')\b#', $token['content'] ) < 1 ) {
 				continue;
 			}
 
@@ -97,5 +106,3 @@ class WordPress_Sniffs_VIP_FunctionRestrictionsSniff implements PHP_CodeSniffer_
 
 
 }//end class
-
-?>

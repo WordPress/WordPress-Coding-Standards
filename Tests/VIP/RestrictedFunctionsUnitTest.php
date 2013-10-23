@@ -12,7 +12,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_VIP_FunctionRestrictionsUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -27,9 +27,14 @@ class WordPress_Tests_VIP_FunctionRestrictionsUnitTest extends AbstractSniffUnit
     public function getErrorList()
     {
         return array(
-            3 => 1,
-            5 => 1,
-            7 => 1,
+            3  => 1,
+            5  => 1,
+            7  => 1,
+            9  => 1,
+            11 => 1,
+            13 => 1,
+            15 => 1,
+            17 => 1,
                );
 
     }//end getErrorList()
