@@ -246,6 +246,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
                                    'sanitize_meta',
                                    'sanitize_term',
                                    'sanitize_term_field',
+                                   'filter_var',
+                                   'filter_input',
                                   );
 
 
