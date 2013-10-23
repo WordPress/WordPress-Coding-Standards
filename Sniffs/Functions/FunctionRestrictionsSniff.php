@@ -6,7 +6,7 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-abstract class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff
 {
 
 	/**
