@@ -41,8 +41,8 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 
 			'file_get_contents' => array(
-				'type' => 'error',
-				'message' => '%s is prohibited, please use wpcom_vip_file_get_contents() instead.',
+				'type' => 'warning',
+				'message' => '%s is highly discouraged, please use wpcom_vip_file_get_contents() instead.',
 				'functions' => array(
 					'file_get_contents',
 					'vip_wp_file_get_contents',
@@ -50,16 +50,16 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 
 			'wp_remote_get' => array(
-				'type' => 'error',
-				'message' => '%s is prohibited, please use vip_safe_wp_remote_get() instead.',
+				'type' => 'warning',
+				'message' => '%s is highly discouraged, please use vip_safe_wp_remote_get() instead.',
 				'functions' => array(
 					'wp_remote_get',
 					),
 				),
 
 			'curl' => array(
-				'type' => 'error',
-				'message' => 'Using cURL functions is not allowed within VIP context. Check (Fetching Remote Data) on VIP Documentation.',
+				'type' => 'warning',
+				'message' => 'Using cURL functions is highly discouraged within VIP context. Check (Fetching Remote Data) on VIP Documentation.',
 				'functions' => array(
 					'curl_*',
 					)
