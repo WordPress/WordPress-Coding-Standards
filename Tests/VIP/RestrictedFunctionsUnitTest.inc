@@ -15,3 +15,5 @@ wp_remote_get( $url );
 curl_init();
 
 curl_close();
+
+extract();

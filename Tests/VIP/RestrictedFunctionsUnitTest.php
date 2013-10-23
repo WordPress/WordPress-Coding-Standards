@@ -50,7 +50,9 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
      */
     public function getWarningList()
     {
-        return array();
+        return array(
+            19 => 1,
+            );
 
     }//end getWarningList()
 

@@ -65,6 +65,14 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 					)
 				),
 
+			'extract' => array(
+				'type' => 'warning',
+				'message' => '%s() usage is highly discouraged, due to the complexity and unintended issues it might cause.',
+				'functions' => array(
+					'extract'
+					),
+				),
+
 			);
 	}
 
