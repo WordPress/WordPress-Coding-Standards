@@ -2,7 +2,7 @@
 
 From the [PHP_CodeSniffer](http://pear.php.net/package/PHP_CodeSniffer) (phpcs) package information on PEAR:
 
-    PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.
+> PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.
 
 This project is a collection of PHP_CodeSniffer rules (sniffs) to validate code developed for WordPress.
 
