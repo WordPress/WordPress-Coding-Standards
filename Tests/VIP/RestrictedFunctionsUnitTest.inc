@@ -17,3 +17,5 @@ curl_init();
 curl_close();
 
 extract();
+
+add_role( 'test' );
