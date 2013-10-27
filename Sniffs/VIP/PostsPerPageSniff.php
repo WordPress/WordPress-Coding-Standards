@@ -65,8 +65,6 @@ class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_Sniffs_Arrays_Arr
 			if ( $val > 50 ) {
 				return 'Detected high pagination limit, `%s` is set to `%s`';
 			}
-		} else {
-			{ echo PHP_EOL, '=== DUMP', PHP_EOL; var_dump( $key, $val ); echo PHP_EOL, '===', PHP_EOL; die(); }
 		}
 	}
 
