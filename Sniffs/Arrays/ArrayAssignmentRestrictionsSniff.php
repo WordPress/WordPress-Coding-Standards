@@ -109,8 +109,10 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 			}
 			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), $operator - 1, null, true );
 			$key = trim( $tokens[$keyIdx]['content'], '\'"' );
-			$valIdx = $phpcsFile->findNext( T_WHITESPACE, $operator + 1, null, true );
-			$val = trim( $tokens[$valIdx]['content'], '\'"' );
+			$valStart = $phpcsFile->findNext( array( T_WHITESPACE ), $operator + 1, null, true );
+			$valEnd = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), $valStart + 1, null, false, null, true );
+			$val = $phpcsFile->getTokensAsString( $valStart, $valEnd - $valStart );
+			$val = trim( $val, '\'"' );
 			$inst[ $key ][] = array( $val, $token['line'] );
 		}
 		// $foo = 'bar=taz&other=thing';
