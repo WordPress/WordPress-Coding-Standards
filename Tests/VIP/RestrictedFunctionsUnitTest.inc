@@ -19,3 +19,5 @@ curl_close();
 extract();
 
 add_role( 'test' );
+
+setcookie( 'test', 'something' );

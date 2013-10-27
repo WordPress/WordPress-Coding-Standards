@@ -53,6 +53,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
             15 => 1,
             17 => 1,
             19 => 1,
+            23 => 1,
             );
 
     }//end getWarningList()

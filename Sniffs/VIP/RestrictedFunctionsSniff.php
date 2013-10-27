@@ -81,6 +81,14 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 					),
 				),
 
+			'cookies' => array(
+				'type' => 'warning',
+				'message' => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
+				'functions' => array(
+					'setcookie',
+					),
+				),
+
 			);
 	}
 
