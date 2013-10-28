@@ -31,3 +31,6 @@ class Bar {
 $x = new Foo();
 $x->add_role(); // ok
 $y = Bar::add_role(); // ok
+\SomeNamespace\add_role(); // ok
+
+\add_role(); // bad
