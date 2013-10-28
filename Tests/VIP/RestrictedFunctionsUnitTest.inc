@@ -21,3 +21,14 @@ extract( array( 'a' => 1 ) ); // bad
 add_role( 'test' ); // bad
 
 array_pop( $array ); // ok
+
+class Foo {
+	function add_role() {}
+}
+class Bar {
+	static function add_role() {}
+}
+$x = new Foo();
+$x->add_role();
+
+$y = Bar::add_role();
