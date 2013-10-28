@@ -29,6 +29,5 @@ class Bar {
 	static function add_role() {}
 }
 $x = new Foo();
-$x->add_role();
-
-$y = Bar::add_role();
+$x->add_role(); // ok
+$y = Bar::add_role(); // ok
