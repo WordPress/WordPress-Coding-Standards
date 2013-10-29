@@ -88,6 +88,17 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 					),
 				),
 
+			'user_meta' => array(
+				'type' => 'error',
+				'message' => '%s() usage is highly discouraged, check VIP documentation on "Working with wp_users"',
+				'functions' => array(
+					'get_user_meta',
+					'update_user_meta',
+					'delete_user_meta',
+					'add_user_meta',
+					),
+				),
+
 			);
 	}
 
