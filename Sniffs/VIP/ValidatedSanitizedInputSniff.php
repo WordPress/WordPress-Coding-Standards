@@ -68,21 +68,23 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			$conditionPtr = key( $tokens[$stackPtr]['conditions'] );
 			$condition = $tokens[$conditionPtr];
 
-			$issetPtr = $phpcsFile->findNext( array( T_ISSET, T_EMPTY ), $condition['parenthesis_opener'], $condition['parenthesis_closer'] );
-			if ( ! empty( $issetPtr ) ) {
-				$isset = $tokens[$issetPtr];
-				$issetOpener = $issetPtr + 1;
-				$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
+			if ( isset( $condition['parenthesis_opener'] ) ) {
+				$issetPtr = $phpcsFile->findNext( array( T_ISSET, T_EMPTY ), $condition['parenthesis_opener'], $condition['parenthesis_closer'] );
+				if ( ! empty( $issetPtr ) ) {
+					$isset = $tokens[$issetPtr];
+					$issetOpener = $issetPtr + 1;
+					$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
 
-				// Check that it is the same variable name
-				if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
-					// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
-					
-					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
+					// Check that it is the same variable name
+					if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
+						// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
+						
+						$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
 
-					if ( $varKeyValidated == $varKey ) {
-						// everything matches, variable IS validated afterall ..
-						$is_validated = true;
+						if ( $varKeyValidated == $varKey ) {
+							// everything matches, variable IS validated afterall ..
+							$is_validated = true;
+						}
 					}
 				}
 			}

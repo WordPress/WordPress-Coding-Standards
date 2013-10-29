@@ -15,7 +15,6 @@
 class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitTest
 {
 
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -29,8 +28,8 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
         return array(
             3  => 1,
             5  => 1,
-            7  => 1,
             21 => 1,
+			36 => 1,
                );
 
     }//end getErrorList()
@@ -47,18 +46,16 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
     public function getWarningList()
     {
         return array(
+			7  => 1,
             9  => 1,
             11 => 1,
             13 => 1,
             15 => 1,
             17 => 1,
             19 => 1,
-            23 => 1,
             );
 
     }//end getWarningList()
 
 
 }//end class
-
-?>
