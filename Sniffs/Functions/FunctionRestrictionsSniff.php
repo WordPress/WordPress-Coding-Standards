@@ -65,6 +65,29 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 
 		$token = $tokens[$stackPtr];
 
+		// exclude function definitions, class methods, and namespaced calls
+		if (
+			$token['code'] == T_STRING
+			&&
+			( $prev = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true ) )
+			&&
+			(
+				// Skip sniffing if calling a method, or on function definitions
+				in_array( $tokens[$prev]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ) )
+				||
+				(
+					// Skip namespaced functions, ie: \foo\bar() not \bar()
+					$tokens[$prev]['code'] == T_NS_SEPARATOR
+					&&
+					( $pprev = $phpcsFile->findPrevious( T_WHITESPACE, $prev - 1, null, true ) )
+					&&
+					$tokens[$pprev]['code'] == T_STRING
+				)
+			)
+			) {
+			return;
+		}
+
 		$exclude = explode( ',', $this->exclude );
 
 		$groups = $this->getGroups();

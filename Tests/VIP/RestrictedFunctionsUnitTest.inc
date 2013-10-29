@@ -23,10 +23,10 @@ add_role( 'test' ); // bad
 array_pop( $array ); // ok
 
 class Foo {
-	function add_role() {}
+	function add_role() {} // ok
 }
 class Bar {
-	static function add_role() {}
+	static function add_role() {} // ok
 }
 $x = new Foo();
 $x->add_role(); // ok
