@@ -17,9 +17,9 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 	public function register()
 	{
 		return array(
-				T_CONSTANT_ENCAPSED_STRING,
-				T_DOUBLE_QUOTED_STRING,
-			   );
+			T_CONSTANT_ENCAPSED_STRING,
+			T_DOUBLE_QUOTED_STRING,
+		);
 
 	}//end register()
 
@@ -55,18 +55,22 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 		if ( T_ARRAY === $tokens[$callbackPtr]['code'] ) {
 			$comma = $phpcsFile->findNext( T_COMMA, $callbackPtr + 1 );
 			if ( false === $comma ) {
-				return $this->confused( $phpcsFile, $stackPtr );
+				$this->confused( $phpcsFile, $stackPtr );
+				return;
 			}
 
 			$callbackPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $comma + 1, null, true, null, true );
 			if ( false === $callbackPtr ) {
-				return $this->confused( $phpcsFile, $stackPtr );
+				$this->confused( $phpcsFile, $stackPtr );
+				return;
 			}
 			if ( ! in_array( $tokens[$callbackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
-				return $this->confused( $phpcsFile, $stackPtr );
+				$this->confused( $phpcsFile, $stackPtr );
+				return;
 			}
 		} elseif ( ! in_array( $tokens[$callbackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
-			return $this->confused( $phpcsFile, $stackPtr );
+			$this->confused( $phpcsFile, $stackPtr );
+			return;
 		}
 
 		$functionName = trim( $tokens[$callbackPtr]['content'], '"\'' );
@@ -80,7 +84,8 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 		}
 
 		if ( is_null( $functionPtr ) ) {
-			return $this->confused( $phpcsFile, $stackPtr );
+			$this->confused( $phpcsFile, $stackPtr );
+			return;
 		}
 
 		$opening = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $functionPtr );
@@ -103,26 +108,19 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 						break;
 					}
 
-					$valueExp = explode( '*', $value );
-					$valueExp = array_map( 'trim', $valueExp );
-					if ( array_filter( $valueExp, 'is_numeric' ) ) {
-						$interval = array_product( $valueExp );
-						break;
-					}
-
 					// If all digits and operators, eval!
 					if ( preg_match( '#^[\s\d\+\*\-\/]+$#', $value ) > 0 ) {
-						$interval = eval( $value ); // No harm here
+						$interval = eval( "return ( $value );" ); // No harm here
 						break;
 					}
 
-					return $this->confused( $phpcsFile, $stackPtr );
-					break;
+					$this->confused( $phpcsFile, $stackPtr );
+					return;
 				}
 			}
 		}
 		
-		if ( $interval < ( 15 * 60 * 60 ) ) {
+		if ( $interval < ( 15 * 60 ) ) {
 			$phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'cron_schedules_interval', array( $interval ) );
 			return;
 		}
