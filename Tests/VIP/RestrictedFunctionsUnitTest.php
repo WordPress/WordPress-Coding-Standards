@@ -15,50 +15,47 @@
 class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitTest
 {
 
+	/**
+	 * Returns the lines where errors should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of errors that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getErrorList()
+	{
+		return array(
+			3  => 1,
+			5  => 1,
+			21 => 1,
+			36 => 1,
+		);
 
-    /**
-     * Returns the lines where errors should occur.
-     *
-     * The key of the array should represent the line number and the value
-     * should represent the number of errors that should occur on that line.
-     *
-     * @return array(int => int)
-     */
-    public function getErrorList()
-    {
-        return array(
-            3  => 1,
-            5  => 1,
-            7  => 1,
-            21 => 1,
-            36 => 1,
-               );
-
-    }//end getErrorList()
+	} //end getErrorList()
 
 
-    /**
-     * Returns the lines where warnings should occur.
-     *
-     * The key of the array should represent the line number and the value
-     * should represent the number of warnings that should occur on that line.
-     *
-     * @return array(int => int)
-     */
-    public function getWarningList()
-    {
-        return array(
-            9  => 1,
-            11 => 1,
-            13 => 1,
-            15 => 1,
-            17 => 1,
-            19 => 1,
-            );
+	/**
+	 * Returns the lines where warnings should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of warnings that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getWarningList()
+	{
+		return array(
+			7  => 1,
+			9  => 1,
+			11 => 1,
+			13 => 1,
+			15 => 1,
+			17 => 1,
+			19 => 1,
+		);
 
-    }//end getWarningList()
+	} //end getWarningList()
 
 
-}//end class
-
-?>
+} //end class

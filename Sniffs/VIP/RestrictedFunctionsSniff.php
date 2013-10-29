@@ -31,14 +31,21 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				'functions' => array( 'switch_to_blog' ),
 				),
 
-			'lambda' => array(
+			'create_function' => array(
+				'type' => 'warning',
+				'message' => '%s is discouraged, please use Anonymous functions instead.',
+				'functions' => array(
+					'create_function',
+				),
+			),
+
+			'eval' => array(
 				'type' => 'error',
 				'message' => '%s is prohibited, please use Anonymous functions instead.',
-				'functions' => array( 
-					'eval', 
-					'create_function',
-					),
+				'functions' => array(
+					'eval',
 				),
+			),
 
 			'file_get_contents' => array(
 				'type' => 'warning',
