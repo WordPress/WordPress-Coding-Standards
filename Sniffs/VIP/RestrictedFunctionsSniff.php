@@ -90,7 +90,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 
 			'user_meta' => array(
 				'type' => 'error',
-				'message' => '%s() usager is highly discouraged, check VIP documentation on "Working with wp_users',
+				'message' => '%s() usage is highly discouraged, check VIP documentation on "Working with wp_users"',
 				'functions' => array(
 					'get_user_meta',
 					'update_user_meta',
