@@ -35,3 +35,11 @@ class Foo {
 add_filter( 'cron_schedules', array( 'Foo', 'my_add_quicklier' ) );
 
 add_filter( 'cron_schedules', array( $some_other_place, 'some_other_method' ) );
+
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_9_mins'] = array(
+		'interval' => 9 * 60,
+		'display' => __( 'Once every 9 minutes' )
+	);
+	return $schedules;
+} );

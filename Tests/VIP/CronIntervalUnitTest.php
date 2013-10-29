@@ -24,6 +24,7 @@ class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest
 				10 => 1,
 				15 => 1,
 				35 => 1,
+				39 => 1,
 				);
 
 		}//end getErrorList()

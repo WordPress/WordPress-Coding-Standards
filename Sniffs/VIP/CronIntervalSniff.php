@@ -64,23 +64,23 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 				$this->confused( $phpcsFile, $stackPtr );
 				return;
 			}
-			if ( ! in_array( $tokens[$callbackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
-				$this->confused( $phpcsFile, $stackPtr );
-				return;
-			}
-		} elseif ( ! in_array( $tokens[$callbackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
-			$this->confused( $phpcsFile, $stackPtr );
-			return;
 		}
 
-		$functionName = trim( $tokens[$callbackPtr]['content'], '"\'' );
-		
-		// Search for the function in tokens
 		$functionPtr = null;
-		foreach ( $tokens as $ptr => $_token ) {
-			if ( $_token['code'] == T_STRING && $_token['content'] == $functionName ) {
-				$functionPtr = $ptr;
+
+		// Search for the function in tokens
+		if ( in_array( $tokens[$callbackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
+			$functionName = trim( $tokens[$callbackPtr]['content'], '"\'' );
+
+			foreach ( $tokens as $ptr => $_token ) {
+				if ( $_token['code'] == T_STRING && $_token['content'] == $functionName ) {
+					$functionPtr = $ptr;
+				}
 			}
+		}
+		// Closure
+		else if ( $tokens[$callbackPtr]['code'] === T_CLOSURE ) {
+			$functionPtr = $callbackPtr;
 		}
 
 		if ( is_null( $functionPtr ) ) {
