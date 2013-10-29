@@ -27,7 +27,7 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_Arra
 	 */
 	public function getGroups() {
 		return array(
-			'posts_per_page' => array(
+			'slow_db_query' => array(
 				'type' => 'warning',
 				'message' => 'Detected usage of %s, possible slow query.',
 				'keys' => array(
