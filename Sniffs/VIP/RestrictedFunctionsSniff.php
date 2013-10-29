@@ -31,14 +31,21 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				'functions' => array( 'switch_to_blog' ),
 				),
 
-			'lambda' => array(
+			'create_function' => array(
+				'type' => 'warning',
+				'message' => '%s is discouraged, please use Anonymous functions instead.',
+				'functions' => array(
+					'create_function',
+				),
+			),
+
+			'eval' => array(
 				'type' => 'error',
 				'message' => '%s is prohibited, please use Anonymous functions instead.',
-				'functions' => array( 
-					'eval', 
-					'create_function',
-					),
+				'functions' => array(
+					'eval',
 				),
+			),
 
 			'file_get_contents' => array(
 				'type' => 'warning',
@@ -69,7 +76,15 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				'type' => 'warning',
 				'message' => '%s() usage is highly discouraged, due to the complexity and unintended issues it might cause.',
 				'functions' => array(
-					'extract'
+					'extract',
+					),
+				),
+
+			'custom_role' => array(
+				'type' => 'error',
+				'message' => 'Use wpcom_vip_add_role() instead of add_role()',
+				'functions' => array(
+					'add_role',
 					),
 				),
 
