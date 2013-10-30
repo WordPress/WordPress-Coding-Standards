@@ -14,4 +14,6 @@ if ( isset( $_SERVER['REMOTE_ADDR'] ) ) { // bad
 	foo( $_SERVER['HTTP_USER_AGENT'] ); // bad
 }
 
-echo $_COOKIE['bar']; // bad
+$x = $_COOKIE['bar']; // bad
+
+$y = $_SERVER['REQUEST_URI']; // ok
