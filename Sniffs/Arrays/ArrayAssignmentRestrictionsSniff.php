@@ -95,9 +95,8 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 			}
 		}
 
-		// Instances: Multi-dimentional array, keyed by line
+		// Instances: Multi-dimensional array, keyed by line
 		$inst = array();
-
 
 		// $foo = array( 'bar' => 'taz' );
 		// $foo['bar'] = $taz;
