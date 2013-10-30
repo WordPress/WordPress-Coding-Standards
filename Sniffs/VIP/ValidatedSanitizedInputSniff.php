@@ -65,15 +65,19 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		
 		// Wrapped in a condition? check existence of isset with the variable as an argument
 		if ( ! empty( $tokens[$stackPtr]['conditions'] ) ) {
-			$conditionPtr = key( $tokens[$stackPtr]['conditions'] );
+			$conditions = $tokens[$stackPtr]['conditions'];
+			end($conditions); // Get closest condition
+			$conditionPtr = key( $conditions );
 			$condition = $tokens[$conditionPtr];
 
-			if ( isset( $condition['parenthesis_opener'] ) && isset( $condition['parenthesis_closer'] ) ) {
+			if ( isset( $condition['parenthesis_opener'] ) ) {
 				$issetPtr = $phpcsFile->findNext( array( T_ISSET, T_EMPTY ), $condition['parenthesis_opener'], $condition['parenthesis_closer'] );
 				if ( ! empty( $issetPtr ) ) {
 					$isset = $tokens[$issetPtr];
 					$issetOpener = $issetPtr + 1;
 					$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
+
+
 
 					// Check that it is the same variable name
 					if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
