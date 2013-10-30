@@ -68,7 +68,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			$conditionPtr = key( $tokens[$stackPtr]['conditions'] );
 			$condition = $tokens[$conditionPtr];
 
-			if ( isset( $condition['parenthesis_opener'] ) ) {
+			if ( isset( $condition['parenthesis_opener'] ) && isset( $condition['parenthesis_closer'] ) ) {
 				$issetPtr = $phpcsFile->findNext( array( T_ISSET, T_EMPTY ), $condition['parenthesis_opener'], $condition['parenthesis_closer'] );
 				if ( ! empty( $issetPtr ) ) {
 					$isset = $tokens[$issetPtr];
@@ -78,7 +78,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 					// Check that it is the same variable name
 					if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
 						// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
-						
+
 						$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
 
 						if ( $varKeyValidated == $varKey ) {
