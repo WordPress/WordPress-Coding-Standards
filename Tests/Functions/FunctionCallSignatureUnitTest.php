@@ -44,8 +44,8 @@ class WordPress_Tests_Functions_FunctionCallSignatureUnitTest extends AbstractSn
     {
         return array(
                 3 => 2,
-                16 => 2,
-                19 => 2,
+                4 => 1,
+                5 => 1,
                );
 
     }//end getErrorList()
