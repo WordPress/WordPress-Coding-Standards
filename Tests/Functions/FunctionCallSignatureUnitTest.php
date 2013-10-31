@@ -44,6 +44,8 @@ class WordPress_Tests_Functions_FunctionCallSignatureUnitTest extends AbstractSn
     {
         return array(
                 3 => 2,
+                4 => 1,
+                5 => 1,
                );
 
     }//end getErrorList()
@@ -59,10 +61,7 @@ class WordPress_Tests_Functions_FunctionCallSignatureUnitTest extends AbstractSn
      */
     public function getWarningList()
     {
-        return array(
-                // 16 => 2,
-                // 19 => 2,
-            );
+        return array();
 
     }//end getWarningList()
 
