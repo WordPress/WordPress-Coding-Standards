@@ -46,6 +46,9 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$instance = $tokens[$stackPtr];
 		$varName = $instance['content'];
 
+		if ( ! isset( $instance['nested_parenthesis'] ) ) {
+			return;
+		}
 		$nested = $instance['nested_parenthesis'];
 
 		// Ignore if wrapped inside ISSET
