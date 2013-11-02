@@ -37,3 +37,5 @@ function get_current_admin_post_type() {
 		$current_post_type = sanitize_key( $_REQUEST['post_type'] );
 	}
 }
+
+$foo = $_POST['bar']; // Bad
