@@ -29,3 +29,11 @@ $empty = (
 	||
 	empty( $_POST['foo'] )
 );
+
+function get_current_admin_post_type() {
+	if ( in_array( $pagenow, $pages ) && ! isset( $_REQUEST['post_type'] ) ) {
+		$current_post_type = 'post';
+	} else if ( isset( $_REQUEST['post_type'] ) ) {
+		$current_post_type = sanitize_key( $_REQUEST['post_type'] );
+	}
+}
