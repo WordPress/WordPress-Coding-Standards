@@ -9,7 +9,7 @@ $id = get_the_ID( ); // Still good, but unnecessary space
 
 $value = apply_filters( 'tag_name', 'value' ); // Good
 
-function my_custom_shortcode( $atts ) {
+/* function my_custom_shortcode( $atts ) {
 	// Bad, opening paranthesis of a multi-line function call
 	// must be the last content on the line. Ditto with the
 	// closing parenthesis.
@@ -30,6 +30,10 @@ function my_custom_shortcode( $atts ) {
 	);
 
 	return sprintf( '%s - %s', $param1, $param2 );
-}
+} */
 add_shortcode( 'my_custom', 'my_custom_shortcode' );
 
+$args = wp_parse_args( $args, array(
+    '1' => 1,
+    '2' => 2,
+) );

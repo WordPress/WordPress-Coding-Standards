@@ -26,6 +26,12 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
 
     private $_type;
 
+    /**
+     * Enable validation of multiline function call parenthesis being respectively last and first on their lines
+     * @var boolean
+     */
+    public $multilineCallParenthesis = false;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -224,15 +230,17 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
             }//end if
         }//end for
 
-        if ($tokens[($openBracket + 1)]['content'] !== $phpcsFile->eolChar) {
-            $error = 'Opening parenthesis of a multi-line function call must be the last content on the line';
-            $phpcsFile->addError($error, $stackPtr);
-        }
+        if ( $this->multilineCallParenthesis ) {
+            if ($tokens[($openBracket + 1)]['content'] !== $phpcsFile->eolChar) {
+                $error = 'Opening parenthesis of a multi-line function call must be the last content on the line';
+                $phpcsFile->addWarning($error, $stackPtr);
+            }
 
-        $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($closeBracket - 1), null, true);
-        if ($tokens[$prev]['line'] === $tokens[$closeBracket]['line']) {
-            $error = 'Closing parenthesis of a multi-line function '.$this->_type.' must be on a line by itself';
-            $phpcsFile->addError($error, $closeBracket);
+            $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($closeBracket - 1), null, true);
+            if ($tokens[$prev]['line'] === $tokens[$closeBracket]['line']) {
+                $error = 'Closing parenthesis of a multi-line function '.$this->_type.' must be on a line by itself';
+                $phpcsFile->addWarning($error, $closeBracket);
+            }
         }
 
     }//end processMultiLineCall()
