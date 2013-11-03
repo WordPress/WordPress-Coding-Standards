@@ -29,3 +29,5 @@ $empty = (
 	||
 	empty( $_POST['foo'] )
 );
+
+$foo = $_POST['bar']; // Bad

@@ -47,8 +47,10 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$varName = $instance['content'];
 
 		if ( ! isset( $instance['nested_parenthesis'] ) ) {
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
 			return;
 		}
+
 		$nested = $instance['nested_parenthesis'];
 
 		// Ignore if wrapped inside ISSET
