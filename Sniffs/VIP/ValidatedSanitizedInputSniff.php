@@ -13,6 +13,12 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 {
 
 	/**
+	 * Check for validation functions for a variable within its own parenthesis only
+	 * @var boolean
+	 */
+	public $check_validation_in_scope_only = false;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -47,8 +53,10 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$varName = $instance['content'];
 
 		if ( ! isset( $instance['nested_parenthesis'] ) ) {
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
 			return;
 		}
+
 		$nested = $instance['nested_parenthesis'];
 
 		// Ignore if wrapped inside ISSET
@@ -65,34 +73,56 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 
 		// Check for validation first
 		$is_validated = false;
-		
-		// Wrapped in a condition? check existence of isset with the variable as an argument
-		if ( ! empty( $tokens[$stackPtr]['conditions'] ) ) {
-			$conditionPtr = key( $tokens[$stackPtr]['conditions'] );
-			$condition = $tokens[$conditionPtr];
 
-			if ( isset( $condition['parenthesis_opener'] ) && isset( $condition['parenthesis_closer'] ) ) {
-				$issetPtr = $phpcsFile->findNext( array( T_ISSET, T_EMPTY ), $condition['parenthesis_opener'], $condition['parenthesis_closer'] );
-				if ( ! empty( $issetPtr ) ) {
-					$isset = $tokens[$issetPtr];
-					$issetOpener = $issetPtr + 1;
-					$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
+		// Validation check in inner scope ?
+		if ( $this->check_validation_in_scope_only ) {
+			// Wrapped in a condition? check existence of isset with the variable as an argument
+			if ( ! empty( $tokens[$stackPtr]['conditions'] ) ) {
+				$conditions = $tokens[$stackPtr]['conditions'];
+				end( $conditions ); // Get closest condition
+				$conditionPtr = key( $conditions );
+				$condition = $tokens[$conditionPtr];
 
-					// Check that it is the same variable name
-					if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
-						// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
+				if ( isset( $condition['parenthesis_opener'] ) ) {
+					$scope_start = $condition['parenthesis_opener'];
+					$scope_end   = $condition['parenthesis_closer'];
+				}
+			}
+		} else {
+			// Get outer scope
+			$function = $phpcsFile->findPrevious( T_FUNCTION, $stackPtr );
+			if ( $function !== false && $stackPtr < $tokens[$function]['scope_closer'] ) {
+				$scope_start = $tokens[$function]['scope_opener'];
+				$scope_end = $stackPtr;
+			} else { // In the open air, check whole file
+				$scope_start = 0;
+				$scope_end = $stackPtr;
+			}
+		}
 
-						$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
+		for ( $i = $scope_start + 1; $i < $scope_end; $i++ ) {
+			if ( ! in_array( $tokens[$i]['code'], array( T_ISSET, T_EMPTY ) ) ) {
+				continue;
+			}
+			$issetPtr = $i;
+			if ( ! empty( $issetPtr ) ) {
+				$isset = $tokens[$issetPtr];
+				$issetOpener = $issetPtr + 1;
+				$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
 
-						if ( $varKeyValidated == $varKey ) {
-							// everything matches, variable IS validated afterall ..
-							$is_validated = true;
-						}
+				// Check that it is the same variable name
+				if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
+					// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
+					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
+
+					if ( $varKeyValidated == $varKey ) {
+						// everything matches, variable IS validated afterall ..
+						$is_validated = true;
 					}
 				}
 			}
 		}
-
+		
 		if ( ! $is_validated ) {
 			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
 			// return; // Should we just return and not look for sanitizing functions ?
