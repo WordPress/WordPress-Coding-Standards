@@ -107,12 +107,14 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 				$operator = $stackPtr;
 			}
 			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), $operator - 1, null, true );
-			$key = trim( $tokens[$keyIdx]['content'], '\'"' );
-			$valStart = $phpcsFile->findNext( array( T_WHITESPACE ), $operator + 1, null, true );
-			$valEnd = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), $valStart + 1, null, false, null, true );
-			$val = $phpcsFile->getTokensAsString( $valStart, $valEnd - $valStart );
-			$val = trim( $val, '\'"' );
-			$inst[ $key ][] = array( $val, $token['line'] );
+			if ( ! is_numeric( $tokens[$keyIdx]['content'] ) ) {
+				$key = trim( $tokens[$keyIdx]['content'], '\'"' );
+				$valStart = $phpcsFile->findNext( array( T_WHITESPACE ), $operator + 1, null, true );
+				$valEnd = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), $valStart + 1, null, false, null, true );
+				$val = $phpcsFile->getTokensAsString( $valStart, $valEnd - $valStart );
+				$val = trim( $val, '\'"' );
+				$inst[ $key ][] = array( $val, $token['line'] );
+			}
 		}
 		// $foo = 'bar=taz&other=thing';
 		elseif ( in_array( $token['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
