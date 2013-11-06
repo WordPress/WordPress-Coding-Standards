@@ -17,3 +17,7 @@ new WP_Query( array(
 	) );
 
 $query = 'foo=bar&meta_key=foo&meta_value=bar';
+
+if ( ! isset( $widget['params'][0] ) ) {
+	$widget['params'][0] = array();
+}
