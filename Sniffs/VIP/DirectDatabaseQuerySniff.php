@@ -46,23 +46,24 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( false == $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), $stackPtr + 1, null, null, null, true ) )
 			return; // This is not a call to the wpdb object
 
-		// Check for whitelisting comment
-		$whitelisted = false;
-		$whitelist_pattern = '/db call\W*(ok|pass|clear|whitelist)/i';
+		// Check for whitelisting comments
 		$endOfStatement = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
+		$endOfLineComment = '';
 		for ( $i = $endOfStatement + 1; $i < count( $tokens ); $i++ ) {
 
-			if ( in_array( $tokens[$i]['code'], array( T_WHITESPACE ) ) ) {
-				continue;
-			}
-
-			if ( $tokens[$i]['code'] != T_COMMENT ) {
+			if ( $tokens[$i]['line'] !== $tokens[$endOfStatement]['line'] ) {
 				break;
 			}
 
-			if ( preg_match( $whitelist_pattern, $tokens[$i]['content'], $matches ) > 0 ) {
-				$whitelisted = true;
+			if ( $tokens[$i]['code'] === T_COMMENT ) {
+				$endOfLineComment .= $tokens[$i]['content'];
 			}
+
+		}
+
+		$whitelisted_db_call = false;
+		if ( preg_match( '/db call\W*(ok|pass|clear|whitelist)/i', $endOfLineComment, $matches ) ) {
+			$whitelisted_db_call = true;
 		}
 
 		// Check for Database Schema Changes
@@ -75,13 +76,17 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		}
 
 		// Flag instance if not whitelisted
-		if ( ! $whitelisted ) {
+		if ( ! $whitelisted_db_call ) {
 			$message = 'Usage of a direct database call is discouraged.';
 			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
 
+		$whitelisted_cache = false;
 		$cached = false;
-		if ( ! empty( $tokens[$stackPtr]['conditions'] ) ) {
+		if ( preg_match( '/cache\s+(ok|pass|clear|whitelist)/i', $endOfLineComment, $matches ) ) {
+			$whitelisted_cache = true;
+		}
+		if ( ! $whitelisted_cache && ! empty( $tokens[$stackPtr]['conditions'] ) ) {
 			$conditions = $tokens[$stackPtr]['conditions'];
 			$scope_function = null;
 			foreach ( $conditions  as $condPtr => $condType ) {
@@ -104,7 +109,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		}
 
-		if ( ! $cached ) {
+		if ( ! $cached && ! $whitelisted_cache ) {
 			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
 			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
