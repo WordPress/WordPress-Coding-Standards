@@ -74,7 +74,6 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$varKey = $this->getArrayIndexKey( $phpcsFile, $tokens, $stackPtr );
 
 		if ( empty( $varKey ) ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s without targeting a member variable.', $stackPtr, null, array( $varName ) );
 			return;
 		}
 
