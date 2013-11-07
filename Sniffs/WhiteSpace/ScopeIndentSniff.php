@@ -108,6 +108,11 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
             }
         }
 
+        // If the line starts with inline HTML (like we're in a template tag), all bets are off
+        if ( T_INLINE_HTML === $tokens[$firstToken]['code'] ) {
+            return;
+        }
+
         // Based on the conditions that surround this token, determine the
         // indent that we expect this current content to be.
         $expectedIndent = $this->calculateExpectedIndent($tokens, $firstToken);
@@ -311,13 +316,17 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
      */
     protected function calculateExpectedIndent(array $tokens, $stackPtr)
     {
-        $conditionStack = array();
-
         $inParenthesis = false;
+        $multilineParentheticalCount = 0;
         if (isset($tokens[$stackPtr]['nested_parenthesis']) === true
             && empty($tokens[$stackPtr]['nested_parenthesis']) === false
         ) {
             $inParenthesis = true;
+            foreach ( $tokens[$stackPtr]['nested_parenthesis'] as $start_id => $end_id ) {
+                if ( $tokens[$start_id]['line'] !== $tokens[$end_id]['line'] ) {
+                    $multilineParentheticalCount += 1;
+                }
+            }
         }
 
         // Empty conditions array (top level structure).
@@ -340,18 +349,10 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
             // If it's an indenting scope ie. it's not in our array of
             // scopes that don't indent, increase indent.
             if (in_array($condition, $this->nonIndentingScopes) === false) {
-                if ($condition === T_CLOSURE && $inParenthesis === true) {
-                    // Closures cause problems with indents when they are
-                    // used as function arguments because the code inside them
-                    // is not technically inside the function yet, so the indent
-                    // is always off by one. So instead, use the
-                    // indent of the closure as the base value.
-                    $indent = ($tokens[$id]['column'] - 1);
-                }
-
                 $indent += $this->indent;
             }
         }
+        $indent += $multilineParentheticalCount;
 
         // Increase by 1 to indiciate that the code should start at a specific column.
         // E.g., code indented 4 spaces should start at column 5.
