@@ -43,10 +43,10 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 
 		$varName = $tokens[$stackPtr]['content'];
 
-		// If we're overriding a superglobal with an assignment, no need ot test
+		// If we're overriding a superglobal with an assignment, no need to test
 		$semicolon_position = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
 		$assignment_position = $phpcsFile->findNext( array( T_EQUAL ), $stackPtr + 1, null, null, null, true );
-		if ( $assignment_position !== false && $assignment_position !== false && $assignment_position < $semicolon_position ) {
+		if ( $semicolon_position !== false && $assignment_position !== false && $assignment_position < $semicolon_position ) {
 			return;
 		}
 

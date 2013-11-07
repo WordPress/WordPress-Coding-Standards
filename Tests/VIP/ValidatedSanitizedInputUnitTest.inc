@@ -50,3 +50,5 @@ function foo() {
 	}
 	echo esc_html( $_GET['test'] ); // Good
 }
+
+$_REQUEST['wp_customize'] = 'on'; // ok
