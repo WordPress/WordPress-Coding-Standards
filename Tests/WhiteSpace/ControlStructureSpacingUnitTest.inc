@@ -12,3 +12,14 @@ if ( true ) {
 } else { //Are we allowed to comment here? If not, message is wrong
 	// ...
 }
+
+// bad
+if ( 'update' === $option_operation['operation'] )
+{
+	update_option( $option_operation['option_name'], $option_operation['old_value'] );
+}
+
+// good
+if ( 'update' === $option_operation['operation'] ) {
+	update_option( $option_operation['option_name'], $option_operation['old_value'] );
+}
