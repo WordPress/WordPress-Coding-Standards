@@ -45,9 +45,7 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 */
 	public function getWarningList()
 	{
-		return array(
-			3 => 1,
-			);
+		return array();
 
 	}//end getWarningList()
 

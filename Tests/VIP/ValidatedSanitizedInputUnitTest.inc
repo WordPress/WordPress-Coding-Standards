@@ -1,6 +1,6 @@
 <?php
 
-do_something( $_POST ); // Warning, unusual usage
+do_something( $_POST ); // OK
 
 do_something_with( $_POST['hello'] ); // Error for no validation, Error for no sanitizing
 
@@ -49,4 +49,13 @@ function foo() {
 		return ;
 	}
 	echo esc_html( $_GET['test'] ); // Good
+}
+
+$_REQUEST['wp_customize'] = 'on'; // ok
+
+// All OK
+$keys = array_keys( $_POST );
+$values = array_values( $_POST );
+foreach( $_POST as $key => $value ) {
+	// ..
 }

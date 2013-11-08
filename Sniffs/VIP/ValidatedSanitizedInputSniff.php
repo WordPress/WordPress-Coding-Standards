@@ -52,6 +52,13 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$instance = $tokens[$stackPtr];
 		$varName = $instance['content'];
 
+		// If we're overriding a superglobal with an assignment, no need to test
+		$semicolon_position = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
+		$assignment_position = $phpcsFile->findNext( array( T_EQUAL ), $stackPtr + 1, null, null, null, true );
+		if ( $semicolon_position !== false && $assignment_position !== false && $assignment_position < $semicolon_position ) {
+			return;
+		}
+
 		if ( ! isset( $instance['nested_parenthesis'] ) ) {
 			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
 			return;
@@ -67,7 +74,6 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$varKey = $this->getArrayIndexKey( $phpcsFile, $tokens, $stackPtr );
 
 		if ( empty( $varKey ) ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s without targeting a member variable.', $stackPtr, null, array( $varName ) );
 			return;
 		}
 

@@ -44,6 +44,7 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
     {
         return array(
                  4 => 2,
+                 17 => 1,
                 );
 
     }//end getErrorList()

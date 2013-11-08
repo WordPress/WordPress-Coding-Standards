@@ -103,13 +103,11 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             $closer = $tokens[$openBracket]['parenthesis_closer'];
 
             if ($tokens[($closer - 1)]['code'] !== T_WHITESPACE) {
-                    $error = 'No space before closing parenthesis is prohibited';
-                    $phpcsFile->addError($error, $closer);
+                $error = 'No space before closing parenthesis is prohibited';
+                $phpcsFile->addError($error, $closer);
             }
 
-            $arrayLine = $tokens[$scopeOpener]['line'];
-
-            if (isset($tokens[$arrayLine]['scope_opener']) === true && $tokens[$arrayLine]['line'] !== $tokens[$tokens[$arrayLine]['scope_opener']]['line']) {
+            if (isset($tokens[$openBracket]['parenthesis_owner']) && $tokens[$closer]['line'] !== $tokens[$scopeOpener]['line']) {
                 $error = 'Opening brace should be on the same line as the declaration';
                 $phpcsFile->addError($error, $openBracket);
                 return;
