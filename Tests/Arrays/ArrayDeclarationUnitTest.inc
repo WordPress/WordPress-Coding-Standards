@@ -59,11 +59,16 @@ class Foo {
 	}
 }
 
-$var = array(
-	'field'             => 'title',
-	'type'              => 'text',
-	'value'             => '', // (translated) text added in set_properties()
-	'label'             => '', // (translated) text added in set_properties()
+$primary_order   = array(
+	'n', // null
+	'b', // boolean
+	'i', // integer
+	'f', // float
+	's', // string
+	'a', // array
+	'o', // object
+	'r', // resource
+	'p', // SPL_Types object
 );
 
 $var = array(
