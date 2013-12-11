@@ -58,3 +58,19 @@ class Foo {
 		);
 	}
 }
+
+$var = array(
+	'field'             => 'title',
+	'type'              => 'text',
+	'value'             => '', // (translated) text added in set_properties()
+	'label'             => '', // (translated) text added in set_properties()
+);
+
+$var = array(
+	'tab_template'      => '
+        <li>%s</li>',
+	'panel_template'        => '
+        <div id="%s">
+            %s
+        </div>',
+);
