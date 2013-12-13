@@ -79,3 +79,12 @@ $var = array(
             %s
         </div>',
 );
+
+// This should all be good:
+$section_args = array(
+	'title' => sprintf(
+		__( 'Sidebar: %s', 'widget-customizer' ),
+		$GLOBALS['wp_registered_sidebars'][$sidebar_id]['name']
+	),
+	'description' => $GLOBALS['wp_registered_sidebars'][$sidebar_id]['description'],
+);
