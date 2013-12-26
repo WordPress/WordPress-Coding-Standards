@@ -38,6 +38,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
      */
     public $blank_line_check = false;
 
+	/**
+	 * Check for blank lines after control structures.
+	 *
+	 * @var boolean
+	 */
+	public $blank_line_after_check = true;
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -179,7 +185,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
                 }
             }
 
-            if ($tokens[$trailingContent]['line'] !== ($tokens[$scopeCloser]['line'] + 1)) {
+            if ($this->blank_line_after_check && $tokens[$trailingContent]['line'] !== ($tokens[$scopeCloser]['line'] + 1)) {
                 $error = 'Blank line found after control structure';
                 $phpcsFile->addError($error, $scopeCloser);
             }
