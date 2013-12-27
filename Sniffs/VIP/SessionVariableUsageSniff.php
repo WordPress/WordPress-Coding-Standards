@@ -2,7 +2,7 @@
 /**
  * WordPress_Sniffs_VIP_SessionVariableUsageSniff
  *
- * Discourages the use of session functions
+ * Discourages the use of the session variable
  *
  * @category PHP
  * @package  PHP_CodeSniffer
