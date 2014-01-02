@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Verifies that all outputted strings are sanitized
+ * Discourages removal of the admin bar.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
- * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
  */
 class WordPress_Sniffs_VIP_AdminBarRemovalSniff implements PHP_CodeSniffer_Sniff
 {
