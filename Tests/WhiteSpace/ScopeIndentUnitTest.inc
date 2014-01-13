@@ -21,9 +21,9 @@ add_action( 'pre_get_posts', 'hwl_home_pagesize', 1 );
 add_filter(
 	'the_content',
 	function( $content ) {
-		if ( is_home() )
+		if ( is_home() ) {
 			return $content;
-
+		}
 		global $post;
 		ob_start();
 		?>
