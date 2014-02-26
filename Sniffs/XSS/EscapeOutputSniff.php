@@ -206,6 +206,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'is_email',
 		'json_encode',
 		'like_escape',
+		'sanitize_bookmark',
+		'sanitize_bookmark_field',
 		'sanitize_email',
 		'sanitize_file_name',
 		'sanitize_html_class',
