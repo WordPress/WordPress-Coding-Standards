@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname $0)/.."
+
+if [ WordPress != "$(basename $(pwd))" ]; then
+	echo "Expected WordPress Coding Standards to be cloned in a 'WordPress' directory"
+	exit 1
+fi
+
+cd ..
+
+for subset_path in $(ls -d WordPress/Subsets/*); do
+	subset_name="WordPress-$(basename $subset_path)"
+	if [ ! -e "$subset_name" ]; then
+		echo "Symlinking subset: $subset_name"
+		ln -s $subset_path $subset_name
+	fi
+done
