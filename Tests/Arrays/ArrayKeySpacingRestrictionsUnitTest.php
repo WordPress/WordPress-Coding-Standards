@@ -45,6 +45,7 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 			17 => 1,
 			18 => 2,
 			23 => 1,
+			26 => 1,
 		);
 	}//end getWarningList()
 

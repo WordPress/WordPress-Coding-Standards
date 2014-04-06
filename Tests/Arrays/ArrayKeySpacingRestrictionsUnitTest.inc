@@ -21,3 +21,8 @@ bar( $arr[ $test['taz'] ] ); // Good
 // Mixed key
 foo( $arr[ 'string' . $var ] ); // Good, should have spaces
 bar( $arr['string'.$var] ); // Bad
+
+// Non-string/int
+$arr[FooClass::FOO_KEY]; // Bad
+
+$arr[0]; // Good

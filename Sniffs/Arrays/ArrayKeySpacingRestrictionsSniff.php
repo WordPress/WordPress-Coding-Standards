@@ -38,25 +38,23 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 
 		$token = $tokens[ $stackPtr ];
 
-		$has_variable = false;
-		for ( $i = $stackPtr + 1; $i < $token['bracket_closer']; $i++ ) {
-			if ( T_VARIABLE === $tokens[ $i ]['code'] ) {
-				$has_variable = true;
-				break;
-			}
-		}
+		$need_spaces = $phpcsFile->findNext(
+			array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_WHITESPACE ),
+			$stackPtr + 1,
+			$token['bracket_closer'],
+			true
+		);
 
 		$spaced1 = ( T_WHITESPACE === $tokens[ $stackPtr + 1 ]['code'] );
 		$spaced2 = ( T_WHITESPACE === $tokens[ $token['bracket_closer'] - 1 ]['code'] );
 
-		// If key has ( or is ) a variable, it should have spaces
-		// Else, it should NOT have spaces
-		if ( $has_variable && ! ( $spaced1 && $spaced2 ) ) {
-			$error = 'Array keys should be surrounded by spaces if they contain a variable.';
+		// It should have spaces only if it only has strings or numbers as the key
+		if ( $need_spaces && ! ( $spaced1 && $spaced2 ) ) {
+			$error = 'Array keys should be surrounded by spaces unless they contain a string or an integer.';
         	$phpcsFile->addWarning( $error, $stackPtr );
 		}
-		elseif( ! $has_variable && ( $spaced1 || $spaced2 ) ) {
-			$error = 'Array keys should NOT be surrounded by spaces if they do not contain a variable.';
+		elseif( ! $need_spaces && ( $spaced1 || $spaced2 ) ) {
+			$error = 'Array keys should NOT be surrounded by spaces if they only contain a string or an integer.';
         	$phpcsFile->addWarning( $error, $stackPtr );
 		}
 
