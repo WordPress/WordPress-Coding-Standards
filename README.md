@@ -24,13 +24,29 @@ Then install WordPress standards
 
 Normally when working with PEAR, the `pear install` command is used, but GitHub automatically names the files in a way that will confuse the `pear install`, so we're falling back to git instead.
 
+The sniffs for WordPress Coding Standards are broken up into subset rulesets, including:
+ - Core: Non-controversial generally-agreed upon and documented in the [handbook](http://make.wordpress.org/core/handbook/coding-standards/php/).
+ - VIP: Rules specific for development and code review on WordPress VIP. See [code review](http://vip.wordpress.com/documentation/code-review-what-we-look-for/) docs.
+ - Extras: Additional rules to check for best practices, such as escaping output and not using `query_posts()`.
+
+The easiest way to use these rulesets is to run [`bin/install-subsets`](bin/install-subsets) which will then create new PHPCS ruleset symlinks alongside the WordPress standard. The subset rulesets include:
+
+ - WordPress-All
+ - WordPress-Core
+ - WordPress-Core-Extra
+ - WordPress-Core-VIP
+ - WordPress-Extra
+ - WordPress-VIP
+
+With these standards set up, you can reference them in PhpStorm or from the command line.
+
 Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`.
 
-    phpcs --standard=WordPress -s wp-cron.php
+    phpcs --standard=WordPress-Core -s wp-cron.php
 
 You can use this to sniff individual files, or use different flags to recursively scan all the directories in a project. This command will show you each file it's scanning, and how many errors it's finding:
 
-    phpcs -p -s -v --standard=WordPress .
+    phpcs -p -s -v --standard=WordPress-Core-Extra .
 
 Output will like this:
 
