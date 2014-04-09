@@ -24,9 +24,28 @@ Then install WordPress standards
 
 Normally when working with PEAR, the `pear install` command is used, but GitHub automatically names the files in a way that will confuse the `pear install`, so we're falling back to git instead.
 
+You can also install phpcs and the WordPress Coding Standards via Composer. Simply add the following repository definition to your `composer.json` file:
+
+    "repositories": [
+      {
+        "type": "git",
+        "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git"
+      }
+    ]
+
+Add the dev requirement:
+
+    "require-dev" : {
+      'wordpress-coding-standards/word-press', 'dev-master'
+    }
+
 Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`.
 
     phpcs --standard=WordPress -s wp-cron.php
+	
+or if you installed via Composer:
+
+    vendor/bin/phpcs --standard=WordPress -s wp-cron.php
 
 You can use this to sniff individual files, or use different flags to recursively scan all the directories in a project. This command will show you each file it's scanning, and how many errors it's finding:
 
