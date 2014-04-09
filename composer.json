@@ -1,5 +1,5 @@
 {
-	"name": "wp-coding-standards/WordPress",
+	"name": "wp-coding-standards/wordpress",
 	"type": "phpcodesniffer-standard",
 	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
 	"keywords": ["PHP_CodeSniffer", "phpcs", "standards", "WordPress"],
