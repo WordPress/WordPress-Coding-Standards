@@ -2,6 +2,11 @@
 <ruleset name="WordPress VIP">
 	<description>WordPress VIP Coding Standards</description>
 
+	<!-- the following are inherited by other sniffs -->
+	<rule ref="WordPress.Arrays.ArrayAssignmentRestrictions"/>
+	<rule ref="WordPress.Functions.FunctionRestrictions"/>
+	<rule ref="WordPress.Variables.VariableRestrictions"/>
+
 	<rule ref="WordPress.VIP.AdminBarRemoval"/>
 	<rule ref="WordPress.VIP.CronInterval"/>
 	<rule ref="WordPress.VIP.DirectDatabaseQuery"/>
