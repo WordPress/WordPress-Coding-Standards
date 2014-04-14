@@ -1,6 +1,6 @@
 #!/bin/bash
 # Check to see that all rules in the standard are present in at least one of the
-# ruleset subsets: Subsets/{Core,Extra,VIP}/ruleset.xml
+# ruleset subsets: {core,extra,vip}/ruleset.xml
 
 cd "$(dirname $0)/.."
 
@@ -9,7 +9,7 @@ unassociated_count=0
 for rule in $(find Sniffs -name '*.php' | sed 's:Sniff.php::' | sed 's:.*Sniffs/::' | sed 's:/:.:g'); do
 	rule="WordPress.$rule"
 	echo "$rule"
-	rulesets=$(grep -l $rule Subsets/{Core,Extra,VIP}/ruleset.xml)
+	rulesets=$(grep -l $rule {core,extra,vip}/ruleset.xml)
 	if [ -z "$rulesets" ]; then
 		unassociated_count=$(expr $unassociated_count + 1)
 		echo " - FAIL"

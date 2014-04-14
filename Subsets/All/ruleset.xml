@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<ruleset name="WordPress All">
-	<rule ref="WordPress-Core"/>
-	<rule ref="WordPress-VIP"/>
-	<rule ref="WordPress-Extra"/>
-</ruleset>
