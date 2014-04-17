@@ -54,7 +54,16 @@ class Foo {
 				foreach ( $screenshot_matches as $i => $screenshot_match ) {
 					print $i;
 				}
-			}
+			},
+			'Food' => sprintf(
+				'%s,%d',
+				'a',
+				1
+			),
+			'Bard' => add_query_arg(
+				'quux',
+				'bazd'
+			)
 		);
 	}
 }
