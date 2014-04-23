@@ -410,7 +410,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             */
 
             // Make sure that we can end lines in brackets and not commas
-            $nextBracket = $phpcsFile->findNext(array(T_OPEN_CURLY_BRACKET), ($index['value'] + 1));
+            $nextBracket = $phpcsFile->findNext(array(T_OPEN_CURLY_BRACKET, T_OPEN_PARENTHESIS), ($index['value'] + 1));
             $lineEndsWithOpenBracket = (
                 $nextBracket !== false
                 &&
