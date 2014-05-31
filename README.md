@@ -52,6 +52,8 @@ Output will like this:
 
     ... and so on...
 
+If you are using **PhpStorm**, please see “[PHP Code Sniffer with WordPress Coding Standards Integration in PhpStorm](http://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)” from their docs.
+
 ### Using the WordPress standard on projects
 
 Lots of WordPress's own code doesn't conform to these standards, so running this on your entire codebase will generate lots, and lots of errors.
