@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Core + Extra">
+	<rule ref="WordPress:core"/>
+	<rule ref="WordPress:extra"/>
+</ruleset>

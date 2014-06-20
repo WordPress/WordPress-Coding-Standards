@@ -10,3 +10,5 @@ fi
 find . \( -name '*.php' \) -exec php -lf {} \;
 
 phpunit --filter WordPress ../../../tests/AllTests.php
+
+bin/check-sniff-ruleset-associations

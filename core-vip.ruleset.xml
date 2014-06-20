@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Core + VIP">
+	<rule ref="WordPress:core"/>
+	<rule ref="WordPress:vip"/>
+</ruleset>
