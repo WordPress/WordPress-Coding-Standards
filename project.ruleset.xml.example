@@ -22,7 +22,7 @@
 		<!--
 		We may want a middle ground though. The best way to do this is add the
 		entire ruleset, then rule by rule, remove ones that don't suit a project. We
-		can do this by running `phpc ` with the '-s' flag, to see the names of the
+		can do this by running `phpcs` with the '-s' flag, to see the names of the
 		different Sniffs, as their rules are broken. From here, we can opt to
 		exclude problematic sniffs like so.
 		-->
