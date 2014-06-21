@@ -1,21 +1,5 @@
 <?php
 /**
- * Unit test class for the MultipleStatementAlignment sniff.
- *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
- */
-
-/**
- * Unit test class for the MultipleStatementAlignment sniff.
- *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
  *
@@ -28,9 +12,8 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_Formatting_MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitTest
 {
-
 
     /**
      * Returns the lines where errors should occur.
@@ -42,7 +25,12 @@ class WordPress_Tests_Formatting_MultipleStatementAlignmentUnitTest extends Abst
      */
     public function getErrorList()
     {
-        return array();
+        return array(
+            3  => 1,
+            5  => 1,
+            21 => 1,
+			36 => 1,
+               );
 
     }//end getErrorList()
 
@@ -58,14 +46,16 @@ class WordPress_Tests_Formatting_MultipleStatementAlignmentUnitTest extends Abst
     public function getWarningList()
     {
         return array(
-                10 => 1,
-                11 => 1,
-                13 => 1,
-                );
+			7  => 1,
+            9  => 1,
+            11 => 1,
+            13 => 1,
+            15 => 1,
+            17 => 1,
+            19 => 1,
+            );
 
     }//end getWarningList()
 
 
 }//end class
-
-?>

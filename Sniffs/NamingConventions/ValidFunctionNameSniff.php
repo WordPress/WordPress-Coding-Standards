@@ -33,6 +33,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
                               'toString',
                               'set_state',
                               'clone',
+                              'invoke'
                              );
 
 

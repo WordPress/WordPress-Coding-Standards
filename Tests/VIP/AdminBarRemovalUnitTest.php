@@ -1,36 +1,14 @@
 <?php
 /**
- * Unit test class for the ObjectInstantiation sniff.
- *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
- */
-
-/**
- * Unit test class for the ObjectInstantiation sniff.
- *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @author    Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Tests_Objects_ObjectInstantiationUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_VIP_AdminBarRemovalUnitTest extends AbstractSniffUnitTest
 {
-
 
     /**
      * Returns the lines where errors should occur.
@@ -43,7 +21,8 @@ class WordPress_Tests_Objects_ObjectInstantiationUnitTest extends AbstractSniffU
     public function getErrorList()
     {
         return array(
-                7 => 1,
+                3 => 1,
+                5 => 1,
                );
 
     }//end getErrorList()

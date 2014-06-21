@@ -17,4 +17,6 @@ class My_Plugin {
 	public static function _my_init() {} // OK
 
 	public function my_init() {} // OK
+
+	public function __invoke() {} // OK
 }
