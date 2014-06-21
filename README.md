@@ -52,6 +52,26 @@ Output will like this:
 
     ... and so on...
 
+### Subset standards
+
+The WordPress standard encompases a superset of the sniffs that the WordPress community may need. It includes sniffs for **Core** standards, but then it also includes sniffs for the [WordPress **VIP** coding requirements](vip.wordpress.com/documentation/code-review-what-we-look-for/), as well as some best practice **Extras**. If you just use the `WordPress` standard, you'll get everything. But if you're not working in the WordPress VIP environment, for example, this won't good for you. So you can reference a specific ruleset when you invoke `phpcs`:
+
+ * [`core.ruleset.xml`](core.ruleset.xml)
+ * [`vip.ruleset.xml`](vip.ruleset.xml)
+ * [`extra.ruleset.xml`](extra.ruleset.xml)
+
+There are also separate repos that create wrapper standards which include each of the above:
+
+ * [`WordPressVIP`](https://github.com/WordPress-Coding-Standards/WordPressVIP)
+ * [`WordPressCore`](https://github.com/WordPress-Coding-Standards/WordPressCore)
+ * [`WordPressExtra`](https://github.com/WordPress-Coding-Standards/WordPressExtra)
+
+If you install these standards in addition to the `WordPress` standard (which they depend on), then you can more easily reference the subset standards when invoking `phpcs`. For example:
+
+```sh
+phpcs --standard=WordPressCore *.php
+```
+
 ### Using the WordPress standard on projects
 
 Lots of WordPress's own code doesn't conform to these standards, so running this on your entire codebase will generate lots, and lots of errors.
