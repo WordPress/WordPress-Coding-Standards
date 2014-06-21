@@ -52,6 +52,8 @@ Output will like this:
 
     ... and so on...
 
+If you are using **PhpStorm**, please see “[PHP Code Sniffer with WordPress Coding Standards Integration in PhpStorm](http://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)” from their docs.
+
 ### Subset standards
 
 The WordPress standard encompases a superset of the sniffs that the WordPress community may need. It includes sniffs for **Core** standards, but then it also includes sniffs for the [WordPress **VIP** coding requirements](vip.wordpress.com/documentation/code-review-what-we-look-for/), as well as some best practice **Extras**. If you just use the `WordPress` standard, you'll get everything. But if you're not working in the WordPress VIP environment, for example, this won't good for you. So you can reference a specific ruleset when you invoke `phpcs`:
