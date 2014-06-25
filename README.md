@@ -56,7 +56,7 @@ If you are using **PhpStorm**, please see “[PHP Code Sniffer with WordPress Co
 
 ### Subset standards
 
-The WordPress standard encompases a superset of the sniffs that the WordPress community may need. It includes sniffs for **Core** standards, but then it also includes sniffs for the [WordPress **VIP** coding requirements](vip.wordpress.com/documentation/code-review-what-we-look-for/), as well as some best practice **Extras**. If you just use the `WordPress` standard, you'll get everything. But if you're not working in the WordPress VIP environment, for example, this won't good for you. So you can reference a specific ruleset when you invoke `phpcs`:
+The WordPress standard encompases a superset of the sniffs that the WordPress community may need. It includes sniffs for **Core** standards, but then it also includes sniffs for the [WordPress **VIP** coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/), as well as some best practice **Extras**. If you just use the `WordPress` standard, you'll get everything. But if you're not working in the WordPress VIP environment, for example, this won't good for you. So you can reference a specific ruleset when you invoke `phpcs`:
 
  * [`core.ruleset.xml`](core.ruleset.xml)
  * [`vip.ruleset.xml`](vip.ruleset.xml)
