@@ -26,7 +26,7 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_Sniffs_Var
 	 */
 	public function getGroups() {
 		return array(
-			'test' => array(
+			'user_meta' => array(
 				'type' => 'error',
 				'message' => 'Usage of users/usermeta tables is highly discouraged in VIP context, For storing user additional user metadata, you should look at User Attributes.',
 				'object_vars' => array(
