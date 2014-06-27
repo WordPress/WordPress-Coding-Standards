@@ -68,7 +68,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 
 		// Ignore if wrapped inside ISSET
 		end( $nested ); // Get closest parenthesis
-		if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY ) ) )
+		if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) )
 			return;
 
 		$varKey = $this->getArrayIndexKey( $phpcsFile, $tokens, $stackPtr );
@@ -107,7 +107,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		}
 
 		for ( $i = $scope_start + 1; $i < $scope_end; $i++ ) {
-			if ( ! in_array( $tokens[$i]['code'], array( T_ISSET, T_EMPTY ) ) ) {
+			if ( ! in_array( $tokens[$i]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) ) {
 				continue;
 			}
 			$issetPtr = $i;
@@ -148,6 +148,8 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 				) {
 				$is_sanitized = true;
 			}
+		} elseif ( T_UNSET === $function['code'] ) {
+			$is_sanitized = true;
 		}
 
 		if ( ! $is_sanitized ) {

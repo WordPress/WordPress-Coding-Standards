@@ -59,3 +59,5 @@ $values = array_values( $_POST );
 foreach( $_POST as $key => $value ) {
 	// ..
 }
+
+unset( $_GET['test'] ) // ok
