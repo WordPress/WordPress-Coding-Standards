@@ -95,10 +95,10 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 				}
 			}
 
-			$scopeStart = $tokens[$scope_function]['scope_opener'];
-			$scopeEnd = $tokens[$scope_function]['scope_closer'];
-
 			if ( $scope_function ) {
+				$scopeStart = $tokens[$scope_function]['scope_opener'];
+				$scopeEnd = $tokens[$scope_function]['scope_closer'];
+
 				$wpcacheget = $phpcsFile->findNext( array( T_STRING ), $scopeStart + 1, $stackPtr - 1, null, 'wp_cache_get' );
 				$wpcacheset = $phpcsFile->findNext( array( T_STRING ), $stackPtr + 1, $scopeEnd - 1, null, 'wp_cache_set' );
 
