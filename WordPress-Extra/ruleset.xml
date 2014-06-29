@@ -3,6 +3,7 @@
 	<description>Best practices beyond core WordPress Coding Standards</description>
 
 	<rule ref="WordPress-Imports"/>
+	<rule ref="WordPress-Core"/>
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
