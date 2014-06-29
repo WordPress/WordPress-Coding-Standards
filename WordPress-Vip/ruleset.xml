@@ -2,7 +2,6 @@
 <ruleset name="WordPress VIP">
 	<description>WordPress VIP Coding Standards</description>
 
-	<rule ref="WordPress-Imports"/>
 	<rule ref="WordPress-Core"/>
 
 	<!-- the following are inherited by other sniffs -->
