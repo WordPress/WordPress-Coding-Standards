@@ -2,7 +2,7 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
-	<rule ref="../imports.ruleset.xml"/>
+	<rule ref="WordPress-Imports"/>
 
 	<rule ref="WordPress.Arrays.ArrayDeclaration"/>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
