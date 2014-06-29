@@ -2,7 +2,7 @@
 <ruleset name="WordPress VIP">
 	<description>WordPress VIP Coding Standards</description>
 
-	<rule ref="./core.ruleset.xml"/>
+	<rule ref="../imports.ruleset.xml"/>
 
 	<!-- the following are inherited by other sniffs -->
 	<rule ref="WordPress.Arrays.ArrayAssignmentRestrictions"/>
