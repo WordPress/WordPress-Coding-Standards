@@ -2,7 +2,32 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
-	<rule ref="WordPress-Imports"/>
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#brace-style -->
+	<rule ref="Generic.ControlStructures.InlineControlStructure" />
+
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces -->
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags -->
+	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
+
+	<!-- important to prevent issues with content being sent before headers -->
+	<rule ref="Generic.Files.ByteOrderMark"/>
+
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
+	<rule ref="Generic.PHP.LowerCaseConstant"/>
+
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#indentation -->
+	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator -->
+	<rule ref="Generic.PHP.NoSilencedErrors" />
+
+	<rule ref="Generic.Files.LineEndings">
+		<properties>
+			<property name="eolChar" value="\n"/>
+		</properties>
+	</rule>
 
 	<rule ref="WordPress.Arrays.ArrayDeclaration"/>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
