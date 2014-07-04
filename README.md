@@ -21,7 +21,7 @@ cd ~/path/to/install/dir
 git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
 git clone https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 cd phpcs
-phpcs --config-set installed_paths ../wpcs
+scripts/phpcs --config-set installed_paths ../wpcs
 ```
 
 Then edit your `$PATH` environment variable to include the location of the `phpcs` script.
