@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress">
+	<!--
+	This ruleset.xml is purely for backwards compatibility prior to the repo restructuring in:
+	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/194
+
+	As part of the repo restructuring, the subset rulesets standards for:
+	 - WordPress-Core
+	 - WordPress-VIP
+	 - WordPress-Extra
+	All of these became referenceable by name when passing the standard to phpcs.
+	To make use of them, you need to add this WordPress-Coding-Standards project
+	to the PHPCS installed paths.
+
+	Read more at https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#readme
+	-->
+	<rule ref="./WordPress/ruleset.xml"/>
+</ruleset>
