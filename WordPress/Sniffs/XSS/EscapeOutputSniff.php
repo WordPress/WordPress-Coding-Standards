@@ -302,9 +302,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			foreach ( self::$okTokenContentSequences as $sequence ) {
 				if ( $sequence[0] === $tokens[ $i ]['content'] ) {
 					$token_string = join( '', array_map(
-						function ( $token ) {
-							return $token['content'];
-						},
+						array( $this, 'get_content_from_token' ),
 						array_slice( $tokens, $i, count( $sequence ) )
 					) );
 					if ( $token_string === join( '', $sequence ) ) {
@@ -371,6 +369,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 	}//end process()
 
+
+	private function get_content_from_token( $token ) {
+		return $token['content'];
+	}
 
 }//end class
 
