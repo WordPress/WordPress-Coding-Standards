@@ -7,8 +7,11 @@ php:
     - 5.5
 
 before_script:
-    - git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git /tmp/phpcs
-    - project_dir=$(pwd) && cd /tmp/phpcs/CodeSniffer/Standards && mv $project_dir ./WordPress && cd WordPress
+    - export PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
+    - export PHPCS_DIR=/tmp/phpcs
+    - export PHPCS_GIT_TREE=master
+    - mkdir -p $PHPCS_DIR && curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
+    - $PHPCS_DIR/scripts/phpcs --config-set installed_paths $(pwd)
 
 script:
     - find . \( -name '*.php' \) -exec php -lf {} \;
