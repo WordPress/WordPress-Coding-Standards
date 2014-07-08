@@ -1,0 +1,11 @@
+{
+  "name": "wordpress-coding-standards/wordpress-coding-standards",
+  "type": "phpcs-standard",
+  "description": "WordPress Coding Standards",
+  "require": {
+    "goatherd/phpcs_installer": "*"
+  },
+  "extra": {
+    "phpcs-standard": "WordPress"
+  }
+}
