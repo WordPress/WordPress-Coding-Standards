@@ -47,3 +47,5 @@ _e( $some_nasty_var ); // Bad
 
 echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
 echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
+
+echo wp_create_nonce( 'foo' ); // Good
