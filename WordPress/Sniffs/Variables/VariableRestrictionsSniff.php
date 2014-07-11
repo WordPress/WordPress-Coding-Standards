@@ -135,18 +135,7 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff implements PHP_CodeSn
 				continue;
 			}
 
-			array_walk(
-				$patterns, 
-				function( &$pattern ) {
-					$pattern = preg_quote( $pattern, '#' );
-					$pattern = preg_replace(
-						array( '#\\\\\*#', '[\'"]' ),
-						array( '.*', '\'' ), 
-						$pattern
-						);
-					return $pattern;
-				}
-				);
+			$patterns = array_map( array( $this, 'test_patterns' ), $patterns );
 
 			$pattern = implode( '|', $patterns );
 
@@ -179,6 +168,16 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff implements PHP_CodeSn
 		}
 
 	}//end process()
+	
+	private function test_patterns( $pattern ) {
+		$pattern = preg_quote( $pattern, '#' );
+		$pattern = preg_replace(
+			array( '#\\\\\*#', '[\'"]' ),
+			array( '.*', '\'' ), 
+			$pattern
+			);
+		return $pattern;
+	}
 
 
 }//end class

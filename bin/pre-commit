@@ -2,11 +2,13 @@
 set -e
 cd "$(git rev-parse --show-toplevel)"
 
-if [ ! -e ../../../CodeSniffer.php ]; then
-	echo "You must clone the WordPress standard inside of the phpcs CodeSniffer/Standards directory; could not find ../../../CodeSniffer.php" 1>&2
+phpcs_root="$(dirname $(dirname $(which phpcs)))"
+
+if [ -z "$phpcs_root" ] || [ ! -d "$phpcs_root" ] || [ ! -e "$phpcs_root/tests/AllTests.php" ]; then
+	echo "Unable to locate phpcs on path to locate the root of the PHP_CodeSniffer project" 1>&2
 	exit 1
 fi
 
 find . \( -name '*.php' \) -exec php -lf {} \;
 
-phpunit --filter WordPress ../../../tests/AllTests.php
+phpunit --filter WordPress "$phpcs_root/tests/AllTests.php"
