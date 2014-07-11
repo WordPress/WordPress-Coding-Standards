@@ -47,14 +47,3 @@ _e( $some_nasty_var ); // Bad
 
 echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
 echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
-
-
-class Test_Widget extends WP_Widget {
-	public function form( $instance ) {
-		?>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label><!-- 1 ok -->
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>"><!-- 2 ok -->
-		</p>
-	<?php
-}
