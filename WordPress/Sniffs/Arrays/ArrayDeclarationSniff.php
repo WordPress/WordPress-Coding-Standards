@@ -207,11 +207,13 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     continue;
                 }
 
+	            /* Commented as we found no trace to such standard in WPCS
                 if ($keyUsed === true && $lastToken === T_COMMA) {
                     $error = 'No key specified for array entry; first entry specifies key';
                     $phpcsFile->addWarning($error, $nextToken);
                     return;
                 }
+	            /**/
 
                 if ($keyUsed === false) {
                     if ($tokens[($nextToken - 1)]['code'] === T_WHITESPACE) {
