@@ -294,6 +294,18 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		$watch = true;
 		for ( $i = $stackPtr; $i < count( $tokens ); $i++ ) {
 
+			foreach ( self::$okTokenContentSequences as $sequence ) {
+				if ( $sequence[0] === $tokens[ $i ]['content'] ) {
+					$token_string = join( '', array_map(
+						array( $this, 'get_content_from_token' ),
+						array_slice( $tokens, $i, count( $sequence ) )
+					) );
+					if ( $token_string === join( '', $sequence ) ) {
+						return;
+					}
+				}
+			}
+
 			// End processing if found the end of statement
 			if ( $tokens[$i]['code'] == T_SEMICOLON ) {
 				return;
@@ -352,6 +364,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 	}//end process()
 
+
+	private function get_content_from_token( $token ) {
+		return $token['content'];
+	}
 
 }//end class
 
