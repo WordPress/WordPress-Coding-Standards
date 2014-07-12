@@ -10,21 +10,28 @@ This is a fork of the WordPress Coding Standards project from [Urban Giraffe](h
 
 See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing).
 
-[![Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+[![Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png?branch=master)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 ### How to use this
 
-Once you've installed PEAR, install Codesniffer:
+To install PHP_CodeSniffer and the WordPress standard(s):
 
-    pear install --alldeps PHP_CodeSniffer
+```bash
+cd ~/path/to/install/dir
+git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
+git clone https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
+cd phpcs
+scripts/phpcs --config-set installed_paths ../wpcs
+```
 
-Then install WordPress standards
+Then edit your `$PATH` environment variable to include the location of the `phpcs` script.
+For example, add the following to your `~/.bashrc` (or `~/.profile` or `~/.bash_profile`)
 
-    git clone git://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $(pear config-get php_dir)/PHP/CodeSniffer/Standards/WordPress
+```sh
+export PATH="$PATH:~/path/to/install/dir/phpcs/scripts/"
+```
 
-Normally when working with PEAR, the `pear install` command is used, but GitHub automatically names the files in a way that will confuse the `pear install`, so we're falling back to git instead.
-
-Then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`.
+Reload your terminal and then run the PHP code sniffer commandline tool on a given file, for example `wp-cron.php`.
 
     phpcs --standard=WordPress -s wp-cron.php
 
@@ -52,13 +59,23 @@ Output will like this:
 
     ... and so on...
 
+If you are using **PhpStorm**, please see “[PHP Code Sniffer with WordPress Coding Standards Integration in PhpStorm](http://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)” from their docs.
+
+### Subset standards
+
+The WordPress standard encompases a superset of the sniffs that the WordPress community may need. It includes sniffs for **Core** standards, but then it also includes sniffs for the [WordPress **VIP** coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/), as well as some best practice **Extras**. If you just use the `WordPress` standard, you'll get everything. But if you're not working in the WordPress VIP environment, for example, this won't good for you. So there are additional standards included in this project, standards which include a subset of the sniffs in the `WordPress` standard. You can use all of the following as standard names when invoking `phpcs`:
+
+ * `WordPress-Core`: Sniffs that seek to implement the [Core coding standards](http://make.wordpress.org/core/handbook/coding-standards/) and go no further.
+ * `WordPress-VIP`: Core sniffs plus sniffs specifically implemented to check against the [VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+ * `WordPress-Extra`: Core sniffs plus any extras that are best practices but could be controversial.
+
 ### Using the WordPress standard on projects
 
 Lots of WordPress's own code doesn't conform to these standards, so running this on your entire codebase will generate lots, and lots of errors.
 
-Instead, try installing the WordPress standard, then invoking it from a project specific codesniffer ruleset instead, like in the supplied example file.
+Instead, try installing the WordPress standard, then invoking it from a project specific CodeSniffer ruleset instead, like in the supplied example file.
 
-Remove the `.example` suffix from project.ruleset.xml and run it in your
+Remove the `.example` suffix from `project.ruleset.xml` and run it in your
 project root, pointing at a given file:
 
     mv project.ruleset.xml.example project.ruleset.xml
