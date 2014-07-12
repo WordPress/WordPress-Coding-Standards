@@ -103,3 +103,30 @@ $strings = array(
 	'enable_async'			=> ( ( true === $this->settings['enable_async'] && ( is_array( $this->active_mimetypes ) && array() !== $this->active_mimetypes ) ) ? true : false ),
 	'enable_async_debug'	=> ( ( true === $this->settings['enable_async_debug'] && ( is_array( $this->active_mimetypes ) && array() !== $this->active_mimetypes ) ) ? true : false ),
 );
+
+$actions = array(
+	'install' => sprintf(
+		'<a href="%1$s" title="Install %2$s">Install</a>',
+		wp_nonce_url(
+			add_query_arg(
+				array(
+					'page'          => TGM_Plugin_Activation::$instance->menu,
+					'plugin'        => $item['slug'],
+					'plugin_name'   => $item['sanitized_plugin'],
+					'plugin_source' => $item['url'],
+					'tgmpa-install' => 'install-plugin',
+				),
+				admin_url( TGM_Plugin_Activation::$instance->parent_url_slug )
+			),
+			'tgmpa-install'
+		),
+		$item['sanitized_plugin']
+	),
+);
+
+$custom_fields = array(
+	'videoembed', // Press75 Simple Video Embedder
+	'_videoembed_manual', // Press75 Simple Video Embedder
+	'_videoembed', // Press75 Simple Video Embedder
+	'_premise_settings', // Premise
+);
