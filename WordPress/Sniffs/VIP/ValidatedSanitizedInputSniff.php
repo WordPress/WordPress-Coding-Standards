@@ -45,6 +45,26 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		/*
+		 * Quoting 'http://php.net/manual/en/reserved.variables.server.php' :
+		 *
+		 * There is no guarantee that every web server will provide any of these;
+		 * servers may omit some, or provide others not listed here.
+		 *
+		 * That said, a large number of these variables are accounted for in
+		 * the » CGI/1.1 specification, so you should be able to expect those.
+		 * http://www.faqs.org/rfcs/rfc3875.html
+		 *
+		 * @see https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/191
+		 */
+		$server_vars = array(
+			'AUTH_TYPE', 'CONTENT_LENGTH', 'CONTENT_TYPE', 'GATEWAY_INTERFACE',
+			'PATH_INFO', 'PATH_TRANSLATED', 'QUERY_STRING', 'REMOTE_ADDR',
+			'REMOTE_HOST', 'REMOTE_IDENT', 'REMOTE_USER', 'REQUEST_METHOD',
+			'SCRIPT_NAME', 'SERVER_NAME', 'SERVER_PORT', 'SERVER_PROTOCOL',
+			'SERVER_SOFTWARE',
+		);
+
 		// Check for $wpdb variable
 		if ( ! in_array( $tokens[$stackPtr]['content'], array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' ) ) )
 			return;
@@ -79,6 +99,11 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 
 		// Check for validation first
 		$is_validated = false;
+
+		// Ignore $_SERVER vars listed earlier by RFC3875
+		if ( $instance['content'] === '$_SERVER' && in_array( $varKey, $server_vars ) ) {
+			$is_validated = true;
+		}
 
 		// Validation check in inner scope ?
 		if ( $this->check_validation_in_scope_only ) {
@@ -122,7 +147,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
 
 					if ( $varKeyValidated == $varKey ) {
-						// everything matches, variable IS validated afterall ..
+						// everything matches, variable IS validated after all ..
 						$is_validated = true;
 					}
 				}
@@ -173,12 +198,13 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 
 		// If no brackets, exit with a warning, this is a non-typical usage of super globals
 		if ( empty ( $bracketOpener ) ) {
-			return false;
+			return '';
 		}
 
 		$bracketCloser = $tokens[$bracketOpener]['bracket_closer'];
 
 		$varKey = trim( $phpcsFile->getTokensAsString( $bracketOpener + 1, $bracketCloser - $bracketOpener - 1 ) ); // aka 'hello' in $_POST['hello']
+		$varKey = trim( $varKey, '\'"');
 
 		return $varKey;
 	}
