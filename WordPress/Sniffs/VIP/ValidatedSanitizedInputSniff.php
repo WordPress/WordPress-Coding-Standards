@@ -113,13 +113,17 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			$issetPtr = $i;
 			if ( ! empty( $issetPtr ) ) {
 				$isset = $tokens[$issetPtr];
-				$issetOpener = $issetPtr + 1;
+				$issetOpener = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $issetPtr );
 				$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
 
 				// Check that it is the same variable name
-				if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
+				for ( $i = $issetOpener + 1; $i < $issetCloser; $i++ ) {
+					if ( $tokens[ $i ]['code'] != T_VARIABLE ) {
+						continue;
+					}
+
 					// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
-					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
+					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $i );
 
 					if ( $varKeyValidated == $varKey ) {
 						// everything matches, variable IS validated afterall ..
