@@ -55,3 +55,7 @@ echo ent2ncr( $text );
 echo number_format ( 1024 );
 
 echo ent2ncr( esc_html( $_data ) );
+
+echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . esc_url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>';
+
+echo '<br/><strong>' . sprintf( esc_html__( 'Found %d results', 'textdomain' ), $result_count ) . '</strong><br/><br/>';
