@@ -159,6 +159,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_shortlink_wp_head',
 		'wp_tag_cloud',
 		'wp_title',
+		'checked',
 	);
 
 	public static $sanitizingFunctions = array(
@@ -210,6 +211,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_redirect',
 		'wp_rel_nofollow',
 		'wp_safe_redirect',
+		'number_format',
+		'ent2ncr',
 	);
 
 	public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
