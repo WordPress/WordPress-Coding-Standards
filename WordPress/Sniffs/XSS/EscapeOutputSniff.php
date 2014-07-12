@@ -20,6 +20,10 @@
 class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 {
 
+	public $customAutoEscapedFunctions = array();
+
+	public $customSanitizingFunctions = array();
+
 	public static $autoEscapedFunctions = array(
 		'allowed_tags',
 		'bloginfo',
@@ -222,6 +226,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'_x',
 	);
 
+	public static $addedCustomFunctions = false;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -252,6 +257,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		// Merge any custom functions with the defaults, if we haven't already.
+		if ( ! self::$addedCustomFunctions ) {
+			self::$sanitizingFunctions = array_merge( self::$sanitizingFunctions, $this->customSanitizingFunctions );
+			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, $this->customAutoEscapedFunctions );
+			self::$addedCustomFunctions = true;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		// If function, not T_ECHO nor T_PRINT
