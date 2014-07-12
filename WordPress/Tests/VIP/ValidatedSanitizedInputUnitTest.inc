@@ -62,3 +62,4 @@ foreach( $_POST as $key => $value ) {
 
 unset( $_GET['test'] ); // ok
 
+echo (int) $_GET['test'];
