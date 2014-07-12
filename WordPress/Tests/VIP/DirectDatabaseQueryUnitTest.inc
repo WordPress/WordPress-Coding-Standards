@@ -56,3 +56,9 @@ function barzd() {
 	global $wpdb;
 	$autoload = $wpdb->get_var( $wpdb->prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // db call ok; no-cache ok
 }
+
+function taz() {
+	/* @var wpdb $wpdb */
+	global $wpdb;
+	echo $wpdb->insert_id; // Good, no actual call, and doesn't need any caching
+}
