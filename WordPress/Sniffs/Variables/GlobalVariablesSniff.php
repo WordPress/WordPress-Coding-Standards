@@ -297,8 +297,10 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff implements PHP_CodeSniffer
 			$assignment = $phpcsFile->findNext( T_WHITESPACE, $tokens[ $bracketPtr ]['bracket_closer'] + 1, null, true );
 
 			if ( $assignment && T_EQUAL === $tokens[ $assignment ]['code'] ) {
-				$phpcsFile->addError( 'Overridding WordPress globals is prohibited', $stackPtr );
-				return;
+				if ( ! $this->is_whitelisted( $tokens, $assignment, 'override' ) ) {
+					$phpcsFile->addError( 'Overridding WordPress globals is prohibited', $stackPtr );
+					return;
+				}
 			}
 
 			return;
@@ -328,12 +330,44 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff implements PHP_CodeSniffer
 				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search ) ) {
 					$next = $phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), $ptr + 1, null, true, null, true );
 					if ( T_EQUAL === $tokens[ $next ]['code'] ) {
-						$phpcsFile->addError( 'Overridding WordPress globals is prohibited', $ptr );
+						if ( ! $this->is_whitelisted( $tokens, $next, 'override' ) ) {
+							$phpcsFile->addError( 'Overridding WordPress globals is prohibited', $ptr );
+						}
 					}
 				}
 			}
 		}
+	}
 
+	/**
+	 * Check for whitelisting comments
+	 *
+	 * @param array   $tokens
+	 * @param integer $ptr
+	 * @param string  $identifier
+	 *
+	 * @return bool
+	 */
+	private function is_whitelisted( $tokens, $ptr, $identifier = 'override' ) {
+		// Checking for the ignore comment, ex: //override ok
+		$isAtEndOfStatement = false;
+		$commentOkRegex     = '/' . $identifier . '\W*(ok|pass|clear|whitelist)/i';
+		$tokensCount        = count( $tokens );
+		for ( $i = $ptr; $i < $tokensCount; $i++ ) {
+			if ( $tokens[$i]['code'] === T_SEMICOLON ) {
+				$isAtEndOfStatement = true;
+			}
 
+			if ( $isAtEndOfStatement === true && in_array( $tokens[$i]['code'], array( T_SEMICOLON, T_WHITESPACE, T_COMMENT ) ) === false ) {
+				break;
+			}
+
+			preg_match( $commentOkRegex, $tokens[$i]['content'], $matches );
+			if ( T_COMMENT === $tokens[$i]['code'] && ! empty( $matches ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
