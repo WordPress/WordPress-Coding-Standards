@@ -44,5 +44,6 @@
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="WordPress.WhiteSpace.PhpIndent"/>
 	<rule ref="WordPress.WhiteSpace.ScopeIndent"/>
+	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 
 </ruleset>
