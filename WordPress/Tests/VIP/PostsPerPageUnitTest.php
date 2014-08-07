@@ -25,7 +25,7 @@ class WordPress_Tests_VIP_PostsPerPageUnitTest extends AbstractSniffUnitTest
 				5  => 1,
 				6  => 1,
 				9  => 2,
-				11 => 1,
+				13 => 1,
 				);
 
 		}//end getErrorList()
