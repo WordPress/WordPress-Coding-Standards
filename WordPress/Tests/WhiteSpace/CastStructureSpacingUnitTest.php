@@ -38,15 +38,7 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
      */
     public function getErrorList()
     {
-        return array(
-                 3 => 1,
-                 6 => 1,
-                 9 => 1,
-                 12 => 2,
-                 15 => 1,
-                 18 => 1,
-                 21 => 1,
-                );
+        return array();
 
     }//end getErrorList()
 
@@ -61,7 +53,15 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
      */
     public function getWarningList()
     {
-        return array();
+        return array(
+                 3 => 1,
+                 6 => 1,
+                 9 => 1,
+                 12 => 2,
+                 15 => 1,
+                 18 => 1,
+                 21 => 1,
+                );
 
     }//end getWarningList()
 

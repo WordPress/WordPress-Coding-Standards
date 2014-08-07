@@ -65,20 +65,26 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeS
                       $expected,
                       $content,
                      );
-            $phpcsFile->addError($error, $stackPtr, 'ContainsWhiteSpace', $data);
+            $phpcsFile->addWarning($error, $stackPtr, 'ContainsWhiteSpace', $data);
         }
 
         if ($tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE) {
             $error = 'No space before opening casting parenthesis is prohibited';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addWarning($error, $stackPtr);
         }
 
         if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
             $error = 'No space after closing casting parenthesis is prohibited';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addWarning($error, $stackPtr);
         }
 	}//end process()
 
+    /**
+     * If true, an error will be thrown; otherwise a warning.
+     *
+     * @var bool
+     */
+    public $error = false;
 
 }//end class
 
