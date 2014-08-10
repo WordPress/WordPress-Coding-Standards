@@ -57,7 +57,7 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
         	$string .= $tokens[$i]['content'];
         }
 
-		preg_match_all('|= [^\$\(]|si', $string, $matches);
+		preg_match_all('|[!=]= [^\$\(]|si', $string, $matches);
 		foreach ( $matches as $match ) {
 			if ( is_array($match) ) {
 				foreach ( $match as $submatch ) {
