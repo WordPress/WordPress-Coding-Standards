@@ -49,7 +49,6 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $content  = print_r($tokens[$stackPtr], true);
         $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
         $closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
         $string = '';
@@ -57,19 +56,24 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
         	$string .= $tokens[$i]['content'];
         }
 
-		preg_match_all('|[!=]= [^\$\(]|si', $string, $matches);
-		foreach ( $matches as $match ) {
-			if ( is_array($match) ) {
-				foreach ( $match as $submatch ) {
-					$error = 'Use Yoda Condition checks, you must';
-            		$phpcsFile->addError($error, $stackPtr);
-				}
-			} else {
-				$error = 'Use Yoda Condition checks, you must';
-    	        $phpcsFile->addError($error, $stackPtr);
-    	    }
+		preg_match_all('|([!=]= [\'\"0-9])|si', $string, $matches);
+		foreach ( $matches[0] as $match ) {
+			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
+    	     $phpcsFile->addError($error, $stackPtr);
 		}
 
+		preg_match_all('|([!=]= \btrue\b)|si', $string, $matches);
+		foreach ( $matches[0] as $match ) {
+			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
+    	    $phpcsFile->addError($error, $stackPtr);
+		}
+
+		preg_match_all('|([!=]= \bfalse\b)|si', $string, $matches);
+		foreach ( $matches[0] as $match ) {
+			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
+            $phpcsFile->addError($error, $stackPtr);
+
+		}
     }//end process()
 
 
