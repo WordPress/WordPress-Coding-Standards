@@ -45,5 +45,6 @@
 	<rule ref="WordPress.WhiteSpace.PhpIndent"/>
 	<rule ref="WordPress.WhiteSpace.ScopeIndent"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+	<rule ref="WordPress.PHP.YodaConditions"/>
 
 </ruleset>
