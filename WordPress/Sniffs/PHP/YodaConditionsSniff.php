@@ -21,60 +21,48 @@
 class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 {
 
-    /**
-     * Returns an array of tokens this test wants to listen for.
-     *
-     * @return array
-     */
-    public function register()
-    {
-        return array(
-                T_IF,
-                T_ELSEIF,
-               );
+	/**
+	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @return array
+	 */
+	public function register()
+	{
+		return array(
+			T_IF,
+			T_ELSEIF,
+		);
 
-    }//end register()
+	}//end register()
 
 
-    /**
-     * Processes this test, when one of its tokens is encountered.
-     *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
-     *
-     * @return void
-     */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-    {
-        $tokens = $phpcsFile->getTokens();
+	/**
+	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @param PHP_CodeSniffer_File	$phpcsFile The file being scanned.
+	 * @param int					$stackPtr  The position of the current token in the
+	 *											stack passed in $tokens.
+	 *
+	 * @return void
+	 */
+	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+	{
+		$tokens = $phpcsFile->getTokens();
 
-        $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
-        $closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
-        $string = '';
-        for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
-        	$string .= $tokens[$i]['content'];
-        }
-
-		preg_match_all('|([!=]= [\'\"0-9])|si', $string, $matches);
-		foreach ( $matches[0] as $match ) {
-			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
-    	     $phpcsFile->addError($error, $stackPtr);
+		$openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
+		$closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
+		$string = '';
+		for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
+			$string .= $tokens[$i]['content'];
 		}
 
-		preg_match_all('|([!=]= \btrue\b)|si', $string, $matches);
+		preg_match_all( '#((!=|==)=?\s*(true|false|[\'"0-9])\b)#si', $string, $matches );
 		foreach ( $matches[0] as $match ) {
 			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
-    	    $phpcsFile->addError($error, $stackPtr);
+			$phpcsFile->addError($error, $stackPtr);
 		}
 
-		preg_match_all('|([!=]= \bfalse\b)|si', $string, $matches);
-		foreach ( $matches[0] as $match ) {
-			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
-            $phpcsFile->addError($error, $stackPtr);
-
-		}
-    }//end process()
+	}//end process()
 
 
 }//end class
