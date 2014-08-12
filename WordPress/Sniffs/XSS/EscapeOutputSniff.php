@@ -175,6 +175,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'esc_html',
 		'esc_html__',
 		'esc_html_e',
+		'esc_html_x',
 		'esc_js',
 		'esc_sql',
 		'esc_textarea',
