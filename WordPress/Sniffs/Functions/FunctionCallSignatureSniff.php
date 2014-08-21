@@ -40,7 +40,19 @@ class WordPress_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeS
      */
     public function register()
     {
-        return array(T_STRING);
+        return array(
+			T_STRING,
+			T_EMPTY,
+			T_EVAL,
+			T_EXIT,
+			T_INCLUDE,
+			T_INCLUDE_ONCE,
+			T_ISSET,
+			T_LIST,
+			T_REQUIRE,
+			T_REQUIRE_ONCE,
+			T_UNSET
+			);
 
     }//end register()
 
