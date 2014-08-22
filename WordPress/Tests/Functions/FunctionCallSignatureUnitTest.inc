@@ -36,6 +36,14 @@ function my_custom_shortcode( $atts ) {
 add_shortcode( 'my_custom', 'my_custom_shortcode' );
 
 $args = wp_parse_args( $args, array(
-    '1' => 1,
-    '2' => 2,
+	'1' => 1,
+	'2' => 2,
 ) );
+
+if ( isset($var1) && isset( $var2 ) ) { // function call for $var1 is Bad, $var2 is good
+	echo '';
+}
+
+if ( empty($var1) && empty( $var2 ) ) { // function call for $var1 is Bad, $var2 is good
+	echo '';
+}
