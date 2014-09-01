@@ -35,10 +35,7 @@
 	<rule ref="WordPress.Files.FileName"/>
 	<rule ref="WordPress.Functions.FunctionCallSignature"/>
 	<rule ref="WordPress.Functions.FunctionDeclarationArgumentSpacing"/>
-	<rule ref="WordPress.NamingConventions.ValidFunctionName">
-		<!-- phpunit uses camel-casing for methods  -->
-		<exclude-pattern>*/tests/*</exclude-pattern>
-	</rule>
+	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
 	<rule ref="WordPress.Strings.DoubleQuoteUsage"/>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
