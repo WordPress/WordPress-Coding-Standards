@@ -130,3 +130,18 @@ $custom_fields = array(
 	'_videoembed', // Press75 Simple Video Embedder
 	'_premise_settings', // Premise
 );
+
+$x = array(
+	'item',
+	/* Some comment */
+);
+
+$y = array(
+	'item',
+	/* Some comment
+	   over multiple lines */
+);
+
+$z = array(
+	/* Just a comment */
+);
