@@ -37,7 +37,7 @@ $query_vars = array_merge(
 );
 $query = new WP_Query( $query_vars );
 
-$defaults = array( 'type'=>'post' ), // Bad, no sapces before and after double arrow
+$defaults = array( 'type'=>'post' ), // Bad, no spaces before and after double arrow
 wp_parse_args( $args, $defaults );
 
 class Foo {
@@ -131,17 +131,54 @@ $custom_fields = array(
 	'_premise_settings', // Premise
 );
 
-$x = array(
+$item_block_comment = array(
 	'item',
 	/* Some comment */
 );
 
-$y = array(
+$item_multiple_line_block_comment = array(
 	'item',
 	/* Some comment
 	   over multiple lines */
 );
 
-$z = array(
+$block_comment = array(
 	/* Just a comment */
+);
+
+$comment = array(
+	// Just a single comment
+);
+
+$multidimensional_comments = array(
+	'item_block_comment' => array(
+		'item',
+		/* comment */
+	),
+	'block_comment' => array(
+		/* comment */
+	),
+	'item_comment' => array(
+		'item',
+		// comment
+	),
+	'comment' => array(
+		// comment
+	),
+	// comment
+	array(
+		'item',
+		/* comment */
+	),
+	array(
+		/* comment */
+	),
+	array(
+		'item',
+		// comment
+	),
+	array(
+		// comment
+	),
+	// comment
 );
