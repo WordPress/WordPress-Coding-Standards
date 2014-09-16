@@ -23,8 +23,6 @@
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator -->
 	<rule ref="Generic.PHP.NoSilencedErrors" />
 
-	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
-
 	<rule ref="Generic.Files.LineEndings">
 		<properties>
 			<property name="eolChar" value="\n"/>
@@ -38,6 +36,7 @@
 	<rule ref="WordPress.Functions.FunctionCallSignature"/>
 	<rule ref="WordPress.Functions.FunctionDeclarationArgumentSpacing"/>
 	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
+	<rule ref="WordPress.Strings.DoubleQuoteUsage"/>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="WordPress.WhiteSpace.PhpIndent"/>
