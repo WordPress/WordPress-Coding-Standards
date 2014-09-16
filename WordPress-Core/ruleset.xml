@@ -39,7 +39,7 @@
 		<!-- phpunit uses camel-casing for methods  -->
 		<exclude-pattern>*/tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.Strings.DoubleQuoteUsage"/>
+  <rule ref="Squiz.StringsDoubleQuoteUsage"/>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="WordPress.WhiteSpace.PhpIndent"/>
