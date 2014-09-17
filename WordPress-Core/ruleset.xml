@@ -24,6 +24,9 @@
 	<rule ref="Generic.PHP.NoSilencedErrors" />
 
 	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+		<severity>0</severity>
+	</rule>
 
 	<rule ref="Generic.Files.LineEndings">
 		<properties>
