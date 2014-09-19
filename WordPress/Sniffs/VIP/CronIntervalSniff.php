@@ -102,7 +102,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 					$valueStart = $phpcsFile->findNext( T_WHITESPACE, $operator + 1, null, true, null, true );
 					$valueEnd   = $phpcsFile->findNext( array( T_COMMA, T_CLOSE_PARENTHESIS ), $valueStart + 1 );
 					$value = $phpcsFile->getTokensAsString( $valueStart, $valueEnd - $valueStart );
-					
+
 					if ( is_numeric( $value ) ) {
 						$interval = $value;
 						break;
@@ -119,13 +119,13 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 				}
 			}
 		}
-		
-		if ( $interval < ( 15 * 60 ) ) {
+
+		if ( isset( $interval ) && $interval < ( 15 * 60 ) ) {
 			$phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'cron_schedules_interval', array( $interval ) );
 			return;
 		}
 
-		
+
 	}//end process()
 
 
