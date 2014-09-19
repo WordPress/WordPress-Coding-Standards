@@ -54,7 +54,7 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 				continue;
 			}
 			$error = 'Found: ' . $token['content'] . ' Use strict comparisons (=== or !===)'; //Found "' . $token . '".
-			$phpcsFile->addError($error, $stackPtr);
+			$phpcsFile->addWarning($error, $stackPtr);
 		}
 
 	}//end process()
