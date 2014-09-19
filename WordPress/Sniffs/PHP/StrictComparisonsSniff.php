@@ -49,10 +49,7 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		foreach ( $tokens as $token ) {
-			if ($token['code'] !== T_IS_EQUAL && $token['code'] !== T_IS_NOT_EQUAL) {
-				continue;
-			}
+		if ($tokens[$stackPtr]['code'] === T_IS_EQUAL || $tokens[$stackPtr]['code'] === T_IS_NOT_EQUAL) {
 			$error = 'Found: ' . $token['content'] . ' Use strict comparisons (=== or !===)'; //Found "' . $token . '".
 			$phpcsFile->addWarning($error, $stackPtr);
 		}
