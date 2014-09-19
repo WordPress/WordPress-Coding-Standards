@@ -29,7 +29,13 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
             3  => 1,
             5  => 1,
             21 => 1,
-			36 => 1,
+            36 => 1,
+            38 => 1,
+            40 => 1,
+            42 => 1,
+            44 => 1,
+            46 => 1,
+            48 => 1,
                );
 
     }//end getErrorList()
@@ -46,7 +52,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
     public function getWarningList()
     {
         return array(
-			7  => 1,
+            7  => 1,
             9  => 1,
             11 => 1,
             13 => 1,
