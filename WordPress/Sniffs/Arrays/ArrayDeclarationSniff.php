@@ -51,8 +51,9 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
         // Array keyword should be lower case.
         if (strtolower($tokens[$stackPtr]['content']) !== $tokens[$stackPtr]['content']) {
-            $error = 'Array keyword should be lower case; expected "array" but found "'.$tokens[$stackPtr]['content'].'"';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Array keyword should be lower case; expected "array" but found "%s"';
+            $data  = array($tokens[$stackPtr]['content']);
+            $phpcsFile->addError($error, $stackPtr, 'NotLowerCase', $data);
         }
 
         $arrayStart   = $tokens[$stackPtr]['parenthesis_opener'];
@@ -61,7 +62,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
         if ($arrayStart != ($stackPtr + 1)) {
             $error = 'There must be no space between the Array keyword and the opening parenthesis';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'SpaceAfterKeyword');
         }
 
         // Check for empty arrays.
@@ -70,7 +71,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             // Empty array, but if the brackets aren't together, there's a problem.
             if (($arrayEnd - $arrayStart) !== 1) {
                 $error = 'Empty array declaration must have no space between the parentheses';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'SpaceInEmptyArray');
 
                 // We can return here because there is nothing else to check. All code
                 // below can assume that the array is not empty.
