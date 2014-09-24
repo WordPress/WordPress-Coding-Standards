@@ -13,7 +13,7 @@
  * WordPress_Sniffs_WhiteSpace_ScopeIndentSniff.
  *
  * Checks that control structures are structured correctly, and their content
- * is indented correctly. 
+ * is indented correctly.
  *
  * Based on the Generic_Sniffs_WhiteSpace_ScopeIndentSniff, with a few
  * modifications for our purposes here.
@@ -47,7 +47,7 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
      *
      * @var array(int)
      */
-    protected $nonIndentingScopes = array();
+    public $nonIndentingScopes = array();
 
 
     /**
@@ -314,7 +314,7 @@ class WordPress_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Sn
      *
      * @return int
      */
-    protected function calculateExpectedIndent(array $tokens, $stackPtr)
+    public function calculateExpectedIndent(array $tokens, $stackPtr)
     {
         $inParenthesis = false;
         $multilineParentheticalCount = 0;
