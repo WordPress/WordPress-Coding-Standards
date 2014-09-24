@@ -1,6 +1,6 @@
 <?php
 /**
- * Enforces Yoda conditional statements , based upon Squiz code
+ * Enforces Strict Comparison checks, based upon Squiz code
  *
  * PHP version 5
  *
@@ -9,15 +9,6 @@
  * @author   Matt Robinson
  */
 
-/**
- * Squiz_Sniffs.
- *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
- */
 class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sniff
 {
 
@@ -50,12 +41,27 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$stackPtr]['code'] === T_IS_EQUAL || $tokens[$stackPtr]['code'] === T_IS_NOT_EQUAL) {
-			$error = 'Found: ' . $token['content'] . ' Use strict comparisons (=== or !===)'; //Found "' . $token . '".
-			$phpcsFile->addWarning($error, $stackPtr);
+			// Check for whitelisting comment
+			$currentLine = $tokens[$stackPtr]['line'];
+			$nextPtr = $stackPtr;
+			while ( isset( $tokens[$nextPtr + 1]['line'] ) && $tokens[$nextPtr + 1]['line'] == $currentLine ) {
+				$nextPtr++;
+				// Do nothing, we just want the last token of the line
+			}
+
+			$is_whitelisted = (
+				$tokens[$nextPtr]['code'] === T_COMMENT
+				&&
+				preg_match( '#loose comparison okay#i', $tokens[$nextPtr]['content'] ) > 0
+			);
+
+			if ( ! $is_whitelisted ) {
+				$error = 'Found: ' . $tokens[$stackPtr]['content'] . ' Use strict comparisons (=== or !==)';
+				$phpcsFile->addWarning($error, $stackPtr);
+			}
 		}
 
 	}//end process()
-
 
 }//end class
 
