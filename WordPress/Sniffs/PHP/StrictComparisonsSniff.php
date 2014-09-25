@@ -56,7 +56,7 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 			);
 
 			if ( ! $is_whitelisted ) {
-				$error = 'Found: ' . $tokens[$stackPtr]['content'] . ' Use strict comparisons (=== or !==)';
+				$error = 'Found: ' . $tokens[$stackPtr]['content'] . '. Use strict comparisons (=== or !==).';
 				$phpcsFile->addWarning($error, $stackPtr);
 			}
 		}
