@@ -44,10 +44,10 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
         	return;
     	} else {
 			if ( ! $this->has_whitelist_comment( 'loose comparison okay', $tokens, $stackPtr ) ) {
-        		$error = 'Found: ' . $tokens[$stackPtr]['content'] . ' Use strict comparisons (=== or !==)';
+        		$error = 'Found: ' . $tokens[$stackPtr]['content'] . '. Use strict comparisons (=== or !==).'
 				$phpcsFile->addWarning($error, $stackPtr);
     		}
-		}
+    	}
 
 	}//end process()
 
