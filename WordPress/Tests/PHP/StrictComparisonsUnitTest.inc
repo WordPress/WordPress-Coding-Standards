@@ -1,14 +1,16 @@
 <?php
 // test for 'equals' conditionals
-if ( true == $true ) { // Bad x 1
+if ( true == $true ) { // Bad
 	echo 'True';
 } elseif ( false === $true ) { // Good
 	echo 'False';
 }
 
 // test for 'not equals' conditionals
-if ( true != $true ) { // Bad x 1
+if ( true != $true ) { // Bad
 	echo 'True';
+} elseif ( true <> $true ) { // Bad
+	echo 'False';
 } elseif ( false !== $true ) { // Good
 	echo 'False';
 }

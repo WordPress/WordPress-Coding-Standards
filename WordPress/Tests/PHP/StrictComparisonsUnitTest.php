@@ -56,6 +56,7 @@ class WordPress_Tests_PHP_StrictComparisonsUnitTest extends AbstractSniffUnitTes
         return array(
             3 => 1,
             10 => 1,
+            12 => 1,
         );
 
     }//end getWarningList()
