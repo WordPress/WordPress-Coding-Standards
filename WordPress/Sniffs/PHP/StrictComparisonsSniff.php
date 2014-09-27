@@ -51,10 +51,17 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 
 	}//end process()
 
+	/**
+	 * Check for whitelisting comments made inline with otherwise invalid code
+	 *
+	 * @param string	$comment A comment to indicate the code is valid
+	 * @param array		$tokens Array of encountered tokens
+	 * @param int		$stackPtr  The position of the current token in the
+	 *											stack passed in $tokens.
+	 *
+	 * @return bool
+	 */
 	function has_whitelist_comment( $comment, $tokens, $stackPtr ) {
-        // get tokens, get the last token in the line,
-        // check if it's a comment and matches $comment, return true or false
-        // Check for whitelisting comment
 		$currentLine = $tokens[$stackPtr]['line'];
 		$nextPtr = $stackPtr;
 		while ( isset( $tokens[$nextPtr + 1]['line'] ) && $tokens[$nextPtr + 1]['line'] == $currentLine ) {
