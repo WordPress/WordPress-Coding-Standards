@@ -31,8 +31,8 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param PHP_CodeSniffer_File	$phpcsFile The file being scanned.
-	 * @param int					$stackPtr  The position of the current token in the
-	 *											stack passed in $tokens.
+	 * @param int			$stackPtr  The position of the current token in the
+	 *						stack passed in $tokens.
 	 *
 	 * @return void
 	 */
@@ -54,10 +54,10 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 	/**
 	 * Check for whitelisting comments made inline with otherwise invalid code
 	 *
-	 * @param string	$comment A comment to indicate the code is valid
-	 * @param array		$tokens Array of encountered tokens
-	 * @param int		$stackPtr  The position of the current token in the
-	 *											stack passed in $tokens.
+	 * @param string	$comment 	A comment to indicate the code is valid
+	 * @param array		$tokens 	Array of encountered tokens
+	 * @param int		$stackPtr  	The position of the current token in the
+	 *					stack passed in $tokens.
 	 *
 	 * @return bool
 	 */
