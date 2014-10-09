@@ -23,6 +23,11 @@
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator -->
 	<rule ref="Generic.PHP.NoSilencedErrors" />
 
+	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+		<severity>0</severity>
+	</rule>
+
 	<rule ref="Generic.Files.LineEndings">
 		<properties>
 			<property name="eolChar" value="\n"/>
@@ -35,14 +40,12 @@
 	<rule ref="WordPress.Files.FileName"/>
 	<rule ref="WordPress.Functions.FunctionCallSignature"/>
 	<rule ref="WordPress.Functions.FunctionDeclarationArgumentSpacing"/>
-	<rule ref="WordPress.NamingConventions.ValidFunctionName">
-		<!-- phpunit uses camel-casing for methods  -->
-		<exclude-pattern>*/tests/*</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.Strings.DoubleQuoteUsage"/>
+	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="WordPress.WhiteSpace.PhpIndent"/>
 	<rule ref="WordPress.WhiteSpace.ScopeIndent"/>
+	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+	<rule ref="WordPress.PHP.YodaConditions"/>
 
 </ruleset>
