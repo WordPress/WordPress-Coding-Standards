@@ -62,3 +62,8 @@ foreach( $_POST as $key => $value ) {
 
 unset( $_GET['test'] ); // ok
 
+function zebra() {
+	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {
+		echo esc_html( $_POST['bar'] ); // ok
+	}
+}
