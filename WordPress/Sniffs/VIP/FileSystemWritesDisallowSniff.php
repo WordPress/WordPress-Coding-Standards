@@ -20,7 +20,7 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	 *
 	 * @var array(string => string|null)
 	 */
-	protected $forbiddenFunctions = array(
+	public $forbiddenFunctions = array(
 										'file_put_contents' => null,
 										'fwrite'            => null,
 										'fputcsv'           => null,

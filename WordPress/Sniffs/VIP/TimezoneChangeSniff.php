@@ -20,7 +20,7 @@ class WordPress_Sniffs_VIP_TimezoneChangeSniff extends Generic_Sniffs_PHP_Forbid
      *
      * @var array(string => string|null)
      */
-    protected $forbiddenFunctions = array(
+    public $forbiddenFunctions = array(
                                     'date_default_timezone_set'      => null,
                                     );
 

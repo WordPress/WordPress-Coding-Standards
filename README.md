@@ -1,4 +1,4 @@
-### WordPress Coding Standards for PHP_CodeSniffer
+# WordPress Coding Standards for PHP_CodeSniffer
 
 From the [PHP_CodeSniffer](http://pear.php.net/package/PHP_CodeSniffer) (phpcs) package information on PEAR:
 
@@ -12,7 +12,7 @@ See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](
 
 [![Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png?branch=master)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
-### How to use this
+## How to use this
 
 To install PHP_CodeSniffer and the WordPress standard(s):
 
@@ -83,8 +83,12 @@ project root, pointing at a given file:
 
 A tiny subset of the options available to codesniffer have been used in this example, and there's much more that can be done in a `ruleset.xml` file. Check the [phpcs documentation](http://pear.php.net/manual/en/package.php.php-codesniffer.php) to see a [fully annotated example to build upon](http://pear.php.net/manual/en/package.php.php-codesniffer.coding-standard-tutorial.php).
 
-### Troubleshooting
+## Troubleshooting
 
 Check your `PATH` if it includes new binaries added into the pear directories. You may have to add `:/usr/local/php/bin` before you can call `phpcs` on the command line.
 
 Remember that you can see where PEAR is looking for stuff, and putting things, by calling `pear config-show`. This is how to find where the `phpcs` binary was added, and where the PEAR library is by default.
+
+## License
+
+See [LICENSE](LICENSE) (MIT).
