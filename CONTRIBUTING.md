@@ -5,16 +5,12 @@ once considered stable.
 
 TL;DR
 
-Make sure you have `phpunit` installed and available in your `PATH`.
+Make sure you have `phpunit` installed and available in your `PATH`. If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), then you can navigate to the directory where the `phpcs` repo is checked out and do:
 
-~~~text
-$ mkdir phpcs
-$ cd phpcs
-$ git clone git@github.com:squizlabs/PHP_CodeSniffer.git .
-$ git checkout 1.4.4
-$ git clone git@github.com:x-team/WordPress-Coding-Standards.git CodeSniffer/Standards/WordPress
-$ phpunit --filter WordPress tests/AllTests.php
-~~~
+```bash
+git checkout phpcs-fixer # needed temporarily until PHPCS 2.0
+phpunit --filter WordPress tests/AllTests.php
+```
 
 Expected output:
 
