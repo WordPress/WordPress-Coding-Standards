@@ -6,5 +6,6 @@
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
+	<rule ref="WordPress.WP.EnqueuedResources"/>
 
 </ruleset>
