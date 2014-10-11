@@ -50,12 +50,11 @@ class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_Sniffs_Arrays_Arr
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		$key = strtolower( $key );
-		if ( 
-			( $key == 'nopaging' && $val == 'true' || $val == 1 )
+		if (
+			( $key == 'nopaging' && ( $val == 'true' || $val == 1 ) )
 			||
 			( in_array( $key, array( 'numberposts', 'posts_per_page' ) ) && $val == '-1' )
 			) {
-
 			return 'Disabling pagination is prohibited in VIP context, do not set `%s` to `%s` ever.';
 		}
 		elseif (

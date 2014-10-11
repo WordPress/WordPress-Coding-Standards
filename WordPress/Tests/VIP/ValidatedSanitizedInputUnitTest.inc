@@ -63,3 +63,11 @@ foreach( $_POST as $key => $value ) {
 unset( $_GET['test'] ); // ok
 
 $domain = str_replace( 'www.', '', sanitize_text_field( $_SERVER['SERVER_NAME'] ) );
+
+echo (int) $_GET['test'];
+
+function zebra() {
+	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {
+		echo esc_html( $_POST['bar'] ); // ok
+	}
+}

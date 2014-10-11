@@ -51,8 +51,9 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
         // Array keyword should be lower case.
         if (strtolower($tokens[$stackPtr]['content']) !== $tokens[$stackPtr]['content']) {
-            $error = 'Array keyword should be lower case; expected "array" but found "'.$tokens[$stackPtr]['content'].'"';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Array keyword should be lower case; expected "array" but found "%s"';
+            $data  = array($tokens[$stackPtr]['content']);
+            $phpcsFile->addError($error, $stackPtr, 'NotLowerCase', $data);
         }
 
         $arrayStart   = $tokens[$stackPtr]['parenthesis_opener'];
@@ -61,7 +62,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
         if ($arrayStart != ($stackPtr + 1)) {
             $error = 'There must be no space between the Array keyword and the opening parenthesis';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'SpaceAfterKeyword');
         }
 
         // Check for empty arrays.
@@ -70,7 +71,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             // Empty array, but if the brackets aren't together, there's a problem.
             if (($arrayEnd - $arrayStart) !== 1) {
                 $error = 'Empty array declaration must have no space between the parentheses';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'SpaceInEmptyArray');
 
                 // We can return here because there is nothing else to check. All code
                 // below can assume that the array is not empty.
@@ -312,7 +313,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             $count     = count($indices);
             $lastIndex = $indices[($count - 1)]['value'];
 
-            $trailingContent = $phpcsFile->findPrevious(T_WHITESPACE, ($arrayEnd - 1), $lastIndex, true);
+            $trailingContent = $phpcsFile->findPrevious(array(T_WHITESPACE, T_COMMENT), ($arrayEnd - 1), $lastIndex, true);
             if ($tokens[$trailingContent]['code'] !== T_COMMA) {
                 $error = 'Comma required after last value in array declaration';
                 $phpcsFile->addError($error, $trailingContent);
@@ -414,9 +415,23 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             // Check each line ends in a comma.
             if ( ! in_array( $tokens[$index['value']]['code'], array( T_ARRAY, T_CLOSURE ) ) && ! $lineEndsWithOpenBracket ) {
                 $nextComma = $phpcsFile->findNext(array(T_COMMA), ($index['value'] + 1));
-                if (($nextComma === false) || ($tokens[$nextComma]['line'] !== $tokens[$index['value']]['line'])) {
-                    $error = 'Each line in an array declaration must end in a comma';
-                    $phpcsFile->addError($error, $index['value']);
+                if (($nextComma === false) || ($nextComma != $index['value']+1) ) {
+                    $fail = true;
+                    // Check if the value token is extending over multiple lines
+                    for ( $i = $index['value']; $i < $nextComma; $i++ ) {
+                        // If the same token code continues ( over multiple lines ), then it is probably the same token
+                        if ( $tokens[$i]['code'] != $tokens[$index['value']]['code'] && $tokens[$nextComma]['line'] != $tokens[$i]['line'] ) {
+                            // Fail if a token between the value and the comma is not of the same code
+                            $fail = true;
+                            break;
+                        } else {
+                            $fail = false;
+                        }
+                    }
+                    if ( $fail ) {
+                        $error = 'Each line in an array declaration must end in a comma';
+                        $phpcsFile->addError($error, $index['value']);
+                    }
                 }
 
                 // Check that there is no space before the comma.

@@ -33,7 +33,7 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
      *
      * @var array(string => string|null)
      */
-    protected $forbiddenFunctions = array(
+    public $forbiddenFunctions = array(
                                      'print_r'                  => null,
                                      'ereg_replace'             => 'preg_replace',
                                      'ereg'                     => null,
