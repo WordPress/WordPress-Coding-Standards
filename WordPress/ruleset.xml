@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress">
+	<description>WordPress Coding Standards</description>
+
+	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-VIP"/>
+</ruleset>
