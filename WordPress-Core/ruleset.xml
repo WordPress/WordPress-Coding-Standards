@@ -34,6 +34,12 @@
 		</properties>
 	</rule>
 
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="1"/>
+        </properties>
+    </rule>
+
 	<rule ref="WordPress.Arrays.ArrayDeclaration"/>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 	<rule ref="WordPress.Classes.ValidClassName"/>
@@ -44,7 +50,6 @@
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="WordPress.WhiteSpace.PhpIndent"/>
-	<rule ref="WordPress.WhiteSpace.ScopeIndent"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.YodaConditions"/>
 
