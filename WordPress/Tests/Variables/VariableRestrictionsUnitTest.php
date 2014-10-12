@@ -10,7 +10,7 @@
 class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSniffUnitTest
 {
 
-	protected function setUp() {
+	public function setUp() {
 		parent::setUp();
 
 		WordPress_Sniffs_Variables_VariableRestrictionsSniff::$groups = array(

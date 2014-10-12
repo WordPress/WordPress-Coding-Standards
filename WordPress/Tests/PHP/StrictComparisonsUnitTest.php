@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit test class for the CaseStructureSpacing sniff.
+ * Unit test class for the StrictComparisons sniff.
  *
  * PHP version 5
  *
@@ -12,7 +12,7 @@
  */
 
 /**
- * Unit test class for the CaseStructureSpacing sniff.
+ * Unit test class for the StrictComparisons sniff.
  *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
@@ -24,7 +24,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_PHP_StrictComparisonsUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -54,14 +54,10 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
     public function getWarningList()
     {
         return array(
-                 3 => 1,
-                 6 => 1,
-                 9 => 1,
-                 12 => 1,
-                 15 => 1,
-                 18 => 1,
-                 21 => 1,
-                );
+            3 => 1,
+            10 => 1,
+            12 => 1,
+        );
 
     }//end getWarningList()
 

@@ -10,7 +10,7 @@
 class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends AbstractSniffUnitTest
 {
 
-	protected function setUp() {
+	public function setUp() {
 		parent::setUp();
 
 		WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff::$groups = array(

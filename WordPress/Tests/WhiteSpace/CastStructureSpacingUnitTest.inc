@@ -1,22 +1,22 @@
 <?php
 
-$array1 = (array)$array;
-$array2 = (array) $array;
+$array1 = (array)$array; // Bad
+$array2 = (array) $array; // Good
 
-$bool1 = (bool)$bool;
-$bool2 = (bool) $bool;
+$bool1 = (bool)$bool; // Bad
+$bool2 = (bool) $bool; // Good
 
-$int1 = (int)$int;
-$int2 = (int) $int
+$int1 = (int)$int; // Bad
+$int2 = (int) $int // Good
 
-$obj1 = ( object )$object;
-$obj2 = (object) $object;
+$obj1 = (object)$object; // Bad
+$obj2 = (object) $object; // Good
 
-$str1 = (string)$string;
-$str2 = (string) $string;
+$str1 = (string)$string; // Bad
+$str2 = (string) $string; // Good
 
-$unset1 = (unset)$unset;
-$unset2 = (unset) $unset;
+$unset1 = (unset)$unset; // Bad
+$unset2 = (unset) $unset; // Good
 
-$float1 = (float)$float;
-$float2 = (float) $float;
+$float1 = (float)$float; // Bad
+$float2 = (float) $float; // Good

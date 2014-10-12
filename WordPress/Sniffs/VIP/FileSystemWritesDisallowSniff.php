@@ -66,7 +66,7 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	 *
 	 * @return void
 	 */
-	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
+	public function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
 	{
 		$data  = array($function);
 		$error = 'Filesystem writes are forbidden, you should not be using %s()';

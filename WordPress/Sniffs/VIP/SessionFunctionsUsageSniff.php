@@ -45,7 +45,7 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
                                     'session_write_close'       => null,
                                     );
 
-    protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
+    public function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
     {
         $data  = array($function);
         $error = 'The use of PHP session function %s() is prohibited.';
