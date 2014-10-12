@@ -138,7 +138,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
             if ($tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE) {
                 $error = "Expected 1 space before \"$operator\"; 0 found";
                 $phpcsFile->addError($error, $stackPtr);
-            } else if (strlen($tokens[($stackPtr - 1)]['content']) !== 1) {
+            } else if (strlen($tokens[($stackPtr - 1)]['content']) !== 1 && $tokens[($stackPtr - 1)]['column'] !== 1) {
                 // Don't throw an error for assignments, because other standards allow
                 // multiple spaces there to align multiple assignments.
                 if (in_array($tokens[$stackPtr]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens) === false) {

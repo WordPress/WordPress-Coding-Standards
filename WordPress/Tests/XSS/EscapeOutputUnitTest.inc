@@ -47,3 +47,11 @@ _e( $some_nasty_var ); // Bad
 
 echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
 echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
+
+echo '<input type="checkbox" name="' . esc_attr( 'field[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
+
+echo ent2ncr( $text );
+
+echo number_format ( 1024 );
+
+echo ent2ncr( esc_html( $_data ) );
