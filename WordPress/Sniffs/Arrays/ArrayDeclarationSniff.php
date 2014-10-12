@@ -207,12 +207,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     continue;
                 }
 
-                if ($keyUsed === true && $lastToken === T_COMMA) {
-                    $error = 'No key specified for array entry; first entry specifies key';
-                    $phpcsFile->addWarning($error, $nextToken);
-                    return;
-                }
-
                 if ($keyUsed === false) {
                     if ($tokens[($nextToken - 1)]['code'] === T_WHITESPACE) {
                         $content     = $tokens[($nextToken - 2)]['content'];
@@ -318,7 +312,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             $count     = count($indices);
             $lastIndex = $indices[($count - 1)]['value'];
 
-            $trailingContent = $phpcsFile->findPrevious(T_WHITESPACE, ($arrayEnd - 1), $lastIndex, true);
+            $trailingContent = $phpcsFile->findPrevious(array(T_WHITESPACE, T_COMMENT), ($arrayEnd - 1), $lastIndex, true);
             if ($tokens[$trailingContent]['code'] !== T_COMMA) {
                 $error = 'Comma required after last value in array declaration';
                 $phpcsFile->addError($error, $trailingContent);
@@ -420,9 +414,23 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             // Check each line ends in a comma.
             if ( ! in_array( $tokens[$index['value']]['code'], array( T_ARRAY, T_CLOSURE ) ) && ! $lineEndsWithOpenBracket ) {
                 $nextComma = $phpcsFile->findNext(array(T_COMMA), ($index['value'] + 1));
-                if (($nextComma === false) || ($tokens[$nextComma]['line'] !== $tokens[$index['value']]['line'])) {
-                    $error = 'Each line in an array declaration must end in a comma';
-                    $phpcsFile->addError($error, $index['value']);
+                if (($nextComma === false) || ($nextComma != $index['value']+1) ) {
+                    $fail = true;
+                    // Check if the value token is extending over multiple lines
+                    for ( $i = $index['value']; $i < $nextComma; $i++ ) {
+                        // If the same token code continues ( over multiple lines ), then it is probably the same token
+                        if ( $tokens[$i]['code'] != $tokens[$index['value']]['code'] && $tokens[$nextComma]['line'] != $tokens[$i]['line'] ) {
+                            // Fail if a token between the value and the comma is not of the same code
+                            $fail = true;
+                            break;
+                        } else {
+                            $fail = false;
+                        }
+                    }
+                    if ( $fail ) {
+                        $error = 'Each line in an array declaration must end in a comma';
+                        $phpcsFile->addError($error, $index['value']);
+                    }
                 }
 
                 // Check that there is no space before the comma.
