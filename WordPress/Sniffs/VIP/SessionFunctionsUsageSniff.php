@@ -20,30 +20,30 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
      *
      * @var array(string => string|null)
      */
-    protected $forbiddenFunctions = array(
-                                    'session_cache_expire'      => null,
-                                    'session_cache_limiter'     => null,
-                                    'session_commit'            => null,
-                                    'session_decode'            => null,
-                                    'session_destroy'           => null,
-                                    'session_encode'            => null,
-                                    'session_get_cookie_params' => null,
-                                    'session_id'                => null,
-                                    'session_is_registered'     => null,
-                                    'session_module_name'       => null,
-                                    'session_name'              => null,
-                                    'session_regenerate_id'     => null,
-                                    'session_register_shutdown' => null,
-                                    'session_register'          => null,
-                                    'session_save_path'         => null,
-                                    'session_set_cookie_params' => null,
-                                    'session_set_save_handler'  => null,
-                                    'session_start'             => null,
-                                    'session_status'            => null,
-                                    'session_unregister'        => null,
-                                    'session_unset'             => null,
-                                    'session_write_close'       => null,
-                                    );
+	public $forbiddenFunctions = array(
+                               'session_cache_expire'      => null,
+                               'session_cache_limiter'     => null,
+                               'session_commit'            => null,
+                               'session_decode'            => null,
+                               'session_destroy'           => null,
+                               'session_encode'            => null,
+                               'session_get_cookie_params' => null,
+                               'session_id'                => null,
+                               'session_is_registered'     => null,
+                               'session_module_name'       => null,
+                               'session_name'              => null,
+                               'session_regenerate_id'     => null,
+                               'session_register_shutdown' => null,
+                               'session_register'          => null,
+                               'session_save_path'         => null,
+                               'session_set_cookie_params' => null,
+                               'session_set_save_handler'  => null,
+                               'session_start'             => null,
+                               'session_status'            => null,
+                               'session_unregister'        => null,
+                               'session_unset'             => null,
+                               'session_write_close'       => null,
+                              );
 
     protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
     {
