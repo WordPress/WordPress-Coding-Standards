@@ -1,5 +1,6 @@
-Ongoing development will be done in the `develop` with merges done into `master`
-once considered stable.
+Ongoing development will be done in the `develop` with merges done into `master` once considered stable. 
+
+To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
 ### Unit Testing
 
