@@ -12,7 +12,7 @@ $id = get_the_ID( ); // Still good, but unnecessary space
 $value = apply_filters( 'tag_name', 'value' ); // Good
 
 function my_custom_shortcode( $atts ) {
-	// OK! Without multilineCallParenthesis, ppening paranthesis of a multi-line
+	// OK! Without multilineCallParenthesis, opening parenthesis of a multi-line
 	// function call can be the last content on the line. Ditto with the
 	// closing parenthesis.
 	extract( shortcode_atts( array(
