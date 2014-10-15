@@ -1,7 +1,7 @@
 <?php
 
 // Bad, no space after opening control structure
-while( have_posts() ) { // Okay, comments are okay here
+while ( have_posts() ) { // Okay, comments are okay here
 	// Okay, comments are okay here as well
 } // Okay, comments are okay here
 
@@ -14,8 +14,7 @@ if ( true ) {
 }
 
 // bad
-if  ( 'update' === $option_operation['operation'] )
-{
+if  ( 'update' === $option_operation['operation'] ) {
 	update_option( $option_operation['option_name'], $option_operation['old_value'] );
 
 }
@@ -26,7 +25,7 @@ if ( 'update' === $option_operation['operation'] ) {
 }
 
 // bad
-if(true){}
+if ( true ){}
 
 
 if ( true ) {
@@ -35,5 +34,4 @@ if ( true ) {
         echo 'OK';
 
     }
-
 }
