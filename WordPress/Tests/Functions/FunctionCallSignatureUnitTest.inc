@@ -47,3 +47,15 @@ if ( isset($var1) && isset( $var2 ) ) { // function call for $var1 is Bad, $var2
 if ( empty($var1) && empty( $var2 ) ) { // function call for $var1 is Bad, $var2 is good
 	echo '';
 }
+
+/**
+ * @see https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/249#issuecomment-59129708
+ */
+function bar() {
+	foo(
+		function () {
+
+			echo 'Hello world!';
+		}
+	);
+}
