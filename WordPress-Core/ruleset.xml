@@ -18,7 +18,14 @@
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#indentation -->
+	<arg name="tab-width" value="4"/>
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="indent" value="4"/>
+			<property name="tabIndent" value="true"/>
+		</properties>
+	</rule>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator -->
 	<rule ref="Generic.PHP.NoSilencedErrors" />
@@ -33,12 +40,6 @@
 			<property name="eolChar" value="\n"/>
 		</properties>
 	</rule>
-
-    <rule ref="Generic.WhiteSpace.ScopeIndent">
-        <properties>
-            <property name="indent" value="1"/>
-        </properties>
-    </rule>
 
 	<rule ref="WordPress.Arrays.ArrayDeclaration"/>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
