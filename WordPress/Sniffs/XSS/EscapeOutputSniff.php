@@ -210,6 +210,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'urlencode',
 		'urlencode_deep',
 		'validate_file',
+		'wp_json_encode',
 		'wp_kses',
 		'wp_kses_allowed_html',
 		'wp_kses_data',
