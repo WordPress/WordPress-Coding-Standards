@@ -1,7 +1,12 @@
-Ongoing development will be done in the `develop` with merges done into `master`
-once considered stable.
+# Branches
 
-### Unit Testing
+Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
+
+To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
+
+Once a commit is made to `develop`, a PR should be opened from `develop` into `master` and named "Next release". This PR will then serve provide a second round of Travis CI checks (especially for any hotfixes pushed directly to the `develop` branch), and provide collaborators with a forum to discuss the upcoming stable release.
+
+# Unit Testing
 
 TL;DR
 
@@ -31,7 +36,7 @@ PEAR installation is intended for ready-to-use not for development. At some poin
 might be submitted to `PHP_CodeSniffer` repo and using their existing convention for unit tests
 will eventually help them to test the code before merging in.
 
-#### Unit Testing conventions
+## Unit Testing conventions
 
 If you see inside the `WordPress/Tests`, the structure mimics the `WordPress/Sniffs`. For example,
 the `WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php` sniff has unit test class defined in
