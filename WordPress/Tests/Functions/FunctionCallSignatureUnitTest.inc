@@ -59,3 +59,18 @@ function bar() {
 		}
 	);
 }
+
+class Foo {
+
+	/**
+	 * Add Tags to post-content on archive pages
+	 * @action loop_after_content, 30
+	 */
+	function action_post_meta_tags() {
+		the_tags(
+			sprintf( '<div class="tags-wrap"><strong>%s: </strong>', esc_html_x( 'Tags', 'archive loop' ) ),
+			', ',
+			'</div>'
+		);
+	}
+}
