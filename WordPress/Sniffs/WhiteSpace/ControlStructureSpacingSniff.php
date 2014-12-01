@@ -83,7 +83,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $tokens = $phpcsFile->getTokens();
 
-        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
+        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE
+            && ! ( $tokens[$stackPtr]['code'] === T_ELSE && $tokens[($stackPtr + 1)]['code'] === T_COLON )
+        ) {
             $error = 'Space after opening control structure is required';
             if (isset($phpcsFile->fixer) === true) {
                 $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfterStructureOpen');
@@ -106,7 +108,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $parenthesisOpener = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
 
-        if (($stackPtr + 1) === $parenthesisOpener) {
+        if (($stackPtr + 1) === $parenthesisOpener && $tokens[$parenthesisOpener]['code'] !== T_COLON) {
             // Checking this: $value = my_function[*](...).
             $error = 'No space before opening parenthesis is prohibited';
             if (isset($phpcsFile->fixer) === true) {
