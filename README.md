@@ -33,7 +33,7 @@ For convenience of using `phpcs` as global command you might want to add path to
 
 2. Clone WordPress standards repository:
 
-        git clone https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
+        git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 
 3. Add its path to PHP_CodeSniffer configuration: 
 
