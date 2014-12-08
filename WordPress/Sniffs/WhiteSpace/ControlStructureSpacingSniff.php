@@ -85,9 +85,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $this->blank_line_check         = (bool) $this->blank_line_check;
-        $this->blank_line_after_check   = (bool) $this->blank_line_after_check;
-        $this->space_before_colon_check = (bool) $this->space_before_colon_check;
+        $this->blank_line_check            = (bool) $this->blank_line_check;
+        $this->blank_line_after_check      = (bool) $this->blank_line_after_check;
+        $this->space_before_colon_required = (bool) $this->space_before_colon_required;
 
         $tokens = $phpcsFile->getTokens();
 
@@ -117,7 +117,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
         // alternative syntax
         if ( $tokens[$scopeOpener]['code'] === T_COLON ) {
 
-            if ( $this->space_before_colon_check ) {
+            if ( $this->space_before_colon_required ) {
 
                 if ( $tokens[$scopeOpener - 1]['code'] !== T_WHITESPACE ) {
                    $error = 'Space between opening control structure and T_COLON is required';
