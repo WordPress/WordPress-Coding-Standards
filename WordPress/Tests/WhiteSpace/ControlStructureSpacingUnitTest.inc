@@ -41,3 +41,7 @@ if ( true ) {
 if ( false ):
 else:
 endif;
+
+if ( false ) :
+else :
+endif;
