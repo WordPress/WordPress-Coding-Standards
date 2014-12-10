@@ -165,7 +165,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_shortlink_wp_head',
 		'wp_tag_cloud',
 		'wp_title',
-		'wp_verify_nonce',
+		'checked',
 	);
 
 	public static $sanitizingFunctions = array(
