@@ -15,8 +15,9 @@
 		}
 	],
 	"require"    : {
-		"squizlabs/php_codesniffer": ">=1.5.4,<2.0"
+		"squizlabs/php_codesniffer": "~2.0"
 	},
+	"minimum-stability" : "RC",
 	"support"    : {
 		"issues": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues"
 	},

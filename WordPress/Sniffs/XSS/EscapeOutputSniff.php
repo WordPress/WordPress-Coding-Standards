@@ -31,6 +31,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'calendar_week_mod',
 		'cancel_comment_reply_link',
 		'category_description',
+		'checked',
 		'comment_ID',
 		'comment_author',
 		'comment_author_IP',
@@ -57,6 +58,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'comments_popup_script',
 		'comments_rss_link',
 		'delete_get_calendar_cache',
+		'disabled',
 		'do_shortcode_tag',
 		'edit_bookmark_link',
 		'edit_comment_link',
@@ -101,6 +103,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'previous_image_link',
 		'previous_post_link',
 		'previous_posts_link',
+		'selected',
 		'single_cat_title',
 		'single_month_title',
 		'single_post_title',
@@ -163,6 +166,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_shortlink_wp_head',
 		'wp_tag_cloud',
 		'wp_title',
+		'checked',
 	);
 
 	public static $sanitizingFunctions = array(
@@ -209,6 +213,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'urlencode',
 		'urlencode_deep',
 		'validate_file',
+		'wp_json_encode',
 		'wp_kses',
 		'wp_kses_allowed_html',
 		'wp_kses_data',
@@ -216,6 +221,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_redirect',
 		'wp_rel_nofollow',
 		'wp_safe_redirect',
+		'number_format',
+		'ent2ncr',
 	);
 
 	public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
