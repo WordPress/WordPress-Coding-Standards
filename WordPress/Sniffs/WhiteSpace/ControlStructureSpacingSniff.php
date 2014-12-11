@@ -48,9 +48,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
     /**
      * Require for space before T_COLON when using the alternative syntax for control structures
      *
-     * @var boolean
+     * @var string one of 'required', 'forbidden', optional'
      */
-    public $space_before_colon_required = true;
+    public $space_before_colon = 'required';
 
 
     /**
@@ -117,7 +117,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
         // alternative syntax
         if ( $tokens[$scopeOpener]['code'] === T_COLON ) {
 
-            if ( $this->space_before_colon_required ) {
+            if ( $this->space_before_colon === 'required') {
 
                 if ( $tokens[$scopeOpener - 1]['code'] !== T_WHITESPACE ) {
                    $error = 'Space between opening control structure and T_COLON is required';
@@ -135,7 +135,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
                    }
                 }
 
-            } else {
+            } elseif ( $this->space_before_colon === 'forbidden' ) {
 
                 if ( $tokens[$scopeOpener - 1]['code'] === T_WHITESPACE ) {
                     $error = 'Extra space between opening control structure and T_COLON found';
