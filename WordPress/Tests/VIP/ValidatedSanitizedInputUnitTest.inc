@@ -69,3 +69,5 @@ function zebra() {
 		echo esc_html( $_POST['bar'] ); // ok
 	}
 }
+
+echo $_GET['test']; // WPCS: sanitization OK.

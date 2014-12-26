@@ -67,6 +67,10 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) )
 				return;
 		} else {
+			if ( $this->is_whitelisted_by_comment( $tokens, $stackPtr ) ) {
+				return;
+			}
+
 			// Search for casting
 			$prev = $phpcsFile->findPrevious( array( T_WHITESPACE ), $stackPtr -1, null, true, null, true );
 			$is_casted = in_array( $tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) );
@@ -138,10 +142,14 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 				}
 			}
 		}
-		
+
 		if ( ! $is_validated ) {
 			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
 			// return; // Should we just return and not look for sanitizing functions ?
+		}
+
+		if ( $this->is_whitelisted_by_comment( $tokens, $stackPtr ) ) {
+			return;
 		}
 
 		// Now look for sanitizing functions
@@ -195,6 +203,38 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$varKey = trim( $phpcsFile->getTokensAsString( $bracketOpener + 1, $bracketCloser - $bracketOpener - 1 ) ); // aka 'hello' in $_POST['hello']
 
 		return $varKey;
+	}
+
+	/**
+	 * Check if an instance is whitelisted by a comment.
+	 *
+	 * @param array $tokens   The tokens in the file.
+	 * @param int   $stackPtr The index of the current token.
+	 *
+	 * @return bool Whether there is a whitelisting comment at the end of the line.
+	 */
+	protected function is_whitelisted_by_comment( $tokens, $stackPtr ) {
+
+		// Checking for the ignore comment, ex: //sanitization ok
+		$isAtEndOfStatement = false;
+		$commentOkRegex     = '/sanitization\W*(ok|pass|clear|whitelist)/i';
+		$tokensCount        = count( $tokens );
+		for ( $i = $stackPtr; $i < $tokensCount; $i++ ) {
+			if ( $tokens[$i]['code'] === T_SEMICOLON ) {
+				$isAtEndOfStatement = true;
+			}
+
+			if ( $isAtEndOfStatement === true && in_array( $tokens[$i]['code'], array( T_SEMICOLON, T_WHITESPACE, T_COMMENT ) ) === false ) {
+				break;
+			}
+
+			preg_match( $commentOkRegex, $tokens[$i]['content'], $matches );
+			if ( ( $tokens[$i]['code'] === T_COMMENT ) && ( empty( $matches ) === false ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }//end class
