@@ -59,7 +59,10 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			return;
 		}
 
-		$is_casted = false;
+		// Search for casting
+		$prev = $phpcsFile->findPrevious( array( T_WHITESPACE ), $stackPtr - 1, null, true, null, true );
+		$is_casted = in_array( $tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) );
+
 		if ( isset( $instance['nested_parenthesis'] ) ) {
 			$nested = $instance['nested_parenthesis'];
 			// Ignore if wrapped inside ISSET
@@ -67,9 +70,6 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) )
 				return;
 		} else {
-			// Search for casting
-			$prev = $phpcsFile->findPrevious( array( T_WHITESPACE ), $stackPtr -1, null, true, null, true );
-			$is_casted = in_array( $tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) );
 			if ( ! $is_casted ) {
 				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
 				return;
@@ -162,6 +162,8 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 					$is_sanitized = true;
 				}
 			} elseif ( T_UNSET === $function['code'] ) {
+				$is_sanitized = true;
+			} elseif ( $is_casted ) {
 				$is_sanitized = true;
 			}
 		}
