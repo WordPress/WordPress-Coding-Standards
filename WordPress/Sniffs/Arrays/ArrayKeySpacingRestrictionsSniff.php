@@ -55,11 +55,11 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 		// It should have spaces only if it only has strings or numbers as the key
 		if ( $need_spaces && ! ( $spaced1 && $spaced2 ) ) {
 			$error = 'Array keys should be surrounded by spaces unless they contain a string or an integer.';
-        	$phpcsFile->addWarning( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
+        	$phpcsFile->addError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
 		}
 		elseif( ! $need_spaces && ( $spaced1 || $spaced2 ) ) {
 			$error = 'Array keys should NOT be surrounded by spaces if they only contain a string or an integer.';
-        	$phpcsFile->addWarning( $error, $stackPtr, 'SpacesAroundArrayKeys' );
+        	$phpcsFile->addError( $error, $stackPtr, 'SpacesAroundArrayKeys' );
 		}
 
 	}//end process()
