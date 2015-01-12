@@ -50,7 +50,7 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
         $data  = array($function);
         $error = 'The use of PHP session function %s() is prohibited.';
 
-        $phpcsFile->addError( $error, $stackPtr, null, $data );
+        $phpcsFile->addError( $error, $stackPtr, $function, $data );
 
     }//end addError()
 

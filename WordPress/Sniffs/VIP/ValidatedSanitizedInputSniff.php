@@ -71,7 +71,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 				return;
 		} else {
 			if ( ! $is_casted ) {
-				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
 				return;
 			}
 		}
@@ -140,7 +140,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		}
 		
 		if ( ! $is_validated ) {
-			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', array( $tokens[$stackPtr]['content'] ) );
 			// return; // Should we just return and not look for sanitizing functions ?
 		}
 
@@ -169,7 +169,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		}
 
 		if ( ! $is_sanitized ) {
-			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
 		}
 
 
