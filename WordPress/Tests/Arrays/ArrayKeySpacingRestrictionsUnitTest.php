@@ -20,20 +20,6 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 	 */
 	public function getErrorList()
 	{
-		return array();
-	}//end getErrorList()
-
-
-	/**
-	 * Returns the lines where warnings should occur.
-	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
-	 *
-	 * @return array(int => int)
-	 */
-	public function getWarningList()
-	{
 		return array(
 			4 => 1,
 			5 => 1,
@@ -49,6 +35,20 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 			29 => 1,
 			31 => 1,
 		);
+	}//end getErrorList()
+
+
+	/**
+	 * Returns the lines where warnings should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of warnings that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getWarningList()
+	{
+		return array();
 	}//end getWarningList()
 
 
