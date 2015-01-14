@@ -40,7 +40,7 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff implements PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if ( in_array( trim( $tokens[$stackPtr]['content'], '"\'' ), array( 'show_admin_bar' ) ) ) {
-			$phpcsFile->addError( 'Removal of admin bar is prohibited.', $stackPtr );
+			$phpcsFile->addError( 'Removal of admin bar is prohibited.', $stackPtr, 'RemovalDetected');
 		}
 	}//end process()
 
