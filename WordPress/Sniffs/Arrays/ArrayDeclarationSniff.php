@@ -188,7 +188,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
         $nextToken  = $stackPtr;
         $lastComma  = $stackPtr;
         $keyUsed    = false;
-        $singleUsed = false;
         $lastToken  = '';
         $indices    = array();
         $maxLength  = 0;
@@ -240,7 +239,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
                     $valueContent = $phpcsFile->findNext(T_WHITESPACE, ($valueContent + 1), $nextToken, true);
                     $indices[]    = array('value' => $valueContent);
-                    $singleUsed   = true;
                 }//end if
 
                 $lastToken = T_COMMA;
@@ -248,12 +246,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             }//end if
 
             if ($tokens[$nextToken]['code'] === T_DOUBLE_ARROW) {
-                if ($singleUsed === true) {
-                    $error = 'Key specified for array entry; first entry has no key';
-                    $phpcsFile->addError($error, $nextToken, 'KeySpecified');
-                    return;
-                }
-
                 $currentEntry['arrow'] = $nextToken;
                 $keyUsed               = true;
 
