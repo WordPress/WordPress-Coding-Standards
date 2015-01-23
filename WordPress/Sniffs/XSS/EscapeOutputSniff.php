@@ -310,15 +310,17 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 		}
 
+		$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+
+		// Check for the ternary operator.
+		$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
+		if ( $ternary ) {
+			$stackPtr = $ternary + 1;
+		}
 
 		// looping through echo'd components
 		$watch = true;
-		for ( $i = $stackPtr; $i < count( $tokens ); $i++ ) {
-
-			// End processing if found the end of statement
-			if ( $tokens[$i]['code'] == T_SEMICOLON ) {
-				return;
-			}
+		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces
 			if ( $tokens[$i]['code'] == T_WHITESPACE )
@@ -326,6 +328,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 			// Wake up on concatenation characters, another part to check
 			if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {
+				$watch = true;
+				continue;
+			}
+
+			// Wake up after a ternary else (:).
+			if ( $ternary && in_array( $tokens[$i]['code'], array( T_INLINE_ELSE ) ) ) {
 				$watch = true;
 				continue;
 			}

@@ -55,3 +55,7 @@ echo ent2ncr( $text );
 echo number_format ( 1024 );
 
 echo ent2ncr( esc_html( $_data ) );
+
+echo $foo ? $foo : 'no foo'; // Bad
+echo empty( $foo ) ? 'no foo' : $foo; // Bad
+echo $foo ? esc_html( $foo ) : 'no foo'; // OK
