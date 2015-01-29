@@ -182,3 +182,13 @@ $multidimensional_comments = array(
 	),
 	// comment
 );
+
+$q = new WP_Query( array(
+	'meta_query' => array(
+		'relation' => 'and', // OK
+		array(
+			'key' => 'asdsa',
+			'value' => 'asds',
+		),
+	),
+) );
