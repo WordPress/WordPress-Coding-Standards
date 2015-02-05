@@ -98,6 +98,11 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
             return;
         }
 
+        // If this is a child class, it may have to use camelCase.
+        if (  $phpcsFile->findExtendedClassName( $currScope ) ) {
+            return;
+        }
+
         $methodProps    = $phpcsFile->getMethodProperties($stackPtr);
         $scope          = $methodProps['scope'];
         $scopeSpecified = $methodProps['scope_specified'];
