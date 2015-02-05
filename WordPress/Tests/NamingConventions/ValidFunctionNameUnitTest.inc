@@ -20,3 +20,8 @@ class My_Plugin {
 
 	public function __invoke() {} // OK
 }
+
+class Test extends WP_UnitTestCase {
+
+	public function setUp() {} // OK
+}
