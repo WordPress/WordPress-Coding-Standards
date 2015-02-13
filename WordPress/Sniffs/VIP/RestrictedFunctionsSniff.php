@@ -64,6 +64,14 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 			),
 
+			'get_tag_link' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_term_link() instead.',
+				'functions' => array(
+					'get_tag_link',
+				),
+			),
+
 			'get_page_by_path' => array(
 				'type' => 'error',
 				'message' => '%s is prohibited, please use wpcom_vip_get_page_by_path() instead.',
