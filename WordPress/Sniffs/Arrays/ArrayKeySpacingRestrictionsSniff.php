@@ -37,9 +37,13 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 		$tokens = $phpcsFile->getTokens();
 
 		$token = $tokens[ $stackPtr ];
+		if ( ! isset( $token['bracket_closer'] ) ) {
+			$phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr );
+			return;
+		}
 
 		$need_spaces = $phpcsFile->findNext(
-			array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_WHITESPACE ),
+			array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_WHITESPACE, T_MINUS ),
 			$stackPtr + 1,
 			$token['bracket_closer'],
 			true

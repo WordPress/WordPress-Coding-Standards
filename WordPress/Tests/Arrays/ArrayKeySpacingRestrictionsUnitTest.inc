@@ -26,3 +26,6 @@ bar( $arr['string'.$var] ); // Bad
 $arr[FooClass::FOO_KEY]; // Bad
 
 $arr[0]; // Good
+$arr[ 0 ]; // Bad
+$arr[-1]; // Good
+$arr[ -1 ]; // Bad

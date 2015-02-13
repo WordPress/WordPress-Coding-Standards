@@ -43,10 +43,21 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( $tokens[$stackPtr]['content'] != '$wpdb' )
 			return;
 
-		if ( false == $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), $stackPtr + 1, null, null, null, true ) )
+		$is_object_call = $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), $stackPtr + 1, null, null, null, true );
+		if ( false == $is_object_call )
 			return; // This is not a call to the wpdb object
 
-		// Check for whitelisting comments
+		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $is_object_call + 1, null, true, null, true );
+		$method = $tokens[ $methodPtr ]['content'];
+
+		$methods = array(
+			'cachable' => array( 'get_var', 'get_col', 'get_row', 'get_results', 'query' ),
+			'noncachable' => array( 'execute', 'insert', 'update', 'replace' ),
+		);
+		if ( ! in_array( $method, array_merge( $methods['cachable'], $methods['noncachable'] ) ) ) {
+			return;
+		}
+
 		$endOfStatement = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
 		$endOfLineComment = '';
 		for ( $i = $endOfStatement + 1; $i < count( $tokens ); $i++ ) {
@@ -79,6 +90,10 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( ! $whitelisted_db_call ) {
 			$message = 'Usage of a direct database call is discouraged.';
 			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
+		}
+
+		if ( ! in_array( $method, $methods['cachable'] ) ) {
+			return;
 		}
 
 		$whitelisted_cache = false;

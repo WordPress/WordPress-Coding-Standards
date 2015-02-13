@@ -20,6 +20,10 @@
 class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 {
 
+	public $customAutoEscapedFunctions = array();
+
+	public $customSanitizingFunctions = array();
+
 	public static $autoEscapedFunctions = array(
 		'allowed_tags',
 		'bloginfo',
@@ -27,6 +31,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'calendar_week_mod',
 		'cancel_comment_reply_link',
 		'category_description',
+		'checked',
 		'comment_ID',
 		'comment_author',
 		'comment_author_IP',
@@ -53,6 +58,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'comments_popup_script',
 		'comments_rss_link',
 		'delete_get_calendar_cache',
+		'disabled',
 		'do_shortcode_tag',
 		'edit_bookmark_link',
 		'edit_comment_link',
@@ -97,6 +103,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'previous_image_link',
 		'previous_post_link',
 		'previous_posts_link',
+		'selected',
 		'single_cat_title',
 		'single_month_title',
 		'single_post_title',
@@ -159,11 +166,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_shortlink_wp_head',
 		'wp_tag_cloud',
 		'wp_title',
-	);
-
-	public static $okTokenContentSequences = array(
-		array( '$this', '->', 'get_field_id' ),
-		array( '$this', '->', 'get_field_name' ),
+		'checked',
 	);
 
 	public static $sanitizingFunctions = array(
@@ -172,9 +175,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'esc_attr',
 		'esc_attr__',
 		'esc_attr_e',
+		'esc_attr_x',
 		'esc_html',
 		'esc_html__',
 		'esc_html_e',
+		'esc_html_x',
 		'esc_js',
 		'esc_sql',
 		'esc_textarea',
@@ -208,6 +213,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'urlencode',
 		'urlencode_deep',
 		'validate_file',
+		'wp_json_encode',
 		'wp_kses',
 		'wp_kses_allowed_html',
 		'wp_kses_data',
@@ -215,6 +221,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_redirect',
 		'wp_rel_nofollow',
 		'wp_safe_redirect',
+		'number_format',
+		'ent2ncr',
 	);
 
 	public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
@@ -227,6 +235,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'_x',
 	);
 
+	public static $addedCustomFunctions = false;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -257,6 +266,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		// Merge any custom functions with the defaults, if we haven't already.
+		if ( ! self::$addedCustomFunctions ) {
+			self::$sanitizingFunctions = array_merge( self::$sanitizingFunctions, $this->customSanitizingFunctions );
+			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, $this->customAutoEscapedFunctions );
+			self::$addedCustomFunctions = true;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		// If function, not T_ECHO nor T_PRINT
@@ -298,18 +314,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		// looping through echo'd components
 		$watch = true;
 		for ( $i = $stackPtr; $i < count( $tokens ); $i++ ) {
-
-			foreach ( self::$okTokenContentSequences as $sequence ) {
-				if ( $sequence[0] === $tokens[ $i ]['content'] ) {
-					$token_string = join( '', array_map(
-						array( $this, 'get_content_from_token' ),
-						array_slice( $tokens, $i, count( $sequence ) )
-					) );
-					if ( $token_string === join( '', $sequence ) ) {
-						return;
-					}
-				}
-			}
 
 			// End processing if found the end of statement
 			if ( $tokens[$i]['code'] == T_SEMICOLON ) {
@@ -368,11 +372,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		}
 
 	}//end process()
-
-
-	private function get_content_from_token( $token ) {
-		return $token['content'];
-	}
 
 }//end class
 

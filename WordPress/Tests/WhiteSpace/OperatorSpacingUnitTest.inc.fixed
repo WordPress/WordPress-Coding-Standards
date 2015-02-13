@@ -2,7 +2,7 @@
 
 $posts = get_posts( 'cat=3' );
 // Bad, no operator spacing
-for ( $i=0; $i<sizeof( $posts ); $i++ ) {
+for ( $i = 0; $i < sizeof( $posts ); $i++ ) {
 	// ...
 }
 
@@ -15,7 +15,7 @@ if ( ! $var ) {
 	// ...
 }
 // Bad
-if ( !$var ) {
+if ( ! $var ) {
 	// ...
 }
 
@@ -42,10 +42,10 @@ if ( 'bb' !== 'bb' ) {
 }
 
 // Bad
-for ( $i =  0; $i < sizeof( $posts ); $i++ ) {
+for ( $i = 0; $i < sizeof( $posts ); $i++ ) {
 	// ...
 }
 // Bad
-if (  ! $var ) {
+if ( ! $var ) {
 	// ...
 }

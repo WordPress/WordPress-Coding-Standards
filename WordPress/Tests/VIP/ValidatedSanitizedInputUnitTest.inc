@@ -44,7 +44,7 @@ if ( ! isset( $_REQUEST['bar2'] ) || ! foo( esc_attr( $_REQUEST['bar2'] ) ) ) { 
 	wp_die( 1 );
 }
 
-function foo() {
+function bar() {
 	if ( ! isset( $_GET['test'] ) ) {
 		return ;
 	}
@@ -60,4 +60,12 @@ foreach( $_POST as $key => $value ) {
 	// ..
 }
 
-unset( $_GET['test'] ) // ok
+unset( $_GET['test'] ); // ok
+
+echo (int) $_GET['test'];
+
+function zebra() {
+	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {
+		echo esc_html( $_POST['bar'] ); // ok
+	}
+}

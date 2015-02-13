@@ -1,34 +1,30 @@
 <?php
 /**
- * Unit test class for the ScopeIndent sniff.
+ * Unit test class for the CaseStructureSpacing sniff.
  *
  * PHP version 5
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @author    Matt Robinson
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
 /**
- * Unit test class for the ScopeIndent sniff.
+ * Unit test class for the CaseStructureSpacing sniff.
  *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @author    Matt Robinson
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_WhiteSpace_ScopeIndentUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -42,11 +38,7 @@ class WordPress_Tests_WhiteSpace_ScopeIndentUnitTest extends AbstractSniffUnitTe
      */
     public function getErrorList()
     {
-        return array(
-                9 => 1,
-                13 => 1,
-                90 => 1,
-               );
+        return array();
 
     }//end getErrorList()
 
@@ -61,7 +53,15 @@ class WordPress_Tests_WhiteSpace_ScopeIndentUnitTest extends AbstractSniffUnitTe
      */
     public function getWarningList()
     {
-        return array();
+        return array(
+                 3 => 1,
+                 6 => 1,
+                 9 => 1,
+                 12 => 2,
+                 15 => 1,
+                 18 => 1,
+                 21 => 1,
+                );
 
     }//end getWarningList()
 

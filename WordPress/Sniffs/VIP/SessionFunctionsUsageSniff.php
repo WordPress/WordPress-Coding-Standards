@@ -20,7 +20,7 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
      *
      * @var array(string => string|null)
      */
-    protected $forbiddenFunctions = array(
+    public $forbiddenFunctions = array(
                                     'session_cache_expire'      => null,
                                     'session_cache_limiter'     => null,
                                     'session_commit'            => null,

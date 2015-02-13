@@ -48,13 +48,10 @@ _e( $some_nasty_var ); // Bad
 echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
 echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
 
+echo '<input type="checkbox" name="' . esc_attr( 'field[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
 
-class Test_Widget extends WP_Widget {
-	public function form( $instance ) {
-		?>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label><!-- 1 ok -->
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>"><!-- 2 ok -->
-		</p>
-	<?php
-}
+echo ent2ncr( $text );
+
+echo number_format ( 1024 );
+
+echo ent2ncr( esc_html( $_data ) );
