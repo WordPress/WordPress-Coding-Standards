@@ -61,3 +61,9 @@ echo empty( $foo ) ? 'no foo' : $foo; // Bad
 echo $foo ? esc_html( $foo ) : 'no foo'; // OK
 
 echo 4; // OK
+
+exit( $foo ); // Bad
+exit( esc_html( $foo ) ); // OK
+
+die( $foo ); // Bad
+die( esc_html( $foo ) ); // OK

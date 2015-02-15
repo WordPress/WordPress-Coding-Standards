@@ -247,6 +247,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		return array(
 			T_ECHO,
 			T_PRINT,
+			T_EXIT,
 			T_STRING,
 		);
 
@@ -282,6 +283,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				return;
 			}
 
+			$stackPtr++; // Ignore the starting bracket
+		}
+
+		if ( $tokens[ $stackPtr ]['code'] === T_EXIT ) {
 			$stackPtr++; // Ignore the starting bracket
 		}
 
