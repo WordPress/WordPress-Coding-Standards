@@ -280,6 +280,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 		$needs_sanitizing_function = false;
 
+		$function = $tokens[ $stackPtr ]['content'];
+
 		// If function, not T_ECHO nor T_PRINT
 		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
 			// Skip if it is a function but is not of the printing functions ( self::needSanitizingFunctions )
@@ -336,6 +338,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			// Ignore whitespaces
 			if ( $tokens[$i]['code'] == T_WHITESPACE )
 				continue;
+
+			if ( 'vprintf' === $function && $tokens[ $i ]['code'] === T_ARRAY ) {
+				$i++; // Skip the opening parenthesis.
+				continue;
+			}
 
 			// Wake up on concatenation characters, another part to check
 			if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {

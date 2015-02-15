@@ -69,3 +69,8 @@ die( $foo ); // Bad
 die( esc_html( $foo ) ); // OK
 
 printf( 'Hello %s', $foo ); // Bad
+printf( 'Hello %s', esc_html( $foo ) ); // OK
+printf( 'Hello %s! Hi %s!', esc_html( $foo ), $bar ); // Bad
+
+vprintf( 'Hello %s', array( $foo ) ); // Bad
+vprintf( 'Hello %s', array( esc_html( $foo ) ) ); // OK
