@@ -67,3 +67,5 @@ exit( esc_html( $foo ) ); // OK
 
 die( $foo ); // Bad
 die( esc_html( $foo ) ); // OK
+
+printf( 'Hello %s', $foo ); // Bad
