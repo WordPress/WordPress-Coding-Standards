@@ -83,3 +83,10 @@ do_something(
 	_x( 'Some string', 'context', 'domain' )
 	, array( $foo ) // OK
 );
+
+// There was a bug where an empty exit followed by other code would give an error.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // OK
+} else {
+	other();
+}

@@ -296,7 +296,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
-		if ( $tokens[ $stackPtr ]['code'] === T_EXIT ) {
+		if ( $tokens[ $stackPtr ]['code'] === T_EXIT && $tokens[ $stackPtr + 1 ]['code'] === T_OPEN_PARENTHESIS ) {
 			$stackPtr++; // Ignore the starting bracket
 		}
 
