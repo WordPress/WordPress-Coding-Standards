@@ -233,6 +233,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'_ngettext',
 		'_nx',
 		'_x',
+		'printf',
+		'vprintf',
 	);
 
 	public static $addedCustomFunctions = false;
@@ -247,6 +249,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		return array(
 			T_ECHO,
 			T_PRINT,
+			T_EXIT,
 			T_STRING,
 		);
 
@@ -275,6 +278,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
+		$needs_sanitizing_function = false;
+
+		$function = $tokens[ $stackPtr ]['content'];
+
 		// If function, not T_ECHO nor T_PRINT
 		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
 			// Skip if it is a function but is not of the printing functions ( self::needSanitizingFunctions )
@@ -282,6 +289,14 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				return;
 			}
 
+			$needs_sanitizing_function = true;
+
+			$stackPtr++; // Ignore the starting bracket
+
+			$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
+		}
+
+		if ( $tokens[ $stackPtr ]['code'] === T_EXIT ) {
 			$stackPtr++; // Ignore the starting bracket
 		}
 
@@ -310,7 +325,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 		}
 
-		$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+		// This is already determined if $needs_sanitizing_function.
+		if ( ! isset( $end_of_statement ) ) {
+			$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+		}
 
 		// Check for the ternary operator.
 		$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
@@ -326,6 +344,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			if ( $tokens[$i]['code'] == T_WHITESPACE )
 				continue;
 
+			if ( 'vprintf' === $function && $tokens[ $i ]['code'] === T_ARRAY ) {
+				$i++; // Skip the opening parenthesis.
+				continue;
+			}
+
 			// Wake up on concatenation characters, another part to check
 			if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {
 				$watch = true;
@@ -334,6 +357,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 			// Wake up after a ternary else (:).
 			if ( $ternary && in_array( $tokens[$i]['code'], array( T_INLINE_ELSE ) ) ) {
+				$watch = true;
+				continue;
+			}
+
+			// Wake up for commas.
+			if ( $needs_sanitizing_function && $tokens[$i]['code'] === T_COMMA ) {
 				$watch = true;
 				continue;
 			}
