@@ -292,6 +292,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			$needs_sanitizing_function = true;
 
 			$stackPtr++; // Ignore the starting bracket
+
+			$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
 		if ( $tokens[ $stackPtr ]['code'] === T_EXIT ) {
@@ -323,7 +325,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 		}
 
-		$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+		// This is already determined if $needs_sanitizing_function.
+		if ( ! isset( $end_of_statement ) ) {
+			$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+		}
 
 		// Check for the ternary operator.
 		$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );

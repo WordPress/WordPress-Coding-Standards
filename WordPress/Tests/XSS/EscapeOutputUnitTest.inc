@@ -74,3 +74,12 @@ printf( 'Hello %s! Hi %s!', esc_html( $foo ), $bar ); // Bad
 
 vprintf( 'Hello %s', array( $foo ) ); // Bad
 vprintf( 'Hello %s', array( esc_html( $foo ) ) ); // OK
+
+// The below checks that functions which are marked as needed further sanitization
+// don't spill over into later arguments when nested in a function call. There was
+// a bug which would cause line 84 to be marked as needing sanitization because _x()
+// is marked as needing sanitization.
+do_something(
+	_x( 'Some string', 'context', 'domain' )
+	, array( $foo ) // OK
+);
