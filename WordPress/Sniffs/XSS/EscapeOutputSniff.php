@@ -340,9 +340,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		$watch = true;
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
-			// Ignore whitespaces
-			if ( $tokens[$i]['code'] == T_WHITESPACE )
+			// Ignore whitespaces and comments.
+			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMENT ) ) ) {
 				continue;
+			}
 
 			if ( 'vprintf' === $function && $tokens[ $i ]['code'] === T_ARRAY ) {
 				$i++; // Skip the opening parenthesis.
