@@ -229,10 +229,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'__',
 		'_e',
 		'_ex',
-		'_n',
-		'_ngettext',
-		'_nx',
-		'_x',
 		'printf',
 		'vprintf',
 	);
