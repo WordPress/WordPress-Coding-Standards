@@ -24,6 +24,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 	public $customSanitizingFunctions = array();
 
+	public $customPrintingFunctions = array();
+
 	public static $autoEscapedFunctions = array(
 		'allowed_tags',
 		'bloginfo',
@@ -273,6 +275,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		if ( ! self::$addedCustomFunctions ) {
 			self::$sanitizingFunctions = array_merge( self::$sanitizingFunctions, $this->customSanitizingFunctions );
 			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, $this->customAutoEscapedFunctions );
+			self::$printingFunctions = array_merge( self::$printingFunctions, $this->customPrintingFunctions );
 			self::$addedCustomFunctions = true;
 		}
 
