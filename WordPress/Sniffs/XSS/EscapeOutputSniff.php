@@ -353,6 +353,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
+			if ( $tokens[ $i ]['code'] === T_DOUBLE_ARROW && 'wp_die' === $function ) {
+				continue;
+			}
+
 			// Wake up on concatenation characters, another part to check
 			if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {
 				$watch = true;
