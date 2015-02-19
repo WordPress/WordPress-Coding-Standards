@@ -24,6 +24,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 	public $customSanitizingFunctions = array();
 
+	public $customPrintingFunctions = array();
+
 	public static $autoEscapedFunctions = array(
 		'allowed_tags',
 		'bloginfo',
@@ -225,14 +227,14 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'ent2ncr',
 	);
 
-	public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
-		'__',
+	/**
+	 * Functions which print output incorporating the values passed to them.
+	 *
+	 * @var array
+	 */
+	public static $printingFunctions = array(
 		'_e',
 		'_ex',
-		'_n',
-		'_ngettext',
-		'_nx',
-		'_x',
 		'printf',
 		'vprintf',
 	);
@@ -263,8 +265,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @todo Allow T_CONSTANT_ENCAPSED_STRING?
-	 *
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
@@ -273,6 +273,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		if ( ! self::$addedCustomFunctions ) {
 			self::$sanitizingFunctions = array_merge( self::$sanitizingFunctions, $this->customSanitizingFunctions );
 			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, $this->customAutoEscapedFunctions );
+			self::$printingFunctions = array_merge( self::$printingFunctions, $this->customPrintingFunctions );
 			self::$addedCustomFunctions = true;
 		}
 
@@ -284,8 +285,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 		// If function, not T_ECHO nor T_PRINT
 		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
-			// Skip if it is a function but is not of the printing functions ( self::needSanitizingFunctions )
-			if ( ! in_array( $tokens[$stackPtr]['content'], $this->needSanitizingFunctions ) ) {
+			// Skip if it is a function but is not of the printing functions ( self::printingFunctions )
+			if ( ! in_array( $tokens[$stackPtr]['content'], self::$printingFunctions ) ) {
 				return;
 			}
 
