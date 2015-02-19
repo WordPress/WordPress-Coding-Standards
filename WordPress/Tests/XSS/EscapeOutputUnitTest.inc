@@ -90,3 +90,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 } else {
 	other();
 }
+
+printf(
+	/* translators: this comment is just for you. */
+	esc_html__( 'Hello %s.', 'domain' )
+	, 'world'
+	// There were other long arguments down here "in real life", which is why this was multi-line.
+);
