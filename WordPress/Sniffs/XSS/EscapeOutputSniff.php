@@ -374,13 +374,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			if ( $watch === false )
 				continue;
 
-			$watch = false;
-
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
 			// Also T_LNUMBER, e.g.: echo 45;
 			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER ) ) ) {
 				continue;
 			}
+
+			$watch = false;
 
 			// Allow int/double/bool casted variables
 			if ( in_array( $tokens[$i]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) ) {
