@@ -97,3 +97,9 @@ printf(
 	, 'world'
 	// There were other long arguments down here "in real life", which is why this was multi-line.
 );
+
+wp_die( $message ); // Bad
+wp_die( esc_html( $message ) ); // OK
+wp_die( esc_html( $message ), $title ); // Bad
+wp_die( esc_html( $message ), '', array( 'back_link' => $link_text ) ); // Bad
+wp_die( esc_html( $message ), '', array( 'back_link' => esc_html( $link_text ) ) ); // OK
