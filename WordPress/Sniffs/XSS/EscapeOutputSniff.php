@@ -237,6 +237,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'_ex',
 		'printf',
 		'vprintf',
+		'wp_die',
 	);
 
 	public static $addedCustomFunctions = false;
@@ -279,7 +280,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$needs_sanitizing_function = false;
+		$is_printing_function = false;
 
 		$function = $tokens[ $stackPtr ]['content'];
 
@@ -290,7 +291,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				return;
 			}
 
-			$needs_sanitizing_function = true;
+			$is_printing_function = true;
 
 			$stackPtr++; // Ignore the starting bracket
 
@@ -326,7 +327,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 		}
 
-		// This is already determined if $needs_sanitizing_function.
+		// This is already determined if $is_printing_function.
 		if ( ! isset( $end_of_statement ) ) {
 			$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
 		}
@@ -346,7 +347,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			if ( 'vprintf' === $function && $tokens[ $i ]['code'] === T_ARRAY ) {
+			// Handle arrays for those functions that accept them.
+			if ( $tokens[ $i ]['code'] === T_ARRAY && in_array( $function, array( 'vprintf', 'wp_die' ) ) ) {
 				$i++; // Skip the opening parenthesis.
 				continue;
 			}
@@ -364,7 +366,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 
 			// Wake up for commas.
-			if ( $needs_sanitizing_function && $tokens[$i]['code'] === T_COMMA ) {
+			if ( $is_printing_function && $tokens[$i]['code'] === T_COMMA ) {
 				$watch = true;
 				continue;
 			}
