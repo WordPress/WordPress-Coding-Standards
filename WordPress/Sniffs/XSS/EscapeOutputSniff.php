@@ -353,7 +353,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			if ( $tokens[ $i ]['code'] === T_DOUBLE_ARROW && 'wp_die' === $function ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ) ) && 'wp_die' === $function ) {
 				continue;
 			}
 
