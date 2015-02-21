@@ -29,8 +29,10 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 	public function register()
 	{
 		return array(
-			T_IF,
-			T_ELSEIF,
+			T_IS_EQUAL,
+			T_IS_NOT_EQUAL,
+			T_IS_IDENTICAL,
+			T_IS_NOT_IDENTICAL,
 		);
 
 	}//end register()
@@ -49,18 +51,40 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
-		$closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
-		$string = '';
-		for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
-			$string .= $tokens[$i]['content'];
+		$beginners = array_merge(
+			PHP_CodeSniffer_Tokens::$booleanOperators
+			, array( T_IF, T_ELSEIF )
+		);
+
+		$beginning = $phpcsFile->findPrevious( $beginners, $stackPtr, null, null, null, true );
+
+		$needs_yoda = false;
+
+		// Note: going backwards!
+		for ( $i = $stackPtr; $i > $beginning; $i-- ) {
+
+			// Ignore whitespace.
+			if ( in_array( $tokens[ $i ]['code'], PHP_CodeSniffer_Tokens::$emptyTokens ) ) {
+				continue;
+			}
+
+			// If this is a variable, we've seen all we need to see.
+			if ( T_VARIABLE === $tokens[ $i ]['code'] ) {
+				$needs_yoda = true;
+				break;
+			}
+
+			// If this is a function call or something, we are OK.
+			if ( in_array( $tokens[ $i ]['code'], array( T_STRING, T_CLOSE_PARENTHESIS ) ) ) {
+				return;
+			}
 		}
 
-		preg_match_all( '#((!=|==)=?\s*(true|false|[\'"0-9])\b)#si', $string, $matches );
-		foreach ( $matches[0] as $match ) {
-			$error = 'Found "' . $match . '". Use Yoda Condition checks, you must';
-			$phpcsFile->addError($error, $stackPtr);
+		if ( ! $needs_yoda ) {
+			return;
 		}
+
+		$phpcsFile->addError( 'Use Yoda Condition checks, you must', $stackPtr );
 
 	}//end process()
 

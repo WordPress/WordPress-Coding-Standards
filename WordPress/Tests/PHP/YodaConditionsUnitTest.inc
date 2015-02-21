@@ -35,8 +35,8 @@ if ( $true !== true ) { // Bad x 1
 	echo 'False';
 }
 
-if ( $true == strtolower( $check ) ) { // Good
 // make sure the test excludes functions on the conditional check
+if ( strtolower( $check ) == $true  ) { // Good
 	echo 'True';
 }
 // makes sure the test excludes variable casting in the conditional check
@@ -57,3 +57,19 @@ if ( $true == 0 ) { // Bad x 1
 } elseif ( 1 == $false ) { // Good x 1
 	echo 'False';
 }
+
+// Testing constant comparison.
+if ( $taxonomy === MyClass::TAXONOMY_SLUG ) { // Bad
+	$link = true;
+} elseif ( MyClass::TAXONOMY_SLUG === $taxonomy ) { // OK
+	$link = false;
+}
+
+if ( $foo === FOO_CONSTANT ) { // Bad
+	$link = true;
+} elseif ( FOO_CONSTANT === $foo ) { // OK
+	$link = false;
+}
+
+if ( $foo == $bar ) {} // Bad
+if ( ( $foo ) == $bar ) {} // OK
