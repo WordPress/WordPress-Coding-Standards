@@ -3,7 +3,7 @@ if ( $true == true || $false == false ) {  // Bad x 2 (in an 'if')
 	echo 'True';
 } elseif ( $true == true && $false == true ) { // Bad x 2 (in an 'elseif')
 	echo 'False';
-} elseif ( false == $true && true == $false ) { // Good - this is the correct was to do conditional checks
+} elseif ( false == $true && true == $false ) { // Good - this is the correct way to do conditional checks
 	echo 'False';
 }
 
@@ -35,8 +35,8 @@ if ( $true !== true ) { // Bad x 1
 	echo 'False';
 }
 
-// make sure the test exclues functions on the conditional check
 if ( $true == strtolower( $check ) ) { // Good
+// make sure the test excludes functions on the conditional check
 	echo 'True';
 }
 // makes sure the test excludes variable casting in the conditional check
