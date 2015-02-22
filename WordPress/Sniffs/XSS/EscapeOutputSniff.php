@@ -379,8 +379,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				continue;
 
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
-			// Also T_LNUMBER, e.g.: echo 45;
-			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER ) ) ) {
+			// Also T_LNUMBER, e.g.: echo 45; exit -1;
+			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_MINUS ) ) ) {
 				continue;
 			}
 
