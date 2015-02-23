@@ -109,3 +109,5 @@ echo '<h2>', esc_html( $foo ), '</h2>'; // OK
 echo 'a', 'b'; // OK
 echo 'Hello, ', $foo; // Bad
 echo esc_html( $foo ), $bar; // Bad
+
+wp_die( -1 ); // OK
