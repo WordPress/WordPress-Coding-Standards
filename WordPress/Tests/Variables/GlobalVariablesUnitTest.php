@@ -4,10 +4,10 @@
  * coding standard. Expected errors and warnings are stored in this class.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   WordPress_Coding_Standards
  * @author    Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest
+class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUnitTest
 {
 
 	/**
@@ -21,20 +21,11 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 	public function getErrorList()
 	{
 		return array(
-			4 => 1,
-			5 => 1,
+			3 => 1,
 			6 => 1,
-			11 => 1,
-			12 => 1,
-			13 => 1,
-			16 => 1,
-			17 => 1,
-			18 => 2,
-			23 => 1,
-			26 => 1,
-			29 => 1,
-			31 => 1,
 		);
+
+
 	}//end getErrorList()
 
 
@@ -48,7 +39,9 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 	 */
 	public function getWarningList()
 	{
-		return array();
+		return array(
+		);
+
 	}//end getWarningList()
 
 

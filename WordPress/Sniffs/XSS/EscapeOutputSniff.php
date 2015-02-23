@@ -20,6 +20,12 @@
 class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 {
 
+	public $customAutoEscapedFunctions = array();
+
+	public $customSanitizingFunctions = array();
+
+	public $customPrintingFunctions = array();
+
 	public static $autoEscapedFunctions = array(
 		'allowed_tags',
 		'bloginfo',
@@ -27,6 +33,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'calendar_week_mod',
 		'cancel_comment_reply_link',
 		'category_description',
+		'checked',
 		'comment_ID',
 		'comment_author',
 		'comment_author_IP',
@@ -53,6 +60,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'comments_popup_script',
 		'comments_rss_link',
 		'delete_get_calendar_cache',
+		'disabled',
 		'do_shortcode_tag',
 		'edit_bookmark_link',
 		'edit_comment_link',
@@ -97,6 +105,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'previous_image_link',
 		'previous_post_link',
 		'previous_posts_link',
+		'selected',
 		'single_cat_title',
 		'single_month_title',
 		'single_post_title',
@@ -159,6 +168,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_shortlink_wp_head',
 		'wp_tag_cloud',
 		'wp_title',
+		'checked',
 	);
 
 	public static $sanitizingFunctions = array(
@@ -167,9 +177,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'esc_attr',
 		'esc_attr__',
 		'esc_attr_e',
+		'esc_attr_x',
 		'esc_html',
 		'esc_html__',
 		'esc_html_e',
+		'esc_html_x',
 		'esc_js',
 		'esc_sql',
 		'esc_textarea',
@@ -203,6 +215,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'urlencode',
 		'urlencode_deep',
 		'validate_file',
+		'wp_json_encode',
 		'wp_kses',
 		'wp_kses_allowed_html',
 		'wp_kses_data',
@@ -210,18 +223,24 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'wp_redirect',
 		'wp_rel_nofollow',
 		'wp_safe_redirect',
+		'number_format',
+		'ent2ncr',
 	);
 
-	public $needSanitizingFunctions = array( // Mostly locatization functions: http://codex.wordpress.org/Function_Reference#Localization
-		'__',
+	/**
+	 * Functions which print output incorporating the values passed to them.
+	 *
+	 * @var array
+	 */
+	public static $printingFunctions = array(
 		'_e',
 		'_ex',
-		'_n',
-		'_ngettext',
-		'_nx',
-		'_x',
+		'printf',
+		'vprintf',
+		'wp_die',
 	);
 
+	public static $addedCustomFunctions = false;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -233,6 +252,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		return array(
 			T_ECHO,
 			T_PRINT,
+			T_EXIT,
 			T_STRING,
 		);
 
@@ -246,21 +266,39 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @todo Allow T_CONSTANT_ENCAPSED_STRING?
-	 *
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		// Merge any custom functions with the defaults, if we haven't already.
+		if ( ! self::$addedCustomFunctions ) {
+			self::$sanitizingFunctions = array_merge( self::$sanitizingFunctions, $this->customSanitizingFunctions );
+			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, $this->customAutoEscapedFunctions );
+			self::$printingFunctions = array_merge( self::$printingFunctions, $this->customPrintingFunctions );
+			self::$addedCustomFunctions = true;
+		}
+
 		$tokens = $phpcsFile->getTokens();
+
+		$is_printing_function = false;
+
+		$function = $tokens[ $stackPtr ]['content'];
 
 		// If function, not T_ECHO nor T_PRINT
 		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
-			// Skip if it is a function but is not of the printing functions ( self::needSanitizingFunctions )
-			if ( ! in_array( $tokens[$stackPtr]['content'], $this->needSanitizingFunctions ) ) {
+			// Skip if it is a function but is not of the printing functions ( self::printingFunctions )
+			if ( ! in_array( $tokens[$stackPtr]['content'], self::$printingFunctions ) ) {
 				return;
 			}
 
+			$is_printing_function = true;
+
+			$stackPtr++; // Ignore the starting bracket
+
+			$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
+		}
+
+		if ( $tokens[ $stackPtr ]['code'] === T_EXIT && $tokens[ $stackPtr + 1 ]['code'] === T_OPEN_PARENTHESIS ) {
 			$stackPtr++; // Ignore the starting bracket
 		}
 
@@ -289,19 +327,35 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 		}
 
+		// This is already determined if $is_printing_function.
+		if ( ! isset( $end_of_statement ) ) {
+			$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+		}
+
+		// Check for the ternary operator.
+		$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
+		if ( $ternary ) {
+			$stackPtr = $ternary + 1;
+		}
 
 		// looping through echo'd components
 		$watch = true;
-		for ( $i = $stackPtr; $i < count( $tokens ); $i++ ) {
+		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
-			// End processing if found the end of statement
-			if ( $tokens[$i]['code'] == T_SEMICOLON ) {
-				return;
+			// Ignore whitespaces and comments.
+			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMENT ) ) ) {
+				continue;
 			}
 
-			// Ignore whitespaces
-			if ( $tokens[$i]['code'] == T_WHITESPACE )
+			// Handle arrays for those functions that accept them.
+			if ( $tokens[ $i ]['code'] === T_ARRAY && in_array( $function, array( 'vprintf', 'wp_die' ) ) ) {
+				$i++; // Skip the opening parenthesis.
 				continue;
+			}
+
+			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ) ) && 'wp_die' === $function ) {
+				continue;
+			}
 
 			// Wake up on concatenation characters, another part to check
 			if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {
@@ -309,15 +363,28 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
+			// Wake up after a ternary else (:).
+			if ( $ternary && in_array( $tokens[$i]['code'], array( T_INLINE_ELSE ) ) ) {
+				$watch = true;
+				continue;
+			}
+
+			// Wake up for commas.
+			if ( $is_printing_function && $tokens[$i]['code'] === T_COMMA ) {
+				$watch = true;
+				continue;
+			}
+
 			if ( $watch === false )
 				continue;
 
-			$watch = false;
-
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
-			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING ) ) ) {
+			// Also T_LNUMBER, e.g.: echo 45; exit -1;
+			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_MINUS ) ) ) {
 				continue;
 			}
+
+			$watch = false;
 
 			// Allow int/double/bool casted variables
 			if ( in_array( $tokens[$i]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) ) {
@@ -326,7 +393,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 			// Now check that next token is a function call.
 			if ( in_array( $tokens[$i]['code'], array( T_STRING ) ) === false ) {
-				$phpcsFile->addError( "Expected next thing to be a escaping function, not '%s'", $i, null, $tokens[$i]['content'] );
+				$phpcsFile->addError( "Expected next thing to be a escaping function, not '%s'", $i, 'OutputNotEscaped', $tokens[$i]['content'] );
 				continue;
 			}
 
@@ -339,7 +406,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 					in_array( $functionName, self::$sanitizingFunctions ) === false
 					) {
 
-					$phpcsFile->addError( "Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $i, null, $tokens[$i]['content'] );
+					$phpcsFile->addError( "Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $i, 'OutputNotSanitized', $tokens[$i]['content'] );
 				}
 
 				// Skip pointer to after the function

@@ -47,3 +47,62 @@ _e( $some_nasty_var ); // Bad
 
 echo filter_var( $bar, FILTER_VALIDATE_EMAIL );
 echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
+
+echo '<input type="checkbox" name="' . esc_attr( 'field[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
+
+echo ent2ncr( $text );
+
+echo number_format ( 1024 );
+
+echo ent2ncr( esc_html( $_data ) );
+
+echo $foo ? $foo : 'no foo'; // Bad
+echo empty( $foo ) ? 'no foo' : $foo; // Bad
+echo $foo ? esc_html( $foo ) : 'no foo'; // OK
+
+echo 4; // OK
+
+exit( $foo ); // Bad
+exit( esc_html( $foo ) ); // OK
+
+die( $foo ); // Bad
+die( esc_html( $foo ) ); // OK
+
+printf( 'Hello %s', $foo ); // Bad
+printf( 'Hello %s', esc_html( $foo ) ); // OK
+printf( 'Hello %s! Hi %s!', esc_html( $foo ), $bar ); // Bad
+
+vprintf( 'Hello %s', array( $foo ) ); // Bad
+vprintf( 'Hello %s', array( esc_html( $foo ) ) ); // OK
+
+// The below checks that functions which are marked as needed further sanitization
+// don't spill over into later arguments when nested in a function call. There was
+// a bug which would cause line 84 to be marked as needing sanitization because _x()
+// is marked as needing sanitization.
+do_something(
+	_x( 'Some string', 'context', 'domain' )
+	, array( $foo ) // OK
+);
+
+// There was a bug where an empty exit followed by other code would give an error.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // OK
+} else {
+	other();
+}
+
+printf(
+	/* translators: this comment is just for you. */
+	esc_html__( 'Hello %s.', 'domain' )
+	, 'world'
+	// There were other long arguments down here "in real life", which is why this was multi-line.
+);
+
+wp_die( $message ); // Bad
+wp_die( esc_html( $message ) ); // OK
+wp_die( esc_html( $message ), $title ); // Bad
+wp_die( esc_html( $message ), '', array( 'back_link' => $link_text ) ); // Bad
+wp_die( esc_html( $message ), '', array( 'back_link' => esc_html( $link_text ) ) ); // OK
+wp_die( esc_html( $message ), '', array( 'response' => 200 ) ); // OK
+
+wp_die( -1 ); // OK

@@ -20,14 +20,14 @@ class WordPress_Sniffs_VIP_TimezoneChangeSniff extends Generic_Sniffs_PHP_Forbid
      *
      * @var array(string => string|null)
      */
-    protected $forbiddenFunctions = array(
+    public $forbiddenFunctions = array(
                                     'date_default_timezone_set'      => null,
                                     );
 
     protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
     {
         $error = 'Using date_default_timezone_set() and similar isn’t allowed, instead use WP internal timezone support.';
-        $phpcsFile->addError( $error, $stackPtr );
+        $phpcsFile->addError( $error, $stackPtr, $function );
 
     }//end addError()
 

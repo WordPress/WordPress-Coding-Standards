@@ -56,7 +56,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
             $suggested = str_replace('__', '_', $suggested);
 
             $error = "Function name \"$functionName\" is in camel caps format, try '".$suggested."'";
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'FunctionNameInvalid');
         }
 
     }//end processTokenOutsideScope()
@@ -82,7 +82,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
             $magicPart = substr($methodName, 2);
             if (in_array($magicPart, $this->_magicMethods) === false) {
                  $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
-                 $phpcsFile->addError($error, $stackPtr);
+                 $phpcsFile->addError($error, $stackPtr, 'MethodDoubleUnderscore');
             }
 
             return;
@@ -95,6 +95,11 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 
         // PHP4 destructors are allowed to break our rules.
         if ($methodName === '_'.$className) {
+            return;
+        }
+
+        // If this is a child class, it may have to use camelCase.
+        if (  $phpcsFile->findExtendedClassName( $currScope ) ) {
             return;
         }
 
@@ -123,7 +128,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
             $suggested = str_replace('__', '_', $suggested);
 
             $error = "Function name \"$methodName\" is in camel caps format, try '".$suggested."'";
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'FunctionNameInvalid');
         }
 
     }//end processTokenWithinScope()

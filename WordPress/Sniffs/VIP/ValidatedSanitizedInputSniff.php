@@ -73,17 +73,23 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			return;
 		}
 
-		if ( ! isset( $instance['nested_parenthesis'] ) ) {
-			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
-			return;
+		// Search for casting
+		$prev = $phpcsFile->findPrevious( array( T_WHITESPACE ), $stackPtr - 1, null, true, null, true );
+		$is_casted = in_array( $tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) );
+
+		if ( isset( $instance['nested_parenthesis'] ) ) {
+			$nested = $instance['nested_parenthesis'];
+			// Ignore if wrapped inside ISSET
+			end( $nested ); // Get closest parenthesis
+			if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) )
+				return;
+		} else {
+			if ( ! $is_casted ) {
+				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
+				return;
+			}
 		}
 
-		$nested = $instance['nested_parenthesis'];
-
-		// Ignore if wrapped inside ISSET
-		end( $nested ); // Get closest parenthesis
-		if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) )
-			return;
 
 		$varKey = $this->getArrayIndexKey( $phpcsFile, $tokens, $stackPtr );
 
@@ -127,13 +133,17 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			$issetPtr = $i;
 			if ( ! empty( $issetPtr ) ) {
 				$isset = $tokens[$issetPtr];
-				$issetOpener = $issetPtr + 1;
+				$issetOpener = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $issetPtr );
 				$issetCloser = $tokens[$issetOpener]['parenthesis_closer'];
 
 				// Check that it is the same variable name
-				if ( $validated = $phpcsFile->findNext( array( T_VARIABLE ), $issetOpener, $issetCloser, null, $varName ) ) {
+				for ( $i = $issetOpener + 1; $i < $issetCloser; $i++ ) {
+					if ( $tokens[ $i ]['code'] != T_VARIABLE ) {
+						continue;
+					}
+
 					// Double check the $varKey inside the variable, ex: 'hello' in $_POST['hello']
-					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $validated );
+					$varKeyValidated = $this->getArrayIndexKey( $phpcsFile, $tokens, $i );
 
 					if ( $varKeyValidated == $varKey ) {
 						// everything matches, variable IS validated afterall ..
@@ -144,33 +154,39 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		}
 		
 		if ( ! $is_validated ) {
-			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', array( $tokens[$stackPtr]['content'] ) );
 			// return; // Should we just return and not look for sanitizing functions ?
 		}
 
 		// Now look for sanitizing functions
 		$is_sanitized = false;
 
-		$functionPtr = key( $nested ) - 1;
-		$function = $tokens[$functionPtr];
-		if ( T_STRING === $function['code'] ) {
-			$functionName = $function['content'];
-			if ( 
-				in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$autoEscapedFunctions )
-				||
-				in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$sanitizingFunctions )
-				) {
+		if ( isset( $is_casted ) && $is_casted ) {
+			$is_sanitized = true;
+		} elseif ( isset( $nested ) ) {
+			$functionPtr = key( $nested ) - 1;
+			$function = $tokens[$functionPtr];
+			if ( T_STRING === $function['code'] ) {
+				$functionName = $function['content'];
+				if (
+					in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$autoEscapedFunctions )
+					||
+					in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$sanitizingFunctions )
+					) {
+					$is_sanitized = true;
+				}
+			} elseif ( T_UNSET === $function['code'] ) {
+				$is_sanitized = true;
+			} elseif ( $is_casted ) {
 				$is_sanitized = true;
 			}
-		} elseif ( T_UNSET === $function['code'] ) {
-			$is_sanitized = true;
 		}
 
 		if ( ! $is_sanitized ) {
-			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
 		}
 
-		
+
 		return;
 	}//end process()
 

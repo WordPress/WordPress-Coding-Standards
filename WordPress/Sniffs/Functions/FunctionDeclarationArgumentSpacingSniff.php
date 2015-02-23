@@ -72,14 +72,14 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
                     $gap   = strlen($tokens[($nextParam + 1)]['content']);
                     $arg   = $tokens[$nextParam]['content'];
                     $error = "Expected 1 space between argument \"$arg\" and equals sign; ".($gap - 1)." found";
-                    $phpcsFile->addError($error, $nextToken);
+                    $phpcsFile->addError($error, $nextToken, 'SpaceBeforeEquals');
                 }
 
                 if ($tokens[($nextToken + 1)]['code'] !== T_WHITESPACE) {
                     $gap   = strlen($tokens[($nextToken + 1)]['content']);
                     $arg   = $tokens[$nextParam]['content'];
                     $error = "Expected 1 space between default value and equals sign for argument \"$arg\";";
-                    $phpcsFile->addError($error, $nextToken);
+                    $phpcsFile->addError($error, $nextToken, 'SpaceAfterEquals');
                 }
             }
 
@@ -91,7 +91,7 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
                     $space = strlen($tokens[($nextComma - 1)]['content']);
                     $arg   = $tokens[$nextParam]['content'];
                     $error = "Expected 0 spaces between argument \"$arg\" and comma; $space found";
-                    $phpcsFile->addError($error, $nextToken);
+                    $phpcsFile->addError($error, $nextToken, 'SpaceBeforeComma');
                 }
             }
 
@@ -124,28 +124,28 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
 
                         if ($gap !== 1) {
                             $error = "Expected 1 space between type hint and argument \"$arg\"; $gap found";
-                            $phpcsFile->addError($error, $nextToken);
+                            $phpcsFile->addError($error, $nextToken, 'SpacingAfterHint');
                         }
 
                         if ($multiLine === false) {
                             if ($tokens[($comma + 1)]['code'] !== T_WHITESPACE) {
                                 $error = "Expected 1 space between comma and type hint \"$hint\"; 0 found";
-                                $phpcsFile->addError($error, $nextToken);
+                                $phpcsFile->addError($error, $nextToken, 'NoSpaceBeforeHint');
                             } else {
                                 $gap = strlen($tokens[($comma + 1)]['content']);
                                 if ($gap !== 1) {
                                     $error = "Expected 1 space between comma and type hint \"$hint\"; $gap found";
-                                    $phpcsFile->addError($error, $nextToken);
+                                    $phpcsFile->addError($error, $nextToken, 'SpacingBeforeHint');
                                 }
                             }
                         }
                     } else if ($multiLine === false && $gap !== 1) {
                         $error = "Expected 1 space between comma and argument \"$arg\"; $gap found";
-                        $phpcsFile->addError($error, $nextToken);
+                        $phpcsFile->addError($error, $nextToken, 'SpacingBeforeArg');
                     }//end if
                 } else {
                     $error = "Expected 1 space between comma and argument \"$arg\"; 0 found";
-                    $phpcsFile->addError($error, $nextToken);
+                    $phpcsFile->addError($error, $nextToken, 'NoSpaceBeforeArg');
                 }//end if
             } else {
                 // First argument in function declaration.
@@ -167,7 +167,7 @@ class WordPress_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff impleme
 
                         if ($gap !== 1) {
                             $error = "Expected 1 space between type hint and argument \"$arg\"; $gap found";
-                            $phpcsFile->addError($error, $nextToken);
+                            $phpcsFile->addError($error, $nextToken, 'SpacingAfterHint');
                         }
                     }
                 }//end if

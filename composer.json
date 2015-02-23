@@ -1,0 +1,28 @@
+{
+	"name"       : "wp-coding-standards/wpcs",
+	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
+	"keywords"   : ["phpcs", "standards", "WordPress"],
+    "license"    : "MIT",
+	"authors"    : [
+		{
+			"name"    : "X-Team",
+			"homepage": "http://x-team.com/"
+		},
+		{
+			"name"    : "Contributors",
+			"homepage": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors"
+
+		}
+	],
+	"require"    : {
+		"squizlabs/php_codesniffer": "~2.0"
+	},
+	"minimum-stability" : "RC",
+	"support"    : {
+		"issues": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues"
+	},
+	"scripts"    : {
+		"post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..",
+		"post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths ../../.."
+	}
+}

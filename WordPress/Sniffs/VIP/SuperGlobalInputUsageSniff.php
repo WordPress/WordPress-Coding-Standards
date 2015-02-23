@@ -65,7 +65,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 			);
 
 		if ( ! $is_whitelisted ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, null, array( $varName ) );
+			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 	}//end process()
 
