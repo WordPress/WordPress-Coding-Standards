@@ -352,6 +352,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			// Skip to the end of a function call if it has been casted to a safe value.
 			if ( T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] && $in_cast ) {
 				$i = $tokens[ $i ]['parenthesis_closer'];
+				$in_cast = false;
 				continue;
 			}
 
@@ -379,6 +380,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 			// Wake up for commas.
 			if ( $tokens[ $i ]['code'] === T_COMMA ) {
+				$in_cast = false;
 				$watch = true;
 				continue;
 			}
