@@ -27,6 +27,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 	{
 		return array(
 				T_VARIABLE,
+				T_DOUBLE_QUOTED_STRING,
 			   );
 
 	}//end register()
@@ -44,9 +45,22 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
 		$tokens = $phpcsFile->getTokens();
+		$superglobals = array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' );
+
+		// Handling string interpolation
+		if ( $tokens[ $stackPtr ]['code'] === T_DOUBLE_QUOTED_STRING ) {
+			foreach ( $superglobals as $superglobal ) {
+				if ( false !== strpos( $tokens[ $stackPtr ]['content'], $superglobal ) ) {
+					$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+					return;
+				}
+			}
+
+			return;
+		}
 
 		// Check for $wpdb variable
-		if ( ! in_array( $tokens[$stackPtr]['content'], array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' ) ) )
+		if ( ! in_array( $tokens[$stackPtr]['content'], $superglobals ) )
 			return;
 
 		$instance = $tokens[$stackPtr];

@@ -62,6 +62,8 @@ foreach( $_POST as $key => $value ) {
 
 unset( $_GET['test'] ); // ok
 
+output( "some string {$_POST['some_var']}" ); // Bad
+
 echo (int) $_GET['test']; // ok
 some_func( $some_arg, (int) $_GET['test'] ); // ok
 
