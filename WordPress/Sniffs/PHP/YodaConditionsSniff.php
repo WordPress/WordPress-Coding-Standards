@@ -84,6 +84,13 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 			return;
 		}
 
+		// Check if this is a var to var comparison, e.g.: if ( $var1 == $var2 )
+		$next_non_empty = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr + 1, null, true );
+
+		if ( T_VARIABLE === $tokens[ $next_non_empty ]['code'] ) {
+			return;
+		}
+
 		$phpcsFile->addError( 'Use Yoda Condition checks, you must', $stackPtr );
 
 	}//end process()

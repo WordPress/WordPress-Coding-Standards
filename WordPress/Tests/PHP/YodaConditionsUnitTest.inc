@@ -71,5 +71,4 @@ if ( $foo === FOO_CONSTANT ) { // Bad
 	$link = false;
 }
 
-if ( $foo == $bar ) {} // Bad
-if ( ( $foo ) == $bar ) {} // OK
+if ( $foo == $bar ) {} // OK
