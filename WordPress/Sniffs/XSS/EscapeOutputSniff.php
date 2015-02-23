@@ -338,12 +338,21 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			$stackPtr = $ternary + 1;
 		}
 
+		$in_cast = false;
+
 		// looping through echo'd components
 		$watch = true;
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces and comments.
 			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMENT ) ) ) {
+				continue;
+			}
+
+			// Skip to the end of a function call if it has been casted to a safe value.
+			if ( T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] && $in_cast ) {
+				$i = $tokens[ $i ]['parenthesis_closer'];
+				$in_cast = false;
 				continue;
 			}
 
@@ -370,7 +379,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			}
 
 			// Wake up for commas.
-			if ( $is_printing_function && $tokens[$i]['code'] === T_COMMA ) {
+			if ( $tokens[ $i ]['code'] === T_COMMA ) {
+				$in_cast = false;
 				$watch = true;
 				continue;
 			}
@@ -388,6 +398,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 			// Allow int/double/bool casted variables
 			if ( in_array( $tokens[$i]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) ) {
+				$in_cast = true;
 				continue;
 			}
 

@@ -105,4 +105,11 @@ wp_die( esc_html( $message ), '', array( 'back_link' => $link_text ) ); // Bad
 wp_die( esc_html( $message ), '', array( 'back_link' => esc_html( $link_text ) ) ); // OK
 wp_die( esc_html( $message ), '', array( 'response' => 200 ) ); // OK
 
+echo '<h2>', esc_html( $foo ), '</h2>'; // OK
+echo 'a', 'b'; // OK
+echo 'Hello, ', $foo; // Bad
+echo esc_html( $foo ), $bar; // Bad
+echo (int) $foo, $bar; // Bad
+echo (int) get_post_meta( $post_id, SOME_NUMBER, true ), do_something( $else ); // Bad
+
 wp_die( -1 ); // OK
