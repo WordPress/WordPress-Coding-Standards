@@ -330,7 +330,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 		// This is already determined if $is_printing_function.
 		if ( ! isset( $end_of_statement ) ) {
-			$end_of_statement = $phpcsFile->findNext( T_SEMICOLON, $stackPtr );
+			$end_of_statement = $phpcsFile->findNext( array( T_SEMICOLON, T_CLOSE_TAG ), $stackPtr );
 		}
 
 		// Check for the ternary operator.
