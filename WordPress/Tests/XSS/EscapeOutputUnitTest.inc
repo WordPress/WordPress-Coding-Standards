@@ -113,3 +113,9 @@ echo (int) $foo, $bar; // Bad
 echo (int) get_post_meta( $post_id, SOME_NUMBER, true ), do_something( $else ); // Bad
 
 wp_die( -1 ); // OK
+
+?>
+<p class="notice"><?php echo esc_html( $message ) ?></p> <!-- OK -->
+<input type="submit" name="sync-progress" class="button button-primary button-large" value="<?php esc_attr_e( 'Start Sync', 'foo' ); ?>" /><!-- OK -->
+<input type="hidden" name="sync-action" class="sync-action" value="<?php echo esc_attr( $continue_sync ? 'sync_progress' : '' ); ?>" /><!-- OK -->
+<?php
