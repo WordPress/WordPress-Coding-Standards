@@ -281,8 +281,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$is_printing_function = false;
-
 		$function = $tokens[ $stackPtr ]['content'];
 
 		// If function, not T_ECHO nor T_PRINT
@@ -292,11 +290,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				return;
 			}
 
-			$is_printing_function = true;
-
 			$stackPtr++; // Ignore the starting bracket
 
-			$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
+			if ( isset( $tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
+				$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
+			}
 		}
 
 		if ( $tokens[ $stackPtr ]['code'] === T_EXIT && $tokens[ $stackPtr + 1 ]['code'] === T_OPEN_PARENTHESIS ) {
