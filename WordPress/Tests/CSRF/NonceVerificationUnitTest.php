@@ -27,6 +27,9 @@ class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTe
 			5 => 1,
 			9 => 1,
 			31 => 1,
+			44 => 1,
+			48 => 1,
+			69 => 1,
 		);
 	}
 
