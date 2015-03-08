@@ -73,4 +73,12 @@ class Some_Class {
 		}
 
 		// Do things here.
-	}}
+	}
+}
+
+// Assignments are allowed.
+function foo_2() {
+	$_POST = array( 'a' => 'b' ); // OK
+	$_POST['test'] = somethin(); // OK
+	$_POST['settings'][ $setting ] = 'bb'; // OK
+}
