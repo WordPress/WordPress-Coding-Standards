@@ -74,3 +74,7 @@ if ( $foo === FOO_CONSTANT ) { // Bad
 if ( $foo == $bar ) {} // OK
 
 $accessibility_mode = ( 'on' === sanitize_key( $_GET['accessibility-mode'] ) ) ? 'on' : 'off'; // OK
+
+if ( $on !== self::$network_mode ) { // OK
+	self::$network_mode = (bool) $on;
+}
