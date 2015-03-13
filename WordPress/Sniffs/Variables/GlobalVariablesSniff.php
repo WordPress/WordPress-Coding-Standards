@@ -60,7 +60,6 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff implements PHP_CodeSniffer
 		'wp_locale',
 		'locale',
 		'l10n',
-		'content_width',
 		'_wp_additional_image_sizes',
 		'wp_embed',
 		'wp_taxonomies',
