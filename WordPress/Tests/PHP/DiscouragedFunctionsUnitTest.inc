@@ -68,3 +68,5 @@ while ( have_posts() ){
 	// ...
 }
 wp_reset_query(); // Bad, use wp_reset_postdata instead
+
+$json = json_encode( $thing ); // Bad, use wp_json_encode instead.
