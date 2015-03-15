@@ -38,6 +38,7 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
                                      'ereg_replace'             => 'preg_replace',
                                      'ereg'                     => null,
                                      'eregi_replace'            => 'preg_replace',
+	                                 'json_encode'              => 'wp_json_encode',
                                      'split'                    => null,
                                      'spliti'                   => null,
                                      'var_dump'                 => null,
