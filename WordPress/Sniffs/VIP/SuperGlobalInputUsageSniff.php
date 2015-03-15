@@ -35,6 +35,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for global input variable
@@ -51,7 +52,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff
 		}
 
 		// Check for whitelisting comment
-		if ( ! $this->has_whitelist_comment( 'input var', $tokens, $stackPtr ) ) {
+		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
 			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 	}//end process()
