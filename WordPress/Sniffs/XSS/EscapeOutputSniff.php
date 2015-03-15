@@ -17,7 +17,7 @@
  * @author   Weston Ruter <weston@x-team.com>
  * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
  */
-class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 {
 
 	public $customAutoEscapedFunctions = array();
@@ -279,6 +279,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			self::$addedCustomFunctions = true;
 		}
 
+		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 
 		$function = $tokens[ $stackPtr ]['content'];
@@ -308,22 +309,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		}
 
 		// Checking for the ignore comment, ex: //xss ok
-		$isAtEndOfStatement = false;
-		$commentOkRegex     = '/xss\W*(ok|pass|clear|whitelist)/i';
-		$tokensCount        = count( $tokens );
-		for ( $i = $stackPtr; $i < $tokensCount; $i++ ) {
-			if ( $tokens[$i]['code'] === T_SEMICOLON ) {
-				$isAtEndOfStatement = true;
-			}
-
-			if ( $isAtEndOfStatement === true && in_array( $tokens[$i]['code'], array( T_SEMICOLON, T_WHITESPACE, T_COMMENT ) ) === false ) {
-				break;
-			}
-
-			preg_match( $commentOkRegex, $tokens[$i]['content'], $matches );
-			if ( ( $tokens[$i]['code'] === T_COMMENT ) && ( empty( $matches ) === false ) ) {
-				return;
-			}
+		if ( $this->has_whitelist_comment( 'xss', $stackPtr ) ) {
+			return;
 		}
 
 		// This is already determined if this is a function and not T_ECHO.

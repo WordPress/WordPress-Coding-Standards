@@ -119,3 +119,9 @@ wp_die( -1 ); // OK
 <input type="submit" name="sync-progress" class="button button-primary button-large" value="<?php esc_attr_e( 'Start Sync', 'foo' ); ?>" /><!-- OK -->
 <input type="hidden" name="sync-action" class="sync-action" value="<?php echo esc_attr( $continue_sync ? 'sync_progress' : '' ); ?>" /><!-- OK -->
 <?php
+
+// Testing whitelisting comments.
+echo $html_fragment; // Bad
+echo $html_fragment; // xss OK.
+echo $html_fragment; // WPCS: XSS whitelist.
+?><?php echo $html_fragment; // XSS pass ?><?php
