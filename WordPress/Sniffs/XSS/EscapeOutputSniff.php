@@ -143,6 +143,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'the_title',
 		'the_title_attribute',
 		'the_title_rss',
+		'vip_powered_wpcom',
 		'walk_nav_menu_tree',
 		'wp_attachment_is_image',
 		'wp_dropdown_categories',
