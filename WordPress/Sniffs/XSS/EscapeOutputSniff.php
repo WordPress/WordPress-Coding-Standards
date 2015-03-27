@@ -243,6 +243,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		'_ex',
 		'printf',
 		'vprintf',
+		'trigger_error',
+		'user_error',
 		'wp_die',
 	);
 
@@ -300,6 +302,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 			if ( isset( $tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
 				$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
+			}
+
+			// These functions only need to have the first argument escaped.
+			if ( in_array( $function, array( 'trigger_error', 'user_error' ) ) ) {
+				$end_of_statement = $phpcsFile->findEndOfStatement( $stackPtr + 1 );
 			}
 		}
 

@@ -68,6 +68,7 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest
 	            124 => 1,
 	            130 => 1,
 	            134 => 1,
+	            137 => 1,
                );
 
     }//end getErrorList()

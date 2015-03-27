@@ -133,3 +133,6 @@ _deprecated_file( __FILE__, '1.3.0' ); // OK
 _deprecated_argument( __METHOD__, '1.3.0', 'The $arg is deprecated.' ); // OK
 _doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument {$args['bob']}." ); // Bad
 _doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument " . esc_html( $args['bob'] ) . "." ); // OK
+
+trigger_error( "There was an error: {$message}", E_USER_NOTICE ); // Bad
+trigger_error( "There was an error: " . esc_html( $message ), E_USER_NOTICE ); // OK
