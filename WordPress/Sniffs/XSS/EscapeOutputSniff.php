@@ -235,6 +235,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	 * @var array
 	 */
 	public static $printingFunctions = array(
+		'_deprecated_argument',
+		'_deprecated_function',
+		'_deprecated_file',
+		'_doing_it_wrong',
 		'_e',
 		'_ex',
 		'printf',
@@ -350,6 +354,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ) ) ) {
+				continue;
+			}
+
+			// Handle magic constants for debug functions.
+			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ) ) ) {
 				continue;
 			}
 
