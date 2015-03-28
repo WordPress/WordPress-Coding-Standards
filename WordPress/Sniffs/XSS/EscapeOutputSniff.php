@@ -235,10 +235,16 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	 * @var array
 	 */
 	public static $printingFunctions = array(
+		'_deprecated_argument',
+		'_deprecated_function',
+		'_deprecated_file',
+		'_doing_it_wrong',
 		'_e',
 		'_ex',
 		'printf',
 		'vprintf',
+		'trigger_error',
+		'user_error',
 		'wp_die',
 	);
 
@@ -297,6 +303,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			if ( isset( $tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
 				$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
 			}
+
+			// These functions only need to have the first argument escaped.
+			if ( in_array( $function, array( 'trigger_error', 'user_error' ) ) ) {
+				$end_of_statement = $phpcsFile->findEndOfStatement( $stackPtr + 1 );
+			}
 		}
 
 		if ( $tokens[ $stackPtr ]['code'] === T_EXIT && $tokens[ $stackPtr + 1 ]['code'] === T_OPEN_PARENTHESIS ) {
@@ -350,6 +361,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ) ) ) {
+				continue;
+			}
+
+			// Handle magic constants for debug functions.
+			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ) ) ) {
 				continue;
 			}
 

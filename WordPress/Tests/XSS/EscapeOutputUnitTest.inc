@@ -125,3 +125,14 @@ echo $html_fragment; // Bad
 echo $html_fragment; // xss OK.
 echo $html_fragment; // WPCS: XSS whitelist.
 ?><?php echo $html_fragment; // XSS pass ?><?php
+
+_deprecated_function( __FUNCTION__, '1.3.0', 'another_func' ); // OK
+_deprecated_function( __FUNCTION__, '1.3.0', $another_func ); // Bad
+_deprecated_function( __FUNCTION__, '1.3.0', esc_html( $another_func ) ); // OK
+_deprecated_file( __FILE__, '1.3.0' ); // OK
+_deprecated_argument( __METHOD__, '1.3.0', 'The $arg is deprecated.' ); // OK
+_doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument {$args['bob']}." ); // Bad
+_doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument " . esc_html( $args['bob'] ) . "." ); // OK
+
+trigger_error( "There was an error: {$message}", E_USER_NOTICE ); // Bad
+trigger_error( "There was an error: " . esc_html( $message ), E_USER_NOTICE ); // OK
