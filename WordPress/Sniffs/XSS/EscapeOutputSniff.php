@@ -248,6 +248,29 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		'wp_die',
 	);
 
+	/**
+	 * Functions that format strings.
+	 *
+	 * These functions are often used for formatting translation strings, and it is
+	 * common practice to escape the individual parameters passed to them as needed
+	 * instead of escaping the entire result. This is especially true when the string
+	 * being formatted contains HTML, which makes escaping the full result more
+	 * difficult.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @var array
+	 */
+	public static $formattingFunctions = array(
+		'sprintf',
+		'vsprintf',
+	);
+
+	/**
+	 * Whether the custom functions were added to the default lists yet.
+	 *
+	 * @var bool
+	 */
 	public static $addedCustomFunctions = false;
 
 	/**
@@ -355,7 +378,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			// Handle arrays for those functions that accept them.
-			if ( $tokens[ $i ]['code'] === T_ARRAY && in_array( $function, array( 'vprintf', 'wp_die' ) ) ) {
+			if ( $tokens[ $i ]['code'] === T_ARRAY ) {
 				$i++; // Skip the opening parenthesis.
 				continue;
 			}
@@ -414,6 +437,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			// This is a function
 			else {
 				$functionName = $tokens[$i]['content'];
+
+				if ( in_array( $functionName, self::$formattingFunctions ) ) {
+					continue;
+				}
+
 				if (
 					in_array( $functionName, self::$autoEscapedFunctions ) === false
 					&&
