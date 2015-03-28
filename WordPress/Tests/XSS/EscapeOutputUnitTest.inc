@@ -136,3 +136,7 @@ _doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument " . esc_html(
 
 trigger_error( "There was an error: {$message}", E_USER_NOTICE ); // Bad
 trigger_error( "There was an error: " . esc_html( $message ), E_USER_NOTICE ); // OK
+
+echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . esc_url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>';
+
+echo '<br/><strong>' . sprintf( esc_html__( 'Found %d results', 'textdomain' ), $result_count ) . '</strong><br/><br/>';
