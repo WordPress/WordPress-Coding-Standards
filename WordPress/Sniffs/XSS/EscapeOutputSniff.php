@@ -264,6 +264,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	public static $formattingFunctions = array(
 		'sprintf',
 		'vsprintf',
+		'wp_sprintf',
 	);
 
 	/**
