@@ -136,3 +136,17 @@ _doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument " . esc_html(
 
 trigger_error( "There was an error: {$message}", E_USER_NOTICE ); // Bad
 trigger_error( "There was an error: " . esc_html( $message ), E_USER_NOTICE ); // OK
+
+echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . esc_url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>'; // OK
+
+echo '<br/><strong>' . sprintf( esc_html__( 'Found %d results', 'textdomain' ), (int) $result_count ) . '</strong><br/><br/>'; // OK
+
+echo sprintf( 'Hello %s', $foo ); // Bad
+echo sprintf( 'Hello %s', esc_html( $foo ) ); // OK
+echo sprintf( 'Hello %s! Hi %s!', esc_html( $foo ), $bar ); // Bad
+
+echo vsprintf( 'Hello %s', array( $foo ) ); // Bad
+echo vsprintf( 'Hello %s', array( esc_html( $foo ) ) ); // OK
+
+echo sprintf( __( 'Welcome to Genesis %s', 'genesis' ), PARENT_THEME_BRANCH ); // Bad x 2
+echo sprintf( esc_html__( 'Welcome to Genesis %s', 'genesis' ), esc_html( PARENT_THEME_BRANCH ) ); // OK

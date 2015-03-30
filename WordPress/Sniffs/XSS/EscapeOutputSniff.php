@@ -248,6 +248,30 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		'wp_die',
 	);
 
+	/**
+	 * Functions that format strings.
+	 *
+	 * These functions are often used for formatting translation strings, and it is
+	 * common practice to escape the individual parameters passed to them as needed
+	 * instead of escaping the entire result. This is especially true when the string
+	 * being formatted contains HTML, which makes escaping the full result more
+	 * difficult.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @var array
+	 */
+	public static $formattingFunctions = array(
+		'sprintf',
+		'vsprintf',
+		'wp_sprintf',
+	);
+
+	/**
+	 * Whether the custom functions were added to the default lists yet.
+	 *
+	 * @var bool
+	 */
 	public static $addedCustomFunctions = false;
 
 	/**
@@ -355,7 +379,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			// Handle arrays for those functions that accept them.
-			if ( $tokens[ $i ]['code'] === T_ARRAY && in_array( $function, array( 'vprintf', 'wp_die' ) ) ) {
+			if ( $tokens[ $i ]['code'] === T_ARRAY ) {
 				$i++; // Skip the opening parenthesis.
 				continue;
 			}
@@ -414,7 +438,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			// This is a function
 			else {
 				$functionName = $tokens[$i]['content'];
+
+				$is_formatting_function = in_array( $functionName, self::$formattingFunctions );
+
 				if (
+					! $is_formatting_function
+					&&
 					in_array( $functionName, self::$autoEscapedFunctions ) === false
 					&&
 					in_array( $functionName, self::$sanitizingFunctions ) === false
@@ -425,7 +454,15 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 				// Skip pointer to after the function
 				if ( $_pos = $phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i, null, null, null, true ) ) {
-					$i = $tokens[$_pos]['parenthesis_closer'];
+
+					// If this is a formatting function we just skip over the opening
+					// parenthesis. Otherwise we skip all the way to the closing.
+					if ( $is_formatting_function ) {
+						$i = $_pos + 1;
+						$watch = true;
+					} else {
+						$i = $tokens[ $_pos ]['parenthesis_closer'];
+					}
 				}
 				continue;
 			}
