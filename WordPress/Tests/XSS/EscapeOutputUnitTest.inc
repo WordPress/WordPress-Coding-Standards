@@ -147,3 +147,6 @@ echo sprintf( 'Hello %s! Hi %s!', esc_html( $foo ), $bar ); // Bad
 
 echo vsprintf( 'Hello %s', array( $foo ) ); // Bad
 echo vsprintf( 'Hello %s', array( esc_html( $foo ) ) ); // OK
+
+echo sprintf( __( 'Welcome to Genesis %s', 'genesis' ), PARENT_THEME_BRANCH ); // Bad x 2
+echo sprintf( esc_html__( 'Welcome to Genesis %s', 'genesis' ), esc_html( PARENT_THEME_BRANCH ) ); // OK
