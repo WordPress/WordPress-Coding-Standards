@@ -55,7 +55,7 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
                 $phpcsFile->addError($error, $stackPtr, 'UnderscoresNotAllowed');
         }
 
-		$phpcsFile->removeTokenListener( $this, $this->register() );
+        $phpcsFile->removeTokenListener( $this, $this->register() );
 
     }//end process()
 
