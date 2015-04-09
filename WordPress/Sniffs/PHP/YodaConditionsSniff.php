@@ -75,7 +75,7 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( in_array( $tokens[ $i ]['code'], array( T_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ) ) ) {
 				return;
 			}
 		}
