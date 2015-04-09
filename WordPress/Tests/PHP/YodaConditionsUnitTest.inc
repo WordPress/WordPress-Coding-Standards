@@ -78,3 +78,7 @@ $accessibility_mode = ( 'on' === sanitize_key( $_GET['accessibility-mode'] ) ) ?
 if ( $on !== self::$network_mode ) { // OK
 	self::$network_mode = (bool) $on;
 }
+
+return 0 === strpos( $foo, 'a' ); // OK
+return 0 == $foo; // OK
+return $foo == 0; // Bad
