@@ -150,3 +150,7 @@ echo vsprintf( 'Hello %s', array( esc_html( $foo ) ) ); // OK
 
 echo sprintf( __( 'Welcome to Genesis %s', 'genesis' ), PARENT_THEME_BRANCH ); // Bad x 2
 echo sprintf( esc_html__( 'Welcome to Genesis %s', 'genesis' ), esc_html( PARENT_THEME_BRANCH ) ); // OK
+
+echo esc_html( strval( $_var ) ? $_var : gettype( $_var ) ); // OK
+echo ( $is_hidden ) ? ' style="display:none;"' : ''; // OK
+echo sprintf( 'Howdy, %s', esc_html( $name ? $name : __( 'Partner' ) ) ); // OK
