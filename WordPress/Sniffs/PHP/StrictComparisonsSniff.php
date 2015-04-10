@@ -40,14 +40,10 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ( $tokens[$stackPtr]['code'] !== T_IS_EQUAL && $tokens[$stackPtr]['code'] !== T_IS_NOT_EQUAL) {
-        	return;
-    	} else {
-			if ( ! $this->has_whitelist_comment( 'loose comparison okay', $tokens, $stackPtr ) ) {
-        		$error = 'Found: ' . $tokens[$stackPtr]['content'] . '. Use strict comparisons (=== or !==).';
-				$phpcsFile->addWarning($error, $stackPtr);
-    		}
-    	}
+		if ( ! $this->has_whitelist_comment( 'loose comparison okay', $tokens, $stackPtr ) ) {
+			$error = 'Found: ' . $tokens[$stackPtr]['content'] . '. Use strict comparisons (=== or !==).';
+			$phpcsFile->addWarning($error, $stackPtr);
+		}
 
 	}//end process()
 
@@ -83,5 +79,3 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff implements PHP_CodeSniffer_Sni
 	}
 
 }//end class
-
-?>

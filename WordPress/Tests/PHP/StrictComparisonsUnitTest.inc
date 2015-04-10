@@ -2,7 +2,7 @@
 // test for 'equals' conditionals
 if ( true == $true ) { // Bad
 	echo 'True';
-} elseif ( false === $true ) { // Good
+} elseif ( false === $true ) { // OK
 	echo 'False';
 }
 
@@ -11,11 +11,11 @@ if ( true != $true ) { // Bad
 	echo 'True';
 } elseif ( true <> $true ) { // Bad
 	echo 'False';
-} elseif ( false !== $true ) { // Good
+} elseif ( false !== $true ) { // OK
 	echo 'False';
 }
 
 // test for whitelisting
-if ( true == $true ) { // loose comparison okay
+if ( true == $true ) { // loose comparison, OK
 	echo 'True';
 }
