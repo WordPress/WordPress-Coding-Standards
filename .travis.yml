@@ -17,7 +17,7 @@ matrix:
 before_script:
     - export PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
     - export PHPCS_DIR=/tmp/phpcs
-    - export PHPCS_BRANCH=phpcs-fixer
+    - export PHPCS_BRANCH=master
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_DIR/scripts/phpcs --config-set installed_paths $(pwd)
 

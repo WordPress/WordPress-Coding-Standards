@@ -17,7 +17,7 @@
  * @author   Weston Ruter <weston@x-team.com>
  * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
  */
-class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 {
 
 	public $customAutoEscapedFunctions = array();
@@ -145,6 +145,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 		'the_title',
 		'the_title_attribute',
 		'the_title_rss',
+		'vip_powered_wpcom',
 		'walk_nav_menu_tree',
 		'wp_attachment_is_image',
 		'wp_dropdown_categories',
@@ -234,13 +235,43 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 	 * @var array
 	 */
 	public static $printingFunctions = array(
+		'_deprecated_argument',
+		'_deprecated_function',
+		'_deprecated_file',
+		'_doing_it_wrong',
 		'_e',
 		'_ex',
 		'printf',
 		'vprintf',
+		'trigger_error',
+		'user_error',
 		'wp_die',
 	);
 
+	/**
+	 * Functions that format strings.
+	 *
+	 * These functions are often used for formatting translation strings, and it is
+	 * common practice to escape the individual parameters passed to them as needed
+	 * instead of escaping the entire result. This is especially true when the string
+	 * being formatted contains HTML, which makes escaping the full result more
+	 * difficult.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @var array
+	 */
+	public static $formattingFunctions = array(
+		'sprintf',
+		'vsprintf',
+		'wp_sprintf',
+	);
+
+	/**
+	 * Whether the custom functions were added to the default lists yet.
+	 *
+	 * @var bool
+	 */
 	public static $addedCustomFunctions = false;
 
 	/**
@@ -267,7 +298,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return void
+	 * @return int|void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
@@ -279,9 +310,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			self::$addedCustomFunctions = true;
 		}
 
+		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 
 		$function = $tokens[ $stackPtr ]['content'];
+
+		// Find the opening parenthesis (if present; T_ECHO might not have it).
+		$open_paren = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr + 1, null, true );
 
 		// If function, not T_ECHO nor T_PRINT
 		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
@@ -290,52 +325,53 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				return;
 			}
 
-			$stackPtr++; // Ignore the starting bracket
-
-			if ( isset( $tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
-				$end_of_statement = $tokens[ $stackPtr ]['parenthesis_closer'];
+			if ( isset( $tokens[ $open_paren ]['parenthesis_closer'] ) ) {
+				$end_of_statement = $tokens[ $open_paren ]['parenthesis_closer'];
 			}
-		}
 
-		if ( $tokens[ $stackPtr ]['code'] === T_EXIT && $tokens[ $stackPtr + 1 ]['code'] === T_OPEN_PARENTHESIS ) {
-			$stackPtr++; // Ignore the starting bracket
-		}
-
-		// Ensure that the next token is a whitespace.
-		$stackPtr++;
-		if ( $tokens[$stackPtr]['code'] === T_WHITESPACE ) {
-			$stackPtr++;
+			// These functions only need to have the first argument escaped.
+			if ( in_array( $function, array( 'trigger_error', 'user_error' ) ) ) {
+				$end_of_statement = $phpcsFile->findEndOfStatement( $open_paren + 1 );
+			}
 		}
 
 		// Checking for the ignore comment, ex: //xss ok
-		$isAtEndOfStatement = false;
-		$commentOkRegex     = '/xss\W*(ok|pass|clear|whitelist)/i';
-		$tokensCount        = count( $tokens );
-		for ( $i = $stackPtr; $i < $tokensCount; $i++ ) {
-			if ( $tokens[$i]['code'] === T_SEMICOLON ) {
-				$isAtEndOfStatement = true;
-			}
-
-			if ( $isAtEndOfStatement === true && in_array( $tokens[$i]['code'], array( T_SEMICOLON, T_WHITESPACE, T_COMMENT ) ) === false ) {
-				break;
-			}
-
-			preg_match( $commentOkRegex, $tokens[$i]['content'], $matches );
-			if ( ( $tokens[$i]['code'] === T_COMMENT ) && ( empty( $matches ) === false ) ) {
-				return;
-			}
+		if ( $this->has_whitelist_comment( 'xss', $stackPtr ) ) {
+			return;
 		}
+
+		$ternary = false;
 
 		// This is already determined if this is a function and not T_ECHO.
 		if ( ! isset( $end_of_statement ) ) {
+
 			$end_of_statement = $phpcsFile->findNext( array( T_SEMICOLON, T_CLOSE_TAG ), $stackPtr );
+			$last_token = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, $end_of_statement - 1, null, true );
+
+			// Check for the ternary operator. We only need to do this here if this
+			// echo is lacking parenthesis. Otherwise it will be handled below.
+			if ( T_OPEN_PARENTHESIS !== $tokens[ $open_paren ]['code'] || T_CLOSE_PARENTHESIS !== $tokens[ $last_token ]['code'] ) {
+
+				$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
+
+				// If there is a ternary skip over the part before the ?. However, if
+				// there is a closing parenthesis ending the statement, we only do
+				// this when the opening parenthesis comes after the ternary. If the
+				// ternary is within the parentheses, it will be handled in the loop.
+				if (
+					$ternary
+					&& (
+						T_CLOSE_PARENTHESIS !== $tokens[ $last_token ]['code']
+						|| $ternary < $tokens[ $last_token ]['parenthesis_opener']
+					)
+				) {
+					$stackPtr = $ternary;
+				}
+			}
 		}
 
-		// Check for the ternary operator.
-		$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
-		if ( $ternary ) {
-			$stackPtr = $ternary + 1;
-		}
+		// Ignore the function itself.
+		$stackPtr++;
 
 		$in_cast = false;
 
@@ -348,20 +384,45 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			// Skip to the end of a function call if it has been casted to a safe value.
-			if ( T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] && $in_cast ) {
-				$i = $tokens[ $i ]['parenthesis_closer'];
-				$in_cast = false;
+			if ( T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] ) {
+
+				if ( $in_cast ) {
+
+					// Skip to the end of a function call if it has been casted to a safe value.
+					$i       = $tokens[ $i ]['parenthesis_closer'];
+					$in_cast = false;
+
+				} else {
+
+					// Skip over the condition part of a ternary (i.e., to after the ?).
+					$ternary = $phpcsFile->findNext( T_INLINE_THEN, $i, $tokens[ $i ]['parenthesis_closer'] );
+
+					if ( $ternary ) {
+
+						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $i, $tokens[ $i ]['parenthesis_closer'] );
+
+						// We only do it if the ternary isn't within a subset of parentheses.
+						if ( ! $next_paren || $ternary > $tokens[ $next_paren ]['parenthesis_closer'] ) {
+							$i = $ternary;
+						}
+					}
+				}
+
 				continue;
 			}
 
 			// Handle arrays for those functions that accept them.
-			if ( $tokens[ $i ]['code'] === T_ARRAY && in_array( $function, array( 'vprintf', 'wp_die' ) ) ) {
+			if ( $tokens[ $i ]['code'] === T_ARRAY ) {
 				$i++; // Skip the opening parenthesis.
 				continue;
 			}
 
 			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ) ) ) {
+				continue;
+			}
+
+			// Handle magic constants for debug functions.
+			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ) ) ) {
 				continue;
 			}
 
@@ -410,7 +471,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 			// This is a function
 			else {
 				$functionName = $tokens[$i]['content'];
+
+				$is_formatting_function = in_array( $functionName, self::$formattingFunctions );
+
 				if (
+					! $is_formatting_function
+					&&
 					in_array( $functionName, self::$autoEscapedFunctions ) === false
 					&&
 					in_array( $functionName, self::$sanitizingFunctions ) === false
@@ -421,11 +487,21 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff implements PHP_CodeSniffer_Sniff
 
 				// Skip pointer to after the function
 				if ( $_pos = $phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i, null, null, null, true ) ) {
-					$i = $tokens[$_pos]['parenthesis_closer'];
+
+					// If this is a formatting function we just skip over the opening
+					// parenthesis. Otherwise we skip all the way to the closing.
+					if ( $is_formatting_function ) {
+						$i = $_pos + 1;
+						$watch = true;
+					} else {
+						$i = $tokens[ $_pos ]['parenthesis_closer'];
+					}
 				}
 				continue;
 			}
 		}
+
+		return $end_of_statement;
 
 	}//end process()
 

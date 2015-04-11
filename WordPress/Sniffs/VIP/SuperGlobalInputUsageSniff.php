@@ -7,7 +7,7 @@
  * @author   Shady Sharaf <shady@x-team.com>
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
  */
-class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff
 {
 
 	/**
@@ -35,6 +35,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for global input variable
@@ -51,20 +52,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 		}
 
 		// Check for whitelisting comment
-		$currentLine = $tokens[$stackPtr]['line'];
-		$nextPtr = $stackPtr;
-		while ( isset( $tokens[$nextPtr + 1]['line'] ) && $tokens[$nextPtr + 1]['line'] == $currentLine ) {
-			$nextPtr++;
-			// Do nothing, we just want the last token of the line
-		}
-
-		$is_whitelisted = ( 
-			$tokens[$nextPtr]['code'] === T_COMMENT 
-			&& 
-			preg_match( '#input var okay#i', $tokens[$nextPtr]['content'] ) > 0
-			);
-
-		if ( ! $is_whitelisted ) {
+		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
 			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 	}//end process()

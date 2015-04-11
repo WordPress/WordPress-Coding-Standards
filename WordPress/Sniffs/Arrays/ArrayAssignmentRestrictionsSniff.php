@@ -76,17 +76,17 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		$token = $tokens[$stackPtr];
-
-		$exclude = explode( ',', $this->exclude );
 
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
+			$phpcsFile->removeTokenListener( $this, $this->register() );
 			return;
 		}
+
+		$tokens = $phpcsFile->getTokens();
+		$token = $tokens[ $stackPtr ];
+		$exclude = explode( ',', $this->exclude );
 
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ) ) ) {
 			$equal = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
