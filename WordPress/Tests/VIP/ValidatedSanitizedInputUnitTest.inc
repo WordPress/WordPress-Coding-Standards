@@ -62,7 +62,10 @@ foreach( $_POST as $key => $value ) {
 
 unset( $_GET['test'] ); // ok
 
-echo (int) $_GET['test'];
+output( "some string {$_POST['some_var']}" ); // Bad
+
+echo (int) $_GET['test']; // ok
+some_func( $some_arg, (int) $_GET['test'] ); // ok
 
 function zebra() {
 	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {

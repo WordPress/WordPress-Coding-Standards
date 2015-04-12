@@ -19,7 +19,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 	 * 		'functions' => array( 'eval', 'create_function' ),
 	 * 	)
 	 * )
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getGroups() {
@@ -53,8 +53,64 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				'functions' => array(
 					'file_get_contents',
 					'vip_wp_file_get_contents',
-					),
 				),
+			),
+
+			'get_term_link' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_term_link() instead.',
+				'functions' => array(
+					'get_term_link',
+				),
+			),
+
+			'get_tag_link' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_term_link() instead.',
+				'functions' => array(
+					'get_tag_link',
+				),
+			),
+
+			'get_page_by_path' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_page_by_path() instead.',
+				'functions' => array(
+					'get_page_by_path',
+				),
+			),
+
+			'get_page_by_title' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_page_by_title() instead.',
+				'functions' => array(
+					'get_page_by_title',
+				),
+			),
+
+			'get_term_by' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_term_by() instead.',
+				'functions' => array(
+					'get_term_by',
+				),
+			),
+
+			'get_category_by_slug' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_category_by_slug() instead.',
+				'functions' => array(
+					'get_category_by_slug',
+				),
+			),
+
+			'url_to_postid' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_url_to_postid() instead.',
+				'functions' => array(
+					'url_to_postid',
+				),
+			),
 
 			'wp_remote_get' => array(
 				'type' => 'warning',

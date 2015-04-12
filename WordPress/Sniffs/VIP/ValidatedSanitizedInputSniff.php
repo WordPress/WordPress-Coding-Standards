@@ -27,6 +27,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 	{
 		return array(
 				T_VARIABLE,
+				T_DOUBLE_QUOTED_STRING,
 			   );
 
 	}//end register()
@@ -44,9 +45,22 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
 		$tokens = $phpcsFile->getTokens();
+		$superglobals = array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' );
+
+		// Handling string interpolation
+		if ( $tokens[ $stackPtr ]['code'] === T_DOUBLE_QUOTED_STRING ) {
+			foreach ( $superglobals as $superglobal ) {
+				if ( false !== strpos( $tokens[ $stackPtr ]['content'], $superglobal ) ) {
+					$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+					return;
+				}
+			}
+
+			return;
+		}
 
 		// Check for $wpdb variable
-		if ( ! in_array( $tokens[$stackPtr]['content'], array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' ) ) )
+		if ( ! in_array( $tokens[$stackPtr]['content'], $superglobals ) )
 			return;
 
 		$instance = $tokens[$stackPtr];
@@ -59,7 +73,10 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			return;
 		}
 
-		$is_casted = false;
+		// Search for casting
+		$prev = $phpcsFile->findPrevious( array( T_WHITESPACE ), $stackPtr - 1, null, true, null, true );
+		$is_casted = in_array( $tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) );
+
 		if ( isset( $instance['nested_parenthesis'] ) ) {
 			$nested = $instance['nested_parenthesis'];
 			// Ignore if wrapped inside ISSET
@@ -75,7 +92,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			$prev = $phpcsFile->findPrevious( array( T_WHITESPACE ), $stackPtr -1, null, true, null, true );
 			$is_casted = in_array( $tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) );
 			if ( ! $is_casted ) {
-				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
 				return;
 			}
 		}
@@ -144,7 +161,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		}
 
 		if ( ! $is_validated ) {
-			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', array( $tokens[$stackPtr]['content'] ) );
 			// return; // Should we just return and not look for sanitizing functions ?
 		}
 
@@ -171,11 +188,13 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 				}
 			} elseif ( T_UNSET === $function['code'] ) {
 				$is_sanitized = true;
+			} elseif ( $is_casted ) {
+				$is_sanitized = true;
 			}
 		}
 
 		if ( ! $is_sanitized ) {
-			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
 		}
 
 

@@ -34,3 +34,15 @@ $y = Bar::add_role(); // ok
 \SomeNamespace\add_role(); // ok
 
 \add_role(); // bad
+
+get_term_link( $term ); // bad
+
+get_page_by_path( $path ); // bad
+
+get_page_by_title( $page_title ); // bad
+
+get_term_by( $field, $value, $taxonomy ); // bad
+
+get_category_by_slug( $slug ); // bad
+
+url_to_postid( $url ); // bad

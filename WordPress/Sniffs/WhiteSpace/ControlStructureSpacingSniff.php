@@ -45,6 +45,13 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
      */
     public $blank_line_after_check = true;
 
+    /**
+     * Require for space before T_COLON when using the alternative syntax for control structures
+     *
+     * @var string one of 'required', 'forbidden', optional'
+     */
+    public $space_before_colon = 'required';
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -83,7 +90,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $tokens = $phpcsFile->getTokens();
 
-        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
+        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE
+            && ! ( $tokens[$stackPtr]['code'] === T_ELSE && $tokens[($stackPtr + 1)]['code'] === T_COLON )
+        ) {
             $error = 'Space after opening control structure is required';
             if (isset($phpcsFile->fixer) === true) {
                 $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfterStructureOpen');
@@ -104,9 +113,50 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
         $scopeOpener = $tokens[$stackPtr]['scope_opener'];
         $scopeCloser = $tokens[$stackPtr]['scope_closer'];
 
+        // alternative syntax
+        if ( $tokens[$scopeOpener]['code'] === T_COLON ) {
+
+            if ( $this->space_before_colon === 'required') {
+
+                if ( $tokens[$scopeOpener - 1]['code'] !== T_WHITESPACE ) {
+                   $error = 'Space between opening control structure and T_COLON is required';
+
+                   if ( isset($phpcsFile->fixer) === true ) {
+                       $fix = $phpcsFile->addFixableError($error, $scopeOpener, 'NoSpaceBetweenStructureColon');
+
+                       if ($fix === true) {
+                           $phpcsFile->fixer->beginChangeset();
+                           $phpcsFile->fixer->addContentBefore($scopeOpener, ' ');
+                           $phpcsFile->fixer->endChangeset();
+                       }
+                   } else {
+                       $phpcsFile->addError($error, $stackPtr, 'NoSpaceBetweenStructureColon');
+                   }
+                }
+
+            } elseif ( $this->space_before_colon === 'forbidden' ) {
+
+                if ( $tokens[$scopeOpener - 1]['code'] === T_WHITESPACE ) {
+                    $error = 'Extra space between opening control structure and T_COLON found';
+
+                    if ( isset($phpcsFile->fixer) === true ) {
+                        $fix = $phpcsFile->addFixableError( $error, $scopeOpener - 1, 'SpaceBetweenStructureColon' );
+
+                        if ($fix === true) {
+                            $phpcsFile->fixer->beginChangeset();
+                            $phpcsFile->fixer->replaceToken( $scopeOpener - 1, '' );
+                            $phpcsFile->fixer->endChangeset();
+                        }
+                    } else {
+                        $phpcsFile->addError( $error, $stackPtr, 'SpaceBetweenStructureColon' );
+                    }
+                }
+            }
+        }
+
         $parenthesisOpener = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
 
-        if (($stackPtr + 1) === $parenthesisOpener) {
+        if (($stackPtr + 1) === $parenthesisOpener && $tokens[$parenthesisOpener]['code'] !== T_COLON) {
             // Checking this: $value = my_function[*](...).
             $error = 'No space before opening parenthesis is prohibited';
             if (isset($phpcsFile->fixer) === true) {

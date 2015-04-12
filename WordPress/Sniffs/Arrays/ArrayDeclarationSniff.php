@@ -57,12 +57,12 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
         }
 
         if ( ! isset( $tokens[$stackPtr]['parenthesis_opener'] ) ) {
-            $phpcsFile->addError('Missing parenthesis opener.', $stackPtr);
+            $phpcsFile->addError('Missing parenthesis opener.', $stackPtr, 'NoParenthesis');
             return;
         }
         $arrayStart = $tokens[$stackPtr]['parenthesis_opener'];
         if ( ! isset( $tokens[$arrayStart]['parenthesis_closer'] ) ) {
-            $phpcsFile->addError('Missing parenthesis closer.', $arrayStart);
+            $phpcsFile->addError('Missing parenthesis closer.', $arrayStart, 'NoParenthesis');
             return;
         }
         $arrayEnd = $tokens[$arrayStart]['parenthesis_closer'];
@@ -93,7 +93,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             if ($tokens[($openBracket + 1)]['code'] !== T_WHITESPACE && $tokens[($openBracket + 1)]['code'] !== T_CLOSE_PARENTHESIS) {
                 // Checking this: $value = my_function([*]...).
                 $warning = 'No space after opening parenthesis of array is bad style';
-                $phpcsFile->addWarning($warning, $stackPtr);
+                $phpcsFile->addWarning($warning, $stackPtr, 'NoSpaceAfterOpenParenthesis');
             }
 
             $closer = $tokens[$openBracket]['parenthesis_closer'];
@@ -109,7 +109,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                 // $value = my_function( ).
                 if ($between !== $closer) {
                     $warning = 'No space before closing parenthesis of array is bad style';
-                    $phpcsFile->addWarning($warning, $closer);
+                    $phpcsFile->addWarning($warning, $closer, 'NoSpaceBeforeCloseParenthesis');
                 }
             }
 
@@ -130,26 +130,26 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                 if ($tokens[($nextArrow - 1)]['code'] !== T_WHITESPACE) {
                     $content = $tokens[($nextArrow - 1)]['content'];
                     $error   = "Expected 1 space between \"$content\" and double arrow; 0 found";
-                    $phpcsFile->addError($error, $nextArrow);
+                    $phpcsFile->addError($error, $nextArrow, 'NoSpaceBeforeDoubleArrow');
                 } else {
                     $spaceLength = strlen($tokens[($nextArrow - 1)]['content']);
                     if ($spaceLength !== 1) {
                         $content = $tokens[($nextArrow - 2)]['content'];
                         $error   = "Expected 1 space between \"$content\" and double arrow; $spaceLength found";
-                        $phpcsFile->addError($error, $nextArrow);
+                        $phpcsFile->addError($error, $nextArrow, 'SpaceBeforeDoubleArrow');
                     }
                 }
 
                 if ($tokens[($nextArrow + 1)]['code'] !== T_WHITESPACE) {
                     $content = $tokens[($nextArrow + 1)]['content'];
                     $error   = "Expected 1 space between double arrow and \"$content\"; 0 found";
-                    $phpcsFile->addError($error, $nextArrow);
+                    $phpcsFile->addError($error, $nextArrow, 'NoSpaceAfterDoubleArrow');
                 } else {
                     $spaceLength = strlen($tokens[($nextArrow + 1)]['content']);
                     if ($spaceLength !== 1) {
                         $content = $tokens[($nextArrow + 2)]['content'];
                         $error   = "Expected 1 space between double arrow and \"$content\"; $spaceLength found";
-                        $phpcsFile->addError($error, $nextArrow);
+                        $phpcsFile->addError($error, $nextArrow, 'SpaceAfterDoubleArrow');
                     }
                 }
             }//end while
@@ -163,13 +163,13 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     if ($tokens[($comma + 1)]['code'] !== T_WHITESPACE) {
                         $content = $tokens[($comma + 1)]['content'];
                         $error   = "Expected 1 space between comma and \"$content\"; 0 found";
-                        $phpcsFile->addError($error, $comma);
+                        $phpcsFile->addError($error, $comma, 'NoSpaceAfterComma');
                     } else {
                         $spaceLength = strlen($tokens[($comma + 1)]['content']);
                         if ($spaceLength !== 1) {
                             $content = $tokens[($comma + 2)]['content'];
                             $error   = "Expected 1 space between comma and \"$content\"; $spaceLength found";
-                            $phpcsFile->addError($error, $comma);
+                            $phpcsFile->addError($error, $comma, 'SpaceAfterComma');
                         }
                     }
 
@@ -177,7 +177,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                         $content     = $tokens[($comma - 2)]['content'];
                         $spaceLength = strlen($tokens[($comma - 1)]['content']);
                         $error       = "Expected 0 spaces between \"$content\" and comma; $spaceLength found";
-                        $phpcsFile->addError($error, $comma);
+                        $phpcsFile->addError($error, $comma, 'SpaceBeforeComma');
                     }
                 }//end foreach
             }//end if
@@ -188,7 +188,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
         $nextToken  = $stackPtr;
         $lastComma  = $stackPtr;
         $keyUsed    = false;
-        $singleUsed = false;
         $lastToken  = '';
         $indices    = array();
         $maxLength  = 0;
@@ -222,7 +221,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                         $content     = $tokens[($nextToken - 2)]['content'];
                         $spaceLength = strlen($tokens[($nextToken - 1)]['content']);
                         $error       = "Expected 0 spaces between \"$content\" and comma; $spaceLength found";
-                        $phpcsFile->addError($error, $nextToken);
+                        $phpcsFile->addError($error, $nextToken, 'SpaceBeforeComma');
                     }
 
                     // Find the value, which will be the first token on the line,
@@ -240,7 +239,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
 
                     $valueContent = $phpcsFile->findNext(T_WHITESPACE, ($valueContent + 1), $nextToken, true);
                     $indices[]    = array('value' => $valueContent);
-                    $singleUsed   = true;
                 }//end if
 
                 $lastToken = T_COMMA;
@@ -248,12 +246,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             }//end if
 
             if ($tokens[$nextToken]['code'] === T_DOUBLE_ARROW) {
-                if ($singleUsed === true) {
-                    $error = 'Key specified for array entry; first entry has no key';
-                    $phpcsFile->addError($error, $nextToken);
-                    return;
-                }
-
                 $currentEntry['arrow'] = $nextToken;
                 $keyUsed               = true;
 
@@ -322,10 +314,10 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             $count     = count($indices);
             $lastIndex = $indices[($count - 1)]['value'];
 
-            $trailingContent = $phpcsFile->findPrevious(array(T_WHITESPACE, T_COMMENT), ($arrayEnd - 1), $lastIndex, true);
+            $trailingContent = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($arrayEnd - 1), $lastIndex, true);
             if ($tokens[$trailingContent]['code'] !== T_COMMA) {
                 $error = 'Comma required after last value in array declaration';
-                $phpcsFile->addError($error, $trailingContent);
+                $phpcsFile->addError($error, $trailingContent, 'NoCommaAfterLast');
             }
 
             foreach ($indices as $value) {
@@ -342,7 +334,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                         // was indented and not flush with the opening parenthesis.
                         if ($tokens[$value['value']]['column'] !== ($keywordStart + 1)) {
                             $error = 'Array value not aligned correctly; expected '.($keywordStart + 1).' spaces but found '.$tokens[$value['value']]['column'];
-                            $phpcsFile->addError($error, $value['value']);
+                            $phpcsFile->addError($error, $value['value'], 'ValueNotAligned');
                         }
                     }
                 */
@@ -380,20 +372,20 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
             if (isset($index['index']) === false) {
                 // Array value only.
                 if (($tokens[$index['value']]['line'] === $tokens[$stackPtr]['line']) && ($numValues > 1)) {
-                    $phpcsFile->addError('The first value in a multi-value array must be on a new line', $stackPtr);
+                    $phpcsFile->addError('The first value in a multi-value array must be on a new line', $stackPtr, 'FirstValueNoNewline');
                 }
 
                 continue;
             }
 
             if (($tokens[$index['index']]['line'] === $tokens[$stackPtr]['line'])) {
-                $phpcsFile->addError('The first index in a multi-value array must be on a new line', $stackPtr);
+                $phpcsFile->addError('The first index in a multi-value array must be on a new line', $stackPtr, 'FirstIndexNoNewline');
                 continue;
             }
 
             /*
                 if ($tokens[$index['index']]['column'] !== $indicesStart) {
-                    $phpcsFile->addError('Array key not aligned correctly; expected '.$indicesStart.' spaces but found '.$tokens[$index['index']]['column'], $index['index']);
+                    $phpcsFile->addError('Array key not aligned correctly; expected '.$indicesStart.' spaces but found '.$tokens[$index['index']]['column'], $index['index'], 'KeyNotAligned');
                     continue;
                 }
 
@@ -401,7 +393,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     $expected  = ($arrowStart - (strlen($index['index_content']) + $tokens[$index['index']]['column']));
                     $expected .= ($expected === 1) ? ' space' : ' spaces';
                     $found     = ($tokens[$index['arrow']]['column'] - (strlen($index['index_content']) + $tokens[$index['index']]['column']));
-                    $phpcsFile->addError("Array double arrow not aligned correctly; expected $expected but found $found", $index['arrow']);
+                    $phpcsFile->addError("Array double arrow not aligned correctly; expected $expected but found $found", $index['arrow'], 'DoubleArrowNotAligned');
                     continue;
                 }
 
@@ -409,7 +401,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     $expected  = ($valueStart - (strlen($tokens[$index['arrow']]['content']) + $tokens[$index['arrow']]['column']));
                     $expected .= ($expected === 1) ? ' space' : ' spaces';
                     $found     = ($tokens[$index['value']]['column'] - (strlen($tokens[$index['arrow']]['content']) + $tokens[$index['arrow']]['column']));
-                    $phpcsFile->addError("Array value not aligned correctly; expected $expected but found $found", $index['arrow']);
+                    $phpcsFile->addError("Array value not aligned correctly; expected $expected but found $found", $index['arrow'], 'ValueNotAligned');
                 }
             */
 
@@ -439,7 +431,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     }
                     if ( $fail ) {
                         $error = 'Each line in an array declaration must end in a comma';
-                        $phpcsFile->addError($error, $index['value']);
+                        $phpcsFile->addError($error, $index['value'], 'NoComma');
                     }
                 }
 
@@ -448,7 +440,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_S
                     $content     = $tokens[($nextComma - 2)]['content'];
                     $spaceLength = strlen($tokens[($nextComma - 1)]['content']);
                     $error       = "Expected 0 spaces between \"$content\" and comma; $spaceLength found";
-                    $phpcsFile->addError($error, $nextComma);
+                    $phpcsFile->addError($error, $nextComma, 'SpaceBeforeComma');
                 }
             }
         }//end foreach
