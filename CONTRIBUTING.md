@@ -102,3 +102,8 @@ In line #31 there are two ERRORs belong to `WordPress.WhiteSpace.OperatorSpacing
 it MUST not included in `ArrayDeclarationUnitTest` (that's why we only return 2 errros for line #31).
 Also there's `getWarningList` method in unit test class that returns an array of line numbers
 indicating WARNINGs.
+
+## Sniff Code Standards
+
+The sniffs for WPCS should be written such that they pass the `WordPress-Core` code standards.
+
