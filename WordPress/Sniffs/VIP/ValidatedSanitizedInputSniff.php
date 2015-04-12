@@ -9,7 +9,7 @@
  * @author   Shady Sharaf <shady@x-team.com>
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
  */
-class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 {
 
 	/**
@@ -44,6 +44,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 		$superglobals = array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' );
 
@@ -84,7 +85,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			if ( in_array( $tokens[ key( $nested ) - 1 ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) )
 				return;
 		} else {
-			if ( $this->is_whitelisted_by_comment( $tokens, $stackPtr ) ) {
+			if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
 				return;
 			}
 
@@ -165,7 +166,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 			// return; // Should we just return and not look for sanitizing functions ?
 		}
 
-		if ( $this->is_whitelisted_by_comment( $tokens, $stackPtr ) ) {
+		if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
 			return;
 		}
 
@@ -222,38 +223,6 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff implements PHP_CodeSniff
 		$varKey = trim( $phpcsFile->getTokensAsString( $bracketOpener + 1, $bracketCloser - $bracketOpener - 1 ) ); // aka 'hello' in $_POST['hello']
 
 		return $varKey;
-	}
-
-	/**
-	 * Check if an instance is whitelisted by a comment.
-	 *
-	 * @param array $tokens   The tokens in the file.
-	 * @param int   $stackPtr The index of the current token.
-	 *
-	 * @return bool Whether there is a whitelisting comment at the end of the line.
-	 */
-	protected function is_whitelisted_by_comment( $tokens, $stackPtr ) {
-
-		// Checking for the ignore comment, ex: //sanitization ok
-		$isAtEndOfStatement = false;
-		$commentOkRegex     = '/sanitization\W*(ok|pass|clear|whitelist)/i';
-		$tokensCount        = count( $tokens );
-		for ( $i = $stackPtr; $i < $tokensCount; $i++ ) {
-			if ( $tokens[$i]['code'] === T_SEMICOLON ) {
-				$isAtEndOfStatement = true;
-			}
-
-			if ( $isAtEndOfStatement === true && in_array( $tokens[$i]['code'], array( T_SEMICOLON, T_WHITESPACE, T_COMMENT ) ) === false ) {
-				break;
-			}
-
-			preg_match( $commentOkRegex, $tokens[$i]['content'], $matches );
-			if ( ( $tokens[$i]['code'] === T_COMMENT ) && ( empty( $matches ) === false ) ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 }//end class
