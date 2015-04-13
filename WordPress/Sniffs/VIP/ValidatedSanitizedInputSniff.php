@@ -180,6 +180,16 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 			$function = $tokens[$functionPtr];
 			if ( T_STRING === $function['code'] ) {
 				$functionName = $function['content'];
+
+				if ( 'array_map' === $functionName ) {
+					$function_opener = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $functionPtr + 1 );
+					$mapped_function = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $function_opener + 1, $function_opener['parenthesis_closer'], true );
+
+					if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $tokens[ $mapped_function ]['code'] ) {
+						$functionName = trim( $tokens[ $mapped_function ]['content'], '\'' );
+					}
+				}
+
 				if (
 					in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$autoEscapedFunctions )
 					||

@@ -74,3 +74,9 @@ function zebra() {
 }
 
 echo $_GET['test']; // WPCS: sanitization OK.
+
+echo array_map( 'sanitize_text_field', $_GET['test'] ); // OK
+echo array_map( 'foo', $_GET['test'] ); // Bad
+echo array_map( $something, $_GET['test'] ); // Bad
+echo array_map( array( $obj, 'func' ), $_GET['test'] ); // Bad
+echo array_map( array( $obj, 'sanitize_text_field' ), $_GET['test'] ); // Bad
