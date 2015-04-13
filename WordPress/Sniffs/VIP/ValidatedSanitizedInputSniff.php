@@ -60,7 +60,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 			return;
 		}
 
-		// Check for $wpdb variable
+		// Check if this is a superglobal.
 		if ( ! in_array( $tokens[$stackPtr]['content'], $superglobals ) )
 			return;
 
