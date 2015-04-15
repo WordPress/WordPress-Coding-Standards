@@ -249,6 +249,16 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	);
 
 	/**
+	 * Printing functions that incorporate unsafe values.
+	 *
+	 * @var array
+	 */
+	public static $unsafePrintingFunctions = array(
+		'_e' => 'esc_html_e() or esc_attr_e()',
+		'_ex' => 'esc_html_ex() or esc_attr_ex()',
+	);
+
+	/**
 	 * Functions that format strings.
 	 *
 	 * These functions are often used for formatting translation strings, and it is
@@ -338,6 +348,15 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		// Checking for the ignore comment, ex: //xss ok
 		if ( $this->has_whitelist_comment( 'xss', $stackPtr ) ) {
 			return;
+		}
+
+		if ( isset( $end_of_statement, self::$unsafePrintingFunctions[ $function ] ) ) {
+			$error = $phpcsFile->addError( "Expected next thing to be an escaping function (like %s), not '%s'", $stackPtr, 'UnsafePrintingFunction', array( self::$unsafePrintingFunctions[ $function ], $function ) );
+
+			// If the error was reported, don't bother checking the function's arguments.
+			if ( $error ) {
+				return $end_of_statement;
+			}
 		}
 
 		$ternary = false;
