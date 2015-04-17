@@ -125,7 +125,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			return;
 		}
 
-		if ( $this->is_assignment( $stackPtr, $phpcsFile ) ) {
+		if ( $this->is_assignment( $stackPtr ) ) {
 			return;
 		}
 
@@ -261,60 +261,6 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		reset( $tokens[ $stackPtr ]['nested_parenthesis'] );
 
 		return in_array( $tokens[ $open_parenthesis - 1 ]['code'], array( T_ISSET, T_EMPTY ) );
-	}
-
-	/**
-	 * Check if this variable is being assigned a value.
-	 *
-	 * E.g., $var = 'foo';
-	 *
-	 * Also handles array assignments to arbitrary depth:
-	 *
-	 * $array['key'][ $foo ][ something() ] = $bar;
-	 *
-	 * @since 0.4.0
-	 *
-	 * @param int $stackPtr                   The index of the token in the stack.
-	 *                                        This must points to either a T_VARIABLE
-	 *                                        or T_CLOSE_SQUARE_BRACKET token.
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 *
-	 * @return bool Whether the token is a variable being assigned a value.
-	 */
-	protected function is_assignment( $stackPtr, $phpcsFile ) {
-
-		$tokens = $phpcsFile->getTokens();
-
-		// Must be a variable or closing square bracket (see below).
-		if ( ! in_array( $tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ) ) ) {
-			return false;
-		}
-
-		$next_non_empty = $phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens
-			, $stackPtr + 1
-			, null
-			, true
-			, null
-			, true
-		);
-
-		// No token found.
-		if ( false === $next_non_empty ) {
-			return false;
-		}
-
-		// If the next token is an assignment, that's all we need to know.
-		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens ) ) {
-			return true;
-		}
-
-		// Check if this is an array assignment, e.g., $var['key'] = 'val';
-		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
-			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'], $phpcsFile );
-		}
-
-		return false;
 	}
 
 } // end class

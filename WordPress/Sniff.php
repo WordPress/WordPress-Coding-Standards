@@ -136,6 +136,58 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 	}
+
+	/**
+	 * Check if this variable is being assigned a value.
+	 *
+	 * E.g., $var = 'foo';
+	 *
+	 * Also handles array assignments to arbitrary depth:
+	 *
+	 * $array['key'][ $foo ][ something() ] = $bar;
+	 *
+	 * @since 0.4.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack. This must points to
+	 *                      either a T_VARIABLE or T_CLOSE_SQUARE_BRACKET token.
+	 *
+	 * @return bool Whether the token is a variable being assigned a value.
+	 */
+	protected function is_assignment( $stackPtr ) {
+
+		$tokens = $this->phpcsFile->getTokens();
+
+		// Must be a variable or closing square bracket (see below).
+		if ( ! in_array( $tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ) ) ) {
+			return false;
+		}
+
+		$next_non_empty = $this->phpcsFile->findNext(
+			PHP_CodeSniffer_Tokens::$emptyTokens
+			, $stackPtr + 1
+			, null
+			, true
+			, null
+			, true
+		);
+
+		// No token found.
+		if ( false === $next_non_empty ) {
+			return false;
+		}
+
+		// If the next token is an assignment, that's all we need to know.
+		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens ) ) {
+			return true;
+		}
+
+		// Check if this is an array assignment, e.g., $var['key'] = 'val';
+		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
+			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'] );
+		}
+
+		return false;
+	}
 }
 
 // EOF
