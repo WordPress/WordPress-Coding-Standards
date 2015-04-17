@@ -80,6 +80,7 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
             63 => 1,
             65 => 1,
             70 => 1,
+	        72 => 1,
         );
 
     }//end getWarningList()

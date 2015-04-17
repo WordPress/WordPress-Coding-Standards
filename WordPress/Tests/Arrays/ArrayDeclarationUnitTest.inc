@@ -192,3 +192,11 @@ $q = new WP_Query( array(
 		),
 	),
 ) );
+
+array(
+	'key',
+	/**
+	 * Doc comment.
+	 */
+//  'core'
+);
