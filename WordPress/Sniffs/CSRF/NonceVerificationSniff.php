@@ -21,7 +21,7 @@
  * @author   J.D. Grimes <jdg@codesymphony.co>
  * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
  */
-class WordPress_Sniffs_CSRF_NonceVerificationSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
 	/**
 	 * Superglobals to give an error for when not accompanied by an nonce check.
@@ -107,6 +107,8 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff implements PHP_CodeSniffer_Sn
 			self::$addedCustomFunctions = true;
 		}
 
+		$this->init( $phpcsFile );
+
 		$tokens = $phpcsFile->getTokens();
 		$instance = $tokens[ $stackPtr ];
 
@@ -116,6 +118,10 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff implements PHP_CodeSniffer_Sn
 		);
 
 		if ( ! in_array( $instance['content'], $superglobals ) ) {
+			return;
+		}
+
+		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
 			return;
 		}
 
