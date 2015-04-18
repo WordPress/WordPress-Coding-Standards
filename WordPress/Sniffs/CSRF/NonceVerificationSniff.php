@@ -30,7 +30,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 *
 	 * @var array
 	 */
-	public $errorForSuperGlobals = array( '$_POST' );
+	public $errorForSuperGlobals = array( '$_POST', '$_FILE' );
 
 	/**
 	 * Superglobals to give a warning for when not accompanied by an nonce check.
