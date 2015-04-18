@@ -181,10 +181,12 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			$start = $tokens[ $f ]['scope_opener'];
 		}
 
+		$in_isset = $this->is_in_isset_or_empty( $stackPtr, $phpcsFile );
+
 		// We allow for isset( $_POST['var'] ) checks to come before the nonce check.
 		// If this is inside an isset(), check after it as well, all the way to the
 		// end of the scope.
-		if ( $this->is_in_isset_or_empty( $stackPtr, $phpcsFile ) ) {
+		if ( $in_isset ) {
 			$end = ( 0 === $start ) ? count( $tokens ) : $tokens[ $start ]['scope_closer'];
 		}
 
@@ -196,13 +198,14 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			&& $start === $last['start']
 		) {
 
-			// If we have already found an nonce check in this scope, we just need to
-			// check whether it comes before or after this token. If not, we can
-			// still go ahead and return false if we've already checked to the end of
-			// the search area.
 			if ( false !== $last['nonce_check'] ) {
-				return ( $last['nonce_check'] < $stackPtr );
+				// If we have already found an nonce check in this scope, we just
+				// need to check whether it comes before this token. It is OK if the
+				// check is after the token though, if this was only a isset() check.
+				return ( $in_isset || $last['nonce_check'] < $stackPtr );
 			} elseif ( $end <= $last['end'] ) {
+				// If not, we can still go ahead and return false if we've already
+				// checked to the end of the search area.
 				return false;
 			}
 

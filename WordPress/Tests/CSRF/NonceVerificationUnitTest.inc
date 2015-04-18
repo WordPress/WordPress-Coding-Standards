@@ -88,3 +88,12 @@ function foo_3() {
 	bar( $_POST['var'] ); // WPCS: CSRF OK
 	bar( $_POST['var'] ); // Bad
 }
+
+// We need to account for when there are multiple vars in a single isset().
+function foo_4() {
+	if ( ! isset( $_POST['foo'], $_POST['bar'], $_POST['_wpnonce'] ) ) { // OK
+		return;
+	}
+
+	check_ajax_referer( 'something' );
+}
