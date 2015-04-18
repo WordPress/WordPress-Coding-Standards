@@ -176,8 +176,8 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		// If we're in a function, only look inside of it.
-		if ( $phpcsFile->hasCondition( $stackPtr, T_FUNCTION ) ) {
-			$f = $phpcsFile->findPrevious( T_FUNCTION, $stackPtr );
+		$f = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		if ( $f ) {
 			$start = $tokens[ $f ]['scope_opener'];
 		}
 
