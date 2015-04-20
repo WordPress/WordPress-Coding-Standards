@@ -1,6 +1,6 @@
 <?php
 /**
- * Flag any non-validated/sanitized input ( _GET / _POST / _REQUEST / _SERVER )
+ * Flag any non-validated/sanitized input ( _GET / _POST / etc. )
  *
  * PHP version 5
  *
@@ -46,7 +46,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 	{
 		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
-		$superglobals = array( '$_GET', '$_POST', '$_REQUEST', '$_SERVER' );
+		$superglobals = WordPress_Sniff::$input_superglobals;
 
 		// Handling string interpolation
 		if ( $tokens[ $stackPtr ]['code'] === T_DOUBLE_QUOTED_STRING ) {

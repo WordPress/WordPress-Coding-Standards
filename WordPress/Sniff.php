@@ -40,6 +40,15 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected $tokens;
 
 	/**
+	 * A list of superglobals that incorporate user input.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @var string[]
+	 */
+	protected static $input_superglobals = array( '$_COOKIE', '$_GET', '$_FILE', '$_POST', '$_REQUEST', '$_SERVER' );
+
+	/**
 	 * Initialize the class for the current process.
 	 *
 	 * This method must be called by child classes before using many of the methods
