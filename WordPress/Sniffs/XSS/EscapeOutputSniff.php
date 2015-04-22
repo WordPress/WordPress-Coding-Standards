@@ -222,6 +222,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		'wp_kses_allowed_html',
 		'wp_kses_data',
 		'wp_kses_post',
+		'wp_parse_id_list',
 		'wp_redirect',
 		'wp_rel_nofollow',
 		'wp_safe_redirect',
