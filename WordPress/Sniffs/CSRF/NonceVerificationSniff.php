@@ -151,11 +151,10 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 *
 	 * @param int                  $stackPtr  The position of the current token in
 	 *                                        the stack of tokens.
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 *
 	 * @return bool
 	 */
-	protected function has_nonce_check( $stackPtr, $phpcsFile ) {
+	protected function has_nonce_check( $stackPtr ) {
 
 		/**
 		 * @var array {
@@ -173,15 +172,15 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		$start = 0;
 		$end = $stackPtr;
 
-		$tokens = $phpcsFile->getTokens();
+		$tokens = $this->phpcsFile->getTokens();
 
 		// If we're in a function, only look inside of it.
-		$f = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		$f = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 		if ( $f ) {
 			$start = $tokens[ $f ]['scope_opener'];
 		}
 
-		$in_isset = $this->is_in_isset_or_empty( $stackPtr, $phpcsFile );
+		$in_isset = $this->is_in_isset_or_empty( $stackPtr );
 
 		// We allow for isset( $_POST['var'] ) checks to come before the nonce check.
 		// If this is inside an isset(), check after it as well, all the way to the
@@ -191,7 +190,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		}
 
 		// Check if we've looked here before.
-		$filename = $phpcsFile->getFilename();
+		$filename = $this->phpcsFile->getFilename();
 
 		if (
 			$filename === $last['file']
@@ -247,23 +246,20 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 * @since 0.4.0
 	 *
 	 * @param int $stackPtr                   The index of the token in the stack.
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 *
 	 * @return bool Whether the token is inside an isset() or empty() statement.
 	 */
-	protected function is_in_isset_or_empty( $stackPtr, $phpcsFile ) {
+	protected function is_in_isset_or_empty( $stackPtr ) {
 
-		$tokens = $phpcsFile->getTokens();
-
-		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 			return false;
 		}
 
-		end( $tokens[ $stackPtr ]['nested_parenthesis'] );
-		$open_parenthesis = key( $tokens[ $stackPtr ]['nested_parenthesis'] );
-		reset( $tokens[ $stackPtr ]['nested_parenthesis'] );
+		end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$open_parenthesis = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		reset( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 
-		return in_array( $tokens[ $open_parenthesis - 1 ]['code'], array( T_ISSET, T_EMPTY ) );
+		return in_array( $this->tokens[ $open_parenthesis - 1 ]['code'], array( T_ISSET, T_EMPTY ) );
 	}
 
 } // end class
