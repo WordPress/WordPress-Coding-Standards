@@ -53,19 +53,6 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	public $customNonceVerificationFunctions = array();
 
 	/**
-	 * List of the functions which verify nonces.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @var array
-	 */
-	public static $nonceVerificationFunctions = array(
-		'wp_verify_nonce',
-		'check_admin_referer',
-		'check_ajax_referer',
-	);
-
-	/**
 	 * Whether the custom functions have been added to the default list yet.
 	 *
 	 * @since 0.5.0
