@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * @since 0.4.0
+ * @since 0.5.0
  *
  * @category PHP
  * @package  PHP_CodeSniffer
@@ -14,7 +14,7 @@
 /**
  * Checks that nonce verification accompanies form processing.
  *
- * @since 0.4.0
+ * @since 0.5.0
  *
  * @category PHP
  * @package  PHP_CodeSniffer
@@ -26,7 +26,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	/**
 	 * Superglobals to give an error for when not accompanied by an nonce check.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var array
 	 */
@@ -37,7 +37,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 *
 	 * If the variable is also in the error list, that takes precedence.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var array
 	 */
@@ -46,7 +46,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	/**
 	 * Custom list of functions which verify nonces.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var array
 	 */
@@ -55,7 +55,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	/**
 	 * List of the functions which verify nonces.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var array
 	 */
@@ -68,7 +68,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	/**
 	 * Whether the custom functions have been added to the default list yet.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var bool
 	 */
@@ -153,8 +153,9 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	/**
 	 * Check if this token has an associated nonce check.
 	 *
-	 * @param int                  $stackPtr  The position of the current token in
-	 *                                        the stack of tokens.
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack of tokens.
 	 *
 	 * @return bool
 	 */
@@ -247,9 +248,9 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	/**
 	 * Check if a token is inside of an isset() or empty() statement.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
-	 * @param int $stackPtr                   The index of the token in the stack.
+	 * @param int $stackPtr The index of the token in the stack.
 	 *
 	 * @return bool Whether the token is inside an isset() or empty() statement.
 	 */
