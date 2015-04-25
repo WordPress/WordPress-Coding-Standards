@@ -129,7 +129,11 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			return;
 		}
 
-		if ( $this->has_nonce_check( $stackPtr, $phpcsFile ) ) {
+		if ( $this->is_only_sanitized( $stackPtr ) ) {
+			return;
+		}
+
+		if ( $this->has_nonce_check( $stackPtr ) ) {
 			return;
 		}
 
@@ -260,6 +264,125 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		reset( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 
 		return in_array( $this->tokens[ $open_parenthesis - 1 ]['code'], array( T_ISSET, T_EMPTY ) );
+	}
+
+	/**
+	 * Check if something is only being sanitized.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is only within a sanitization.
+	 */
+	protected function is_only_sanitized( $stackPtr ) {
+
+		// If it isn't being sanitized at all.
+		if ( ! $this->is_sanitized( $stackPtr ) ) {
+			return false;
+		}
+
+		// If this isn't set, we know the value must have only been casted, because
+		// is_sanitized() would have returned false otherwise.
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return true;
+		}
+
+		// At this point we're expecting the value to have not been casted. If it
+		// was, it wasn't *only* casted, because it's also in a function.
+		if ( $this->is_safe_casted( $stackPtr ) ) {
+			return false;
+		}
+
+		// The only parentheses should belong to the sanitizing function. If there's
+		// more than one set, this isn't *only* sanitization.
+		return ( count( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) === 1 );
+	}
+
+	/**
+	 * Check if something is being casted to a safe value.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token being casted.
+	 */
+	protected function is_safe_casted( $stackPtr ) {
+
+		// Get the last non-empty token.
+		$prev = $this->phpcsFile->findPrevious(
+			PHP_CodeSniffer_Tokens::$emptyTokens
+			, $stackPtr - 1
+			, null
+			, true
+		);
+
+		// Check if it is a safe cast.
+		return in_array(
+			$this->tokens[ $prev ]['code']
+			, array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST )
+		);
+	}
+
+	/**
+	 * Check if something is being sanitized.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token being sanitized.
+	 */
+	protected function is_sanitized( $stackPtr ) {
+
+		// First we check if it is being casted to a safe value.
+		if ( $this->is_safe_casted( $stackPtr ) ) {
+			return true;
+		}
+
+		// If this isn't within a function call, we know already that it's not safe.
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		// Get the function that it's in.
+		end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$function_opener = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$functionPtr = key( $function_opener ) - 1;
+		$function = $this->tokens[ $functionPtr ];
+
+		// If it is just being unset, the value isn't used at all, so it's safe.
+		if ( T_UNSET === $function['code'] ) {
+			return true;
+		}
+
+		// If this isn't a call to a function, it sure isn't sanitizing function.
+		if ( T_STRING !== $function['code'] ) {
+			return false;
+		}
+
+		$functionName = $function['content'];
+
+		// Arrays might be sanitized via array_map().
+		if ( 'array_map' === $functionName ) {
+
+			// Get the first parameter (name of function being used on the array).
+			$mapped_function = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens
+				, $function_opener + 1
+				, $function_opener['parenthesis_closer']
+				, true
+			);
+
+			// If we're able to resolve the function name, do so.
+			if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
+				$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
+			}
+		}
+
+		// Check if this is a sanitizing function.
+		return in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$sanitizingFunctions );
 	}
 
 } // end class

@@ -97,3 +97,21 @@ function foo_4() {
 
 	check_ajax_referer( 'something' );
 }
+
+// Sanitization before the nonce check is permitted.
+function sanitization_allowed() {
+
+	$foo = (int) $_POST['foo']; // OK
+	$bar = sanitize_key( $_POST['bar'] ); // OK
+
+	check_ajax_referer( "something-{$foo}-{$bar}" );
+}
+
+// The value must only be sanitized though.
+function foo_5() {
+
+	do_something( (int) $_POST['foo'] ); // Bad
+	do_something( sanitize_key( $_POST['bar'] ) ); // Bad
+
+	check_ajax_referer( 'something' );
+}
