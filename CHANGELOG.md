@@ -38,7 +38,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ### Removed
 - Errors for mixed key/keyless array elements in the `WordPress.Arrays.ArrayDeclaration` sniff.
-- BOM from `WordPress.WhiteSpace/OperatorSpacing` sniff file.
+- BOM from `WordPress.WhiteSpace.OperatorSpacing` sniff file.
 - `$content_width` from the list of non-overwritable globals in the `WordPress.Variables.GlobalVariables` sniff.
 - `WordPress.Arrays.ArrayAssignmentRestrictions` sniff from the `WordPress-VIP` ruleset.
 
@@ -51,7 +51,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - `WordPress.Arrays.ArrayDeclaration` sniff not ignoring doc comments.
 - Link to phpStorm instructions in `README.md`.
 - Poor performance of the `WordPress.Arrays.ArrayAssignmentRestrictions` sniff.
-- Poor performance of teh `WordPress.Files.FileName` sniff.
+- Poor performance of the `WordPress.Files.FileName` sniff.
 
 ## [0.3.0] - 2014-12-11
 
