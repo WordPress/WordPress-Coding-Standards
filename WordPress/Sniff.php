@@ -46,7 +46,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @var string[]
 	 */
-	protected static $input_superglobals = array( '$_COOKIE', '$_GET', '$_FILE', '$_POST', '$_REQUEST', '$_SERVER' );
+	protected static $input_superglobals = array( '$_COOKIE', '$_GET', '$_FILES', '$_POST', '$_REQUEST', '$_SERVER' );
 
 	/**
 	 * Initialize the class for the current process.
