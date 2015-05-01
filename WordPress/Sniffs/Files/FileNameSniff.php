@@ -23,7 +23,6 @@
 class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
 {
 
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -43,25 +42,20 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff
      * @param int                  $stackPtr  The position of the current token in the
      *                                        stack passed in $tokens.
      *
-     * @return void
+     * @return int
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
-
-        // Make sure this is the first PHP open tag so we don't process
-        // the same file twice.
-        $prevOpenTag = $phpcsFile->findPrevious(T_OPEN_TAG, ($stackPtr - 1));
-        if ($prevOpenTag !== false) {
-            return;
-        }
 
         $fileName = basename($phpcsFile->getFileName());
+
         if (strpos($fileName, '_') !== false) {
                 $expected = str_replace('_', '-', $fileName);
-                $error    = ucfirst('Filename "'.$fileName.'" with underscores found; use '.$expected.' instead');
-                $phpcsFile->addError($error, $stackPtr);
+                $error    = 'Filename "'.$fileName.'" with underscores found; use '.$expected.' instead';
+                $phpcsFile->addError($error, $stackPtr, 'UnderscoresNotAllowed');
         }
+
+        return $phpcsFile->numTokens + 1;
 
     }//end process()
 

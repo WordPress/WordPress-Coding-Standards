@@ -72,9 +72,9 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 		$error = 'Filesystem writes are forbidden, you should not be using %s()';
 
 		if ( $this->error === true ) {
-			$phpcsFile->addError( $error, $stackPtr, '', $data );
+			$phpcsFile->addError( $error, $stackPtr, 'FileWriteDetected', $data );
 		} else {
-			$phpcsFile->addWarning( $error, $stackPtr, '', $data );
+			$phpcsFile->addWarning( $error, $stackPtr, 'FileWriteDetected', $data );
 		}
 
 	}//end addError()

@@ -62,10 +62,21 @@ foreach( $_POST as $key => $value ) {
 
 unset( $_GET['test'] ); // ok
 
-echo (int) $_GET['test'];
+output( "some string {$_POST['some_var']}" ); // Bad
+
+echo (int) $_GET['test']; // ok
+some_func( $some_arg, (int) $_GET['test'] ); // ok
 
 function zebra() {
 	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {
 		echo esc_html( $_POST['bar'] ); // ok
 	}
 }
+
+echo $_GET['test']; // WPCS: sanitization OK.
+
+echo array_map( 'sanitize_text_field', $_GET['test'] ); // OK
+echo array_map( 'foo', $_GET['test'] ); // Bad
+echo array_map( $something, $_GET['test'] ); // Bad
+echo array_map( array( $obj, 'func' ), $_GET['test'] ); // Bad
+echo array_map( array( $obj, 'sanitize_text_field' ), $_GET['test'] ); // Bad

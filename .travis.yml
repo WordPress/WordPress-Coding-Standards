@@ -1,3 +1,5 @@
+sudo: false
+
 language:
     - php
 
@@ -5,11 +7,18 @@ php:
     - 5.3
     - 5.4
     - 5.5
+    - 5.6
+    - nightly
+    - hhvm
+
+matrix:
+  allow_failures:
+    - php: nightly
+    - php: hhvm
 
 before_script:
-    - export PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
     - export PHPCS_DIR=/tmp/phpcs
-    - export PHPCS_BRANCH=phpcs-fixer
+    - export PHPCS_BRANCH=master
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_DIR/scripts/phpcs --config-set installed_paths $(pwd)
 

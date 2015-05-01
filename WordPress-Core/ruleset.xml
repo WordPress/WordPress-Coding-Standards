@@ -4,6 +4,10 @@
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#brace-style -->
 	<rule ref="Generic.ControlStructures.InlineControlStructure" />
+	<rule ref="Squiz.ControlStructures.ControlSignature" />
+	<rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
+		<severity>0</severity>
+	</rule>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>

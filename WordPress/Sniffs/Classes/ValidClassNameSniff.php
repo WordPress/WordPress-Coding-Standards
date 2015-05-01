@@ -64,7 +64,7 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
             $error  = 'Possible parse error: ';
             $error .= $tokens[$stackPtr]['content'];
             $error .= ' missing opening or closing brace';
-            $phpcsFile->addWarning($error, $stackPtr);
+            $phpcsFile->addWarning($error, $stackPtr, 'MissingBrace');
             return;
         }
 
@@ -81,7 +81,7 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
         if ($valid === false) {
             $type  = ucfirst($tokens[$stackPtr]['content']);
             $error = "$type name \"$name\" is not in camel caps format";
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps');
         }
 
     }//end process()
