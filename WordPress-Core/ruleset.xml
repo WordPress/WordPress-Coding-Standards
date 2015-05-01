@@ -38,6 +38,14 @@
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
 		<severity>0</severity>
 	</rule>
+	
+	<!-- Added for lowercase "as" keyword check -->
+	<rule ref="Squiz.ControlStructures.ForEachLoopDeclaration">
+		<properties>
+			<property name="requiredSpacesAfterOpen" value="1"/>
+			<property name="requiredSpacesBeforeClose" value="1"/>
+		</properties>
+	</rule>
 
 	<rule ref="Generic.Files.LineEndings">
 		<properties>
