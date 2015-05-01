@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. )
  *
@@ -9,8 +10,7 @@
  * @author   Shady Sharaf <shady@x-team.com>
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
  */
-class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
-{
+class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff {
 
 	/**
 	 * Check for validation functions for a variable within its own parenthesis only
@@ -23,15 +23,12 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
-				T_VARIABLE,
-				T_DOUBLE_QUOTED_STRING,
-			   );
-
-	}//end register()
-
+			T_VARIABLE,
+			T_DOUBLE_QUOTED_STRING,
+		);
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -42,17 +39,17 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
 		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 		$superglobals = WordPress_Sniff::$input_superglobals;
 
 		// Handling string interpolation
-		if ( $tokens[ $stackPtr ]['code'] === T_DOUBLE_QUOTED_STRING ) {
+		if ( T_DOUBLE_QUOTED_STRING === $tokens[ $stackPtr ]['code'] ) {
 			foreach ( $superglobals as $superglobal ) {
 				if ( false !== strpos( $tokens[ $stackPtr ]['content'], $superglobal ) ) {
-					$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable: %s', $stackPtr, null, array( $tokens[$stackPtr]['content'] ) );
+					$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable: %s', $stackPtr, null, array( $tokens[ $stackPtr ]['content'] ) );
 					return;
 				}
 			}
@@ -61,8 +58,9 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 		}
 
 		// Check if this is a superglobal.
-		if ( ! in_array( $tokens[$stackPtr]['content'], $superglobals ) )
+		if ( ! in_array( $tokens[ $stackPtr ]['content'], $superglobals ) ) {
 			return;
+		}
 
 		// If we're overriding a superglobal with an assignment, no need to test
 		if ( $this->is_assignment( $stackPtr ) ) {
@@ -83,7 +81,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 
 			// Search for casting.
 			if ( ! $this->is_safe_casted( $stackPtr ) ) {
-				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
+				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[ $stackPtr ]['content'] ) );
 				return;
 			}
 		}
@@ -96,7 +94,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {
-			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', array( $tokens[ $stackPtr ]['content'] ) );
 			// return; // Should we just return and not look for sanitizing functions ?
 		}
 
@@ -106,10 +104,11 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff
 
 		// Now look for sanitizing functions
 		if ( ! $this->is_sanitized( $stackPtr ) ) {
-			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[$stackPtr]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[ $stackPtr ]['content'] ) );
 		}
 
 		return;
-	}//end process()
 
-}//end class
+	} // end process()
+
+} // end class
