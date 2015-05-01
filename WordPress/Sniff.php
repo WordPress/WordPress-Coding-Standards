@@ -409,9 +409,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// Get the function that it's in.
-		end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$function_opener = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-		$functionPtr = key( $function_opener ) - 1;
+		$function_closer = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$functionPtr = $function_opener - 1;
 		$function = $this->tokens[ $functionPtr ];
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
@@ -433,7 +433,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$mapped_function = $this->phpcsFile->findNext(
 				PHP_CodeSniffer_Tokens::$emptyTokens
 				, $function_opener + 1
-				, $function_opener['parenthesis_closer']
+				, $function_closer
 				, true
 			);
 
