@@ -590,6 +590,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 		}
 
+		return false;
 	}
 }
 
