@@ -592,6 +592,72 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		return false;
 	}
+
+	/**
+	 * Check whether a variable is being compared to another value.
+	 *
+	 * E.g., $var === 'foo', 1 <= $var, etc.
+	 *
+	 * Also recognizes `switch ( $var )`.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of this token in the stack.
+	 *
+	 * @return bool Whether this is a comparison.
+	 */
+	protected function is_comparison( $stackPtr ) {
+
+		// We first check if this is a switch statement (switch ( $var )).
+		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+
+			if (
+				isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
+				&& T_SWITCH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+			) {
+				return true;
+			}
+		}
+
+		// Find the previous non-empty token. We check before the var first because
+		// yoda conditions are usually expected.
+		$previous_token = $this->phpcsFile->findPrevious(
+			PHP_CodeSniffer_Tokens::$emptyTokens
+			, $stackPtr - 1
+			, null
+			, true
+		);
+
+		if ( in_array( $this->tokens[ $previous_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
+			return true;
+		}
+
+		// Maybe the comparison operator is after this.
+		$next_token = $this->phpcsFile->findNext(
+			PHP_CodeSniffer_Tokens::$emptyTokens
+			, $stackPtr + 1
+			, null
+			, true
+		);
+
+		// This might be an opening square bracket in the case of arrays ($var['a']).
+		while ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
+
+			$next_token = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens
+				, $this->tokens[ $next_token ]['bracket_closer'] + 1
+				, null
+				, true
+			);
+		}
+
+		if ( in_array( $this->tokens[ $next_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
+			return true;
+		}
+
+		return false;
+	}
 }
 
 // EOF

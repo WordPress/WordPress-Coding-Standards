@@ -88,6 +88,11 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			return;
 		}
 
+		// If this is a comparison ('a' == $_POST['foo']), sanitization isn't needed.
+		if ( $this->is_comparison( $stackPtr ) ) {
+			return;
+		}
+
 		// Now look for sanitizing functions
 		if ( ! $this->is_sanitized( $stackPtr ) ) {
 			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[ $stackPtr ]['content'] ) );

@@ -83,3 +83,11 @@ echo array_map( array( $obj, 'sanitize_text_field' ), $_GET['test'] ); // Bad
 
 // Sanitized but not validated.
 $foo = (int) $_POST['foo6']; // Bad
+
+// Non-assignment checks are OK.
+if ( 'bar' === $_POST['foo'] ) {} // OK
+if ( $_GET['test'] != 'a' ) {} // OK
+if ( 'bar' === do_something( $_POST['foo'] ) ) {} // Bad
+
+switch ( $_POST['foo'] ) {} // OK
+switch ( do_something( $_POST['foo'] ) ) {} // Bad
