@@ -72,20 +72,6 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			return;
 		}
 
-		// If this isn't in a function call we can perform the sanitization check easily.
-		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-
-			if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
-				return;
-			}
-
-			// Search for casting.
-			if ( ! $this->is_safe_casted( $stackPtr ) ) {
-				$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[ $stackPtr ]['content'] ) );
-				return;
-			}
-		}
-
 		$array_key = $this->get_array_access_key( $stackPtr );
 
 		if ( empty( $array_key ) ) {
