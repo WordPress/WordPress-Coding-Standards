@@ -90,6 +90,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		'get_the_term_list',
 		'get_the_title',
 		'has_post_thumbnail',
+		'in_array',
+		'is_array',
 		'is_attachment',
 		'next_comments_link',
 		'next_image_link',
