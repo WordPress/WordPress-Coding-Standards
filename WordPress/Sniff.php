@@ -446,6 +446,218 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Check if this is a sanitizing function.
 		return in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$sanitizingFunctions );
 	}
+
+	/**
+	 * Get the index key of an array variable.
+	 *
+	 * E.g., "bar" in $foo['bar'].
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return string|false The array index key whose value is being accessed.
+	 */
+	protected function get_array_access_key( $stackPtr ) {
+
+		// Find the next non-empty token.
+		$open_bracket = $this->phpcsFile->findNext(
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			$stackPtr + 1,
+			null,
+			true
+		);
+
+		// If it isn't a bracket, this isn't an array-access.
+		if ( T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code'] ) {
+			return false;
+		}
+
+		$key = $this->phpcsFile->getTokensAsString(
+			$open_bracket + 1
+			, $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1
+		);
+
+		return trim( $key );
+	}
+
+	/**
+	 * Check if the existence of a variable is validated with isset() or empty().
+	 *
+	 * When $in_condition_only is false, (which is the default), this is considered
+	 * valid:
+	 *
+	 * ```php
+	 * if ( isset( $var ) ) {
+	 *     // Do stuff, like maybe return or exit (but could be anything)
+	 * }
+	 *
+	 * foo( $var );
+	 * ```
+	 *
+	 * When it is true, that would be invalid, the use of the variable must be within
+	 * the scope of the validating condition, like this:
+	 *
+	 * ```php
+	 * if ( isset( $var ) ) {
+	 *     foo( $var );
+	 * }
+	 * ```
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int    $stackPtr          The index of this token in the stack.
+	 * @param string $array_key         An array key to check for ("bar" in $foo['bar']).
+	 * @param bool   $in_condition_only Whether to require that this use of the
+	 *                                  variable occur within the scope of the
+	 *                                  validating condition, or just in the same
+	 *                                  scope as it (default).
+	 *
+	 * @return bool Whether the var is validated.
+	 */
+	protected function is_validated( $stackPtr, $array_key = null, $in_condition_only = false ) {
+
+		if ( $in_condition_only ) {
+
+			// This is a stricter check, requiring the variable to be used only
+			// within the validation condition.
+
+			// If there are no conditions, there's no validation.
+			if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+				return false;
+			}
+
+			$conditions = $this->tokens[ $stackPtr ]['conditions'];
+			end( $conditions ); // Get closest condition
+			$conditionPtr = key( $conditions );
+			$condition = $this->tokens[ $conditionPtr ];
+
+			if ( ! isset( $condition['parenthesis_opener'] ) ) {
+
+				$this->phpcsFile->addError(
+					'Possible parse error, condition missing open parenthesis.',
+					$conditionPtr,
+					'IsValidatedMissingConditionOpener'
+				);
+
+				return false;
+			}
+
+			$scope_start = $condition['parenthesis_opener'];
+			$scope_end   = $condition['parenthesis_closer'];
+
+		} else {
+
+			// We are are more loose, requiring only that the variable be validated
+			// in the same function/file scope as it is used.
+
+			// Check if we are in a function.
+			$function = $this->phpcsFile->findPrevious( T_FUNCTION, $stackPtr );
+
+			// If so, we check only within the function, otherwise the whole file.
+			if ( false !== $function && $stackPtr < $this->tokens[ $function ]['scope_closer'] ) {
+				$scope_start = $this->tokens[ $function ]['scope_opener'];
+			} else {
+				$scope_start = 0;
+			}
+
+			$scope_end = $stackPtr;
+		}
+
+		for ( $i = $scope_start + 1; $i < $scope_end; $i++ ) {
+
+			if ( ! in_array( $this->tokens[ $i ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) ) {
+				continue;
+			}
+
+			$issetOpener = $this->phpcsFile->findNext( T_OPEN_PARENTHESIS, $i );
+			$issetCloser = $this->tokens[ $issetOpener ]['parenthesis_closer'];
+
+			// Look for this variable. We purposely stomp $i from the parent loop.
+			for ( $i = $issetOpener + 1; $i < $issetCloser; $i++ ) {
+
+				if ( T_VARIABLE !== $this->tokens[ $i ]['code'] ) {
+					continue;
+				}
+
+				// If we're checking for a specific array key (ex: 'hello' in
+				// $_POST['hello']), that mush match too.
+				if ( $array_key && $this->get_array_access_key( $i ) !== $array_key ) {
+					continue;
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether a variable is being compared to another value.
+	 *
+	 * E.g., $var === 'foo', 1 <= $var, etc.
+	 *
+	 * Also recognizes `switch ( $var )`.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of this token in the stack.
+	 *
+	 * @return bool Whether this is a comparison.
+	 */
+	protected function is_comparison( $stackPtr ) {
+
+		// We first check if this is a switch statement (switch ( $var )).
+		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+
+			if (
+				isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
+				&& T_SWITCH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+			) {
+				return true;
+			}
+		}
+
+		// Find the previous non-empty token. We check before the var first because
+		// yoda conditions are usually expected.
+		$previous_token = $this->phpcsFile->findPrevious(
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			$stackPtr - 1,
+			null,
+			true
+		);
+
+		if ( in_array( $this->tokens[ $previous_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
+			return true;
+		}
+
+		// Maybe the comparison operator is after this.
+		$next_token = $this->phpcsFile->findNext(
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			$stackPtr + 1,
+			null,
+			true
+		);
+
+		// This might be an opening square bracket in the case of arrays ($var['a']).
+		while ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
+
+			$next_token = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				$this->tokens[ $next_token ]['bracket_closer'] + 1,
+				null,
+				true
+			);
+		}
+
+		if ( in_array( $this->tokens[ $next_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
+			return true;
+		}
+
+		return false;
+	}
 }
 
 // EOF

@@ -30,7 +30,7 @@ $empty = (
 	empty( $_POST['foo4'] )
 );
 
-$foo = $_POST['bar']; // Bad
+$foo = $_POST['bar']; // Bad x 2
 
 function foo() {
 	// Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
@@ -80,3 +80,14 @@ echo array_map( 'foo', $_GET['test'] ); // Bad
 echo array_map( $something, $_GET['test'] ); // Bad
 echo array_map( array( $obj, 'func' ), $_GET['test'] ); // Bad
 echo array_map( array( $obj, 'sanitize_text_field' ), $_GET['test'] ); // Bad
+
+// Sanitized but not validated.
+$foo = (int) $_POST['foo6']; // Bad
+
+// Non-assignment checks are OK.
+if ( 'bar' === $_POST['foo'] ) {} // OK
+if ( $_GET['test'] != 'a' ) {} // OK
+if ( 'bar' === do_something( $_POST['foo'] ) ) {} // Bad
+
+switch ( $_POST['foo'] ) {} // OK
+switch ( do_something( $_POST['foo'] ) ) {} // Bad

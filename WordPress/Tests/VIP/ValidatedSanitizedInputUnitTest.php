@@ -29,12 +29,15 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 			7 => 1,
 			10 => 1,
 			20 => 1,
-			33 => 1,
+			33 => 2,
 			65 => 1,
 			79 => 1,
 			80 => 1,
 			81 => 1,
 			82 => 1,
+			85 => 1,
+			90 => 1,
+			93 => 1,
 			);
 
 	}//end getErrorList()
