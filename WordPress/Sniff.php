@@ -623,10 +623,10 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Find the previous non-empty token. We check before the var first because
 		// yoda conditions are usually expected.
 		$previous_token = $this->phpcsFile->findPrevious(
-			PHP_CodeSniffer_Tokens::$emptyTokens
-			, $stackPtr - 1
-			, null
-			, true
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			$stackPtr - 1,
+			null,
+			true
 		);
 
 		if ( in_array( $this->tokens[ $previous_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
@@ -635,20 +635,20 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// Maybe the comparison operator is after this.
 		$next_token = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens
-			, $stackPtr + 1
-			, null
-			, true
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			$stackPtr + 1,
+			null,
+			true
 		);
 
 		// This might be an opening square bracket in the case of arrays ($var['a']).
 		while ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
 
 			$next_token = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens
-				, $this->tokens[ $next_token ]['bracket_closer'] + 1
-				, null
-				, true
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				$this->tokens[ $next_token ]['bracket_closer'] + 1,
+				null,
+				true
 			);
 		}
 
