@@ -462,10 +462,10 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// Find the next non-empty token.
 		$open_bracket = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens
-			, $stackPtr + 1
-			, null
-			, true
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			$stackPtr + 1,
+			null,
+			true
 		);
 
 		// If it isn't a bracket, this isn't an array-access.
@@ -535,9 +535,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			if ( ! isset( $condition['parenthesis_opener'] ) ) {
 
 				$this->phpcsFile->addError(
-					'Possible parse error, condition missing open parenthesis.'
-					, $conditionPtr
-					, 'IsValidatedMissingConditionOpener'
+					'Possible parse error, condition missing open parenthesis.',
+					$conditionPtr,
+					'IsValidatedMissingConditionOpener'
 				);
 
 				return false;
