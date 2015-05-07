@@ -2,12 +2,8 @@
 	"name"       : "wp-coding-standards/wpcs",
 	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
 	"keywords"   : ["phpcs", "standards", "WordPress"],
-    "license"    : "MIT",
+	"license"    : "MIT",
 	"authors"    : [
-		{
-			"name"    : "X-Team",
-			"homepage": "http://x-team.com/"
-		},
 		{
 			"name"    : "Contributors",
 			"homepage": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors"
