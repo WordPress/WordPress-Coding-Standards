@@ -6,7 +6,7 @@ while ( have_posts() ) {
 
 	// OK
 	?>
-	<a href="<?php the_permalink(); ?>" alt="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
+	<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
 	<?php
 
 	the_content(); // OK
@@ -16,7 +16,7 @@ while ( have_posts() ) {
 
 <h2><?php echo $title; // Bad ?></h2>
 <h2><?php echo esc_html( $title ); // OK ?></h2>
-<h2><?php echo apply_filters( 'the_title', $title ); // Bad, no sanitizing function ?></h2>
+<h2><?php echo apply_filters( 'the_title', $title ); // Bad, no escaping function ?></h2>
 
 <?php
 // issue:#53
@@ -50,9 +50,9 @@ echo filter_input( INPUT_GET, $bar, FILTER_SANITIZE_SPECIAL_CHARS );
 
 echo '<input type="checkbox" name="' . esc_attr( 'field[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
 
-echo ent2ncr( $text );
+echo ent2ncr( $text ); // Bad
 
-echo number_format ( 1024 );
+echo number_format( 1024 );
 
 echo ent2ncr( esc_html( $_data ) );
 
