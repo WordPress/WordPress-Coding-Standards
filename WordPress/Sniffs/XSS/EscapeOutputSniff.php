@@ -10,7 +10,7 @@
  */
 
 /**
- * Verifies that all outputted strings are sanitized
+ * Verifies that all outputted strings are escaped.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
