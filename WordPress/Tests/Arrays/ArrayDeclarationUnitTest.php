@@ -65,6 +65,7 @@ class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitT
     {
         return array(
                 12 => 2,
+	            208 => 2,
                 );
 
     }//end getWarningList()
