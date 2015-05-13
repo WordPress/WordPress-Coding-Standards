@@ -19,6 +19,24 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 	public $check_validation_in_scope_only = false;
 
 	/**
+	 * Custom list of functions that sanitize the values passed to them.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var string[]
+	 */
+	public $customSanitizingFunctions = array();
+
+	/**
+	 * Whether the custom list of functions has been added to the defaults yet.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var bool
+	 */
+	protected static $addedCustomFunctions = false;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -40,6 +58,17 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+		// Merge any custom functions with the defaults, if we haven't already.
+		if ( ! self::$addedCustomFunctions ) {
+
+			WordPress_Sniff::$sanitizingFunctions = array_merge(
+				WordPress_Sniff::$sanitizingFunctions,
+				array_flip( $this->customSanitizingFunctions )
+			);
+
+			self::$addedCustomFunctions = true;
+		}
 
 		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();

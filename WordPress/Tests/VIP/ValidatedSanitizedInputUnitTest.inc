@@ -16,9 +16,9 @@ if ( isset( $_POST['foo2'] ) ) {
 
 
 if ( isset( $_POST['foo3'] ) ) {
-	bar( esc_html( $_POST['foo3'] ) ); // Good, validated and sanitized
+	bar( sanitize_text_field( $_POST['foo3'] ) ); // Good, validated and sanitized
 	bar( $_POST['foo3'] ); // Error, validated but not sanitized
-	bar( esc_html( $_POST['foo3'] ) ); // Good, validated and sanitized
+	bar( sanitize_text_field( $_POST['foo3'] ) ); // Good, validated and sanitized
 }
 
 // Should all be OK
@@ -34,13 +34,13 @@ $foo = $_POST['bar']; // Bad x 2
 
 function foo() {
 	// Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
-	if ( ! isset( $_REQUEST['bar1'] ) || ! foo( esc_attr( $_REQUEST['bar1'] ) ) ) {
+	if ( ! isset( $_REQUEST['bar1'] ) || ! foo( sanitize_text_field( $_REQUEST['bar1'] ) ) ) {
 		wp_die( 1 );
 	}
 }
 
 // Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
-if ( ! isset( $_REQUEST['bar2'] ) || ! foo( esc_attr( $_REQUEST['bar2'] ) ) ) { // Ok
+if ( ! isset( $_REQUEST['bar2'] ) || ! foo( sanitize_text_field( $_REQUEST['bar2'] ) ) ) { // Ok
 	wp_die( 1 );
 }
 

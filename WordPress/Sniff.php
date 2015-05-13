@@ -29,9 +29,292 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $nonceVerificationFunctions = array(
-		'wp_verify_nonce',
-		'check_admin_referer',
-		'check_ajax_referer',
+		'wp_verify_nonce' => true,
+		'check_admin_referer' => true,
+		'check_ajax_referer' => true,
+	);
+
+	/**
+	 * Functions that escape values for display.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var array
+	 */
+	public static $escapingFunctions = array(
+		'absint' => true,
+		'esc_attr__' => true,
+		'esc_attr_e' => true,
+		'esc_attr_x' => true,
+		'esc_attr' => true,
+		'esc_html__' => true,
+		'esc_html_e' => true,
+		'esc_html_x' => true,
+		'esc_html' => true,
+		'esc_js' => true,
+		'esc_sql' => true,
+		'esc_textarea' => true,
+		'esc_url_raw' => true,
+		'esc_url' => true,
+		'filter_input' => true,
+		'filter_var' => true,
+		'intval' => true,
+		'json_encode' => true,
+		'like_escape' => true,
+		'number_format' => true,
+		'rawurlencode' => true,
+		'sanitize_html_class' => true,
+		'sanitize_user_field' => true,
+		'tag_escape' => true,
+		'urlencode_deep' => true,
+		'urlencode' => true,
+		'wp_json_encode' => true,
+		'wp_kses_allowed_html' => true,
+		'wp_kses_data' => true,
+		'wp_kses_post' => true,
+		'wp_kses' => true,
+	);
+
+	/**
+	 * Functions whose output is automatically escaped for display.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var array
+	 */
+	public static $autoEscapedFunctions = array(
+		'allowed_tags' => true,
+		'bloginfo' => true,
+		'body_class' => true,
+		'calendar_week_mod' => true,
+		'cancel_comment_reply_link' => true,
+		'category_description' => true,
+		'checked' => true,
+		'comment_author_email_link' => true,
+		'comment_author_email' => true,
+		'comment_author_IP' => true,
+		'comment_author_link' => true,
+		'comment_author_rss' => true,
+		'comment_author_url_link' => true,
+		'comment_author_url' => true,
+		'comment_author' => true,
+		'comment_class' => true,
+		'comment_date' => true,
+		'comment_excerpt' => true,
+		'comment_form_title' => true,
+		'comment_form' => true,
+		'comment_id_fields' => true,
+		'comment_ID' => true,
+		'comment_reply_link' => true,
+		'comment_text_rss' => true,
+		'comment_text' => true,
+		'comment_time' => true,
+		'comment_type' => true,
+		'comments_link' => true,
+		'comments_number' => true,
+		'comments_popup_link' => true,
+		'comments_popup_script' => true,
+		'comments_rss_link' => true,
+		'delete_get_calendar_cache' => true,
+		'disabled' => true,
+		'do_shortcode_tag' => true,
+		'edit_bookmark_link' => true,
+		'edit_comment_link' => true,
+		'edit_post_link' => true,
+		'edit_tag_link' => true,
+		'get_archives_link' => true,
+		'get_attachment_link' => true,
+		'get_avatar' => true,
+		'get_bookmark_field' => true,
+		'get_bookmark' => true,
+		'get_calendar' => true,
+		'get_comment_author_link' => true,
+		'get_comment_date' => true,
+		'get_comment_time' => true,
+		'get_current_blog_id' => true,
+		'get_delete_post_link' => true,
+		'get_footer' => true,
+		'get_header' => true,
+		'get_search_form' => true,
+		'get_search_query' => true,
+		'get_sidebar' => true,
+		'get_template_part' => true,
+		'get_the_author_link' => true,
+		'get_the_author' => true,
+		'get_the_date' => true,
+		'get_the_post_thumbnail' => true,
+		'get_the_term_list' => true,
+		'get_the_title' => true,
+		'has_post_thumbnail' => true,
+		'is_attachment' => true,
+		'next_comments_link' => true,
+		'next_image_link' => true,
+		'next_post_link' => true,
+		'next_posts_link' => true,
+		'paginate_comments_links' => true,
+		'permalink_anchor' => true,
+		'post_class' => true,
+		'post_password_required' => true,
+		'post_type_archive_title' => true,
+		'posts_nav_link' => true,
+		'previous_comments_link' => true,
+		'previous_image_link' => true,
+		'previous_post_link' => true,
+		'previous_posts_link' => true,
+		'selected' => true,
+		'single_cat_title' => true,
+		'single_month_title' => true,
+		'single_post_title' => true,
+		'single_tag_title' => true,
+		'single_term_title' => true,
+		'sticky_class' => true,
+		'tag_description' => true,
+		'term_description' => true,
+		'the_attachment_link' => true,
+		'the_author_link' => true,
+		'the_author_meta' => true,
+		'the_author_posts_link' => true,
+		'the_author_posts' => true,
+		'the_author' => true,
+		'the_category_rss' => true,
+		'the_category' => true,
+		'the_content_rss' => true,
+		'the_content' => true,
+		'the_date_xml' => true,
+		'the_date' => true,
+		'the_excerpt_rss' => true,
+		'the_excerpt' => true,
+		'the_feed_link' => true,
+		'the_ID' => true,
+		'the_meta' => true,
+		'the_modified_author' => true,
+		'the_modified_date' => true,
+		'the_modified_time' => true,
+		'the_permalink' => true,
+		'the_post_thumbnail' => true,
+		'the_search_query' => true,
+		'the_shortlink' => true,
+		'the_tags' => true,
+		'the_taxonomies' => true,
+		'the_terms' => true,
+		'the_time' => true,
+		'the_title_attribute' => true,
+		'the_title_rss' => true,
+		'the_title' => true,
+		'vip_powered_wpcom' => true,
+		'walk_nav_menu_tree' => true,
+		'wp_attachment_is_image' => true,
+		'wp_dropdown_categories' => true,
+		'wp_dropdown_users' => true,
+		'wp_enqueue_script' => true,
+		'wp_generate_tag_cloud' => true,
+		'wp_get_archives' => true,
+		'wp_get_attachment_image' => true,
+		'wp_get_attachment_link' => true,
+		'wp_link_pages' => true,
+		'wp_list_authors' => true,
+		'wp_list_bookmarks' => true,
+		'wp_list_categories' => true,
+		'wp_list_comments' => true,
+		'wp_login_form' => true,
+		'wp_loginout' => true,
+		'wp_meta' => true,
+		'wp_nav_menu' => true,
+		'wp_register' => true,
+		'wp_shortlink_header' => true,
+		'wp_shortlink_wp_head' => true,
+		'wp_tag_cloud' => true,
+		'wp_title' => true,
+	);
+
+	/**
+	 * Functions that sanitize values.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var array
+	 */
+	public static $sanitizingFunctions = array(
+		'absint' => true,
+		'filter_input' => true,
+		'filter_var' => true,
+		'in_array' => true,
+		'intval' => true,
+		'is_array' => true,
+		'is_email' => true,
+		'number_format' => true,
+		'sanitize_bookmark_field' => true,
+		'sanitize_bookmark' => true,
+		'sanitize_email' => true,
+		'sanitize_file_name' => true,
+		'sanitize_html_class' => true,
+		'sanitize_key' => true,
+		'sanitize_meta' => true,
+		'sanitize_mime_type' => true,
+		'sanitize_option' => true,
+		'sanitize_sql_orderby' => true,
+		'sanitize_term_field' => true,
+		'sanitize_term' => true,
+		'sanitize_text_field' => true,
+		'sanitize_title_for_query' => true,
+		'sanitize_title_with_dashes' => true,
+		'sanitize_title' => true,
+		'sanitize_user_field' => true,
+		'sanitize_user' => true,
+		'validate_file' => true,
+		'wp_kses_allowed_html' => true,
+		'wp_kses_data' => true,
+		'wp_kses_post' => true,
+		'wp_kses' => true,
+		'wp_parse_id_list' => true,
+		'wp_redirect' => true,
+		'wp_safe_redirect' => true,
+	);
+
+	/**
+	 * Functions that format strings.
+	 *
+	 * These functions are often used for formatting values just before output, and
+	 * it is common practice to escape the individual parameters passed to them as
+	 * needed instead of escaping the entire result. This is especially true when the
+	 * string being formatted contains HTML, which makes escaping the full result
+	 * more difficult.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var array
+	 */
+	public static $formattingFunctions = array(
+		'ent2ncr' => true,
+		'sprintf' => true,
+		'vsprintf' => true,
+		'wp_sprintf' => true,
+	);
+
+
+	/**
+	 * Functions which print output incorporating the values passed to them.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var array
+	 */
+	public static $printingFunctions = array(
+		'_deprecated_argument' => true,
+		'_deprecated_file' => true,
+		'_deprecated_function' => true,
+		'_doing_it_wrong' => true,
+		'_e' => true,
+		'_ex' => true,
+		'die' => true,
+		'echo' => true,
+		'exit' => true,
+		'print' => true,
+		'printf' => true,
+		'trigger_error' => true,
+		'user_error' => true,
+		'vprintf' => true,
+		'wp_die' => true,
 	);
 
 	/**
@@ -294,7 +577,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( in_array( $tokens[ $i ]['content'], self::$nonceVerificationFunctions ) ) {
+			if ( isset( self::$nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
 				$last['nonce_check'] = $i;
 				return true;
 			}
@@ -444,7 +727,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// Check if this is a sanitizing function.
-		return in_array( $functionName, WordPress_Sniffs_XSS_EscapeOutputSniff::$sanitizingFunctions );
+		return isset( self::$sanitizingFunctions[ $functionName ] );
 	}
 
 	/**
