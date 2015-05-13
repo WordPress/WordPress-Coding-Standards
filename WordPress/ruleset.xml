@@ -3,6 +3,7 @@
 	<description>WordPress Coding Standards</description>
 
 	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 	<rule ref="WordPress-VIP"/>
 </ruleset>
