@@ -95,8 +95,8 @@
 		<exclude name="Generic.Commenting.DocComment.ContentBeforeClose"/>
 
 		<!-- WP allows @todo's in comments -->
-	    <exclude name="Generic.Commenting.Todo.CommentFound"/>
+		<exclude name="Generic.Commenting.Todo.CommentFound"/>
 		<!-- WP allows @todo's in comments -->
-	    <exclude name="Generic.Commenting.Todo.TaskFound"/>
+		<exclude name="Generic.Commenting.Todo.TaskFound"/>
 	</rule>
 </ruleset>
