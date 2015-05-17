@@ -41,6 +41,21 @@ For convenience of using `phpcs` as global command you might want to add path to
 
         phpcs --config-set installed_paths /path/to/wpcs
 
+
+To summarize:
+
+```bash
+cd ~/projects
+git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
+git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
+cd phpcs
+./scripts/phpcs --config-set installed_paths ../wpcs
+```
+
+And then add the `~/projects/phpcs/scripts` directory to your `PATH` environment variable via your `.bashrc`.
+
+You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
+
 ## How to use
 
 ### Command line
