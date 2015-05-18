@@ -12,8 +12,6 @@ php:
 env:
   - PHPCS_BRANCH=master
   - PHPCS_BRANCH=2.2.0
-  - PHPCS_BRANCH=2.1.0
-  - PHPCS_BRANCH=2.0.0
 
 matrix:
   include:
