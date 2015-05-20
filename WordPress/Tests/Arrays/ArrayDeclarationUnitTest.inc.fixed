@@ -1,19 +1,19 @@
 <?php
 
-$array_keyword_capitalize_first = Array(); // Bad
+$array_keyword_capitalize_first = array(); // Bad
 
 $array_keyword_must_be_lower_case = array(); // Good
 
-$array_declaration_with_space_after_keyword = array (); // Bad
+$array_declaration_with_space_after_keyword = array(); // Bad
 
-$space_between_parantheses_on_empty_array = array( ); // Bad
+$space_between_parantheses_on_empty_array = array(); // Bad
 
 $query_vars = array_merge(
-	array('post_type' => 'food'), // Bad, no spaces after opening and befoer closing paranthesis
+	array( 'post_type' => 'food' ), // Bad, no spaces after opening and befoer closing paranthesis
 	// ...
 	array(
 		'post_status' => 'private',
-		'orderby' => 'title' // Bad, no comma at the ending
+		'orderby' => 'title',// Bad, no comma at the ending
 	)
 );
 $query = new WP_Query( $query_vars );
@@ -37,7 +37,7 @@ $query_vars = array_merge(
 );
 $query = new WP_Query( $query_vars );
 
-$defaults = array( 'type'=>'post' ); // Bad, no spaces before and after double arrow
+$defaults = array( 'type' => 'post' ); // Bad, no spaces before and after double arrow
 wp_parse_args( $args, $defaults );
 
 class Foo {
@@ -205,4 +205,4 @@ array(
 array( 1, 2 );
 
 // Test for fixing of extra whitespace.
-array(   1, 2     );
+array( 1, 2 );

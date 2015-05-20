@@ -72,7 +72,9 @@
 		<severity>0</severity>
 	</rule>
 
-	<rule ref="WordPress.Arrays.ArrayDeclaration"/>
+	<rule ref="WordPress.Arrays.ArrayDeclaration">
+		<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+	</rule>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 	<rule ref="WordPress.Classes.ValidClassName"/>
 	<rule ref="WordPress.Files.FileName"/>
