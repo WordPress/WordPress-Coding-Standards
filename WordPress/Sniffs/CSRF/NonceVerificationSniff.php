@@ -88,7 +88,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		if ( ! self::$addedCustomFunctions ) {
 			self::$nonceVerificationFunctions = array_merge(
 				self::$nonceVerificationFunctions
-				, $this->customNonceVerificationFunctions
+				, array_flip( $this->customNonceVerificationFunctions )
 			);
 
 			self::$addedCustomFunctions = true;

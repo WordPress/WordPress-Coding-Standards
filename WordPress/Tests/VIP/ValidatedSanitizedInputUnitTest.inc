@@ -4,7 +4,7 @@ do_something( $_POST ); // OK
 
 do_something_with( $_POST['hello'] ); // Error for no validation, Error for no sanitizing
 
-echo esc_html( $_POST['foo1'] ); // Error for no validation
+echo sanitize_text_field( $_POST['foo1'] ); // Error for no validation
 
 if ( isset( $_POST['foo2'] ) ) {
 	bar( $_POST['foo2'] ); // Error for no sanitizing
@@ -16,9 +16,9 @@ if ( isset( $_POST['foo2'] ) ) {
 
 
 if ( isset( $_POST['foo3'] ) ) {
-	bar( esc_html( $_POST['foo3'] ) ); // Good, validated and sanitized
+	bar( sanitize_text_field( $_POST['foo3'] ) ); // Good, validated and sanitized
 	bar( $_POST['foo3'] ); // Error, validated but not sanitized
-	bar( esc_html( $_POST['foo3'] ) ); // Good, validated and sanitized
+	bar( sanitize_text_field( $_POST['foo3'] ) ); // Good, validated and sanitized
 }
 
 // Should all be OK
@@ -34,13 +34,13 @@ $foo = $_POST['bar']; // Bad x 2
 
 function foo() {
 	// Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
-	if ( ! isset( $_REQUEST['bar1'] ) || ! foo( esc_attr( $_REQUEST['bar1'] ) ) ) {
+	if ( ! isset( $_REQUEST['bar1'] ) || ! foo( sanitize_text_field( $_REQUEST['bar1'] ) ) ) {
 		wp_die( 1 );
 	}
 }
 
 // Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
-if ( ! isset( $_REQUEST['bar2'] ) || ! foo( esc_attr( $_REQUEST['bar2'] ) ) ) { // Ok
+if ( ! isset( $_REQUEST['bar2'] ) || ! foo( sanitize_text_field( $_REQUEST['bar2'] ) ) ) { // Ok
 	wp_die( 1 );
 }
 
@@ -48,7 +48,7 @@ function bar() {
 	if ( ! isset( $_GET['test'] ) ) {
 		return ;
 	}
-	echo esc_html( $_GET['test'] ); // Good
+	echo sanitize_text_field( $_GET['test'] ); // Good
 }
 
 $_REQUEST['wp_customize'] = 'on'; // ok
@@ -69,7 +69,7 @@ some_func( $some_arg, (int) $_GET['test'] ); // ok
 
 function zebra() {
 	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {
-		echo esc_html( $_POST['bar'] ); // ok
+		echo sanitize_text_field( $_POST['bar'] ); // ok
 	}
 }
 
@@ -91,3 +91,7 @@ if ( 'bar' === do_something( $_POST['foo'] ) ) {} // Bad
 
 switch ( $_POST['foo'] ) {} // OK
 switch ( do_something( $_POST['foo'] ) ) {} // Bad
+
+// Sanitization is required even when the value is being escaped.
+echo esc_html( $_POST['foo'] ); // Bad
+echo esc_html( sanitize_text_field( $_POST['foo'] ) ); // OK
