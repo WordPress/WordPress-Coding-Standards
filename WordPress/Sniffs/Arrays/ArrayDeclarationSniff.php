@@ -40,7 +40,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 		if ( T_WHITESPACE !== $tokens[ $arrayStart + 1 ]['code'] ) {
 
 			$warning = 'Missing space after array opener.';
-			$fix = $phpcsFile->addFixableWarning( $warning, $arrayStart, 'NoSpaceAfterOpenParenthesis' );
+			$fix = $phpcsFile->addFixableError( $warning, $arrayStart, 'NoSpaceAfterOpenParenthesis' );
 
 			if ( $fix ) {
 				$phpcsFile->fixer->addContent( $arrayStart, ' ' );
@@ -48,7 +48,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 		} elseif ( ' ' !== $tokens[ $arrayStart + 1 ]['content'] ) {
 
-			$fix = $phpcsFile->addFixableWarning(
+			$fix = $phpcsFile->addFixableError(
 				'Expected 1 space after array opener, found %s.',
 				$arrayStart,
 				'SpaceAfterArrayOpener',
@@ -63,7 +63,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 		if ( T_WHITESPACE !== $tokens[ $arrayEnd - 1 ]['code'] ) {
 
 			$warning = 'Missing space before array closer.';
-			$fix = $phpcsFile->addFixableWarning( $warning, $arrayEnd, 'NoSpaceAfterOpenParenthesis' );
+			$fix = $phpcsFile->addFixableError( $warning, $arrayEnd, 'NoSpaceAfterOpenParenthesis' );
 
 			if ( $fix ) {
 				$phpcsFile->fixer->addContentBefore( $arrayEnd, ' ' );
@@ -71,7 +71,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 		} elseif ( ' ' !== $tokens[ $arrayEnd - 1 ]['content'] ) {
 
-			$fix = $phpcsFile->addFixableWarning(
+			$fix = $phpcsFile->addFixableError(
 				'Expected 1 space before array closer, found %s.',
 				$arrayEnd,
 				'SpaceAfterArrayCloser',
