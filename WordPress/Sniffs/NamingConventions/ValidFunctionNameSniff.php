@@ -99,7 +99,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
         }
 
         // If this is a child class, it may have to use camelCase.
-        if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedClassName( $currScope, $phpcsFile ) ) {
+        if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedInterfaceName( $currScope, $phpcsFile ) ) {
             return;
         }
 
@@ -147,8 +147,8 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	 *
 	 * @return string
 	 */
-	public function findImplementedClassName( $stackPtr, $phpcsFile ) {
-        $tokens = $phpcsFile->getTokens();
+	public function findImplementedInterfaceName( $stackPtr, $phpcsFile ) {
+		$tokens = $phpcsFile->getTokens();
 
 		// Check for the existence of the token.
 		if ( isset( $tokens[ $stackPtr ] ) === false ) {
