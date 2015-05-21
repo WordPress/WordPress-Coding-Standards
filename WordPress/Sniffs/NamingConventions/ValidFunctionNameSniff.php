@@ -160,8 +160,8 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		if ( isset( $tokens[ $stackPtr ]['scope_closer'] ) === false ) {
 			return false;
 		}
-		$classCloserIndex = $tokens[ $stackPtr ]['scope_closer'];
-		$extendsIndex = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classCloserIndex );
+		$classOpenerIndex = $tokens[ $stackPtr ]['scope_opener'];
+		$extendsIndex = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classOpenerIndex );
 		if ( false === $extendsIndex ) {
 			return false;
 		}
@@ -170,7 +170,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			T_STRING,
 			T_WHITESPACE,
 		);
-		$end  = $phpcsFile->findNext( $find, ( $extendsIndex + 1 ), $classCloserIndex, true );
+		$end  = $phpcsFile->findNext( $find, ( $extendsIndex + 1 ), $classOpenerIndex + 1, true );
 		$name = $phpcsFile->getTokensAsString( ( $extendsIndex + 1 ), ( $end - $extendsIndex - 1 ) );
 		$name = trim( $name );
 		if ( $name === '' ) {
