@@ -31,5 +31,6 @@
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
 	<rule ref="WordPress.WP.EnqueuedResources"/>
 	<rule ref="WordPress.Variables.GlobalVariables"/>
+	<rule ref="WordPress.PHP.StrictComparisons" />
 
 </ruleset>
