@@ -95,3 +95,6 @@ switch ( do_something( $_POST['foo'] ) ) {} // Bad
 // Sanitization is required even when the value is being escaped.
 echo esc_html( $_POST['foo'] ); // Bad
 echo esc_html( sanitize_text_field( $_POST['foo'] ) ); // OK
+
+$current_tax_slug = isset( $_GET['a'] ) ? sanitize_key( $_GET['a'] ) : false;
+$current_tax_slug = isset( $_GET['a'] ) ? $_GET['a'] : false;
