@@ -28,6 +28,15 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 	public $customSanitizingFunctions = array();
 
 	/**
+	 * Custom sanitizing functions that implicitly unslash the values passed to them.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var string[]
+	 */
+	public $customUnslashingSanitizingFunctions = array();
+
+	/**
 	 * Whether the custom list of functions has been added to the defaults yet.
 	 *
 	 * @since 0.5.0
@@ -65,6 +74,11 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			WordPress_Sniff::$sanitizingFunctions = array_merge(
 				WordPress_Sniff::$sanitizingFunctions,
 				array_flip( $this->customSanitizingFunctions )
+			);
+
+			WordPress_Sniff::$unslashingSanitizingFunctions = array_merge(
+				WordPress_Sniff::$unslashingSanitizingFunctions,
+				array_flip( $this->customUnslashingSanitizingFunctions )
 			);
 
 			self::$addedCustomFunctions = true;
@@ -123,7 +137,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		}
 
 		// Now look for sanitizing functions
-		if ( ! $this->is_sanitized( $stackPtr ) ) {
+		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
 			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[ $stackPtr ]['content'] ) );
 		}
 

@@ -272,6 +272,19 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * Sanitizing functions that implicitly unslash the data passed to them.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var array
+	 */
+	public static $unslashingSanitizingFunctions = array(
+		'absint' => true,
+		'is_array' => true,
+		'sanitize_key' => true,
+	);
+
+	/**
 	 * Functions that format strings.
 	 *
 	 * These functions are often used for formatting values just before output, and
@@ -290,7 +303,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'vsprintf' => true,
 		'wp_sprintf' => true,
 	);
-
 
 	/**
 	 * Functions which print output incorporating the values passed to them.
@@ -675,11 +687,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.5.0
 	 *
-	 * @param int $stackPtr The index of the token in the stack.
+	 * @param int  $stackPtr        The index of the token in the stack.
+	 * @param bool $require_unslash Whether to give an error if wp_unslash() isn't
+	 *                              used on the variable before sanitization.
 	 *
 	 * @return bool Whether the token being sanitized.
 	 */
-	protected function is_sanitized( $stackPtr ) {
+	protected function is_sanitized( $stackPtr, $require_unslash = false ) {
 
 		// First we check if it is being casted to a safe value.
 		if ( $this->is_safe_casted( $stackPtr ) ) {
@@ -688,14 +702,16 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// If this isn't within a function call, we know already that it's not safe.
 		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			if ( $require_unslash ) {
+				$this->add_unslash_error( $stackPtr );
+			}
 			return false;
 		}
 
 		// Get the function that it's in.
 		$function_closer = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 		$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$functionPtr = $function_opener - 1;
-		$function = $this->tokens[ $functionPtr ];
+		$function = $this->tokens[ $function_opener - 1 ];
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
 		if ( T_UNSET === $function['code'] ) {
@@ -704,10 +720,33 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// If this isn't a call to a function, it sure isn't sanitizing function.
 		if ( T_STRING !== $function['code'] ) {
+			if ( $require_unslash ) {
+				$this->add_unslash_error( $stackPtr );
+			}
 			return false;
 		}
 
 		$functionName = $function['content'];
+
+		// Check if wp_unslash() is being used.
+		if ( 'wp_unslash' === $functionName ) {
+
+			$is_unslashed = true;
+
+			$function_closer = prev( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+
+			// If there is no other function being used, this value is unsanitized.
+			if ( ! $function_closer ) {
+				return false;
+			}
+
+			$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$functionName = $this->tokens[ $function_opener - 1 ]['content'];
+
+		} else {
+
+			$is_unslashed = false;
+		}
 
 		// Arrays might be sanitized via array_map().
 		if ( 'array_map' === $functionName ) {
@@ -726,8 +765,30 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 		}
 
+		// If slashing is required, give an error.
+		if ( ! $is_unslashed && $require_unslash && ! isset( self::$unslashingSanitizingFunctions[ $functionName ] ) ) {
+			$this->add_unslash_error( $stackPtr );
+		}
+
 		// Check if this is a sanitizing function.
 		return isset( self::$sanitizingFunctions[ $functionName ] );
+	}
+
+	/**
+	 * Add an error for missing use of wp_unslash().
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 */
+	public function add_unslash_error( $stackPtr ) {
+
+		$this->phpcsFile->addError(
+			'Missing wp_unslash() before sanitization.',
+			$stackPtr,
+			'MissingUnslash',
+			array( $this->tokens[ $stackPtr ]['content'] )
+		);
 	}
 
 	/**
