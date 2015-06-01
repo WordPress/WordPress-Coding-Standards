@@ -10,7 +10,7 @@
  */
 
 /**
- * Verifies that all outputted strings are sanitized
+ * Verifies that all outputted strings are escaped.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
@@ -20,262 +20,53 @@
 class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 {
 
-	public $customAutoEscapedFunctions = array();
-
-	public $customSanitizingFunctions = array();
-
-	public $customPrintingFunctions = array();
-
-	public static $autoEscapedFunctions = array(
-		'allowed_tags',
-		'bloginfo',
-		'body_class',
-		'calendar_week_mod',
-		'cancel_comment_reply_link',
-		'category_description',
-		'checked',
-		'comment_ID',
-		'comment_author',
-		'comment_author_IP',
-		'comment_author_email',
-		'comment_author_email_link',
-		'comment_author_link',
-		'comment_author_rss',
-		'comment_author_url',
-		'comment_author_url_link',
-		'comment_class',
-		'comment_date',
-		'comment_excerpt',
-		'comment_form',
-		'comment_form_title',
-		'comment_id_fields',
-		'comment_reply_link',
-		'comment_text',
-		'comment_text_rss',
-		'comment_time',
-		'comment_type',
-		'comments_link',
-		'comments_number',
-		'comments_popup_link',
-		'comments_popup_script',
-		'comments_rss_link',
-		'delete_get_calendar_cache',
-		'disabled',
-		'do_shortcode_tag',
-		'edit_bookmark_link',
-		'edit_comment_link',
-		'edit_post_link',
-		'edit_tag_link',
-		'get_archives_link',
-		'get_attachment_link',
-		'get_avatar',
-		'get_bookmark',
-		'get_bookmark_field',
-		'get_calendar',
-		'get_comment_author_link',
-		'get_comment_date',
-		'get_comment_time',
-		'get_current_blog_id',
-		'get_delete_post_link',
-		'get_footer',
-		'get_header',
-		'get_search_form',
-		'get_search_query',
-		'get_sidebar',
-		'get_template_part',
-		'get_the_author',
-		'get_the_author_link',
-		'get_the_date',
-		'get_the_post_thumbnail',
-		'get_the_term_list',
-		'get_the_title',
-		'has_post_thumbnail',
-		'is_attachment',
-		'next_comments_link',
-		'next_image_link',
-		'next_post_link',
-		'next_posts_link',
-		'paginate_comments_links',
-		'permalink_anchor',
-		'post_class',
-		'post_password_required',
-		'post_type_archive_title',
-		'posts_nav_link',
-		'previous_comments_link',
-		'previous_image_link',
-		'previous_post_link',
-		'previous_posts_link',
-		'selected',
-		'single_cat_title',
-		'single_month_title',
-		'single_post_title',
-		'single_tag_title',
-		'single_term_title',
-		'sticky_class',
-		'tag_description',
-		'term_description',
-		'the_ID',
-		'the_attachment_link',
-		'the_author',
-		'the_author_link',
-		'the_author_meta',
-		'the_author_posts',
-		'the_author_posts_link',
-		'the_category',
-		'the_category_rss',
-		'the_content',
-		'the_content_rss',
-		'the_date',
-		'the_date_xml',
-		'the_excerpt',
-		'the_excerpt_rss',
-		'the_feed_link',
-		'the_meta',
-		'the_modified_author',
-		'the_modified_date',
-		'the_modified_time',
-		'the_permalink',
-		'the_post_thumbnail',
-		'the_search_query',
-		'the_shortlink',
-		'the_tags',
-		'the_taxonomies',
-		'the_terms',
-		'the_time',
-		'the_title',
-		'the_title_attribute',
-		'the_title_rss',
-		'vip_powered_wpcom',
-		'walk_nav_menu_tree',
-		'wp_attachment_is_image',
-		'wp_dropdown_categories',
-		'wp_dropdown_users',
-		'wp_enqueue_script',
-		'wp_generate_tag_cloud',
-		'wp_get_archives',
-		'wp_get_attachment_image',
-		'wp_get_attachment_link',
-		'wp_link_pages',
-		'wp_list_authors',
-		'wp_list_bookmarks',
-		'wp_list_categories',
-		'wp_list_comments',
-		'wp_login_form',
-		'wp_loginout',
-		'wp_meta',
-		'wp_nav_menu',
-		'wp_register',
-		'wp_shortlink_header',
-		'wp_shortlink_wp_head',
-		'wp_tag_cloud',
-		'wp_title',
-		'checked',
-	);
-
-	public static $sanitizingFunctions = array(
-		'absint',
-		'balanceTags',
-		'esc_attr',
-		'esc_attr__',
-		'esc_attr_e',
-		'esc_attr_x',
-		'esc_html',
-		'esc_html__',
-		'esc_html_e',
-		'esc_html_x',
-		'esc_js',
-		'esc_sql',
-		'esc_textarea',
-		'esc_url',
-		'esc_url_raw',
-		'filter_input',
-		'filter_var',
-		'intval',
-		'is_email',
-		'json_encode',
-		'like_escape',
-		'rawurlencode',
-		'sanitize_bookmark',
-		'sanitize_bookmark_field',
-		'sanitize_email',
-		'sanitize_file_name',
-		'sanitize_html_class',
-		'sanitize_key',
-		'sanitize_meta',
-		'sanitize_mime_type',
-		'sanitize_option',
-		'sanitize_sql_orderby',
-		'sanitize_term',
-		'sanitize_term_field',
-		'sanitize_text_field',
-		'sanitize_title',
-		'sanitize_title_for_query',
-		'sanitize_title_with_dashes',
-		'sanitize_user',
-		'sanitize_user_field',
-		'tag_escape',
-		'urlencode',
-		'urlencode_deep',
-		'validate_file',
-		'wp_json_encode',
-		'wp_kses',
-		'wp_kses_allowed_html',
-		'wp_kses_data',
-		'wp_kses_post',
-		'wp_parse_id_list',
-		'wp_redirect',
-		'wp_rel_nofollow',
-		'wp_safe_redirect',
-		'number_format',
-		'ent2ncr',
-	);
+	/**
+	 * Custom list of functions which escape values for output.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @var string[]
+	 */
+	public $customEscapingFunctions = array();
 
 	/**
-	 * Functions which print output incorporating the values passed to them.
+	 * Custom list of functions whose return values are pre-escaped for output.
 	 *
-	 * @var array
+	 * @since 0.3.0
+	 *
+	 * @var string[]
 	 */
-	public static $printingFunctions = array(
-		'_deprecated_argument',
-		'_deprecated_function',
-		'_deprecated_file',
-		'_doing_it_wrong',
-		'_e',
-		'_ex',
-		'printf',
-		'vprintf',
-		'trigger_error',
-		'user_error',
-		'wp_die',
-	);
+	public $customAutoEscapedFunctions = array();
+
+	/**
+	 * Custom list of functions which escape values for output.
+	 *
+	 * @since 0.3.0
+	 * @deprecated 0.5.0 Use $customEscapingFunctions instead.
+	 *
+	 * @var string[]
+	 */
+	public $customSanitizingFunctions = array();
+
+	/**
+	 * Custom list of functions which print output incorporating the passed values.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @var string[]
+	 */
+	public $customPrintingFunctions = array();
 
 	/**
 	 * Printing functions that incorporate unsafe values.
+	 *
+	 * @since 0.4.0
 	 *
 	 * @var array
 	 */
 	public static $unsafePrintingFunctions = array(
 		'_e' => 'esc_html_e() or esc_attr_e()',
 		'_ex' => 'esc_html_ex() or esc_attr_ex()',
-	);
-
-	/**
-	 * Functions that format strings.
-	 *
-	 * These functions are often used for formatting translation strings, and it is
-	 * common practice to escape the individual parameters passed to them as needed
-	 * instead of escaping the entire result. This is especially true when the string
-	 * being formatted contains HTML, which makes escaping the full result more
-	 * difficult.
-	 *
-	 * @since 0.4.0
-	 *
-	 * @var array
-	 */
-	public static $formattingFunctions = array(
-		'sprintf',
-		'vsprintf',
-		'wp_sprintf',
 	);
 
 	/**
@@ -315,9 +106,15 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	{
 		// Merge any custom functions with the defaults, if we haven't already.
 		if ( ! self::$addedCustomFunctions ) {
-			self::$sanitizingFunctions = array_merge( self::$sanitizingFunctions, $this->customSanitizingFunctions );
-			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, $this->customAutoEscapedFunctions );
-			self::$printingFunctions = array_merge( self::$printingFunctions, $this->customPrintingFunctions );
+			WordPress_Sniff::$escapingFunctions = array_merge( WordPress_Sniff::$escapingFunctions, array_flip( $this->customEscapingFunctions ) );
+			WordPress_Sniff::$autoEscapedFunctions = array_merge( WordPress_Sniff::$autoEscapedFunctions, array_flip( $this->customAutoEscapedFunctions ) );
+			WordPress_Sniff::$printingFunctions = array_merge( WordPress_Sniff::$printingFunctions, array_flip( $this->customPrintingFunctions ) );
+
+			if ( ! empty( $this->customSanitizingFunctions ) ) {
+				WordPress_Sniff::$escapingFunctions = array_merge( WordPress_Sniff::$escapingFunctions, array_flip( $this->customSanitizingFunctions ) );
+				$phpcsFile->addWarning( 'The customSanitizingFunctions property is deprecated in favor of customEscapingFunctions.', 0, 'DeprecatedCustomSanitizingFunctions' );
+			}
+
 			self::$addedCustomFunctions = true;
 		}
 
@@ -331,8 +128,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 		// If function, not T_ECHO nor T_PRINT
 		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
-			// Skip if it is a function but is not of the printing functions ( self::printingFunctions )
-			if ( ! in_array( $tokens[$stackPtr]['content'], self::$printingFunctions ) ) {
+			// Skip if it is a function but is not of the printing functions.
+			if ( ! isset( self::$printingFunctions[ $tokens[ $stackPtr ]['content'] ] ) ) {
 				return;
 			}
 
@@ -483,42 +280,40 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			// Now check that next token is a function call.
-			if ( in_array( $tokens[$i]['code'], array( T_STRING ) ) === false ) {
-				$phpcsFile->addError( "Expected next thing to be a escaping function, not '%s'", $i, 'OutputNotEscaped', $tokens[$i]['content'] );
-				continue;
-			}
+			if ( T_STRING === $this->tokens[ $i ]['code'] ) {
 
-			// This is a function
-			else {
-				$functionName = $tokens[$i]['content'];
+				$functionName = $this->tokens[ $i ]['content'];
+				$is_formatting_function = isset( self::$formattingFunctions[ $functionName ] );
 
-				$is_formatting_function = in_array( $functionName, self::$formattingFunctions );
-
-				if (
-					! $is_formatting_function
-					&&
-					in_array( $functionName, self::$autoEscapedFunctions ) === false
-					&&
-					in_array( $functionName, self::$sanitizingFunctions ) === false
-					) {
-
-					$phpcsFile->addError( "Expected a sanitizing function (see Codex for 'Data Validation'), but instead saw '%s'", $i, 'OutputNotSanitized', $tokens[$i]['content'] );
-				}
-
-				// Skip pointer to after the function
-				if ( $_pos = $phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i, null, null, null, true ) ) {
+				// Skip pointer to after the function.
+				if ( $_pos = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i, null, null, null, true ) ) {
 
 					// If this is a formatting function we just skip over the opening
 					// parenthesis. Otherwise we skip all the way to the closing.
 					if ( $is_formatting_function ) {
-						$i = $_pos + 1;
+						$i     = $_pos + 1;
 						$watch = true;
 					} else {
-						$i = $tokens[ $_pos ]['parenthesis_closer'];
+						$i = $this->tokens[ $_pos ]['parenthesis_closer'];
 					}
 				}
-				continue;
+
+				// If this is a safe function, we don't flag it.
+				if (
+					$is_formatting_function
+					|| isset( self::$autoEscapedFunctions[ $functionName ] )
+					|| isset( self::$escapingFunctions[ $functionName ] )
+				) {
+					continue;
+				}
 			}
+
+			$this->phpcsFile->addError(
+				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
+				$i,
+				'OutputNotEscaped',
+				$this->tokens[ $i ]['content']
+			);
 		}
 
 		return $end_of_statement;

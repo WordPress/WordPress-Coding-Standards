@@ -38,12 +38,26 @@
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
 		<severity>0</severity>
 	</rule>
+	
+	<rule ref="Generic.PHP.LowerCaseKeyword"/>
 
 	<rule ref="Generic.Files.LineEndings">
 		<properties>
 			<property name="eolChar" value="\n"/>
 		</properties>
 	</rule>
+
+
+	<rule ref="Generic.Files.EndFileNewline"/>
+
+	<!-- https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
+	<rule ref="Generic.Files.LowercasedFilename"/>
+
+	<!-- https://make.wordpress.org/core/handbook/coding-standards/php/#space-usage -->
+	<rule ref="Generic.Formatting.SpaceAfterCast"/>
+
+	<!-- https://make.wordpress.org/core/handbook/coding-standards/php/#brace-style -->
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
 
 	<rule ref="PEAR.Functions.FunctionCallSignature">
 		<properties>
@@ -58,7 +72,9 @@
 		<severity>0</severity>
 	</rule>
 
-	<rule ref="WordPress.Arrays.ArrayDeclaration"/>
+	<rule ref="WordPress.Arrays.ArrayDeclaration">
+		<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+	</rule>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 	<rule ref="WordPress.Classes.ValidClassName"/>
 	<rule ref="WordPress.Files.FileName"/>

@@ -11,5 +11,7 @@
 	<rule ref="WordPress.VIP"/>
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
+	<rule ref="WordPress.CSRF.NonceVerification" />
+	<rule ref="WordPress.PHP.StrictComparisons" />
 
 </ruleset>

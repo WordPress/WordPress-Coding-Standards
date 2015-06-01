@@ -2,12 +2,12 @@
 
 do_something( $_POST ); // OK
 
-do_something_with( $_POST['hello'] ); // Error for no validation, Error for no sanitizing
+do_something_with( $_POST['hello'] ); // Error for no validation, Error for no sanitizing, Error for no unslashing.
 
-echo esc_html( $_POST['foo1'] ); // Error for no validation
+echo sanitize_text_field( wp_unslash( $_POST['foo1'] ) ); // Error for no validation
 
 if ( isset( $_POST['foo2'] ) ) {
-	bar( $_POST['foo2'] ); // Error for no sanitizing
+	bar( wp_unslash( $_POST['foo2'] ) ); // Error for no sanitizing
 }
 
 // @TODO: Cover non-parenthesis'd conditions
@@ -16,9 +16,9 @@ if ( isset( $_POST['foo2'] ) ) {
 
 
 if ( isset( $_POST['foo3'] ) ) {
-	bar( esc_html( $_POST['foo3'] ) ); // Good, validated and sanitized
-	bar( $_POST['foo3'] ); // Error, validated but not sanitized
-	bar( esc_html( $_POST['foo3'] ) ); // Good, validated and sanitized
+	bar( sanitize_text_field( wp_unslash( $_POST['foo3'] ) ) ); // Good, validated and sanitized
+	bar( wp_unslash( $_POST['foo3'] ) ); // Error, validated but not sanitized
+	bar( sanitize_text_field( wp_unslash( $_POST['foo3'] ) ) ); // Good, validated and sanitized
 }
 
 // Should all be OK
@@ -30,17 +30,17 @@ $empty = (
 	empty( $_POST['foo4'] )
 );
 
-$foo = $_POST['bar']; // Bad
+$foo = $_POST['bar']; // Bad x 3
 
 function foo() {
 	// Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
-	if ( ! isset( $_REQUEST['bar1'] ) || ! foo( esc_attr( $_REQUEST['bar1'] ) ) ) {
+	if ( ! isset( $_REQUEST['bar1'] ) || ! foo( sanitize_text_field( wp_unslash( $_REQUEST['bar1'] ) ) ) ) {
 		wp_die( 1 );
 	}
 }
 
 // Ok, if WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff::$check_validation_in_scope_only == false
-if ( ! isset( $_REQUEST['bar2'] ) || ! foo( esc_attr( $_REQUEST['bar2'] ) ) ) { // Ok
+if ( ! isset( $_REQUEST['bar2'] ) || ! foo( sanitize_text_field( wp_unslash( $_REQUEST['bar2'] ) ) ) ) { // Ok
 	wp_die( 1 );
 }
 
@@ -48,7 +48,7 @@ function bar() {
 	if ( ! isset( $_GET['test'] ) ) {
 		return ;
 	}
-	echo esc_html( $_GET['test'] ); // Good
+	echo sanitize_text_field( wp_unslash( $_GET['test'] ) ); // Good
 }
 
 $_REQUEST['wp_customize'] = 'on'; // ok
@@ -69,14 +69,43 @@ some_func( $some_arg, (int) $_GET['test'] ); // ok
 
 function zebra() {
 	if ( isset( $_GET['foo'], $_POST['bar'] ) ) {
-		echo esc_html( $_POST['bar'] ); // ok
+		echo sanitize_text_field( wp_unslash( $_POST['bar'] ) ); // ok
 	}
 }
 
 echo $_GET['test']; // WPCS: sanitization OK.
 
-echo array_map( 'sanitize_text_field', $_GET['test'] ); // OK
-echo array_map( 'foo', $_GET['test'] ); // Bad
-echo array_map( $something, $_GET['test'] ); // Bad
-echo array_map( array( $obj, 'func' ), $_GET['test'] ); // Bad
-echo array_map( array( $obj, 'sanitize_text_field' ), $_GET['test'] ); // Bad
+echo array_map( 'sanitize_text_field', wp_unslash( $_GET['test'] ) ); // OK
+echo array_map( 'foo', wp_unslash( $_GET['test'] ) ); // Bad
+echo array_map( $something, wp_unslash( $_GET['test'] ) ); // Bad
+echo array_map( array( $obj, 'func' ), wp_unslash( $_GET['test'] ) ); // Bad
+echo array_map( array( $obj, 'sanitize_text_field' ), wp_unslash( $_GET['test'] ) ); // Bad
+
+// Sanitized but not validated.
+$foo = (int) $_POST['foo6']; // Bad
+
+// Non-assignment checks are OK.
+if ( 'bar' === $_POST['foo'] ) {} // OK
+if ( $_GET['test'] != 'a' ) {} // OK
+if ( 'bar' === do_something( wp_unslash( $_POST['foo'] ) ) ) {} // Bad
+
+switch ( $_POST['foo'] ) {} // OK
+switch ( do_something( wp_unslash( $_POST['foo'] ) ) ) {} // Bad
+
+// Sanitization is required even when the value is being escaped.
+echo esc_html( wp_unslash( $_POST['foo'] ) ); // Bad
+echo esc_html( sanitize_text_field( wp_unslash( $_POST['foo'] ) ) ); // OK
+
+$current_tax_slug = isset( $_GET['a'] ) ? sanitize_key( $_GET['a'] ) : false; // OK
+$current_tax_slug = isset( $_GET['a'] ) ? $_GET['a'] : false; // Bad x 2
+$current_tax_slug = isset( $_GET['a'] ) ? wp_unslash( $_GET['a'] ) : false; // Bad
+$current_tax_slug = isset( $_GET['a'] ) ? sanitize_text_field( wp_unslash( $_GET['a'] ) ) : false; // OK
+
+echo sanitize_text_field( $_POST['foo545'] ); // Error for no validation, unslashing
+echo array_map( 'sanitize_text_field', $_GET['test'] ); // Bad, no unslashing
+echo array_map( 'sanitize_key', $_GET['test'] ); // OK
+
+foo( absint( $_GET['foo'] ) ); // OK
+$ids = array_map( 'absint', $_GET['test'] ); // OK
+
+if ( is_array( $_GET['test'] ) ) {} // OK

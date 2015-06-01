@@ -99,7 +99,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
         }
 
         // If this is a child class, it may have to use camelCase.
-        if (  $phpcsFile->findExtendedClassName( $currScope ) ) {
+        if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedInterfaceName( $currScope, $phpcsFile ) ) {
             return;
         }
 
@@ -133,7 +133,50 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 
     }//end processTokenWithinScope()
 
+	/**
+	 * Returns the name of the class that the specified class implements.
+	 *
+	 * Returns FALSE on error or if there is no implemented class name.
+	 *
+	 * @param int $stackPtr The stack position of the class.
+	 * @param PHP_CodeSniffer_File $phpcsFile The stack position of the class.
+	 *
+	 * @see PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff::findExtendedClassName()
+	 *
+	 * @todo This needs to be upstreamed and made part of PHP_CodeSniffer_File.
+	 *
+	 * @return string
+	 */
+	public function findImplementedInterfaceName( $stackPtr, $phpcsFile ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Check for the existence of the token.
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+		if ( $tokens[ $stackPtr ]['code'] !== T_CLASS ) {
+			return false;
+		}
+		if ( isset( $tokens[ $stackPtr ]['scope_closer'] ) === false ) {
+			return false;
+		}
+		$classOpenerIndex = $tokens[ $stackPtr ]['scope_opener'];
+		$extendsIndex = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classOpenerIndex );
+		if ( false === $extendsIndex ) {
+			return false;
+		}
+		$find = array(
+			T_NS_SEPARATOR,
+			T_STRING,
+			T_WHITESPACE,
+		);
+		$end  = $phpcsFile->findNext( $find, ( $extendsIndex + 1 ), $classOpenerIndex + 1, true );
+		$name = $phpcsFile->getTokensAsString( ( $extendsIndex + 1 ), ( $end - $extendsIndex - 1 ) );
+		$name = trim( $name );
+		if ( $name === '' ) {
+			return false;
+		}
+		return $name;
+	}//end findExtendedClassName()
 
 }//end class
-
-?>

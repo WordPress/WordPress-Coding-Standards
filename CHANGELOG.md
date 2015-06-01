@@ -6,9 +6,44 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased]
 
 ### Added
-- `WordPress.CSRF.NonceVerification` sniff to flag form processing without nonce verification.
+- Sniff to flag dynamic translatable strings and textdomains.
+- `get_children()`, `wp_get_object_terms()`, `wp_get_post_(categories|tags|terms)()`, 
+`get_category_by_slug()`, `get_cat_ID()`, `count_user_posts()`, and `wp_old_slug_redirect()` 
+to the list of restricted functions in the `WordPress.VIP.RestrictedFunctions` sniff.
 
-## [0.4.0] - 2015-5-1
+## [0.5.0] - 2015-06-01
+
+### Added
+- `WordPress.CSRF.NonceVerification` sniff to flag form processing without nonce verification.
+- `in_array()` and `is_array()` to the list of sanitizing functions.
+- Support for automatic error fixing to the `WordPress.Arrays.ArrayDeclaration` sniff.
+- `WordPress.PHP.StrictComparisions` to the `WordPress-VIP` and `WordPress-Extra` rulesets.
+- `WordPress-Docs` ruleset to sniff for proper commenting.
+- `Generic.PHP.LowerCaseKeyword`, `Generic.Files.EndFileNewline`, `Generic.Files.LowercasedFilename`, 
+`Generic.Formatting.SpaceAfterCast`, and `Generic.Functions.OpeningFunctionBraceKernighanRitchie` to the `WordPress-Core` ruleset.
+- `Generic.PHP.DeprecatedFunctions`, `Generic.PHP.ForbiddenFunctions`, `Generic.Functions.CallTimePassByReference`, 
+`Generic.Formatting.DisallowMultipleStatements`, `Generic.CodeAnalysis.EmptyStatement`, 
+`Generic.CodeAnalysis.ForLoopShouldBeWhileLoop`, `Generic.CodeAnalysis.ForLoopWithTestFunctionCall`, 
+`Generic.CodeAnalysis.JumbledIncrementer`, `Generic.CodeAnalysis.UnconditionalIfStatement`, 
+`Generic.CodeAnalysis.UnnecessaryFinalModifier`, `Generic.CodeAnalysis.UselessOverridingMethod`, 
+`Generic.Classes.DuplicateClassName`, and `Generic.Strings.UnnecessaryStringConcat` to the `WordPress-Extra` ruleset.
+- Error for missing use of `wp_unslash()` on superglobal data to the `WordPress.VIP.ValidatedSanitizedInput` sniff. 
+
+### Changed
+- The `WordPress.VIP.ValidatedSanitizedInput` sniff to require sanitization of input even when it is being directly escaped and output.
+- The minimum required PHP_CodeSniffer version to 2.2.0.
+- The `WordPress.VIP.ValidatedSanitizedInput` and `WordPress.XSS.EscapeOutput` sniffs: 
+the list of escaping functions was split from the list of sanitizing functions. The `customSanitizingFunctions` 
+property has been moved to the `ValidatedSanitizedInput` sniff, and the `customEscapingFunctions`
+property should now be used instead for the `EscapeOutput` sniff.
+- The `WordPress.Arrays.ArrayDeclaration` sniff to give errors for `NoSpaceAfterOpenParenthesis`, `SpaceAfterArrayOpener`, and `SpaceAfterArrayCloser`, instead of warnings.
+- The `WordPress.NamingConventions.ValidFunctionName` sniff to allow camelCase method names in classes that implement interfaces.
+
+### Fixed
+- The `WordPress.VIP.ValidatedSanitizedInput` sniff not reporting missing validation when reporting missing sanitization.
+- The `WordPress.VIP.ValidatedSanitizedInput` sniff flagging superglobals as needing sanitization when they were only being used in a comparison using `if` or `switch`, etc.
+
+## [0.4.0] - 2015-05-01
 
 ### Added
 - Change log file.

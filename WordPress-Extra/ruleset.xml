@@ -2,11 +2,35 @@
 <ruleset name="WordPress Extra">
 	<description>Best practices beyond core WordPress Coding Standards</description>
 
+	<rule ref="Generic.PHP.DeprecatedFunctions"/>
+	<rule ref="Generic.PHP.ForbiddenFunctions"/>
+	<rule ref="Generic.Functions.CallTimePassByReference"/>
+	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+	<rule ref="Generic.CodeAnalysis.EmptyStatement" />
+	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
+	<rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
+	<rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
+	<rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
+	<rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
+	<rule ref="Generic.Classes.DuplicateClassName"/>
+	<rule ref="Generic.Strings.UnnecessaryStringConcat"/>
+	
+	<!-- This sniff is not refined enough for general use -->
+	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
+	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
+	
+	<!-- Hook callbacks may not use all params -->
+	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
+	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
+
 	<rule ref="WordPress-Core"/>
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
+	<rule ref="WordPress.CSRF.NonceVerification" />
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
 	<rule ref="WordPress.WP.EnqueuedResources"/>
 	<rule ref="WordPress.Variables.GlobalVariables"/>
+	<rule ref="WordPress.PHP.StrictComparisons" />
 
 </ruleset>
