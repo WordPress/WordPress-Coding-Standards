@@ -11,6 +11,10 @@
  */
 class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_Sniff
 {
+	protected $methods = array(
+		'cachable' => array( 'get_var', 'get_col', 'get_row', 'get_results', 'query' ),
+		'noncachable' => array( 'execute', 'insert', 'update', 'replace' ),
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -50,11 +54,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $is_object_call + 1, null, true, null, true );
 		$method = $tokens[ $methodPtr ]['content'];
 
-		$methods = array(
-			'cachable' => array( 'get_var', 'get_col', 'get_row', 'get_results', 'query' ),
-			'noncachable' => array( 'execute', 'insert', 'update', 'replace' ),
-		);
-		if ( ! in_array( $method, array_merge( $methods['cachable'], $methods['noncachable'] ) ) ) {
+		if ( ! in_array( $method, array_merge( $this->methods['cachable'], $this->methods['noncachable'] ) ) ) {
 			return;
 		}
 
@@ -92,7 +92,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
 		}
 
-		if ( ! in_array( $method, $methods['cachable'] ) ) {
+		if ( ! in_array( $method, $this->methods['cachable'] ) ) {
 			return;
 		}
 
