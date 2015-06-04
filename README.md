@@ -95,10 +95,13 @@ The project encompasses a super–set of the sniffs that the WordPress community
 
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
- - `WordPress` — all of the sniffs in the project.
- - `WordPress-Core` — sniffs that seek to implement the [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/) and go no further.
- - `WordPress-Extra` — `WordPress-Core` plus extra best practices sniffs, which are not part of core coding standards and could be controversial.
- - `WordPress-VIP` — `WordPress-Core` plus sniffs that seek to implement the [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/).
+ - `WordPress` — complete set with all of the sniffs in the project
+  - `WordPress-Core` — main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
+  - `WordPress-Docs` — additional ruleset for inline documentation
+  - `WordPress-Extra` — extended ruleset for optional best practices sniffs
+    - includes `WordPress-Core`
+  - `WordPress-VIP` — extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+    - includes `WordPress-Core`
 
 
 ### Using custom ruleset
