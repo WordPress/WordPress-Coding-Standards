@@ -82,14 +82,14 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $_pos + 1, $endOfStatement, null, null, true ) ) {
 			if ( preg_match( '#\b(ALTER|CREATE|DROP)\b#i', $tokens[$_pos]['content'], $matches ) > 0 ) {
 				$message = 'Attempting a database schema change is highly discouraged.';
-				$this->add_unique_message( $phpcsFile, 'error', $_pos, $tokens[$_pos]['line'], $message );
+				$this->add_unique_message( $phpcsFile, 'error', $_pos, $tokens[$_pos]['line'], $message, 'SchemaChange' );
 			}
 		}
 
 		// Flag instance if not whitelisted
 		if ( ! $whitelisted_db_call ) {
 			$message = 'Usage of a direct database call is discouraged.';
-			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
+			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message, 'DirectQuery' );
 		}
 
 		if ( ! in_array( $method, $this->methods['cachable'] ) ) {
@@ -126,7 +126,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		if ( ! $cached && ! $whitelisted_cache ) {
 			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
-			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message );
+			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message, 'NoCaching' );
 		}
 
 	}//end process()
@@ -138,9 +138,10 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 * @param int    $pointer
 	 * @param int    $line
 	 * @param string $message
+	 * @param string $code    The error code for this message.
      * @return void
 	 */
-	function add_unique_message( PHP_CodeSniffer_File $phpcsFile, $type, $pointer, $line, $message ) {
+	function add_unique_message( PHP_CodeSniffer_File $phpcsFile, $type, $pointer, $line, $message, $code ) {
 		$messages = call_user_func( array( $phpcsFile, 'get' . ucfirst( $type . 's' ) ) );
 		if ( isset( $messages[$line] ) ) {
 			foreach ( $messages[$line] as $idx => $events ) {
@@ -152,7 +153,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 			}
 		}
 
-		call_user_func( array( $phpcsFile, 'add' . ucfirst( $type ) ), $message, $pointer );
+		call_user_func( array( $phpcsFile, 'add' . ucfirst( $type ) ), $message, $pointer, $code );
 	}
 
 
