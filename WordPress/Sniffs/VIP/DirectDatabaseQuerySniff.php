@@ -37,7 +37,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return void
+	 * @return int|void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
@@ -81,19 +81,17 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$_pos = $stackPtr;
 		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $_pos + 1, $endOfStatement, null, null, true ) ) {
 			if ( preg_match( '#\b(ALTER|CREATE|DROP)\b#i', $tokens[$_pos]['content'], $matches ) > 0 ) {
-				$message = 'Attempting a database schema change is highly discouraged.';
-				$this->add_unique_message( $phpcsFile, 'error', $_pos, $tokens[$_pos]['line'], $message, 'SchemaChange' );
+				$phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
 		}
 
 		// Flag instance if not whitelisted
 		if ( ! $whitelisted_db_call ) {
-			$message = 'Usage of a direct database call is discouraged.';
-			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message, 'DirectQuery' );
+			$phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 		}
 
 		if ( ! in_array( $method, $this->methods['cachable'] ) ) {
-			return;
+			return $endOfStatement;
 		}
 
 		$whitelisted_cache = false;
@@ -126,35 +124,11 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		if ( ! $cached && ! $whitelisted_cache ) {
 			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
-			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message, 'NoCaching' );
+			$phpcsFile->addError( $message, $stackPtr, 'NoCaching' );
 		}
+
+		return $endOfStatement;
 
 	}//end process()
-
-	/**
-	 * Add unique message per line
-	 * @param PHP_CodeSniffer_File $phpcsFile
-	 * @param string $type      (error|warning)
-	 * @param int    $pointer
-	 * @param int    $line
-	 * @param string $message
-	 * @param string $code    The error code for this message.
-     * @return void
-	 */
-	function add_unique_message( PHP_CodeSniffer_File $phpcsFile, $type, $pointer, $line, $message, $code ) {
-		$messages = call_user_func( array( $phpcsFile, 'get' . ucfirst( $type . 's' ) ) );
-		if ( isset( $messages[$line] ) ) {
-			foreach ( $messages[$line] as $idx => $events ) {
-				foreach ( $events as $arr ) {
-					if ( $arr['message'] == $message ) {
-						return false;
-					}
-				}
-			}
-		}
-
-		call_user_func( array( $phpcsFile, 'add' . ucfirst( $type ) ), $message, $pointer, $code );
-	}
-
 
 }//end class
