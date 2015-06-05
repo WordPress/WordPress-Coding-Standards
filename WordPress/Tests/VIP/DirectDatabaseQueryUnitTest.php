@@ -30,6 +30,9 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 			32 => 1,
 			34 => 1,
 			50 => 1,
+			78 => 1,
+			79 => 1,
+			80 => 1,
 			);
 
 	}//end getErrorList()
