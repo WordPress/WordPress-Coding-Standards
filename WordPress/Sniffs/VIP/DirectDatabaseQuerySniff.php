@@ -11,9 +11,28 @@
  */
 class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_Sniff
 {
-	protected $methods = array(
-		'cachable' => array( 'delete', 'get_var', 'get_col', 'get_row', 'get_results', 'query', 'replace', 'update' ),
-		'noncachable' => array( 'insert' ),
+
+	/**
+	 * The lists of $wpdb methods.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var array[]
+	 */
+	protected static $methods = array(
+		'cachable' => array(
+			'delete' => true,
+			'get_var' => true,
+			'get_col' => true,
+			'get_row' => true,
+			'get_results' => true,
+			'query' => true,
+			'replace' => true,
+			'update' => true,
+		),
+		'noncachable' => array(
+			'insert' => true,
+		),
 	);
 
 	/**
@@ -41,6 +60,10 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		if ( ! isset( self::$methods['all'] ) ) {
+			self::$methods['all'] = array_merge( self::$methods['cachable'], self::$methods['noncachable'] );
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for $wpdb variable
@@ -54,7 +77,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $is_object_call + 1, null, true, null, true );
 		$method = $tokens[ $methodPtr ]['content'];
 
-		if ( ! in_array( $method, array_merge( $this->methods['cachable'], $this->methods['noncachable'] ) ) ) {
+		if ( ! isset( self::$methods['all'][ $method ] ) ) {
 			return;
 		}
 
@@ -90,7 +113,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 			$phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 		}
 
-		if ( ! in_array( $method, $this->methods['cachable'] ) ) {
+		if ( ! isset( self::$methods['cachable'][ $method ] ) ) {
 			return $endOfStatement;
 		}
 
