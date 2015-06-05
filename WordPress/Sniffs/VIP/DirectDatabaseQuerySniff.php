@@ -12,8 +12,8 @@
 class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_Sniff
 {
 	protected $methods = array(
-		'cachable' => array( 'get_var', 'get_col', 'get_row', 'get_results', 'query' ),
-		'noncachable' => array( 'execute', 'insert', 'update', 'replace' ),
+		'cachable' => array( 'delete', 'get_var', 'get_col', 'get_row', 'get_results', 'query', 'replace', 'update' ),
+		'noncachable' => array( 'insert' ),
 	);
 
 	/**
@@ -95,35 +95,45 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		}
 
 		$whitelisted_cache = false;
-		$cached = false;
+		$cached = $wp_cache_get = false;
 		if ( preg_match( '/cache\s+(ok|pass|clear|whitelist)/i', $endOfLineComment, $matches ) ) {
 			$whitelisted_cache = true;
 		}
 		if ( ! $whitelisted_cache && ! empty( $tokens[$stackPtr]['conditions'] ) ) {
-			$conditions = $tokens[$stackPtr]['conditions'];
-			$scope_function = null;
-			foreach ( $conditions  as $condPtr => $condType ) {
-				if ( $condType == T_FUNCTION ) {
-					$scope_function = $condPtr;
-				}
-			}
+			$scope_function = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
 			if ( $scope_function ) {
 				$scopeStart = $tokens[$scope_function]['scope_opener'];
 				$scopeEnd = $tokens[$scope_function]['scope_closer'];
 
-				$wpcacheget = $phpcsFile->findNext( array( T_STRING ), $scopeStart + 1, $stackPtr - 1, null, 'wp_cache_get' );
-				$wpcacheset = $phpcsFile->findNext( array( T_STRING ), $stackPtr + 1, $scopeEnd - 1, null, 'wp_cache_set' );
+				for ( $i = $scopeStart + 1; $i < $scopeEnd; $i++ ) {
+					if ( T_STRING === $tokens[ $i ]['code'] ) {
 
-				if ( $wpcacheget && $wpcacheset ) {
-					$cached = true;
+						if ( 'wp_cache_delete' === $tokens[ $i ]['content'] ) {
+
+							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ) ) ) {
+								$cached = true;
+								break;
+							}
+
+						} elseif ( 'wp_cache_get' === $tokens[ $i ]['content'] ) {
+
+							$wp_cache_get = true;
+
+						} elseif ( in_array( $tokens[ $i ]['content'], array( 'wp_cache_set', 'wp_cache_add' ) ) ) {
+
+							if ( $wp_cache_get ) {
+								$cached = true;
+								break;
+							}
+						}
+					}
 				}
 			}
-
 		}
 
 		if ( ! $cached && ! $whitelisted_cache ) {
-			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
+			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set or wp_cache_delete.';
 			$phpcsFile->addError( $message, $stackPtr, 'NoCaching' );
 		}
 
