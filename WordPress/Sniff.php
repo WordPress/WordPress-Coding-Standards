@@ -330,6 +330,40 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * A list of functions that get data from the cache.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var array
+	 */
+	public static $cacheGetFunctions = array(
+		'wp_cache_get' => true,
+	);
+
+	/**
+	 * A list of functions that set data in the cache.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var array
+	 */
+	public static $cacheSetFunctions = array(
+		'wp_cache_set' => true,
+		'wp_cache_add' => true,
+	);
+
+	/**
+	 * A list of functions that delete data from the cache.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var array
+	 */
+	public static $cacheDeleteFunctions = array(
+		'wp_cache_delete' => true,
+	);
+
+	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
