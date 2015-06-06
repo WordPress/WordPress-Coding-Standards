@@ -13,6 +13,33 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 {
 
 	/**
+	 * List of custom cache get functions.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var string[]
+	 */
+	public $customCacheGetFunctions = array();
+
+	/**
+	 * List of custom cache set functions.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var string[]
+	 */
+	public $customCacheSetFunctions = array();
+
+	/**
+	 * List of custom cache delete functions.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var string[]
+	 */
+	public $customCacheDeleteFunctions = array();
+
+	/**
 	 * The lists of $wpdb methods.
 	 *
 	 * @since 0.6.0
@@ -62,6 +89,21 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	{
 		if ( ! isset( self::$methods['all'] ) ) {
 			self::$methods['all'] = array_merge( self::$methods['cachable'], self::$methods['noncachable'] );
+
+			WordPress_Sniff::$cacheGetFunctions = array_merge(
+				WordPress_Sniff::$cacheGetFunctions,
+				array_flip( $this->customCacheGetFunctions )
+			);
+
+			WordPress_Sniff::$cacheSetFunctions = array_merge(
+				WordPress_Sniff::$cacheSetFunctions,
+				array_flip( $this->customCacheSetFunctions )
+			);
+
+			WordPress_Sniff::$cacheDeleteFunctions = array_merge(
+				WordPress_Sniff::$cacheDeleteFunctions,
+				array_flip( $this->customCacheDeleteFunctions )
+			);
 		}
 
 		$tokens = $phpcsFile->getTokens();
@@ -132,18 +174,18 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 				for ( $i = $scopeStart + 1; $i < $scopeEnd; $i++ ) {
 					if ( T_STRING === $tokens[ $i ]['code'] ) {
 
-						if ( 'wp_cache_delete' === $tokens[ $i ]['content'] ) {
+						if ( isset( WordPress_Sniff::$cacheDeleteFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ) ) ) {
 								$cached = true;
 								break;
 							}
 
-						} elseif ( 'wp_cache_get' === $tokens[ $i ]['content'] ) {
+						} elseif ( isset( WordPress_Sniff::$cacheGetFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							$wp_cache_get = true;
 
-						} elseif ( in_array( $tokens[ $i ]['content'], array( 'wp_cache_set', 'wp_cache_add' ) ) ) {
+						} elseif ( isset( WordPress_Sniff::$cacheSetFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							if ( $wp_cache_get ) {
 								$cached = true;
