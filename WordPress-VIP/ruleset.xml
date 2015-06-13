@@ -4,10 +4,6 @@
 
 	<rule ref="WordPress-Core"/>
 
-	<!-- the following are inherited by other sniffs -->
-	<rule ref="WordPress.Functions.FunctionRestrictions"/>
-	<rule ref="WordPress.Variables.VariableRestrictions"/>
-
 	<rule ref="WordPress.VIP"/>
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
