@@ -36,5 +36,5 @@ before_script:
     - $PHPCS_BIN --config-set installed_paths $(pwd)
 
 script:
-    - find . \( -name '*.php' \) -exec php -lf {} \;
+    - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
     - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
