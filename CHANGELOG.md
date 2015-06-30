@@ -11,6 +11,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 `get_category_by_slug()`, `get_cat_ID()`, `count_user_posts()`, and `wp_old_slug_redirect()` 
 to the list of restricted functions in the `WordPress.VIP.RestrictedFunctions` sniff.
 
+## [0.6.0] - 2015-06-30
+
+### Added
+- Support for `wp_cache_add()` and `wp_cache_delete()`, as well as custom cache 
+functions,in the `WordPress.VIP.DirectDatabaseQuery` sniff.
+
+### Removed
+- `WordPress.Functions.FunctionRestrictions` and `WordPress.Variables.VariableRestrictions` 
+from the `WordPress-VIP` standard, since they are just parents for other sniffs.
+
 ## [0.5.0] - 2015-06-01
 
 ### Added
