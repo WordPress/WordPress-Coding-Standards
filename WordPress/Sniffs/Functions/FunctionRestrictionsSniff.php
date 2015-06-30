@@ -93,7 +93,7 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
-			return;
+			return count( $tokens ) + 1;
 		}
 
 		foreach ( $groups as $groupName => $group ) {
