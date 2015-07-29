@@ -45,3 +45,31 @@ endif;
 if ( false ) :
 else :
 endif;
+
+function($arg){} // Bad
+function ( $arg ) {
+	// OK
+}
+
+function () {
+	// OK
+}
+
+function something($arg){} // Bad
+function foo( $arg ) {
+	// OK
+}
+
+function no_params() {
+	// OK
+}
+
+function another () {} // Bad, space before open parenthesis prohibited.
+function    and_another() {} // Bad, space before function name prohibited.
+function
+bar() {} // Bad
+function baz()     {} // Bad
+function test()
+{} // Bad
+
+function &return_by_ref() {} // OK
