@@ -73,3 +73,12 @@ function test()
 {} // Bad
 
 function &return_by_ref() {} // OK
+
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 0
+
+function() {} // OK
+function( $arg ) {} // OK
+function($arg){} // Bad
+function () {} // Bad
+
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
