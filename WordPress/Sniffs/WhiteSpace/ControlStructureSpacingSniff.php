@@ -213,7 +213,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 		    }
 
        } elseif ( $tokens[$parenthesisOpener]['code'] !== T_COLON ) {
-//var_dump( $this->spaces_before_closure_open_paren, $tokens[$stackPtr], $tokens[$stackPtr +1]);
+
             if (
                 T_CLOSURE === $tokens[ $stackPtr ]['code']
                 && 0 === (int) $this->spaces_before_closure_open_paren
