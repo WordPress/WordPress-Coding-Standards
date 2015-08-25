@@ -81,6 +81,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
                 T_ELSEIF,
 	            T_FUNCTION,
 	            T_CLOSURE,
+                T_USE,
                );
 
     }//end register()
@@ -119,12 +120,19 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             }
         }
 
-        if (isset($tokens[$stackPtr]['scope_closer']) === false) {
-            return;
-        }
+        if ( isset( $tokens[ $stackPtr ]['scope_closer'] ) === false ) {
 
-        $scopeOpener = $tokens[$stackPtr]['scope_opener'];
-        $scopeCloser = $tokens[$stackPtr]['scope_closer'];
+            if ( T_USE === $tokens[ $stackPtr ]['code'] ) {
+                $scopeOpener = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $stackPtr + 1 );
+                $scopeCloser = $tokens[ $scopeOpener ]['scope_closer'];
+            } else {
+                return;
+            }
+
+        } else {
+            $scopeOpener = $tokens[ $stackPtr ]['scope_opener'];
+            $scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
+        }
 
         // alternative syntax
         if ( $tokens[$scopeOpener]['code'] === T_COLON ) {
@@ -212,7 +220,31 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 			    }
 		    }
 
-       } elseif ( $tokens[$parenthesisOpener]['code'] !== T_COLON ) {
+        } elseif ( T_CLOSURE === $tokens[ $stackPtr ]['code'] ) {
+
+            // Check if there is a use () statement.
+            if ( isset( $tokens[ $parenthesisOpener ]['parenthesis_closer'] ) ) {
+
+                $usePtr = $phpcsFile->findNext(
+                    PHP_CodeSniffer_Tokens::$emptyTokens,
+                    $tokens[ $parenthesisOpener ]['parenthesis_closer'] + 1,
+                    null,
+                    true,
+                    null,
+                    true
+                );
+
+                // If it is, we set that as the "scope opener".
+                if ( T_USE === $tokens[ $usePtr ]['code'] ) {
+                    $scopeOpener = $usePtr;
+                }
+            }
+        }
+
+        if (
+            T_COLON !== $tokens[ $parenthesisOpener ]['code']
+            && T_FUNCTION !== $tokens[ $stackPtr ]['code']
+        ) {
 
             if (
                 T_CLOSURE === $tokens[ $stackPtr ]['code']

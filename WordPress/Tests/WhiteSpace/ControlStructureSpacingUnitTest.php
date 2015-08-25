@@ -58,6 +58,13 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 	            72 => 1,
                 81 => 3,
                 82 => 1,
+                85 => 1,
+                91 => 2,
+                92 => 1,
+                94 => 1,
+                95 => 1,
+                97 => 1,
+                98 => 1,
                );
 
         // Uncomment when "$blank_line_check" parameter will be "true" by default.
