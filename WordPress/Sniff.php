@@ -281,6 +281,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public static $unslashingSanitizingFunctions = array(
 		'absint' => true,
+		'boolval' => true,
+		'intval' => true,
 		'is_array' => true,
 		'sanitize_key' => true,
 	);
