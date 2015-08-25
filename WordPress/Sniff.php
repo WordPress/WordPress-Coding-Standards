@@ -117,6 +117,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'comments_rss_link' => true,
 		'delete_get_calendar_cache' => true,
 		'disabled' => true,
+		'do_shortcode' => true,
 		'do_shortcode_tag' => true,
 		'edit_bookmark_link' => true,
 		'edit_comment_link' => true,
