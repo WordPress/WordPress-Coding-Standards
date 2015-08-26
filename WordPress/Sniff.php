@@ -240,6 +240,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'esc_url_raw' => true,
 		'filter_input' => true,
 		'filter_var' => true,
+		'hash_equals' => true,
 		'in_array' => true,
 		'intval' => true,
 		'is_array' => true,
