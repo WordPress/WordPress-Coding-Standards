@@ -22,8 +22,7 @@
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
-class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
 
     /**
      * A list of tokenizers this sniff supports.
@@ -103,6 +102,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $tokens = $phpcsFile->getTokens();
 
+        $this->init( $phpcsFile );
+
         if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE
             && ! ( $tokens[$stackPtr]['code'] === T_ELSE && $tokens[($stackPtr + 1)]['code'] === T_COLON )
             && ! ( T_CLOSURE === $tokens[ $stackPtr ]['code'] && 0 === (int) $this->spaces_before_closure_open_paren )
@@ -122,7 +123,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         if ( isset( $tokens[ $stackPtr ]['scope_closer'] ) === false ) {
 
-            if ( T_USE === $tokens[ $stackPtr ]['code'] ) {
+            if ( T_USE === $tokens[ $stackPtr ]['code'] && 'closure' === $this->get_use_type( $stackPtr ) ) {
                 $scopeOpener = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $stackPtr + 1 );
                 $scopeCloser = $tokens[ $scopeOpener ]['scope_closer'];
             } else {

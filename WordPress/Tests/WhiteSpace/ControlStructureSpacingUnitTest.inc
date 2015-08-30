@@ -96,3 +96,6 @@ $closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 )  {}; //
 
 $closureWithArgsAndVars = function ( $arg1, $arg2 )use ( $var1, $var2 ) {}; // Bad, expected exactly one space between closing parenthesis and control structure.
 $closureWithArgsAndVars = function ( $arg1, $arg2 )  use ( $var1, $var2 ) {}; // Bad, expected exactly one space between closing parenthesis and control structure.
+
+// Namespaces.
+use Foo\Admin;
