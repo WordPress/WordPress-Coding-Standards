@@ -121,12 +121,24 @@ property should now be used instead for the `EscapeOutput` sniff.
 - Poor performance of the `WordPress.Arrays.ArrayAssignmentRestrictions` sniff.
 - Poor performance of the `WordPress.Files.FileName` sniff.
 
-## 0.3.0 - 2014-12-11
+## [0.3.0] - 2014-12-11
+
+See the comparison for full list.
 
 ### Changed
 - Use semantic version tags for releases.
+
+## [2013-10-06]
+
+See the comparison for full list.
+
+## 2013-06-11
+
+Initial tagged release.
 
 [0.7.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2013-10-06...0.3.0
+[2013-10-06]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
