@@ -157,3 +157,10 @@ echo sprintf( 'Howdy, %s', esc_html( $name ? $name : __( 'Partner' ) ) ); // OK
 
 _e( 'Something' ); // Bad
 esc_html_e( 'Something' ); // OK
+
+echo $something // Bad
+     . esc_attr( 'baz-' // Rest is OK
+	         . $r
+	         . ( $r === $active_round ? ' foo' : '' )
+	         . ( $r < $active_round ? ' bar' : '' )
+	) . 'something';
