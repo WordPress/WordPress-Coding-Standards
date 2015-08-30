@@ -137,6 +137,7 @@ See the comparison for full list.
 
 Initial tagged release.
 
+[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...HEAD
 [0.7.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.4.0...0.5.0
