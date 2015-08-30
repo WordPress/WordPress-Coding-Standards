@@ -11,6 +11,29 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 `get_category_by_slug()`, `get_cat_ID()`, `count_user_posts()`, and `wp_old_slug_redirect()` 
 to the list of restricted functions in the `WordPress.VIP.RestrictedFunctions` sniff.
 
+## [0.7.0] - 2015-08-30
+
+### Added
+- Automatic error fixing to the `WordPress.Arrays.ArrayKeySpacingRestrictions` sniff.
+- Functions and closures to the control structures checked by the `WordPress.WhiteSpace.ControlStructureSpacing`
+sniff.
+- Sniffing and fixing for extra spacing in the `WordPress.WhiteSpace.ControlStructureSpacing`
+sniff. (Previously it only checked for insufficient spacing.)
+- `.twig` files to the default ignored files.
+- `esc_url_raw()` and `hash_equals()` to the list of sanitizing functions.
+- `intval()` and `boolval()` to list of unslashing functions.
+- `do_shortcode()` to the list of auto-escaped functions.
+
+### Removed
+- `WordPress.Functions.FunctionDeclarationArgumentSpacing` in favor of the upstream
+sniff `Squiz.Functions.FunctionDeclarationArgumentSpacing`.
+
+### Fixed
+- Reference to incorrect issue in the inline docs of the `WordPress.VIP.SessionVariableUsage`
+sniff.
+- `WordPress.XSS.EscapeOutput` sniff incorrectly handling ternary conditions in
+`echo` statements without parentheses in some cases.
+
 ## [0.6.0] - 2015-06-30
 
 ### Added
