@@ -2,12 +2,13 @@
 /**
  * WordPress_Sniffs_VIP_SessionVariableUsageSniff
  *
- * Discourages the use of the session variable
+ * Discourages the use of the session variable.
+ * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
  */
 class WordPress_Sniffs_VIP_SessionVariableUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff
 {

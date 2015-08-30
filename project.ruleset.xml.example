@@ -8,6 +8,7 @@
 	<exclude-pattern>/docroot/index.php</exclude-pattern>
 	<exclude-pattern>/docroot/xmlrpc.php</exclude-pattern>
 	<exclude-pattern>/docroot/wp-content/plugins/*</exclude-pattern>
+	<exclude-pattern>*.twig</exclude-pattern>
 
 	<rule ref="Squiz.PHP.CommentedOutCode"/>
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>

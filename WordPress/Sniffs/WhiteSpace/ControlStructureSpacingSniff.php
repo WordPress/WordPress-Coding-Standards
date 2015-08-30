@@ -22,8 +22,7 @@
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
-class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
 
     /**
      * A list of tokenizers this sniff supports.
@@ -52,6 +51,16 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
      */
     public $space_before_colon = 'required';
 
+	/**
+	 * How many spaces should be between a T_CLOSURE and T_OPEN_PARENTHESIS.
+	 *
+	 * function[*]() {...}
+	 *
+	 * @since 0.7.0
+	 *
+	 * @var int
+	 */
+	public $spaces_before_closure_open_paren = 1;
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -69,6 +78,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
                 T_DO,
                 T_ELSE,
                 T_ELSEIF,
+	            T_FUNCTION,
+	            T_CLOSURE,
+                T_USE,
                );
 
     }//end register()
@@ -90,8 +102,11 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $tokens = $phpcsFile->getTokens();
 
+        $this->init( $phpcsFile );
+
         if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE
             && ! ( $tokens[$stackPtr]['code'] === T_ELSE && $tokens[($stackPtr + 1)]['code'] === T_COLON )
+            && ! ( T_CLOSURE === $tokens[ $stackPtr ]['code'] && 0 === (int) $this->spaces_before_closure_open_paren )
         ) {
             $error = 'Space after opening control structure is required';
             if (isset($phpcsFile->fixer) === true) {
@@ -106,12 +121,19 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             }
         }
 
-        if (isset($tokens[$stackPtr]['scope_closer']) === false) {
-            return;
-        }
+        if ( isset( $tokens[ $stackPtr ]['scope_closer'] ) === false ) {
 
-        $scopeOpener = $tokens[$stackPtr]['scope_opener'];
-        $scopeCloser = $tokens[$stackPtr]['scope_closer'];
+            if ( T_USE === $tokens[ $stackPtr ]['code'] && 'closure' === $this->get_use_type( $stackPtr ) ) {
+                $scopeOpener = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $stackPtr + 1 );
+                $scopeCloser = $tokens[ $scopeOpener ]['scope_closer'];
+            } else {
+                return;
+            }
+
+        } else {
+            $scopeOpener = $tokens[ $stackPtr ]['scope_opener'];
+            $scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
+        }
 
         // alternative syntax
         if ( $tokens[$scopeOpener]['code'] === T_COLON ) {
@@ -156,20 +178,127 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
 
         $parenthesisOpener = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
 
-        if (($stackPtr + 1) === $parenthesisOpener && $tokens[$parenthesisOpener]['code'] !== T_COLON) {
-            // Checking this: $value = my_function[*](...).
-            $error = 'No space before opening parenthesis is prohibited';
-            if (isset($phpcsFile->fixer) === true) {
-                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceBeforeOpenParenthesis');
-                if ($fix === true) {
-                    $phpcsFile->fixer->beginChangeset();
-                    $phpcsFile->fixer->addContent($stackPtr, ' ');
-                    $phpcsFile->fixer->endChangeset();
+	    // If this is a function declaration.
+	    if ( $tokens[ $stackPtr ]['code'] === T_FUNCTION ) {
+
+		    if ( $tokens[ $parenthesisOpener ]['code'] === T_STRING ) {
+
+			    $function_name_ptr = $parenthesisOpener;
+
+		    } elseif ( $tokens[ $parenthesisOpener ]['code'] === T_BITWISE_AND ) {
+
+			    // This function returns by reference (function &function_name() {}).
+			    $function_name_ptr = $parenthesisOpener = $phpcsFile->findNext(
+				    PHP_CodeSniffer_Tokens::$emptyTokens,
+				    $parenthesisOpener + 1,
+				    null,
+				    true
+			    );
+		    }
+
+		    $parenthesisOpener = $phpcsFile->findNext(
+			    PHP_CodeSniffer_Tokens::$emptyTokens,
+			    $parenthesisOpener + 1,
+			    null,
+			    true
+		    );
+
+		    // Checking this: function my_function[*](...) {}
+		    if ( $parenthesisOpener !== $function_name_ptr + 1 ) {
+
+			    $error = 'Space between function name and opening parenthesis is prohibited.';
+			    $fix = $phpcsFile->addFixableError(
+				    $error,
+				    $stackPtr,
+				    'SpaceBeforeFunctionOpenParenthesis',
+				    $tokens[ $function_name_ptr + 1 ]['content']
+			    );
+
+			    if ( true === $fix ) {
+				    $phpcsFile->fixer->beginChangeset();
+				    $phpcsFile->fixer->replaceToken( $function_name_ptr + 1, '' );
+				    $phpcsFile->fixer->endChangeset();
+			    }
+		    }
+
+        } elseif ( T_CLOSURE === $tokens[ $stackPtr ]['code'] ) {
+
+            // Check if there is a use () statement.
+            if ( isset( $tokens[ $parenthesisOpener ]['parenthesis_closer'] ) ) {
+
+                $usePtr = $phpcsFile->findNext(
+                    PHP_CodeSniffer_Tokens::$emptyTokens,
+                    $tokens[ $parenthesisOpener ]['parenthesis_closer'] + 1,
+                    null,
+                    true,
+                    null,
+                    true
+                );
+
+                // If it is, we set that as the "scope opener".
+                if ( T_USE === $tokens[ $usePtr ]['code'] ) {
+                    $scopeOpener = $usePtr;
                 }
-            } else {
-                $phpcsFile->addError($error, $stackPtr, 'NoSpaceBeforeOpenParenthesis');
             }
         }
+
+        if (
+            T_COLON !== $tokens[ $parenthesisOpener ]['code']
+            && T_FUNCTION !== $tokens[ $stackPtr ]['code']
+        ) {
+
+            if (
+                T_CLOSURE === $tokens[ $stackPtr ]['code']
+                && 0 === (int) $this->spaces_before_closure_open_paren
+            ) {
+
+                if ( ($stackPtr + 1) !== $parenthesisOpener ) {
+                    // Checking this: function[*](...) {}.
+                    $error = 'Space before closure opening parenthesis is prohibited';
+                    $fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'SpaceBeforeClosureOpenParenthesis' );
+                    if ( $fix === true ) {
+                        $phpcsFile->fixer->beginChangeset();
+                        $phpcsFile->fixer->replaceToken( $stackPtr + 1, '' );
+                        $phpcsFile->fixer->endChangeset();
+                    }
+                }
+
+            } elseif ( ($stackPtr + 1) === $parenthesisOpener ) {
+
+                // Checking this: if[*](...) {}.
+                $error = 'No space before opening parenthesis is prohibited';
+                if ( isset( $phpcsFile->fixer ) === true ) {
+                    $fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+                    if ( $fix === true ) {
+                        $phpcsFile->fixer->beginChangeset();
+                        $phpcsFile->fixer->addContent( $stackPtr, ' ' );
+                        $phpcsFile->fixer->endChangeset();
+                    }
+                } else {
+                    $phpcsFile->addError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+                }
+            }
+        }
+
+	    if (
+		    T_WHITESPACE === $tokens[ $stackPtr + 1 ]['code']
+		    && ' ' !== $tokens[ $stackPtr + 1 ]['content']
+	    ) {
+		    // Checking this: if [*](...) {}.
+		    $error = 'Expected exactly one space before opening parenthesis; "%s" found.';
+		    $fix = $phpcsFile->addFixableError(
+			    $error,
+			    $stackPtr,
+			    'ExtraSpaceBeforeOpenParenthesis',
+			    $tokens[ $stackPtr + 1 ]['content']
+		    );
+
+		    if ( true === $fix ) {
+			    $phpcsFile->fixer->beginChangeset();
+			    $phpcsFile->fixer->replaceToken( $stackPtr + 1, ' ' );
+			    $phpcsFile->fixer->endChangeset();
+		    }
+	    }
 
         if ($tokens[($parenthesisOpener + 1)]['code'] !== T_WHITESPACE
             && $tokens[($parenthesisOpener + 1)]['code'] !== T_CLOSE_PARENTHESIS
@@ -188,22 +317,45 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
             }
         }
 
-        if (isset($tokens[$parenthesisOpener]['parenthesis_closer']) === true) {
+        if ( isset($tokens[$parenthesisOpener]['parenthesis_closer']) === true ) {
+
             $parenthesisCloser = $tokens[$parenthesisOpener]['parenthesis_closer'];
 
-            if ($tokens[($parenthesisCloser - 1)]['code'] !== T_WHITESPACE) {
-                $error = 'No space before closing parenthesis is prohibited';
-                if (isset($phpcsFile->fixer) === true) {
-                    $fix = $phpcsFile->addFixableError($error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis');
-                    if ($fix === true) {
-                        $phpcsFile->fixer->beginChangeset();
-                        $phpcsFile->fixer->addContentBefore($parenthesisCloser, ' ');
-                        $phpcsFile->fixer->endChangeset();
-                    }
-                } else {
-                    $phpcsFile->addError($error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis');
-                }
-            }
+	        if ( $tokens[($parenthesisOpener + 1)]['code'] !== T_CLOSE_PARENTHESIS ) {
+
+	            if ($tokens[($parenthesisCloser - 1)]['code'] !== T_WHITESPACE) {
+	                $error = 'No space before closing parenthesis is prohibited';
+	                if (isset($phpcsFile->fixer) === true) {
+	                    $fix = $phpcsFile->addFixableError($error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis');
+	                    if ($fix === true) {
+	                        $phpcsFile->fixer->beginChangeset();
+	                        $phpcsFile->fixer->addContentBefore($parenthesisCloser, ' ');
+	                        $phpcsFile->fixer->endChangeset();
+	                    }
+	                } else {
+	                    $phpcsFile->addError($error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis');
+	                }
+	            }
+
+		        if (
+			        $tokens[ $parenthesisCloser + 1 ]['code'] !== T_WHITESPACE
+		            && $tokens[ $scopeOpener ]['code'] !== T_COLON
+		        ) {
+			        $error = 'Space between opening control structure and closing parenthesis is required';
+
+			        if ( isset( $phpcsFile->fixer ) === true ) {
+				        $fix = $phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceAfterCloseParenthesis' );
+
+				        if ( $fix === true ) {
+					        $phpcsFile->fixer->beginChangeset();
+					        $phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
+					        $phpcsFile->fixer->endChangeset();
+				        }
+			        } else {
+				        $phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
+			        }
+		        }
+	        }
 
             if (isset($tokens[$parenthesisOpener]['parenthesis_owner']) === true
                 && $tokens[$parenthesisCloser]['line'] !== $tokens[$scopeOpener]['line']
@@ -218,7 +370,6 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
                             $phpcsFile->fixer->replaceToken($i, '');
                         }
 
-                        // TODO: Should be a separate check for spacing between ")" and "{" only (when they are on same line).
                         $phpcsFile->fixer->addContent($parenthesisCloser, ' ');
                         $phpcsFile->fixer->endChangeset();
                     }
@@ -226,7 +377,27 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff implements PHP_Co
                     $phpcsFile->addError($error, $parenthesisOpener, 'OpenBraceNotSameLine');
                 }//end if
                 return;
-            }//end if
+
+            } elseif (
+		        T_WHITESPACE === $tokens[ $parenthesisCloser + 1 ]['code']
+		        && ' ' !== $tokens[ $parenthesisCloser + 1 ]['content']
+	        ) {
+
+		        // Checking this: if (...) [*]{}
+		        $error = 'Expected exactly one space between closing parenthesis and opening control structure; "%s" found.';
+		        $fix = $phpcsFile->addFixableError(
+			        $error,
+			        $stackPtr,
+			        'ExtraSpaceAfterCloseParenthesis',
+			        $tokens[ $parenthesisCloser + 1 ]['content']
+		        );
+
+		        if ( true === $fix ) {
+			        $phpcsFile->fixer->beginChangeset();
+			        $phpcsFile->fixer->replaceToken( $parenthesisCloser + 1, ' ' );
+			        $phpcsFile->fixer->endChangeset();
+		        }
+	        }
         }//end if
 
         if ($this->blank_line_check === true) {

@@ -172,16 +172,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 				$ternary = $phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
 
 				// If there is a ternary skip over the part before the ?. However, if
-				// there is a closing parenthesis ending the statement, we only do
-				// this when the opening parenthesis comes after the ternary. If the
-				// ternary is within the parentheses, it will be handled in the loop.
-				if (
-					$ternary
-					&& (
-						T_CLOSE_PARENTHESIS !== $tokens[ $last_token ]['code']
-						|| $ternary < $tokens[ $last_token ]['parenthesis_opener']
-					)
-				) {
+				// the ternary is within parentheses, it will be handled in the loop.
+				if ( $ternary && empty( $tokens[ $ternary ]['nested_parenthesis'] ) ) {
 					$stackPtr = $ternary;
 				}
 			}

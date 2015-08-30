@@ -72,13 +72,20 @@
 		<severity>0</severity>
 	</rule>
 
+	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+		<properties>
+			<property name="equalsSpacing" value="1" />
+			<property name="requiredSpacesAfterOpen" value="1" />
+			<property name="requiredSpacesBeforeClose" value="1" />
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.Arrays.ArrayDeclaration">
 		<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
 	</rule>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 	<rule ref="WordPress.Classes.ValidClassName"/>
 	<rule ref="WordPress.Files.FileName"/>
-	<rule ref="WordPress.Functions.FunctionDeclarationArgumentSpacing"/>
 	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
