@@ -45,7 +45,7 @@ endif;
 if ( false ) :
 else :
 endif;
-
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
 function($arg){} // Bad
 function ( $arg ) {
 	// OK
