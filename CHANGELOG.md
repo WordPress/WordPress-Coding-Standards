@@ -1,4 +1,5 @@
-# Change Log
+# Change Log for WordPress Coding Standards
+
 All notable changes to this project will be documented in this file.
 
 This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
@@ -10,6 +11,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - `get_children()`, `wp_get_object_terms()`, `wp_get_post_(categories|tags|terms)()`, 
 `get_category_by_slug()`, `get_cat_ID()`, `count_user_posts()`, and `wp_old_slug_redirect()` 
 to the list of restricted functions in the `WordPress.VIP.RestrictedFunctions` sniff.
+
+## [0.7.1] - 2015-08-31
+
+### Changed
+- The default number of spaces before a closure's opening parenthesis from 1 to 0.
 
 ## [0.7.0] - 2015-08-30
 
@@ -123,5 +129,24 @@ property should now be used instead for the `EscapeOutput` sniff.
 
 ## [0.3.0] - 2014-12-11
 
+See the comparison for full list.
+
 ### Changed
 - Use semantic version tags for releases.
+
+## [2013-10-06]
+
+See the comparison for full list.
+
+## 2013-06-11
+
+Initial tagged release.
+
+[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...HEAD
+[0.7.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...0.7.1
+[0.7.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.6.0...0.7.0
+[0.6.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.4.0...0.5.0
+[0.4.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2013-10-06...0.3.0
+[2013-10-06]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
