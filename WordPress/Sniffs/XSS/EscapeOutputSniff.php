@@ -288,10 +288,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 						// Get the first parameter (name of function being used on the array).
 						$mapped_function = $this->phpcsFile->findNext(
-							PHP_CodeSniffer_Tokens::$emptyTokens
-							, $function_opener + 1
-							, $tokens[ $function_opener ]['parenthesis_closer']
-							, true
+							PHP_CodeSniffer_Tokens::$emptyTokens,
+							$function_opener + 1,
+							$tokens[ $function_opener ]['parenthesis_closer'],
+							true
 						);
 
 						// If we're able to resolve the function name, do so.
