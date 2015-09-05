@@ -164,3 +164,6 @@ echo $something // Bad
 	         . ( $r === $active_round ? ' foo' : '' )
 	         . ( $r < $active_round ? ' bar' : '' )
 	) . 'something';
+
+echo implode( '<br>', $items ); // Bad
+echo implode( '<br>', urlencode_deep( $items ) ); // OK
