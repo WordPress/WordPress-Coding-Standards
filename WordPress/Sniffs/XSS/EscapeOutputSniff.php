@@ -274,6 +274,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			// Now check that next token is a function call.
 			if ( T_STRING === $this->tokens[ $i ]['code'] ) {
 
+				$ptr = $i;
+
 				$functionName = $this->tokens[ $i ]['content'];
 
 				$function_opener = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i + 1, null, null, null, true );
@@ -295,6 +297,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 						// If we're able to resolve the function name, do so.
 						if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
 							$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
+							$ptr = $mapped_function;
 						}
 					}
 
@@ -317,13 +320,19 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 				) {
 					continue;
 				}
+
+				$content = $functionName;
+
+			} else {
+				$content = $this->tokens[ $i ]['content'];
+				$ptr = $i;
 			}
 
 			$this->phpcsFile->addError(
 				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
-				$i,
+				$ptr,
 				'OutputNotEscaped',
-				$this->tokens[ $i ]['content']
+				$content
 			);
 		}
 
