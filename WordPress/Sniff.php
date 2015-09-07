@@ -305,6 +305,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	public static $formattingFunctions = array(
 		'ent2ncr' => true,
 		'implode' => true,
+		'join' => true,
 		'sprintf' => true,
 		'vsprintf' => true,
 		'wp_sprintf' => true,

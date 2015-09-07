@@ -169,3 +169,5 @@ echo implode( '<br>', $items ); // Bad
 echo implode( '<br>', urlencode_deep( $items ) ); // OK
 echo implode( '<br>', array_map( 'esc_html', $items ) ); // OK
 echo implode( '<br>', array_map( 'foo', $items ) ); // Bad
+echo join( '<br>', $items ); // Bad
+echo join( '<br>', array_map( 'esc_html', $items ) ); // OK
