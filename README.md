@@ -89,6 +89,10 @@ Will result in following output:
 
 Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](https://www.jetbrains.com/phpstorm/help/using-php-code-sniffer-tool.html)” in PhpStorm documentation.
 
+### Sublime Text
+
+Install the [sublime-phpcs package](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
+
 ## Standards subsets
 
 The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example those specific to WordPress VIP coding requirements.
