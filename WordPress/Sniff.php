@@ -334,6 +334,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'user_error' => true,
 		'vprintf' => true,
 		'wp_die' => true,
+		'wp_dropdown_pages' => true,
 	);
 
 	/**
