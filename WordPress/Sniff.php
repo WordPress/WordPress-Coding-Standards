@@ -306,6 +306,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'ent2ncr' => true,
 		'implode' => true,
 		'join' => true,
+		'nl2br' => true,
 		'sprintf' => true,
 		'vsprintf' => true,
 		'wp_sprintf' => true,
