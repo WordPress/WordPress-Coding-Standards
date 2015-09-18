@@ -43,7 +43,7 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff extends Generic_Sniffs_PHP_
         $tokens = $phpcsFile->getTokens();
 
         if ( $tokens[$stackPtr]['content'] == '$_SESSION' ) {
-        	$phpcsFile->addError('Usage of $_SESSION variable is prohibited.', $stackPtr);
+        	$phpcsFile->addError( 'Usage of $_SESSION variable is prohibited.', $stackPtr, 'SessionVarsProhibited' );
         }
 
 
