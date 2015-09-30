@@ -99,3 +99,11 @@ $closureWithArgsAndVars = function ( $arg1, $arg2 )  use ( $var1, $var2 ) {}; //
 
 // Namespaces.
 use Foo\Admin;
+
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren -1
+
+function( $arg ) {} // OK
+function ( $arg ) {} // OK
+
+$closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // OK
+$closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // OK
