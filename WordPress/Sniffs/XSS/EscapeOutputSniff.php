@@ -274,19 +274,41 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			// Now check that next token is a function call.
 			if ( T_STRING === $this->tokens[ $i ]['code'] ) {
 
+				$ptr = $i;
+
 				$functionName = $this->tokens[ $i ]['content'];
+
+				$function_opener = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i + 1, null, null, null, true );
+
 				$is_formatting_function = isset( self::$formattingFunctions[ $functionName ] );
 
-				// Skip pointer to after the function.
-				if ( $_pos = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i, null, null, null, true ) ) {
+				if ( $function_opener ) {
 
+					if ( 'array_map' === $functionName ) {
+
+						// Get the first parameter (name of function being used on the array).
+						$mapped_function = $this->phpcsFile->findNext(
+							PHP_CodeSniffer_Tokens::$emptyTokens,
+							$function_opener + 1,
+							$tokens[ $function_opener ]['parenthesis_closer'],
+							true
+						);
+
+						// If we're able to resolve the function name, do so.
+						if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
+							$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
+							$ptr = $mapped_function;
+						}
+					}
+
+					// Skip pointer to after the function.
 					// If this is a formatting function we just skip over the opening
 					// parenthesis. Otherwise we skip all the way to the closing.
 					if ( $is_formatting_function ) {
-						$i     = $_pos + 1;
+						$i     = $function_opener + 1;
 						$watch = true;
 					} else {
-						$i = $this->tokens[ $_pos ]['parenthesis_closer'];
+						$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
 					}
 				}
 
@@ -298,13 +320,19 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 				) {
 					continue;
 				}
+
+				$content = $functionName;
+
+			} else {
+				$content = $this->tokens[ $i ]['content'];
+				$ptr = $i;
 			}
 
 			$this->phpcsFile->addError(
 				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
-				$i,
+				$ptr,
 				'OutputNotEscaped',
-				$this->tokens[ $i ]['content']
+				$content
 			);
 		}
 

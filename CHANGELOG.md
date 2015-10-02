@@ -12,6 +12,28 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 `get_category_by_slug()`, `get_cat_ID()`, `count_user_posts()`, and `wp_old_slug_redirect()` 
 to the list of restricted functions in the `WordPress.VIP.RestrictedFunctions` sniff.
 
+## [0.8.0] - 2015-10-02
+
+### Added
+- `implode()` and `join()` to the list of formatting functions in the `WordPress.XSS.EscapeOutput`
+sniff. This is useful when you need to have HTML in the `$glue` parameter.
+- Support in the `WordPress.XSS.EscapeOutput` sniff for escaping an array of values
+using `array_map()`. (Otherwise the support for `implode()` isn't of much use :)
+- Docs for running WPCS in Sublime Text.
+- `nl2br()` to the list of formatting functions.
+- `wp_dropdown_pages()` to the list of printing functions.
+- Error codes to all error/warning messages.
+- `WordPress.WP.PreparedSQL` sniff for flagging unprepared SQL queries.
+
+### Removed
+- Sniffing for the number of spaces before a closure's opening parenthesis from the
+default configuration of the `WordPress.WhiteSpace.ControlStructureSpacing` sniff. It
+can be re-enabled per-project as desired.
+
+### Fixed
+- The `WordPress.XSS.EscapeOutput` sniff giving error messages with the closing
+parenthesis in them instead of the offending function's name.
+
 ## [0.7.1] - 2015-08-31
 
 ### Changed
@@ -142,7 +164,8 @@ See the comparison for full list.
 
 Initial tagged release.
 
-[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.1...0.8.0
 [0.7.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.5.0...0.6.0

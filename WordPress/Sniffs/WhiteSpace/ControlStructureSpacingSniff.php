@@ -60,7 +60,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 	 *
 	 * @var int
 	 */
-	public $spaces_before_closure_open_paren = 0;
+	public $spaces_before_closure_open_paren = -1;
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -106,7 +106,13 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
         if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE
             && ! ( $tokens[$stackPtr]['code'] === T_ELSE && $tokens[($stackPtr + 1)]['code'] === T_COLON )
-            && ! ( T_CLOSURE === $tokens[ $stackPtr ]['code'] && 0 === (int) $this->spaces_before_closure_open_paren )
+            && ! (
+                T_CLOSURE === $tokens[ $stackPtr ]['code']
+                && (
+                    0 === (int) $this->spaces_before_closure_open_paren
+                    || -1 === (int) $this->spaces_before_closure_open_paren
+                )
+            )
         ) {
             $error = 'Space after opening control structure is required';
             if (isset($phpcsFile->fixer) === true) {
@@ -263,7 +269,13 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
                     }
                 }
 
-            } elseif ( ($stackPtr + 1) === $parenthesisOpener ) {
+            } elseif (
+                (
+                    T_CLOSURE !== $tokens[ $stackPtr ]['code']
+                    || 1 === (int) $this->spaces_before_closure_open_paren
+                )
+                && ($stackPtr + 1) === $parenthesisOpener
+            ) {
 
                 // Checking this: if[*](...) {}.
                 $error = 'No space before opening parenthesis is prohibited';

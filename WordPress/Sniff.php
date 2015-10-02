@@ -304,6 +304,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public static $formattingFunctions = array(
 		'ent2ncr' => true,
+		'implode' => true,
+		'join' => true,
+		'nl2br' => true,
 		'sprintf' => true,
 		'vsprintf' => true,
 		'wp_sprintf' => true,
@@ -332,6 +335,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'user_error' => true,
 		'vprintf' => true,
 		'wp_die' => true,
+		'wp_dropdown_pages' => true,
 	);
 
 	/**
