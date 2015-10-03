@@ -171,3 +171,8 @@ echo implode( '<br>', array_map( 'esc_html', $items ) ); // OK
 echo implode( '<br>', array_map( 'foo', $items ) ); // Bad
 echo join( '<br>', $items ); // Bad
 echo join( '<br>', array_map( 'esc_html', $items ) ); // OK
+
+echo '<option name="' . esc_attr( $name ) . '"' .
+     ( $name === $selected ? ' selected' : '' ) .
+     '>' . esc_html( $value )
+     . '</option>';
