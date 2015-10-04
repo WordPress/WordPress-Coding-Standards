@@ -208,7 +208,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 					if ( $ternary ) {
 
-						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $i, $tokens[ $i ]['parenthesis_closer'] );
+						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $i + 1, $tokens[ $i ]['parenthesis_closer'] );
 
 						// We only do it if the ternary isn't within a subset of parentheses.
 						if ( ! $next_paren || $ternary > $tokens[ $next_paren ]['parenthesis_closer'] ) {
