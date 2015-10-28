@@ -76,7 +76,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 				$string = str_replace( '$wpdb', '', $tokens[ $i ]['content'] );
 
-				if ( false !== strpos( $string, '$' ) ) {
+				if ( preg_match( '/\$\w+/', $string ) ) {
 
 					$phpcsFile->addError(
 						'Use placeholders and $wpdb->prepare(); found %s',
