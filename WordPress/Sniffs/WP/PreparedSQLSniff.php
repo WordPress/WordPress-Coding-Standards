@@ -76,7 +76,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 				$string = str_replace( '$wpdb', '', $tokens[ $i ]['content'] );
 
-				if ( preg_match( '/\$\w+/', $string ) ) {
+				// Check if the $ is followed by a valid name, and that it is not preceded by an escape sequence.
+				if ( preg_match( '/(\\\\*)\$\w+/', $string, $matches ) && strlen( $matches[1] ) % 2 === 0 ) {
 
 					$phpcsFile->addError(
 						'Use placeholders and $wpdb->prepare(); found %s',
