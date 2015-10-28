@@ -77,16 +77,21 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				$string = str_replace( '$wpdb', '', $tokens[ $i ]['content'] );
 
 				// Check if the $ is followed by a valid name, and that it is not preceded by an escape sequence.
-				if ( preg_match( '/(\\\\*)\$\w+/', $string, $matches ) && strlen( $matches[1] ) % 2 === 0 ) {
-
-					$phpcsFile->addError(
-						'Use placeholders and $wpdb->prepare(); found %s',
-						$i,
-						'NotPrepared',
-						array( $tokens[ $i ]['content'] )
-					);
+				if ( preg_match_all( '/(?P<backslashes>\\\\*)\$(?P<symbol>\w+)/', $string, $match_sets, PREG_SET_ORDER ) ) {
+					foreach ( $match_sets as $matches ) {
+						if ( strlen( $matches['backslashes'] ) % 2 === 0 ) {
+							$phpcsFile->addError(
+								'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
+								$i,
+								'NotPrepared',
+								array(
+									$matches['symbol'],
+									$tokens[ $i ]['content']
+								)
+							);
+						}
+					}
 				}
-
 				continue;
 			}
 
