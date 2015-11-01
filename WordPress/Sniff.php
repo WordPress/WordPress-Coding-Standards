@@ -1080,6 +1080,27 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// USE keywords for classes to import to a namespace.
 		return 'class';
 	}
+
+	/**
+	 * Get the interpolated variable names from a string.
+	 *
+	 * Check if '$' is followed by a valid variable name, and that it is not preceded by an escape sequence.
+	 *
+	 * @param string $string A T_DOUBLE_QUOTED_STRING token.
+	 *
+	 * @return array Variable names (without '$' sigil).
+	 */
+	protected function get_interpolated_variables( $string ) {
+		$variables = array();
+		if ( preg_match_all( '/(?P<backslashes>\\\\*)\$(?P<symbol>\w+)/', $string, $match_sets, PREG_SET_ORDER ) ) {
+			foreach ( $match_sets as $matches ) {
+				if ( strlen( $matches['backslashes'] ) % 2 === 0 ) {
+					$variables[] = $matches['symbol'];
+				}
+			}
+		}
+		return $variables;
+	}
 }
 
 // EOF
