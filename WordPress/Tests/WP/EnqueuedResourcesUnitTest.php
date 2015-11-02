@@ -11,6 +11,16 @@
 class WordPress_Tests_WP_EnqueuedResourcesUnitTest extends AbstractSniffUnitTest
 {
 
+    /**
+     * Skip this test on PHP 5.2.
+     *
+     * @since 0.9.0
+     *
+     * @return bool Whether to skip this test.
+     */
+    protected function shouldSkipTest() {
+        return version_compare( PHP_VERSION, '5.3.0', '<' );
+    }
 
     /**
      * Returns the lines where errors should occur.
