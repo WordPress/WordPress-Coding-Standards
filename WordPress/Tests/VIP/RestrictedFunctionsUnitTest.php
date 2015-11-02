@@ -29,6 +29,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
             3  => 1,
             5  => 1,
             21 => 1,
+            34 => version_compare( PHP_VERSION, '5.3.0', '>=' ) ? 0 : 1,
             36 => 1,
             38 => 1,
             40 => 1,
