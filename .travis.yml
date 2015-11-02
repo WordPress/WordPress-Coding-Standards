@@ -39,4 +39,4 @@ before_script:
 
 script:
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
-    - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
+    - if [ $(phpenv version-name) != "5.2" ]; then phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
