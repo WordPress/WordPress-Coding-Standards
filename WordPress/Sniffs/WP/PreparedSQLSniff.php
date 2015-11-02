@@ -74,18 +74,24 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 			if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
 
-				$string = str_replace( '$wpdb', '', $tokens[ $i ]['content'] );
+				$bad_variables = array_filter(
+					$this->get_interpolated_variables( $tokens[ $i ]['content'] ),
+					function ( $symbol ) {
+						return ! in_array( $symbol, array( 'wpdb' ), true );
+					}
+				);
 
-				if ( false !== strpos( $string, '$' ) ) {
-
+				foreach ( $bad_variables as $bad_variable ) {
 					$phpcsFile->addError(
-						'Use placeholders and $wpdb->prepare(); found %s',
+						'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
 						$i,
 						'NotPrepared',
-						array( $tokens[ $i ]['content'] )
+						array(
+							$bad_variable,
+							$tokens[ $i ]['content']
+						)
 					);
 				}
-
 				continue;
 			}
 
