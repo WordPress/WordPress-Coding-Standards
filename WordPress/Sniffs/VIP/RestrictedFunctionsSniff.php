@@ -112,6 +112,14 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 			),
 
+			'attachment_url_to_postid' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_attachment_url_to_postid() instead.',
+				'functions' => array(
+					'attachment_url_to_postid',
+				),
+			),
+
 			'wp_remote_get' => array(
 				'type' => 'warning',
 				'message' => '%s is highly discouraged, please use vip_safe_wp_remote_get() instead.',

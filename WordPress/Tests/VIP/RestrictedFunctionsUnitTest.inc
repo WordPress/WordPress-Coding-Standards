@@ -46,3 +46,6 @@ get_term_by( $field, $value, $taxonomy ); // bad
 get_category_by_slug( $slug ); // bad
 
 url_to_postid( $url ); // bad
+
+attachment_url_to_postid( $url ); // bad
+wpcom_vip_attachment_url_to_postid( $url ); // ok
