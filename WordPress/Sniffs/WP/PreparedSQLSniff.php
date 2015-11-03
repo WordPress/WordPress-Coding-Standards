@@ -76,9 +76,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 				$bad_variables = array_filter(
 					$this->get_interpolated_variables( $tokens[ $i ]['content'] ),
-					function ( $symbol ) {
-						return ! in_array( $symbol, array( 'wpdb' ), true );
-					}
+					create_function( '$symbol', 'return ! in_array( $symbol, array( "wpdb" ), true );' ) // Replace this with closure once 5.3 is minimum requirement.
 				);
 
 				foreach ( $bad_variables as $bad_variable ) {

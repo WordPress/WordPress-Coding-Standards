@@ -91,9 +91,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		// Handling string interpolation
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[ $stackPtr ]['code'] ) {
 			$interpolated_variables = array_map(
-				function ( $symbol ) {
-					return '$' . $symbol;
-				},
+				create_function( '$symbol', 'return "$" . $symbol;' ), // Replace with closure when 5.3 is minimum requirement for PHPCS.
 				$this->get_interpolated_variables( $tokens[ $stackPtr ]['content'] )
 			);
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
