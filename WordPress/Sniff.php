@@ -237,6 +237,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $sanitizingFunctions = array(
+		'_wp_handle_upload' => true,
 		'absint' => true,
 		'esc_url_raw' => true,
 		'filter_input' => true,
@@ -266,6 +267,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'sanitize_user_field' => true,
 		'sanitize_user' => true,
 		'validate_file' => true,
+		'wp_handle_sideload' => true,
+		'wp_handle_upload' => true,
 		'wp_kses_allowed_html' => true,
 		'wp_kses_data' => true,
 		'wp_kses_post' => true,
