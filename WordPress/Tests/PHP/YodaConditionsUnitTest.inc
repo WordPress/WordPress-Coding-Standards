@@ -82,3 +82,5 @@ if ( $on !== self::$network_mode ) { // OK
 return 0 === strpos( $foo, 'a' ); // OK
 return 0 == $foo; // OK
 return $foo == 0; // Bad
+
+if ( (int) $a['interval'] === (int) $b['interval'] ) {} // OK
