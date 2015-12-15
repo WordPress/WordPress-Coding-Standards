@@ -239,6 +239,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	public static $sanitizingFunctions = array(
 		'_wp_handle_upload' => true,
 		'absint' => true,
+		'array_key_exists' => true,
 		'esc_url_raw' => true,
 		'filter_input' => true,
 		'filter_var' => true,
