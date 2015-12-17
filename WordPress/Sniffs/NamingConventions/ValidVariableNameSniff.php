@@ -104,7 +104,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 						$obj_var_name = substr( $obj_var_name, 1 );
 					}
 
-					if ( ! in_array( $obj_var_name, $this->whitelisted_mixed_case_member_var_names, true ) && static::isSnakeCase( $obj_var_name ) === false ) {
+					if ( ! in_array( $obj_var_name, $this->whitelisted_mixed_case_member_var_names, true ) && self::isSnakeCase( $obj_var_name ) === false ) {
 						$error = 'Variable "%s" is not in valid camel caps format';
 						$data  = array( $original_var_name );
 						$phpcs_file->addError( $error, $var, 'NotSnakeCaseMemberVar', $data );
@@ -132,7 +132,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			}
 		}
 
-		if ( static::isSnakeCase( $var_name ) === false ) {
+		if ( self::isSnakeCase( $var_name ) === false ) {
 			$error = 'Variable "%s" is not in valid snake_case format';
 			$data  = array( $original_var_name );
 			$phpcs_file->addError( $error, $stack_ptr, 'NotSnakeCase', $data );
@@ -184,7 +184,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			}
 		}
 
-		if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) && static::isSnakeCase( $var_name ) === false ) {
+		if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) && self::isSnakeCase( $var_name ) === false ) {
 			$error = 'Member variable "%s" is not in valid snake_case format.';
 			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
 		}
@@ -211,7 +211,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 					continue;
 				}
 
-				if ( static::isSnakeCase( $var_name ) === false ) {
+				if ( self::isSnakeCase( $var_name ) === false ) {
 					$error = 'Variable "%s" is not in snake_case format';
 					$data  = array( $var_name );
 					$phpcs_file->addError( $error, $stack_ptr, 'StringNotSnakeCase', $data );
