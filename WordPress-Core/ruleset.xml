@@ -85,6 +85,7 @@
 	</rule>
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 	<rule ref="WordPress.Classes.ValidClassName"/>
+	<rule ref="WordPress.NamingConventions.ValidVariableName"/>
 	<rule ref="WordPress.Files.FileName"/>
 	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
