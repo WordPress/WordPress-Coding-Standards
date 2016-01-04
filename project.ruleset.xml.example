@@ -29,6 +29,6 @@
 		-->
 
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing" />
-		<exclude name="WordPress.Functions.FunctionCallSignature" />
+		<exclude name="WordPress.XSS.EscapeOutput" />
 	</rule>
 </ruleset>
