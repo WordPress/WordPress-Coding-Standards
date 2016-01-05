@@ -89,3 +89,8 @@ $comment = get_comment( 1 );
 echo $comment->comment_ID;
 echo $comment->comment_post_ID;
 echo $comment->comment_author_IP;
+
+class Foo {
+	public $_public_leading_underscore;
+	private $private_no_underscore_loading;
+}
