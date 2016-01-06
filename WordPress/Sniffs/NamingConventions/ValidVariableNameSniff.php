@@ -105,7 +105,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 					}
 
 					if ( ! in_array( $obj_var_name, $this->whitelisted_mixed_case_member_var_names, true ) && self::isSnakeCase( $obj_var_name ) === false ) {
-						$error = 'Variable "%s" is not in valid camel caps format';
+						$error = 'Variable "%s" is not in valid snake_case format';
 						$data  = array( $original_var_name );
 						$phpcs_file->addError( $error, $var, 'NotSnakeCaseMemberVar', $data );
 					}
@@ -163,27 +163,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			return;
 		}
 
-		$public    = ( 'private' !== $member_props['scope'] );
 		$error_data = array( $var_name );
-
-		if ( $public ) {
-			if ( substr( $var_name, 0, 1 ) === '_' ) {
-				$error = '%s member variable "%s" must not contain a leading underscore';
-				$data  = array(
-					ucfirst( $member_props['scope'] ),
-					$error_data[0],
-				);
-				$phpcs_file->addError( $error, $stack_ptr, 'PublicHasUnderscore', $data );
-				return;
-			}
-		} else {
-			if ( substr( $var_name, 0, 1 ) !== '_' ) {
-				$error = 'Private member variable "%s" must contain a leading underscore';
-				$phpcs_file->addError( $error, $stack_ptr, 'PrivateNoUnderscore', $error_data );
-				return;
-			}
-		}
-
 		if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) && self::isSnakeCase( $var_name ) === false ) {
 			$error = 'Member variable "%s" is not in valid snake_case format.';
 			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
