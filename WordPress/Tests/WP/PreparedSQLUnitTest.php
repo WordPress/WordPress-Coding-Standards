@@ -26,6 +26,8 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			16 => 1,
 			17 => 1,
 			18 => 1,
+			20 => 1,
+			21 => 1,
 		);
 	}
 

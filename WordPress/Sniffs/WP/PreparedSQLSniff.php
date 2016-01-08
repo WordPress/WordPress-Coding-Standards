@@ -14,7 +14,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 *
 	 * @since 0.8.0
 	 *
-	 * @var array[]
+	 * @var array
 	 */
 	protected static $methods = array(
 		'get_var' => true,
@@ -23,6 +23,24 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		'get_results' => true,
 		'prepare' => true,
 		'query' => true,
+	);
+
+	/**
+	 * Tokens that we don't flag when they are found in a $wpdb method call.
+	 *
+	 * @since 0.9.0
+	 *
+	 * @var array
+	 */
+	protected $ignored_tokens = array(
+		T_OBJECT_OPERATOR => true,
+		T_OPEN_PARENTHESIS => true,
+		T_CLOSE_PARENTHESIS => true,
+		T_WHITESPACE => true,
+		T_STRING_CONCAT => true,
+		T_CONSTANT_ENCAPSED_STRING => true,
+		T_OPEN_SQUARE_BRACKET => true,
+		T_CLOSE_SQUARE_BRACKET => true,
 	);
 
 	/**
@@ -60,17 +78,19 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 		$this->init( $phpcsFile );
 
-		$method_call_end = $this->is_wpdb_method_call( $stackPtr );
+		$is_method_call = $this->is_wpdb_method_call( $stackPtr );
 
-		if ( ! $method_call_end ) {
+		if ( ! $is_method_call ) {
 			return;
 		}
+
+		list( $start, $end ) = $is_method_call;
 
 		if ( $this->has_whitelist_comment( 'unprepared SQL', $stackPtr ) ) {
 			return;
 		}
 
-		for ( $i = $stackPtr + 1; $i < $method_call_end; $i++ ) {
+		for ( $i = $start + 1; $i < $end; $i++ ) {
 
 			if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
 
@@ -93,30 +113,32 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				continue;
 			}
 
-			if ( T_VARIABLE !== $tokens[ $i ]['code'] ) {
+			if ( T_VARIABLE === $tokens[ $i ]['code'] ) {
+				if ( '$wpdb' === $tokens[ $i ]['content'] ) {
+
+					$is_method_call = $this->is_wpdb_method_call( $i );
+
+					if ( $is_method_call ) {
+						list( $i, $end ) = $is_method_call;
+					}
+
+					continue;
+				}
+			}
+
+			if ( isset( $this->ignored_tokens[ $tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
-			if ( '$wpdb' === $tokens[ $i ]['content'] ) {
-
-				$is_method_call = $this->is_wpdb_method_call( $i );
-
-				if ( $is_method_call ) {
-					$method_call_end = $is_method_call;
-				}
-
-			} else {
-
-				 $phpcsFile->addError(
-					 'Use placeholders and $wpdb->prepare(); found %s',
-					 $i,
-					 'NotPrepared',
-					 array( $tokens[ $i ]['content'] )
-				 );
-			}
+			 $phpcsFile->addError(
+				 'Use placeholders and $wpdb->prepare(); found %s',
+				 $i,
+				 'NotPrepared',
+				 array( $tokens[ $i ]['content'] )
+			 );
 		}
 
-		return $method_call_end;
+		return $end;
 
 	} // end process().
 
@@ -155,7 +177,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		// Find the end of the first parameter.
 		$end = $this->phpcsFile->findEndOfStatement( $opening_paren + 1 );
 
-		return $end + 1;
+		if ( T_COMMA !== $this->tokens[ $end ]['code'] ) {
+			$end += 1;
+		}
+
+		return array( $opening_paren + 1, $end );
 	}
 
 } // end class.
