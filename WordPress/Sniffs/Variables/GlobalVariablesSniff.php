@@ -298,7 +298,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff
 
 			if ( $assignment && T_EQUAL === $tokens[ $assignment ]['code'] ) {
 				if ( ! $this->has_whitelist_comment( 'override', $assignment ) ) {
-					$phpcsFile->addError( 'Overridding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
+					$phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
 					return;
 				}
 			}
@@ -331,7 +331,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff
 					$next = $phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), $ptr + 1, null, true, null, true );
 					if ( T_EQUAL === $tokens[ $next ]['code'] ) {
 						if ( ! $this->has_whitelist_comment( 'override', $next ) ) {
-							$phpcsFile->addError( 'Overridding WordPress globals is prohibited', $ptr, 'OverrideProhibited' );
+							$phpcsFile->addError( 'Overriding WordPress globals is prohibited', $ptr, 'OverrideProhibited' );
 						}
 					}
 				}
