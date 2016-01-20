@@ -69,3 +69,4 @@ wp_old_slug_redirect(); // error
 get_adjacent_post(); // error
 get_previous_post(); // error
 get_next_post(); // error
+parse_url( 'http://example.com/' ); // warning
