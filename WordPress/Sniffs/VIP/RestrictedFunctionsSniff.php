@@ -231,6 +231,14 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 			),
 
+			'parse_url' => array(
+				'type' => 'warning',
+				'message' => '%s is discouraged due to a lack for backwards-compatibility in PHP versions; please use wp_parse_url() instead.',
+				'functions' => array(
+					'parse_url',
+				),
+			),
+
 		);
 	}
 }//end class
