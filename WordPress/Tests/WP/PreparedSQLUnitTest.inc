@@ -19,3 +19,5 @@ $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title = 'Th
 
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad
 $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ) ); // Bad
+
+$wpdb->query( "SELECT * FROM " . $wpdb->posts . " WHERE post_title LIKE 'foo';" ); // OK
