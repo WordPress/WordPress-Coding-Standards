@@ -41,6 +41,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		T_CONSTANT_ENCAPSED_STRING => true,
 		T_OPEN_SQUARE_BRACKET => true,
 		T_CLOSE_SQUARE_BRACKET => true,
+		T_COMMA => true,
+		T_LNUMBER => true,
 	);
 
 	/**
@@ -138,6 +140,31 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 			if ( T_VARIABLE === $tokens[ $this->i ]['code'] ) {
 				if ( '$wpdb' === $tokens[ $this->i ]['content'] ) {
 					$this->is_wpdb_method_call( $this->i );
+					continue;
+				}
+			}
+
+			if ( T_STRING === $tokens[ $this->i ]['code'] ) {
+
+				if (
+					isset( self::$SQLEscapingFunctions[ $tokens[ $this->i ]['content'] ] )
+					|| isset( self::$SQLAutoEscapedFunctions[ $tokens[ $this->i ]['content'] ] )
+				) {
+
+					// Find the opening parenthesis.
+					$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, $this->i + 1, null, true, null, true );
+
+					if (
+						$opening_paren
+						&& T_OPEN_PARENTHESIS === $this->tokens[ $opening_paren ]['code']
+						&& isset( $this->tokens[ $opening_paren ]['parenthesis_closer'] )
+					) {
+						// Skip past the end of the function.
+						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
+						continue;
+					}
+
+				} elseif ( isset( self::$formattingFunctions[ $tokens[ $this->i ]['content'] ] ) ) {
 					continue;
 				}
 			}

@@ -21,3 +21,13 @@ $wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';
 $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ) ); // Bad
 
 $wpdb->query( "SELECT * FROM " . $wpdb->posts . " WHERE post_title LIKE 'foo';" ); // OK
+
+// All OK.
+$all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
+	'SELECT `post_id`, `meta_value` FROM `%s` WHERE `meta_key` = "sort_order" AND `post_id` IN (%s)',
+	$wpdb->postmeta,
+	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+), $post_ids ) );
+
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . esc_sql( $foo ) . "';" ); // OK
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . absint( $foo ) . ";" ); // OK
