@@ -68,14 +68,14 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			// If this is a variable, we've seen all we need to see.
-			if ( T_VARIABLE === $tokens[ $i ]['code'] ) {
+			// If this is a variable or array, we've seen all we need to see.
+			if ( T_VARIABLE === $tokens[ $i ]['code'] || T_CLOSE_SQUARE_BRACKET === $tokens[ $i ]['code'] ) {
 				$needs_yoda = true;
 				break;
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( in_array( $tokens[ $i ]['code'], array( T_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ) ) ) {
 				return;
 			}
 		}

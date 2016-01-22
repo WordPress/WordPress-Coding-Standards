@@ -50,6 +50,8 @@ class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest
             62 => 1,
             68 => 1,
             84 => 1,
+            88 => 1,
+            90 => 1,
         );
 
     }//end getErrorList()
