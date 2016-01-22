@@ -308,6 +308,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $formattingFunctions = array(
+		'array_fill' => true,
 		'ent2ncr' => true,
 		'implode' => true,
 		'join' => true,
@@ -341,6 +342,31 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'vprintf' => true,
 		'wp_die' => true,
 		'wp_dropdown_pages' => true,
+	);
+
+	/**
+	 * Functions that escape values for use in SQL queries.
+	 *
+	 * @since 0.9.0
+	 *
+	 * @var array
+	 */
+	public static $SQLEscapingFunctions = array(
+		'absint' => true,
+		'esc_sql' => true,
+		'intval' => true,
+		'like_escape' => true,
+	);
+
+	/**
+	 * Functions whose output is automatically escaped for use in SQL queries.
+	 *
+	 * @since 0.9.0
+	 *
+	 * @var array
+	 */
+	public static $SQLAutoEscapedFunctions = array(
+		'count' => true,
 	);
 
 	/**
