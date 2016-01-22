@@ -88,3 +88,5 @@ if ( (int) $a['interval'] === (int) $b['interval'] ) {} // OK
 if ( $GLOBALS['wpdb']->num_rows === 0 ) {} // Bad
 
 if ( $true == strtolower( $check ) ) {} // Bad
+
+$update = 'yes' === strtolower( $this->from_post( 'update' ) ); // OK
