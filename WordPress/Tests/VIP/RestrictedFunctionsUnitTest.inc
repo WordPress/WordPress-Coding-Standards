@@ -46,3 +46,27 @@ get_term_by( $field, $value, $taxonomy ); // bad
 get_category_by_slug( $slug ); // bad
 
 url_to_postid( $url ); // bad
+
+attachment_url_to_postid( $url ); // bad
+wpcom_vip_attachment_url_to_postid( $url ); // ok
+
+get_tag_link(); // error
+get_category_link(); // error
+get_cat_ID(); // error
+url_to_post_id(); // error
+attachment_url_to_postid(); // error
+get_posts(); // warning
+wp_get_recent_posts(); // warning
+get_pages(); // error
+get_children(); // error
+wp_get_post_terms(); // error
+wp_get_post_categories(); // error
+wp_get_post_tags(); // error
+wp_get_object_terms(); // error
+term_exists(); // error
+count_user_posts(); // error
+wp_old_slug_redirect(); // error
+get_adjacent_post(); // error
+get_previous_post(); // error
+get_next_post(); // error
+parse_url( 'http://example.com/' ); // warning

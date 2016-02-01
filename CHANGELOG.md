@@ -8,9 +8,36 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ### Added
 - Sniff to flag dynamic translatable strings and textdomains.
-- `get_children()`, `wp_get_object_terms()`, `wp_get_post_(categories|tags|terms)()`, 
-`get_category_by_slug()`, `get_cat_ID()`, `count_user_posts()`, and `wp_old_slug_redirect()` 
-to the list of restricted functions in the `WordPress.VIP.RestrictedFunctions` sniff.
+
+## [0.9.0] - 2016-02-01
+
+### Added
+- `count()` to the list of auto-escaped functions.
+- `Squiz.PHP.CommentedOutCode` sniff to `WordPress-VIP` ruleset.
+- Support for PHP 5.2.
+- `attachment_url_to_postid()` and `parse_url()` to the restricted functions for `WordPress-VIP`.
+- `WordPress.VIP.OrderByRand` sniff.
+- `WordPress.PHP.StrictInArray` sniff for `WordPress-VIP` and `WordPress-Extra`.
+- `get_tag_link()`, `get_category_link()`, `get_cat_ID()`, `url_to_post_id()`, `attachment_url_to_postid()`
+`get_posts()`, `wp_get_recent_posts()`, `get_pages()`, `get_children()`, `wp_get_post_terms()`
+`wp_get_post_categories()`, `wp_get_post_tags()`, `wp_get_object_terms()`, `term_exists()`,
+`count_user_posts()`, `wp_old_slug_redirect()`, `get_adjacent_post()`, `get_previous_post()`,
+`get_next_post()` to uncached functions in `WordPress.VIP.RestrictedFunctions` sniff.
+- `wp_handle_upload()` and `array_key_exists()` to the list of sanitizing functions.
+- Checking for object properties in `WordPress.PHP.YodaConditions` sniff.
+- `WordPress.NamingConventions.ValidVariableName` sniff.
+- Flagging of function calls incorporated into database queries in `WordPress.WP.PreparedSQL`.
+- Recognition of escaping and auto-escaped functions in `WordPress.WP.PreparedSQL`.
+- `true`, `false`, and `null` to the tokens ignored in `WordPress.XSS.EscapeOutput`.
+
+### Fixed
+- Incorrect ternary detection in `WordPress.XSS.EscapeOutput` sniff.
+- False positives when detecting variables interpolated into strings in the
+`WordPress.WP.PreparedSQL` and `WordPress.VIP.ValidatedSanitizedInput` sniffs.
+- False positives in `WordPress.PHP.YodaConditions` when the variable is being casted.
+- `$wpdb` properties being flagged in `WordPress.WP.PreparedSQL` sniff.
+- False positive in `WordPress.PHP.YodaConditions` when the a string is on the left side of the
+comparison.
 
 ## [0.8.0] - 2015-10-02
 
@@ -164,7 +191,8 @@ See the comparison for full list.
 
 Initial tagged release.
 
-[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.1...0.8.0
 [0.7.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.6.0...0.7.0

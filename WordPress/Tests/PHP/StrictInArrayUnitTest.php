@@ -1,18 +1,26 @@
 <?php
 /**
- * Unit test class for the ValidatedSanitizedInputSniff
+ * Unit test class for the StrictInArray sniff.
  *
  * PHP version 5
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
- * @author    Shady Sharaf <shady@x-team.com>
+ * @author    Matt Robinson
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
-class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest
-{
-
+/**
+ * Unit test class for the StrictInArray sniff.
+ *
+ * A sniff unit test checks a .inc file for expected violations of a single
+ * coding standard. Expected errors and warnings are stored in this class.
+ *
+ * @category  PHP
+ * @package   PHP_CodeSniffer
+ */
+class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,32 +30,12 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 *
 	 * @return array(int => int)
 	 */
-	public function getErrorList()
-	{
+	public function getErrorList() {
 		return array(
-			5 => 3,
 			7 => 1,
-			10 => 1,
 			20 => 1,
-			33 => 3,
-			65 => 1,
-			79 => 1,
-			80 => 1,
-			81 => 1,
-			82 => 1,
-			85 => 1,
-			90 => 1,
-			93 => 1,
-			96 => 1,
-			100 => 2,
-			101 => 1,
-			104 => 2,
-			105 => 1,
-			114 => 2,
-			);
-
-	}//end getErrorList()
-
+		);
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -57,13 +45,11 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 *
 	 * @return array(int => int)
 	 */
-	public function getWarningList()
-	{
-		return array();
-
-	}//end getWarningList()
-
-
-}//end class
-
-?>
+	public function getWarningList() {
+		return array(
+			5 => 1,
+			9 => 1,
+			10 => 1,
+		);
+	}
+}

@@ -101,8 +101,9 @@ printf(
 wp_die( $message ); // Bad
 wp_die( esc_html( $message ) ); // OK
 wp_die( esc_html( $message ), $title ); // Bad
-wp_die( esc_html( $message ), '', array( 'back_link' => $link_text ) ); // Bad
-wp_die( esc_html( $message ), '', array( 'back_link' => esc_html( $link_text ) ) ); // OK
+wp_die( esc_html( $message ), esc_html( $title ) ); // OK
+wp_die( esc_html( $message ), '', array( 'back_link' => true ) ); // OK
+wp_die( esc_html( $message ), '', array( 'back_link' => false ) ); // OK
 wp_die( esc_html( $message ), '', array( 'response' => 200 ) ); // OK
 
 echo '<h2>', esc_html( $foo ), '</h2>'; // OK
@@ -171,3 +172,8 @@ echo implode( '<br>', array_map( 'esc_html', $items ) ); // OK
 echo implode( '<br>', array_map( 'foo', $items ) ); // Bad
 echo join( '<br>', $items ); // Bad
 echo join( '<br>', array_map( 'esc_html', $items ) ); // OK
+
+echo '<option name="' . esc_attr( $name ) . '"' .
+     ( $name === $selected ? ' selected' : '' ) .
+     '>' . esc_html( $value )
+     . '</option>';

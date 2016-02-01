@@ -68,14 +68,14 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			// If this is a variable, we've seen all we need to see.
-			if ( T_VARIABLE === $tokens[ $i ]['code'] ) {
+			// If this is a variable or array, we've seen all we need to see.
+			if ( T_VARIABLE === $tokens[ $i ]['code'] || T_CLOSE_SQUARE_BRACKET === $tokens[ $i ]['code'] ) {
 				$needs_yoda = true;
 				break;
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( in_array( $tokens[ $i ]['code'], array( T_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ) ) ) {
 				return;
 			}
 		}
@@ -86,6 +86,10 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff
 
 		// Check if this is a var to var comparison, e.g.: if ( $var1 == $var2 )
 		$next_non_empty = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr + 1, null, true );
+
+		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$castTokens ) ) {
+			$next_non_empty = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $next_non_empty + 1, null, true );
+		}
 
 		if ( in_array( $tokens[ $next_non_empty ]['code'], array( T_SELF, T_PARENT, T_STATIC ) ) ) {
 			$next_non_empty = $phpcsFile->findNext(

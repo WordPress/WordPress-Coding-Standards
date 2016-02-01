@@ -29,6 +29,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
             3  => 1,
             5  => 1,
             21 => 1,
+            34 => version_compare( PHP_VERSION, '5.3.0', '>=' ) ? 0 : 1,
             36 => 1,
             38 => 1,
             40 => 1,
@@ -36,7 +37,25 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
             44 => 1,
             46 => 1,
             48 => 1,
-               );
+            50 => 1,
+            53 => 1,
+            54 => 1,
+            55 => 1,
+            56 => 1,
+            57 => 1,
+            60 => 1,
+            61 => 1,
+            62 => 1,
+            63 => 1,
+            64 => 1,
+            65 => 1,
+            66 => 1,
+            67 => 1,
+            68 => 1,
+            69 => 1,
+            70 => 1,
+            71 => 1,
+        );
 
     }//end getErrorList()
 
@@ -59,6 +78,9 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
             15 => 1,
             17 => 1,
             19 => 1,
+            58 => 1,
+            59 => 1,
+            72 => 1,
             );
 
     }//end getWarningList()

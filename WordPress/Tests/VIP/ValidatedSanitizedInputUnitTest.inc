@@ -109,3 +109,6 @@ foo( absint( $_GET['foo'] ) ); // OK
 $ids = array_map( 'absint', $_GET['test'] ); // OK
 
 if ( is_array( $_GET['test'] ) ) {} // OK
+
+output( "some string \$_POST[some_var]" ); // Ok
+output( "some string \\$_POST[some_var] $_GET[evil]" ); // Bad 2
