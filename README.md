@@ -93,6 +93,17 @@ Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](htt
 
 Install the [sublime-phpcs package](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
 
+### Atom
+
+- Install PHP Sniffer and WordPress Coding Standards per above
+- Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager
+- Run `which phpcs` to get your `phpcs` executable path
+- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.)
+
+![Atom Linter WordPress Coding Standards configuration](https://cloud.githubusercontent.com/assets/224636/12740504/ce4e97b8-c941-11e5-8d83-c77a2470d58e.png)
+
+![Atom Linter in action using WordPress Coding Standards](https://cloud.githubusercontent.com/assets/224636/12740542/131c5894-c942-11e5-9e31-5e020c993224.png)
+
 ## Standards subsets
 
 The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example those specific to WordPress VIP coding requirements.
