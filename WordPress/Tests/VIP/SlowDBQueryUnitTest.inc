@@ -5,16 +5,16 @@ new WP_Query( array(
 		array(
 			'key' => 'foo',
 			'value' => 'bar',
-			),
 		),
+	),
 	'tax_query' => array(
 		array(
 			'taxonomy' => 'foo',
-			),
 		),
+	),
 	'meta_key' => 'foo',
 	'meta_value' => 'bar',
-	) );
+) );
 
 $query = 'foo=bar&meta_key=foo&meta_value=bar';
 
@@ -34,7 +34,6 @@ $test = array(
 	'tax_query' => array( // WPCS: tax_query ok.
 		array(
 			'taxonomy' => 'foo',
-			),
 		),
 	),
 );
