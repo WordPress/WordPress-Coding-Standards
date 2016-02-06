@@ -1,3 +1,7 @@
+# Upstream Issues
+
+Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will be caused by a bug in PHPCS and not in WPCS itself. Before reporting a bug, you should check what sniff an error is coming from. Running `phpcs` with the `-s` flag, which will show the names of the sniffs with each error. If the error message in question doesn't come from a sniff whose name starts with `WordPress`, the issue is probably a bug in PHPCS itself, and should be [reported there](https://github.com/squizlabs/PHP_CodeSniffer/issues).
+
 # Branches
 
 Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
