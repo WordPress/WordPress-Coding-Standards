@@ -91,14 +91,30 @@ Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](htt
 
 ### Sublime Text
 
+##### sublime-phpcs package
 Install the [sublime-phpcs package](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
+
+##### SublimeLinter-phpcs
+sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/) can do that.
+
+- Install PHP Sniffer and WordPress Coding Standards per above.
+- Use [Package Control](https://packagecontrol.io/) to search for and install [SublimeLinter](http://www.sublimelinter.com) then [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/).
+- From the command palette, select `Preferences: SublimeLinter Settings - User` and change `user.linters.phpcs.standard` to the phpcs standard of your choice (e.g. `WordPress`, `WordPress-VIP`, etc.).
+
+![SublimeLinter-phpcs user settings](https://cloud.githubusercontent.com/assets/224636/12946250/068776ba-cfc1-11e5-816b-109e4e32d21b.png)
+
+- You may need to restart Sublime for these settings to take effect. Error messages appear in the bottom of the editor.
+
+![SublimeLinter-phpcs linting](https://cloud.githubusercontent.com/assets/224636/12946326/75986c3a-cfc1-11e5-8537-1243554bbab6.png)
+
+![SublimeLinter-phpcs error](https://cloud.githubusercontent.com/assets/224636/12946335/8bee5a30-cfc1-11e5-8b5f-b10e8e4a4909.png)
 
 ### Atom
 
-- Install PHP Sniffer and WordPress Coding Standards per above
-- Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager
-- Run `which phpcs` to get your `phpcs` executable path
-- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.)
+- Install PHP Sniffer and WordPress Coding Standards per above.
+- Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager.
+- Run `which phpcs` to get your `phpcs` executable path.
+- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
 
 ![Atom Linter WordPress Coding Standards configuration](https://cloud.githubusercontent.com/assets/224636/12740504/ce4e97b8-c941-11e5-8d83-c77a2470d58e.png)
 
