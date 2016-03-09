@@ -55,6 +55,12 @@
 
 	<!-- https://make.wordpress.org/core/handbook/coding-standards/php/#space-usage -->
 	<rule ref="Generic.Formatting.SpaceAfterCast"/>
+	<rule ref="Squiz.Strings.ConcatenationSpacing">
+		<properties>
+			<property name="spacing" value="1"/>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
 
 	<!-- https://make.wordpress.org/core/handbook/coding-standards/php/#brace-style -->
 	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
