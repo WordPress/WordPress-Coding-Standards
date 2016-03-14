@@ -39,4 +39,24 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_Arra
 				)
 			);
 	}
+
+	/**
+	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the current token
+	 *                                        in the stack passed in $tokens.
+	 *
+	 * @return void
+	 */
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+		$this->init( $phpcsFile );
+
+		if ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
+			return;
+		}
+
+		parent::process( $phpcsFile, $stackPtr );
+	}
 }//end class

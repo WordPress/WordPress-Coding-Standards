@@ -46,8 +46,10 @@ class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitT
                 3 => 1,
                 7 => 1,
                 9 => 1,
+                12 => 2,
                 16 => 1,
                 40 => 2,
+                208 => 2,
                );
 
     }//end getErrorList()
@@ -64,7 +66,6 @@ class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitT
     public function getWarningList()
     {
         return array(
-                12 => 2,
                 );
 
     }//end getWarningList()

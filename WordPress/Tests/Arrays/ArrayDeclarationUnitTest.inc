@@ -37,7 +37,7 @@ $query_vars = array_merge(
 );
 $query = new WP_Query( $query_vars );
 
-$defaults = array( 'type'=>'post' ), // Bad, no spaces before and after double arrow
+$defaults = array( 'type'=>'post' ); // Bad, no spaces before and after double arrow
 wp_parse_args( $args, $defaults );
 
 class Foo {
@@ -52,7 +52,7 @@ class Foo {
 			},
 			'Screenshots' => function ( $body ) {
 				foreach ( $screenshot_matches as $i => $screenshot_match ) {
-					print $i;
+					print (int) $i;
 				}
 			},
 			'Food' => sprintf(
@@ -63,7 +63,7 @@ class Foo {
 			'Bard' => add_query_arg(
 				'quux',
 				'bazd'
-			)
+			),
 		);
 	}
 }
@@ -82,20 +82,20 @@ $primary_order   = array(
 
 $var = array(
 	'tab_template'      => '
-        <li>%s</li>',
+		<li>%s</li>',
 	'panel_template'        => '
-        <div id="%s">
-            %s
-        </div>',
+		<div id="%s">
+		    %s
+		</div>',
 );
 
 // This should all be good:
 $section_args = array(
 	'title' => sprintf(
 		__( 'Sidebar: %s', 'widget-customizer' ),
-		$GLOBALS['wp_registered_sidebars'][$sidebar_id]['name']
+		$GLOBALS['wp_registered_sidebars'][ $sidebar_id ]['name']
 	),
-	'description' => $GLOBALS['wp_registered_sidebars'][$sidebar_id]['description'],
+	'description' => $GLOBALS['wp_registered_sidebars'][ $sidebar_id ]['description'],
 );
 
 $strings = array(
@@ -182,3 +182,27 @@ $multidimensional_comments = array(
 	),
 	// comment
 );
+
+$q = new WP_Query( array(
+	'meta_query' => array(
+		'relation' => 'and', // OK
+		array(
+			'key' => 'asdsa',
+			'value' => 'asds',
+		),
+	),
+) );
+
+array(
+	'key',
+	/**
+	 * Doc comment.
+	 */
+//  'core'
+);
+
+// Multiple values in an array on a single line is allowed.
+array( 1, 2 );
+
+// Test for fixing of extra whitespace.
+array(   1, 2     );

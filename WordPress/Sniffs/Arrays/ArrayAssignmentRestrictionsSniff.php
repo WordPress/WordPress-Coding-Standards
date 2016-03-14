@@ -6,15 +6,15 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress_Sniff
 {
 
 	/**
 	 * Exclude groups
 	 *
 	 * Example: 'foo,bar'
-	 * 
-	 * @var string Comma-delimited group list 
+	 *
+	 * @var string Comma-delimited group list
 	 */
 	public $exclude = '';
 
@@ -22,7 +22,7 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 	 * Groups of variable data to check against.
 	 * Don't use this in extended classes, override getGroups() instead.
 	 * This is only used for Unit tests.
-	 * 
+	 *
 	 * @var array
 	 */
 	public static $groups = array();
@@ -76,17 +76,17 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		$token = $tokens[$stackPtr];
-
-		$exclude = explode( ',', $this->exclude );
 
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
+			$phpcsFile->removeTokenListener( $this, $this->register() );
 			return;
 		}
+
+		$tokens = $phpcsFile->getTokens();
+		$token = $tokens[ $stackPtr ];
+		$exclude = explode( ',', $this->exclude );
 
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ) ) ) {
 			$equal = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
@@ -132,7 +132,7 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 
 
 		foreach ( $groups as $groupName => $group ) {
-			
+
 			if ( in_array( $groupName, $exclude ) ) {
 				continue;
 			}
@@ -165,9 +165,9 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 
 					call_user_func(
 						$addWhat,
-						$message, 
-						$stackPtr, 
-						$groupName, 
+						$message,
+						$stackPtr,
+						$groupName,
 						array( $key, $val )
 						);
 				}
@@ -183,7 +183,7 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff implements PHP_Co
 	/**
 	 * Callback to process each confirmed key, to check value
 	 * This must be extended to add the logic to check assignment value
-	 * 
+	 *
 	 * @param  string   $key   Array index / key
 	 * @param  mixed    $val   Assigned value
 	 * @param  int      $line  Token line

@@ -19,14 +19,14 @@
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @author   Akeda Bagus <akeda@x-team.com>
+ * @author   Greg Sherwood <gsherwood@squiz.net>
+ * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @license  https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/PHP_CodeSniffer
  */
 class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUnitTest
 {
@@ -43,9 +43,11 @@ class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUn
     public function getErrorList()
     {
         return array(
-                 5 => 4,
-                 18 => 1,
-                );
+                5  => 4,
+                18 => 1,
+                45 => 1,
+                49 => 1,
+               );
 
     }//end getErrorList()
 

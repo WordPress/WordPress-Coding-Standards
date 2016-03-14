@@ -86,7 +86,7 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff implements PHP_CodeSn
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
-			return;
+			return count( $tokens ) + 1;
 		}
 
 		// Check if it is a function not a variable

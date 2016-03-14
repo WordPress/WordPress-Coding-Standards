@@ -20,3 +20,18 @@ class My_Plugin {
 
 	public function __invoke() {} // OK
 }
+
+class Test extends WP_UnitTestCase {
+
+	public function setUp() {} // OK
+}
+
+class Foo implements ArrayAccess {
+	function offsetSet( $key, $value ) {} // OK
+
+	function offsetUnset( $key ) {} // OK
+
+	function offsetExists( $key ) {} // OK
+
+	function offsetGet( $key ) {} // OK
+}

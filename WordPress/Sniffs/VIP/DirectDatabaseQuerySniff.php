@@ -13,6 +13,56 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 {
 
 	/**
+	 * List of custom cache get functions.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var string[]
+	 */
+	public $customCacheGetFunctions = array();
+
+	/**
+	 * List of custom cache set functions.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var string[]
+	 */
+	public $customCacheSetFunctions = array();
+
+	/**
+	 * List of custom cache delete functions.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var string[]
+	 */
+	public $customCacheDeleteFunctions = array();
+
+	/**
+	 * The lists of $wpdb methods.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @var array[]
+	 */
+	protected static $methods = array(
+		'cachable' => array(
+			'delete' => true,
+			'get_var' => true,
+			'get_col' => true,
+			'get_row' => true,
+			'get_results' => true,
+			'query' => true,
+			'replace' => true,
+			'update' => true,
+		),
+		'noncachable' => array(
+			'insert' => true,
+		),
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -33,10 +83,29 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return void
+	 * @return int|void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		if ( ! isset( self::$methods['all'] ) ) {
+			self::$methods['all'] = array_merge( self::$methods['cachable'], self::$methods['noncachable'] );
+
+			WordPress_Sniff::$cacheGetFunctions = array_merge(
+				WordPress_Sniff::$cacheGetFunctions,
+				array_flip( $this->customCacheGetFunctions )
+			);
+
+			WordPress_Sniff::$cacheSetFunctions = array_merge(
+				WordPress_Sniff::$cacheSetFunctions,
+				array_flip( $this->customCacheSetFunctions )
+			);
+
+			WordPress_Sniff::$cacheDeleteFunctions = array_merge(
+				WordPress_Sniff::$cacheDeleteFunctions,
+				array_flip( $this->customCacheDeleteFunctions )
+			);
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for $wpdb variable
@@ -50,11 +119,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $is_object_call + 1, null, true, null, true );
 		$method = $tokens[ $methodPtr ]['content'];
 
-		$methods = array(
-			'cachable' => array( 'get_var', 'get_col', 'get_row', 'get_results', 'query' ),
-			'noncachable' => array( 'execute', 'insert', 'update', 'replace' ),
-		);
-		if ( ! in_array( $method, array_merge( $methods['cachable'], $methods['noncachable'] ) ) ) {
+		if ( ! isset( self::$methods['all'][ $method ] ) ) {
 			return;
 		}
 
@@ -81,79 +146,64 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		$_pos = $stackPtr;
 		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $_pos + 1, $endOfStatement, null, null, true ) ) {
 			if ( preg_match( '#\b(ALTER|CREATE|DROP)\b#i', $tokens[$_pos]['content'], $matches ) > 0 ) {
-				$message = 'Attempting a database schema change is highly discouraged.';
-				$this->add_unique_message( $phpcsFile, 'error', $_pos, $tokens[$_pos]['line'], $message );
+				$phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
 		}
 
 		// Flag instance if not whitelisted
 		if ( ! $whitelisted_db_call ) {
-			$message = 'Usage of a direct database call is discouraged.';
-			$this->add_unique_message( $phpcsFile, 'warning', $stackPtr, $tokens[$stackPtr]['line'], $message );
+			$phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 		}
 
-		if ( ! in_array( $method, $methods['cachable'] ) ) {
-			return;
+		if ( ! isset( self::$methods['cachable'][ $method ] ) ) {
+			return $endOfStatement;
 		}
 
 		$whitelisted_cache = false;
-		$cached = false;
+		$cached = $wp_cache_get = false;
 		if ( preg_match( '/cache\s+(ok|pass|clear|whitelist)/i', $endOfLineComment, $matches ) ) {
 			$whitelisted_cache = true;
 		}
 		if ( ! $whitelisted_cache && ! empty( $tokens[$stackPtr]['conditions'] ) ) {
-			$conditions = $tokens[$stackPtr]['conditions'];
-			$scope_function = null;
-			foreach ( $conditions  as $condPtr => $condType ) {
-				if ( $condType == T_FUNCTION ) {
-					$scope_function = $condPtr;
-				}
-			}
+			$scope_function = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
 			if ( $scope_function ) {
 				$scopeStart = $tokens[$scope_function]['scope_opener'];
 				$scopeEnd = $tokens[$scope_function]['scope_closer'];
 
-				$wpcacheget = $phpcsFile->findNext( array( T_STRING ), $scopeStart + 1, $stackPtr - 1, null, 'wp_cache_get' );
-				$wpcacheset = $phpcsFile->findNext( array( T_STRING ), $stackPtr + 1, $scopeEnd - 1, null, 'wp_cache_set' );
+				for ( $i = $scopeStart + 1; $i < $scopeEnd; $i++ ) {
+					if ( T_STRING === $tokens[ $i ]['code'] ) {
 
-				if ( $wpcacheget && $wpcacheset ) {
-					$cached = true;
-				}
-			}
+						if ( isset( WordPress_Sniff::$cacheDeleteFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
-		}
+							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ) ) ) {
+								$cached = true;
+								break;
+							}
 
-		if ( ! $cached && ! $whitelisted_cache ) {
-			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set.';
-			$this->add_unique_message( $phpcsFile, 'error', $stackPtr, $tokens[$stackPtr]['line'], $message );
-		}
+						} elseif ( isset( WordPress_Sniff::$cacheGetFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
-	}//end process()
+							$wp_cache_get = true;
 
-	/**
-	 * Add unique message per line
-	 * @param PHP_CodeSniffer_File $phpcsFile
-	 * @param string $type      (error|warning)
-	 * @param int    $pointer
-	 * @param int    $line
-	 * @param string $message
-     * @return void
-	 */
-	function add_unique_message( PHP_CodeSniffer_File $phpcsFile, $type, $pointer, $line, $message ) {
-		$messages = call_user_func( array( $phpcsFile, 'get' . ucfirst( $type . 's' ) ) );
-		if ( isset( $messages[$line] ) ) {
-			foreach ( $messages[$line] as $idx => $events ) {
-				foreach ( $events as $arr ) {
-					if ( $arr['message'] == $message ) {
-						return false;
+						} elseif ( isset( WordPress_Sniff::$cacheSetFunctions[ $tokens[ $i ]['content'] ] ) ) {
+
+							if ( $wp_cache_get ) {
+								$cached = true;
+								break;
+							}
+						}
 					}
 				}
 			}
 		}
 
-		call_user_func( array( $phpcsFile, 'add' . ucfirst( $type ) ), $message, $pointer );
-	}
+		if ( ! $cached && ! $whitelisted_cache ) {
+			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set or wp_cache_delete.';
+			$phpcsFile->addError( $message, $stackPtr, 'NoCaching' );
+		}
 
+		return $endOfStatement;
+
+	}//end process()
 
 }//end class

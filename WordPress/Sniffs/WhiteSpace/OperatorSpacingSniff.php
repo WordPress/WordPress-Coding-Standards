@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Modified version of Squiz operator white spacing, based upon Squiz code
  *
@@ -43,7 +43,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
         $operators  = PHP_CodeSniffer_Tokens::$operators;
         $assignment = PHP_CodeSniffer_Tokens::$assignmentTokens;
 
-        $tokens = array_unique(array_merge($comparison, $operators, $assignment));
+        $tokens   = array_unique(array_merge($comparison, $operators, $assignment));
         $tokens[] = T_BOOLEAN_NOT;
 
         return $tokens;
@@ -136,29 +136,74 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
             $operator = $tokens[$stackPtr]['content'];
 
             if ($tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE) {
-                $error = "Expected 1 space before \"$operator\"; 0 found";
-                $phpcsFile->addError($error, $stackPtr);
-            } else if (strlen($tokens[($stackPtr - 1)]['content']) !== 1) {
+                $error = 'Expected 1 space before "%s"; 0 found';
+                $data  = array($operator);
+                if (isset($phpcsFile->fixer) === true) {
+                    $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceBefore', $data);
+                    if ($fix === true) {
+                        $phpcsFile->fixer->beginChangeset();
+                        $phpcsFile->fixer->addContentBefore($stackPtr, ' ');
+                        $phpcsFile->fixer->endChangeset();
+                    }
+                } else {
+                    $phpcsFile->addError($error, $stackPtr, 'NoSpaceBefore', $data);
+                }
+            } else if (strlen($tokens[($stackPtr - 1)]['content']) !== 1 && $tokens[($stackPtr - 1)]['column'] !== 1) {
                 // Don't throw an error for assignments, because other standards allow
                 // multiple spaces there to align multiple assignments.
                 if (in_array($tokens[$stackPtr]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens) === false) {
                     $found = strlen($tokens[($stackPtr - 1)]['content']);
-                    $error = "Expected 1 space before \"$operator\"; $found found";
-                    $phpcsFile->addError($error, $stackPtr);
+                    $error = 'Expected 1 space before "%s"; %s found';
+                    $data  = array(
+                              $operator,
+                              $found,
+                             );
+                    if (isset($phpcsFile->fixer) === true) {
+                        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpacingBefore', $data);
+                        if ($fix === true) {
+                            $phpcsFile->fixer->beginChangeset();
+                            $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
+                            $phpcsFile->fixer->endChangeset();
+                        }
+                    } else {
+                        $phpcsFile->addError($error, $stackPtr, 'SpacingBefore', $data);
+                    }
                 }
-            }
+            }//end if
 
             if ($operator !== '-') {
                 if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
-                    $error = "Expected 1 space after \"$operator\"; 0 found";
-                    $phpcsFile->addError($error, $stackPtr);
+                    $error = 'Expected 1 space after "%s"; 0 found';
+                    $data  = array($operator);
+                    if (isset($phpcsFile->fixer) === true) {
+                        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfter', $data);
+                        if ($fix === true) {
+                            $phpcsFile->fixer->beginChangeset();
+                            $phpcsFile->fixer->addContent($stackPtr, ' ');
+                            $phpcsFile->fixer->endChangeset();
+                        }
+                    } else {
+                        $phpcsFile->addError($error, $stackPtr, 'NoSpaceAfter', $data);
+                    }
                 } else if (strlen($tokens[($stackPtr + 1)]['content']) !== 1) {
                     $found = strlen($tokens[($stackPtr + 1)]['content']);
-                    $error = "Expected 1 space after \"$operator\"; $found found";
-                    $phpcsFile->addError($error, $stackPtr);
-                }
-            }
-
+                    $error = 'Expected 1 space after "%s"; %s found';
+                    $data  = array(
+                              $operator,
+                              $found,
+                             );
+                    if (isset($phpcsFile->fixer) === true) {
+                        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpacingAfter', $data);
+                        if ($fix === true) {
+                            $phpcsFile->fixer->beginChangeset();
+                            $phpcsFile->fixer->replaceToken(($stackPtr + 1), ' ');
+                            $phpcsFile->fixer->endChangeset();
+                        }
+                    } else {
+                        $phpcsFile->addError($error, $stackPtr, 'SpacingAfter', $data);
+                    }
+                }//end if
+            }//end if
         }//end if
 
     }//end process()

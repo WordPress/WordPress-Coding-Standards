@@ -1,13 +1,13 @@
 <?php
 /**
- * Flag any usage of super global input var ( _GET / _POST / _REQUEST )
+ * Flag any usage of super global input var ( _GET / _POST / etc. )
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
  */
-class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer_Sniff
+class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff
 {
 
 	/**
@@ -35,37 +35,24 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff implements PHP_CodeSniffer
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
 	{
+		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for global input variable
-		if ( ! in_array( $tokens[$stackPtr]['content'], array( '$_GET', '$_POST', '$_REQUEST' ) ) )
+		if ( ! in_array( $tokens[ $stackPtr ]['content'], WordPress_Sniff::$input_superglobals ) ) {
 			return;
+		}
 
 		$varName = $tokens[$stackPtr]['content'];
 
 		// If we're overriding a superglobal with an assignment, no need to test
-		$semicolon_position = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
-		$assignment_position = $phpcsFile->findNext( array( T_EQUAL ), $stackPtr + 1, null, null, null, true );
-		if ( $semicolon_position !== false && $assignment_position !== false && $assignment_position < $semicolon_position ) {
+		if ( $this->is_assignment( $stackPtr ) ) {
 			return;
 		}
 
 		// Check for whitelisting comment
-		$currentLine = $tokens[$stackPtr]['line'];
-		$nextPtr = $stackPtr;
-		while ( isset( $tokens[$nextPtr + 1]['line'] ) && $tokens[$nextPtr + 1]['line'] == $currentLine ) {
-			$nextPtr++;
-			// Do nothing, we just want the last token of the line
-		}
-
-		$is_whitelisted = ( 
-			$tokens[$nextPtr]['code'] === T_COMMENT 
-			&& 
-			preg_match( '#input var okay#i', $tokens[$nextPtr]['content'] ) > 0
-			);
-
-		if ( ! $is_whitelisted ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, null, array( $varName ) );
+		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
+			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 	}//end process()
 

@@ -62,3 +62,44 @@ function taz() {
 	global $wpdb;
 	echo $wpdb->insert_id; // Good, no actual call, and doesn't need any caching
 }
+
+// Some $wpdb methods can pass with only deleting the cache.
+function cache_delete_only() {
+	global $wpdb;
+
+	$data = $where = array();
+
+	// These methods are allowed to be used with just wp_cache_delete().
+	$wpdb->update( $wpdb->users, $data, $where ); // db call ok; OK
+	$wpdb->replace( $wpdb->users, $data, $where ); // db call ok; OK
+	$wpdb->delete( $wpdb->users, $data, $where ); // db call ok; OK
+	$wpdb->query( 'SELECT X FROM Y' ); // db call ok; OK
+
+	$wpdb->get_results( 'SELECT X FROM Y' ); // db call ok; Bad
+	$wpdb->get_row( 'SELECT X FROM Y' ); // db call ok; Bad
+	$wpdb->get_col( 'SELECT X FROM Y' ); // db call ok; Bad
+
+	wp_cache_delete( 'key', 'group' );
+}
+
+// It is OK to use the wp_cache_add() function in place of wp_cache_set().
+function cache_add_instead_of_set() {
+	global $wpdb;
+
+	$baz = wp_cache_get( 'baz' );
+
+	if ( false !== $baz ) {
+
+		$data = $where = array();
+
+		$wpdb->update( $wpdb->users, $data, $where ); // db call ok; OK
+		$wpdb->replace( $wpdb->users, $data, $where ); // db call ok; OK
+		$wpdb->delete( $wpdb->users, $data, $where ); // db call ok; OK
+		$wpdb->query( 'SELECT X FROM Y' ); // db call ok; OK
+		$wpdb->get_row( 'SELECT X FROM Y' ); // db call ok; OK
+		$wpdb->get_col( 'SELECT X FROM Y' ); // db call ok; OK
+		$baz = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // db call ok; OK
+
+		wp_cache_add( 'baz', $baz );
+	}
+}
