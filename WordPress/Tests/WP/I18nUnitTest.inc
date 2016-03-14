@@ -41,3 +41,27 @@ _x( 'string', SOMETHING, 'domain' ); // Bad, shouldn't use constant for context
 _x( 'string', SOMETHING . 'context', 'domain' ); // Bad, shouldn't use constant for context
 
 _x( 'string', 'context' . SOMETHING, 'domain' ); // Bad, shouldn't use constant for context
+
+_n( 'I have a cat.', 'I have cats.', $number ); // OK.
+_n( 'I have a cat.', 'I have cats.', $number, 'my-slug' ); // OK.
+_n( 'I have a cat.', 'I have cats.', $number, "illegal $string" ); // Bad.
+_n( 'I have a cat.', 'I have cats.', $number, SOMETHING ); // Bad.
+
+_n_noop( 'I have a cat.', 'I have cats.', $number ); // OK.
+_n_noop( 'I have a cat.', 'I have cats.', $number, 'my-slug' ); // OK.
+_n_noop( 'I have a cat.', 'I have cats.', $number, "illegal $string" ); // Bad.
+_n_noop( 'I have a cat.', 'I have cats.', $number, SOMETHING ); // Bad.
+
+_nx( 'I have a cat.', 'I have cats.', $number, 'Not really.' ); // OK.
+_nx( 'I have a cat.', 'I have cats.', $number, $context ); // Bad.
+_nx( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug' ); // OK.
+_nx( 'I have a cat.', 'I have cats.', $number, $context, 'my-slug' ); // Bad.
+_nx( 'I have a cat.', 'I have cats.', $number, 'Not really.', "illegal $string" ); // Bad.
+_nx( 'I have a cat.', 'I have cats.', $number, 'Not really.', SOMETHING ); // Bad.
+
+_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.' ); // OK.
+_nx_noop( 'I have a cat.', 'I have cats.', $number, $context ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug' ); // OK.
+_nx_noop( 'I have a cat.', 'I have cats.', $number, $context, 'my-slug' ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', "illegal $string" ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', SOMETHING ); // Bad.
