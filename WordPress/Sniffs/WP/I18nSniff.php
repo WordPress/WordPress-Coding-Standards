@@ -8,7 +8,7 @@
  * @package   PHP_CodeSniffer
  * @author    Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_WP_I18nSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 	public $i18n_functions = array(
 		'translate',
@@ -57,23 +57,24 @@ class WordPress_Sniffs_WP_I18nSniff implements PHP_CodeSniffer_Sniff {
 			return;
 		}
 
-		if ( $next_token = $phpcs_file->findNext( T_WHITESPACE, $stack_ptr + 1, null, true ) ) {
-			if ( T_OPEN_PARENTHESIS !== $tokens[ $next_token ]['code'] ) {
-				return;
-			}
+		$next_token = $phpcs_file->findNext( T_WHITESPACE, $stack_ptr + 1, null, true );
+		if ( ! $next_token || T_OPEN_PARENTHESIS !== $tokens[ $next_token ]['code'] ) {
+			 return;
 		}
 
-		// Get arguments
+		// Look at arguments.
 		for ( $i = $next_token + 1; $i < $tokens[ $next_token ]['parenthesis_closer'] - 1; $i += 1 ) {
-			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMA, T_CONSTANT_ENCAPSED_STRING ) ) ) {
+			if ( T_CONSTANT_ENCAPSED_STRING === $tokens[ $i ]['code'] ) {
+				continue;
+			}
+			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMA ), true ) ) {
 				continue;
 			}
 
 			if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
-				$string = $tokens[ $i ]['content'];
-				if ( preg_match( '#\$#', $string ) > 0 ) {
-					$phpcs_file->addError( 'Translatable strings should not contain variables, found ' . $tokens[ $i ]['content'], $i );
-					return;
+				$interpolated_variables = $this->get_interpolated_variables( $tokens[ $i ]['content'] );
+				foreach ( $interpolated_variables as $interpolated_variable ) {
+					$phpcs_file->addError( "Translatable strings cannot contain interpolated variables. Found $interpolated_variable.", $i, 'InterpolatedVariable' );
 				}
 				continue;
 			}

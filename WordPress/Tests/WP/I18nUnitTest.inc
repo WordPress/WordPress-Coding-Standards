@@ -2,7 +2,9 @@
 
 __( "hell$varo", 'domain' ); // Bad, shouldn't use a string with variables
 
-__( "hell\$varo", 'domain' ); // Bad, shouldn't use a string with variables
+__( "hell\$varo", 'domain' ); // OK, Variable is not interpolated.
+__( "hell\\$varo", 'domain' ); // Bad, is interpolated.
+__( "hell\\\$varo", 'domain' ); // OK, variable is escaped.
 
 __( $var, 'domain' ); // Bad, shouldn't use variables
 
