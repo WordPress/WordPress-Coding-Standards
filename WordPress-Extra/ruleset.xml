@@ -33,6 +33,7 @@
 	<rule ref="WordPress.WP.PreparedSQL"/>
 	<rule ref="WordPress.Variables.GlobalVariables"/>
 	<rule ref="WordPress.PHP.StrictComparisons" />
+	<rule ref="WordPress.WP.I18n" />
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray" />
