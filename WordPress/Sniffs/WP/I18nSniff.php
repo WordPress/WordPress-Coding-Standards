@@ -149,7 +149,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 */
 	protected function check_literal_string_text_tokens( $phpcs_file, $arg_name = '$text', $stack_ptr, $tokens = array() ) {
 		if ( 0 === count( $tokens ) ) {
-			$phpcs_file->addError( "Missing translatable text (%s arg).", $stack_ptr, 'MissingText', array( $arg_name ) );
+			$phpcs_file->addError( 'Missing translatable text (%s arg).', $stack_ptr, 'MissingText', array( $arg_name ) );
 			return false;
 		}
 		if ( count( $tokens ) > 1 ) {
@@ -170,7 +170,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 			return false;
 		}
-		$phpcs_file->addError( 'Trnslatable text (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralText', array( $arg_name, $tokens[0]['content'] ) );
+		$phpcs_file->addError( 'Translatable text (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralText', array( $arg_name, $tokens[0]['content'] ) );
 		return false;
 	}
 
@@ -193,7 +193,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 */
 	protected function check_literal_string_context_tokens( $phpcs_file, $arg_name = '$context', $stack_ptr, $tokens = array() ) {
 		if ( 0 === count( $tokens ) ) {
-			$phpcs_file->addError( "Missing context (%s arg).", $stack_ptr, 'MissingContext', array( $arg_name ) );
+			$phpcs_file->addError( 'Missing context (%s arg).', $stack_ptr, 'MissingContext', array( $arg_name ) );
 			return false;
 		}
 		if ( count( $tokens ) > 1 ) {
@@ -229,7 +229,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 */
 	protected function check_string_domain_tokens( $phpcs_file, $arg_name = '$domain', $stack_ptr, $tokens = array() ) {
 		if ( 0 === count( $tokens ) ) {
-			$phpcs_file->addWarning( "Missing text domain (%s arg).", $stack_ptr, 'MissingTextDomain', array( $arg_name ) );
+			$phpcs_file->addWarning( 'Missing text domain (%s arg).', $stack_ptr, 'MissingTextDomain', array( $arg_name ) );
 			return false;
 		}
 		if ( count( $tokens ) > 1 ) {

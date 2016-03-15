@@ -69,4 +69,4 @@ _nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', SOMETHING ); 
 translate( 'foo', 'bar' ); // Bad, low-level API function.
 translate_with_gettext_context( 'foo', 'bar', 'baz' ); // Bad, low-level API function.
 
-_( 'foo', 'bar' );
+_( 'foo', 'bar' ); // Bad.
