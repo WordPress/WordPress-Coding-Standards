@@ -53,8 +53,16 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$tokens = $phpcs_file->getTokens();
 		$token  = $tokens[ $stack_ptr ];
 
+		if ( in_array( $token['content'], array( 'translate', 'translate_with_gettext_context' ), true ) ) {
+			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for .', $stack_ptr, 'LowLevelTranslationFunction', array( $token['content'] ) );
+		}
+
 		if ( ! in_array( $token['content'], $this->i18n_functions, true ) ) {
 			return;
+		}
+
+		if ( in_array( $token['content'], array( 'translate', 'translate_with_gettext_context' ), true ) ) {
+			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $token['content'] ) );
 		}
 
 		$translation_function = $token['content'];
@@ -96,10 +104,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		unset( $argument_tokens );
 
 		$argument_assertions = array();
-		if ( in_array( $translation_function, array( '__', 'esc_attr__', 'esc_html__', '_e', 'esc_attr_e', 'esc_html_e' ) ) ) {
+		if ( in_array( $translation_function, array( '__', 'esc_attr__', 'esc_html__', '_e', 'esc_attr_e', 'esc_html_e', 'translate' ) ) ) {
 			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
-		} else if ( in_array( $translation_function, array( '_x', '_ex', 'esc_attr_x', 'esc_html_x' ) ) ) {
+		} else if ( in_array( $translation_function, array( '_x', '_ex', 'esc_attr_x', 'esc_html_x', 'translate_with_gettext_context' ) ) ) {
 			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$context', 'check_literal_string_context_tokens' );
 			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );

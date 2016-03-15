@@ -65,3 +65,6 @@ _nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug' ); 
 _nx_noop( 'I have a cat.', 'I have cats.', $number, $context, 'my-slug' ); // Bad.
 _nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', "illegal $string" ); // Bad.
 _nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', SOMETHING ); // Bad.
+
+translate( 'foo', 'bar' ); // Bad, low-level API function.
+translate_with_gettext_context( 'foo', 'bar', 'baz' ); // Bad, low-level API function.
