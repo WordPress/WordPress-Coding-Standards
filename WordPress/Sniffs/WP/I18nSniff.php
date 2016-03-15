@@ -53,34 +53,196 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$tokens = $phpcs_file->getTokens();
 		$token  = $tokens[ $stack_ptr ];
 
-		if ( ! in_array( $token['content'], $this->i18n_functions ) ) {
+		if ( ! in_array( $token['content'], $this->i18n_functions, true ) ) {
 			return;
 		}
 
-		$next_token = $phpcs_file->findNext( T_WHITESPACE, $stack_ptr + 1, null, true );
-		if ( ! $next_token || T_OPEN_PARENTHESIS !== $tokens[ $next_token ]['code'] ) {
+		$translation_function = $token['content'];
+
+		$func_open_paren_token = $phpcs_file->findNext( T_WHITESPACE, $stack_ptr + 1, null, true );
+		if ( ! $func_open_paren_token || T_OPEN_PARENTHESIS !== $tokens[ $func_open_paren_token ]['code'] ) {
 			 return;
 		}
 
+		$arguments_tokens = array();
+		$argument_tokens = array();
+
 		// Look at arguments.
-		for ( $i = $next_token + 1; $i < $tokens[ $next_token ]['parenthesis_closer'] - 1; $i += 1 ) {
-			if ( T_CONSTANT_ENCAPSED_STRING === $tokens[ $i ]['code'] ) {
+		for ( $i = $func_open_paren_token + 1; $i < $tokens[ $func_open_paren_token ]['parenthesis_closer'] - 1; $i += 1 ) {
+			$this_token = $tokens[ $i ];
+			$this_token['token_index'] = $i;
+			if ( in_array( $this_token['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {
 				continue;
 			}
-			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMA ), true ) ) {
+			if ( T_COMMA === $this_token['code'] ) {
+				$arguments_tokens[] = $argument_tokens;
+				$argument_tokens = array();
 				continue;
 			}
+			$argument_tokens[] = $this_token;
 
-			if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
-				$interpolated_variables = $this->get_interpolated_variables( $tokens[ $i ]['content'] );
-				foreach ( $interpolated_variables as $interpolated_variable ) {
-					$phpcs_file->addError( "Translatable strings cannot contain interpolated variables. Found $interpolated_variable.", $i, 'InterpolatedVariable' );
+			// Include everything up to and including the parenthesis_closer if this token has one.
+			if ( ! empty( $this_token['parenthesis_closer'] ) ) {
+				for ( $j = $i + 1; $j <= $this_token['parenthesis_closer']; $j += 1 ) {
+					$tokens[ $j ]['token_index'] = $j;
+					$argument_tokens[] = $tokens[ $j ];
 				}
-				continue;
+				$i = $this_token['parenthesis_closer'];
 			}
-
-			$phpcs_file->addError( sprintf( 'Translatable string expected, but found "%s"', $tokens[ $i ]['content'] ), $i );
-			return;
 		}
+		if ( ! empty( $argument_tokens ) ) {
+			$arguments_tokens[] = $argument_tokens;
+		}
+		unset( $argument_tokens );
+
+		$argument_assertions = array();
+		if ( in_array( $translation_function, array( '__', 'esc_attr__', 'esc_html__', '_e', 'esc_attr_e', 'esc_html_e' ) ) ) {
+			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
+			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+		} else if ( in_array( $translation_function, array( '_x', '_ex', 'esc_attr_x', 'esc_html_x' ) ) ) {
+			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
+			$argument_assertions[] = array( '$context', 'check_literal_string_context_tokens' );
+			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+		} else if ( in_array( $translation_function, array( '_n', '_n_noop' ) ) ) {
+			$argument_assertions[] = array( '$single', 'check_literal_string_text_tokens' );
+			$argument_assertions[] = array( '$plural', 'check_literal_string_text_tokens' );
+			$argument_assertions[] = array( '$number', 'check_number_tokens' );
+			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+		} else if ( in_array( $translation_function, array( '_nx', '_nx_noop' ) ) ) {
+			$argument_assertions[] = array( '$single', 'check_literal_string_text_tokens' );
+			$argument_assertions[] = array( '$plural', 'check_literal_string_text_tokens' );
+			$argument_assertions[] = array( '$number', 'check_number_tokens' );
+			$argument_assertions[] = array( '$context', 'check_literal_string_context_tokens' );
+			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+		}
+
+		$argument_stack_ptr = $func_open_paren_token;
+		foreach ( $argument_assertions as $argument_assertion ) {
+			$argument_tokens = array_shift( $arguments_tokens );
+			if ( ! $argument_tokens ) {
+				$argument_tokens = array();
+			} else {
+				$argument_stack_ptr = $argument_tokens[0]['token_index'];
+			}
+			$method_name = $argument_assertion[1];
+			$arg_name = $argument_assertion[0];
+			call_user_func( array( $this, $method_name ), $phpcs_file, $arg_name, $argument_stack_ptr, $argument_tokens );
+		}
+	}
+
+	/**
+	 * Check if supplied tokens represent a translation text string literal.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param string $arg_name
+	 * @param int $stack_ptr
+	 * @param array $tokens
+	 * @return bool
+	 */
+	protected function check_literal_string_text_tokens( $phpcs_file, $arg_name = '$text', $stack_ptr, $tokens = array() ) {
+		if ( 0 === count( $tokens ) ) {
+			$phpcs_file->addError( "Missing translatable text (%s arg).", $stack_ptr, 'MissingText', array( $arg_name ) );
+			return false;
+		}
+		if ( count( $tokens ) > 1 ) {
+			$contents = '';
+			foreach ( $tokens as $token ) {
+				$contents .= $token['content'];
+			}
+			$phpcs_file->addError( 'Translatable text (%s arg) must be a single string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralText', array( $arg_name, $contents ) );
+			return false;
+		}
+		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
+			return true;
+		}
+		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
+			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
+			foreach ( $interpolated_variables as $interpolated_variable ) {
+				$phpcs_file->addError( 'Translatable text (%s arg) must not contain interpolated variables. Found "$%s".', $stack_ptr, 'InterpolatedVariableText', array( $arg_name, $interpolated_variable ) );
+			}
+			return false;
+		}
+		$phpcs_file->addError( 'Trnslatable text (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralText', array( $arg_name, $tokens[0]['content'] ) );
+		return false;
+	}
+
+	/**
+	 * The $number argument can be anything, so this is a no-op.
+	 *
+	 * @return bool
+	 */
+	protected function check_number_tokens() {
+		return true;
+	}
+
+	/**
+	 * Check if supplied tokens are a literal string context.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param int $stack_ptr
+	 * @param array $tokens
+	 * @return bool
+	 */
+	protected function check_literal_string_context_tokens( $phpcs_file, $arg_name = '$context', $stack_ptr, $tokens = array() ) {
+		if ( 0 === count( $tokens ) ) {
+			$phpcs_file->addError( "Missing context (%s arg).", $stack_ptr, 'MissingContext', array( $arg_name ) );
+			return false;
+		}
+		if ( count( $tokens ) > 1 ) {
+			$contents = '';
+			foreach ( $tokens as $token ) {
+				$contents .= $token['content'];
+			}
+			$phpcs_file->addError( 'Context (%s arg) should be a single string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralContext', array( $arg_name, $contents ) );
+			return false;
+		}
+		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
+			return true;
+		}
+		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
+			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
+			foreach ( $interpolated_variables as $interpolated_variable ) {
+				$phpcs_file->addError( 'Context strings (%s arg) should not contain interpolated variables. Found "$%s".', $stack_ptr, 'InterpolatedVariableContext', array( $arg_name, $interpolated_variable ) );
+			}
+			return false;
+		}
+		$phpcs_file->addError( 'Context (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralContext', array( $arg_name, $tokens[0]['content'] ) );
+		return false;
+	}
+
+	/**
+	 * Check if supplied tokens are a valid text domain.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param string $arg_name
+	 * @param int $stack_ptr
+	 * @param array $tokens
+	 * @return bool
+	 */
+	protected function check_string_domain_tokens( $phpcs_file, $arg_name = '$domain', $stack_ptr, $tokens = array() ) {
+		if ( 0 === count( $tokens ) ) {
+			$phpcs_file->addWarning( "Missing text domain (%s arg).", $stack_ptr, 'MissingTextDomain', array( $arg_name ) );
+			return false;
+		}
+		if ( count( $tokens ) > 1 ) {
+			$contents = '';
+			foreach ( $tokens as $token ) {
+				$contents .= $token['content'];
+			}
+			$phpcs_file->addWarning( 'Text domain (%s arg) should be a single string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralTextDomain', array( $arg_name, $contents ) );
+			return false;
+		}
+		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
+			return true;
+		}
+		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
+			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
+			foreach ( $interpolated_variables as $interpolated_variable ) {
+				$phpcs_file->addWarning( 'Text domain strings (%s arg) should not contain interpolated variables. Found "$%s".', $stack_ptr, 'InterpolatedVariableTextDomain', array( $arg_name, $interpolated_variable ) );
+			}
+			return false;
+		}
+		$phpcs_file->addWarning( 'Text domain (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralTextDomain', array( $arg_name, $tokens[0]['content'] ) );
+		return false;
 	}
 }
