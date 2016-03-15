@@ -53,8 +53,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$tokens = $phpcs_file->getTokens();
 		$token  = $tokens[ $stack_ptr ];
 
-		if ( in_array( $token['content'], array( 'translate', 'translate_with_gettext_context' ), true ) ) {
-			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for .', $stack_ptr, 'LowLevelTranslationFunction', array( $token['content'] ) );
+		if ( '_' === $token['content'] ) {
+			$phpcs_file->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
 		}
 
 		if ( ! in_array( $token['content'], $this->i18n_functions, true ) ) {
