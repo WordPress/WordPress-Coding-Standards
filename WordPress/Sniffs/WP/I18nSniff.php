@@ -11,22 +11,22 @@
 class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 	public $i18n_functions = array(
-		'translate',
-		'translate_with_gettext_context',
-		'__',
-		'esc_attr__',
-		'esc_html__',
-		'_e',
-		'esc_attr_e',
-		'esc_html_e',
-		'_x',
-		'_ex',
-		'esc_attr_x',
-		'esc_html_x',
-		'_n',
-		'_nx',
-		'_n_noop',
-		'_nx_noop',
+		'translate'                      => 'simple',
+		'__'                             => 'simple',
+		'esc_attr__'                     => 'simple',
+		'esc_html__'                     => 'simple',
+		'_e'                             => 'simple',
+		'esc_attr_e'                     => 'simple',
+		'esc_html_e'                     => 'simple',
+		'translate_with_gettext_context' => 'context',
+		'_x'                             => 'context',
+		'_ex'                            => 'context',
+		'esc_attr_x'                     => 'context',
+		'esc_html_x'                     => 'context',
+		'_n'                             => 'number',
+		'_nx'                            => 'number_context',
+		'_n_noop'                        => 'number',
+		'_nx_noop'                       => 'number_context',
 	);
 
 	/**
@@ -57,15 +57,14 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$phpcs_file->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
 		}
 
-		if ( ! in_array( $token['content'], $this->i18n_functions, true ) ) {
+		if ( ! isset( $this->i18n_functions[ $token['content'] ] ) ) {
 			return;
 		}
-
-		if ( in_array( $token['content'], array( 'translate', 'translate_with_gettext_context' ), true ) ) {
-			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $token['content'] ) );
-		}
-
 		$translation_function = $token['content'];
+
+		if ( in_array( $translation_function, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
+			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $translation_function ) );
+		}
 
 		$func_open_paren_token = $phpcs_file->findNext( T_WHITESPACE, $stack_ptr + 1, null, true );
 		if ( ! $func_open_paren_token || T_OPEN_PARENTHESIS !== $tokens[ $func_open_paren_token ]['code'] ) {
@@ -104,19 +103,19 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		unset( $argument_tokens );
 
 		$argument_assertions = array();
-		if ( in_array( $translation_function, array( '__', 'esc_attr__', 'esc_html__', '_e', 'esc_attr_e', 'esc_html_e', 'translate' ) ) ) {
+		if ( 'simple' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
-		} else if ( in_array( $translation_function, array( '_x', '_ex', 'esc_attr_x', 'esc_html_x', 'translate_with_gettext_context' ) ) ) {
+		} else if ( 'context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$context', 'check_literal_string_context_tokens' );
 			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
-		} else if ( in_array( $translation_function, array( '_n', '_n_noop' ) ) ) {
+		} else if ( 'number' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( '$single', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$plural', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$number', 'check_number_tokens' );
 			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
-		} else if ( in_array( $translation_function, array( '_nx', '_nx_noop' ) ) ) {
+		} else if ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( '$single', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$plural', 'check_literal_string_text_tokens' );
 			$argument_assertions[] = array( '$number', 'check_number_tokens' );
