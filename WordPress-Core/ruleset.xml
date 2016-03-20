@@ -9,6 +9,9 @@
 		<severity>0</severity>
 	</rule>
 
+	<!-- https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#use-elseif-not-else-if -->
+	<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
+
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
 
@@ -38,7 +41,7 @@
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
 		<severity>0</severity>
 	</rule>
-	
+
 	<rule ref="Generic.PHP.LowerCaseKeyword"/>
 
 	<rule ref="Generic.Files.LineEndings">
