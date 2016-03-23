@@ -39,6 +39,11 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			63 => 1,
 			65 => 1,
 			72 => 1,
+			74 => 1,
+			75 => 1,
+			76 => 1,
+			77 => 1,
+			78 => 1,
 		);
 	}
 

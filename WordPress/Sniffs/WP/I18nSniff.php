@@ -104,36 +104,36 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		$argument_assertions = array();
 		if ( 'simple' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
-			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
 		} else if ( 'context' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( '$text', 'check_literal_string_text_tokens' );
-			$argument_assertions[] = array( '$context', 'check_literal_string_context_tokens' );
-			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
 		} else if ( 'number' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( '$single', 'check_literal_string_text_tokens' );
-			$argument_assertions[] = array( '$plural', 'check_literal_string_text_tokens' );
-			$argument_assertions[] = array( '$number', 'check_number_tokens' );
-			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
+			array_shift( $arguments_tokens );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
 		} else if ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( '$single', 'check_literal_string_text_tokens' );
-			$argument_assertions[] = array( '$plural', 'check_literal_string_text_tokens' );
-			$argument_assertions[] = array( '$number', 'check_number_tokens' );
-			$argument_assertions[] = array( '$context', 'check_literal_string_context_tokens' );
-			$argument_assertions[] = array( '$domain', 'check_string_domain_tokens' );
+			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
+			array_shift( $arguments_tokens );
+			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
 		}
 
-		$argument_stack_ptr = $func_open_paren_token;
-		foreach ( $argument_assertions as $argument_assertion ) {
-			$argument_tokens = array_shift( $arguments_tokens );
-			if ( ! $argument_tokens ) {
-				$argument_tokens = array();
+		if ( ! empty( $arguments_tokens ) ) {
+			$phpcs_file->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
+		}
+
+		foreach ( $argument_assertions as $argument_assertion_context ) {
+			if ( empty( $argument_assertion_context['tokens'][0] ) ) {
+				$argument_assertion_context['stack_ptr'] = $func_open_paren_token;
 			} else {
-				$argument_stack_ptr = $argument_tokens[0]['token_index'];
+				$argument_assertion_context['stack_ptr'] = $argument_assertion_context['tokens'][0]['token_index'];
 			}
-			$method_name = $argument_assertion[1];
-			$arg_name = $argument_assertion[0];
-			call_user_func( array( $this, $method_name ), $phpcs_file, $arg_name, $argument_stack_ptr, $argument_tokens );
+			call_user_func( array( $this, 'check_argument_tokens' ), $phpcs_file, $argument_assertion_context );
 		}
 	}
 
@@ -141,14 +141,18 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * Check if supplied tokens represent a translation text string literal.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param string $arg_name
-	 * @param int $stack_ptr
-	 * @param array $tokens
+	 * @param array $context
 	 * @return bool
 	 */
-	protected function check_literal_string_text_tokens( $phpcs_file, $arg_name = '$text', $stack_ptr, $tokens = array() ) {
+	protected function check_argument_tokens( PHP_CodeSniffer_File $phpcs_file, $context ) {
+		$stack_ptr = $context['stack_ptr'];
+		$tokens = $context['tokens'];
+		$arg_name = $context['arg_name'];
+		$method = empty( $context['warning'] ) ? 'addError' : 'addWarning';
+
 		if ( 0 === count( $tokens ) ) {
-			$phpcs_file->addError( 'Missing translatable text (%s arg).', $stack_ptr, 'MissingText', array( $arg_name ) );
+			$code = 'MissingArg' . ucfirst( $arg_name );
+			$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
 			return false;
 		}
 		if ( count( $tokens ) > 1 ) {
@@ -156,7 +160,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			foreach ( $tokens as $token ) {
 				$contents .= $token['content'];
 			}
-			$phpcs_file->addError( 'Translatable text (%s arg) must be a single string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralText', array( $arg_name, $contents ) );
+			$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
+			$phpcs_file->$method( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $contents ) );
 			return false;
 		}
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
@@ -165,91 +170,13 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
 			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
-				$phpcs_file->addError( 'Translatable text (%s arg) must not contain interpolated variables. Found "$%s".', $stack_ptr, 'InterpolatedVariableText', array( $arg_name, $interpolated_variable ) );
+				$code = 'InterpolatedVariable' . ucfirst( $arg_name );
+				$phpcs_file->$method( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $code, array( $arg_name, $interpolated_variable ) );
 			}
 			return false;
 		}
-		$phpcs_file->addError( 'Translatable text (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralText', array( $arg_name, $tokens[0]['content'] ) );
-		return false;
-	}
-
-	/**
-	 * The $number argument can be anything, so this is a no-op.
-	 *
-	 * @return bool
-	 */
-	protected function check_number_tokens() {
-		return true;
-	}
-
-	/**
-	 * Check if supplied tokens are a literal string context.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int $stack_ptr
-	 * @param array $tokens
-	 * @return bool
-	 */
-	protected function check_literal_string_context_tokens( $phpcs_file, $arg_name = '$context', $stack_ptr, $tokens = array() ) {
-		if ( 0 === count( $tokens ) ) {
-			$phpcs_file->addError( 'Missing context (%s arg).', $stack_ptr, 'MissingContext', array( $arg_name ) );
-			return false;
-		}
-		if ( count( $tokens ) > 1 ) {
-			$contents = '';
-			foreach ( $tokens as $token ) {
-				$contents .= $token['content'];
-			}
-			$phpcs_file->addError( 'Context (%s arg) should be a single string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralContext', array( $arg_name, $contents ) );
-			return false;
-		}
-		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			return true;
-		}
-		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
-			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
-			foreach ( $interpolated_variables as $interpolated_variable ) {
-				$phpcs_file->addError( 'Context strings (%s arg) should not contain interpolated variables. Found "$%s".', $stack_ptr, 'InterpolatedVariableContext', array( $arg_name, $interpolated_variable ) );
-			}
-			return false;
-		}
-		$phpcs_file->addError( 'Context (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralContext', array( $arg_name, $tokens[0]['content'] ) );
-		return false;
-	}
-
-	/**
-	 * Check if supplied tokens are a valid text domain.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param string $arg_name
-	 * @param int $stack_ptr
-	 * @param array $tokens
-	 * @return bool
-	 */
-	protected function check_string_domain_tokens( $phpcs_file, $arg_name = '$domain', $stack_ptr, $tokens = array() ) {
-		if ( 0 === count( $tokens ) ) {
-			$phpcs_file->addWarning( 'Missing text domain (%s arg).', $stack_ptr, 'MissingTextDomain', array( $arg_name ) );
-			return false;
-		}
-		if ( count( $tokens ) > 1 ) {
-			$contents = '';
-			foreach ( $tokens as $token ) {
-				$contents .= $token['content'];
-			}
-			$phpcs_file->addWarning( 'Text domain (%s arg) should be a single string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralTextDomain', array( $arg_name, $contents ) );
-			return false;
-		}
-		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			return true;
-		}
-		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
-			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
-			foreach ( $interpolated_variables as $interpolated_variable ) {
-				$phpcs_file->addWarning( 'Text domain strings (%s arg) should not contain interpolated variables. Found "$%s".', $stack_ptr, 'InterpolatedVariableTextDomain', array( $arg_name, $interpolated_variable ) );
-			}
-			return false;
-		}
-		$phpcs_file->addWarning( 'Text domain (%s arg) should be single a string literal, not "%s".', $stack_ptr, 'NonSingularStringLiteralTextDomain', array( $arg_name, $tokens[0]['content'] ) );
+		$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
+		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $tokens[0]['content'] ) );
 		return false;
 	}
 }

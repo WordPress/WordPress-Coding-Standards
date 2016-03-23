@@ -70,3 +70,9 @@ translate( 'foo', 'bar' ); // Bad, low-level API function.
 translate_with_gettext_context( 'foo', 'bar', 'baz' ); // Bad, low-level API function.
 
 _( 'foo', 'bar' ); // Bad.
+
+__( 'foo', 'bar', 'too-many-args' ); // Bad.
+_x( 'string', 'context', 'domain', 'too-many-args' ); // Bad
+_n( 'I have a cat.', 'I have cats.', $number, 'my-slug', 'too-many-args' ); // Bad
+_n_noop( 'I have a cat.', 'I have cats.', $number, 'my-slug', 'too-many-args' ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
