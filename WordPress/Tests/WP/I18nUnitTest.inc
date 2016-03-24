@@ -76,3 +76,10 @@ _x( 'string', 'context', 'domain', 'too-many-args' ); // Bad
 _n( 'I have a cat.', 'I have cats.', $number, 'my-slug', 'too-many-args' ); // Bad
 _n_noop( 'I have a cat.', 'I have cats.', $number, 'my-slug', 'too-many-args' ); // Bad.
 _nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
+
+// Make sure that multi-line string literals are accepted.
+_nx( 'I have
+a cat.', 'I have
+cats.', $number, 'Not
+really.', 'my-
+slug' ); // OK.

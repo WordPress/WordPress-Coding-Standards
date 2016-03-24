@@ -86,6 +86,18 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$argument_tokens = array();
 				continue;
 			}
+
+			// Merge consecutive single or double quoted strings (when they span multiple lines).
+			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || T_DOUBLE_QUOTED_STRING === $this_token['code'] ) {
+				for ( $j = $i + 1; $j < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $j += 1 ) {
+					if ( $this_token['code'] === $tokens[ $j ]['code'] ) {
+						$this_token['content'] .= $tokens[ $j ]['content'];
+						$i = $j;
+					} else {
+						break;
+					}
+				}
+			}
 			$argument_tokens[] = $this_token;
 
 			// Include everything up to and including the parenthesis_closer if this token has one.
@@ -106,16 +118,16 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		if ( 'simple' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
-		} else if ( 'context' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
-		} else if ( 'number' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'number' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			array_shift( $arguments_tokens );
 			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
-		} else if ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			array_shift( $arguments_tokens );
@@ -175,6 +187,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 			return false;
 		}
+
 		$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
 		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $tokens[0]['content'] ) );
 		return false;
