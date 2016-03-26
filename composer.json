@@ -1,6 +1,8 @@
 {
 	"name"       : "wp-coding-standards/wpcs",
 	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
+	"type"       : "phpcs-standard",
+	"version": "9.0",
 	"keywords"   : ["phpcs", "standards", "WordPress"],
 	"license"    : "MIT",
 	"authors"    : [
@@ -20,5 +22,14 @@
 	"scripts"    : {
 		"post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..",
 		"post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths ../../.."
+	},
+	"extra"      : {
+		"standards": {
+			"WordPress"      : "WordPress",
+			"WordPress-Core" : "WordPress-Core",
+			"WordPress-Docs" : "WordPress-Docs",
+			"WordPress-Extra": "WordPress-Extra",
+			"WordPress-VIP"  : "WordPress-VIP"
+		}
 	}
 }
