@@ -24,7 +24,7 @@
 		"post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths ../../.."
 	},
 	"extra"      : {
-		"standards": {
+		"phpcs-standards": {
 			"WordPress"      : "WordPress",
 			"WordPress-Core" : "WordPress-Core",
 			"WordPress-Docs" : "WordPress-Docs",
