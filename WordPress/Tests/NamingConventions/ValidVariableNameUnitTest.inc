@@ -77,13 +77,13 @@ $myXML     = 'hello'; // Bad
 $XMLParser = 'hello'; // Bad
 $xmlParser = 'hello'; // Bad
 
-$ID = 1;
+$ID = 1; // Bad
 $post = get_post( $x );
 echo $post->ID;
 
-echo $comment_ID;
-echo $comment_post_ID;
-echo $comment_author_IP;
+echo $comment_ID; // Bad
+echo $comment_post_ID; // Bad
+echo $comment_author_IP; // Bad
 
 $comment = get_comment( 1 );
 echo $comment->comment_ID;
