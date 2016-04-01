@@ -102,4 +102,7 @@
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.YodaConditions"/>
 
+	<rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
+		<severity>0</severity>
+	</rule>
 </ruleset>
