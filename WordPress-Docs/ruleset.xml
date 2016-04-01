@@ -74,6 +74,9 @@
 		<exclude name="Squiz.Commenting.VariableComment.TagNotAllowed"/>
 		<!-- WP prefers @since first -->
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
+
+		<!-- It is too early for PHP7 features to be required -->
+		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" />
 	</rule>
 
 	<rule ref="Generic.Commenting">
