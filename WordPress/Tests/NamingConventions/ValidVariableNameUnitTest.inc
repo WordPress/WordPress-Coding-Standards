@@ -97,5 +97,6 @@ class Foo {
 
 if ( is_category() ) {
 	$category = get_queried_object();
-	$cat_ID = $category->cat_ID;
+	$cat_id = $category->cat_ID;
+	$cat_ID = $category->cat_ID; // Bad.
 }

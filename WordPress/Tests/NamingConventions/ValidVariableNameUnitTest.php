@@ -73,6 +73,7 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 			84   => 1,
 			85   => 1,
 			86   => 1,
+			101  => 1,
 		);
 
 		return $errors;
