@@ -67,6 +67,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		'comment_post_ID',
 		'post_ID',
 		'comment_author_IP',
+		'cat_ID',
 	);
 
 	/**

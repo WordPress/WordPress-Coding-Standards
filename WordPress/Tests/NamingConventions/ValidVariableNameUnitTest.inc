@@ -94,3 +94,8 @@ class Foo {
 	public $_public_leading_underscore;
 	private $private_no_underscore_loading;
 }
+
+if ( is_category() ) {
+	$category = get_queried_object();
+	$cat_ID = $category->cat_ID;
+}
