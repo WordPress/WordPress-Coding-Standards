@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit test class for the CaseStructureSpacing sniff.
+ * Unit test class for the CastStructureSpacing sniff.
  *
  * PHP version 5
  *
@@ -12,7 +12,7 @@
  */
 
 /**
- * Unit test class for the CaseStructureSpacing sniff.
+ * Unit test class for the CastStructureSpacing sniff.
  *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
