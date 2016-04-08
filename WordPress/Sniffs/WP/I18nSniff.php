@@ -75,7 +75,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$argument_tokens = array();
 
 		// Look at arguments.
-		for ( $i = $func_open_paren_token + 1; $i < $tokens[ $func_open_paren_token ]['parenthesis_closer'] - 1; $i += 1 ) {
+		for ( $i = $func_open_paren_token + 1; $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i += 1 ) {
 			$this_token = $tokens[ $i ];
 			$this_token['token_index'] = $i;
 			if ( in_array( $this_token['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {

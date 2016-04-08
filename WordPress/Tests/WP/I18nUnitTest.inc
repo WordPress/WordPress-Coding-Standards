@@ -83,3 +83,6 @@ a cat.', 'I have
 cats.', $number, 'Not
 really.', 'my-
 slug' ); // OK.
+
+// Ensure lack of spaces doesn't cause i18n error.
+_n_noop('I have a cat.', 'I have cats.', 'my-slug'); // OK.
