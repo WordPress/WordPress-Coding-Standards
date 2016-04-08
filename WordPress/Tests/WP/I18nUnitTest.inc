@@ -47,10 +47,10 @@ _n( 'I have a cat.', 'I have cats.', $number, 'my-slug' ); // OK.
 _n( 'I have a cat.', 'I have cats.', $number, "illegal $string" ); // Bad.
 _n( 'I have a cat.', 'I have cats.', $number, SOMETHING ); // Bad.
 
-_n_noop( 'I have a cat.', 'I have cats.', $number ); // Bad, no text domain.
-_n_noop( 'I have a cat.', 'I have cats.', $number, 'my-slug' ); // OK.
-_n_noop( 'I have a cat.', 'I have cats.', $number, "illegal $string" ); // Bad.
-_n_noop( 'I have a cat.', 'I have cats.', $number, SOMETHING ); // Bad.
+_n_noop( 'I have a cat.', 'I have cats.' ); // Bad, no text domain.
+_n_noop( 'I have a cat.', 'I have cats.', 'my-slug' ); // OK.
+_n_noop( 'I have a cat.', 'I have cats.', "illegal $string" ); // Bad.
+_n_noop( 'I have a cat.', 'I have cats.',  SOMETHING ); // Bad.
 
 _nx( 'I have a cat.', 'I have cats.', $number, 'Not really.' ); // Bad, no text domain.
 _nx( 'I have a cat.', 'I have cats.', $number, $context ); // Bad.
@@ -59,12 +59,12 @@ _nx( 'I have a cat.', 'I have cats.', $number, $context, 'my-slug' ); // Bad.
 _nx( 'I have a cat.', 'I have cats.', $number, 'Not really.', "illegal $string" ); // Bad.
 _nx( 'I have a cat.', 'I have cats.', $number, 'Not really.', SOMETHING ); // Bad.
 
-_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.' ); // Bad, no text domain.
-_nx_noop( 'I have a cat.', 'I have cats.', $number, $context ); // Bad, no text domain, variable context.
-_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug' ); // OK.
-_nx_noop( 'I have a cat.', 'I have cats.', $number, $context, 'my-slug' ); // Bad.
-_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', "illegal $string" ); // Bad.
-_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', SOMETHING ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', 'Not really.' ); // Bad, no text domain.
+_nx_noop( 'I have a cat.', 'I have cats.', $context ); // Bad, no text domain, variable context.
+_nx_noop( 'I have a cat.', 'I have cats.', 'Not really.', 'my-slug' ); // OK.
+_nx_noop( 'I have a cat.', 'I have cats.', $context, 'my-slug' ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', 'Not really.', "illegal $string" ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', 'Not really.', SOMETHING ); // Bad.
 
 translate( 'foo', 'bar' ); // Bad, low-level API function.
 translate_with_gettext_context( 'foo', 'bar', 'baz' ); // Bad, low-level API function.
@@ -74,8 +74,8 @@ _( 'foo', 'bar' ); // Bad.
 __( 'foo', 'bar', 'too-many-args' ); // Bad.
 _x( 'string', 'context', 'domain', 'too-many-args' ); // Bad
 _n( 'I have a cat.', 'I have cats.', $number, 'my-slug', 'too-many-args' ); // Bad
-_n_noop( 'I have a cat.', 'I have cats.', $number, 'my-slug', 'too-many-args' ); // Bad.
-_nx_noop( 'I have a cat.', 'I have cats.', $number, 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
+_n_noop( 'I have a cat.', 'I have cats.', 'my-slug', 'too-many-args' ); // Bad.
+_nx_noop( 'I have a cat.', 'I have cats.', 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
 
 // Make sure that multi-line string literals are accepted.
 _nx( 'I have
