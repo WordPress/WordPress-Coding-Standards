@@ -52,6 +52,7 @@ echo MyClass::$varName; // Bad
 echo MyClass::$var_name;
 echo MyClass::$varname;
 echo MyClass::$_varName; // Bad
+echo MyClass::$VAR_name; // Bad
 
 echo $this->varName2; // Bad
 echo $this->var_name2;
@@ -61,6 +62,7 @@ echo $object->varName2; // Bad
 echo $object->var_name2;
 echo $object_name->varname2;
 echo $object_name->_varName2; // Bad
+echo $object_name->VAR_name; // Bad
 
 echo $this->myFunction($one, $two);
 echo $object->myFunction($one_two);
