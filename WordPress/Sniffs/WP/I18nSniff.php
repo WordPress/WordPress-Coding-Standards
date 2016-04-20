@@ -25,8 +25,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		'esc_html_x'                     => 'context',
 		'_n'                             => 'number',
 		'_nx'                            => 'number_context',
-		'_n_noop'                        => 'number',
-		'_nx_noop'                       => 'number_context',
+		'_n_noop'                        => 'noopnumber',
+		'_nx_noop'                       => 'noopnumber_context',
 	);
 
 	/**
@@ -75,7 +75,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$argument_tokens = array();
 
 		// Look at arguments.
-		for ( $i = $func_open_paren_token + 1; $i < $tokens[ $func_open_paren_token ]['parenthesis_closer'] - 1; $i += 1 ) {
+		for ( $i = $func_open_paren_token + 1; $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i += 1 ) {
 			$this_token = $tokens[ $i ];
 			$this_token['token_index'] = $i;
 			if ( in_array( $this_token['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {
@@ -131,6 +131,15 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			array_shift( $arguments_tokens );
+			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+		} elseif ( 'noopnumber' === $this->i18n_functions[ $translation_function ] ) {
+			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+		} elseif ( 'noopnumber_context' === $this->i18n_functions[ $translation_function ] ) {
+			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
 		}
