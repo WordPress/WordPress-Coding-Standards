@@ -10,6 +10,25 @@
  */
 class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
+	/**
+	 * Text domain.
+	 *
+	 * @todo Eventually this should be able to be auto-supplied via looking at $phpcs_file->getFilename()
+	 * @link https://youtrack.jetbrains.com/issue/WI-17740
+	 *
+	 * @var string
+	 */
+	public $text_domain;
+
+	/**
+	 * Allow unit tests to override the supplied text_domain.
+	 *
+	 * @todo While it doesn't work, ideally this should be able to be done in \WordPress_Tests_WP_I18nUnitTest::setUp()
+	 *
+	 * @var string
+	 */
+	static $text_domain_override;
+
 	public $i18n_functions = array(
 		'translate'                      => 'simple',
 		'__'                             => 'simple',
@@ -52,6 +71,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	public function process( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 		$tokens = $phpcs_file->getTokens();
 		$token  = $tokens[ $stack_ptr ];
+
+		if ( ! empty( self::$text_domain_override ) ) {
+			$this->text_domain = self::$text_domain_override;
+		}
 
 		if ( '_' === $token['content'] ) {
 			$phpcs_file->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
@@ -117,31 +140,31 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$argument_assertions = array();
 		if ( 'simple' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
 		} elseif ( 'context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
 		} elseif ( 'number' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			array_shift( $arguments_tokens );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
 		} elseif ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			array_shift( $arguments_tokens );
 			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
 		} elseif ( 'noopnumber' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
 		} elseif ( 'noopnumber_context' === $this->i18n_functions[ $translation_function ] ) {
 			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
 			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ), 'warning' => true );
+			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
 		}
 
 		if ( ! empty( $arguments_tokens ) ) {
@@ -173,7 +196,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		if ( 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
-			$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
+			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
+				$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
+			}
 			return false;
 		}
 		if ( count( $tokens ) > 1 ) {
@@ -186,6 +211,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			return false;
 		}
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $tokens[0]['content'], '\'""' ) !== $this->text_domain ) {
+				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $tokens[0]['content'] ) );
+				return false;
+			}
 			return true;
 		}
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
@@ -194,7 +223,14 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$code = 'InterpolatedVariable' . ucfirst( $arg_name );
 				$phpcs_file->$method( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $code, array( $arg_name, $interpolated_variable ) );
 			}
-			return false;
+			if ( ! empty( $interpolated_variables ) ) {
+				return false;
+			}
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $tokens[0]['content'], '\'""' ) !== $this->text_domain ) {
+				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $tokens[0]['content'] ) );
+				return false;
+			}
+			return true;
 		}
 
 		$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );

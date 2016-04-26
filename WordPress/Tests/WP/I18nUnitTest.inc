@@ -1,46 +1,46 @@
 <?php
 
-__( "hell$varo", 'domain' ); // Bad, shouldn't use a string with variables
+__( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables
 
-__( "hell\$varo", 'domain' ); // OK, Variable is not interpolated.
-__( "hell\\$varo", 'domain' ); // Bad, is interpolated.
-__( "hell\\\$varo", 'domain' ); // OK, variable is escaped.
+__( "hell\$varo", 'my-slug' ); // OK, Variable is not interpolated.
+__( "hell\\$varo", 'my-slug' ); // Bad, is interpolated.
+__( "hell\\\$varo", 'my-slug' ); // OK, variable is escaped.
 
-__( $var, 'domain' ); // Bad, shouldn't use variables
+__( $var, 'my-slug' ); // Bad, shouldn't use variables
 
 __( 'string', SOMETHING ); // Bad, shouldn't use CONSTANTS
 
-__( 'string' . $var, 'domain' ); // Bad, shouldn't use variable for string
+__( 'string' . $var, 'my-slug' ); // Bad, shouldn't use variable for string
 
-__( $var . 'string', 'domain' ); // Bad, shouldn't use variable for string
+__( $var . 'string', 'my-slug' ); // Bad, shouldn't use variable for string
 
-__( SOMETHING, 'domain' ); // Bad, shouldn't use constant for string
+__( SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string
 
-__( 'string' . SOMETHING, 'domain' ); // Bad, shouldn't use constant for string
+__( 'string' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string
 
-__( SOMETHING . 'string', 'domain' ); // Bad, shouldn't use variable for string
+__( SOMETHING . 'string', 'my-slug' ); // Bad, shouldn't use variable for string
 
 __( 'string', $domain ); // Bad, shouldn't use variable for domain
 
 __( 'string', 'my' . $domain ); // Bad, shouldn't use variable for domain
 
-__( 'string', $domain . 'domain' ); // Bad, shouldn't use variable for domain
+__( 'string', $domain . 'my-slug' ); // Bad, shouldn't use variable for domain
 
-__( 'string', 'domain' ); // Good
+__( 'string', 'my-slug' ); // Good
 
-_x( 'string', 'context', 'domain' ); // Good
+_x( 'string', 'context', 'my-slug' ); // Good
 
-_x( 'string', $var, 'domain' ); // Bad, shouldn't use variable for context
+_x( 'string', $var, 'my-slug' ); // Bad, shouldn't use variable for context
 
-_x( 'string', 'context' . $var, 'domain' ); // Bad, shouldn't use variable for context
+_x( 'string', 'context' . $var, 'my-slug' ); // Bad, shouldn't use variable for context
 
-_x( 'string', $var . 'context', 'domain' ); // Bad, shouldn't use variable for context
+_x( 'string', $var . 'context', 'my-slug' ); // Bad, shouldn't use variable for context
 
-_x( 'string', SOMETHING, 'domain' ); // Bad, shouldn't use constant for context
+_x( 'string', SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context
 
-_x( 'string', SOMETHING . 'context', 'domain' ); // Bad, shouldn't use constant for context
+_x( 'string', SOMETHING . 'context', 'my-slug' ); // Bad, shouldn't use constant for context
 
-_x( 'string', 'context' . SOMETHING, 'domain' ); // Bad, shouldn't use constant for context
+_x( 'string', 'context' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context
 
 _n( 'I have %d cat.', 'I have %d cats.', $number ); // Bad, no text domain.
 _n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug' ); // OK.
@@ -66,13 +66,13 @@ _nx_noop( 'I have %d cat.', 'I have %d cats.', $context, 'my-slug' ); // Bad.
 _nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', "illegal $string" ); // Bad.
 _nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', SOMETHING ); // Bad.
 
-translate( 'foo', 'bar' ); // Bad, low-level API function.
-translate_with_gettext_context( 'foo', 'bar', 'baz' ); // Bad, low-level API function.
+translate( 'foo', 'my-slug' ); // Bad, low-level API function.
+translate_with_gettext_context( 'foo', 'bar', 'my-slug' ); // Bad, low-level API function.
 
-_( 'foo', 'bar' ); // Bad.
+_( 'foo', 'my-slug' ); // Bad.
 
-__( 'foo', 'bar', 'too-many-args' ); // Bad.
-_x( 'string', 'context', 'domain', 'too-many-args' ); // Bad
+__( 'foo', 'my-slug', 'too-many-args' ); // Bad.
+_x( 'string', 'context', 'my-slug', 'too-many-args' ); // Bad
 _n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug', 'too-many-args' ); // Bad
 _n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug', 'too-many-args' ); // Bad.
 _nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
@@ -81,11 +81,10 @@ _nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug', 'too-ma
 _nx( 'I have
 %d cat.', 'I have
 %d cats.', $number, 'Not
-really.', 'my-
-slug' ); // OK.
+really.', 'my-slug' ); // OK.
 
 // Ensure lack of spaces doesn't cause i18n error.
 _n_noop('I have %d cat.', 'I have %d cats.', 'my-slug'); // OK.
 
 // Dollar sign in literal string is not interpolated, so OK.
-_n_noop( 'I have %d cat.', 'I have %d cats.', 'literal-string-so-$variable-not-interpolated' ); // OK.
+_n_noop( 'I have %d cat.', 'I have %d cats literal-string-so-$variable-not-interpolated.', 'my-slug' ); // OK.
