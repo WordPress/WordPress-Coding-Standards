@@ -101,5 +101,6 @@
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.YodaConditions"/>
+	<rule ref="WordPress.WP.I18n"/>
 
 </ruleset>
