@@ -227,7 +227,9 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				'functions' => array(
 					'get_adjacent_post',
 					'get_previous_post',
+					'get_previous_post_link',
 					'get_next_post',
+					'get_next_post_link',
 				),
 			),
 
@@ -236,6 +238,59 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				'message' => '%s is discouraged due to a lack for backwards-compatibility in PHP versions; please use wp_parse_url() instead.',
 				'functions' => array(
 					'parse_url',
+				),
+			),
+
+			'get_intermediate_image_sizes' => array(
+				'type' => 'error',
+				'message' => 'Intermediate images do not exist on the VIP platform, and thus get_intermediate_image_sizes() returns an empty array() on the platform. This behavior is intentional to prevent WordPress from generating multiple thumbnails when images are uploaded.',
+				'functions' => array(
+					'get_intermediate_image_sizes',
+				),
+			),
+
+			'serialize' => array(
+				'type' => 'warning',
+				'message' => '%s Serialized data has <a href=\'https://www.owasp.org/index.php/PHP_Object_Injection\'>known vulnerability problems</a> with Object Injection. JSON is generally a better approach for serializing data.',
+				'functions' => array(
+					'serialize',
+					'unserialize',
+				),
+			),
+
+			'error_log' => array(
+				'type' => 'error',
+				'message' => '%s Debug code is not allowed on VIP Production',
+				'functions' => array(
+					'error_log',
+					'var_dump',
+					'print_r',
+					'trigger_error',
+					'set_error_handler',
+				),
+			),
+
+			'wp_redirect' => array(
+				'type' => 'warning',
+				'message' => '%s Using wp_safe_redirect(), along with the allowed_redirect_hosts filter, can help avoid any chances of malicious redirects within code. It’s also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
+				'functions' => array(
+					'wp_redirect',
+				),
+			),
+
+			'wp_is_mobile' => array(
+				'type' => 'error',
+				'message' => '%s When targeting mobile visitors, jetpack_is_mobile() should be used instead of wp_is_mobile. It is more robust and works better with full page caching.',
+				'functions' => array(
+					'wp_is_mobile',
+				),
+			),
+
+			'urlencode' => array(
+				'type' => 'warning',
+				'message' => '%s urlencode should only be used when dealing with legacy applications rawurlencode should now de used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
+				'functions' => array(
+					'rawurlencode',
 				),
 			),
 
