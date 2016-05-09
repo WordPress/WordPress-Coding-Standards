@@ -61,7 +61,7 @@ class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_Sniffs_Arrays_Arr
 			in_array( $key, array( 'posts_per_page', 'numberposts' ) )
 			) {
 
-			if ( $val > 50 ) {
+			if ( $val > 100 ) {
 				return 'Detected high pagination limit, `%s` is set to `%s`';
 			}
 		}
