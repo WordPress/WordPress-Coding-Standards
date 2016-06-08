@@ -88,3 +88,9 @@ _n_noop('I have %d cat.', 'I have %d cats.', 'my-slug'); // OK.
 
 // Dollar sign in literal string is not interpolated, so OK.
 _n_noop( 'I have %d cat.', 'I have %d cats literal-string-so-$variable-not-interpolated.', 'my-slug' ); // OK.
+
+// Multiple placeholders should have orderable
+__( 'There are %d monkeys in the %s', 'my-slug' ); // Multiple arguments should be numbered
+__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK
+_n( 'There is %d monkey in the %s', 'There are %d monkeys in the %s', $number, 'my-slug' ); // Multiple arguments should be numbered
+_n( 'There is %1$d monkey in the %2$s', 'In the %2$s are There are %1$d monkeys', $number, 'my-slug' ); // OK

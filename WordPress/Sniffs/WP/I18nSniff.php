@@ -210,6 +210,32 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$phpcs_file->$method( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $contents ) );
 			return false;
 		}
+
+		// Check for multiple unordered placeholders.
+		// Regex copied from http://php.net/manual/en/function.sprintf.php#93552
+		$unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
+
+		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ) ) ) {
+			preg_match_all( $unordered_sprintf_placeholder_regex, $tokens[0]['content'], $unordered_matches );
+			$unordered_matches = $unordered_matches[0];
+
+			if ( count( $unordered_matches ) >= 2 ) {
+				$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
+
+				$suggestions = array();
+				for ( $i = 0; $i < count( $unordered_matches ); $i++ ) {
+					$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], ( $i + 1 ) . '$', 1, 0 );
+				}
+
+				$phpcs_file->$method(
+					'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
+					$stack_ptr,
+					'UnorderedPlaceholders',
+					array( join( ', ', $suggestions ), join( ',', $unordered_matches ) )
+				);
+			}
+		}
+
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $tokens[0]['content'], '\'""' ) !== $this->text_domain ) {
 				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $tokens[0]['content'] ) );
