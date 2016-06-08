@@ -194,6 +194,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$arg_name = $context['arg_name'];
 		$method = empty( $context['warning'] ) ? 'addError' : 'addWarning';
 		$content = $tokens[0]['content'];
+		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
 
 		if ( 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
@@ -228,12 +229,20 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], ( $i + 1 ) . '$', 1, 0 );
 				}
 
-				$phpcs_file->$method(
+				$fix = $phpcs_file->$fixable_method(
 					'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
 					$stack_ptr,
 					'UnorderedPlaceholders',
 					array( join( ', ', $suggestions ), join( ',', $unordered_matches ) )
 				);
+
+				if ( true === $fix ) {
+					$fixed_str = str_replace( $unordered_matches, $suggestions, $content );
+
+					$phpcs_file->fixer->beginChangeset();
+					$phpcs_file->fixer->replaceToken( $stack_ptr, $fixed_str );
+					$phpcs_file->fixer->endChangeset();
+				}
 			}
 		}
 
