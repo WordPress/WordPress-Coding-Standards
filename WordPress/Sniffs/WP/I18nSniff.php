@@ -193,6 +193,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$tokens = $context['tokens'];
 		$arg_name = $context['arg_name'];
 		$method = empty( $context['warning'] ) ? 'addError' : 'addWarning';
+		$content = $tokens[0]['content'];
 
 		if ( 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
@@ -216,7 +217,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
 
 		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ) ) ) {
-			preg_match_all( $unordered_sprintf_placeholder_regex, $tokens[0]['content'], $unordered_matches );
+			preg_match_all( $unordered_sprintf_placeholder_regex, $content, $unordered_matches );
 			$unordered_matches = $unordered_matches[0];
 
 			if ( count( $unordered_matches ) >= 2 ) {
@@ -237,14 +238,14 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $tokens[0]['content'], '\'""' ) !== $this->text_domain ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $tokens[0]['content'] ) );
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $content, '\'""' ) !== $this->text_domain ) {
+				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $content ) );
 				return false;
 			}
 			return true;
 		}
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
-			$interpolated_variables = $this->get_interpolated_variables( $tokens[0]['content'] );
+			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
 				$code = 'InterpolatedVariable' . ucfirst( $arg_name );
 				$phpcs_file->$method( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $code, array( $arg_name, $interpolated_variable ) );
@@ -252,15 +253,15 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $tokens[0]['content'], '\'""' ) !== $this->text_domain ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $tokens[0]['content'] ) );
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $content, '\'""' ) !== $this->text_domain ) {
+				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $content ) );
 				return false;
 			}
 			return true;
 		}
 
 		$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
-		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $tokens[0]['content'] ) );
+		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $content ) );
 		return false;
 	}
 }
