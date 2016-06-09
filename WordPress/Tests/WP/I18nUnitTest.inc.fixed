@@ -89,8 +89,15 @@ _n_noop('I have %d cat.', 'I have %d cats.', 'my-slug'); // OK.
 // Dollar sign in literal string is not interpolated, so OK.
 _n_noop( 'I have %d cat.', 'I have %d cats literal-string-so-$variable-not-interpolated.', 'my-slug' ); // OK.
 
-// Multiple placeholders should have orderable placeholders
-__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // Multiple arguments should be numbered
-__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK
-_n( 'There is %1$d monkey in the %2$s', 'There are %1$d monkeys in the %2$s', $number, 'my-slug' ); // Multiple arguments should be numbered
-_n( 'There is %1$d monkey in the %2$s', 'In the %2$s are There are %1$d monkeys', $number, 'my-slug' ); // OK
+// Multiple placeholders should have orderable placeholders.
+__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // Multiple arguments should be numbered.
+__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK.
+_n( 'There is %1$d monkey in the %2$s', 'There are %1$d monkeys in the %2$s', $number, 'my-slug' ); // Multiple arguments should be numbered.
+_n( 'There is %1$d monkey in the %2$s', 'In the %2$s there are %1$d monkeys', $number, 'my-slug' ); // OK.
+
+// The singular form should use placeholders if the plural does.
+// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals
+_n( 'I have a cat.', 'I have %d cats.', $number, 'my-slug' ); // Bad, singular should have placeholder.
+_n_noop( 'I have a cat.', 'I have %d cats.', 'my-slug' ); // Bad, singular should have placeholder.
+_nx( 'I have a cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
+_nx_noop( 'I have a cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.

@@ -68,6 +68,10 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			78 => 1,
 			93 => 1,
 			95 => 2,
+			100 => 1,
+			101 => 1,
+			102 => 1,
+			103 => 1,
 		);
 	}
 
@@ -83,6 +87,10 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 		return array(
 			69 => 1,
 			70 => 1,
+			100 => 1,
+			101 => 1,
+			102 => 1,
+			103 => 1,
 		);
 	}
 }

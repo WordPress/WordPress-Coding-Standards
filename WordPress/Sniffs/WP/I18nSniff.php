@@ -179,6 +179,14 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 			call_user_func( array( $this, 'check_argument_tokens' ), $phpcs_file, $argument_assertion_context );
 		}
+
+		// For _n*() calls, compare the singular and plural strings.
+		if ( false !== strpos( $this->i18n_functions[ $translation_function ], 'number' ) ) {
+			$single_context = $argument_assertions[0];
+			$plural_context = $argument_assertions[1];
+
+			$this->compare_single_and_plural_arguments( $phpcs_file, $stack_ptr, $single_context, $plural_context );
+		}
 	}
 
 	/**
@@ -272,5 +280,44 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
 		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $content ) );
 		return false;
+	}
+
+	/**
+	 * Check for inconsistencies between single and plural arguments.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param array $single_context
+	 * @param array $plural_context
+	 * @return void
+	 */
+	protected function compare_single_and_plural_arguments( PHP_CodeSniffer_File $phpcs_file, $stack_ptr, $single_context, $plural_context ) {
+		$single_content = $single_context['tokens'][0]['content'];
+		$plural_content = $plural_context['tokens'][0]['content'];
+
+		// Regex copied from http://php.net/manual/en/function.sprintf.php#93552
+		$sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
+
+		preg_match_all( $sprintf_placeholder_regex, $single_content, $single_placeholders );
+		$single_placeholders = $single_placeholders[0];
+
+		preg_match_all( $sprintf_placeholder_regex, $plural_content, $plural_placeholders );
+		$plural_placeholders = $plural_placeholders[0];
+
+		// English conflates "singular" with "only one", described in the codex:
+		// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals
+		if ( count( $single_placeholders ) < count( $plural_placeholders ) ) {
+			$error_string = 'Missing singular placeholder, needed for some languages. See https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals';
+			$single_index = $single_context['tokens'][0]['token_index'];
+
+			$phpcs_file->addError( $error_string, $single_index, 'MissingSingularPlaceholder' );
+		}
+
+		// Reordering is fine, but mismatched placeholders is probably wrong.
+		sort( $single_placeholders );
+		sort( $plural_placeholders );
+
+		if ( $single_placeholders !== $plural_placeholders ) {
+			$phpcs_file->addWarning( 'Mismatched placeholders is probably an error', $stack_ptr, 'MismatchedPlaceholders' );
+		}
 	}
 }
