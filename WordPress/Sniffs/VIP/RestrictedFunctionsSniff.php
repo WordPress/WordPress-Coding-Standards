@@ -294,6 +294,38 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 			),
 
+			'ereg' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use preg_match() instead. See http://php.net/manual/en/function.ereg.php',
+				'functions' => array(
+					'ereg',
+				),
+			),
+
+			'eregi' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use preg_match() with i modifier instead. See http://php.net/manual/en/function.eregi.php',
+				'functions' => array(
+					'eregi',
+				),
+			),
+
+			'ereg_replace' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use preg_replace() instead. See http://php.net/manual/en/function.ereg-replace.php',
+				'functions' => array(
+					'ereg_replace',
+				),
+			),
+
+			'split' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use explode() or preg_split() instead. See http://php.net/manual/en/function.split.php',
+				'functions' => array(
+					'split',
+				),
+			),
+
 		);
 	}
 }//end class
