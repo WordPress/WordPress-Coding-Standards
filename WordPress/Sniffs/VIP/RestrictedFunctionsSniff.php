@@ -177,12 +177,11 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 			),
 
-			'get_pages' => array(
+			'get_children' => array(
 				'type' => 'error',
 				'message' => '%s is highly discouraged in favor of creating a new WP_Query() so that Advanced Post Cache will cache the query.',
 				'functions' => array(
 					'get_children',
-					'get_pages',
 				),
 			),
 
