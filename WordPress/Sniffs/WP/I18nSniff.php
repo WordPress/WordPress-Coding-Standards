@@ -49,7 +49,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	);
 
 	// These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
-    static $sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
+	static $sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
 	// "Unordered" means there's no position specifier: '%s', not '%2$s'
 	static $unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
 
@@ -207,7 +207,6 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$arg_name = $context['arg_name'];
 		$method = empty( $context['warning'] ) ? 'addError' : 'addWarning';
 		$content = $tokens[0]['content'];
-		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
 
 		if ( 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
@@ -226,35 +225,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			return false;
 		}
 
-		// Check for multiple unordered placeholders.
-
 		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ) ) ) {
-			preg_match_all( self::$unordered_sprintf_placeholder_regex, $content, $unordered_matches );
-			$unordered_matches = $unordered_matches[0];
-
-			if ( count( $unordered_matches ) >= 2 ) {
-				$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
-
-				$suggestions = array();
-				for ( $i = 0; $i < count( $unordered_matches ); $i++ ) {
-					$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], ( $i + 1 ) . '$', 1, 0 );
-				}
-
-				$fix = $phpcs_file->$fixable_method(
-					'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
-					$stack_ptr,
-					'UnorderedPlaceholders',
-					array( join( ', ', $suggestions ), join( ',', $unordered_matches ) )
-				);
-
-				if ( true === $fix ) {
-					$fixed_str = str_replace( $unordered_matches, $suggestions, $content );
-
-					$phpcs_file->fixer->beginChangeset();
-					$phpcs_file->fixer->replaceToken( $stack_ptr, $fixed_str );
-					$phpcs_file->fixer->endChangeset();
-				}
-			}
+			$this->check_text( $phpcs_file, $context );
 		}
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
@@ -318,6 +290,49 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		if ( $single_placeholders !== $plural_placeholders ) {
 			$phpcs_file->addWarning( 'Mismatched placeholders is probably an error', $stack_ptr, 'MismatchedPlaceholders' );
+		}
+	}
+
+	/**
+	 * Check the string itself for problems
+	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param array $single_context
+	 * @param array $plural_context
+	 * @return void
+	 */
+	protected function check_text( PHP_CodeSniffer_File $phpcs_file, $context ) {
+		$stack_ptr = $context['stack_ptr'];
+		$arg_name = $context['arg_name'];
+		$content = $context['tokens'][0]['content'];
+		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
+
+		// UnorderedPlaceholders: Check for multiple unordered placeholders.
+		preg_match_all( self::$unordered_sprintf_placeholder_regex, $content, $unordered_matches );
+		$unordered_matches = $unordered_matches[0];
+
+		if ( count( $unordered_matches ) >= 2 ) {
+			$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
+
+			$suggestions = array();
+			for ( $i = 0; $i < count( $unordered_matches ); $i++ ) {
+				$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], ( $i + 1 ) . '$', 1, 0 );
+			}
+
+			$fix = $phpcs_file->$fixable_method(
+				'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
+				$stack_ptr,
+				'UnorderedPlaceholders',
+				array( join( ', ', $suggestions ), join( ',', $unordered_matches ) )
+			);
+
+			if ( true === $fix ) {
+				$fixed_str = str_replace( $unordered_matches, $suggestions, $content );
+
+				$phpcs_file->fixer->beginChangeset();
+				$phpcs_file->fixer->replaceToken( $stack_ptr, $fixed_str );
+				$phpcs_file->fixer->endChangeset();
+			}
 		}
 	}
 }
