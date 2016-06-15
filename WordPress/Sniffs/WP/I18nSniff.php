@@ -334,5 +334,15 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$phpcs_file->fixer->endChangeset();
 			}
 		}
+
+		// NoEmptyStrings
+
+		// Strip placeholders and surrounding quotes.
+		$non_placeholder_content = trim( $content, "'" );
+		$non_placeholder_content = preg_replace( self::$sprintf_placeholder_regex, '', $non_placeholder_content );
+
+		if ( empty( $non_placeholder_content ) ) {
+			$phpcs_file->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
+		}
 	}
 }

@@ -101,3 +101,8 @@ _n( 'I have a cat.', 'I have %d cats.', $number, 'my-slug' ); // Bad, singular s
 _n_noop( 'I have a cat.', 'I have %d cats.', 'my-slug' ); // Bad, singular should have placeholder.
 _nx( 'I have a cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
 _nx_noop( 'I have a cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
+
+__( '%s', 'my-slug' ); // Bad, don't waste translator's time
+__( '%1$s%2$s', 'my-slug' ); // Bad, don't waste translator's time
+_n( 'I have %d cat.', '%d', $number, 'my-slug' ); // Bad, move the logic out of the translation
+__( '\'%s\'', 'my-slug' ); // OK (ish. this is a technical test, not a great string)
