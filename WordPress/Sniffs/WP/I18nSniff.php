@@ -48,6 +48,11 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		'_nx_noop'                       => 'noopnumber_context',
 	);
 
+	// These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+    static $sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
+	// "Unordered" means there's no position specifier: '%s', not '%2$s'
+	static $unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
+
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -222,11 +227,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		// Check for multiple unordered placeholders.
-		// Regex copied from http://php.net/manual/en/function.sprintf.php#93552
-		$unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
 
 		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ) ) ) {
-			preg_match_all( $unordered_sprintf_placeholder_regex, $content, $unordered_matches );
+			preg_match_all( self::$unordered_sprintf_placeholder_regex, $content, $unordered_matches );
 			$unordered_matches = $unordered_matches[0];
 
 			if ( count( $unordered_matches ) >= 2 ) {
@@ -294,13 +297,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$single_content = $single_context['tokens'][0]['content'];
 		$plural_content = $plural_context['tokens'][0]['content'];
 
-		// Regex copied from http://php.net/manual/en/function.sprintf.php#93552
-		$sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
-
-		preg_match_all( $sprintf_placeholder_regex, $single_content, $single_placeholders );
+		preg_match_all( self::$sprintf_placeholder_regex, $single_content, $single_placeholders );
 		$single_placeholders = $single_placeholders[0];
 
-		preg_match_all( $sprintf_placeholder_regex, $plural_content, $plural_placeholders );
+		preg_match_all( self::$sprintf_placeholder_regex, $plural_content, $plural_placeholders );
 		$plural_placeholders = $plural_placeholders[0];
 
 		// English conflates "singular" with "only one", described in the codex:
