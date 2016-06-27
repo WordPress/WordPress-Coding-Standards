@@ -71,6 +71,24 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	);
 
 	/**
+	 * Custom list of variables which can have mixed case.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @var string[]
+	 */
+	public $customVariablesWhitelist = array();
+
+	/**
+	 * Whether the custom whitelisted variables were added to the default list yet.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @var bool
+	 */
+	public static $addedCustomVariables = false;
+
+	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
@@ -80,6 +98,14 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @return void
 	 */
 	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+
+		// Merge any custom variables with the defaults, if we haven't already.
+		if ( ! self::$addedCustomVariables ) {
+			$this->whitelisted_mixed_case_member_var_names = array_merge( $this->whitelisted_mixed_case_member_var_names, $this->customVariablesWhitelist );
+
+			self::$addedCustomVariables = true;
+		}
+
 		$tokens  = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
