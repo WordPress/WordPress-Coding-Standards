@@ -140,29 +140,35 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			}//end if
 		}//end if
 
+		$in_class     = false;
+		$obj_operator = $phpcs_file->findPrevious( array( T_WHITESPACE ), ( $stack_ptr - 1 ), null, true );
+		if ( T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] || T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+			// The variable lives within a class, and is referenced like
+			// this: MyClass::$_variable or $class->variable.
+			$in_class = true;
+		}
+
 		// There is no way for us to know if the var is public or private,
 		// so we have to ignore a leading underscore if there is one and just
 		// check the main part of the variable name.
 		$original_var_name = $var_name;
-		if ( substr( $var_name, 0, 1 ) === '_' ) {
-			$obj_operator = $phpcs_file->findPrevious( array( T_WHITESPACE ), ( $stack_ptr - 1 ), null, true );
-			if ( T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] ) {
-				// The variable lives within a class, and is referenced like
-				// this: MyClass::$_variable, so we don't know its scope.
-				$in_class = true;
-			} else {
-				$in_class = $phpcs_file->hasCondition( $stack_ptr, array( T_CLASS, T_INTERFACE, T_TRAIT ) );
-			}
-
-			if ( true === $in_class ) {
-				$var_name = substr( $var_name, 1 );
-			}
+		if ( substr( $var_name, 0, 1 ) === '_' && true === $in_class ) {
+			$var_name = substr( $var_name, 1 );
 		}
 
 		if ( self::isSnakeCase( $var_name ) === false ) {
-			$error = 'Variable "%s" is not in valid snake_case format';
-			$data  = array( $original_var_name );
-			$phpcs_file->addError( $error, $stack_ptr, 'NotSnakeCase', $data );
+			if ( $in_class && ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) ) {
+				$error      = 'Object property "%s" is not in valid snake_case format';
+				$error_name = 'NotSnakeCaseMemberVar';
+			} elseif ( ! $in_class ) {
+				$error      = 'Variable "%s" is not in valid snake_case format';
+				$error_name = 'NotSnakeCase';
+			}
+
+			if ( isset( $error, $error_name ) ) {
+				$data  = array( $original_var_name );
+				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
+			}
 		}
 
 	}
@@ -219,7 +225,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 				}
 
 				if ( self::isSnakeCase( $var_name ) === false ) {
-					$error = 'Variable "%s" is not in snake_case format';
+					$error = 'Variable "%s" is not in valid snake_case format';
 					$data  = array( $var_name );
 					$phpcs_file->addError( $error, $stack_ptr, 'StringNotSnakeCase', $data );
 				}
