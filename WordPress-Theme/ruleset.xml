@@ -8,6 +8,14 @@
 	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/phpshort.php -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag" />
 
+	<!-- Only UNIX line endings allowed. -->
+	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/lineendings.php -->
+	<rule ref="Generic.Files.LineEndings">
+		<properties>
+			<property name="eolChar" value="\n"/>
+		</properties>
+	</rule>
+
 
 
 </ruleset>
