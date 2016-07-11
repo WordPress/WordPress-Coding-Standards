@@ -22,8 +22,7 @@ if (class_exists('Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true) === false) 
  * @package  PHP_CodeSniffer
  * @author   John Godley <john@urbangiraffe.com>
  */
-class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff
-{
+class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 
     /**
      * A list of forbidden functions with their alternatives.
@@ -34,17 +33,20 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
      * @var array(string => string|null)
      */
     public $forbiddenFunctions = array(
-		'print_r'                  => null,
-		'debug_print_backtrace'    => null,
+    		// Deprecated
 		'ereg_replace'             => 'preg_replace',
 		'ereg'                     => null,
 		'eregi_replace'            => 'preg_replace',
-		'json_encode'              => 'wp_json_encode',
 		'split'                    => null,
 		'spliti'                   => null,
+    		// Development
+		'print_r'                  => null,
+		'debug_print_backtrace'    => null,
 		'var_dump'                 => null,
 		'var_export'               => null,
-		// WordPress
+		// Discouraged
+		'json_encode'              => 'wp_json_encode',
+		// WordPress deprecated
 		'find_base_dir'            => 'WP_Filesystem::abspath',
 		'get_base_dir'             => 'WP_Filesystem::abspath',
 		'dropdown_categories'      => 'wp_link_category_checklist',
@@ -59,6 +61,7 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 		'get_attachment_icon_src'  => 'wp_get_attachment_image_src',
 		'get_attachment_icon'      => 'wp_get_attachment_image',
 		'get_attachment_innerHTML' => 'wp_get_attachment_image',
+		// WordPress discouraged
 		'query_posts'              => 'WP_Query',
 		'wp_reset_query'           => 'wp_reset_postdata',
 	);
@@ -71,5 +74,3 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
     public $error = false;
 
 }//end class
-
-?>
