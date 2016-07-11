@@ -70,3 +70,16 @@ get_adjacent_post(); // error
 get_previous_post(); // error
 get_next_post(); // error
 parse_url( 'http://example.com/' ); // warning
+
+dl(); // error
+error_reporting(); // error
+ini_alter(); // error
+ini_restore(); // error
+ini_set(); // error
+magic_quotes_runtime(); // error
+set_magic_quotes_runtime(); // error
+apache_setenv(); // error
+putenv(); // error
+set_include_path(); // error
+restore_include_path(); // error
+phpinfo(); // error

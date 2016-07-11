@@ -326,6 +326,33 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 				),
 			),
 
+			'runtime_configuration' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, changing configuration at runtime is not allowed on VIP Production.',
+				'functions' => array(
+					'dl',
+					'error_reporting',
+					'ini_alter',
+					'ini_restore',
+					'ini_set',
+					'magic_quotes_runtime',
+					'set_magic_quotes_runtime',
+					'apache_setenv',
+					'putenv',
+					'set_include_path',
+					'restore_include_path',
+				),
+			),
+
+			'prevent_path_disclosure' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited as it can lead to full path disclosure.',
+				'functions' => array(
+					'error_reporting',
+					'phpinfo',
+				),
+			),
+
 		);
 	}
 }//end class
