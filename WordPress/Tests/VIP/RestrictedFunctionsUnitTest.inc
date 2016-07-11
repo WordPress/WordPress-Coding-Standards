@@ -57,8 +57,8 @@ url_to_post_id(); // error
 attachment_url_to_postid(); // error
 get_posts(); // warning
 wp_get_recent_posts(); // warning
-get_pages(); // error
-get_children(); // error
+
+get_children(); // warning
 wp_get_post_terms(); // error
 wp_get_post_categories(); // error
 wp_get_post_tags(); // error
