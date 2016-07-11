@@ -32,12 +32,17 @@ matrix:
     - php: hhvm
     - env: PHPCS_BRANCH=3.0
 
-before_script:
+install:
+    - export DEV_LIB_PATH=dev-lib
+    - export DEV_LIB_SKIP=composer
+    - if [ ! -e "$DEV_LIB_PATH" ] && [ -L .travis.yml ]; then export DEV_LIB_PATH=$( dirname $( readlink .travis.yml ) ); fi
+    - if [ ! -e "$DEV_LIB_PATH" ]; then git clone https://github.com/xwp/wp-dev-lib.git $DEV_LIB_PATH; fi
     - export PHPCS_DIR=/tmp/phpcs
-    - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
-    - $PHPCS_BIN --config-set installed_paths $(pwd)
+    - export PHPCS_BIN_DIR=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin; else echo $PHPCS_DIR/scripts; fi)
+    - export PATH="$PHPCS_BIN_DIR:$PATH"
+    - phpcs --config-set installed_paths $(pwd)
+    - source $DEV_LIB_PATH/travis.install.sh
 
 script:
-    - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
-    - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
+    - source $DEV_LIB_PATH/travis.script.sh
