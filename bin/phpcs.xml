@@ -7,4 +7,6 @@
 		<exclude name="WordPress.NamingConventions.ValidVariableName" />
 	</rule>
 
+	<rule ref="WordPress-Extra" />
+
 </ruleset>

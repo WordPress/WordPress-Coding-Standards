@@ -82,10 +82,13 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 		if ( T_BITWISE_AND === $tokens[ $stackPtr ]['code'] ) {
 			// If its not a reference, then we expect one space either side of the
 			// bitwise operator.
-			if ( false === $phpcsFile->isReference( $stackPtr ) ) {
-				// @todo Implement ?
+			// if ( false === $phpcsFile->isReference( $stackPtr ) ) {
+				// @todo Implement  or remove ?
 
-			} // end if
+			// } // end if
+
+			return;
+
 		} else {
 			if ( T_MINUS === $tokens[ $stackPtr ]['code'] ) {
 				// Check minus spacing, but make sure we aren't just assigning
