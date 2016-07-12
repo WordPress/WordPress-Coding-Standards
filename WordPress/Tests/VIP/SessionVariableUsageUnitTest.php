@@ -28,7 +28,6 @@ class WordPress_Tests_VIP_SessionVariableUsageUnitTest extends AbstractSniffUnit
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

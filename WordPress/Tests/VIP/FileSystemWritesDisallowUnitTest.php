@@ -30,7 +30,6 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

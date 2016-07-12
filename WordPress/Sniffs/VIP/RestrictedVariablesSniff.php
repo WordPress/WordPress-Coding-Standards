@@ -45,5 +45,6 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_Sniffs_Var
 				),
 			),
 		);
-	}
+	} // end getGroups()
+
 } // end class

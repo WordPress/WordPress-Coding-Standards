@@ -79,7 +79,6 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

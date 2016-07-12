@@ -21,7 +21,6 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
 	} // end register()
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *

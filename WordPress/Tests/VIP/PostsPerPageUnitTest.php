@@ -29,7 +29,6 @@ class WordPress_Tests_VIP_PostsPerPageUnitTest extends AbstractSniffUnitTest {
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

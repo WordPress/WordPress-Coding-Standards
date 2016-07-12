@@ -34,7 +34,6 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

@@ -24,7 +24,6 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 		);
 	}
 
-
 	/**
 	 * Returns the lines where errors should occur.
 	 *
@@ -41,7 +40,6 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 		 );
 
 	} // end getErrorList()
-
 
 	/**
 	 * Returns the lines where warnings should occur.

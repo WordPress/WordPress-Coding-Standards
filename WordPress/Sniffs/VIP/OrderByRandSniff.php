@@ -40,5 +40,6 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 		} else {
 			return false;
 		}
-	}
+	} // end callback()
+
 } // end class

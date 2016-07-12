@@ -51,7 +51,6 @@ class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitT
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

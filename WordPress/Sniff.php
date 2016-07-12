@@ -1126,5 +1126,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 		}
 		return $variables;
-	}
+	} // end get_interpolated_variables()
+
 }

@@ -25,7 +25,6 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

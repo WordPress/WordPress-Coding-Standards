@@ -53,7 +53,6 @@ class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest {
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

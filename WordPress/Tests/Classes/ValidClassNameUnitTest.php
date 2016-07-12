@@ -45,7 +45,6 @@ class WordPress_Tests_Classes_ValidClassNameUnitTest extends AbstractSniffUnitTe
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

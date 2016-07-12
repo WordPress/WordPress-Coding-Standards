@@ -36,7 +36,6 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		'debugInfo',
 	);
 
-
 	/**
 	 * Processes the tokens outside the scope.
 	 *
@@ -59,7 +58,6 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		}
 
 	} // end processTokenOutsideScope()
-
 
 	/**
 	 * Processes the tokens within the scope.

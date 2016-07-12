@@ -73,7 +73,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 	} // end register()
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *

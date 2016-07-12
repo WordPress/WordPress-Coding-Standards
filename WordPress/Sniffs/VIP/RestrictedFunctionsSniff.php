@@ -346,5 +346,6 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Fun
 			),
 
 		);
-	}
+	} // end getGroups()
+
 } // end class

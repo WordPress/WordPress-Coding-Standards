@@ -24,7 +24,6 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 
 	} // end register()
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *

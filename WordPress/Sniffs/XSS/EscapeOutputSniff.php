@@ -75,7 +75,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 */
 	public static $addedCustomFunctions = false;
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -90,7 +89,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		);
 
 	} // end register()
-
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

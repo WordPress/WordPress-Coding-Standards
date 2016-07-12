@@ -47,7 +47,6 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 		return array();
 	}
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
@@ -122,4 +121,5 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 		}
 
 	} // end process()
+
 } // end class

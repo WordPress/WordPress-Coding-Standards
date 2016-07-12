@@ -82,7 +82,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 		}
 	}
 
-
 	/**
 	 * @since 0.5.0
 	 */

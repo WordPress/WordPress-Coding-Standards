@@ -25,7 +25,6 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

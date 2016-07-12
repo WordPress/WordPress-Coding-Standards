@@ -22,7 +22,6 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff implements PHP_CodeSniffer_Sniff
 
 	} // end register()
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *

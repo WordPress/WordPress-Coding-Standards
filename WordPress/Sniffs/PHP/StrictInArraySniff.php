@@ -71,5 +71,6 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 			$phpcsFile->addWarning( 'Not using strict comparison for in_array(); supply true for third argument.', $lastToken, 'MissingTrueStrict' );
 			return;
 		}
-	}
-}
+	} // end process()
+
+} // end class

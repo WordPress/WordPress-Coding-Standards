@@ -26,7 +26,6 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff implements PHP_CodeSn
 	 */
 	public static $groups = array();
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -62,7 +61,6 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff implements PHP_CodeSn
 	public function getGroups() {
 		return self::$groups;
 	}
-
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -168,5 +166,6 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff implements PHP_CodeSn
 			$pattern
 		);
 		return $pattern;
-	}
+	} // end test_patterns()
+
 } // end class

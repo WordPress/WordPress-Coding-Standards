@@ -32,7 +32,6 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 		);
 	}
 
-
 	/**
 	 * Returns the lines where errors should occur.
 	 *
@@ -53,7 +52,6 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 		);
 
 	} // end getErrorList()
-
 
 	/**
 	 * Returns the lines where warnings should occur.

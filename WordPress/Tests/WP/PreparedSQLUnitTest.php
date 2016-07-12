@@ -31,7 +31,6 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 		);
 	} // end getErrorList()
 
-
 	/**
 	 * @since 0.8.0
 	 */

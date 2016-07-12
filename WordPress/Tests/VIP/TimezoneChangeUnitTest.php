@@ -27,7 +27,6 @@ class WordPress_Tests_VIP_TimezoneChangeUnitTest extends AbstractSniffUnitTest {
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

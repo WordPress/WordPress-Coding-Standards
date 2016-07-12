@@ -26,7 +26,6 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 */
 	public static $groups = array();
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -41,7 +40,6 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 		);
 
 	} // end register()
-
 
 	/**
 	 * Groups of variables to restrict.
@@ -62,7 +60,6 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	public function getGroups() {
 		return self::$groups;
 	}
-
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -190,5 +187,6 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		return true;
-	}
+	} // end callback()
+
 } // end class

@@ -43,7 +43,6 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

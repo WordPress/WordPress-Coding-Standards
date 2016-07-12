@@ -39,7 +39,6 @@ class WordPress_Tests_PHP_StrictComparisonsUnitTest extends AbstractSniffUnitTes
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

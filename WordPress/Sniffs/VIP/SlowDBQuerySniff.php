@@ -57,5 +57,6 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_Arra
 		}
 
 		parent::process( $phpcsFile, $stackPtr );
-	}
+	} // end process()
+
 } // end class

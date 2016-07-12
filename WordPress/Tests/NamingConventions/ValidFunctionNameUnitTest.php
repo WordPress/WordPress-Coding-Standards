@@ -47,7 +47,6 @@ class WordPress_Tests_NamingConventions_ValidFunctionNameUnitTest extends Abstra
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

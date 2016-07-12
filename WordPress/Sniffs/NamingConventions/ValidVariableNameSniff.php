@@ -204,7 +204,6 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 
 	}
 
-
 	/**
 	 * Processes the variable found within a double quoted string.
 	 *
@@ -242,5 +241,6 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	static function isSnakeCase( $var_name ) {
 		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
-	}
+	} // end isSnakeCase()
+
 } // end class

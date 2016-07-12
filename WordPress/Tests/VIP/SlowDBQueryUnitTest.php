@@ -22,7 +22,6 @@ class WordPress_Tests_VIP_SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

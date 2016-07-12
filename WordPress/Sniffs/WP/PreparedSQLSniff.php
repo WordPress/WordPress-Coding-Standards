@@ -232,5 +232,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		return true;
-	}
+	} // is_wpdb_method_call()
+
 } // end class.

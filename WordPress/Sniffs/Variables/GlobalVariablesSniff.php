@@ -336,5 +336,6 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				}
 			}
 		}
-	}
-}
+	} // end process()
+
+} // end class

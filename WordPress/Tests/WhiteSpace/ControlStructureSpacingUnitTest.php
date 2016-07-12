@@ -41,7 +41,6 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 		return version_compare( PHP_VERSION, '5.3.0', '<' );
 	}
 
-
 	/**
 	 * Returns the lines where errors should occur.
 	 *
@@ -87,7 +86,6 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 		return $ret;
 
 	} // end getErrorList()
-
 
 	/**
 	 * Returns the lines where warnings should occur.

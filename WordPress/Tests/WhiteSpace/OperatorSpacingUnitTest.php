@@ -48,7 +48,6 @@ class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUn
 
 	} // end getErrorList()
 
-
 	/**
 	 * Returns the lines where warnings should occur.
 	 *

@@ -63,7 +63,6 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 	 */
 	public $spaces_before_closure_open_paren = -1;
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -85,7 +84,6 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 		);
 
 	} // end register()
-
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

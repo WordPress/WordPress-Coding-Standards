@@ -23,7 +23,6 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 
 	} // end register()
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *

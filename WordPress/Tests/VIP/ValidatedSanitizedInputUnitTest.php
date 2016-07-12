@@ -41,10 +41,9 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 			104 => 2,
 			105 => 1,
 			114 => 2,
-			);
+		);
 
 	} // end getErrorList()
-
 
 	/**
 	 * Returns the lines where warnings should occur.

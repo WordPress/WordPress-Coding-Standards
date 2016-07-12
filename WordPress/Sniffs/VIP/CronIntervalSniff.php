@@ -22,7 +22,6 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 
 	} // end register()
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
@@ -123,8 +122,8 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 
 	} // end process()
 
-
 	public function confused( $phpcsFile, $stackPtr ) {
 		$phpcsFile->addWarning( 'Detected changing of cron_schedules, but could not detect the interval value.', $stackPtr, 'ChangeDetected' );
-	}
+	} // end confused()
+
 } // end class
