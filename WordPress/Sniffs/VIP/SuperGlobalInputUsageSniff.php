@@ -7,21 +7,19 @@
  * @author   Shady Sharaf <shady@x-team.com>
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
  */
-class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff
-{
+class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
-				T_VARIABLE,
-			   );
+			T_VARIABLE,
+		);
 
-	}//end register()
+	} // end register()
 
 
 	/**
@@ -33,27 +31,27 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$this->init( $phpcsFile );
 		$tokens = $phpcsFile->getTokens();
 
-		// Check for global input variable
-		if ( ! in_array( $tokens[ $stackPtr ]['content'], WordPress_Sniff::$input_superglobals ) ) {
+		// Check for global input variable.
+		if ( ! in_array( $tokens[ $stackPtr ]['content'], WordPress_Sniff::$input_superglobals, true ) ) {
 			return;
 		}
 
-		$varName = $tokens[$stackPtr]['content'];
+		$varName = $tokens[ $stackPtr ]['content'];
 
-		// If we're overriding a superglobal with an assignment, no need to test
+		// If we're overriding a superglobal with an assignment, no need to test.
 		if ( $this->is_assignment( $stackPtr ) ) {
 			return;
 		}
 
-		// Check for whitelisting comment
+		// Check for whitelisting comment.
 		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
 			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
-	}//end process()
 
-}//end class
+	} // end process()
+
+} // end class

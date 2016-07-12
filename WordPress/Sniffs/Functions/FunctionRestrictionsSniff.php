@@ -1,20 +1,19 @@
 <?php
 /**
- * Restricts usage of some functions
+ * Restricts usage of some functions.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
-	 * Exclude groups
+	 * Exclude groups.
 	 *
 	 * Example: 'switch_to_blog,user_meta'
-	 * 
-	 * @var string Comma-delimited group list 
+	 *
+	 * @var string Comma-delimited group list.
 	 */
 	public $exclude = '';
 
@@ -23,26 +22,25 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
-				T_STRING,
-				T_EVAL,
-			   );
+			T_STRING,
+			T_EVAL,
+		);
 
-	}//end register()
+	} // end register()
 
 	/**
-	 * Groups of functions to restrict
+	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
 	 * 	'lambda' => array(
-	 * 		'type' => 'error' | 'warning',
-	 * 		'message' => 'Use anonymous functions instead please!',
+	 * 		'type'      => 'error' | 'warning',
+	 * 		'message'   => 'Use anonymous functions instead please!',
 	 * 		'functions' => array( 'eval', 'create_function' ),
 	 * 	)
 	 * )
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getGroups() {
@@ -59,29 +57,27 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
+		$token  = $tokens[ $stackPtr ];
 
-		$token = $tokens[$stackPtr];
-
-		// exclude function definitions, class methods, and namespaced calls
+		// Exclude function definitions, class methods, and namespaced calls.
 		if (
-			$token['code'] == T_STRING
+			T_STRING === $token['code']
 			&&
-			( $prev = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true ) )
+			( $prev = $phpcsFile->findPrevious( T_WHITESPACE, ( $stackPtr - 1 ), null, true ) )
 			&&
 			(
-				// Skip sniffing if calling a method, or on function definitions
-				in_array( $tokens[$prev]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ) )
+				// Skip sniffing if calling a method, or on function definitions.
+				in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true )
 				||
 				(
-					// Skip namespaced functions, ie: \foo\bar() not \bar()
-					$tokens[$prev]['code'] == T_NS_SEPARATOR
+					// Skip namespaced functions, ie: \foo\bar() not \bar().
+					T_NS_SEPARATOR === $tokens[ $prev ]['code']
 					&&
-					( $pprev = $phpcsFile->findPrevious( T_WHITESPACE, $prev - 1, null, true ) )
+					( $pprev = $phpcsFile->findPrevious( T_WHITESPACE, ( $prev - 1 ), null, true ) )
 					&&
-					$tokens[$pprev]['code'] == T_STRING
+					T_STRING === $tokens[ $pprev ]['code']
 				)
 			)
 			) {
@@ -93,12 +89,12 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
-			return count( $tokens ) + 1;
+			return ( count( $tokens ) + 1 );
 		}
 
 		foreach ( $groups as $groupName => $group ) {
-			
-			if ( in_array( $groupName, $exclude ) ) {
+
+			if ( in_array( $groupName, $exclude, true ) ) {
 				continue;
 			}
 
@@ -109,7 +105,7 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 				continue;
 			}
 
-			if ( $group['type'] == 'warning' ) {
+			if ( 'warning' === $group['type'] ) {
 				$addWhat = array( $phpcsFile, 'addWarning' );
 			} else {
 				$addWhat = array( $phpcsFile, 'addError' );
@@ -117,15 +113,13 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff implements PHP_CodeSn
 
 			call_user_func(
 				$addWhat,
-				$group['message'], 
-				$stackPtr, 
-				$groupName, 
+				$group['message'],
+				$stackPtr,
+				$groupName,
 				array( $token['content'] )
-				);
+			);
 
 		}
 
-	}//end process()
-
-
-}//end class
+	} // end process()
+} // end class

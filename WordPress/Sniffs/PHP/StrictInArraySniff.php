@@ -6,7 +6,6 @@
  * @category PHP
  * @package  PHP_CodeSniffer
  */
-
 class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
 
 	/**
@@ -23,8 +22,9 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File  $phpcsFile The file being scanned.
-	 * @param int                   $stackPtr  The position of the current token in the stack passed in $tokens.
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the current token
+	 *                                        in the stack passed in $tokens.
 	 *
 	 * @return void
 	 */
@@ -36,7 +36,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 			return;
 		}
 
-		if ( ! isset( $tokens[ $stackPtr - 1 ] ) ) {
+		if ( ! isset( $tokens[ ( $stackPtr - 1 ) ] ) ) {
 			return;
 		}
 
@@ -48,7 +48,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 		}
 
 		// Get the closing parenthesis.
-		$openParenthesis = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $stackPtr + 1 );
+		$openParenthesis = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $stackPtr + 1 ) );
 		if ( false === $openParenthesis ) {
 			return;
 		}
@@ -61,7 +61,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 
 		// Get last token in the function call.
 		$closeParenthesis = $tokens[ $openParenthesis ]['parenthesis_closer'];
-		$lastToken = $phpcsFile->findPrevious( array( T_WHITESPACE, T_COMMENT ), $closeParenthesis - 1, $openParenthesis + 1, true );
+		$lastToken        = $phpcsFile->findPrevious( array( T_WHITESPACE, T_COMMENT ), ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ), true );
 		if ( false === $lastToken ) {
 			$phpcsFile->addError( 'Missing arguments to in_array().', $openParenthesis, 'MissingArguments' );
 			return;

@@ -48,9 +48,14 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		'_nx_noop'                       => 'noopnumber_context',
 	);
 
-	// These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	/**
+	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 */
 	static $sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
-	// "Unordered" means there's no position specifier: '%s', not '%2$s'
+
+	/**
+	 * "Unordered" means there's no position specifier: '%s', not '%2$s'.
+	 */
 	static $unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
 
 	/**
@@ -94,33 +99,33 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $translation_function ) );
 		}
 
-		$func_open_paren_token = $phpcs_file->findNext( T_WHITESPACE, $stack_ptr + 1, null, true );
+		$func_open_paren_token = $phpcs_file->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
 		if ( ! $func_open_paren_token || T_OPEN_PARENTHESIS !== $tokens[ $func_open_paren_token ]['code'] ) {
 			 return;
 		}
 
 		$arguments_tokens = array();
-		$argument_tokens = array();
+		$argument_tokens  = array();
 
 		// Look at arguments.
-		for ( $i = $func_open_paren_token + 1; $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i += 1 ) {
-			$this_token = $tokens[ $i ];
+		for ( $i = ( $func_open_paren_token + 1 ); $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i += 1 ) {
+			$this_token                = $tokens[ $i ];
 			$this_token['token_index'] = $i;
 			if ( in_array( $this_token['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {
 				continue;
 			}
 			if ( T_COMMA === $this_token['code'] ) {
 				$arguments_tokens[] = $argument_tokens;
-				$argument_tokens = array();
+				$argument_tokens    = array();
 				continue;
 			}
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
 			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || T_DOUBLE_QUOTED_STRING === $this_token['code'] ) {
-				for ( $j = $i + 1; $j < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $j += 1 ) {
+				for ( $j = ( $i + 1 ); $j < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $j += 1 ) {
 					if ( $this_token['code'] === $tokens[ $j ]['code'] ) {
 						$this_token['content'] .= $tokens[ $j ]['content'];
-						$i = $j;
+						$i                      = $j;
 					} else {
 						break;
 					}
@@ -130,9 +135,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 			// Include everything up to and including the parenthesis_closer if this token has one.
 			if ( ! empty( $this_token['parenthesis_closer'] ) ) {
-				for ( $j = $i + 1; $j <= $this_token['parenthesis_closer']; $j += 1 ) {
+				for ( $j = ( $i + 1 ); $j <= $this_token['parenthesis_closer']; $j += 1 ) {
 					$tokens[ $j ]['token_index'] = $j;
-					$argument_tokens[] = $tokens[ $j ];
+					$argument_tokens[]           = $tokens[ $j ];
 				}
 				$i = $this_token['parenthesis_closer'];
 			}
@@ -198,15 +203,15 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * Check if supplied tokens represent a translation text string literal.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array $context
+	 * @param array                $context
 	 * @return bool
 	 */
 	protected function check_argument_tokens( PHP_CodeSniffer_File $phpcs_file, $context ) {
 		$stack_ptr = $context['stack_ptr'];
-		$tokens = $context['tokens'];
-		$arg_name = $context['arg_name'];
-		$method = empty( $context['warning'] ) ? 'addError' : 'addWarning';
-		$content = $tokens[0]['content'];
+		$tokens    = $context['tokens'];
+		$arg_name  = $context['arg_name'];
+		$method    = empty( $context['warning'] ) ? 'addError' : 'addWarning';
+		$content   = $tokens[0]['content'];
 
 		if ( 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
@@ -225,7 +230,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			return false;
 		}
 
-		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ) ) ) {
+		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ), true ) ) {
 			$this->check_text( $phpcs_file, $context );
 		}
 
@@ -260,9 +265,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	/**
 	 * Check for inconsistencies between single and plural arguments.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array $single_context
-	 * @param array $plural_context
+	 * @param PHP_CodeSniffer_File $phpcs_file     The file being scanned.
+	 * @param array                $single_context
+	 * @param array                $plural_context
 	 * @return void
 	 */
 	protected function compare_single_and_plural_arguments( PHP_CodeSniffer_File $phpcs_file, $stack_ptr, $single_context, $plural_context ) {
@@ -294,28 +299,28 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	}
 
 	/**
-	 * Check the string itself for problems
+	 * Check the string itself for problems.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array $single_context
-	 * @param array $plural_context
+	 * @param array                $context
 	 * @return void
 	 */
 	protected function check_text( PHP_CodeSniffer_File $phpcs_file, $context ) {
-		$stack_ptr = $context['stack_ptr'];
-		$arg_name = $context['arg_name'];
-		$content = $context['tokens'][0]['content'];
+		$stack_ptr      = $context['stack_ptr'];
+		$arg_name       = $context['arg_name'];
+		$content        = $context['tokens'][0]['content'];
 		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
 
 		// UnorderedPlaceholders: Check for multiple unordered placeholders.
 		preg_match_all( self::$unordered_sprintf_placeholder_regex, $content, $unordered_matches );
-		$unordered_matches = $unordered_matches[0];
+		$unordered_matches       = $unordered_matches[0];
+		$unordered_matches_count = count( $unordered_matches );
 
-		if ( count( $unordered_matches ) >= 2 ) {
+		if ( $unordered_matches_count >= 2 ) {
 			$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
 
 			$suggestions = array();
-			for ( $i = 0; $i < count( $unordered_matches ); $i++ ) {
+			for ( $i = 0; $i < $unordered_matches_count; $i++ ) {
 				$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], ( $i + 1 ) . '$', 1, 0 );
 			}
 
@@ -335,7 +340,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 		}
 
-		// NoEmptyStrings
+		// NoEmptyStrings.
 
 		// Strip placeholders and surrounding quotes.
 		$non_placeholder_content = trim( $content, "'" );

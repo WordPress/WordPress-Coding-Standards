@@ -8,8 +8,7 @@
  * @package  WordPress_Coding_Standards
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff
-{
+class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 
 	public $globals = array(
 		'comment',
@@ -278,23 +277,23 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		$search = array(); // Array of globals to watch for
+		$search = array(); // Array of globals to watch for.
 
 		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
-			$bracketPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $stackPtr + 1, null, true );
+			$bracketPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
 
 			if ( T_OPEN_SQUARE_BRACKET !== $tokens[ $bracketPtr ]['code'] ) {
 				return;
 			}
 
-			$varPtr = $phpcsFile->findNext( T_WHITESPACE, $bracketPtr + 1, $tokens[ $bracketPtr ]['bracket_closer'], true );
+			$varPtr   = $phpcsFile->findNext( T_WHITESPACE, ( $bracketPtr + 1 ), $tokens[ $bracketPtr ]['bracket_closer'], true );
 			$varToken = $tokens[ $varPtr ];
 
-			if ( ! in_array( trim( $varToken['content'], '\'"' ), $this->globals ) ) {
+			if ( ! in_array( trim( $varToken['content'], '\'"' ), $this->globals, true ) ) {
 				return;
 			}
 
-			$assignment = $phpcsFile->findNext( T_WHITESPACE, $tokens[ $bracketPtr ]['bracket_closer'] + 1, null, true );
+			$assignment = $phpcsFile->findNext( T_WHITESPACE, ( $tokens[ $bracketPtr ]['bracket_closer'] + 1 ), null, true );
 
 			if ( $assignment && T_EQUAL === $tokens[ $assignment ]['code'] ) {
 				if ( ! $this->has_whitelist_comment( 'override', $assignment ) ) {
@@ -304,19 +303,19 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff
 			}
 
 			return;
-		}
-		elseif ( T_GLOBAL === $token['code'] ) {
-			$ptr = $stackPtr + 1;
+
+		} elseif ( T_GLOBAL === $token['code'] ) {
+			$ptr = ( $stackPtr + 1 );
 			while ( $ptr ) {
 				$ptr++;
 				$var = $tokens[ $ptr ];
 				if ( T_VARIABLE === $var['code'] ) {
 					$varname = substr( $var['content'], 1 );
-					if ( in_array( $varname, $this->globals ) ) {
+					if ( in_array( $varname, $this->globals, true ) ) {
 						$search[] = $varname;
 					}
 				}
-				// Halt the loop
+				// Halt the loop.
 				if ( T_SEMICOLON === $var['code'] ) {
 					$ptr = false;
 				}
@@ -325,10 +324,10 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff
 				return;
 			}
 
-			// Check for assignments to collected global vars
+			// Check for assignments to collected global vars.
 			foreach ( $tokens as $ptr => $token ) {
-				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search ) ) {
-					$next = $phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), $ptr + 1, null, true, null, true );
+				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
+					$next = $phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), ( $ptr + 1 ), null, true, null, true );
 					if ( T_EQUAL === $tokens[ $next ]['code'] ) {
 						if ( ! $this->has_whitelist_comment( 'override', $next ) ) {
 							$phpcsFile->addError( 'Overriding WordPress globals is prohibited', $ptr, 'OverrideProhibited' );
