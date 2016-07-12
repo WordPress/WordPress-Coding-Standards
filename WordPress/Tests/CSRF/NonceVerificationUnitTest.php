@@ -34,7 +34,8 @@ class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTe
 			113 => 1,
 			114 => 1,
 		);
-	}
+	} // end getErrorList()
+
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -46,6 +47,6 @@ class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTe
 	 */
 	public function getWarningList() {
 		return array();
-	}
+	} // end getWarningList()
 
 } // end class

@@ -29,13 +29,14 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			20 => 1,
 			21 => 1,
 		);
-	}
+	} // end getErrorList()
+
 
 	/**
 	 * @since 0.8.0
 	 */
 	public function getWarningList() {
 		return array();
-	}
+	} // end getWarningList()
 
 } // end class.

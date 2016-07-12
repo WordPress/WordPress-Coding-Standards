@@ -10,9 +10,7 @@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
-class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest
-{
-
+class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,16 +20,15 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 	 *
 	 * @return array(int => int)
 	 */
-	public function getErrorList()
-	{
+	public function getErrorList() {
 		return array(
 			3  => 1,
 			9  => 1,
 			10 => 1,
 			12 => 1,
-			);
+		);
 
-	}//end getErrorList()
+	} // end getErrorList()
 
 
 	/**
@@ -42,13 +39,9 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 	 *
 	 * @return array(int => int)
 	 */
-	public function getWarningList()
-	{
+	public function getWarningList() {
 		return array();
 
-	}//end getWarningList()
+	} // end getWarningList()
 
-
-}//end class
-
-?>
+} // end class

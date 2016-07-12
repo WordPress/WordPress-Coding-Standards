@@ -28,21 +28,18 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest
-{
+class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 
-
-    /**
-     * Returns the lines where errors should occur.
-     *
-     * The key of the array should represent the line number and the value
-     * should represent the number of errors that should occur on that line.
-     *
-     * @return array(int => int)
-     */
-    public function getErrorList()
-    {
-        return array(
+	/**
+	 * Returns the lines where errors should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of errors that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getErrorList() {
+		return array(
 			17 => 1,
 			19 => 1,
 			36 => 1,
@@ -80,24 +77,20 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest
 			173 => 1,
 		);
 
-    }//end getErrorList()
+	} // end getErrorList()
 
 
-    /**
-     * Returns the lines where warnings should occur.
-     *
-     * The key of the array should represent the line number and the value
-     * should represent the number of warnings that should occur on that line.
-     *
-     * @return array(int => int)
-     */
-    public function getWarningList()
-    {
-        return array();
+	/**
+	 * Returns the lines where warnings should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of warnings that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getWarningList() {
+		return array();
 
-    }//end getWarningList()
+	} // end getWarningList()
 
-
-}//end class
-
-?>
+} // end class

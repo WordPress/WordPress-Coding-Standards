@@ -16,6 +16,7 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 		parent::setUp();
 	}
 
+
 	/**
 	 * Returns the lines where errors should occur.
 	 *
@@ -76,7 +77,8 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			106 => 1,
 			107 => 1,
 		);
-	}
+	} // end getErrorList()
+
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -95,5 +97,6 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			102 => 1,
 			103 => 1,
 		);
-	}
-}
+	} // end getWarningList()
+
+} // end class.
