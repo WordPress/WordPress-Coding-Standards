@@ -1,13 +1,22 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * WordPress_Sniffs_VIP_SessionFunctionsUsageSniff.
  *
  * Discourages the use of session functions.
  *
+ * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
- * @see  https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
  */
 class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 

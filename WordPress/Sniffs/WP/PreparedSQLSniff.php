@@ -1,5 +1,13 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Sniff for prepared SQL.
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.

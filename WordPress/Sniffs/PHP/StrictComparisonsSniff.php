@@ -1,8 +1,14 @@
 <?php
 /**
- * Enforces Strict Comparison checks, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * PHP version 5
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Enforces Strict Comparison checks, based upon Squiz code.
  *
  * @category PHP
  * @package  PHP_CodeSniffer

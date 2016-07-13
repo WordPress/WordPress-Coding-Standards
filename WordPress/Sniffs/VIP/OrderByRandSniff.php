@@ -1,8 +1,17 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Flag using orderby => rand.
  *
- * @link https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
+ * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  */

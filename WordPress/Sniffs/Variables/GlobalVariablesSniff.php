@@ -1,5 +1,13 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * WordPress_Sniffs_Variables_GlobalVariablesSniff.
  *
  * Warns about usage of global variables used by WordPress

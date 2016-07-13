@@ -2,8 +2,6 @@
 /**
  * WordPress_Sniffs_CSRF_NonceVerificationSniff.
  *
- * PHP version 5
- *
  * @since 0.5.0
  *
  * @category PHP
@@ -13,12 +11,13 @@
 /**
  * Checks that nonce verification accompanies form processing.
  *
- * @since 0.5.0
+ * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
+ *
+ * @since    0.5.0
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   J.D. Grimes <jdg@codesymphony.co>
- * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
  */
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 

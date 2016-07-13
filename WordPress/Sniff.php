@@ -2,8 +2,6 @@
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
- * PHP version 5
- *
  * @category  PHP
  * @package   PHP_CodeSniffer
  */

@@ -1,8 +1,16 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * WordPress_Sniffs_WP_Enqueued_Resources_Sniff
  *
- * Makes sure scripts and styles are enqueued and not explicitly echo'd
+ * Makes sure scripts and styles are enqueued and not explicitly echo'd.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer

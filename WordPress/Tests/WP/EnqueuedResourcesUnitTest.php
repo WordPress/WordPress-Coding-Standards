@@ -1,8 +1,14 @@
 <?php
 /**
- * Unit test class for the EnqueuedResources sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Unit test class for the EnqueuedResources sniff.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer

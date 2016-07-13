@@ -2,8 +2,6 @@
 /**
  * WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
  *
- * PHP version 5
- *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   John Godley <john@urbangiraffe.com>

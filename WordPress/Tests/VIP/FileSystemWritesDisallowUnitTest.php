@@ -1,15 +1,20 @@
 <?php
 /**
- * Unit test class for the Filesystem writes sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Unit test class for the Filesystem writes sniff.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Shady Sharaf <shady@x-team.com>
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest {
 
 	/**

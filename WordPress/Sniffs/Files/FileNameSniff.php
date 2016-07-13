@@ -2,12 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * PHP version 5
- *
  * @category PHP
  * @package  PHP_CodeSniffer
- * @author   John Godley
- * @link     http://codex.wordpress.org/WordPress_Coding_Standards
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**

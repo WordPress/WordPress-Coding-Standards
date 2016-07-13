@@ -2,8 +2,6 @@
 /**
  * Enforces WordPress array format, based upon Squiz code.
  *
- * PHP version 5
- *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   John Godley <john@urbangiraffe.com>

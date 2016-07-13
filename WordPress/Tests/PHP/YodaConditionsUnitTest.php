@@ -1,14 +1,10 @@
 <?php
 /**
- * Unit test class for the YodaConditions sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Matt Robinson
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**

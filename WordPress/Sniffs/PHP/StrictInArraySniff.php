@@ -1,8 +1,17 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Flag calling in_array() without true as the third parameter.
  *
- * @link https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  */

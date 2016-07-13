@@ -1,6 +1,14 @@
 <?php
 /**
- * Warn about __FILE__ for page registration
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Warn about __FILE__ for page registration.
  *
  * @category PHP
  * @package  PHP_CodeSniffer

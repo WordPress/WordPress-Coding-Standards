@@ -1,9 +1,10 @@
 <?php
 /**
- * Unit test class for the PreparedSQL sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * @package WordPress-Coding-Standards
- * @since 0.8.0
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**

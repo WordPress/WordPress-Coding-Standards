@@ -1,13 +1,22 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * WordPress_Sniffs_VIP_TimezoneChangeSniff.
  *
  * Disallow the changing of timezone
  *
+ * @link     http://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
- * @see  http://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/
  */
 class WordPress_Sniffs_VIP_TimezoneChangeSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 

@@ -2,15 +2,13 @@
 /**
  * Enforces WordPress function name format, based upon Squiz code.
  *
- * PHP version 5
- *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   John Godley <john@urbangiraffe.com>
  */
 
 /**
- * Enforces WordPress array format.
+ * Enforces WordPress function name format.
  *
  * @category PHP
  * @package  PHP_CodeSniffer

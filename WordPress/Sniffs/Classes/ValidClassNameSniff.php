@@ -2,8 +2,6 @@
 /**
  * Modified Squiz_Sniffs_Classes_ValidClassNameSniff.
  *
- * PHP version 5
- *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>

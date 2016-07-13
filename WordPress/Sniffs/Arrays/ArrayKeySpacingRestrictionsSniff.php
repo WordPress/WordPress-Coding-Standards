@@ -1,8 +1,16 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Check for proper spacing in array key references.
  *
- * @see http://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
+ * @link     http://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
  *
  * @category PHP
  * @package  PHP_CodeSniffer

@@ -1,8 +1,16 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * WordPress_Sniffs_WP_I18nSniff
  *
- * Makes sure internationalization functions are used properly
+ * Makes sure internationalization functions are used properly.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
