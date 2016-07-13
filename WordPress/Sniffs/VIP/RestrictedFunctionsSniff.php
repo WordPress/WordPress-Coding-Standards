@@ -6,8 +6,7 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff
-{
+class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.

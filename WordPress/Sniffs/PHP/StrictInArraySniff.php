@@ -6,7 +6,7 @@
  * @category PHP
  * @package  PHP_CodeSniffer
  */
-class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
+class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

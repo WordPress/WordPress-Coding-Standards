@@ -6,8 +6,7 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff
-{
+class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.

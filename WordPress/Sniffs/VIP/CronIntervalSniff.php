@@ -6,8 +6,7 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
