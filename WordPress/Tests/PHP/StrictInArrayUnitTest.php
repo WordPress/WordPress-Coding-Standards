@@ -1,14 +1,10 @@
 <?php
 /**
- * Unit test class for the StrictInArray sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Matt Robinson
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
@@ -35,7 +31,7 @@ class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 			7 => 1,
 			20 => 1,
 		);
-	}
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -51,5 +47,6 @@ class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 			9 => 1,
 			10 => 1,
 		);
-	}
-}
+	} // end getWarningList()
+
+} // end class

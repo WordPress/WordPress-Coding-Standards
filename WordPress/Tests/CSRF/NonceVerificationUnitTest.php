@@ -1,16 +1,20 @@
 <?php
+/**
+ * Unit test class for WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
 
 /**
  * Unit test class for the NonceVerification Sniff.
- *
- * PHP version 5
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    J.D. Grimes <jdg@codesymphony.co>
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTest {
 
 	/**
@@ -34,7 +38,7 @@ class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTe
 			113 => 1,
 			114 => 1,
 		);
-	}
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -46,6 +50,7 @@ class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTe
 	 */
 	public function getWarningList() {
 		return array();
-	}
+
+	} // end getWarningList()
 
 } // end class

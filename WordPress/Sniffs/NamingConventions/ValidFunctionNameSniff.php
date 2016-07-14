@@ -1,8 +1,6 @@
 <?php
 /**
- * Enforces WordPress function name format, based upon Squiz code
- *
- * PHP version 5
+ * Enforces WordPress function name format, based upon Squiz code.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
@@ -10,136 +8,132 @@
  */
 
 /**
- * Enforces WordPress array format
+ * Enforces WordPress function name format.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   John Godley <john@urbangiraffe.com>
  */
-class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff
-{
+class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 
-    private $_magicMethods = array(
-                              'construct',
-                              'destruct',
-                              'call',
-                              'callStatic',
-                              'get',
-                              'set',
-                              'isset',
-                              'unset',
-                              'sleep',
-                              'wakeup',
-                              'toString',
-                              'set_state',
-                              'clone',
-                              'invoke',
-                              'debugInfo'
-                             );
+	private $_magicMethods = array(
+		'construct',
+		'destruct',
+		'call',
+		'callStatic',
+		'get',
+		'set',
+		'isset',
+		'unset',
+		'sleep',
+		'wakeup',
+		'toString',
+		'set_state',
+		'clone',
+		'invoke',
+		'debugInfo',
+	);
 
+	/**
+	 * Processes the tokens outside the scope.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
+	 * @param int                  $stackPtr  The position where this token was
+	 *                                        found.
+	 *
+	 * @return void
+	 */
+	protected function processTokenOutsideScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
 
-    /**
-     * Processes the tokens outside the scope.
-     *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-     * @param int                  $stackPtr  The position where this token was
-     *                                        found.
-     *
-     * @return void
-     */
-    protected function processTokenOutsideScope(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-    {
-        $functionName = $phpcsFile->getDeclarationName($stackPtr);
+		if ( strtolower( $functionName ) !== $functionName ) {
+			$suggested = preg_replace( '/([A-Z])/', '_$1', $functionName );
+			$suggested = strtolower( $suggested );
+			$suggested = str_replace( '__', '_', $suggested );
 
-        if (strtolower($functionName) !== $functionName) {
-            $suggested = preg_replace('/([A-Z])/', '_$1', $functionName);
-            $suggested = strtolower($suggested);
-            $suggested = str_replace('__', '_', $suggested);
+			$error = "Function name \"$functionName\" is in camel caps format, try '{$suggested}'";
+			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid' );
+		}
 
-            $error = "Function name \"$functionName\" is in camel caps format, try '".$suggested."'";
-            $phpcsFile->addError($error, $stackPtr, 'FunctionNameInvalid');
-        }
+	} // end processTokenOutsideScope()
 
-    }//end processTokenOutsideScope()
+	/**
+	 * Processes the tokens within the scope.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
+	 * @param int                  $stackPtr  The position where this token was
+	 *                                        found.
+	 * @param int                  $currScope The position of the current scope.
+	 *
+	 * @return void
+	 */
+	protected function processTokenWithinScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope ) {
+		$className	= $phpcsFile->getDeclarationName( $currScope );
+		$methodName = $phpcsFile->getDeclarationName( $stackPtr );
 
+		// Is this a magic method. IE. is prefixed with "__".
+		if ( 0 === strpos( $methodName, '__' ) ) {
+			$magicPart = substr( $methodName, 2 );
+			if ( false === in_array( $magicPart, $this->_magicMethods, true ) ) {
+				 $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
+				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore' );
+			}
 
-    /**
-     * Processes the tokens within the scope.
-     *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-     * @param int                  $stackPtr  The position where this token was
-     *                                        found.
-     * @param int                  $currScope The position of the current scope.
-     *
-     * @return void
-     */
-    protected function processTokenWithinScope(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope)
-    {
-        $className  = $phpcsFile->getDeclarationName($currScope);
-        $methodName = $phpcsFile->getDeclarationName($stackPtr);
+			return;
+		}
 
-        // Is this a magic method. IE. is prefixed with "__".
-        if (preg_match('|^__|', $methodName) !== 0) {
-            $magicPart = substr($methodName, 2);
-            if (in_array($magicPart, $this->_magicMethods) === false) {
-                 $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
-                 $phpcsFile->addError($error, $stackPtr, 'MethodDoubleUnderscore');
-            }
+		// PHP4 constructors are allowed to break our rules.
+		if ( $methodName === $className ) {
+			return;
+		}
 
-            return;
-        }
+		// PHP4 destructors are allowed to break our rules.
+		if ( '_' . $className === $methodName ) {
+			return;
+		}
 
-        // PHP4 constructors are allowed to break our rules.
-        if ($methodName === $className) {
-            return;
-        }
+		// If this is a child class, it may have to use camelCase.
+		if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedInterfaceName( $currScope, $phpcsFile ) ) {
+			return;
+		}
 
-        // PHP4 destructors are allowed to break our rules.
-        if ($methodName === '_'.$className) {
-            return;
-        }
+		$methodProps	= $phpcsFile->getMethodProperties( $stackPtr );
+		$scope			= $methodProps['scope'];
+		$scopeSpecified = $methodProps['scope_specified'];
 
-        // If this is a child class, it may have to use camelCase.
-        if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedInterfaceName( $currScope, $phpcsFile ) ) {
-            return;
-        }
+		if ( 'private' === $methodProps['scope'] ) {
+			$isPublic = false;
+		} else {
+			$isPublic = true;
+		}
 
-        $methodProps    = $phpcsFile->getMethodProperties($stackPtr);
-        $scope          = $methodProps['scope'];
-        $scopeSpecified = $methodProps['scope_specified'];
+		// If the scope was specified on the method, then the method must be
+		// camel caps and an underscore should be checked for. If it wasn't
+		// specified, treat it like a public method and remove the underscore
+		// prefix if there is one because we can't determine if it is private or
+		// public.
+		$testMethodName = $methodName;
+		if ( false === $scopeSpecified && '_' === $methodName{0} ) {
+			$testMethodName = substr( $methodName, 1 );
+		}
 
-        if ($methodProps['scope'] === 'private')
-            $isPublic = false;
-        else
-            $isPublic = true;
+		if ( strtolower( $testMethodName ) !== $testMethodName ) {
+			$suggested = preg_replace( '/([A-Z])/', '_$1', $methodName );
+			$suggested = strtolower( $suggested );
+			$suggested = str_replace( '__', '_', $suggested );
 
-        // If the scope was specified on the method, then the method must be
-        // camel caps and an underscore should be checked for. If it wasn't
-        // specified, treat it like a public method and remove the underscore
-        // prefix if there is one because we can't determine if it is private or
-        // public.
-        $testMethodName = $methodName;
-        if ($scopeSpecified === false && $methodName{0} === '_') {
-            $testMethodName = substr($methodName, 1);
-        }
+			$error = "Function name \"$methodName\" is in camel caps format, try '{$suggested}'";
+			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid' );
+		}
 
-        if (strtolower($testMethodName) !== $testMethodName) {
-            $suggested = preg_replace('/([A-Z])/', '_$1', $methodName);
-            $suggested = strtolower($suggested);
-            $suggested = str_replace('__', '_', $suggested);
-
-            $error = "Function name \"$methodName\" is in camel caps format, try '".$suggested."'";
-            $phpcsFile->addError($error, $stackPtr, 'FunctionNameInvalid');
-        }
-
-    }//end processTokenWithinScope()
+	} // end processTokenWithinScope()
 
 	/**
 	 * Returns the name of the class that the specified class implements.
 	 *
 	 * Returns FALSE on error or if there is no implemented class name.
 	 *
-	 * @param int $stackPtr The stack position of the class.
+	 * @param int                  $stackPtr  The stack position of the class.
 	 * @param PHP_CodeSniffer_File $phpcsFile The stack position of the class.
 	 *
 	 * @see PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff::findExtendedClassName()
@@ -152,17 +146,17 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for the existence of the token.
-		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+		if ( ! isset( $tokens[ $stackPtr ] ) ) {
 			return false;
 		}
-		if ( $tokens[ $stackPtr ]['code'] !== T_CLASS ) {
+		if ( T_CLASS !== $tokens[ $stackPtr ]['code'] ) {
 			return false;
 		}
-		if ( isset( $tokens[ $stackPtr ]['scope_closer'] ) === false ) {
+		if ( ! isset( $tokens[ $stackPtr ]['scope_closer'] ) ) {
 			return false;
 		}
 		$classOpenerIndex = $tokens[ $stackPtr ]['scope_opener'];
-		$extendsIndex = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classOpenerIndex );
+		$extendsIndex     = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classOpenerIndex );
 		if ( false === $extendsIndex ) {
 			return false;
 		}
@@ -171,13 +165,13 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			T_STRING,
 			T_WHITESPACE,
 		);
-		$end  = $phpcsFile->findNext( $find, ( $extendsIndex + 1 ), $classOpenerIndex + 1, true );
+		$end  = $phpcsFile->findNext( $find, ( $extendsIndex + 1 ), ( $classOpenerIndex + 1 ), true );
 		$name = $phpcsFile->getTokensAsString( ( $extendsIndex + 1 ), ( $end - $extendsIndex - 1 ) );
 		$name = trim( $name );
-		if ( $name === '' ) {
+		if ( '' === $name ) {
 			return false;
 		}
 		return $name;
-	}//end findExtendedClassName()
+	} // end findExtendedClassName()
 
-}//end class
+} // end class

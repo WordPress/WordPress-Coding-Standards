@@ -1,20 +1,27 @@
 <?php
 /**
- * Restricts array assignment of certain keys
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Restricts array assignment of certain keys.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress_Sniff
-{
+class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress_Sniff {
 
 	/**
-	 * Exclude groups
+	 * Exclude groups.
 	 *
 	 * Example: 'foo,bar'
 	 *
-	 * @var string Comma-delimited group list
+	 * @var string Comma-delimited group list.
 	 */
 	public $exclude = '';
 
@@ -27,25 +34,23 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 */
 	public static $groups = array();
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
-				T_DOUBLE_ARROW,
-				T_CLOSE_SQUARE_BRACKET,
-				T_CONSTANT_ENCAPSED_STRING,
-				T_DOUBLE_QUOTED_STRING,
-			   );
+			T_DOUBLE_ARROW,
+			T_CLOSE_SQUARE_BRACKET,
+			T_CONSTANT_ENCAPSED_STRING,
+			T_DOUBLE_QUOTED_STRING,
+		);
 
-	}//end register()
+	} // end register()
 
 	/**
-	 * Groups of variables to restrict
+	 * Groups of variables to restrict.
 	 * This should be overridden in extending classes.
 	 *
 	 * Example: groups => array(
@@ -64,7 +69,6 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 		return self::$groups;
 	}
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
@@ -74,8 +78,7 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
 		$groups = $this->getGroups();
 
@@ -84,45 +87,47 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 			return;
 		}
 
-		$tokens = $phpcsFile->getTokens();
-		$token = $tokens[ $stackPtr ];
+		$tokens  = $phpcsFile->getTokens();
+		$token   = $tokens[ $stackPtr ];
 		$exclude = explode( ',', $this->exclude );
 
-		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ) ) ) {
-			$equal = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
-			if ( $tokens[$equal]['code'] !== T_EQUAL ) {
+		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ), true ) ) {
+			$equal = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+			if ( T_EQUAL !== $tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!
 			}
 		}
 
-		// Instances: Multi-dimensional array, keyed by line
+		// Instances: Multi-dimensional array, keyed by line.
 		$inst = array();
 
-		// $foo = array( 'bar' => 'taz' );
-		// $foo['bar'] = $taz;
-		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ) ) ) {
-			if ( $token['code'] == T_CLOSE_SQUARE_BRACKET ) {
-				$operator = $phpcsFile->findNext( array( T_EQUAL ), $stackPtr + 1 );
-			} elseif ( $token['code'] == T_DOUBLE_ARROW ) {
+		/*
+		   Covers:
+		   $foo = array( 'bar' => 'taz' );
+		   $foo['bar'] = $taz;
+		 */
+		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
+			if ( T_CLOSE_SQUARE_BRACKET === $token['code']  ) {
+				$operator = $phpcsFile->findNext( array( T_EQUAL ), ( $stackPtr + 1 ) );
+			} elseif ( T_DOUBLE_ARROW === $token['code'] ) {
 				$operator = $stackPtr;
 			}
-			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), $operator - 1, null, true );
-			if ( ! is_numeric( $tokens[$keyIdx]['content'] ) ) {
-				$key = trim( $tokens[$keyIdx]['content'], '\'"' );
-				$valStart = $phpcsFile->findNext( array( T_WHITESPACE ), $operator + 1, null, true );
-				$valEnd = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), $valStart + 1, null, false, null, true );
-				$val = $phpcsFile->getTokensAsString( $valStart, $valEnd - $valStart );
-				$val = trim( $val, '\'"' );
+			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
+			if ( ! is_numeric( $tokens[ $keyIdx ]['content'] ) ) {
+				$key            = trim( $tokens[ $keyIdx ]['content'], '\'"' );
+				$valStart       = $phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
+				$valEnd         = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
+				$val            = $phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
+				$val            = trim( $val, '\'"' );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
-		}
-		// $foo = 'bar=taz&other=thing';
-		elseif ( in_array( $token['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
+		} elseif ( in_array( $token['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+			// $foo = 'bar=taz&other=thing';
 			if ( preg_match_all( '#[\'"&]([a-z_]+)=([^\'"&]*)#i', $token['content'], $matches ) <= 0 ) {
-				return; // No assignments here, nothing to check
+				return; // No assignments here, nothing to check.
 			}
 			foreach ( $matches[1] as $i => $_k ) {
-				$inst[ $_k ][] = array( $matches[2][$i], $token['line'] );
+				$inst[ $_k ][] = array( $matches[2][ $i ], $token['line'] );
 			}
 		}
 
@@ -130,10 +135,9 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 			return;
 		}
 
-
 		foreach ( $groups as $groupName => $group ) {
 
-			if ( in_array( $groupName, $exclude ) ) {
+			if ( in_array( $groupName, $exclude, true ) ) {
 				continue;
 			}
 
@@ -143,21 +147,21 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 				foreach ( $assignments as $occurance ) {
 					list( $val, $line ) = $occurance;
 
-					if ( ! in_array( $key, $group['keys'] ) ) {
+					if ( ! in_array( $key, $group['keys'], true ) ) {
 						continue;
 					}
 
 					$output = call_user_func( $callback, $key, $val, $line, $group );
 
-					if ( $output === false || $output === null ) {
+					if ( ! isset( $output ) || false === $output ) {
 						continue;
-					} elseif ( $output === true ) {
+					} elseif ( true === $output ) {
 						$message = $group['message'];
 					} else {
 						$message = $output;
 					}
 
-					if ( $group['type'] == 'warning' ) {
+					if ( 'warning' === $group['type'] ) {
 						$addWhat = array( $phpcsFile, 'addWarning' );
 					} else {
 						$addWhat = array( $phpcsFile, 'addError' );
@@ -169,30 +173,28 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 						$stackPtr,
 						$groupName,
 						array( $key, $val )
-						);
+					);
 				}
 			}
 
-
-			// return; // Show one error only
-
+			// return; // Show one error only.
 		}
 
-	}//end process()
+	} // end process()
 
 	/**
-	 * Callback to process each confirmed key, to check value
-	 * This must be extended to add the logic to check assignment value
+	 * Callback to process each confirmed key, to check value.
+	 * This must be extended to add the logic to check assignment value.
 	 *
-	 * @param  string   $key   Array index / key
-	 * @param  mixed    $val   Assigned value
-	 * @param  int      $line  Token line
-	 * @param  array    $group Group definition
-	 * @return mixed           FALSE if no match, TRUE if matches, STRING if matches with custom error message passed to ->process()
+	 * @param  string $key   Array index / key.
+	 * @param  mixed  $val   Assigned value.
+	 * @param  int    $line  Token line.
+	 * @param  array  $group Group definition.
+	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
+	 *                       with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		return true;
-	}
+	} // end callback()
 
-
-}//end class
+} // end class

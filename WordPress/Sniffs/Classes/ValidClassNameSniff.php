@@ -2,8 +2,6 @@
 /**
  * Modified Squiz_Sniffs_Classes_ValidClassNameSniff.
  *
- * PHP version 5
- *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
@@ -28,65 +26,57 @@
  * @version   Release: 1.2.0RC1
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sniff {
 
+	/**
+	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @return array
+	 */
+	public function register() {
+		return array(
+			T_CLASS,
+			T_INTERFACE,
+		);
 
-    /**
-     * Returns an array of tokens this test wants to listen for.
-     *
-     * @return array
-     */
-    public function register()
-    {
-        return array(
-                T_CLASS,
-                T_INTERFACE,
-               );
+	} // end register()
 
-    }//end register()
+	/**
+	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The current file being processed.
+	 * @param int                  $stackPtr  The position of the current token in the
+	 *                                        stack passed in $tokens.
+	 *
+	 * @return void
+	 */
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
 
+		if ( ! isset( $tokens[ $stackPtr ]['scope_opener'] ) ) {
+			$error	= 'Possible parse error: ';
+			$error .= $tokens[ $stackPtr ]['content'];
+			$error .= ' missing opening or closing brace';
+			$phpcsFile->addWarning( $error, $stackPtr, 'MissingBrace' );
+			return;
+		}
 
-    /**
-     * Processes this test, when one of its tokens is encountered.
-     *
-     * @param PHP_CodeSniffer_File $phpcsFile The current file being processed.
-     * @param int                  $stackPtr  The position of the current token in the
-     *                                        stack passed in $tokens.
-     *
-     * @return void
-     */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-    {
-        $tokens = $phpcsFile->getTokens();
+		// Determine the name of the class or interface. Note that we cannot
+		// simply look for the first T_STRING because a class name
+		// starting with the number will be multiple tokens.
+		$opener    = $tokens[ $stackPtr ]['scope_opener'];
+		$nameStart = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), $opener, true );
+		$nameEnd   = $phpcsFile->findNext( T_WHITESPACE, $nameStart, $opener );
+		$name	   = trim( $phpcsFile->getTokensAsString( $nameStart, ( $nameEnd - $nameStart ) ) );
 
-        if (isset($tokens[$stackPtr]['scope_opener']) === false) {
-            $error  = 'Possible parse error: ';
-            $error .= $tokens[$stackPtr]['content'];
-            $error .= ' missing opening or closing brace';
-            $phpcsFile->addWarning($error, $stackPtr, 'MissingBrace');
-            return;
-        }
+		// Check for camel caps format.
+		$valid = PHP_CodeSniffer::isCamelCaps( str_replace( '_', '', $name ), true, true, false );
+		if ( false === $valid ) {
+			$type  = ucfirst( $tokens[ $stackPtr ]['content'] );
+			$error = "$type name \"$name\" is not in camel caps format";
+			$phpcsFile->addError( $error, $stackPtr, 'NotCamelCaps' );
+		}
 
-        // Determine the name of the class or interface. Note that we cannot
-        // simply look for the first T_STRING because a class name
-        // starting with the number will be multiple tokens.
-        $opener    = $tokens[$stackPtr]['scope_opener'];
-        $nameStart = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), $opener, true);
-        $nameEnd   = $phpcsFile->findNext(T_WHITESPACE, $nameStart, $opener);
-        $name      = trim($phpcsFile->getTokensAsString($nameStart, ($nameEnd - $nameStart)));
+	} // end process()
 
-        // Check for camel caps format.
-        $valid = PHP_CodeSniffer::isCamelCaps(str_replace('_', '', $name), true, true, false);
-        if ($valid === false) {
-            $type  = ucfirst($tokens[$stackPtr]['content']);
-            $error = "$type name \"$name\" is not in camel caps format";
-            $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps');
-        }
-
-    }//end process()
-
-
-}//end class
-
-?>
+} // end class

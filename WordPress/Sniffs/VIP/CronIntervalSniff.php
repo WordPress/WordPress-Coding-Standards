@@ -1,28 +1,33 @@
 <?php
 /**
- * Flag cron schedules less than 15 minutes
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Flag cron schedules less than 15 minutes.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
-{
+class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
 			T_CONSTANT_ENCAPSED_STRING,
 			T_DOUBLE_QUOTED_STRING,
 		);
 
-	}//end register()
-
+	} // end register()
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -33,33 +38,32 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[$stackPtr];
+		$token  = $tokens[ $stackPtr ];
 
-		if ( 'cron_schedules' != trim( $token['content'], '"\'' ) ) {
+		if ( 'cron_schedules' !== trim( $token['content'], '"\'' ) ) {
 			return;
 		}
 
-		// If within add_filter
+		// If within add_filter.
 		$functionPtr = $phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
-		if ( $tokens[$functionPtr]['content'] != 'add_filter' ) {
+		if ( 'add_filter' !== $tokens[ $functionPtr ]['content'] ) {
 			return;
 		}
 
-		// Detect callback function name
-		$callbackPtr = $phpcsFile->findNext( array( T_COMMA, T_WHITESPACE ), $stackPtr + 1, null, true, null, true );
+		// Detect callback function name.
+		$callbackPtr = $phpcsFile->findNext( array( T_COMMA, T_WHITESPACE ), ( $stackPtr + 1 ), null, true, null, true );
 
-		// If callback is array, get second element
-		if ( T_ARRAY === $tokens[$callbackPtr]['code'] ) {
-			$comma = $phpcsFile->findNext( T_COMMA, $callbackPtr + 1 );
+		// If callback is array, get second element.
+		if ( T_ARRAY === $tokens[ $callbackPtr ]['code'] ) {
+			$comma = $phpcsFile->findNext( T_COMMA, ( $callbackPtr + 1 ) );
 			if ( false === $comma ) {
 				$this->confused( $phpcsFile, $stackPtr );
 				return;
 			}
 
-			$callbackPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $comma + 1, null, true, null, true );
+			$callbackPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $comma + 1 ), null, true, null, true );
 			if ( false === $callbackPtr ) {
 				$this->confused( $phpcsFile, $stackPtr );
 				return;
@@ -68,18 +72,16 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 
 		$functionPtr = null;
 
-		// Search for the function in tokens
-		if ( in_array( $tokens[$callbackPtr]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
-			$functionName = trim( $tokens[$callbackPtr]['content'], '"\'' );
+		// Search for the function in tokens.
+		if ( in_array( $tokens[ $callbackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+			$functionName = trim( $tokens[ $callbackPtr ]['content'], '"\'' );
 
 			foreach ( $tokens as $ptr => $_token ) {
-				if ( $_token['code'] == T_STRING && $_token['content'] == $functionName ) {
+				if ( T_STRING === $_token['code'] && $_token['content'] === $functionName ) {
 					$functionPtr = $ptr;
 				}
 			}
-		}
-		// Closure
-		else if ( $tokens[$callbackPtr]['code'] === T_CLOSURE ) {
+		} elseif ( T_CLOSURE === $tokens[ $callbackPtr ]['code'] ) { // Closure.
 			$functionPtr = $callbackPtr;
 		}
 
@@ -92,16 +94,16 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 		$closing = $tokens[ $opening ]['bracket_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
-			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ) ) ) {
-				if ( trim( $tokens[$i]['content'], '\'"' ) == 'interval' ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+				if ( 'interval' === trim( $tokens[ $i ]['content'], '\'"' ) ) {
 					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, null, null, true );
 					if ( empty( $operator ) ) {
 						$this->confused( $phpcsFile, $stackPtr );
 					}
 
-					$valueStart = $phpcsFile->findNext( T_WHITESPACE, $operator + 1, null, true, null, true );
-					$valueEnd   = $phpcsFile->findNext( array( T_COMMA, T_CLOSE_PARENTHESIS ), $valueStart + 1 );
-					$value = $phpcsFile->getTokensAsString( $valueStart, $valueEnd - $valueStart );
+					$valueStart = $phpcsFile->findNext( T_WHITESPACE, ( $operator + 1 ), null, true, null, true );
+					$valueEnd   = $phpcsFile->findNext( array( T_COMMA, T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
+					$value      = $phpcsFile->getTokensAsString( $valueStart, ( $valueEnd - $valueStart ) );
 
 					if ( is_numeric( $value ) ) {
 						$interval = $value;
@@ -110,7 +112,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 
 					// If all digits and operators, eval!
 					if ( preg_match( '#^[\s\d\+\*\-\/]+$#', $value ) > 0 ) {
-						$interval = eval( "return ( $value );" ); // No harm here
+						$interval = eval( "return ( $value );" ); // No harm here.
 						break;
 					}
 
@@ -125,13 +127,10 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff
 			return;
 		}
 
-
-	}//end process()
-
+	} // end process()
 
 	public function confused( $phpcsFile, $stackPtr ) {
 		$phpcsFile->addWarning( 'Detected changing of cron_schedules, but could not detect the interval value.', $stackPtr, 'ChangeDetected' );
-	}
+	} // end confused()
 
-
-}//end class
+} // end class

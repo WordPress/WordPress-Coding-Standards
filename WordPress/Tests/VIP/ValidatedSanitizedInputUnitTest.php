@@ -1,18 +1,21 @@
 <?php
 /**
- * Unit test class for the ValidatedSanitizedInputSniff
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Unit test class for the ValidatedSanitizedInputSniff
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Shady Sharaf <shady@x-team.com>
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
-class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest
-{
-
+class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,8 +25,7 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 *
 	 * @return array(int => int)
 	 */
-	public function getErrorList()
-	{
+	public function getErrorList() {
 		return array(
 			5 => 3,
 			7 => 1,
@@ -44,10 +46,9 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 			104 => 2,
 			105 => 1,
 			114 => 2,
-			);
+		);
 
-	}//end getErrorList()
-
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -57,13 +58,9 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 *
 	 * @return array(int => int)
 	 */
-	public function getWarningList()
-	{
+	public function getWarningList() {
 		return array();
 
-	}//end getWarningList()
+	} // end getWarningList()
 
-
-}//end class
-
-?>
+} // end class

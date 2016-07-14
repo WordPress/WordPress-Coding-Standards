@@ -1,13 +1,21 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Flag calling in_array() without true as the third parameter.
  *
- * @link https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  */
-
-class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
+class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -23,8 +31,9 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File  $phpcsFile The file being scanned.
-	 * @param int                   $stackPtr  The position of the current token in the stack passed in $tokens.
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the current token
+	 *                                        in the stack passed in $tokens.
 	 *
 	 * @return void
 	 */
@@ -36,7 +45,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 			return;
 		}
 
-		if ( ! isset( $tokens[ $stackPtr - 1 ] ) ) {
+		if ( ! isset( $tokens[ ( $stackPtr - 1 ) ] ) ) {
 			return;
 		}
 
@@ -48,7 +57,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 		}
 
 		// Get the closing parenthesis.
-		$openParenthesis = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $stackPtr + 1 );
+		$openParenthesis = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $stackPtr + 1 ) );
 		if ( false === $openParenthesis ) {
 			return;
 		}
@@ -61,7 +70,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 
 		// Get last token in the function call.
 		$closeParenthesis = $tokens[ $openParenthesis ]['parenthesis_closer'];
-		$lastToken = $phpcsFile->findPrevious( array( T_WHITESPACE, T_COMMENT ), $closeParenthesis - 1, $openParenthesis + 1, true );
+		$lastToken        = $phpcsFile->findPrevious( array( T_WHITESPACE, T_COMMENT ), ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ), true );
 		if ( false === $lastToken ) {
 			$phpcsFile->addError( 'Missing arguments to in_array().', $openParenthesis, 'MissingArguments' );
 			return;
@@ -71,5 +80,6 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniffs_Arrays_Ar
 			$phpcsFile->addWarning( 'Not using strict comparison for in_array(); supply true for third argument.', $lastToken, 'MissingTrueStrict' );
 			return;
 		}
-	}
-}
+	} // end process()
+
+} // end class

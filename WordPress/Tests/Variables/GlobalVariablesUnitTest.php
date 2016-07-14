@@ -1,5 +1,13 @@
 <?php
 /**
+ * Unit test class for WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
  *
@@ -7,8 +15,7 @@
  * @package   WordPress_Coding_Standards
  * @author    Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUnitTest
-{
+class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -18,16 +25,13 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 	 *
 	 * @return array(int => int)
 	 */
-	public function getErrorList()
-	{
+	public function getErrorList() {
 		return array(
 			3 => 1,
 			6 => 1,
 		);
 
-
-	}//end getErrorList()
-
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -37,12 +41,9 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 	 *
 	 * @return array(int => int)
 	 */
-	public function getWarningList()
-	{
-		return array(
-		);
+	public function getWarningList() {
+		return array();
 
-	}//end getWarningList()
+	} // end getWarningList()
 
-
-}//end class
+} // end class

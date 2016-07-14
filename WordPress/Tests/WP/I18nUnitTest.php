@@ -1,8 +1,14 @@
 <?php
 /**
- * Unit test class for the EnqueuedResources sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Unit test class for the I18nUnit sniff.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
@@ -76,7 +82,7 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			106 => 1,
 			107 => 1,
 		);
-	}
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -95,5 +101,6 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			102 => 1,
 			103 => 1,
 		);
-	}
-}
+	} // end getWarningList()
+
+} // end class.

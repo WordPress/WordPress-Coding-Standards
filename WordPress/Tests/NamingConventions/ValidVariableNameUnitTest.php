@@ -1,17 +1,10 @@
 <?php
 /**
- * Unit test class for WordPress_Sniffs_NamingConventions_ValidVariableNameSniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @author    Weston Ruter
- * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
@@ -87,7 +80,7 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 
 		return $errors;
 
-	}//end getErrorList()
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -99,5 +92,7 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 	 */
 	public function getWarningList() {
 		return array();
-	}
-}//end class
+
+	} // end getWarningList()
+
+} // end class

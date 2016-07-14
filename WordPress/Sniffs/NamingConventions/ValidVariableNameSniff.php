@@ -106,20 +106,20 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			self::$addedCustomVariables = true;
 		}
 
-		$tokens  = $phpcs_file->getTokens();
+		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
 		// If it's a php reserved var, then its ok.
-		if ( in_array( $var_name, $this->php_reserved_vars ) === true ) {
+		if ( in_array( $var_name, $this->php_reserved_vars, true ) ) {
 			return;
 		}
 
 		$obj_operator = $phpcs_file->findNext( array( T_WHITESPACE ), ( $stack_ptr + 1 ), null, true );
 		if ( T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
 			// Check to see if we are using a variable from an object.
-			$var = $phpcs_file->findNext( array( T_WHITESPACE ), ($obj_operator + 1), null, true );
+			$var = $phpcs_file->findNext( array( T_WHITESPACE ), ( $obj_operator + 1 ), null, true );
 			if ( T_STRING === $tokens[ $var ]['code'] ) {
-				$bracket = $phpcs_file->findNext( array( T_WHITESPACE ), ($var + 1), null, true );
+				$bracket = $phpcs_file->findNext( array( T_WHITESPACE ), ( $var + 1 ), null, true );
 				if ( T_OPEN_PARENTHESIS !== $tokens[ $bracket ]['code'] ) {
 					$obj_var_name = $tokens[ $var ]['content'];
 
@@ -127,7 +127,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 					// private, so we have to ignore a leading underscore if there is
 					// one and just check the main part of the variable name.
 					$original_var_name = $obj_var_name;
-					if ( substr( $obj_var_name, 0, 1 ) === '_' ) {
+					if ( '_' === substr( $obj_var_name, 0, 1 ) ) {
 						$obj_var_name = substr( $obj_var_name, 1 );
 					}
 
@@ -136,9 +136,9 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 						$data  = array( $original_var_name );
 						$phpcs_file->addError( $error, $var, 'NotSnakeCaseMemberVar', $data );
 					}
-				}//end if
-			}//end if
-		}//end if
+				} // end if
+			} // end if
+		} // end if
 
 		$in_class     = false;
 		$obj_operator = $phpcs_file->findPrevious( array( T_WHITESPACE ), ( $stack_ptr - 1 ), null, true );
@@ -152,7 +152,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		// so we have to ignore a leading underscore if there is one and just
 		// check the main part of the variable name.
 		$original_var_name = $var_name;
-		if ( substr( $var_name, 0, 1 ) === '_' && true === $in_class ) {
+		if ( '_' === substr( $var_name, 0, 1 ) && true === $in_class ) {
 			$var_name = substr( $var_name, 1 );
 		}
 
@@ -188,7 +188,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 
 		$var_name     = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 		$member_props = $phpcs_file->getMemberProperties( $stack_ptr );
-		if ( empty( $member_props ) === true ) {
+		if ( empty( $member_props ) ) {
 			// Couldn't get any info about this variable, which
 			// generally means it is invalid or possibly has a parse
 			// error. Any errors will be reported by the core, so
@@ -197,34 +197,33 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		}
 
 		$error_data = array( $var_name );
-		if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) && self::isSnakeCase( $var_name ) === false ) {
+		if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) && false === self::isSnakeCase( $var_name ) ) {
 			$error = 'Member variable "%s" is not in valid snake_case format.';
 			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
 		}
 
 	}
 
-
 	/**
 	 * Processes the variable found within a double quoted string.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
 	 * @param int                  $stack_ptr  The position of the double quoted
-	 *                                        string.
+	 *                                         string.
 	 *
 	 * @return void
 	 */
 	protected function processVariableInString( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 		$tokens = $phpcs_file->getTokens();
 
-		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) !== 0 ) {
+		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
-				if ( in_array( $var_name, $this->php_reserved_vars ) === true ) {
+				if ( in_array( $var_name, $this->php_reserved_vars, true ) ) {
 					continue;
 				}
 
-				if ( self::isSnakeCase( $var_name ) === false ) {
+				if ( false === self::isSnakeCase( $var_name ) ) {
 					$error = 'Variable "%s" is not in valid snake_case format';
 					$data  = array( $var_name );
 					$phpcs_file->addError( $error, $stack_ptr, 'StringNotSnakeCase', $data );
@@ -237,10 +236,11 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * Return whether the variable is in snake_case.
 	 *
-	 * @param string $var_name
+	 * @param string $var_name Variable name.
 	 * @return bool
 	 */
 	static function isSnakeCase( $var_name ) {
 		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
-	}
-}//end class
+	} // end isSnakeCase()
+
+} // end class

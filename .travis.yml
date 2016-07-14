@@ -18,6 +18,9 @@ env:
 matrix:
   fast_finish: true
   include:
+    # Run PHPCS against WPCS. I just picked to run it against 5.5.
+    - php: 5.5
+      env: PHPCS_BRANCH=master SNIFF=1
     # Run against PHPCS 3.0. I just picked to run it against 5.6.
     - php: 5.6
       env: PHPCS_BRANCH=3.0
@@ -41,3 +44,13 @@ before_script:
 script:
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
     - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
+    # WordPress Coding Standards.
+    # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+    # @link http://pear.php.net/package/PHP_CodeSniffer/
+    # -p flag: Show progress of the run.
+    # -s flag: Show sniff codes in all reports.
+    # -v flag: Print verbose output.
+    # -n flag: Do not print warnings. (shortcut for --warning-severity=0)
+    # --standard: Use WordPress as the standard.
+    # --extensions: Only sniff PHP files.
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n . --standard=./bin/phpcs.xml --extensions=php; fi

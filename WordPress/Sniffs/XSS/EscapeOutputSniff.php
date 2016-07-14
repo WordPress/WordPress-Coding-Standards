@@ -2,8 +2,6 @@
 /**
  * Squiz_Sniffs_XSS_EscapeOutputSniff.
  *
- * PHP version 5
- *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Weston Ruter <weston@x-team.com>
@@ -12,13 +10,13 @@
 /**
  * Verifies that all outputted strings are escaped.
  *
+ * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Weston Ruter <weston@x-team.com>
- * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
  */
-class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
-{
+class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 	/**
 	 * Custom list of functions which escape values for output.
@@ -65,7 +63,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	 * @var array
 	 */
 	public static $unsafePrintingFunctions = array(
-		'_e' => 'esc_html_e() or esc_attr_e()',
+		'_e'  => 'esc_html_e() or esc_attr_e()',
 		'_ex' => 'esc_html_ex() or esc_attr_ex()',
 	);
 
@@ -81,8 +79,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
 			T_ECHO,
 			T_PRINT,
@@ -90,8 +87,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			T_STRING,
 		);
 
-	}//end register()
-
+	} // end register()
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -102,13 +98,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 	 *
 	 * @return int|void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		// Merge any custom functions with the defaults, if we haven't already.
 		if ( ! self::$addedCustomFunctions ) {
-			WordPress_Sniff::$escapingFunctions = array_merge( WordPress_Sniff::$escapingFunctions, array_flip( $this->customEscapingFunctions ) );
+			WordPress_Sniff::$escapingFunctions    = array_merge( WordPress_Sniff::$escapingFunctions, array_flip( $this->customEscapingFunctions ) );
 			WordPress_Sniff::$autoEscapedFunctions = array_merge( WordPress_Sniff::$autoEscapedFunctions, array_flip( $this->customAutoEscapedFunctions ) );
-			WordPress_Sniff::$printingFunctions = array_merge( WordPress_Sniff::$printingFunctions, array_flip( $this->customPrintingFunctions ) );
+			WordPress_Sniff::$printingFunctions    = array_merge( WordPress_Sniff::$printingFunctions, array_flip( $this->customPrintingFunctions ) );
 
 			if ( ! empty( $this->customSanitizingFunctions ) ) {
 				WordPress_Sniff::$escapingFunctions = array_merge( WordPress_Sniff::$escapingFunctions, array_flip( $this->customSanitizingFunctions ) );
@@ -124,10 +119,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		$function = $tokens[ $stackPtr ]['content'];
 
 		// Find the opening parenthesis (if present; T_ECHO might not have it).
-		$open_paren = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr + 1, null, true );
+		$open_paren = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-		// If function, not T_ECHO nor T_PRINT
-		if ( $tokens[$stackPtr]['code'] == T_STRING ) {
+		// If function, not T_ECHO nor T_PRINT.
+		if ( T_STRING === $tokens[ $stackPtr ]['code'] ) {
 			// Skip if it is a function but is not of the printing functions.
 			if ( ! isset( self::$printingFunctions[ $tokens[ $stackPtr ]['content'] ] ) ) {
 				return;
@@ -138,12 +133,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			// These functions only need to have the first argument escaped.
-			if ( in_array( $function, array( 'trigger_error', 'user_error' ) ) ) {
+			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
 		}
 
-		// Checking for the ignore comment, ex: //xss ok
+		// Checking for the ignore comment, ex: //xss ok.
 		if ( $this->has_whitelist_comment( 'xss', $stackPtr ) ) {
 			return;
 		}
@@ -163,7 +158,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 		if ( ! isset( $end_of_statement ) ) {
 
 			$end_of_statement = $phpcsFile->findNext( array( T_SEMICOLON, T_CLOSE_TAG ), $stackPtr );
-			$last_token = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, $end_of_statement - 1, null, true );
+			$last_token       = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
 
 			// Check for the ternary operator. We only need to do this here if this
 			// echo is lacking parenthesis. Otherwise it will be handled below.
@@ -184,12 +179,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 		$in_cast = false;
 
-		// looping through echo'd components
+		// Looping through echo'd components.
 		$watch = true;
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces and comments.
-			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMENT ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {
 				continue;
 			}
 
@@ -208,7 +203,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 					if ( $ternary ) {
 
-						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $i + 1, $tokens[ $i ]['parenthesis_closer'] );
+						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), $tokens[ $i ]['parenthesis_closer'] );
 
 						// We only do it if the ternary isn't within a subset of parentheses.
 						if ( ! $next_paren || $ternary > $tokens[ $next_paren ]['parenthesis_closer'] ) {
@@ -221,52 +216,53 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			}
 
 			// Handle arrays for those functions that accept them.
-			if ( $tokens[ $i ]['code'] === T_ARRAY ) {
+			if ( T_ARRAY === $tokens[ $i ]['code'] ) {
 				$i++; // Skip the opening parenthesis.
 				continue;
 			}
 
-			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ), true ) ) {
 				continue;
 			}
 
 			// Handle magic constants for debug functions.
-			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ), true ) ) {
 				continue;
 			}
 
-			// Wake up on concatenation characters, another part to check
-			if ( in_array( $tokens[$i]['code'], array( T_STRING_CONCAT ) ) ) {
+			// Wake up on concatenation characters, another part to check.
+			if ( in_array( $tokens[ $i ]['code'], array( T_STRING_CONCAT ), true ) ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up after a ternary else (:).
-			if ( $ternary && in_array( $tokens[$i]['code'], array( T_INLINE_ELSE ) ) ) {
+			if ( $ternary && in_array( $tokens[ $i ]['code'], array( T_INLINE_ELSE ), true ) ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up for commas.
-			if ( $tokens[ $i ]['code'] === T_COMMA ) {
+			if ( T_COMMA === $tokens[ $i ]['code'] ) {
 				$in_cast = false;
-				$watch = true;
+				$watch   = true;
 				continue;
 			}
 
-			if ( $watch === false )
+			if ( false === $watch ) {
 				continue;
+			}
 
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
 			// Also T_LNUMBER, e.g.: echo 45; exit -1; and booleans.
-			if ( in_array( $tokens[$i]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_MINUS, T_TRUE, T_FALSE, T_NULL ) ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_MINUS, T_TRUE, T_FALSE, T_NULL ), true ) ) {
 				continue;
 			}
 
 			$watch = false;
 
-			// Allow int/double/bool casted variables
-			if ( in_array( $tokens[$i]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ) ) ) {
+			// Allow int/double/bool casted variables.
+			if ( in_array( $tokens[ $i ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ), true ) ) {
 				$in_cast = true;
 				continue;
 			}
@@ -274,12 +270,9 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 			// Now check that next token is a function call.
 			if ( T_STRING === $this->tokens[ $i ]['code'] ) {
 
-				$ptr = $i;
-
-				$functionName = $this->tokens[ $i ]['content'];
-
-				$function_opener = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), $i + 1, null, null, null, true );
-
+				$ptr                    = $i;
+				$functionName           = $this->tokens[ $i ]['content'];
+				$function_opener        = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), ( $i + 1 ), null, null, null, true );
 				$is_formatting_function = isset( self::$formattingFunctions[ $functionName ] );
 
 				if ( $function_opener ) {
@@ -289,7 +282,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 						// Get the first parameter (name of function being used on the array).
 						$mapped_function = $this->phpcsFile->findNext(
 							PHP_CodeSniffer_Tokens::$emptyTokens,
-							$function_opener + 1,
+							( $function_opener + 1 ),
 							$tokens[ $function_opener ]['parenthesis_closer'],
 							true
 						);
@@ -305,7 +298,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 					// If this is a formatting function we just skip over the opening
 					// parenthesis. Otherwise we skip all the way to the closing.
 					if ( $is_formatting_function ) {
-						$i     = $function_opener + 1;
+						$i     = ( $function_opener + 1 );
 						$watch = true;
 					} else {
 						$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
@@ -325,7 +318,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 			} else {
 				$content = $this->tokens[ $i ]['content'];
-				$ptr = $i;
+				$ptr     = $i;
 			}
 
 			$this->phpcsFile->addError(
@@ -338,8 +331,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff
 
 		return $end_of_statement;
 
-	}//end process()
+	} // end process()
 
-}//end class
-
-?>
+} // end class

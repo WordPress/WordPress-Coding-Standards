@@ -1,18 +1,21 @@
 <?php
 /**
- * Unit test class for the SuperGlobalInputUsage
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
+ * Unit test class for the SuperGlobalInputUsage
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Shady Sharaf <shady@x-team.com>
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
-class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUnitTest
-{
-
+class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,13 +25,10 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 	 *
 	 * @return array(int => int)
 	 */
-	public function getErrorList()
-	{
-		return array(
-			);
+	public function getErrorList() {
+		return array();
 
-	}//end getErrorList()
-
+	} // end getErrorList()
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -38,16 +38,12 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 	 *
 	 * @return array(int => int)
 	 */
-	public function getWarningList()
-	{
+	public function getWarningList() {
 		return array(
 			3 => 1,
 			11 => 1,
 			13 => 1,
-			);
+		);
+	} // end getWarningList()
 
-	}//end getWarningList()
-
-
-}//end class
-
+} // end class

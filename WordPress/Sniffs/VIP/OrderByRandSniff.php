@@ -1,8 +1,17 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Flag using orderby => rand.
  *
- * @link https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
+ * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  */
@@ -20,7 +29,7 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 				'keys' => array(
 					'orderby',
 				),
-			)
+			),
 		);
 	}
 
@@ -28,11 +37,11 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 	 * Callback to process each confirmed key, to check value
 	 * This must be extended to add the logic to check assignment value
 	 *
-	 * @param  string   $key   Array index / key
-	 * @param  mixed    $val   Assigned value
-	 * @param  int      $line  Token line
-	 * @param  array    $group Group definition
-	 * @return mixed           FALSE if no match, TRUE if matches, STRING if matches with custom error message passed to ->process()
+	 * @param  string $key   Array index / key.
+	 * @param  mixed  $val   Assigned value.
+	 * @param  int    $line  Token line.
+	 * @param  array  $group Group definition.
+	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		if ( 'rand' === strtolower( $val ) ) {
@@ -40,6 +49,6 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 		} else {
 			return false;
 		}
-	}
+	} // end callback()
 
-}//end class
+} // end class
