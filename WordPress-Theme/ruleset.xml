@@ -4,6 +4,10 @@
 	<description>Standards any Theme to be published on wordpress.org should comply with.</description>
 
 
+	<!-- No PHP short open tags allowed. -->
+	<!-- Covers: https://github.com/Otto42/theme-check/blob/master/checks/phpshort.php -->
+	<rule ref="Generic.PHP.DisallowShortOpenTag" />
+
 
 
 </ruleset>
