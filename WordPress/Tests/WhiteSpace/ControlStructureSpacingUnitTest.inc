@@ -107,3 +107,26 @@ function ( $arg ) {} // OK
 
 $closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // OK
 $closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // OK
+
+/**
+ * Test for bug where this sniff was triggering a "Blank line found after control structure" error
+ * if there is a blank line after the last method in a class.
+ *
+ * Bug did not trigger when a comment was found after the closing brace of the method.
+ *
+ * Neither of the below examples should trigger the error.
+ */
+class Bar_Foo {
+
+	function foo() {
+	} // Now you won't see the bug.
+
+}
+
+class Foo_Bar {
+
+	// Now you will.
+	function bar() {
+	}
+
+}
