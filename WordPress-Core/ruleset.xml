@@ -14,6 +14,7 @@
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+	<rule ref="PSR2.Files.ClosingTag"/>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
