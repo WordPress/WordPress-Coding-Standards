@@ -495,9 +495,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			// Another control structure's closing brace.
 			if ( isset( $tokens[ $trailingContent ]['scope_condition'] ) ) {
 				$owner = $tokens[ $trailingContent ]['scope_condition'];
-				if ( T_FUNCTION === $tokens[ $owner ]['code'] ) {
-					// The next content is the closing brace of a function
-					// so normal function rules apply and we can ignore it.
+				if ( in_array( $tokens[ $owner ]['code'], array( T_FUNCTION, T_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+					// The next content is the closing brace of a function, class, interface or trait
+					// so normal function/class rules apply and we can ignore it.
 					return;
 				}
 			}
