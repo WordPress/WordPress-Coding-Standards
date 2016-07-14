@@ -2,7 +2,7 @@
 
 $this->do_action( 'someAction' ); // Ok - not WP do_action.
 SomeClass::do_action( 'someAction' ); // Ok - not WP do_action.
-\SomeClass\do_action( 'someAction' ); // Ok - not WP do_action.
+prefix_do_action( 'someAction' ); // Ok - not WP do_action.
 
 // Check for incorrect word separators.
 do_action( "admin_head-$hook_suffix" ); // Warning - use underscore.
