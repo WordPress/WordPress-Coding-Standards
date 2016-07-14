@@ -21,7 +21,7 @@
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
-	<rule ref="WordPress.PHP.DisallowAlternativeOpenTag"/>
+	<rule ref="WordPress.PHP.DisallowAlternativePHPTags"/>
 
 	<!-- important to prevent issues with content being sent before headers -->
 	<rule ref="Generic.Files.ByteOrderMark"/>

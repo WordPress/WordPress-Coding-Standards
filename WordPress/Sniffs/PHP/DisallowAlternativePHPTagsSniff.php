@@ -8,7 +8,9 @@
  */
 
 /**
- * Makes sure that no alternative PHP open tags are used.
+ * Verifies that no alternative PHP open tags are used.
+ *
+ * If alternative PHP open tags are found, this sniff can fix both the open and close tags.
  *
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/580
  *
@@ -16,7 +18,7 @@
  * @package  PHP_CodeSniffer
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
-class WordPress_Sniffs_PHP_DisallowAlternativeOpenTagSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
