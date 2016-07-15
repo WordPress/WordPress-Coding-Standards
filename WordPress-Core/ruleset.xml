@@ -25,8 +25,13 @@
 	<!-- important to prevent issues with content being sent before headers -->
 	<rule ref="Generic.Files.ByteOrderMark"/>
 
+	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
+
+	<!-- Dev defined constants should be in all upper-case with underscores separating words -->
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
+	<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#indentation -->
 	<arg name="tab-width" value="4"/>
