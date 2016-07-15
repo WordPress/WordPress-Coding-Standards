@@ -16,7 +16,7 @@ $ch = curl_init(); // bad
 
 curl_close( $ch ); // bad
 
-extract( array( 'a' => 1 ) ); // bad
+// Empty line - function moved to another sniff.
 
 add_role( 'test' ); // bad
 
