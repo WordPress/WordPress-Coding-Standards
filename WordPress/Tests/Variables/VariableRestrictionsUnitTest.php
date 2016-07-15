@@ -20,7 +20,7 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 	protected function setUp() {
 		parent::setUp();
 
-		WordPress_Sniffs_Variables_VariableRestrictionsSniff::$groups = array(
+		WordPress_AbstractVariableRestrictionsSniff::$groups = array(
 			'test' => array(
 				'type'          => 'error',
 				'message'       => 'Detected usage of %s',

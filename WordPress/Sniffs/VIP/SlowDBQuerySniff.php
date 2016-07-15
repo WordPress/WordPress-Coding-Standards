@@ -14,7 +14,7 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
+class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.
@@ -66,5 +66,20 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_Sniffs_Arrays_Arra
 
 		parent::process( $phpcsFile, $stackPtr );
 	} // end process()
+
+	/**
+	 * Callback to process each confirmed key, to check value.
+	 * This must be extended to add the logic to check assignment value.
+	 *
+	 * @param  string $key   Array index / key.
+	 * @param  mixed  $val   Assigned value.
+	 * @param  int    $line  Token line.
+	 * @param  array  $group Group definition.
+	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
+	 *                       with custom error message passed to ->process().
+	 */
+	public function callback( $key, $val, $line, $group ) {
+		return true;
+	} // end callback()
 
 } // end class

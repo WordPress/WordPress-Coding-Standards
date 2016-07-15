@@ -15,7 +15,7 @@
  * @category PHP
  * @package  PHP_CodeSniffer
  */
-class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
+class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.

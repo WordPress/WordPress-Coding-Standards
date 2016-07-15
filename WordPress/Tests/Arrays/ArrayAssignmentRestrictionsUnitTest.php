@@ -20,7 +20,7 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 	protected function setUp() {
 		parent::setUp();
 
-		WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff::$groups = array(
+		WordPress_AbstractArrayAssignmentRestrictionsSniff::$groups = array(
 			'posts_per_page' => array(
 				'type'    => 'error',
 				'message' => 'Found assignment value of %s to be %s',
