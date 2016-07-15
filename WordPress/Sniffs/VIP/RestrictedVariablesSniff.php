@@ -14,7 +14,7 @@
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_Sniffs_Variables_VariableRestrictionsSniff {
+class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVariableRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.
