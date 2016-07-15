@@ -19,6 +19,40 @@
 class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
+	 * Additional word separators.
+	 *
+	 * This public variable allows providing additional word separators which
+	 * will be allowed in hook names via a property in the phpcs.xml config file.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.NamingConventions.ValidHookName">
+	 *   <properties>
+	 *     <property name="additionalWordDelimiters" value="-"/>
+	 *   </properties>
+	 * </rule>
+	 *
+	 * Provide several extra delimiters as one string:
+	 * <rule ref="WordPress.NamingConventions.ValidHookName">
+	 *   <properties>
+	 *     <property name="additionalWordDelimiters" value="-/."/>
+	 *   </properties>
+	 * </rule>
+	 *
+	 * @var string
+	 */
+	public $additionalWordDelimiters = '';
+
+	/**
+	 * Regular expression to test for correct punctuation of a hook name.
+	 *
+	 * The placeholder will be replaced by potentially provided additional
+	 * word delimiters in the `prepare_regex()` method.
+	 *
+	 * @var string
+	 */
+	protected $punctuation_regex = '`[^\w%s]`';
+
+	/**
 	 * Functions we're interested in.
 	 *
 	 * Only testing the hook call functions as when using 'add_action'/'add_filter' you can't influence
@@ -26,7 +60,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 	 *
 	 * @var array
 	 */
-	public $hook_functions = array(
+	protected $hook_functions = array(
 		'do_action',
 		'do_action_ref_array',
 		'apply_filters',
@@ -34,7 +68,9 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 	);
 
 	/**
-	 * Returns an array of tokens this test wants to listen for.
+	 * Register this sniff.
+	 *
+	 * Prepares the punctuation regex and returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
@@ -44,23 +80,6 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 		);
 
 	} // end register()
-
-	/**
-	 * Groups of functions to restrict.
-	 *
-	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
-	 * )
-	 *
-	 * @return array
-	 */
-	public function getGroups() {
-		return array();
-	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -74,6 +93,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
+		$regex  = $this->prepare_regex();
 
 		// Check if one of the hook functions was found.
 		if ( false === in_array( $tokens[ $stackPtr ]['content'], $this->hook_functions, true ) ) {
@@ -126,14 +146,14 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 				 */
 				if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
 					$string          = trim( $tokens[ $i ]['content'], '"' );
-					$transform       = $this->transform_complex_string( $string );
-					$case_transform  = $this->transform_complex_string( $string, 'case' );
-					$punct_transform = $this->transform_complex_string( $string, 'punctuation' );
+					$transform       = $this->transform_complex_string( $string, $regex );
+					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
+					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
 				} else {
 					$string          = trim( $tokens[ $i ]['content'], '\'"' );
-					$transform       = $this->transform( $string );
-					$case_transform  = $this->transform( $string, 'case' );
-					$punct_transform = $this->transform( $string, 'punctuation' );
+					$transform       = $this->transform( $string, $regex );
+					$case_transform  = $this->transform( $string, $regex, 'case' );
+					$punct_transform = $this->transform( $string, $regex, 'punctuation' );
 				}
 
 				if ( $string === $transform ) {
@@ -172,24 +192,45 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 	} // end process()
 
 	/**
+	 * Prepare the punctuation regular expression.
+	 *
+	 * Merges the existing regular expression with potentially provided extra word delimiters to allow.
+	 * This is done 'late' and for each found token as otherwise inline `@codingStandardsChangeSetting`
+	 * directives would be ignored.
+	 *
+	 * @return string
+	 */
+	protected function prepare_regex() {
+		$extra = '';
+		if ( '' !== $this->additionalWordDelimiters && is_string( $this->additionalWordDelimiters ) ) {
+			$extra = preg_quote( $this->additionalWordDelimiters, '`' );
+		}
+
+		return sprintf( $this->punctuation_regex, $extra );
+
+	} // end prepare_regex()
+
+	/**
 	 * Transform an arbitrary string to lowercase and replace punctuation and spaces with underscores.
 	 *
 	 * @param string $string         The target string.
+	 * @param string $regex          The punctuation regular expression to use.
 	 * @param string $transform_type Whether to a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
-	protected function transform( $string, $transform_type = 'full' ) {
+	protected function transform( $string, $regex, $transform_type = 'full' ) {
+
 		switch ( $transform_type ) {
 			case 'case':
 				return strtolower( $string );
 
 			case 'punctuation':
-				return preg_replace( '`\W`', '_', $string );
+				return preg_replace( $regex, '_', $string );
 
 			case 'full':
 			default:
-				return preg_replace( '`\W`', '_', strtolower( $string ) );
+				return preg_replace( $regex, '_', strtolower( $string ) );
 		}
 	} // end transform()
 
@@ -197,11 +238,12 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 	 * Transform a complex string which may contain variable extrapolation.
 	 *
 	 * @param string $string         The target string.
+	 * @param string $regex          The punctuation regular expression to use.
 	 * @param string $transform_type Whether to a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
-	protected function transform_complex_string( $string, $transform_type = 'full' ) {
+	protected function transform_complex_string( $string, $regex, $transform_type = 'full' ) {
 		$output = preg_split( '`([\{\}\$\[\] ])`', $string, -1, PREG_SPLIT_DELIM_CAPTURE );
 
 		$is_variable = false;
@@ -228,7 +270,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 				}
 				if ( false === $has_braces && ' ' === $part ) {
 					$is_variable  = false;
-					$output[ $i ] = $this->transform( $part, $transform_type );
+					$output[ $i ] = $this->transform( $part, $regex, $transform_type );
 				}
 
 				if ( ( true === $has_braces && 0 === $braces ) && false === in_array( $output[ ( $i + 1 ) ], array( '{', '[' ), true ) ) {
@@ -238,7 +280,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 				continue;
 			}
 
-			$output[ $i ] = $this->transform( $part, $transform_type );
+			$output[ $i ] = $this->transform( $part, $regex, $transform_type );
 		}
 
 		return implode( '', $output );
