@@ -8,7 +8,7 @@
  */
 
 /**
- * WordPress_Classes_OpeningBraceSameLineSniff.
+ * WordPress_Classes_ClassOpeningStatementSniff.
  *
  * Checks that the opening brace of a class or interface is on the same line
  * as the class declaration.
@@ -21,7 +21,7 @@
  * @package  PHP_CodeSniffer
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
-class WordPress_Sniffs_Classes_OpeningBraceSameLineSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

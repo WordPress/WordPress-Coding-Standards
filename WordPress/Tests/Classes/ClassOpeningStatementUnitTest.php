@@ -8,7 +8,7 @@
  */
 
 /**
- * Unit test class for the OpeningBraceSameLine sniff.
+ * Unit test class for the ClassOpeningStatement sniff.
  *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
@@ -17,7 +17,7 @@
  * @package  PHP_CodeSniffer
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
-class WordPress_Tests_Classes_OpeningBraceSameLineUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
