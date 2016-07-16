@@ -1,13 +1,18 @@
 <?php
 /**
+ * Unit test class for WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Unit test class for the NoAddAdminPages sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @category Theme
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @category  PHP
+ * @package   PHP_CodeSniffer
+ * @author    Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
 class WordPress_Tests_Theme_NoAddAdminPagesUnitTest extends AbstractSniffUnitTest {
 

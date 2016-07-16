@@ -1,12 +1,20 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * WordPress_Sniffs_Theme_NoAddAdminPagesSniff.
  *
  * Forbids the use of add_..._page() functions within Themes with the exception of `add_theme_page()`.
  *
- * @category Theme
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @category  PHP
+ * @package   PHP_CodeSniffer
+ * @author    Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
 class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Functions_FunctionRestrictionsSniff {
 
@@ -51,6 +59,6 @@ class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Funct
 				),
 			),
 		);
-	} // end getGroups()
+	}
 
 } // end class
