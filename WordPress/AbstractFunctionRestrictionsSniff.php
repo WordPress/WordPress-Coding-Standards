@@ -105,10 +105,10 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 				continue;
 			}
 
-			$functions = implode( '|', $group['functions'] );
-			$functions = preg_replace( '#[^\.]\*#', '.*', $functions ); // So you can use * instead of .*
+			$functions = array_map( array( $this, 'prepare_functionname_for_regex' ), $group['functions'] );
+			$functions = implode( '|', $functions );
 
-			if ( preg_match( '#\b(' . $functions . ')\b#', $token['content'] ) < 1 ) {
+			if ( preg_match( '`\b(?:' . $functions . ')\b`i', $token['content'] ) < 1 ) {
 				continue;
 			}
 
@@ -129,5 +129,23 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 		}
 
 	} // end process()
+
+	/**
+	 * Prepare the function name for use in a regular expression.
+	 *
+	 * The getGroups() method allows for providing function with a wildcard * to target
+	 * a group of functions. This prepare routine takes that into account while still safely
+	 * escaping the function name for use in a regular expression.
+	 *
+	 * @param string $function Function name.
+	 * @return string Regex escaped lowercase function name.
+	 */
+	protected function prepare_functionname_for_regex( $function ) {
+		$function = str_replace( array( '.*', '*' ) , '#', $function ); // Replace wildcards with placeholder.
+		$function = preg_quote( $function, '`' );
+		$function = str_replace( '#', '.*', $function ); // Replace placeholder with regex wildcard.
+
+		return $function;
+	}
 
 } // end class
