@@ -71,6 +71,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
 			83 => 1,
 			84 => 1,
 			85 => 1,
+			87 => 1,
 		);
 
 	} // end getErrorList()
@@ -96,6 +97,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
 			59 => 1,
 			61 => 1,
 			72 => 1,
+			88 => 1,
 		);
 
 	} // end getWarningList()
