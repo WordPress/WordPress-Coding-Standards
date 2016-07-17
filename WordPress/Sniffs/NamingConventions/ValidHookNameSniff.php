@@ -10,6 +10,11 @@
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
  *
+ * This sniff is only testing the hook invoke functions as when using 'add_action'/'add_filter'
+ * you can't influence the hook name.
+ *
+ * Hook names invoked with `do_action_deprecated()` and `apply_filters_deprecated()` are ignored.
+ *
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
  *
  * @category PHP
@@ -53,21 +58,6 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 	protected $punctuation_regex = '`[^\w%s]`';
 
 	/**
-	 * Functions we're interested in.
-	 *
-	 * Only testing the hook call functions as when using 'add_action'/'add_filter' you can't influence
-	 * the hook name.
-	 *
-	 * @var array
-	 */
-	protected $hook_functions = array(
-		'do_action',
-		'do_action_ref_array',
-		'apply_filters',
-		'apply_filters_ref_array',
-	);
-
-	/**
 	 * Register this sniff.
 	 *
 	 * Prepares the punctuation regex and returns an array of tokens this test wants to listen for.
@@ -96,7 +86,12 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 		$regex  = $this->prepare_regex();
 
 		// Check if one of the hook functions was found.
-		if ( false === in_array( $tokens[ $stackPtr ]['content'], $this->hook_functions, true ) ) {
+		if ( ! isset( WordPress_Sniff::$hookInvokeFunctions[ $tokens[ $stackPtr ]['content'] ] ) ) {
+			return;
+		}
+
+		// Ignore deprecated hook names.
+		if ( strpos( $tokens[ $stackPtr ]['content'], '_deprecated' ) > 0 ) {
 			return;
 		}
 

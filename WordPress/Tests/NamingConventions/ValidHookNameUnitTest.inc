@@ -79,3 +79,7 @@ do_action( "admin_Head_{${$Name}}_Action_{${$Name}}_Action" ); // Error - use lo
 do_action( "admin_Head_{$foo->{$baz[1]}}_Action_{$foo->{$baz[1]}}_Action" ); // Error - use lowercase.
 do_action( "admin_Head_{${getName()}}_Action_{${getName()}}_Action" ); // Error - use lowercase.
 do_action( "admin_Head_{${$object->getName()}}_Action_{${$object->getName()}}_Action" ); // Error - use lowercase.
+
+// Make sure that deprecated hook names are ignored for this sniff.
+do_action_deprecated( "admin_Head_$Post admin_Head_$Post" ); // Ok.
+apply_filters_deprecated( "admin_Head_$Post->ID admin_Head_$Post->ID" ); // Ok.
