@@ -9,24 +9,6 @@ var_dump( $post_id ); // Bad, forbidden use
 print_r( $post_ID ); // Bad, forbidden use
 
 
-// DEPRECATED PHP FUNCTIONS
-// ------------------------
-
-$title = get_the_title();
-
-$title = ereg_replace( 'cool', 'not cool', get_the_title() ); // Bad, ereg_replace has been deprecated. Use preg_replace instead.
-$title = preg_replace( 'cool', 'not cool', get_the_title() ); // Good
-
-if ( ereg( '[A-Za-z]+', $title, $regs ) ) // Bad, ereg also deprecated. Use preg_match instead.
-	die( $regs );
-
-$title = eregi_replace( 'cool', 'not cool', get_the_title() ); // Bad, eregi_replace also deprecated. Use preg_replace instead.
-
-list( $year, $month, $day ) = split( ':', $date ); // Bad, split has been deprecated. Use preg_split or explode instead.
-
-$title_parts = spliti( ' ', get_the_title(), 4 ); // Bad, spliti also deprecated. Use preg_split instead.
-
-
 // DEPRECATED WORDPRESS FUNCTIONS
 // ------------------------------
 
