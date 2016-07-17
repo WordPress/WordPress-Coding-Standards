@@ -71,13 +71,11 @@ class WordPress_Tests_NamingConventions_ValidHookNameUnitTest extends AbstractSn
 					80 => 1,
 					81 => 1,
 				);
-				break;
 
 			case 'ValidHookNameUnitTest.1.inc':
 			case 'ValidHookNameUnitTest.2.inc':
 			default:
 				return array();
-				break;
 
 		} // end switch
 
@@ -106,7 +104,6 @@ class WordPress_Tests_NamingConventions_ValidHookNameUnitTest extends AbstractSn
 					72 => 1,
 					77 => 1,
 				);
-				break;
 
 			case 'ValidHookNameUnitTest.1.inc':
 			case 'ValidHookNameUnitTest.2.inc':
@@ -116,11 +113,10 @@ class WordPress_Tests_NamingConventions_ValidHookNameUnitTest extends AbstractSn
 					14 => 1,
 					15 => 1,
 				);
-				break;
 
 			default:
 				return array();
-				break;
+
 		} // end switch
 
 	} // end getWarningList()
