@@ -86,3 +86,5 @@ phpinfo(); // error
 
 PHPINFO(); // error
 CURL_getinfo(); // error
+
+curlyhair(); // ok
