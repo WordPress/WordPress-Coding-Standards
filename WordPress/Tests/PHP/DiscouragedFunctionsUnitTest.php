@@ -66,6 +66,7 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
 			51 => 1,
 			53 => 1,
 			55 => 1,
+			57 => 1,
 			63 => 1,
 			65 => 1,
 			70 => 1,
