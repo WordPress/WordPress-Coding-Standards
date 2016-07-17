@@ -83,3 +83,8 @@ putenv(); // error
 set_include_path(); // error
 restore_include_path(); // error
 phpinfo(); // error
+
+PHPINFO(); // error
+CURL_getinfo(); // error
+
+curlyhair(); // ok
