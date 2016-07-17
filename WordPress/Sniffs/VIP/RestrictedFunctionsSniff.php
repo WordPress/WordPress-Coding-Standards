@@ -139,14 +139,6 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
-			'extract' => array(
-				'type'      => 'warning',
-				'message'   => '%s() usage is highly discouraged, due to the complexity and unintended issues it might cause.',
-				'functions' => array(
-					'extract',
-				),
-			),
-
 			'custom_role' => array(
 				'type'      => 'error',
 				'message'   => 'Use wpcom_vip_add_role() instead of add_role()',
