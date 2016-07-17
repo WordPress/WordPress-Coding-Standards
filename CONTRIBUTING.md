@@ -14,23 +14,25 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 
 TL;DR
 
-Make sure you have `phpunit` installed and available in your `PATH`. If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), then you can navigate to the directory where the `phpcs` repo is checked out and do:
+If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), then you can navigate to the directory where the `phpcs` repo is checked out and do:
 
-```bash
-git checkout phpcs-fixer # needed temporarily until PHPCS 2.0
-phpunit --filter WordPress tests/AllTests.php
+```sh
+composer install
+vendor/bin/phpunit --filter WordPress tests/AllTests.php
 ```
 
 Expected output:
 
-~~~text
-PHPUnit 3.7.18 by Sebastian Bergmann.
+~~~sh
+PHPUnit 4.8.26 by Sebastian Bergmann and contributors.
 
-...............
+....................................
 
-Time: 1 second, Memory: 37.00Mb
+Tests generated 90 unique error codes; 28 were fixable (31.11%)
 
-OK (15 tests, 0 assertions)
+Time: 3.08 second, Memory: 24.00MB
+
+OK (36 tests, 0 assertions)
 ~~~
 
 You can ignore any skipped tests as these are for `PHP_CodeSniffer` external tools.
@@ -70,7 +72,7 @@ Also note the class name convention. The method `getErrorList` MUST return an ar
 indicating errors (when running `phpcs`) found in `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`.
 If you run:
 
-~~~text
+~~~sh
 $ cd /path-to-cloned/phpcs
 $ ./scripts/phpcs --standard=Wordpress -s CodeSniffer/Standards/WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc
 ...
