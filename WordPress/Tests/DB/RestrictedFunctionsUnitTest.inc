@@ -14,7 +14,7 @@ class Bar {
 $x = new Foo();
 $x->mysql_info(); // ok
 $y = Bar::mysql_info(); // ok
-\SomeNamespace\mysql_info(); // ok
+prefix_mysql_info(); // ok
 
 
 /**
