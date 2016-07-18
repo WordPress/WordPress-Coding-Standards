@@ -22,4 +22,8 @@
 	<rule ref="Generic.Files.ByteOrderMark" />
 
 
+	<!-- Check that the I18N functions are used correctly. -->
+	<!-- This sniff can also check the text domain, provided it's passed to PHPCS. -->
+	<rule ref="WordPress.WP.I18n" />
+
 </ruleset>
