@@ -59,6 +59,6 @@ class WordPress_Sniffs_Theme_NoAddAdminPagesSniff extends WordPress_Sniffs_Funct
 				),
 			),
 		);
-	}
+	} // end getGroups()
 
 } // end class
