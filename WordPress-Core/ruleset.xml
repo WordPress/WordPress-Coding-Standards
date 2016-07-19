@@ -113,4 +113,6 @@
 	<rule ref="WordPress.WP.I18n"/>
 	<rule ref="WordPress.Functions.DontExtract"/>
 
+	<rule ref="WordPress.DB.RestrictedFunctions"/>
+
 </ruleset>
