@@ -226,7 +226,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			}
 
 			// Handle magic constants for debug functions.
-			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ), true ) ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_CLASS_C, T_FILE, T_FUNC_C, T_LINE, T_METHOD_C, T_NS_C, T_TRAIT_C ), true ) ) {
 				continue;
 			}
 
