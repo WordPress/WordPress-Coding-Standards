@@ -401,6 +401,44 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * A list of functions that invoke WP hooks (filters/actions).
+	 *
+	 * @since 0.10.0
+	 *
+	 * @var array
+	 */
+	public static $hookInvokeFunctions = array(
+		'do_action'                => true,
+		'do_action_ref_array'      => true,
+		'do_action_deprecated'     => true,
+		'apply_filters'            => true,
+		'apply_filters_ref_array'  => true,
+		'apply_filters_deprecated' => true,
+	);
+
+	/**
+	 * A list of functions that are used to interact with the WP plugins API.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @var array <string function name> => <int position of the hook name argument in function signature>
+	 */
+	public static $hookFunctions = array(
+		'has_filter'         => 1,
+		'add_filter'         => 1,
+		'remove_filter'      => 1,
+		'remove_all_filters' => 1,
+		'doing_filter'       => 1, // Hook name optional.
+		'has_action'         => 1,
+		'add_action'         => 1,
+		'doing_action'       => 1, // Hook name optional.
+		'did_action'         => 1,
+		'remove_action'      => 1,
+		'remove_all_actions' => 1,
+		'current_filter'     => 0, // No hook name argument.
+	);
+
+	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0

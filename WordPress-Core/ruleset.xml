@@ -112,6 +112,7 @@
 	<rule ref="WordPress.PHP.YodaConditions"/>
 	<rule ref="WordPress.WP.I18n"/>
 	<rule ref="WordPress.Functions.DontExtract"/>
+	<rule ref="WordPress.NamingConventions.ValidHookName"/>
 
 	<rule ref="WordPress.DB.RestrictedFunctions"/>
 
