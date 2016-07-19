@@ -26,17 +26,27 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	public $exclude = '';
 
 	/**
-	 * Returns an array of tokens this test wants to listen for.
+	 * Groups of function data to check against.
+	 * Don't use this in extended classes, override getGroups() instead.
+	 * This is only used for Unit tests.
 	 *
-	 * @return array
+	 * @var array
 	 */
-	public function register() {
-		return array(
-			T_STRING,
-			T_EVAL,
-		);
+	public static $unittest_groups = array();
 
-	} // end register()
+	/**
+	 * Regex pattern with placeholder for the function names.
+	 *
+	 * @var string
+	 */
+	protected $regex_pattern = '`\b(?:%s)\b`i';
+
+	/**
+	 * Cache for the group information.
+	 *
+	 * @var array
+	 */
+	protected $groups = array();
 
 	/**
 	 * Groups of functions to restrict.
@@ -51,9 +61,65 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * 	)
 	 * )
 	 *
+	 * You can use * wildcards to target a group of functions.
+	 *
 	 * @return array
 	 */
 	abstract public function getGroups();
+
+	/**
+	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @return array
+	 */
+	public function register() {
+		// Prepare the function group regular expressions only once.
+		if ( false === $this->setup_groups( 'functions' ) ) {
+			return array();
+		}
+
+		return array(
+			T_STRING,
+			T_EVAL,
+		);
+	}
+
+	/**
+	 * Set up the regular expressions for each group.
+	 *
+	 * @param string $key The group array index key where the input for the regular expression can be found.
+	 * @return bool True is the groups were setup. False if not.
+	 */
+	protected function setup_groups( $key ) {
+		// Prepare the function group regular expressions only once.
+		$this->groups = $this->getGroups();
+
+		if ( empty( $this->groups ) && empty( self::$unittest_groups ) ) {
+			return false;
+		}
+
+		// Allow for adding extra unit tests.
+		if ( ! empty( self::$unittest_groups ) ) {
+			$this->groups = array_merge( $this->groups, self::$unittest_groups );
+		}
+
+		foreach ( $this->groups as $groupName => $group ) {
+			if ( empty( $group[ $key ] ) ) {
+				unset( $this->groups[ $groupName ] );
+			} else {
+				$items = array_map( array( $this, 'prepare_name_for_regex' ), $group[ $key ] );
+				$items = implode( '|', $items );
+
+				$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
+			}
+		}
+
+		if ( empty( $this->groups ) ) {
+			return false;
+		}
+
+		return true;
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -93,22 +159,13 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 
 		$exclude = explode( ',', $this->exclude );
 
-		$groups = $this->getGroups();
-
-		if ( empty( $groups ) ) {
-			return ( count( $tokens ) + 1 );
-		}
-
-		foreach ( $groups as $groupName => $group ) {
+		foreach ( $this->groups as $groupName => $group ) {
 
 			if ( in_array( $groupName, $exclude, true ) ) {
 				continue;
 			}
 
-			$functions = array_map( array( $this, 'prepare_functionname_for_regex' ), $group['functions'] );
-			$functions = implode( '|', $functions );
-
-			if ( preg_match( '`\b(?:' . $functions . ')\b`i', $token['content'] ) < 1 ) {
+			if ( preg_match( $group['regex'], $token['content'] ) < 1 ) {
 				continue;
 			}
 
@@ -133,14 +190,14 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	/**
 	 * Prepare the function name for use in a regular expression.
 	 *
-	 * The getGroups() method allows for providing function with a wildcard * to target
+	 * The getGroups() method allows for providing function names with a wildcard * to target
 	 * a group of functions. This prepare routine takes that into account while still safely
 	 * escaping the function name for use in a regular expression.
 	 *
 	 * @param string $function Function name.
-	 * @return string Regex escaped lowercase function name.
+	 * @return string Regex escaped function name.
 	 */
-	protected function prepare_functionname_for_regex( $function ) {
+	protected function prepare_name_for_regex( $function ) {
 		$function = str_replace( array( '.*', '*' ) , '#', $function ); // Replace wildcards with placeholder.
 		$function = preg_quote( $function, '`' );
 		$function = str_replace( '#', '.*', $function ); // Replace placeholder with regex wildcard.
