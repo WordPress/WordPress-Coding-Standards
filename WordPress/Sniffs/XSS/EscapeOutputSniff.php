@@ -75,6 +75,21 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	public static $addedCustomFunctions = false;
 
 	/**
+	 * List of names of the tokens representing PHP magic constants.
+	 *
+	 * @var array
+	 */
+	private $magic_constant_tokens = array(
+		'T_CLASS_C'  => true, // __CLASS__
+		'T_FILE'     => true, // __FILE__
+		'T_FUNC_C'   => true, // __FUNCTION__
+		'T_LINE'     => true, // __LINE__
+		'T_METHOD_C' => true, // __METHOD__
+		'T_NS_C'     => true, // __NAMESPACE__
+		'T_TRAIT_C'  => true, // __TRAIT__
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -226,7 +241,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			}
 
 			// Handle magic constants for debug functions.
-			if ( in_array( $tokens[ $i ]['code'], array( T_METHOD_C, T_FUNC_C, T_FILE, T_CLASS_C ), true ) ) {
+			if ( isset( $this->magic_constant_tokens[ $tokens[ $i ]['type'] ] ) ) {
 				continue;
 			}
 
