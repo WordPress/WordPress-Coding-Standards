@@ -123,30 +123,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
-		$methodProps	= $phpcsFile->getMethodProperties( $stackPtr );
-		$scope			= $methodProps['scope'];
-		$scopeSpecified = $methodProps['scope_specified'];
-
-		if ( 'private' === $methodProps['scope'] ) {
-			$isPublic = false;
-		} else {
-			$isPublic = true;
-		}
-
-		// If the scope was specified on the method, then the method must be
-		// camel caps and an underscore should be checked for. If it wasn't
-		// specified, treat it like a public method and remove the underscore
-		// prefix if there is one because we can't determine if it is private or
-		// public.
-		$testMethodName = $methodName;
-		if ( false === $scopeSpecified && '_' === $methodName{0} ) {
-			$testMethodName = substr( $methodName, 1 );
-		// Ignore special functions.
-		if ( '' === ltrim( $methodName, '_' ) ) {
-			return;
-		}
-
-		if ( strtolower( $testMethodName ) !== $testMethodName ) {
+		if ( strtolower( $methodName ) !== $methodName ) {
 			$suggested = preg_replace( '/([A-Z])/', '_$1', $methodName );
 			$suggested = strtolower( $suggested );
 			$suggested = str_replace( '__', '_', $suggested );
