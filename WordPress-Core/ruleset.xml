@@ -96,6 +96,7 @@
 			<property name="requiredSpacesAfterOpen" value="1" />
 			<property name="requiredSpacesBeforeClose" value="1" />
 		</properties>
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose" />
 	</rule>
 
 	<rule ref="WordPress.Arrays.ArrayDeclaration">
