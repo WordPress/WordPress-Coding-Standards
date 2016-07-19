@@ -9,6 +9,10 @@
  * @author   Marc McIntyre <mmcintyre@squiz.net>
  */
 
+if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
+	throw new PHP_CodeSniffer_Exception( 'Class Squiz_Sniffs_Arrays_ArrayDeclarationSniff not found' );
+}
+
 /**
  * Enforces WordPress array format.
  *
