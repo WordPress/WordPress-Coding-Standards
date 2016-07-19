@@ -49,7 +49,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$prevToken = $phpcsFile->findPrevious( array( T_WHITESPACE, T_COMMENT ), ( $stackPtr - 1 ), null, true );
+		$prevToken = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		// Skip if this is instance of in_array() not a function call.
 		if ( false === $prevToken || in_array( $tokens[ $prevToken ]['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON ), true ) ) {
@@ -70,7 +70,7 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 
 		// Get last token in the function call.
 		$closeParenthesis = $tokens[ $openParenthesis ]['parenthesis_closer'];
-		$lastToken        = $phpcsFile->findPrevious( array( T_WHITESPACE, T_COMMENT ), ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ), true );
+		$lastToken        = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ), true );
 		if ( false === $lastToken ) {
 			$phpcsFile->addError( 'Missing arguments to in_array().', $openParenthesis, 'MissingArguments' );
 			return;

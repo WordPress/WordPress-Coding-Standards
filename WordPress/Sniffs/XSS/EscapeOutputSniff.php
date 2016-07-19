@@ -184,7 +184,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces and comments.
-			if ( in_array( $tokens[ $i ]['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {
+			if ( in_array( $tokens[ $i ]['code'], PHP_CodeSniffer_Tokens::$emptyTokens, true ) ) {
 				continue;
 			}
 
