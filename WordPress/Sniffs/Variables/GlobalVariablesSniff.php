@@ -335,7 +335,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			// Check for assignments to collected global vars.
 			foreach ( $tokens as $ptr => $token ) {
 				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
-					$next = $phpcsFile->findNext( array( T_WHITESPACE, T_COMMENT ), ( $ptr + 1 ), null, true, null, true );
+					$next = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr + 1 ), null, true, null, true );
 					if ( T_EQUAL === $tokens[ $next ]['code'] ) {
 						if ( ! $this->has_whitelist_comment( 'override', $next ) ) {
 							$phpcsFile->addError( 'Overriding WordPress globals is prohibited', $ptr, 'OverrideProhibited' );
