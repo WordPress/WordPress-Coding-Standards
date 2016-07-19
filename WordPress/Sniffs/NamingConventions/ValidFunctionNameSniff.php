@@ -10,28 +10,15 @@
 /**
  * Enforces WordPress function name format.
  *
+ * Last synced with parent class July 2016 at commit 916b09a.
+ * @link     https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidFunctionNameSniff.php
+ *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   John Godley <john@urbangiraffe.com>
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 
-	private $_magicMethods = array(
-		'construct',
-		'destruct',
-		'call',
-		'callStatic',
-		'get',
-		'set',
-		'isset',
-		'unset',
-		'sleep',
-		'wakeup',
-		'toString',
-		'set_state',
-		'clone',
-		'invoke',
-		'debugInfo',
 	);
 
 	/**
@@ -46,13 +33,40 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	protected function processTokenOutsideScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
 
+		if ( ! isset( $functionName ) ) {
+			// Ignore closures.
+			return;
+		}
+
+		if ( '' === ltrim( $functionName, '_' ) ) {
+			// Ignore special functions.
+			return;
+		}
+
+        // Is this a magic function ? I.e., it is prefixed with "__" ?
+		// Outside class scope this basically just means __autoload().
+		if ( 0 === strpos( $functionName, '__' ) ) {
+			$magicPart = strtolower( substr( $functionName, 2 ) );
+			if ( ! isset( $this->magicFunctions[ $magicPart ] ) ) {
+				$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				$errorData = array( $functionName );
+				$phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
+			}
+
+			return;
+		}
+
 		if ( strtolower( $functionName ) !== $functionName ) {
 			$suggested = preg_replace( '/([A-Z])/', '_$1', $functionName );
 			$suggested = strtolower( $suggested );
 			$suggested = str_replace( '__', '_', $suggested );
 
-			$error = "Function name \"$functionName\" is in camel caps format, try '{$suggested}'";
-			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid' );
+			$error     = 'Function name "%s" is not in snake case format, try "%s"';
+			$errorData = array(
+				$functionName,
+				$suggested,
+			);
+			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
 
 	} // end processTokenOutsideScope()
@@ -68,17 +82,29 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	 * @return void
 	 */
 	protected function processTokenWithinScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope ) {
-		$className	= $phpcsFile->getDeclarationName( $currScope );
 		$methodName = $phpcsFile->getDeclarationName( $stackPtr );
 
-		// Is this a magic method. IE. is prefixed with "__".
+		if ( ! isset( $methodName ) ) {
+			// Ignore closures.
+			return;
+		}
+
+		$className	= $phpcsFile->getDeclarationName( $currScope );
+
+		// Is this a magic method ? I.e. is it prefixed with "__" ?
 		if ( 0 === strpos( $methodName, '__' ) ) {
-			$magicPart = substr( $methodName, 2 );
-			if ( false === in_array( $magicPart, $this->_magicMethods, true ) ) {
-				 $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
-				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore' );
+			$magicPart = strtolower( substr( $methodName, 2 ) );
+			if ( ! isset( $this->magicMethods[ $magicPart ] ) ) {
+				 $error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				 $errorData = array( $className . '::' . $methodName );
+				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
 			}
 
+			return;
+		}
+
+		// Ignore special functions.
+		if ( '' === ltrim( $methodName, '_' ) ) {
 			return;
 		}
 
@@ -115,6 +141,9 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		$testMethodName = $methodName;
 		if ( false === $scopeSpecified && '_' === $methodName{0} ) {
 			$testMethodName = substr( $methodName, 1 );
+		// Ignore special functions.
+		if ( '' === ltrim( $methodName, '_' ) ) {
+			return;
 		}
 
 		if ( strtolower( $testMethodName ) !== $testMethodName ) {
