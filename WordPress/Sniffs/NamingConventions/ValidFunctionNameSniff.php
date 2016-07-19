@@ -19,6 +19,27 @@
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 
+	/**
+	 * Additional double underscore prefixed methods specific to certain PHP native extensions.
+	 *
+	 * Currently only handles the SoapClient Extension.
+	 *
+	 * @link http://php.net/manual/en/class.soapclient.php
+	 *
+	 * @var array <string method name> => <string class name>
+	 */
+	private $methodsDoubleUnderscore = array(
+		'doRequest'              => 'SoapClient',
+		'getFunctions'           => 'SoapClient',
+		'getLastRequest'         => 'SoapClient',
+		'getLastRequestHeaders'  => 'SoapClient',
+		'getLastResponse'        => 'SoapClient',
+		'getLastResponseHeaders' => 'SoapClient',
+		'getTypes'               => 'SoapClient',
+		'setCookie'              => 'SoapClient',
+		'setLocation'            => 'SoapClient',
+		'setSoapHeaders'         => 'SoapClient',
+		'soapCall'               => 'SoapClient',
 	);
 
 	/**
@@ -91,18 +112,6 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 
 		$className	= $phpcsFile->getDeclarationName( $currScope );
 
-		// Is this a magic method ? I.e. is it prefixed with "__" ?
-		if ( 0 === strpos( $methodName, '__' ) ) {
-			$magicPart = strtolower( substr( $methodName, 2 ) );
-			if ( ! isset( $this->magicMethods[ $magicPart ] ) ) {
-				 $error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
-				 $errorData = array( $className . '::' . $methodName );
-				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
-			}
-
-			return;
-		}
-
 		// Ignore special functions.
 		if ( '' === ltrim( $methodName, '_' ) ) {
 			return;
@@ -118,8 +127,23 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
-		// If this is a child class, it may have to use camelCase.
-		if ( $phpcsFile->findExtendedClassName( $currScope ) || $this->findImplementedInterfaceName( $currScope, $phpcsFile ) ) {
+		$extended  = $phpcsFile->findExtendedClassName( $currScope );
+		$interface = $this->findImplementedInterfaceName( $currScope, $phpcsFile );
+
+		// If this is a child class or interface implementation, it may have to use camelCase or double underscores.
+		if ( $extended || $interface ) {
+			return;
+		}
+
+		// Is this a magic method ? I.e. is it prefixed with "__" ?
+		if ( 0 === strpos( $methodName, '__' ) ) {
+			$magicPart = strtolower( substr( $methodName, 2 ) );
+			if ( ! isset( $this->magicMethods[ $magicPart ] ) && ! isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
+				 $error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				 $errorData = array( $className . '::' . $methodName );
+				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
+			}
+
 			return;
 		}
 
