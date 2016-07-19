@@ -1,6 +1,6 @@
 <?php
 /**
- * Enforces WordPress function name format, based upon Squiz code.
+ * Enforces WordPress function name format.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
@@ -8,7 +8,9 @@
  */
 
 /**
- * Enforces WordPress function name format.
+ * Enforces WordPress function name and method name format, based upon Squiz code.
+ *
+ * @link     https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
  *
  * Last synced with parent class July 2016 at commit 916b09a.
  * @link     https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidFunctionNameSniff.php
@@ -64,7 +66,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
-        // Is this a magic function ? I.e., it is prefixed with "__" ?
+		// Is this a magic function ? I.e., it is prefixed with "__" ?
 		// Outside class scope this basically just means __autoload().
 		if ( 0 === strpos( $functionName, '__' ) ) {
 			$magicPart = strtolower( substr( $functionName, 2 ) );
@@ -81,6 +83,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			$suggested = preg_replace( '/([A-Z])/', '_$1', $functionName );
 			$suggested = strtolower( $suggested );
 			$suggested = str_replace( '__', '_', $suggested );
+			$suggested = trim( $suggested, '_' );
 
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
@@ -147,13 +150,20 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
+		// Check for all lowercase.
 		if ( strtolower( $methodName ) !== $methodName ) {
 			$suggested = preg_replace( '/([A-Z])/', '_$1', $methodName );
 			$suggested = strtolower( $suggested );
 			$suggested = str_replace( '__', '_', $suggested );
+			$suggested = trim( $suggested, '_' );
 
-			$error = "Function name \"$methodName\" is in camel caps format, try '{$suggested}'";
-			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid' );
+			$error     = 'Method name "%s" in class %s is not in snake case format, try "%s"';
+			$errorData = array(
+				$methodName,
+				$className,
+				$suggested,
+			);
+			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 
 	} // end processTokenWithinScope()
