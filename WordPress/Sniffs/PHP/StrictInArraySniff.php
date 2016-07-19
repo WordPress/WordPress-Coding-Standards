@@ -8,7 +8,7 @@
  */
 
 /**
- * Flag calling in_array() without true as the third parameter.
+ * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.
  *
  * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
  *
@@ -16,6 +16,26 @@
  * @package  PHP_CodeSniffer
  */
 class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
+
+	/**
+	 * List of array functions to which a $strict parameter can be passed.
+	 *
+	 * The $strict parameter is the third and last parameter for each of these functions.
+	 *
+	 * The array_keys() function only requires the $strict parameter when the optional
+	 * second parameter $search has been set.
+	 *
+	 * @link http://php.net/in-array
+	 * @link http://php.net/array-search
+	 * @link http://php.net/array-keys
+	 *
+	 * @var array <string function_name> => <bool always needed ?>
+	 */
+	protected $array_functions = array(
+		'in_array'     => true,
+		'array_search' => true,
+		'array_keys'   => false,
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -39,9 +59,10 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
+		$token  = strtolower( $tokens[ $stackPtr ]['content'] );
 
-		// Skip any token that is not 'in_array'.
-		if ( 'in_array' !== strtolower( $tokens[ $stackPtr ]['content'] ) ) {
+		// Bail out if not one of the targetted functions.
+		if ( ! isset( $this->array_functions[ $token ] ) ) {
 			return;
 		}
 
@@ -49,12 +70,21 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$prevToken = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		$prev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
-		// Skip if this is instance of in_array() not a function call.
-		if ( false === $prevToken || in_array( $tokens[ $prevToken ]['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON ), true ) ) {
-			return;
+		if ( false !== $prev ) {
+			// Skip sniffing if calling a same-named method, or on function definitions.
+			if ( in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true ) ) {
+				return;
+			}
+
+			// Skip namespaced functions, ie: \foo\bar() not \bar().
+			$pprev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
+			if ( false !== $pprev && T_NS_SEPARATOR === $tokens[ $prev ]['code'] && T_STRING === $tokens[ $pprev ]['code'] ) {
+				return;
+			}
 		}
+		unset( $prev, $pprev );
 
 		// Get the closing parenthesis.
 		$openParenthesis = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $stackPtr + 1 ) );
@@ -71,13 +101,24 @@ class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
 		// Get last token in the function call.
 		$closeParenthesis = $tokens[ $openParenthesis ]['parenthesis_closer'];
 		$lastToken        = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ), true );
+
+		// Check if the strict check is actually needed.
+		if ( false === $this->array_functions[ $token ] ) {
+			$hasComma = $phpcsFile->findPrevious( T_COMMA, ( $closeParenthesis - 1 ), ( $openParenthesis + 1 ) );
+			if ( false === $hasComma || end( $tokens[ $hasComma ]['nested_parenthesis'] ) !== $closeParenthesis ) {
+				return;
+			}
+		}
+
+		$errorData = array( $token );
+
 		if ( false === $lastToken ) {
-			$phpcsFile->addError( 'Missing arguments to in_array().', $openParenthesis, 'MissingArguments' );
+			$phpcsFile->addError( 'Missing arguments to %s.', $openParenthesis, 'MissingArguments', $errorData );
 			return;
 		}
 
 		if ( T_TRUE !== $tokens[ $lastToken ]['code'] ) {
-			$phpcsFile->addWarning( 'Not using strict comparison for in_array(); supply true for third argument.', $lastToken, 'MissingTrueStrict' );
+			$phpcsFile->addWarning( 'Not using strict comparison for %s; supply true for third argument.', $lastToken, 'MissingTrueStrict', $errorData );
 			return;
 		}
 	} // end process()
