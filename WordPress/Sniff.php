@@ -500,8 +500,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// we need to here.
 		$end_of_statement = $this->phpcsFile->findNext( array( T_CLOSE_TAG, T_SEMICOLON ), $stackPtr );
 
-		// Check at the end of the statement if it comes before the end of the line.
-		if ( $end_of_statement < $end_of_line ) {
+		// Check at the end of the statement if it comes before - or is - the end of the line.
+		if ( $end_of_statement <= $end_of_line ) {
 
 			// If the statement was ended by a semicolon, we find the next non-
 			// whitespace token. If the semicolon was left out and it was terminated

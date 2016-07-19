@@ -57,7 +57,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
 		// Check for whitelisting comment.
 		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s, probably need manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
+			$phpcsFile->addWarning( 'Detected access of super global var %s, probably needs manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 
 	} // end process()
