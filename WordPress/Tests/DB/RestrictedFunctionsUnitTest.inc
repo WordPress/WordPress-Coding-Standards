@@ -74,3 +74,17 @@ maxdb_num_fields();
 maxdb_prepare();
 maxdb_real_query
 maxdb_stat();
+
+
+/**
+ * And these shouldn't give an error.
+ */
+
+// WP Native function which was named a bit unfortunately.
+mysql_to_rfc3339(); // Ok.
+
+// Other WP Native functions which shouldn't give a problem anyway.
+mysql2date(); // Ok.
+wp_check_mysql_version(); // Ok.
+wp_check_php_mysql_version(); // Ok.
+WP_Date_Query::build_mysql_datetime(); // Ok.
