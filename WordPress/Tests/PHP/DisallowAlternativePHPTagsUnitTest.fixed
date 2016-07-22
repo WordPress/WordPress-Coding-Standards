@@ -1,9 +1,0 @@
-<div>
-<?php echo $var; ?>
-Some content here.
-<?php echo $var; ?>
-<?php echo $var . ' and some more text to make sure the snippet works'; ?>
-<?php
-echo $var;
-?>
-</div>

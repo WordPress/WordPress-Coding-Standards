@@ -3,7 +3,7 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -14,10 +14,37 @@
  * coding standard. Expected errors and warnings are stored in this class.
  *
  * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
 class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest {
+
+	/**
+	 * Whether ASP tags are enabled or not.
+	 *
+	 * @var bool
+	 */
+	private $asp_tags = false;
+
+	/**
+	 * Get the ini values only once.
+	 */
+	protected function setUp() {
+		parent::setUp();
+
+		if ( version_compare( PHP_VERSION, '7.0.0alpha1', '<' ) ) {
+			$this->asp_tags = (bool) ini_get( 'asp_tags' );
+		}
+	}
+
+	/**
+	 * Skip this test on HHVM.
+	 *
+	 * @return bool Whether to skip this test.
+	 */
+	protected function shouldSkipTest() {
+		return defined( 'HHVM_VERSION' );
+	}
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -28,22 +55,22 @@ class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSni
 	 * @return array<int, int>
 	 */
 	public function getErrorList() {
-		$asp_enabled   = (boolean) ini_get( 'asp_tags' );
-		$short_enabled = (boolean) ini_get( 'short_open_tag' );
-
 		$errors = array(
-			6 => 1,
+			8 => 1,
+			11 => 1,
+			12 => 1,
+			15 => 1,
 		);
 
-		if ( true === $asp_enabled ) {
+		if ( true === $this->asp_tags ) {
 			$errors[4] = 1;
-		}
-		if ( true === $asp_enabled && ( true === $short_enabled || defined( 'HHVM_VERSION' ) === true ) ) {
 			$errors[5] = 1;
+			$errors[6] = 1;
+			$errors[7] = 1;
 		}
 
 		return $errors;
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -54,24 +81,18 @@ class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSni
 	 * @return array<int, int>
 	 */
 	public function getWarningList() {
-		$asp_enabled   = (boolean) ini_get( 'asp_tags' );
-		$short_enabled = (boolean) ini_get( 'short_open_tag' );
-
 		$warnings = array();
 
-		if ( false === $asp_enabled ) {
+		if ( false === $this->asp_tags ) {
 			$warnings = array(
 				4 => 1,
 				5 => 1,
-			);
-		} elseif ( false === $short_enabled && false === defined( 'HHVM_VERSION' ) ) {
-			$warnings = array(
-				5 => 1,
+				6 => 1,
+				7 => 1,
 			);
 		}
 
 		return $warnings;
+	}
 
-	} // end getWarningList()
-
-} // end class
+} // End class.
