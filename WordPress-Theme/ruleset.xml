@@ -26,4 +26,7 @@
 	<!-- This sniff can also check the text domain, provided it's passed to PHPCS. -->
 	<rule ref="WordPress.WP.I18n" />
 
+	<!-- No hard coding of scripts and styles. Everything should be enqueued. -->
+	<rule ref="WordPress.WP.EnqueuedResources" />
+
 </ruleset>
