@@ -13,6 +13,7 @@
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="Squiz.PHP.CommentedOutCode" />
+	<rule ref="Squiz.PHP.DiscouragedFunctions" />
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray" />
