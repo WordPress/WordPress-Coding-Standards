@@ -35,8 +35,20 @@ class WordPress_Tests_NamingConventions_ValidFunctionNameUnitTest extends Abstra
 	public function getErrorList() {
 		return array(
 			3 => 1,
+			9 => 1,
 			13 => 1,
 			15 => 1,
+			79 => 1,
+			80 => 1,
+			81 => 1,
+			82 => 1,
+			83 => 1,
+			84 => 1,
+			85 => 1,
+			86 => 1,
+			87 => 1,
+			88 => 1,
+			89 => 1,
 		);
 
 	} // end getErrorList()
