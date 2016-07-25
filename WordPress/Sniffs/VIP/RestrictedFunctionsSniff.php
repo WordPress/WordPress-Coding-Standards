@@ -253,11 +253,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				'type'      => 'error',
 				'message'   => '%s Debug code is not allowed on VIP Production',
 				'functions' => array(
-					'error_log',
-					'var_dump',
-					'print_r',
-					'trigger_error',
-					'set_error_handler',
+					'wp_debug_backtrace_summary',
 				),
 			),
 
