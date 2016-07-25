@@ -165,6 +165,10 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 				continue;
 			}
 
+			if ( isset( $group['whitelist'][ $token['content'] ] ) ) {
+				continue;
+			}
+
 			if ( preg_match( $group['regex'], $token['content'] ) < 1 ) {
 				continue;
 			}

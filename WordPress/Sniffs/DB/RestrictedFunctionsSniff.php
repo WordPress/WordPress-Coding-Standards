@@ -51,6 +51,9 @@ class WordPress_Sniffs_DB_RestrictedFunctionsSniff extends WordPress_AbstractFun
 					'mysqlnd_memcache_*',
 					'maxdb_*',
 				),
+				'whitelist' => array(
+					'mysql_to_rfc3339' => true,
+				),
 			),
 
 		);
