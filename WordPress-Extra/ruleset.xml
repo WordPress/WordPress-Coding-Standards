@@ -35,6 +35,8 @@
 	<rule ref="WordPress.PHP.StrictComparisons" />
 	<rule ref="WordPress.WP.I18n" />
 
+	<rule ref="Squiz.PHP.DiscouragedFunctions" />
+
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray" />
 </ruleset>

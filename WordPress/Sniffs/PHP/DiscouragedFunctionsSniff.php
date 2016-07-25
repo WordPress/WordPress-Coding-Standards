@@ -38,11 +38,7 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 		'split'                    => null,
 		'spliti'                   => null,
 
-		// Development.
-		'print_r'                  => null,
-		'debug_print_backtrace'    => null,
-		'var_dump'                 => null,
-		'var_export'               => null,
+		// Development functions replaced by Squiz.PHP.DiscouragedFunctions.
 
 		// Discouraged.
 		'json_encode'              => 'wp_json_encode',
