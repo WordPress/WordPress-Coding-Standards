@@ -64,23 +64,20 @@ class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSni
 		/*
 		 * Is the brace on the same line as the class/interface/trait declaration ?
 		 */
-		$classLine      = $tokens[ $stackPtr ]['line'];
-		$braceLine      = $tokens[ $openingBrace ]['line'];
-		$lineDifference = ( $braceLine - $classLine );
+		$lastClassLineToken = $phpcsFile->findPrevious( T_STRING, ( $openingBrace - 1 ), $stackPtr );
+		$lastClassLine      = $tokens[ $lastClassLineToken ]['line'];
+		$braceLine          = $tokens[ $openingBrace ]['line'];
+		$lineDifference     = ( $braceLine - $lastClassLine );
 
 		if ( $lineDifference > 0 ) {
 			$phpcsFile->recordMetric( $stackPtr, 'Class opening brace placement', 'new line' );
 			$error = 'Opening brace should be on the same line as the declaration for %s';
 			$fix   = $phpcsFile->addFixableError( $error, $openingBrace, 'BraceOnNewLine', $errorData );
 			if ( true === $fix ) {
-				$prev = $phpcsFile->findPrevious( T_STRING, ( $openingBrace - 1 ), $stackPtr );
-
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent( $prev, ' {' );
+				$phpcsFile->fixer->addContent( $lastClassLineToken, ' {' );
 				$phpcsFile->fixer->replaceToken( $openingBrace, '' );
 				$phpcsFile->fixer->endChangeset();
-
-				unset( $prev );
 			}
 		} else {
 			$phpcsFile->recordMetric( $stackPtr, 'Class opening brace placement', 'same line' );

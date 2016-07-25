@@ -39,6 +39,8 @@ class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSnif
 			41 => 1,
 			44 => 1,
 			47 => 1,
+			70 => 1,
+			79 => 1,
 		);
 
 	} // end getErrorList()
