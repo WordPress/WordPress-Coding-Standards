@@ -100,7 +100,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 		$this->init( $phpcsFile );
 
-		if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1) ]['code']
+		if ( isset( $tokens[ ( $stackPtr + 1 ) ] ) && T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code']
 			&& ! ( T_ELSE === $tokens[ $stackPtr ]['code'] && T_COLON === $tokens[ ( $stackPtr + 1 ) ]['code'] )
 			&& ! (
 				T_CLOSURE === $tokens[ $stackPtr ]['code']
