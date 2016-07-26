@@ -68,11 +68,11 @@ maxdb_close();
 maxdb_connect();
 maxdb_errno();
 maxdb_escape_string();
-maxdb_fetch_assoc
+maxdb_fetch_assoc();
 maxdb_init();
 maxdb_num_fields();
 maxdb_prepare();
-maxdb_real_query
+maxdb_real_query();
 maxdb_stat();
 
 
