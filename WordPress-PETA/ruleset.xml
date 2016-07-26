@@ -35,4 +35,10 @@
 	<rule ref="Generic.Commenting.Todo" />
 	<rule ref="Wordpress.PETA.RestrictedFunctions" />
 
+	<!-- Warnings that are being escalated to errors -->
+	<rule ref="Squiz.PHP.CommentedOutCode.Found">
+		<type>error</type>
+		<message>This comment is %s%% valid code. 'Don't suffer commented-out code to survive' (Martin, 'Clean Code' 287).</message>
+	</rule>
+
 </ruleset>
