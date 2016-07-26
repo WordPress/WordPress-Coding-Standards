@@ -21,24 +21,23 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_old_slug_redirect" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_adjacent_post" />
 
-		<!-- We don't have access to vip_safe_* recommended functions -->
-		<exclude name="WordPress.VIP.RestrictedFunctions.wp_remote_get" />
-
 		<!-- VIP user problems don't apply to PETA sites in the same way -->
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
 		<exclude name="WordPress.VIP.RestrictedVariables.user_meta" />
 	</rule>
 
-	<!--
-	Additional rules not included in WordPress-VIP package
-	-->
+	<!-- Additional rules not included in WordPress-VIP package -->
 	<rule ref="Generic.Commenting.Todo" />
-	<rule ref="Wordpress.PETA.RestrictedFunctions" />
 
 	<!-- Warnings that are being escalated to errors -->
 	<rule ref="Squiz.PHP.CommentedOutCode.Found">
 		<type>error</type>
 		<message>This comment is %s%% valid code. 'Don't suffer commented-out code to survive' (Martin, 'Clean Code' 287).</message>
+	</rule>
+
+	<!-- Rules that need more helpful descriptions -->
+	<rule ref="WordPress.VIP.RestrictedFunctions.wp_remote_get">
+		<message>Be careful with %s, as it is a blocking function by default. Consider loading content via AJAX instead.</message>
 	</rule>
 
 </ruleset>
