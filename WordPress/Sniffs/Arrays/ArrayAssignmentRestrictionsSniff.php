@@ -9,12 +9,12 @@
 /**
  * Restricts array assignment of certain keys.
  *
- * @deprecated 0.1.0 The functionality which used to be contained in this class has been moved to
- *                   the WordPress_AbstractArrayAssignmentRestrictionsSniff class.
- *                   This class is left here to prevent backward-compatibility breaks for
- *                   custom sniffs extending the old class and references to this
- *                   sniff from custom phpcs.xml files.
- *                   This file is also still used to unit test the abstract class.
+ * @deprecated 0.10.0 The functionality which used to be contained in this class has been moved to
+ *                    the WordPress_AbstractArrayAssignmentRestrictionsSniff class.
+ *                    This class is left here to prevent backward-compatibility breaks for
+ *                    custom sniffs extending the old class and references to this
+ *                    sniff from custom phpcs.xml files.
+ *                    This file is also still used to unit test the abstract class.
  *
  * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Shady Sharaf <shady@x-team.com>
