@@ -14,7 +14,7 @@
 
 3. Add its path to PHP_CodeSniffer configuration:
 
-        phpcs --config-set installed_paths /path/to/wpcs
+        phpcs --config-set installed_paths /path/to/petacs
 
 
 To summarize:
