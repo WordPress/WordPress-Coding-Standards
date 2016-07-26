@@ -1,9 +1,6 @@
 <?php
-
 /**
  * WordPress_Sniffs_CSRF_NonceVerificationSniff.
- *
- * PHP version 5
  *
  * @since 0.5.0
  *
@@ -14,12 +11,13 @@
 /**
  * Checks that nonce verification accompanies form processing.
  *
- * @since 0.5.0
+ * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
+ *
+ * @since    0.5.0
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   J.D. Grimes <jdg@codesymphony.co>
- * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
  */
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
@@ -96,7 +94,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
 		$this->init( $phpcsFile );
 
-		$tokens = $phpcsFile->getTokens();
+		$tokens   = $phpcsFile->getTokens();
 		$instance = $tokens[ $stackPtr ];
 
 		$superglobals = array_merge(
@@ -104,7 +102,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			, $this->warnForSuperGlobals
 		);
 
-		if ( ! in_array( $instance['content'], $superglobals ) ) {
+		if ( ! in_array( $instance['content'], $superglobals, true ) ) {
 			return;
 		}
 
@@ -125,7 +123,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		}
 
 		// If we're still here, no nonce-verification function was found.
-		$severity = ( in_array( $instance['content'], $this->errorForSuperGlobals ) ) ? 0 : 'warning';
+		$severity = ( in_array( $instance['content'], $this->errorForSuperGlobals, true ) ) ? 0 : 'warning';
 
 		$phpcsFile->addError(
 			'Processing form data without nonce verification.'

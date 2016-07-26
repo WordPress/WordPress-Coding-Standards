@@ -16,7 +16,7 @@ $ch = curl_init(); // bad
 
 curl_close( $ch ); // bad
 
-extract( array( 'a' => 1 ) ); // bad
+// Empty line - function moved to another sniff.
 
 add_role( 'test' ); // bad
 
@@ -57,8 +57,8 @@ url_to_post_id(); // error
 attachment_url_to_postid(); // error
 get_posts(); // warning
 wp_get_recent_posts(); // warning
-get_pages(); // error
-get_children(); // error
+
+get_children(); // warning
 wp_get_post_terms(); // error
 wp_get_post_categories(); // error
 wp_get_post_tags(); // error
@@ -70,3 +70,21 @@ get_adjacent_post(); // error
 get_previous_post(); // error
 get_next_post(); // error
 parse_url( 'http://example.com/' ); // warning
+
+dl(); // error
+error_reporting(); // error
+ini_alter(); // error
+ini_restore(); // error
+ini_set(); // error
+magic_quotes_runtime(); // error
+set_magic_quotes_runtime(); // error
+apache_setenv(); // error
+putenv(); // error
+set_include_path(); // error
+restore_include_path(); // error
+phpinfo(); // error
+
+PHPINFO(); // error
+CURL_getinfo(); // error
+
+curlyhair(); // ok

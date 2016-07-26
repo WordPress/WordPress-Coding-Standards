@@ -2,6 +2,9 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
+	<!-- Check for PHP Parse errors -->
+	<rule ref="Generic.PHP.Syntax"/>
+
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#brace-style -->
 	<rule ref="Generic.ControlStructures.InlineControlStructure" />
 	<rule ref="Squiz.ControlStructures.ControlSignature" />
@@ -14,15 +17,22 @@
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces -->
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+	<rule ref="PSR2.Files.ClosingTag"/>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags -->
 	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
+	<rule ref="WordPress.PHP.DisallowAlternativePHPTags"/>
 
 	<!-- important to prevent issues with content being sent before headers -->
 	<rule ref="Generic.Files.ByteOrderMark"/>
 
+	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
+
+	<!-- Dev defined constants should be in all upper-case with underscores separating words -->
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
+	<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
 
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#indentation -->
 	<arg name="tab-width" value="4"/>
@@ -87,6 +97,7 @@
 			<property name="requiredSpacesAfterOpen" value="1" />
 			<property name="requiredSpacesBeforeClose" value="1" />
 		</properties>
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose" />
 	</rule>
 
 	<rule ref="WordPress.Arrays.ArrayDeclaration">
@@ -102,5 +113,10 @@
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.YodaConditions"/>
 	<rule ref="WordPress.WP.I18n"/>
+	<rule ref="WordPress.Functions.DontExtract"/>
+	<rule ref="WordPress.NamingConventions.ValidHookName"/>
+	<rule ref="WordPress.DB.RestrictedFunctions"/>
+
+	<rule ref="WordPress.DB.RestrictedClasses"/>
 
 </ruleset>

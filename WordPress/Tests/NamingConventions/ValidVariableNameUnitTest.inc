@@ -1,6 +1,6 @@
 <?php
-$varName  = 'hello';
-$var_name = 'hello'; // Bad
+$varName  = 'hello'; // Bad
+$var_name = 'hello';
 $varname  = 'hello';
 $_varName = 'hello'; // Bad
 
@@ -52,6 +52,7 @@ echo MyClass::$varName; // Bad
 echo MyClass::$var_name;
 echo MyClass::$varname;
 echo MyClass::$_varName; // Bad
+echo MyClass::$VAR_name; // Bad
 
 echo $this->varName2; // Bad
 echo $this->var_name2;
@@ -61,6 +62,7 @@ echo $object->varName2; // Bad
 echo $object->var_name2;
 echo $object_name->varname2;
 echo $object_name->_varName2; // Bad
+echo $object_name->VAR_name; // Bad
 
 echo $this->myFunction($one, $two);
 echo $object->myFunction($one_two);
@@ -93,6 +95,24 @@ echo $comment->comment_author_IP;
 class Foo {
 	public $_public_leading_underscore;
 	private $private_no_underscore_loading;
+	
+	function Bar( $VARname ) { // Bad
+		$localVariable = false; // Bad
+		echo Some_Class::$VarName; // Bad
+		echo $this->VAR_name; // Bad
+		$_localVariable = false; // Bad
+		echo Some_Class::$_VarName; // Bad
+		echo $this->_VAR_name; // Bad
+	}
+
+	function Baz( $var_name ) { // Ok
+		$local_variable = false; // Ok
+		echo Some_Class::$var_name; // Ok
+		echo $this->var_name; // Ok
+		$_local_variable = false; // Ok
+		echo Some_Class::$_var_name; // Ok
+		echo $this->_var_name; // Ok
+	}
 }
 
 if ( is_category() ) {

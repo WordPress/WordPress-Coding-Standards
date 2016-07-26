@@ -1,19 +1,26 @@
 <?php
+/**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
 
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. )
  *
- * PHP version 5
+ * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
  *
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
  */
 class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff {
 
 	/**
-	 * Check for validation functions for a variable within its own parenthesis only
+	 * Check for validation functions for a variable within its own parenthesis only.
+	 *
 	 * @var boolean
 	 */
 	public $check_validation_in_scope_only = false;
@@ -88,25 +95,25 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		$tokens = $phpcsFile->getTokens();
 		$superglobals = WordPress_Sniff::$input_superglobals;
 
-		// Handling string interpolation
+		// Handling string interpolation.
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[ $stackPtr ]['code'] ) {
 			$interpolated_variables = array_map(
 				create_function( '$symbol', 'return "$" . $symbol;' ), // Replace with closure when 5.3 is minimum requirement for PHPCS.
 				$this->get_interpolated_variables( $tokens[ $stackPtr ]['content'] )
 			);
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
-				$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, null, array( $bad_variable, $tokens[ $stackPtr ]['content'] ) );
+				$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $tokens[ $stackPtr ]['content'] ) );
 			}
 
 			return;
 		}
 
 		// Check if this is a superglobal.
-		if ( ! in_array( $tokens[ $stackPtr ]['content'], $superglobals ) ) {
+		if ( ! in_array( $tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
 			return;
 		}
 
-		// If we're overriding a superglobal with an assignment, no need to test
+		// If we're overriding a superglobal with an assignment, no need to test.
 		if ( $this->is_assignment( $stackPtr ) ) {
 			return;
 		}
@@ -122,9 +129,11 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			return;
 		}
 
+		$error_data = array( $tokens[ $stackPtr ]['content'] );
+
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {
-			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', array( $tokens[ $stackPtr ]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', $error_data );
 			// return; // Should we just return and not look for sanitizing functions ?
 		}
 
@@ -137,9 +146,9 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			return;
 		}
 
-		// Now look for sanitizing functions
+		// Now look for sanitizing functions.
 		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
-			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', array( $tokens[ $stackPtr ]['content'] ) );
+			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
 
 		return;

@@ -1,14 +1,10 @@
 <?php
 /**
- * Unit test class for the CastStructureSpacing sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Matt Robinson
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
@@ -24,48 +20,40 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest
-{
+class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
 
+	/**
+	 * Returns the lines where errors should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of errors that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getErrorList() {
+		return array();
 
-    /**
-     * Returns the lines where errors should occur.
-     *
-     * The key of the array should represent the line number and the value
-     * should represent the number of errors that should occur on that line.
-     *
-     * @return array(int => int)
-     */
-    public function getErrorList()
-    {
-        return array();
+	} // end getErrorList()
 
-    }//end getErrorList()
+	/**
+	 * Returns the lines where warnings should occur.
+	 *
+	 * The key of the array should represent the line number and the value
+	 * should represent the number of warnings that should occur on that line.
+	 *
+	 * @return array(int => int)
+	 */
+	public function getWarningList() {
+		return array(
+			 3 => 1,
+			 6 => 1,
+			 9 => 1,
+			 12 => 2,
+			 15 => 1,
+			 18 => 1,
+			 21 => 1,
+		);
 
+	} // end getWarningList()
 
-    /**
-     * Returns the lines where warnings should occur.
-     *
-     * The key of the array should represent the line number and the value
-     * should represent the number of warnings that should occur on that line.
-     *
-     * @return array(int => int)
-     */
-    public function getWarningList()
-    {
-        return array(
-                 3 => 1,
-                 6 => 1,
-                 9 => 1,
-                 12 => 2,
-                 15 => 1,
-                 18 => 1,
-                 21 => 1,
-                );
-
-    }//end getWarningList()
-
-
-}//end class
-
-?>
+} // end class

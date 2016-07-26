@@ -1,5 +1,13 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @category PHP
+ * @package  PHP_CodeSniffer
+ * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ */
+
+/**
  * Sniff for prepared SQL.
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
@@ -17,12 +25,12 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * @var array
 	 */
 	protected static $methods = array(
-		'get_var' => true,
-		'get_col' => true,
-		'get_row' => true,
+		'get_var'     => true,
+		'get_col'     => true,
+		'get_row'     => true,
 		'get_results' => true,
-		'prepare' => true,
-		'query' => true,
+		'prepare'     => true,
+		'query'       => true,
 	);
 
 	/**
@@ -33,16 +41,16 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * @var array
 	 */
 	protected $ignored_tokens = array(
-		T_OBJECT_OPERATOR => true,
-		T_OPEN_PARENTHESIS => true,
-		T_CLOSE_PARENTHESIS => true,
-		T_WHITESPACE => true,
-		T_STRING_CONCAT => true,
+		T_OBJECT_OPERATOR          => true,
+		T_OPEN_PARENTHESIS         => true,
+		T_CLOSE_PARENTHESIS        => true,
+		T_WHITESPACE               => true,
+		T_STRING_CONCAT            => true,
 		T_CONSTANT_ENCAPSED_STRING => true,
-		T_OPEN_SQUARE_BRACKET => true,
-		T_CLOSE_SQUARE_BRACKET => true,
-		T_COMMA => true,
-		T_LNUMBER => true,
+		T_OPEN_SQUARE_BRACKET      => true,
+		T_CLOSE_SQUARE_BRACKET     => true,
+		T_COMMA                    => true,
+		T_LNUMBER                  => true,
 	);
 
 	/**
@@ -130,7 +138,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						'NotPrepared',
 						array(
 							$bad_variable,
-							$tokens[ $this->i ]['content']
+							$tokens[ $this->i ]['content'],
 						)
 					);
 				}
@@ -152,7 +160,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				) {
 
 					// Find the opening parenthesis.
-					$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, $this->i + 1, null, true, null, true );
+					$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, ( $this->i + 1 ), null, true, null, true );
 
 					if (
 						$opening_paren
@@ -163,7 +171,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-
 				} elseif ( isset( self::$formattingFunctions[ $tokens[ $this->i ]['content'] ] ) ) {
 					continue;
 				}
@@ -199,16 +206,16 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	protected function is_wpdb_method_call( $stackPtr ) {
 
 		// Check that this is a method call.
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), $stackPtr + 1, null, null, null, true );
+		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, null, null, true );
 		if ( false === $is_object_call ) {
 			return false;
 		}
 
-		$methodPtr = $this->phpcsFile->findNext( array( T_WHITESPACE ), $is_object_call + 1, null, true, null, true );
+		$methodPtr = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
 		$method = $this->tokens[ $methodPtr ]['content'];
 
 		// Find the opening parenthesis.
-		$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, $methodPtr + 1, null, true, null, true );
+		$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, ( $methodPtr + 1 ), null, true, null, true );
 
 		if ( ! $opening_paren ) {
 			return false;
@@ -233,6 +240,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		return true;
-	}
+	} // is_wpdb_method_call()
 
 } // end class.
