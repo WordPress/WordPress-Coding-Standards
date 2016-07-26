@@ -33,4 +33,4 @@ You should then see `WordPress-PETA` et al listed when you run `phpcs -i`.
 
 ## How to use
 
-See the [How to use section here](/README.md#how-to-use) for usage instructions, using the `WordPress-PETA` standard.
+See the [How to use section here](/README.md#how-to-use) for instructions. Use the `WordPress-PETA` standard when configuring your IDE/command line for phpcs parsing.
