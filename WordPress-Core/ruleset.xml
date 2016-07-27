@@ -118,6 +118,6 @@
 	<rule ref="WordPress.DB.RestrictedFunctions"/>
 	<rule ref="WordPress.DB.RestrictedClasses"/>
 
-		<rule ref="WordPress.PHP.POSIXFunctions" />
+	<rule ref="WordPress.PHP.POSIXFunctions" />
 
 </ruleset>
