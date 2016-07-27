@@ -34,6 +34,21 @@
 		<type>error</type>
 		<message>This comment is %s%% valid code. 'Don't suffer commented-out code to survive' (Martin, 'Clean Code' 287).</message>
 	</rule>
+	<rule ref="WordPress.PHP.StrictComparisons.LooseComparison">
+		<type>error</type>
+	</rule>
+	<rule ref="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.PHP.StrictInArray.MissingTrueStrict">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WhiteSpace.CastStructureSpacing.ContainsWhiteSpace">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.VIP.RestrictedFunctions.serialize">
+		<type>error</type>
+	</rule>
 
 	<!-- Rules that need more helpful descriptions -->
 	<rule ref="WordPress.VIP.RestrictedFunctions.wp_remote_get">
