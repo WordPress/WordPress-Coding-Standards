@@ -31,13 +31,6 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 	 * @var array(string => string|null)
 	 */
 	public $forbiddenFunctions = array(
-		// Deprecated.
-		'ereg_replace'             => 'preg_replace',
-		'ereg'                     => null,
-		'eregi_replace'            => 'preg_replace',
-		'split'                    => null,
-		'spliti'                   => null,
-
 		// Development.
 		'print_r'                  => null,
 		'debug_print_backtrace'    => null,

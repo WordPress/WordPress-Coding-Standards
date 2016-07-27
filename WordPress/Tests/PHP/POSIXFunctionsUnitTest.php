@@ -8,7 +8,7 @@
  */
 
 /**
- * Unit test class for the DiscouragedFunctions sniff.
+ * WordPress_Tests_PHP_POSIXFunctionsUnitTest
  *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
@@ -22,7 +22,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_PHP_POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -33,7 +33,15 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
 	 * @return array(int => int)
 	 */
 	public function getErrorList() {
-		return array();
+		return array(
+			13 => 1,
+			16 => 1,
+			18 => 1,
+			20 => 1,
+			22 => 1,
+			24 => 1,
+			26 => 1,
+		);
 
 	} // end getErrorList()
 
@@ -46,27 +54,7 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
 	 * @return array(int => int)
 	 */
 	public function getWarningList() {
-		return array(
-			8 => 1,
-			9 => 1,
-			15 => 1,
-			17 => 1,
-			19 => 1,
-			21 => 1,
-			23 => 1,
-			25 => 1,
-			27 => 1,
-			29 => 1,
-			31 => 1,
-			33 => 1,
-			35 => 1,
-			37 => 1,
-			39 => 1,
-			45 => 1,
-			47 => 1,
-			52 => 1,
-			54 => 1,
-		);
+		return array();
 
 	} // end getWarningList()
 
