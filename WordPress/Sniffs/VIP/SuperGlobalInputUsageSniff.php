@@ -41,14 +41,13 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$this->init( $phpcsFile );
-		$tokens = $phpcsFile->getTokens();
 
 		// Check for global input variable.
-		if ( ! in_array( $tokens[ $stackPtr ]['content'], WordPress_Sniff::$input_superglobals, true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], self::$input_superglobals, true ) ) {
 			return;
 		}
 
-		$varName = $tokens[ $stackPtr ]['content'];
+		$varName = $this->tokens[ $stackPtr ]['content'];
 
 		// If we're overriding a superglobal with an assignment, no need to test.
 		if ( $this->is_assignment( $stackPtr ) ) {

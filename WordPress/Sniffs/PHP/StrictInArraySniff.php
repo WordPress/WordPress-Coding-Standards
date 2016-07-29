@@ -15,7 +15,7 @@
  * @category PHP
  * @package  PHP_CodeSniffer
  */
-class WordPress_Sniffs_PHP_StrictInArraySniff extends WordPress_Sniff {
+class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * List of array functions to which a $strict parameter can be passed.

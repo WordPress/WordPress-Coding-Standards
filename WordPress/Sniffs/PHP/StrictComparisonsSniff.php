@@ -42,8 +42,7 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 		$this->init( $phpcsFile );
 
 		if ( ! $this->has_whitelist_comment( 'loose comparison', $stackPtr ) ) {
-			$tokens = $phpcsFile->getTokens();
-			$error  = 'Found: ' . $tokens[ $stackPtr ]['content'] . '. Use strict comparisons (=== or !==).';
+			$error  = 'Found: ' . $this->tokens[ $stackPtr ]['content'] . '. Use strict comparisons (=== or !==).';
 			$phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
 		}
 

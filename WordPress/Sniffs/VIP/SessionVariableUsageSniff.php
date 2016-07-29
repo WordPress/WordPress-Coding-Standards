@@ -7,10 +7,6 @@
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
-if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
-}
-
 /**
  * WordPress_Sniffs_VIP_SessionVariableUsageSniff
  *
@@ -23,7 +19,7 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
  * @package  PHP_CodeSniffer
  * @author   Shady Sharaf <shady@x-team.com>
  */
-class WordPress_Sniffs_VIP_SessionVariableUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
+class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
