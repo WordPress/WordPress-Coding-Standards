@@ -26,6 +26,9 @@ matrix:
       env: PHPCS_BRANCH=3.0
     # Run against HHVM and PHP nightly.
     - php: hhvm
+      sudo: required
+      dist: trusty 
+      group: edge 
       env: PHPCS_BRANCH=master
     - php: nightly
       env: PHPCS_BRANCH=master
