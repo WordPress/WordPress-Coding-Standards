@@ -2,17 +2,17 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * WordPress_Sniffs_Files_FileNameSniff.
- *
  * Ensures filenames do not contain underscores.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   John Godley
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  John Godley <john@urbangiraffe.com>
+ *
+ * @since   0.1.0
  */
 class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 

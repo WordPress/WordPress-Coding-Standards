@@ -2,20 +2,20 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * WordPress_Sniffs_VIP_SessionVariableUsageSniff
- *
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Shady Sharaf <shady@x-team.com>
+ *
+ * @since   2014-12-11
  */
 class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_Sniff {
 

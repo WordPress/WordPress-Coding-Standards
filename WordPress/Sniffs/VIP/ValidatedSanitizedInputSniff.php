@@ -2,17 +2,21 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * Flag any non-validated/sanitized input ( _GET / _POST / etc. )
+ * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Shady Sharaf <shady@x-team.com>
+ *
+ * @since   2014-12-11
+ * @since   0.4.0 This class now extends WordPress_Sniff.
+ * @since   0.5.0 Method getArrayIndexKey() has been moved to WordPress_Sniff.
  */
 class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff {
 

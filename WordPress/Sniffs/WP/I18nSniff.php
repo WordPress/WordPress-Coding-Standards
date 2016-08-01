@@ -2,17 +2,18 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * WordPress_Sniffs_WP_I18nSniff
+ * Makes sure WP internationalization functions are used properly.
  *
- * Makes sure internationalization functions are used properly.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ *
+ * @since   0.10.0
  */
 class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 

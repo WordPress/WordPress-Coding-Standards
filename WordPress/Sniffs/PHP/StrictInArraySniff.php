@@ -2,16 +2,20 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.
  *
- * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ * @link    https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ *
+ * @since   0.9.0
+ * @since   0.10.0 This sniff not only checks for `in_array()`, but also `array_search()` and `array_keys()`.
  */
 class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 
@@ -26,6 +30,8 @@ class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 	 * @link http://php.net/in-array
 	 * @link http://php.net/array-search
 	 * @link http://php.net/array-keys
+	 *
+	 * @since 0.10.0
 	 *
 	 * @var array <string function_name> => <bool always needed ?>
 	 */

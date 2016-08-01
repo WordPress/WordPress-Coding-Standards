@@ -1,18 +1,20 @@
 <?php
 /**
- * Modified version of Squiz operator white spacing, based upon Squiz code
+ * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * Modified version of Squiz operator white spacing.
+ * Verify operator spacing, based upon Squiz code.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ *
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  John Godley <john@urbangiraffe.com>
+ *
+ * @since   0.1.0
+ * @since   2014-12-11 This sniff now has the ability to fix the issues it flags.
  */
 class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff {
 

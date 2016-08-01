@@ -1,22 +1,21 @@
 <?php
 /**
- * Enforces spacing around logical operators and assignments, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * Squiz_Sniffs_WhiteSpace_ControlStructureSpacingSniff.
+ * Enforces spacing around logical operators and assignments, based upon Squiz code.
  *
- * Checks that any array declarations are lower case.
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  John Godley <john@urbangiraffe.com>
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @since   0.1.0
+ * @since   2013-06-11 This sniff no longer supports JS.
+ * @since   2014-12-11 This sniff now has the ability to fix most errors it flags.
+ * @since   0.7.0      This class now extends WordPress_Sniff.
  */
 class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
 

@@ -2,16 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Flag using orderby => rand.
  *
- * @link     https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
+ * @link    https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ *
+ * @since   0.9.0
  */
 class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 

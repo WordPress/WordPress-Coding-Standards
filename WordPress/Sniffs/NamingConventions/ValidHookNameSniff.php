@@ -14,10 +14,12 @@
  *
  * Hook names invoked with `do_action_deprecated()` and `apply_filters_deprecated()` are ignored.
  *
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ *
+ * @since   0.10.0
  */
 class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeSniffer_Sniff {
 

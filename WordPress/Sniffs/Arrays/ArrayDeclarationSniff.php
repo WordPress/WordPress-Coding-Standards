@@ -1,11 +1,9 @@
 <?php
 /**
- * Enforces WordPress array format, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
@@ -13,12 +11,23 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
 }
 
 /**
- * Enforces WordPress array format.
+ * Enforces WordPress array format, based upon Squiz code.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  John Godley <john@urbangiraffe.com>
+ *
+ * @since   0.1.0
+ * @since   0.5.0 Now extends `Squiz_Sniffs_Arrays_ArrayDeclarationSniff`.
+ *
+ * @todo    Check whether the upstream PRs have been merged and released and if possible,
+ *          remove duplicate logic.
+ *          Ref: commit 3ea49d2b56f248d83bed890f9f5246d67c775d54
+ *          "The upstream version is similar, except that we exclude a few errors.
+ *          Unfortunately we have to actually comment out the code rather than just
+ *          using the upstream sniff and `<exclude>` in our ruleset, due to a bug
+ *          (squizlabs/PHP_CodeSniffer#582). (I've also included a fix for another
+ *          bug, squizlabs/PHP_CodeSniffer#584.) Because of this, we cannot yet
+ *          eliminate duplicated logic from this child sniff."
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {
 

@@ -7,11 +7,11 @@
  */
 
 /**
- * Unit test class for the NonceVerification Sniff.
+ * Unit test class for the NonceVerification sniff.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    J.D. Grimes <jdg@codesymphony.co>
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  J.D. Grimes <jdg@codesymphony.co>
+ * @since   0.5.0
  */
 class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTest {
 

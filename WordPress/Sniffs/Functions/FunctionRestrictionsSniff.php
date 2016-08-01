@@ -2,21 +2,23 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Restricts usage of some functions.
  *
+ * @package    PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author     Shady Sharaf <shady@x-team.com>
+ *
+ * @since      2014-12-11
  * @deprecated 0.10.0 The functionality which used to be contained in this class has been moved to
  *                    the WordPress_AbstractFunctionRestrictionsSniff class.
  *                    This class is left here to prevent backward-compatibility breaks for
  *                    custom sniffs extending the old class and references to this
  *                    sniff from custom phpcs.xml files.
- *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Shady Sharaf <shady@x-team.com>
+ * @see        WordPress_AbstractFunctionRestrictionsSniff
  */
 class WordPress_Sniffs_Functions_FunctionRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 

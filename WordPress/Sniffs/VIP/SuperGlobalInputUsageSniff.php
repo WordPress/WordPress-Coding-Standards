@@ -2,17 +2,20 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * Flag any usage of super global input var ( _GET / _POST / etc. )
+ * Flag any usage of super global input var ( _GET / _POST / etc. ).
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/79
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Shady Sharaf <shady@x-team.com>
+ *
+ * @since   2014-12-11
+ * @since   0.4.0 This class now extends WordPress_Sniff.
  */
 class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 

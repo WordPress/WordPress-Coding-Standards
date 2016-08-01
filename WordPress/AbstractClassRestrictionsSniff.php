@@ -11,6 +11,8 @@
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ *
+ * @since   0.10.0
  */
 abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 

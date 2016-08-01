@@ -9,8 +9,9 @@
 /**
  * Unit test class for the EnqueuedResources sniff.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Shady Sharaf <shady@x-team.com>
+ * @since   2014-12-11
  */
 class WordPress_Tests_WP_EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 

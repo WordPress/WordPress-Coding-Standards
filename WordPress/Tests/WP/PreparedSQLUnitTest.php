@@ -9,9 +9,9 @@
 /**
  * Unit test class for the PreparedSQL sniff.
  *
- * @since 0.8.0
- *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  J.D. Grimes <jdg@codesymphony.co>
+ * @since   0.8.0
  */
 class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 

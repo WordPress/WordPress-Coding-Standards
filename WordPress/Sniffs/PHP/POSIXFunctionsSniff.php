@@ -2,19 +2,22 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Perl compatible regular expressions (PCRE, preg_ functions) should be used in preference
  * to their POSIX counterparts.
  *
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#regular-expressions
- * @link     http://php.net/manual/en/ref.regex.php
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#regular-expressions
+ * @link    http://php.net/manual/en/ref.regex.php
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ *
+ * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff
+ *                 and the WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
  */
 class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 

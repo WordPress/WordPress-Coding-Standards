@@ -1,18 +1,18 @@
 <?php
 /**
- * Enforces Yoda conditional statements , based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Matt Robinson
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Enforces Yoda conditional statements.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Matt Robinson
+ *
+ * @since   2014-12-11
  */
 class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff {
 

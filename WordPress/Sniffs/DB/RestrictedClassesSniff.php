@@ -14,10 +14,12 @@
  *  helps keep your code forward-compatible and, in cases where results are cached in memory,
  *  it can be many times faster."
  *
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ *
+ * @since   0.10.0
  */
 class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClassRestrictionsSniff {
 

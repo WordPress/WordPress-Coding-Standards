@@ -9,10 +9,9 @@
 /**
  * Unit test class for the StrictInArray sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ * @since   0.9.0
  */
 class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 

@@ -2,8 +2,8 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
@@ -12,14 +12,14 @@
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @since 0.8.0
+ * @author  J.D. Grimes <jdg@codesymphony.co>
+ *
+ * @since   0.8.0
  */
 class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 	/**
 	 * The lists of $wpdb methods.
-	 *
-	 * @since 0.8.0
 	 *
 	 * @var array
 	 */
@@ -77,8 +77,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
-	 * @since 0.8.0
-	 *
 	 * @return array
 	 */
 	public function register() {
@@ -89,8 +87,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @since 0.8.0
 	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token

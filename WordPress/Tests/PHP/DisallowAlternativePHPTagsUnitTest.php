@@ -9,11 +9,9 @@
 /**
  * Unit test class for the DisallowAlternativePHPTags sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @since   0.10.0
  */
 class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest {
 

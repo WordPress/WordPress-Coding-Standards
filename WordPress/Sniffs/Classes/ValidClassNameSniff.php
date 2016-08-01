@@ -1,28 +1,19 @@
 <?php
 /**
- * Modified Squiz_Sniffs_Classes_ValidClassNameSniff.
+ * WordPress Coding Standard.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ValidClassNameSniff.php,v 1.6 2008/05/19 05:59:25 squiz Exp $
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * Squiz_Sniffs_Classes_ValidClassNameSniff.
+ * Ensures classes are in camel caps, and the first letter is capitalised.
  *
- * Ensures classes are in camel caps, and the first letter is capitalised
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.0RC1
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  John Godley <john@urbangiraffe.com>
+ *
+ * @since   0.1.0
  */
 class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sniff {
 

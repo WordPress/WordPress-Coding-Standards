@@ -2,15 +2,17 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Enforces Strict Comparison checks, based upon Squiz code.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Matt Robinson
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Matt Robinson
+ *
+ * @since   0.4.0
  */
 class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 

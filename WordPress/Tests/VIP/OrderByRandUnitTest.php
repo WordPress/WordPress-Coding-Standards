@@ -7,10 +7,11 @@
  */
 
 /**
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
+ * Unit test class for the OrderByRand sniff.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ * @since   0.9.0
  */
 class WordPress_Tests_VIP_OrderByRandUnitTest extends AbstractSniffUnitTest {
 

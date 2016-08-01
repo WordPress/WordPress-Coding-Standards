@@ -7,19 +7,11 @@
  */
 
 /**
- * Unit test class for WordPress_Sniffs_NamingConventions_ValidVariableNameSniff.
+ * Unit test class for the ValidVariableName sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @author    Weston Ruter
- * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ * @since   0.9.0
  */
 class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 

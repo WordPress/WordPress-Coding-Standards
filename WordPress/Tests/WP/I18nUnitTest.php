@@ -7,10 +7,11 @@
  */
 
 /**
- * Unit test class for the I18nUnit sniff.
+ * Unit test class for the I18n sniff.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Weston Ruter <weston@x-team.com>
+ * @since   0.10.0
  */
 class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 

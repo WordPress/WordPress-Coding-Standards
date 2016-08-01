@@ -2,17 +2,17 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * WordPress_Sniffs_WP_Enqueued_Resources_Sniff
- *
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Shady Sharaf <shady@x-team.com>
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Shady Sharaf <shady@x-team.com>
+ *
+ * @since   2014-12-11
  */
 class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Sniff {
 

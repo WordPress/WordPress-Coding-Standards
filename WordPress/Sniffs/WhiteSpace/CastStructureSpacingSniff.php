@@ -1,27 +1,19 @@
 <?php
 /**
- * Enforces spacing around casting of variables, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
- * Squiz_Sniffs_WhiteSpace_CastSpacingSniff.
+ * Ensure cast statements don't contain whitespace, but *are* surrounded by whitespace, based upon Squiz code.
  *
- * Ensure cast statements don't contain whitespace.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Matt Robinson
+ *
+ * @since   2014-12-11
  */
 class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 

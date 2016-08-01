@@ -7,11 +7,11 @@
  */
 
 /**
- * Unit test class for the Filesystem writes sniff.
+ * Unit test class for the FileSystemWritesDisallow sniff.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Shady Sharaf <shady@x-team.com>
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Shady Sharaf <shady@x-team.com>
+ * @since   2014-12-11
  */
 class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest {
 

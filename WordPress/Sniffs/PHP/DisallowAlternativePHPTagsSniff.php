@@ -2,8 +2,8 @@
 /**
  * WordPress Coding Standard.
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
@@ -11,10 +11,17 @@
  *
  * If alternative PHP open tags are found, this sniff can fix both the open and close tags.
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/580
+ * @link      https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/580
  *
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author    Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ *
+ * @since     0.10.0
+ *
+ * {@internal If and when the upstream PR https://github.com/squizlabs/PHP_CodeSniffer/pull/1084
+ *            would be merged and the WPCS minimum PHPCS version would be upped to the version
+ *            that PR is contained in, this sniff and associated unit tests can be replaced by
+ *            the upstream sniff Generic.PHP.DisallowAlternativePHPTags.}}
  */
 class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSniffer_Sniff {
 

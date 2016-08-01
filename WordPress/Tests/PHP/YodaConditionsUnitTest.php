@@ -7,16 +7,11 @@
  */
 
 /**
- * Unit test class for the YodeConditions sniff.
+ * Unit test class for the YodaConditions sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Matt Robinson
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Matt Robinson
+ * @since   2014-12-11
  */
 class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest {
 

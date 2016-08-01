@@ -2,7 +2,8 @@
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
@@ -10,9 +11,9 @@
  *
  * Provides a bootstrap for the sniffs, to reduce code duplication.
  *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @version   0.4.0
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  J.D. Grimes <jdg@codesymphony.co>
+ * @since   0.4.0
  */
 abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
@@ -459,7 +460,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * A list of superglobals that incorporate user input.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var string[]
 	 */
@@ -576,7 +577,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * $array['key'][ $foo ][ something() ] = $bar;
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @param int $stackPtr The index of the token in the stack. This must points to
 	 *                      either a T_VARIABLE or T_CLOSE_SQUARE_BRACKET token.
@@ -1126,6 +1127,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * This function will check the token and return 'closure', 'trait', or 'class',
 	 * based on which of these uses the use is being used for.
 	 *
+	 * @since 0.7.0
+	 *
 	 * @param int $stackPtr The position of the token to check.
 	 *
 	 * @return string The type of use.
@@ -1152,6 +1155,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Get the interpolated variable names from a string.
 	 *
 	 * Check if '$' is followed by a valid variable name, and that it is not preceded by an escape sequence.
+	 *
+	 * @since 0.9.0
 	 *
 	 * @param string $string A T_DOUBLE_QUOTED_STRING token.
 	 *

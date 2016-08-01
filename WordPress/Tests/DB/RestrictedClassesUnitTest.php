@@ -7,18 +7,11 @@
  */
 
 /**
- * WordPress_Tests_DB_RestrictedFunctionsUnitTest
+ * Unit test class for the DB_RestrictedClasses sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @package   PHP\CodeSniffer\WordPress-Coding-Standards
- * @author    Akeda Bagus <akeda@x-team.com>
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
+ * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @since   0.10.0
  */
 class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
