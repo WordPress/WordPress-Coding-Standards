@@ -16,7 +16,9 @@
 class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * @since 0.8.0
+	 * Returns the lines where errors should occur.
+	 *
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		return array(
@@ -34,7 +36,9 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	}
 
 	/**
-	 * @since 0.8.0
+	 * Returns the lines where warnings should occur.
+	 *
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		return array();

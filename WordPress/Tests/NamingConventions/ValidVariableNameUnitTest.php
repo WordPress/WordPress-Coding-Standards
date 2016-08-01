@@ -26,10 +26,7 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of errors that should occur on that line.
-	 *
-	 * @return array<int, int>
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		$errors = array(
@@ -83,10 +80,7 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
-	 *
-	 * @return array<int, int>
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		return array();
