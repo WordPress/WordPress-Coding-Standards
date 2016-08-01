@@ -12,7 +12,6 @@
  *
  * Also checks that the brace is the last thing on that line and has precisely one space before it.
  *
- * Loosely based on Generic_Sniffs_Functions_OpeningFunctionBraceKernighanRitchieSniff.
  * @link      https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#brace-style
  *
  * @package   PHP\CodeSniffer\WordPress-Coding-Standards
@@ -22,8 +21,8 @@
  *
  * {@internal Upstream PR https://github.com/squizlabs/PHP_CodeSniffer/pull/1070 has been merged.
  *            If and when the WPCS minimum PHPCS version would be upped to the version
- *            that PR is contained in, this sniff and associated unit tests can be replaced by
- *            the upstream sniff Generic.Classes.OpeningBraceSameLine.}}
+ *            that PR is contained in - probably v 2.7.0 -, this sniff and associated unit tests
+ *            can be replaced by the upstream sniff Generic.Classes.OpeningBraceSameLine.}}
  */
 class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSniffer_Sniff {
 

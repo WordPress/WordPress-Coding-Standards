@@ -13,6 +13,11 @@
  * @author  Matt Robinson
  *
  * @since   0.4.0
+ *
+ * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
+ * It is currently unclear whether this sniff is actually based on Squiz code on whether the above
+ * reference to it is a copy/paste oversight.
+ * @link    Possibly: https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Operators/ComparisonOperatorUsageSniff.php
  */
 class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 

@@ -15,12 +15,13 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
  *
  * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
  *
- * Last synced with parent class July 2016 at commit 916b09a.
- * @link     https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidFunctionNameSniff.php
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  John Godley <john@urbangiraffe.com>
  *
  * @since   0.1.0
+ *
+ * Last synced with parent class July 2016 up to commit 4fea2e651109e41066a81e22e004d851fb1287f6.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 

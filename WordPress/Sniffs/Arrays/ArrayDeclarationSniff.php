@@ -30,6 +30,9 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
  *          (squizlabs/PHP_CodeSniffer#582). (I've also included a fix for another
  *          bug, squizlabs/PHP_CodeSniffer#584.) Because of this, we cannot yet
  *          eliminate duplicated logic from this child sniff."
+ *
+ * Last synced with parent class ?[unknown date]? at commit ?[unknown commit]?.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {
 

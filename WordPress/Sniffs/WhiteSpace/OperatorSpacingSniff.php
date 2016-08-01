@@ -18,6 +18,9 @@
  *
  * @since   0.1.0
  * @since   2014-12-11 This sniff now has the ability to fix the issues it flags.
+ *
+ * Last synced with base class December 2008 at commit f01746fd1c89e98174b16c76efd325825eb58bf1.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php
  */
 class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff {
 

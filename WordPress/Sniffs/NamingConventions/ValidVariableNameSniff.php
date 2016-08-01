@@ -2,9 +2,6 @@
 /**
  * WordPress Coding Standard.
  *
- * Based on Squiz_Sniffs_NamingConventions_ValidVariableNameSniff:
- * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
- *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
@@ -22,6 +19,9 @@ if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) )
  * @author  Weston Ruter <weston@x-team.com>
  *
  * @since   0.9.0
+ *
+ * Last synced with base class July 2014 at commit ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  */
 class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff {
 

@@ -16,6 +16,9 @@
  * @since   2013-06-11 This sniff no longer supports JS.
  * @since   2014-12-11 This sniff now has the ability to fix most errors it flags.
  * @since   0.7.0      This class now extends WordPress_Sniff.
+ *
+ * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
 class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
 

@@ -15,6 +15,9 @@
  * @author  John Godley <john@urbangiraffe.com>
  *
  * @since   0.1.0
+ *
+ * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Classes/ValidClassNameSniff.php
  */
 class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sniff {
 
