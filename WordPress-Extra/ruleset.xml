@@ -15,11 +15,11 @@
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
 	<rule ref="Generic.Classes.DuplicateClassName"/>
 	<rule ref="Generic.Strings.UnnecessaryStringConcat"/>
-	
+
 	<!-- This sniff is not refined enough for general use -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
 	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
-	
+
 	<!-- Hook callbacks may not use all params -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
@@ -30,11 +30,13 @@
 	<rule ref="WordPress.CSRF.NonceVerification" />
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
 	<rule ref="WordPress.WP.EnqueuedResources"/>
-	<rule ref="WordPress.WP.PreparedSQL"/>
 	<rule ref="WordPress.Variables.GlobalVariables"/>
 	<rule ref="WordPress.PHP.StrictComparisons" />
-	<rule ref="WordPress.WP.I18n" />
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray" />
+
+	<!-- Check for PHP Parse errors. -->
+	<rule ref="Generic.PHP.Syntax" />
+
 </ruleset>
