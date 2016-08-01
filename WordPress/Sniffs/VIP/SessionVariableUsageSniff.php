@@ -18,6 +18,8 @@
  * @author  Shady Sharaf <shady@x-team.com>
  *
  * @since   2014-12-11
+ * @since   0.10.0 The sniff no longer needlessly extends the Generic_Sniffs_PHP_ForbiddenFunctionsSniff
+ *                 which it didn't use.
  */
 class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_Sniff {
 

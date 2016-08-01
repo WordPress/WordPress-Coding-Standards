@@ -18,6 +18,8 @@
  *
  * @since   0.9.0
  * @since   0.10.0 This sniff not only checks for `in_array()`, but also `array_search()` and `array_keys()`.
+ *                 The sniff no longer needlessly extends the WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff
+ *                 which it didn't use.
  */
 class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 
