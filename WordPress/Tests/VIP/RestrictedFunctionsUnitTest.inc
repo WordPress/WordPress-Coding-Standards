@@ -1,90 +1,90 @@
 <?php
 
-switch_to_blog( $blogid ); // bad
+switch_to_blog( $blogid ); // Bad.
 
-eval( 'some_code' ); // bad
+eval( 'some_code' ); // Bad.
 
-create_function( 'foo', 'bar(foo);' ); // bad
+create_function( 'foo', 'bar(foo);' ); // Bad.
 
-file_get_contents( $url ); // bad
+file_get_contents( $url ); // Bad.
 
-vip_wp_file_get_contents( $url ); // bad
+vip_wp_file_get_contents( $url ); // Bad.
 
-wp_remote_get( $url ); // bad
+wp_remote_get( $url ); // Bad.
 
-$ch = curl_init(); // bad
+$ch = curl_init(); // Bad.
 
-curl_close( $ch ); // bad
+curl_close( $ch ); // Bad.
 
 // Empty line - function moved to another sniff.
 
-add_role( 'test' ); // bad
+add_role( 'test' ); // Bad.
 
-array_pop( $array ); // ok
+array_pop( $array ); // Ok.
 
 class Foo {
-	function add_role() {} // ok
+	function add_role() {} // Ok.
 }
 class Bar {
-	static function add_role() {} // ok
+	static function add_role() {} // Ok.
 }
 $x = new Foo();
-$x->add_role(); // ok
-$y = Bar::add_role(); // ok
-\SomeNamespace\add_role(); // ok
+$x->add_role(); // Ok.
+$y = Bar::add_role(); // Ok.
+\SomeNamespace\add_role(); // Ok.
 
-\add_role(); // bad
+\add_role(); // Bad.
 
-get_term_link( $term ); // bad
+get_term_link( $term ); // Bad.
 
-get_page_by_path( $path ); // bad
+get_page_by_path( $path ); // Bad.
 
-get_page_by_title( $page_title ); // bad
+get_page_by_title( $page_title ); // Bad.
 
-get_term_by( $field, $value, $taxonomy ); // bad
+get_term_by( $field, $value, $taxonomy ); // Bad.
 
-get_category_by_slug( $slug ); // bad
+get_category_by_slug( $slug ); // Bad.
 
-url_to_postid( $url ); // bad
+url_to_postid( $url ); // Bad.
 
-attachment_url_to_postid( $url ); // bad
-wpcom_vip_attachment_url_to_postid( $url ); // ok
+attachment_url_to_postid( $url ); // Bad.
+wpcom_vip_attachment_url_to_postid( $url ); // Ok.
 
-get_tag_link(); // error
-get_category_link(); // error
-get_cat_ID(); // error
-url_to_post_id(); // error
-attachment_url_to_postid(); // error
-get_posts(); // warning
-wp_get_recent_posts(); // warning
+get_tag_link(); // Error.
+get_category_link(); // Error.
+get_cat_ID(); // Error.
+url_to_post_id(); // Error.
+attachment_url_to_postid(); // Error.
+get_posts(); // Warning.
+wp_get_recent_posts(); // Warning.
 
-get_children(); // warning
-wp_get_post_terms(); // error
-wp_get_post_categories(); // error
-wp_get_post_tags(); // error
-wp_get_object_terms(); // error
-term_exists(); // error
-count_user_posts(); // error
-wp_old_slug_redirect(); // error
-get_adjacent_post(); // error
-get_previous_post(); // error
-get_next_post(); // error
-parse_url( 'http://example.com/' ); // warning
+get_children(); // Warning.
+wp_get_post_terms(); // Error.
+wp_get_post_categories(); // Error.
+wp_get_post_tags(); // Error.
+wp_get_object_terms(); // Error.
+term_exists(); // Error.
+count_user_posts(); // Error.
+wp_old_slug_redirect(); // Error.
+get_adjacent_post(); // Error.
+get_previous_post(); // Error.
+get_next_post(); // Error.
+parse_url( 'http://example.com/' ); // Warning.
 
-dl(); // error
-error_reporting(); // error
-ini_alter(); // error
-ini_restore(); // error
-ini_set(); // error
-magic_quotes_runtime(); // error
-set_magic_quotes_runtime(); // error
-apache_setenv(); // error
-putenv(); // error
-set_include_path(); // error
-restore_include_path(); // error
-phpinfo(); // error
+dl(); // Error.
+error_reporting(); // Error.
+ini_alter(); // Error.
+ini_restore(); // Error.
+ini_set(); // Error.
+magic_quotes_runtime(); // Error.
+set_magic_quotes_runtime(); // Error.
+apache_setenv(); // Error.
+putenv(); // Error.
+set_include_path(); // Error.
+restore_include_path(); // Error.
+phpinfo(); // Error.
 
-PHPINFO(); // error
-CURL_getinfo(); // error
+PHPINFO(); // Error.
+CURL_getinfo(); // Error.
 
-curlyhair(); // ok
+curlyhair(); // Ok.

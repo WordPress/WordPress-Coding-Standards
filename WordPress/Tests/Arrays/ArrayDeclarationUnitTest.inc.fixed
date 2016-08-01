@@ -1,48 +1,48 @@
 <?php
 
-$array_keyword_capitalize_first = array(); // Bad
+$array_keyword_capitalize_first = array(); // Bad.
 
-$array_keyword_must_be_lower_case = array(); // Good
+$array_keyword_must_be_lower_case = array(); // Good.
 
-$array_declaration_with_space_after_keyword = array(); // Bad
+$array_declaration_with_space_after_keyword = array(); // Bad.
 
-$space_between_parantheses_on_empty_array = array(); // Bad
+$space_between_parantheses_on_empty_array = array(); // Bad.
 
 $query_vars = array_merge(
-	array( 'post_type' => 'food' ), // Bad, no spaces after opening and befoer closing paranthesis
+	array( 'post_type' => 'food' ), // Bad, no spaces after opening and before closing paranthesis.
 	// ...
 	array(
 		'post_status' => 'private',
-		'orderby' => 'title',// Bad, no comma at the ending
+		'orderby' => 'title',// Bad, no comma at the ending.
 	)
 );
 $query = new WP_Query( $query_vars );
 
 $query_vars = array_merge(
-	array( 'post_type' => 'food' ), // Good
+	array( 'post_type' => 'food' ), // Good.
 	// ...
 	array(
 		'post_status' => 'private',
-		'orderby'     => 'title', // Good
+		'orderby'     => 'title', // Good.
 	),
 	array(
-		'closure' => function () { // Good, Closures allowed
+		'closure' => function () { // Good, closures allowed.
 			return array();
 		},
 	),
-	bar( // Good, Functions allowed
+	bar( // Good, functions allowed.
 		1,
 		2
 	)
 );
 $query = new WP_Query( $query_vars );
 
-$defaults = array( 'type' => 'post' ); // Bad, no spaces before and after double arrow
+$defaults = array( 'type' => 'post' ); // Bad, no spaces before and after double arrow.
 wp_parse_args( $args, $defaults );
 
 class Foo {
 	function to_markdown( $params = array() ) {
-		// Parse sections
+		// Parse sections.
 		$section_formatters = array(
 			'Description' => function ( $body ) use ( $params ) {
 				if ( isset( $params['travis_ci_url'] ) ) {
@@ -69,15 +69,15 @@ class Foo {
 }
 
 $primary_order   = array(
-	'n', // null
-	'b', // boolean
-	'i', // integer
-	'f', // float
-	's', // string
-	'a', // array
-	'o', // object
-	'r', // resource
-	'p', // SPL_Types object
+	'n', // Null.
+	'b', // Boolean.
+	'i', // Integer.
+	'f', // Float.
+	's', // String.
+	'a', // Array.
+	'o', // Object.
+	'r', // Resource.
+	'p', // SPL_Types object.
 );
 
 $var = array(
@@ -89,7 +89,7 @@ $var = array(
 		</div>',
 );
 
-// This should all be good:
+// This should all be good.
 $section_args = array(
 	'title' => sprintf(
 		__( 'Sidebar: %s', 'widget-customizer' ),
@@ -125,67 +125,67 @@ $actions = array(
 );
 
 $custom_fields = array(
-	'videoembed', // Press75 Simple Video Embedder
-	'_videoembed_manual', // Press75 Simple Video Embedder
-	'_videoembed', // Press75 Simple Video Embedder
-	'_premise_settings', // Premise
+	'videoembed', // Press75 Simple Video Embedder.
+	'_videoembed_manual', // Press75 Simple Video Embedder.
+	'_videoembed', // Press75 Simple Video Embedder.
+	'_premise_settings', // Premise.
 );
 
 $item_block_comment = array(
 	'item',
-	/* Some comment */
+	/* Some comment. */
 );
 
 $item_multiple_line_block_comment = array(
 	'item',
 	/* Some comment
-	   over multiple lines */
+	   over multiple lines. */
 );
 
 $block_comment = array(
-	/* Just a comment */
+	/* Just a comment. */
 );
 
 $comment = array(
-	// Just a single comment
+	// Just a single comment.
 );
 
 $multidimensional_comments = array(
 	'item_block_comment' => array(
 		'item',
-		/* comment */
+		/* Comment. */
 	),
 	'block_comment' => array(
-		/* comment */
+		/* Comment. */
 	),
 	'item_comment' => array(
 		'item',
-		// comment
+		// Comment.
 	),
 	'comment' => array(
-		// comment
+		// Comment.
 	),
-	// comment
+	// Comment.
 	array(
 		'item',
-		/* comment */
+		/* Comment. */
 	),
 	array(
-		/* comment */
+		/* Comment. */
 	),
 	array(
 		'item',
-		// comment
+		// Comment.
 	),
 	array(
-		// comment
+		// Comment.
 	),
-	// comment
+	// Comment.
 );
 
 $q = new WP_Query( array(
 	'meta_query' => array(
-		'relation' => 'and', // OK
+		'relation' => 'and', // Ok.
 		array(
 			'key' => 'asdsa',
 			'value' => 'asds',
@@ -198,7 +198,7 @@ array(
 	/**
 	 * Doc comment.
 	 */
-//  'core'
+//  'core'.
 );
 
 // Multiple values in an array on a single line is allowed.

@@ -1,23 +1,23 @@
 <?php
 
-in_array( 1, array( '1', 1, true ), true ); // OK
+in_array( 1, array( '1', 1, true ), true ); // Ok.
 
-in_array( 1, array( '1', 1, true ) ); // Warning
+in_array( 1, array( '1', 1, true ) ); // Warning.
 
-in_array( 1, array( '1', 1, true ); // Error
+in_array( 1, array( '1', 1, true ); // Error.
 
-in_array( 1, array( '1', 1, true ), false ); // Warning
-IN_ARRAY( 1, array( '1', 1, true ), false ); // Warning
+in_array( 1, array( '1', 1, true ), false ); // Warning.
+IN_ARRAY( 1, array( '1', 1, true ), false ); // Warning.
 
-Foo::in_array( 1, array( '1', 1, true ) ); // OK
+Foo::in_array( 1, array( '1', 1, true ) ); // Ok.
 Foo::
-	in_array( 1, array( '1', 1, true ) ); // OK
+	in_array( 1, array( '1', 1, true ) ); // Ok.
 
-$bar->in_array( 1, array( '1', 1, true ) ); // OK
+$bar->in_array( 1, array( '1', 1, true ) ); // Ok.
 $bar->
-	in_array( 1, array( '1', 1, true ) ); // OK
+	in_array( 1, array( '1', 1, true ) ); // Ok.
 
-in_array(); // Error
+in_array(); // Error.
 
 
 array_search( 1, $array, true ); // Ok.

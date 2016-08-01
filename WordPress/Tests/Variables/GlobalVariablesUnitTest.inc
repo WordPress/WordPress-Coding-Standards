@@ -6,4 +6,4 @@ global $wpdb;
 $wpdb = 'test';
 
 global $post;
-$post = get_post( 1 ); // override ok
+$post = get_post( 1 ); // Override ok.

@@ -1,20 +1,20 @@
 <?php
 
 $posts = get_posts( 'cat=3' );
-// Bad, no operator spacing
+// Bad, no operator spacing.
 for ( $i=0; $i<sizeof( $posts ); $i++ ) {
 	// ...
 }
 
-// Good
+// Good.
 for ( $i = 0; $i < sizeof( $posts ); $i++ ) {
 	// ...
 }
-// Good
+// Good.
 if ( ! $var ) {
 	// ...
 }
-// Bad
+// Bad.
 if ( !$var ) {
 	// ...
 }
@@ -27,7 +27,7 @@ while ( have_posts() ) {
 	);
 }
 
-// All OK
+// All OK.
 if ( 'bb' !== 'bb' ) {
 	if (
 		empty($_GET['refid']) &&
@@ -41,11 +41,11 @@ if ( 'bb' !== 'bb' ) {
 	}
 }
 
-// Bad
+// Bad.
 for ( $i =  0; $i < sizeof( $posts ); $i++ ) {
 	// ...
 }
-// Bad
+// Bad.
 if (  ! $var ) {
 	// ...
 }
