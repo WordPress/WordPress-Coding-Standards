@@ -74,7 +74,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return void
+	 * @return int|void If no groups are found, a stack pointer to indicate to skip the current one is passed.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens  = $phpcsFile->getTokens();
@@ -109,7 +109,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 				$var      = $token['content'];
 
 			} elseif ( in_array( $token['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON, T_DOUBLE_QUOTED_STRING ), true ) && ! empty( $group['object_vars'] ) ) {
-				// Object var, ex: $foo->bar / $foo::bar / Foo::bar / Foo::$bar
+				// Object var, ex: $foo->bar / $foo::bar / Foo::bar / Foo::$bar .
 				$patterns = array_merge( $patterns, $group['object_vars'] );
 
 				$owner = $phpcsFile->findPrevious( array( T_VARIABLE, T_STRING ), $stackPtr );
@@ -163,6 +163,12 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 
 	} // end process()
 
+	/**
+	 * Transform a wildcard pattern to a usable regex pattern.
+	 *
+	 * @param string $pattern Pattern.
+	 * @return string
+	 */
 	private function test_patterns( $pattern ) {
 		$pattern = preg_quote( $pattern, '#' );
 		$pattern = preg_replace(

@@ -15,6 +15,9 @@
  */
 class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends AbstractSniffUnitTest {
 
+	/**
+	 * Fill in the $groups property to test the abstract class.
+	 */
 	protected function setUp() {
 		parent::setUp();
 

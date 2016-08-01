@@ -49,8 +49,9 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 * Documented here for clarity. Not (re)defined as it is already defined in the parent class.
 	 *
 	 * @return array
+	 *
+	abstract public function getGroups();
 	 */
-	// abstract public function getGroups();
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

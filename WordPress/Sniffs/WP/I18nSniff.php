@@ -35,6 +35,11 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 */
 	static $text_domain_override;
 
+	/**
+	 * The I18N functions in use in WP.
+	 *
+	 * @var array <string function name> => <string function type>
+	 */
 	public $i18n_functions = array(
 		'translate'                      => 'simple',
 		'__'                             => 'simple',
@@ -56,13 +61,17 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 *
+	 * @var string
 	 */
-	static $sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
+	public static $sprintf_placeholder_regex = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
 
 	/**
 	 * "Unordered" means there's no position specifier: '%s', not '%2$s'.
+	 *
+	 * @var string
 	 */
-	static $unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
+	public static $unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -80,7 +89,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
 	 * @param int                  $stack_ptr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 *                                         in the stack passed in $tokens.
 	 *
 	 * @return void
 	 */
@@ -209,7 +218,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * Check if supplied tokens represent a translation text string literal.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array                $context
+	 * @param array                $context    Context (@todo needs better description).
 	 * @return bool
 	 */
 	protected function check_argument_tokens( PHP_CodeSniffer_File $phpcs_file, $context ) {
@@ -272,8 +281,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * Check for inconsistencies between single and plural arguments.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file     The file being scanned.
-	 * @param array                $single_context
-	 * @param array                $plural_context
+	 * @param int                  $stack_ptr      The position of the current token
+	 *                                             in the stack passed in $tokens.
+	 * @param array                $single_context Single context (@todo needs better description).
+	 * @param array                $plural_context Plural context (@todo needs better description).
 	 * @return void
 	 */
 	protected function compare_single_and_plural_arguments( PHP_CodeSniffer_File $phpcs_file, $stack_ptr, $single_context, $plural_context ) {
@@ -287,7 +298,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$plural_placeholders = $plural_placeholders[0];
 
 		// English conflates "singular" with "only one", described in the codex:
-		// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals
+		// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals .
 		if ( count( $single_placeholders ) < count( $plural_placeholders ) ) {
 			$error_string = 'Missing singular placeholder, needed for some languages. See https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals';
 			$single_index = $single_context['tokens'][0]['token_index'];
@@ -308,7 +319,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * Check the string itself for problems.
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array                $context
+	 * @param array                $context    Context (@todo needs better description).
 	 * @return void
 	 */
 	protected function check_text( PHP_CodeSniffer_File $phpcs_file, $context ) {
@@ -346,9 +357,11 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 		}
 
-		// NoEmptyStrings.
-
-		// Strip placeholders and surrounding quotes.
+		/*
+		 * NoEmptyStrings.
+		 *
+		 * Strip placeholders and surrounding quotes.
+		 */
 		$non_placeholder_content = trim( $content, "'" );
 		$non_placeholder_content = preg_replace( self::$sprintf_placeholder_regex, '', $non_placeholder_content );
 

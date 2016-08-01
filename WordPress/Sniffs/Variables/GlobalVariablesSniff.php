@@ -16,6 +16,11 @@
  */
 class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 
+	/**
+	 * List of global WP variables.
+	 *
+	 * @var array
+	 */
 	public $globals = array(
 		'comment',
 		'comment_alt',

@@ -66,6 +66,8 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	/**
 	 * Generates the error or warning for this sniff.
 	 *
+	 * Overloads parent addError method.
+	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the forbidden function
 	 *                                        in the token array.

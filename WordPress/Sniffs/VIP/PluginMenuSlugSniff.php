@@ -14,6 +14,11 @@
  */
 class WordPress_Sniffs_VIP_PluginMenuSlugSniff implements PHP_CodeSniffer_Sniff {
 
+	/**
+	 * Functions which can be used to add pages to the WP Admin menu.
+	 *
+	 * @var array
+	 */
 	public $add_menu_functions = array(
 		'add_menu_page',
 		'add_object_page',

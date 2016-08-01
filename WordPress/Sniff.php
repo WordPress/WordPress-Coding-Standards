@@ -611,7 +611,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return true;
 		}
 
-		// Check if this is an array assignment, e.g., $var['key'] = 'val';
+		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
 		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
 			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'] );
 		}
@@ -631,14 +631,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function has_nonce_check( $stackPtr ) {
 
 		/**
-		 * @var array {
-		 *      A cache of the scope that we last checked for nonce verification in.
+		 * A cache of the scope that we last checked for nonce verification in.
 		 *
-		 *      @var string $file  The name of the file.
-		 *      @var int    $start The index of the token where the scope started.
-		 *      @var int    $end   The index of the token where the scope ended.
-		 *      @var bool|int $nonce_check The index of the token where an nonce
-		 *                         check was found, or false if none was found.
+		 * @var array {
+		 *      @var string   $file        The name of the file.
+		 *      @var int      $start       The index of the token where the scope started.
+		 *      @var int      $end         The index of the token where the scope ended.
+		 *      @var bool|int $nonce_check The index of the token where an nonce check
+		 *                                 was found, or false if none was found.
 		 * }
 		 */
 		static $last;
@@ -971,7 +971,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function is_validated( $stackPtr, $array_key = null, $in_condition_only = false ) {
 
 		if ( $in_condition_only ) {
-
 			/*
 			   This is a stricter check, requiring the variable to be used only
 			   within the validation condition.
@@ -1002,7 +1001,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$scope_end   = $condition['parenthesis_closer'];
 
 		} else {
-
 			/*
 			   We are are more loose, requiring only that the variable be validated
 			   in the same function/file scope as it is used.

@@ -74,13 +74,13 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 		}
 
 		if ( T_BITWISE_AND === $tokens[ $stackPtr ]['code'] ) {
-			// If its not a reference, then we expect one space either side of the
+			/*
+			// If it's not a reference, then we expect one space either side of the
 			// bitwise operator.
-			// if ( false === $phpcsFile->isReference( $stackPtr ) ) {
-				// @todo Implement  or remove ?
-
-			// } // end if
-
+			if ( false === $phpcsFile->isReference( $stackPtr ) ) {
+				// @todo Implement or remove ?
+			}
+			*/
 			return;
 
 		} else {

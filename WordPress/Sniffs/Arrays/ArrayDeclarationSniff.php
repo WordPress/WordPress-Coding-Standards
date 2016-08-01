@@ -23,7 +23,15 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {
 
 	/**
+	 * Process a single line array.
+	 *
 	 * @since 0.5.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
+	 * @param int                  $stackPtr   The position of the current token
+	 *                                         in the stack passed in $tokens.
+	 * @param int                  $arrayStart Position of the array opener in the token stack.
+	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
 	 */
 	public function processSingleLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
 
@@ -83,7 +91,15 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 	}
 
 	/**
+	 * Process a multi-line array.
+	 *
 	 * @since 0.5.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
+	 * @param int                  $stackPtr   The position of the current token
+	 *                                         in the stack passed in $tokens.
+	 * @param int                  $arrayStart Position of the array opener in the token stack.
+	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
 	 */
 	public function processMultiLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
 		$tokens       = $phpcsFile->getTokens();
@@ -458,7 +474,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				}
 			} // End for.
 
-			//if ( $nextComma === false || ( $tokens[ $nextComma ]['line'] !== $valueLine ) ) {
 			if ( false === $nextComma ) {
 				$error = 'Each line in an array declaration must end in a comma';
 				$fix   = $phpcsFile->addFixableError( $error, $index['value'], 'NoComma' );

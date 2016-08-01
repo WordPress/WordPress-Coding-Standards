@@ -55,6 +55,19 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
 		'session_write_close'       => null,
 	);
 
+	/**
+	 * Generates the error or warning for this sniff.
+	 *
+	 * Overloads parent addError method.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the forbidden function
+	 *                                        in the token array.
+	 * @param string               $function  The name of the forbidden function.
+	 * @param string               $pattern   The pattern used for the match.
+	 *
+	 * @return void
+	 */
 	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null ) {
 		$data  = array( $function );
 		$error = 'The use of PHP session function %s() is prohibited.';

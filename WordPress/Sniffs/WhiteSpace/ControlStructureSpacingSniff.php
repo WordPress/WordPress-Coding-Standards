@@ -51,7 +51,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 	/**
 	 * How many spaces should be between a T_CLOSURE and T_OPEN_PARENTHESIS.
 	 *
-	 * function[*]() {...}
+	 * `function[*]() {...}`
 	 *
 	 * @since 0.7.0
 	 *

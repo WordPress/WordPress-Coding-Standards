@@ -277,7 +277,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 
 			'urlencode' => array(
 				'type'      => 'warning',
-				'message'   => '%s urlencode should only be used when dealing with legacy applications rawurlencode should now de used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
+				'message'   => '%s urlencode should only be used when dealing with legacy applications rawurlencode should now be used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
 				'functions' => array(
 					'rawurlencode',
 				),
