@@ -17,7 +17,7 @@
  * @author  Shady Sharaf <shady@x-team.com>
  *
  * @since   2014-12-11
- * @since   0.7.0 This sniff now has the ability to fix number of the issues it flags.
+ * @since   0.7.0 This sniff now has the ability to fix a number of the issues it flags.
  */
 class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_CodeSniffer_Sniff {
 
