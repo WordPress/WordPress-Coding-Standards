@@ -4,6 +4,8 @@
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
