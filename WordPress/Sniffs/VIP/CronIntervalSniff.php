@@ -134,7 +134,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 */
-	public function confused( $phpcsFile, $stackPtr ) {
+	public function confused( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$phpcsFile->addWarning(
 			'Detected changing of cron_schedules, but could not detect the interval value.',
 			$stackPtr,

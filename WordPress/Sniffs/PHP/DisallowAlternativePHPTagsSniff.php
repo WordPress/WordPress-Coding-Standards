@@ -198,7 +198,7 @@ class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSn
 	 * @param int                  $close_tag_pointer Stack pointer to the PHP close tag.
 	 * @param bool                 $echo              Whether to add 'echo' or not.
 	 */
-	private function add_changeset( $phpcsFile, $tokens, $open_tag_pointer, $close_tag_pointer, $echo = false ) {
+	private function add_changeset( PHP_CodeSniffer_File $phpcsFile, $tokens, $open_tag_pointer, $close_tag_pointer, $echo = false ) {
 		// Build up the open tag replacement and make sure there's always whitespace behind it.
 		$open_replacement = '<?php';
 		if ( true === $echo ) {
