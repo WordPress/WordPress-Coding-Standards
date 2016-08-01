@@ -2,8 +2,7 @@
 /**
  * Enforces spacing around casting of variables, based upon Squiz code.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)
@@ -16,8 +15,7 @@
  *
  * Ensure cast statements don't contain whitespace.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006-2014 Squiz Pty Ltd (ABN 77 084 670 600)

@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -12,8 +11,7 @@
  *
  * @link     http://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Shady Sharaf <shady@x-team.com>
  */
 class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_CodeSniffer_Sniff {

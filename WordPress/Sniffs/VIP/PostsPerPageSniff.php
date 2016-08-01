@@ -2,16 +2,14 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Flag returning high or infinite posts_per_page.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Shady Sharaf <shady@x-team.com>
  */
 class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {

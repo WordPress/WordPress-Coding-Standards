@@ -4,8 +4,7 @@
  *
  * @since 0.5.0
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  */
 
 /**
@@ -15,8 +14,7 @@
  *
  * @since    0.5.0
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   J.D. Grimes <jdg@codesymphony.co>
  */
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {

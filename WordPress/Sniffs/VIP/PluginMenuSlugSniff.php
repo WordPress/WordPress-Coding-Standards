@@ -2,16 +2,14 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Warn about __FILE__ for page registration.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Shady Sharaf <shady@x-team.com>
  */
 class WordPress_Sniffs_VIP_PluginMenuSlugSniff implements PHP_CodeSniffer_Sniff {

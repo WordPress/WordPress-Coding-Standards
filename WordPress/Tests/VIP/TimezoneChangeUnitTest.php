@@ -2,16 +2,14 @@
 /**
  * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * WordPress_Tests_VIP_TimezoneChangeUnitTest
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Shady Sharaf <shady@x-team.com>
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */

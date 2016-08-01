@@ -2,8 +2,7 @@
 /**
  * Enforces spacing around logical operators and assignments, based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>
@@ -14,8 +13,7 @@
  *
  * Checks that any array declarations are lower case.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>

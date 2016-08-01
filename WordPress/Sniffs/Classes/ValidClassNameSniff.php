@@ -2,8 +2,7 @@
 /**
  * Modified Squiz_Sniffs_Classes_ValidClassNameSniff.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
@@ -17,8 +16,7 @@
  *
  * Ensures classes are in camel caps, and the first letter is capitalised
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)

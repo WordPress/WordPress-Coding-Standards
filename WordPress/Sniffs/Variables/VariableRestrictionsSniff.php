@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -17,8 +16,7 @@
  *                   sniff from custom phpcs.xml files.
  *                   This file is also still used to unit test the abstract class.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Shady Sharaf <shady@x-team.com>
  */
 class WordPress_Sniffs_Variables_VariableRestrictionsSniff extends WordPress_AbstractVariableRestrictionsSniff {

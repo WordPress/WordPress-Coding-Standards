@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -12,7 +11,7 @@
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
- * @package WordPress-Coding-Standards
+ * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @since 0.8.0
  */
 class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {

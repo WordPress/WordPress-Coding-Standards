@@ -2,7 +2,6 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
  * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
@@ -14,7 +13,6 @@
  *
  * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/580
  *
- * @category PHP
  * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */

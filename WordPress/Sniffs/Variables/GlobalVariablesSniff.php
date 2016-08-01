@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -12,8 +11,7 @@
  *
  * Warns about usage of global variables used by WordPress
  *
- * @category PHP
- * @package  WordPress_Coding_Standards
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Shady Sharaf <shady@x-team.com>
  */
 class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {

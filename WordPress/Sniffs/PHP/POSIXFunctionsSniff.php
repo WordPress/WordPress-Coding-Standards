@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -14,8 +13,7 @@
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#regular-expressions
  * @link     http://php.net/manual/en/ref.regex.php
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
 class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {

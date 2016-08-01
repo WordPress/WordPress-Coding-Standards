@@ -2,8 +2,7 @@
 /**
  * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -13,8 +12,7 @@
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
 class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSniffUnitTest {

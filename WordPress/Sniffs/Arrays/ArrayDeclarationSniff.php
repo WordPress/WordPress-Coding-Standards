@@ -2,8 +2,7 @@
 /**
  * Enforces WordPress array format, based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>
@@ -16,8 +15,7 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
 /**
  * Enforces WordPress array format.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>

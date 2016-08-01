@@ -5,8 +5,7 @@
  * Based on Squiz_Sniffs_NamingConventions_ValidVariableNameSniff:
  * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @author    Weston Ruter
@@ -24,8 +23,7 @@ if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) )
  *
  * Checks the naming of variables and member variables.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @author    Weston Ruter

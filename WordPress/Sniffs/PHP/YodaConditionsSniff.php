@@ -2,16 +2,14 @@
 /**
  * Enforces Yoda conditional statements , based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Matt Robinson
  */
 
 /**
  * Enforces Yoda conditional statements.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  * @author   Greg Sherwood <gsherwood@squiz.net>
  * @author   Marc McIntyre <mmcintyre@squiz.net>

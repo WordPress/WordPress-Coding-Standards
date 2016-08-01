@@ -2,8 +2,7 @@
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  */
 
 /**
@@ -11,8 +10,7 @@
  *
  * Provides a bootstrap for the sniffs, to reduce code duplication.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @version   0.4.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */

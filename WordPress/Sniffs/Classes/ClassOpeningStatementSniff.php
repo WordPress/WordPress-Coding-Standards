@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -17,8 +16,7 @@
  *
  * Loosely based on Generic_Sniffs_Functions_OpeningFunctionBraceKernighanRitchieSniff.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
  */
 class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSniffer_Sniff {

@@ -2,8 +2,7 @@
 /**
  * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
@@ -11,6 +10,8 @@
  * Unit test class for the PreparedSQL sniff.
  *
  * @since 0.8.0
+ *
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  */
 class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 

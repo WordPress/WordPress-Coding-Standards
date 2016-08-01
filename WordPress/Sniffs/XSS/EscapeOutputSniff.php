@@ -2,8 +2,7 @@
 /**
  * Squiz_Sniffs_XSS_EscapeOutputSniff.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Weston Ruter <weston@x-team.com>
  */
 
@@ -12,8 +11,7 @@
  *
  * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   Weston Ruter <weston@x-team.com>
  */
 class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {

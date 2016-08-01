@@ -2,8 +2,7 @@
 /**
  * WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  */
 
@@ -16,8 +15,7 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
  *
  * Discourages the use of debug functions and suggests deprecated WordPress alternatives
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  */
 class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {

@@ -2,16 +2,14 @@
 /**
  * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
 /**
  * Unit test class for the EnqueuedResources sniff.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Shady Sharaf <shady@x-team.com>
  */
 class WordPress_Tests_WP_EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {

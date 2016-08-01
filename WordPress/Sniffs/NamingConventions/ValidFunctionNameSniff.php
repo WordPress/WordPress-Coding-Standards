@@ -2,8 +2,7 @@
 /**
  * Enforces WordPress function name format.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  */
 
@@ -19,8 +18,7 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
  * Last synced with parent class July 2016 at commit 916b09a.
  * @link     https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidFunctionNameSniff.php
  *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package  PHP\CodeSniffer\WordPress-Coding-Standards
  * @author   John Godley <john@urbangiraffe.com>
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
