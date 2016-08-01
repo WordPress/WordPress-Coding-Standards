@@ -94,8 +94,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
 		$this->init( $phpcsFile );
 
-		$tokens   = $phpcsFile->getTokens();
-		$instance = $tokens[ $stackPtr ];
+		$instance = $this->tokens[ $stackPtr ];
 
 		$superglobals = array_merge(
 			$this->errorForSuperGlobals

@@ -78,13 +78,13 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		// Merge any custom functions with the defaults, if we haven't already.
 		if ( ! self::$addedCustomFunctions ) {
 
-			WordPress_Sniff::$sanitizingFunctions = array_merge(
-				WordPress_Sniff::$sanitizingFunctions,
+			self::$sanitizingFunctions = array_merge(
+				self::$sanitizingFunctions,
 				array_flip( $this->customSanitizingFunctions )
 			);
 
-			WordPress_Sniff::$unslashingSanitizingFunctions = array_merge(
-				WordPress_Sniff::$unslashingSanitizingFunctions,
+			self::$unslashingSanitizingFunctions = array_merge(
+				self::$unslashingSanitizingFunctions,
 				array_flip( $this->customUnslashingSanitizingFunctions )
 			);
 
@@ -92,24 +92,23 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		}
 
 		$this->init( $phpcsFile );
-		$tokens = $phpcsFile->getTokens();
-		$superglobals = WordPress_Sniff::$input_superglobals;
+		$superglobals = self::$input_superglobals;
 
 		// Handling string interpolation.
-		if ( T_DOUBLE_QUOTED_STRING === $tokens[ $stackPtr ]['code'] ) {
+		if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			$interpolated_variables = array_map(
 				create_function( '$symbol', 'return "$" . $symbol;' ), // Replace with closure when 5.3 is minimum requirement for PHPCS.
-				$this->get_interpolated_variables( $tokens[ $stackPtr ]['content'] )
+				$this->get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
 			);
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
-				$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $tokens[ $stackPtr ]['content'] ) );
+				$phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $this->tokens[ $stackPtr ]['content'] ) );
 			}
 
 			return;
 		}
 
 		// Check if this is a superglobal.
-		if ( ! in_array( $tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
 			return;
 		}
 
@@ -129,7 +128,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			return;
 		}
 
-		$error_data = array( $tokens[ $stackPtr ]['content'] );
+		$error_data = array( $this->tokens[ $stackPtr ]['content'] );
 
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {

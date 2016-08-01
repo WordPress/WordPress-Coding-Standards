@@ -7,6 +7,10 @@
  * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
  */
 
+if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
+	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
+}
+
 /**
  * Disallow Filesystem writes.
  *

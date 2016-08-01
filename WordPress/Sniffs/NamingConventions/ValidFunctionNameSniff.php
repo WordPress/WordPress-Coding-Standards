@@ -7,6 +7,10 @@
  * @author   John Godley <john@urbangiraffe.com>
  */
 
+if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', true ) ) {
+	throw new PHP_CodeSniffer_Exception( 'Class PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff not found' );
+}
+
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
  *

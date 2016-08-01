@@ -7,7 +7,7 @@
  * @author   John Godley <john@urbangiraffe.com>
  */
 
-if ( false === class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
+if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
 }
 
