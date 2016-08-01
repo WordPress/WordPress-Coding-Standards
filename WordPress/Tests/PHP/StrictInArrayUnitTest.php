@@ -55,4 +55,4 @@ class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 		);
 	} // end getWarningList()
 
-} // end class
+} // End class.

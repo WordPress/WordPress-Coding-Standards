@@ -121,4 +121,4 @@ class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 		}
 	} // end process()
 
-} // end class
+} // End class.

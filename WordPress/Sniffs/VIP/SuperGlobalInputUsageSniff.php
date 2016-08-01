@@ -59,4 +59,4 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
 	} // end process()
 
-} // end class
+} // End class.

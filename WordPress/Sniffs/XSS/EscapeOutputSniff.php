@@ -345,4 +345,4 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 	} // end process()
 
-} // end class
+} // End class.

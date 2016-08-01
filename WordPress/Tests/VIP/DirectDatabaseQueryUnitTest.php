@@ -55,4 +55,4 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

@@ -203,4 +203,4 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 
 	} // end process()
 
-} // end class
+} // End class.

@@ -119,4 +119,4 @@ class WordPress_Tests_NamingConventions_ValidHookNameUnitTest extends AbstractSn
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

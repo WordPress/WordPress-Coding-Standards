@@ -95,4 +95,4 @@ class WordPress_Tests_DB_RestrictedFunctionsUnitTest extends AbstractSniffUnitTe
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

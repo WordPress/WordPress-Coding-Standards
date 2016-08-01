@@ -56,4 +56,4 @@ class WordPress_Tests_PHP_POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

@@ -40,4 +40,4 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 		return array();
 	} // end getWarningList()
 
-} // end class.
+} // End class.

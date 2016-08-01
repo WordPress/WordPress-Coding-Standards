@@ -152,4 +152,4 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 
 	}
 
-} // end class
+} // End class.

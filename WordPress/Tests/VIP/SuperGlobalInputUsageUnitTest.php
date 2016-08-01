@@ -44,4 +44,4 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 		);
 	} // end getWarningList()
 
-} // end class
+} // End class.

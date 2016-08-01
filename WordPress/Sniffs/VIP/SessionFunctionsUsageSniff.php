@@ -63,4 +63,4 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
 
 	} // end addError()
 
-} // end class
+} // End class.

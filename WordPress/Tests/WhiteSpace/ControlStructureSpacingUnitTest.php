@@ -92,4 +92,4 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

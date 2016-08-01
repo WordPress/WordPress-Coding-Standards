@@ -54,4 +54,4 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

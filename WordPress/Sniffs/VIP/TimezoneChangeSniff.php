@@ -40,4 +40,4 @@ class WordPress_Sniffs_VIP_TimezoneChangeSniff extends Generic_Sniffs_PHP_Forbid
 
 	} // end addError()
 
-} // end class
+} // End class.

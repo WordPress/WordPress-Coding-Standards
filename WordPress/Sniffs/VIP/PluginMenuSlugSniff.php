@@ -72,4 +72,4 @@ class WordPress_Sniffs_VIP_PluginMenuSlugSniff implements PHP_CodeSniffer_Sniff 
 
 	} // end process()
 
-} // end class
+} // End class.

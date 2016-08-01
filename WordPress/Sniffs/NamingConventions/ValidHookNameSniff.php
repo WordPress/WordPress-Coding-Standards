@@ -279,4 +279,4 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 		return implode( '', $output );
 	} // end transform_complex_string()
 
-} // end class
+} // End class.

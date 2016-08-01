@@ -51,4 +51,4 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_
 
 	} // end process()
 
-} // end class
+} // End class.

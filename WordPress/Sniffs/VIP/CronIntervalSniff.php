@@ -131,4 +131,4 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 		$phpcsFile->addWarning( 'Detected changing of cron_schedules, but could not detect the interval value.', $stackPtr, 'ChangeDetected' );
 	} // end confused()
 
-} // end class
+} // End class.

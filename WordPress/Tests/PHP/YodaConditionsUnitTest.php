@@ -60,4 +60,4 @@ class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest {
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

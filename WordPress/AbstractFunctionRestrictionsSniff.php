@@ -207,4 +207,4 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 		return $function;
 	}
 
-} // end class
+} // End class.

@@ -93,4 +93,4 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

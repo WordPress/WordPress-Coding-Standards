@@ -44,4 +44,4 @@ class WordPress_Tests_VIP_SessionVariableUsageUnitTest extends AbstractSniffUnit
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

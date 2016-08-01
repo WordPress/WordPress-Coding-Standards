@@ -43,4 +43,4 @@ class WordPress_Tests_VIP_TimezoneChangeUnitTest extends AbstractSniffUnitTest {
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

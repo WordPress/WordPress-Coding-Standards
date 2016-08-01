@@ -77,4 +77,4 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
 
 	} // end process()
 
-} // end class
+} // End class.

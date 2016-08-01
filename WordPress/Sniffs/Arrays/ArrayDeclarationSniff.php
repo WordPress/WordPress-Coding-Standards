@@ -494,4 +494,4 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 	} // end processMultiLineArray()
 
-} // end class
+} // End class.

@@ -37,4 +37,4 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff extends WordPress_Abs
 		return array();
 	}
 
-} // end class
+} // End class.

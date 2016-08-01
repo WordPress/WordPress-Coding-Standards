@@ -64,4 +64,4 @@ class WordPress_Tests_NamingConventions_ValidFunctionNameUnitTest extends Abstra
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

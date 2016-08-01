@@ -72,4 +72,4 @@ class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_AbstractArrayAssi
 		}
 	} // end callback()
 
-} // end class
+} // End class.

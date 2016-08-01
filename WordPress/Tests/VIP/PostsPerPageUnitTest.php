@@ -48,4 +48,4 @@ class WordPress_Tests_VIP_PostsPerPageUnitTest extends AbstractSniffUnitTest {
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

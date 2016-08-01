@@ -100,4 +100,4 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff 
 
 	} // end process()
 
-} // end class
+} // End class.

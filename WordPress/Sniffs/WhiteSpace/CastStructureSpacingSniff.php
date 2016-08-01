@@ -78,4 +78,4 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeS
 	 */
 	public $error = false;
 
-} // end class
+} // End class.

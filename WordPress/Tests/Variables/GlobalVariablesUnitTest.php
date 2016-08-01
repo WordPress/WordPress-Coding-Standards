@@ -44,4 +44,4 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

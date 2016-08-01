@@ -58,4 +58,4 @@ class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSnif
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

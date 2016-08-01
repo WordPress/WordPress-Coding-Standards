@@ -49,4 +49,4 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 
 	} // end process()
 
-} // end class
+} // End class.

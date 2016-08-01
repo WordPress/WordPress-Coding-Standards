@@ -60,4 +60,4 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

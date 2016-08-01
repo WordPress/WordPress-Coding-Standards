@@ -54,4 +54,4 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 		return true;
 	} // end callback()
 
-} // end class
+} // End class.

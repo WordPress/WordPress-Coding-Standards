@@ -72,4 +72,4 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

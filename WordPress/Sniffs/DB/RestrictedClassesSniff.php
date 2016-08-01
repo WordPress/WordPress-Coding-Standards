@@ -50,4 +50,4 @@ class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClass
 		);
 	}
 
-} // end class
+} // End class.

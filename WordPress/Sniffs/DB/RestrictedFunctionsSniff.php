@@ -57,4 +57,4 @@ class WordPress_Sniffs_DB_RestrictedFunctionsSniff extends WordPress_AbstractFun
 		);
 	}
 
-} // end class
+} // End class.

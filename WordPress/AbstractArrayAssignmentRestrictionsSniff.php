@@ -193,4 +193,4 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	 */
 	abstract public function callback( $key, $val, $line, $group );
 
-} // end class
+} // End class.

@@ -48,4 +48,4 @@ class WordPress_Tests_Functions_DontExtractUnitTest extends AbstractSniffUnitTes
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

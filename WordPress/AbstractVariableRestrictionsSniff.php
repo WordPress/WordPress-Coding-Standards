@@ -173,4 +173,4 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 		return $pattern;
 	} // end test_patterns()
 
-} // end class
+} // End class.

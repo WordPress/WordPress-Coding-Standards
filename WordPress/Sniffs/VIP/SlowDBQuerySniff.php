@@ -80,4 +80,4 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 		return true;
 	} // end callback()
 
-} // end class
+} // End class.

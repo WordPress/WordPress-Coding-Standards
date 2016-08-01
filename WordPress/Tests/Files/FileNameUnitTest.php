@@ -48,4 +48,4 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

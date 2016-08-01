@@ -208,4 +208,4 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 	} // end process()
 
-} // end class
+} // End class.

@@ -53,4 +53,4 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 
 	} // end process()
 
-} // end class
+} // End class.

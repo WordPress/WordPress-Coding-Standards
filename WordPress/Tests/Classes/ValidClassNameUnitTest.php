@@ -50,4 +50,4 @@ class WordPress_Tests_Classes_ValidClassNameUnitTest extends AbstractSniffUnitTe
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

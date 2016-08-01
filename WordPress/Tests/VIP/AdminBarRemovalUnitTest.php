@@ -44,4 +44,4 @@ class WordPress_Tests_VIP_AdminBarRemovalUnitTest extends AbstractSniffUnitTest 
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

@@ -46,4 +46,4 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

@@ -40,4 +40,4 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff extends WordPress_Abs
 		return parent::$groups;
 	}
 
-} // end class
+} // End class.

@@ -216,4 +216,4 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		return $name;
 	} // end findExtendedClassName()
 
-} // end class
+} // End class.

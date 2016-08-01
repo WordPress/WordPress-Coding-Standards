@@ -58,4 +58,4 @@ class WordPress_Tests_WP_EnqueuedResourcesUnitTest extends AbstractSniffUnitTest
 
 	} // end getWarningList()
 
-} // end class
+} // End class.

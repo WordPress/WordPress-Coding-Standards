@@ -86,4 +86,4 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 
 	} // end addError()
 
-} // end class
+} // End class.

@@ -86,4 +86,4 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 		return $register;
 	}
 
-} // end class
+} // End class.

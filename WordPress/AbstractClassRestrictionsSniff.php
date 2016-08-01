@@ -258,4 +258,4 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		return $namespace;
 	}
 
-} // end class
+} // End class.

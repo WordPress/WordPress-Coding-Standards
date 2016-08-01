@@ -241,4 +241,4 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
 	} // end isSnakeCase()
 
-} // end class
+} // End class.
