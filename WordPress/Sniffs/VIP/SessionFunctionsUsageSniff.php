@@ -13,7 +13,7 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 /**
  * Discourages the use of session functions.
  *
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
@@ -73,7 +73,6 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
 		$error = 'The use of PHP session function %s() is prohibited.';
 
 		$phpcsFile->addError( $error, $stackPtr, $function, $data );
-
 	}
 
 } // End class.

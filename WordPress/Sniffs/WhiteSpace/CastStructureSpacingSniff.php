@@ -9,6 +9,7 @@
 /**
  * Ensure cast statements don't contain whitespace, but *are* surrounded by whitespace, based upon Squiz code.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Matt Robinson

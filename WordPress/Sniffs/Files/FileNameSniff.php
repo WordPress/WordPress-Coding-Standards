@@ -9,6 +9,8 @@
 /**
  * Ensures filenames do not contain underscores.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  John Godley <john@urbangiraffe.com>
  *

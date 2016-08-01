@@ -9,6 +9,7 @@
 /**
  * Ensures classes are in camel caps, and the first letter is capitalised.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  John Godley <john@urbangiraffe.com>

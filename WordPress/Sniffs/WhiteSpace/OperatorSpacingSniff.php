@@ -9,6 +9,9 @@
 /**
  * Verify operator spacing, based upon Squiz code.
  *
+ * "Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators."
+ *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  John Godley <john@urbangiraffe.com>

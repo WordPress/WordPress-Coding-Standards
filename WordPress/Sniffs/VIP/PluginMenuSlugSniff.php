@@ -9,6 +9,8 @@
 /**
  * Warn about __FILE__ for page registration.
  *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#using-__file__-for-page-registration
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *

@@ -9,6 +9,8 @@
 /**
  * Enforces Yoda conditional statements.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#yoda-conditions
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Matt Robinson
  *

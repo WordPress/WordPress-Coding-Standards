@@ -10,7 +10,7 @@
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>

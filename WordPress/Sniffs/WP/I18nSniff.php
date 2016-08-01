@@ -9,6 +9,8 @@
 /**
  * Makes sure WP internationalization functions are used properly.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/internationalization/
+ * @link    https://developer.wordpress.org/plugins/internationalization/
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Weston Ruter <weston@x-team.com>

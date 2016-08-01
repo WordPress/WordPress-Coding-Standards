@@ -9,6 +9,8 @@
 /**
  * Flag returning high or infinite posts_per_page.
  *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#no-limit-queries
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *

@@ -9,6 +9,8 @@
 /**
  * Flag potentially slow queries.
  *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *

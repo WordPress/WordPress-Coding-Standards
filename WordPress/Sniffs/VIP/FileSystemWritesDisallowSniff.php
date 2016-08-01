@@ -13,7 +13,7 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 /**
  * Disallow Filesystem writes.
  *
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>

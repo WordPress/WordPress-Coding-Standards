@@ -9,7 +9,8 @@
 /**
  * Flag Database direct queries.
  *
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>

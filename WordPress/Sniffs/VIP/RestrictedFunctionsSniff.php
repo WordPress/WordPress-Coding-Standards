@@ -34,13 +34,14 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 	 */
 	public function getGroups() {
 		return array(
-
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#switch_to_blog
 			'switch_to_blog' => array(
 				'type'      => 'error',
 				'message'   => '%s is not something you should ever need to do in a VIP theme context. Instead use an API (XML-RPC, REST) to interact with other sites if needed.',
 				'functions' => array( 'switch_to_blog' ),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function
 			'create_function' => array(
 				'type'      => 'warning',
 				'message'   => '%s is discouraged, please use Anonymous functions instead.',
@@ -49,6 +50,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function
 			'eval' => array(
 				'type'      => 'error',
 				'message'   => '%s is prohibited, please use Anonymous functions instead.',
@@ -126,6 +128,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls
 			'wp_remote_get' => array(
 				'type'      => 'warning',
 				'message'   => '%s is highly discouraged, please use vip_safe_wp_remote_get() instead.',
@@ -134,6 +137,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls
 			'curl' => array(
 				'type'      => 'warning',
 				'message'   => 'Using cURL functions is highly discouraged within VIP context. Check (Fetching Remote Data) on VIP Documentation.',
@@ -142,6 +146,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#custom-roles
 			'custom_role' => array(
 				'type'      => 'error',
 				'message'   => 'Use wpcom_vip_add_role() instead of add_role()',
@@ -150,6 +155,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#caching-constraints
 			'cookies' => array(
 				'type'      => 'warning',
 				'message'   => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
@@ -158,6 +164,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#working-with-wp_users-and-user_meta
 			'user_meta' => array(
 				'type'      => 'error',
 				'message'   => '%s() usage is highly discouraged, check VIP documentation on "Working with wp_users"',
@@ -227,6 +234,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_parse_url-instead-of-parse_url
 			'parse_url' => array(
 				'type'      => 'warning',
 				'message'   => '%s is discouraged due to a lack for backwards-compatibility in PHP versions; please use wp_parse_url() instead.',
@@ -243,6 +251,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#serializing-data
 			'serialize' => array(
 				'type'      => 'warning',
 				'message'   => '%s Serialized data has <a href=\'https://www.owasp.org/index.php/PHP_Object_Injection\'>known vulnerability problems</a> with Object Injection. JSON is generally a better approach for serializing data.',
@@ -252,6 +261,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#commented-out-code-debug-code-or-output
 			'error_log' => array(
 				'type'      => 'error',
 				'message'   => '%s Debug code is not allowed on VIP Production',
@@ -264,6 +274,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect
 			'wp_redirect' => array(
 				'type'     => 'warning',
 				'message'   => '%s Using wp_safe_redirect(), along with the allowed_redirect_hosts filter, can help avoid any chances of malicious redirects within code. It’s also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
@@ -272,6 +283,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#mobile-detection
 			'wp_is_mobile' => array(
 				'type'      => 'error',
 				'message'   => '%s When targeting mobile visitors, jetpack_is_mobile() should be used instead of wp_is_mobile. It is more robust and works better with full page caching.',
@@ -280,6 +292,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#encoding-values-used-when-creating-a-url-or-passed-to-add_query_arg
 			'urlencode' => array(
 				'type'      => 'warning',
 				'message'   => '%s urlencode should only be used when dealing with legacy applications rawurlencode should now be used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
@@ -288,6 +301,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration
 			'runtime_configuration' => array(
 				'type'      => 'error',
 				'message'   => '%s is prohibited, changing configuration at runtime is not allowed on VIP Production.',

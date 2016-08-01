@@ -13,6 +13,7 @@
  * Also checks that the brace is the last thing on that line and has precisely one space before it.
  *
  * Loosely based on Generic_Sniffs_Functions_OpeningFunctionBraceKernighanRitchieSniff.
+ * @link      https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#brace-style
  *
  * @package   PHP\CodeSniffer\WordPress-Coding-Standards
  * @author    Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>

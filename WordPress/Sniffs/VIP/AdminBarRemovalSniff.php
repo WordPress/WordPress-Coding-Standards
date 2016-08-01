@@ -9,6 +9,8 @@
 /**
  * Discourages removal of the admin bar.
  *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#removing-the-admin-bar
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *

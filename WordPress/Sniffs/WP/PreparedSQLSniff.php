@@ -11,6 +11,8 @@
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#formatting-sql-statements
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  J.D. Grimes <jdg@codesymphony.co>
  *

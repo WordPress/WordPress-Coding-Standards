@@ -9,6 +9,8 @@
 /**
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.
  *
+ * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#inline-resources
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *

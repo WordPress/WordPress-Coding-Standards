@@ -9,6 +9,8 @@
 /**
  * Flag cron schedules less than 15 minutes.
  *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *

@@ -13,6 +13,8 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
 /**
  * Enforces WordPress array format, based upon Squiz code.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
+ *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  John Godley <john@urbangiraffe.com>
  *

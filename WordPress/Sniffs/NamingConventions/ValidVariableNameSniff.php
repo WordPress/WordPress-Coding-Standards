@@ -16,6 +16,7 @@ if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) )
 /**
  * Checks the naming of variables and member variables.
  *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Weston Ruter <weston@x-team.com>
