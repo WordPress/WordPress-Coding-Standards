@@ -61,6 +61,6 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
 
 		$phpcsFile->addError( $error, $stackPtr, $function, $data );
 
-	} // end addError()
+	}
 
 } // End class.

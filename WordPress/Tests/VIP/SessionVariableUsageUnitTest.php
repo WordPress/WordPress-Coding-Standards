@@ -29,7 +29,7 @@ class WordPress_Tests_VIP_SessionVariableUsageUnitTest extends AbstractSniffUnit
 			4 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -42,6 +42,6 @@ class WordPress_Tests_VIP_SessionVariableUsageUnitTest extends AbstractSniffUnit
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

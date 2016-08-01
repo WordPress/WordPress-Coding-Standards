@@ -36,7 +36,7 @@ class WordPress_Tests_VIP_RestrictedVariablesUnitTest extends AbstractSniffUnitT
 			9 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -53,6 +53,6 @@ class WordPress_Tests_VIP_RestrictedVariablesUnitTest extends AbstractSniffUnitT
 			17 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

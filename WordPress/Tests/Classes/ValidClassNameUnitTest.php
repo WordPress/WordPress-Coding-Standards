@@ -35,7 +35,7 @@ class WordPress_Tests_Classes_ValidClassNameUnitTest extends AbstractSniffUnitTe
 			7 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -48,6 +48,6 @@ class WordPress_Tests_Classes_ValidClassNameUnitTest extends AbstractSniffUnitTe
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

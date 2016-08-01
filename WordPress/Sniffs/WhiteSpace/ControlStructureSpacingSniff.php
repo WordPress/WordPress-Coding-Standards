@@ -79,7 +79,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			T_USE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

@@ -100,7 +100,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			T_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

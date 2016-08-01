@@ -456,7 +456,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					$nextComma = $i;
 					break;
 				}
-			} // end for
+			} // End for.
 
 			//if ( $nextComma === false || ( $tokens[ $nextComma ]['line'] !== $valueLine ) ) {
 			if ( false === $nextComma ) {

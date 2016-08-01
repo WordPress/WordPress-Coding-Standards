@@ -99,6 +99,6 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			102 => 1,
 			103 => 1,
 		);
-	} // end getWarningList()
+	}
 
 } // End class.

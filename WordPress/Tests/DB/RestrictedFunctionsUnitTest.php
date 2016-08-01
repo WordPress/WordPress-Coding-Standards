@@ -93,6 +93,6 @@ class WordPress_Tests_DB_RestrictedFunctionsUnitTest extends AbstractSniffUnitTe
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

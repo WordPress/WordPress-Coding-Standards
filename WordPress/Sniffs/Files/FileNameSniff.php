@@ -24,7 +24,7 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 	public function register() {
 		return array( T_OPEN_TAG );
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

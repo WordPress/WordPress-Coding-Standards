@@ -37,7 +37,7 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
 			T_INTERFACE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

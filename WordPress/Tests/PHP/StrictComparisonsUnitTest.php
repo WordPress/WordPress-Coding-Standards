@@ -31,7 +31,7 @@ class WordPress_Tests_PHP_StrictComparisonsUnitTest extends AbstractSniffUnitTes
 	public function getErrorList() {
 		return array();
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -48,6 +48,6 @@ class WordPress_Tests_PHP_StrictComparisonsUnitTest extends AbstractSniffUnitTes
 			12 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

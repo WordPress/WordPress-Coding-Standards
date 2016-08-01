@@ -33,7 +33,7 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeS
 	public function register() {
 		return PHP_CodeSniffer_Tokens::$castTokens;
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

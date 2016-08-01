@@ -84,6 +84,6 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 			$phpcsFile->addWarning( $error, $stackPtr, 'FileWriteDetected', $data );
 		}
 
-	} // end addError()
+	}
 
 } // End class.

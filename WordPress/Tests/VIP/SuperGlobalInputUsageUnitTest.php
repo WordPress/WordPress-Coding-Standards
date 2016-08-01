@@ -26,7 +26,7 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 	public function getErrorList() {
 		return array();
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -42,6 +42,6 @@ class WordPress_Tests_VIP_SuperGlobalInputUsageUnitTest extends AbstractSniffUni
 			13 => 1,
 			15 => 1,
 		);
-	} // end getWarningList()
+	}
 
 } // End class.

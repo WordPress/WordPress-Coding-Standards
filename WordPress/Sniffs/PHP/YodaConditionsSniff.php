@@ -29,7 +29,7 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff 
 			T_IS_NOT_IDENTICAL,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

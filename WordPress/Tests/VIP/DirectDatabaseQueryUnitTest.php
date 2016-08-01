@@ -35,7 +35,7 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 			80 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -53,6 +53,6 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 			50 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

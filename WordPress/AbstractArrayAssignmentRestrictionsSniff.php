@@ -45,7 +45,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			T_DOUBLE_QUOTED_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Groups of variables to restrict.

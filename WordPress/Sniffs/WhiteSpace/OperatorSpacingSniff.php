@@ -41,7 +41,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 
 		return $tokens;
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this sniff, when one of its tokens is encountered.

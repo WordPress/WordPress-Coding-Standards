@@ -29,7 +29,7 @@ class WordPress_Tests_VIP_PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 			5 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -42,6 +42,6 @@ class WordPress_Tests_VIP_PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

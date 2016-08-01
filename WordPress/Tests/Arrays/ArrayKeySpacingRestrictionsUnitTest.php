@@ -39,7 +39,7 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 			29 => 1,
 			31 => 1,
 		);
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -52,6 +52,6 @@ class WordPress_Tests_Arrays_ArrayKeySpacingRestrictionsUnitTest extends Abstrac
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

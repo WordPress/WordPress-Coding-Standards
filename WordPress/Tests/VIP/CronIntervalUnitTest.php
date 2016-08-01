@@ -31,7 +31,7 @@ class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest {
 			39 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -46,6 +46,6 @@ class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest {
 			37 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

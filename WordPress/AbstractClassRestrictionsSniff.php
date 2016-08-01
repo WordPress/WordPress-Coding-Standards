@@ -70,7 +70,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			T_IMPLEMENTS,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

@@ -26,7 +26,7 @@ class WordPress_Tests_VIP_SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList() {
 		return array();
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -46,6 +46,6 @@ class WordPress_Tests_VIP_SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 			30 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

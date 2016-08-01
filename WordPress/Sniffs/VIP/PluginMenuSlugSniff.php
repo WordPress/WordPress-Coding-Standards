@@ -42,7 +42,7 @@ class WordPress_Sniffs_VIP_PluginMenuSlugSniff implements PHP_CodeSniffer_Sniff 
 			T_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -70,6 +70,6 @@ class WordPress_Sniffs_VIP_PluginMenuSlugSniff implements PHP_CodeSniffer_Sniff 
 			$phpcsFile->addError( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );
 		}
 
-	} // end process()
+	}
 
 } // End class.

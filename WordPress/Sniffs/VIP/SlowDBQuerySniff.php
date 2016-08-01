@@ -63,7 +63,7 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 		}
 
 		parent::process( $phpcsFile, $stackPtr );
-	} // end process()
+	}
 
 	/**
 	 * Callback to process each confirmed key, to check value.
@@ -78,6 +78,6 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		return true;
-	} // end callback()
+	}
 
 } // End class.

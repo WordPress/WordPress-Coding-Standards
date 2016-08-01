@@ -115,8 +115,8 @@ class WordPress_Tests_NamingConventions_ValidHookNameUnitTest extends AbstractSn
 			default:
 				return array();
 
-		} // end switch
+		}
 
-	} // end getWarningList()
+	}
 
 } // End class.

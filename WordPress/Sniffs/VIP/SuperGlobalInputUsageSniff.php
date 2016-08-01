@@ -26,7 +26,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 			T_VARIABLE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -57,6 +57,6 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 			$phpcsFile->addWarning( 'Detected access of super global var %s, probably needs manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 
-	} // end process()
+	}
 
 } // End class.

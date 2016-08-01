@@ -70,6 +70,6 @@ class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_AbstractArrayAssi
 				return 'Detected high pagination limit, `%s` is set to `%s`';
 			}
 		}
-	} // end callback()
+	}
 
 } // End class.

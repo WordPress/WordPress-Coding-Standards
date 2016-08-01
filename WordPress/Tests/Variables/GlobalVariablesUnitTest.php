@@ -29,7 +29,7 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 			6 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -42,6 +42,6 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

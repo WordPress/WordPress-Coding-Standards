@@ -41,7 +41,7 @@ class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSnif
 			79 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -56,6 +56,6 @@ class WordPress_Tests_Classes_ClassOpeningStatementUnitTest extends AbstractSnif
 			51 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

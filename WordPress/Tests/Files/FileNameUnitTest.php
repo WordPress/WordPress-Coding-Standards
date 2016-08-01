@@ -33,7 +33,7 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList() {
 		return array();
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -46,6 +46,6 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

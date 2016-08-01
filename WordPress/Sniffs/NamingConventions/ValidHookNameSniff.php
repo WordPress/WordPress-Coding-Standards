@@ -67,7 +67,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 			T_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

@@ -49,7 +49,7 @@ class WordPress_Tests_NamingConventions_ValidFunctionNameUnitTest extends Abstra
 			89 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -62,6 +62,6 @@ class WordPress_Tests_NamingConventions_ValidFunctionNameUnitTest extends Abstra
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

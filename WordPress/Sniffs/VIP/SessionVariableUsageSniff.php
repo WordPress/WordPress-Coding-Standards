@@ -29,7 +29,7 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_
 			T_VARIABLE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -49,6 +49,6 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_
 			$phpcsFile->addError( 'Usage of $_SESSION variable is prohibited.', $stackPtr, 'SessionVarsProhibited' );
 		}
 
-	} // end process()
+	}
 
 } // End class.

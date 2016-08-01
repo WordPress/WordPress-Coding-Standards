@@ -38,6 +38,6 @@ class WordPress_Sniffs_VIP_TimezoneChangeSniff extends Generic_Sniffs_PHP_Forbid
 		$error = 'Using date_default_timezone_set() and similar isn’t allowed, instead use WP internal timezone support.';
 		$phpcsFile->addError( $error, $stackPtr, $function );
 
-	} // end addError()
+	}
 
 } // End class.

@@ -26,7 +26,7 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 			T_OPEN_SQUARE_BRACKET,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

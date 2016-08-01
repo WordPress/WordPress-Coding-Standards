@@ -31,7 +31,7 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 			12 => 1,
 		);
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -44,6 +44,6 @@ class WordPress_Tests_VIP_FileSystemWritesDisallowUnitTest extends AbstractSniff
 	public function getWarningList() {
 		return array();
 
-	} // end getWarningList()
+	}
 
 } // End class.

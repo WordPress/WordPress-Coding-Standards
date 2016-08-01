@@ -64,4 +64,4 @@ class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctio
 		);
 	} // end getGroups()
 
-} // end class
+} // End class.

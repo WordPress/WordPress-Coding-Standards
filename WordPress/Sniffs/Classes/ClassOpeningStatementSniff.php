@@ -33,7 +33,7 @@ class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSni
 			T_TRAIT,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -127,6 +127,6 @@ class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSni
 			}
 		}
 
-	} // end process()
+	} // End process().
 
-} // end class
+} // End class.

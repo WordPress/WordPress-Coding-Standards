@@ -31,7 +31,7 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	public function getErrorList() {
 		return array();
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -52,6 +52,6 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 			 21 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

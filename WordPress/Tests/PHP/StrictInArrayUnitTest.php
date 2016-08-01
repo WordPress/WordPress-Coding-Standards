@@ -29,7 +29,7 @@ class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 			7 => 1,
 			20 => 1,
 		);
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -53,6 +53,6 @@ class WordPress_Tests_PHP_StrictInArrayUnitTest extends AbstractSniffUnitTest {
 			39 => 1,
 			40 => 1,
 		);
-	} // end getWarningList()
+	}
 
 } // End class.

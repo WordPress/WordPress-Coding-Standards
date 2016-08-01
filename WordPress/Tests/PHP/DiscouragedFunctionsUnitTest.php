@@ -33,7 +33,7 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
 	public function getErrorList() {
 		return array();
 
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -66,6 +66,6 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
 			54 => 1,
 		);
 
-	} // end getWarningList()
+	}
 
 } // End class.

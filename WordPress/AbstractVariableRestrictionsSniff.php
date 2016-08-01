@@ -46,7 +46,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 			T_DOUBLE_QUOTED_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Groups of variables to restrict.
@@ -171,6 +171,6 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 			$pattern
 		);
 		return $pattern;
-	} // end test_patterns()
+	}
 
 } // End class.
