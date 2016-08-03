@@ -14,7 +14,7 @@
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *
- * @since   2014-12-11
+ * @since   0.3.0
  * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
  *                 Moved the file and renamed the class from
  *                 `WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff` to

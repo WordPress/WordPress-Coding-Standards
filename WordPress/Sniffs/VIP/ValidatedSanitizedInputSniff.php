@@ -16,7 +16,7 @@
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *
- * @since   2014-12-11
+ * @since   0.3.0
  * @since   0.4.0 This class now extends WordPress_Sniff.
  * @since   0.5.0 Method getArrayIndexKey() has been moved to WordPress_Sniff.
  */

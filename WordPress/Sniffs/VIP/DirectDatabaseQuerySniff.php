@@ -17,7 +17,7 @@
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *
- * @since   2014-12-11
+ * @since   0.3.0
  * @since   0.6.0 Removed the add_unique_message() function as it is no longer needed.
  */
 class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_Sniff {

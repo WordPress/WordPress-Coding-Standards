@@ -14,7 +14,7 @@
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
  *
- * @since   2014-12-11
+ * @since   0.3.0
  * @since   0.10.0 The checks for `extract()` and the POSIX functions have been replaced by
  *                 the stand-alone sniffs WordPress_Sniffs_Functions_DontExtractSniff and
  *                 WordPress_Sniffs_PHP_POSIXFunctionsSniff respectively.

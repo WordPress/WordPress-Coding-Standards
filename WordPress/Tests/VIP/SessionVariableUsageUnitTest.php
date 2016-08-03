@@ -13,7 +13,7 @@
  *
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Shady Sharaf <shady@x-team.com>
- * @since   2014-12-11
+ * @since   0.3.0
  */
 class WordPress_Tests_VIP_SessionVariableUsageUnitTest extends AbstractSniffUnitTest {
 

@@ -16,7 +16,7 @@
  *
  * @since   0.1.0
  * @since   2013-06-11 This sniff no longer supports JS.
- * @since   2014-12-11 This sniff now has the ability to fix most errors it flags.
+ * @since   0.3.0      This sniff now has the ability to fix most errors it flags.
  * @since   0.7.0      This class now extends WordPress_Sniff.
  *
  * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.

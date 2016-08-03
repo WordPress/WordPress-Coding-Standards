@@ -16,7 +16,7 @@
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Matt Robinson
  *
- * @since   2014-12-11
+ * @since   0.3.0
  */
 class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff {
 

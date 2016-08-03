@@ -16,7 +16,7 @@
  * @package PHP\CodeSniffer\WordPress-Coding-Standards
  * @author  Matt Robinson
  *
- * @since   2014-12-11
+ * @since   0.3.0
  *
  * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/CastSpacingSniff.php
