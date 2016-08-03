@@ -14,6 +14,8 @@
  *
  * @category PHP
  * @package  PHP_CodeSniffer
+ *
+ * @since   0.xx.0 This sniff now has the ability to fix some of the issues it flags.
  */
 class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 
@@ -118,9 +120,16 @@ class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		if ( T_TRUE !== $tokens[ $lastToken ]['code'] ) {
-			$phpcsFile->addWarning( 'Not using strict comparison for %s; supply true for third argument.', $lastToken, 'MissingTrueStrict', $errorData );
-			return;
+			$fix = $phpcsFile->addFixableWarning( 'Not using strict comparison for %s; supply true for third argument.', $lastToken, 'MissingTrueStrict', $errorData );
+			if ( true === $fix ) {
+				if ( T_FALSE === $tokens[ $lastToken ]['code'] ) {
+					$phpcsFile->fixer->replaceToken( $lastToken, 'true' );
+				} else {
+					$phpcsFile->fixer->addContent( $lastToken, ', true' );
+				}
+			}
 		}
+
 	} // end process()
 
 } // end class
