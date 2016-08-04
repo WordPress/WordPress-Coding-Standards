@@ -14,6 +14,7 @@
 		"squizlabs/php_codesniffer": "^2.6"
 	},
 	"minimum-stability" : "RC",
+	"prefer-stable": true,
 	"support"    : {
 		"issues": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues"
 	},
