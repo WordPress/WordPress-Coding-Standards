@@ -25,6 +25,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	/**
 	 * The lists of $wpdb methods.
 	 *
+	 * @since 0.8.0
+	 *
 	 * @var array
 	 */
 	protected static $methods = array(
@@ -81,6 +83,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
+	 * @since 0.8.0
+	 *
 	 * @return array
 	 */
 	public function register() {
@@ -95,6 +99,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
+	 *
+	 * @since 0.8.0
 	 *
 	 * @return int|void
 	 */
