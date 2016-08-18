@@ -2,19 +2,21 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Flag any non-validated/sanitized input ( _GET / _POST / etc. )
+ * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.4.0 This class now extends WordPress_Sniff.
+ * @since   0.5.0 Method getArrayIndexKey() has been moved to WordPress_Sniff.
  */
 class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff {
 
@@ -150,8 +152,6 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			$phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
 
-		return;
-
 	} // end process()
 
-} // end class
+} // End class.

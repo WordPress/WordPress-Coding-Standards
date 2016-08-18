@@ -2,17 +2,21 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts array assignment of certain keys.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
+ *                 Moved the file and renamed the class from
+ *                 `WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff` to
+ *                 `WordPress_AbstractArrayAssignmentRestrictionsSniff`.
  */
 abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPress_Sniff {
 
@@ -47,7 +51,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			T_DOUBLE_QUOTED_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Groups of variables to restrict.
@@ -195,4 +199,4 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	 */
 	abstract public function callback( $key, $val, $line, $group );
 
-} // end class
+} // End class.

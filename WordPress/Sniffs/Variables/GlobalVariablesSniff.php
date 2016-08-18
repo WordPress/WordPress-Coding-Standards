@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -12,12 +12,18 @@
  *
  * Warns about usage of global variables used by WordPress
  *
- * @category PHP
- * @package  WordPress_Coding_Standards
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.4.0 This class now extends WordPress_Sniff.
  */
 class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 
+	/**
+	 * List of global WP variables.
+	 *
+	 * @var array
+	 */
 	public $globals = array(
 		'comment',
 		'comment_alt',
@@ -345,4 +351,4 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 		}
 	} // end process()
 
-} // end class
+} // End class.

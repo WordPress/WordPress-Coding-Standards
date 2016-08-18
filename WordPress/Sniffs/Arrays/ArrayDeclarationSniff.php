@@ -1,12 +1,10 @@
 <?php
 /**
- * Enforces WordPress array format, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
@@ -14,18 +12,40 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
 }
 
 /**
- * Enforces WordPress array format.
+ * Enforces WordPress array format, based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.1.0
+ * @since   0.5.0 Now extends `Squiz_Sniffs_Arrays_ArrayDeclarationSniff`.
+ *
+ * @todo    Check whether the upstream PRs have been merged and released and if possible,
+ *          remove duplicate logic.
+ *          Ref: commit 3ea49d2b56f248d83bed890f9f5246d67c775d54
+ *          "The upstream version is similar, except that we exclude a few errors.
+ *          Unfortunately we have to actually comment out the code rather than just
+ *          using the upstream sniff and `<exclude>` in our ruleset, due to a bug
+ *          (squizlabs/PHP_CodeSniffer#582). (I've also included a fix for another
+ *          bug, squizlabs/PHP_CodeSniffer#584.) Because of this, we cannot yet
+ *          eliminate duplicated logic from this child sniff."
+ *
+ * Last synced with parent class ?[unknown date]? at commit ?[unknown commit]?.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {
 
 	/**
+	 * Process a single line array.
+	 *
 	 * @since 0.5.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
+	 * @param int                  $stackPtr   The position of the current token
+	 *                                         in the stack passed in $tokens.
+	 * @param int                  $arrayStart Position of the array opener in the token stack.
+	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
 	 */
 	public function processSingleLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
 
@@ -85,7 +105,15 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 	}
 
 	/**
+	 * Process a multi-line array.
+	 *
 	 * @since 0.5.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
+	 * @param int                  $stackPtr   The position of the current token
+	 *                                         in the stack passed in $tokens.
+	 * @param int                  $arrayStart Position of the array opener in the token stack.
+	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
 	 */
 	public function processMultiLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
 		$tokens       = $phpcsFile->getTokens();
@@ -458,9 +486,8 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					$nextComma = $i;
 					break;
 				}
-			} // end for
+			} // End for.
 
-			//if ( $nextComma === false || ( $tokens[ $nextComma ]['line'] !== $valueLine ) ) {
 			if ( false === $nextComma ) {
 				$error = 'Each line in an array declaration must end in a comma';
 				$fix   = $phpcsFile->addFixableError( $error, $index['value'], 'NoComma' );
@@ -496,4 +523,4 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 	} // end processMultiLineArray()
 
-} // end class
+} // End class.

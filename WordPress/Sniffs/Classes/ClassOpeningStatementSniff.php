@@ -2,24 +2,27 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Classes_ClassOpeningStatementSniff.
- *
  * Checks that the opening brace of a class or interface is on the same line
  * as the class declaration.
  *
  * Also checks that the brace is the last thing on that line and has precisely one space before it.
  *
- * Loosely based on Generic_Sniffs_Functions_OpeningFunctionBraceKernighanRitchieSniff.
+ * @link      https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#brace-style
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package   WPCS\WordPressCodingStandards
+ *
+ * @since     0.10.0
+ *
+ * {@internal Upstream PR https://github.com/squizlabs/PHP_CodeSniffer/pull/1070 has been merged.
+ *            If and when the WPCS minimum PHPCS version would be upped to the version
+ *            that PR is contained in - probably v 2.7.0 -, this sniff and associated unit tests
+ *            can be replaced by the upstream sniff Generic.Classes.OpeningBraceSameLine.}}
  */
 class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSniffer_Sniff {
 
@@ -35,7 +38,7 @@ class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSni
 			T_TRAIT,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -129,6 +132,6 @@ class WordPress_Sniffs_Classes_ClassOpeningStatementSniff implements PHP_CodeSni
 			}
 		}
 
-	} // end process()
+	} // End process().
 
-} // end class
+} // End class.

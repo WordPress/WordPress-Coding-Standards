@@ -2,17 +2,17 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts usage of some classes.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.10.0
  */
 abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
@@ -51,8 +51,9 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 * Documented here for clarity. Not (re)defined as it is already defined in the parent class.
 	 *
 	 * @return array
+	 *
+	abstract public function getGroups();
 	 */
-	// abstract public function getGroups();
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -72,7 +73,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			T_IMPLEMENTS,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -178,13 +179,13 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * See if the classname was found in a namespaced file and if so, add the namespace to the classname.
 	 *
-	 * @param string $classname   The full classname as found.
-	 * @param object $phpcsFile   Instance of phpcsFile.
-	 * @param array  $tokens      The token stack for this file.
-	 * @param int    $search_from The token position to search up from.
+	 * @param string               $classname   The full classname as found.
+	 * @param PHP_CodeSniffer_File $phpcsFile   The file being scanned.
+	 * @param array                $tokens      The token stack for this file.
+	 * @param int                  $search_from The token position to search up from.
 	 * @return string Classname, potentially prefixed with the namespace.
 	 */
-	protected function get_namespaced_classname( $classname, $phpcsFile, $tokens, $search_from ) {
+	protected function get_namespaced_classname( $classname, PHP_CodeSniffer_File $phpcsFile, $tokens, $search_from ) {
 		// Don't do anything if this is already a fully qualified classname.
 		if ( empty( $classname ) || '\\' === $classname[0] ) {
 			return $classname;
@@ -216,12 +217,12 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * Determine the namespace name based on whether this is a scoped namespace or a file namespace.
 	 *
-	 * @param object $phpcsFile   Instance of phpcsFile.
-	 * @param array  $tokens      The token stack for this file.
-	 * @param int    $search_from The token position to search up from.
+	 * @param PHP_CodeSniffer_File $phpcsFile   The file being scanned.
+	 * @param array                $tokens      The token stack for this file.
+	 * @param int                  $search_from The token position to search up from.
 	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applied.
 	 */
-	protected function determine_namespace( $phpcsFile, $tokens, $search_from ) {
+	protected function determine_namespace( PHP_CodeSniffer_File $phpcsFile, $tokens, $search_from ) {
 		$namespace = '';
 
 		if ( ! empty( $tokens[ $search_from ]['conditions'] ) ) {
@@ -247,12 +248,12 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * Get the namespace name based on the position of the namespace scope opener.
 	 *
-	 * @param object $phpcsFile         Instance of phpcsFile.
-	 * @param array  $tokens            The token stack for this file.
-	 * @param int    $t_namespace_token The token position to search from.
+	 * @param PHP_CodeSniffer_File $phpcsFile         The file being scanned.
+	 * @param array                $tokens            The token stack for this file.
+	 * @param int                  $t_namespace_token The token position to search from.
 	 * @return string Namespace name.
 	 */
-	protected function get_namespace_name( $phpcsFile, $tokens, $t_namespace_token ) {
+	protected function get_namespace_name( PHP_CodeSniffer_File $phpcsFile, $tokens, $t_namespace_token ) {
 		$nameEnd = ( $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET, T_WHITESPACE, T_SEMICOLON ), ( $t_namespace_token + 2 ) ) - 1 );
 		$length    = ( $nameEnd - ( $t_namespace_token + 1 ) );
 		$namespace = $phpcsFile->getTokensAsString( ( $t_namespace_token + 2 ), $length );
@@ -260,4 +261,4 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		return $namespace;
 	}
 
-} // end class
+} // End class.

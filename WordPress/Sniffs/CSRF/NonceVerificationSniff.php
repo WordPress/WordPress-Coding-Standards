@@ -1,23 +1,20 @@
 <?php
 /**
- * WordPress_Sniffs_CSRF_NonceVerificationSniff.
+ * WordPress Coding Standard.
  *
- * @since 0.5.0
- *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Checks that nonce verification accompanies form processing.
  *
- * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
+ * @link    https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
  *
- * @since    0.5.0
+ * @package WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   J.D. Grimes <jdg@codesymphony.co>
+ * @since   0.5.0
  */
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
@@ -134,4 +131,4 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
 	} // end process()
 
-} // end class
+} // End class.

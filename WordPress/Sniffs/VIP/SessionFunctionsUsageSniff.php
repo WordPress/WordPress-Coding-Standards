@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
@@ -12,15 +12,13 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 }
 
 /**
- * WordPress_Sniffs_VIP_SessionFunctionsUsageSniff.
- *
  * Discourages the use of session functions.
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
 class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 
@@ -57,12 +55,24 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP
 		'session_write_close'       => null,
 	);
 
+	/**
+	 * Generates the error or warning for this sniff.
+	 *
+	 * Overloads parent addError method.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the forbidden function
+	 *                                        in the token array.
+	 * @param string               $function  The name of the forbidden function.
+	 * @param string               $pattern   The pattern used for the match.
+	 *
+	 * @return void
+	 */
 	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null ) {
 		$data  = array( $function );
 		$error = 'The use of PHP session function %s() is prohibited.';
 
 		$phpcsFile->addError( $error, $stackPtr, $function, $data );
+	}
 
-	} // end addError()
-
-} // end class
+} // End class.

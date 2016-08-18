@@ -1,10 +1,10 @@
 <?php
 /**
- * WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
@@ -12,13 +12,13 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 }
 
 /**
- * WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
+ * Discourages the use of various functions and suggests (WordPress) alternatives.
  *
- * Discourages the use of debug functions and suggests deprecated WordPress alternatives
+ * @package WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @since   0.1.0
+ * @since   0.10.0 The checks for the POSIX functions have been replaced by the stand-alone
+ *                 sniff WordPress_Sniffs_PHP_POSIXFunctionsSniff.
  */
 class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 
@@ -88,4 +88,4 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 		return $register;
 	}
 
-} // end class
+} // End class.

@@ -2,17 +2,21 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts usage of some functions.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
+ *                 Moved the file and renamed the class from
+ *                 `WordPress_Sniffs_Functions_FunctionRestrictionsSniff` to
+ *                 `WordPress_AbstractFunctionRestrictionsSniff`.
  */
 abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff {
 
@@ -209,4 +213,4 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 		return $function;
 	}
 
-} // end class
+} // End class.

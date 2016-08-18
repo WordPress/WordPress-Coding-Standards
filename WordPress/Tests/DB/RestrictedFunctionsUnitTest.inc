@@ -1,20 +1,20 @@
 <?php
 
-my_mysql_info(); // ok
-wrap_mysql_info(); // ok
-mysqlnd_msinfo(); // ok
+my_mysql_info(); // Ok.
+wrap_mysql_info(); // Ok.
+mysqlnd_msinfo(); // Ok.
 
 class Foo {
-	function mysql_info() {} // ok
+	function mysql_info() {} // Ok.
 }
 class Bar {
-	static function mysql_info() {} // ok
+	static function mysql_info() {} // Ok.
 }
 
 $x = new Foo();
-$x->mysql_info(); // ok
-$y = Bar::mysql_info(); // ok
-prefix_mysql_info(); // ok
+$x->mysql_info(); // Ok.
+$y = Bar::mysql_info(); // Ok.
+prefix_mysql_info(); // Ok.
 
 
 /**
@@ -68,11 +68,11 @@ maxdb_close();
 maxdb_connect();
 maxdb_errno();
 maxdb_escape_string();
-maxdb_fetch_assoc
+maxdb_fetch_assoc();
 maxdb_init();
 maxdb_num_fields();
 maxdb_prepare();
-maxdb_real_query
+maxdb_real_query();
 maxdb_stat();
 
 

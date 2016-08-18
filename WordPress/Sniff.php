@@ -2,8 +2,9 @@
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -11,10 +12,8 @@
  *
  * Provides a bootstrap for the sniffs, to reduce code duplication.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @version   0.4.0
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.4.0
  */
 abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
@@ -461,7 +460,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * A list of superglobals that incorporate user input.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var string[]
 	 */
@@ -578,7 +577,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * $array['key'][ $foo ][ something() ] = $bar;
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @param int $stackPtr The index of the token in the stack. This must points to
 	 *                      either a T_VARIABLE or T_CLOSE_SQUARE_BRACKET token.
@@ -613,7 +612,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return true;
 		}
 
-		// Check if this is an array assignment, e.g., $var['key'] = 'val';
+		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
 		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
 			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'] );
 		}
@@ -633,14 +632,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function has_nonce_check( $stackPtr ) {
 
 		/**
-		 * @var array {
-		 *      A cache of the scope that we last checked for nonce verification in.
+		 * A cache of the scope that we last checked for nonce verification in.
 		 *
-		 *      @var string $file  The name of the file.
-		 *      @var int    $start The index of the token where the scope started.
-		 *      @var int    $end   The index of the token where the scope ended.
-		 *      @var bool|int $nonce_check The index of the token where an nonce
-		 *                         check was found, or false if none was found.
+		 * @var array {
+		 *      @var string   $file        The name of the file.
+		 *      @var int      $start       The index of the token where the scope started.
+		 *      @var int      $end         The index of the token where the scope ended.
+		 *      @var bool|int $nonce_check The index of the token where an nonce check
+		 *                                 was found, or false if none was found.
 		 * }
 		 */
 		static $last;
@@ -973,7 +972,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function is_validated( $stackPtr, $array_key = null, $in_condition_only = false ) {
 
 		if ( $in_condition_only ) {
-
 			/*
 			   This is a stricter check, requiring the variable to be used only
 			   within the validation condition.
@@ -1004,7 +1002,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$scope_end   = $condition['parenthesis_closer'];
 
 		} else {
-
 			/*
 			   We are are more loose, requiring only that the variable be validated
 			   in the same function/file scope as it is used.
@@ -1130,6 +1127,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * This function will check the token and return 'closure', 'trait', or 'class',
 	 * based on which of these uses the use is being used for.
 	 *
+	 * @since 0.7.0
+	 *
 	 * @param int $stackPtr The position of the token to check.
 	 *
 	 * @return string The type of use.
@@ -1156,6 +1155,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Get the interpolated variable names from a string.
 	 *
 	 * Check if '$' is followed by a valid variable name, and that it is not preceded by an escape sequence.
+	 *
+	 * @since 0.9.0
 	 *
 	 * @param string $string A T_DOUBLE_QUOTED_STRING token.
 	 *

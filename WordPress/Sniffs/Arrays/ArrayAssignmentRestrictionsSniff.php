@@ -2,24 +2,24 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts array assignment of certain keys.
  *
- * @deprecated 0.1.0 The functionality which used to be contained in this class has been moved to
- *                   the WordPress_AbstractArrayAssignmentRestrictionsSniff class.
- *                   This class is left here to prevent backward-compatibility breaks for
- *                   custom sniffs extending the old class and references to this
- *                   sniff from custom phpcs.xml files.
- *                   This file is also still used to unit test the abstract class.
+ * @package    WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @since      0.3.0
+ * @deprecated 0.10.0 The functionality which used to be contained in this class has been moved to
+ *                    the WordPress_AbstractArrayAssignmentRestrictionsSniff class.
+ *                    This class is left here to prevent backward-compatibility breaks for
+ *                    custom sniffs extending the old class and references to this
+ *                    sniff from custom phpcs.xml files.
+ *                    This file is also still used to unit test the abstract class.
+ * @see        WordPress_AbstractArrayAssignmentRestrictionsSniff
  */
 class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
@@ -56,4 +56,4 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 		return true;
 	} // end callback()
 
-} // end class
+} // End class.

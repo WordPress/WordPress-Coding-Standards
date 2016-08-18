@@ -34,7 +34,7 @@ class TheirMysqli implements \mysqli {}
 
 $db5 = new PDO();
 $db6 - new PDO->exec();
-PDO::getAvailableDrivers()
+PDO::getAvailableDrivers();
 
 $db7 = new PDOStatement;
 $db8 = new \PDOStatement();

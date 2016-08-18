@@ -1,10 +1,10 @@
 <?php
 /**
- * Enforces WordPress function name format.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', true ) ) {
@@ -14,14 +14,14 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
  *
- * @link     https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
+ * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
  *
- * Last synced with parent class July 2016 at commit 916b09a.
- * @link     https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidFunctionNameSniff.php
+ * @package WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
+ * @since   0.1.0
+ *
+ * Last synced with parent class July 2016 up to commit 4fea2e651109e41066a81e22e004d851fb1287f6.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 
@@ -173,9 +173,11 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	} // end processTokenWithinScope()
 
 	/**
-	 * Returns the name of the class that the specified class implements.
+	 * Returns the name of the interface that the specified class implements.
 	 *
-	 * Returns FALSE on error or if there is no implemented class name.
+	 * Returns FALSE on error or if there is no implemented interface name.
+	 *
+	 * @since 0.5.0
 	 *
 	 * @param int                  $stackPtr  The stack position of the class.
 	 * @param PHP_CodeSniffer_File $phpcsFile The stack position of the class.
@@ -218,4 +220,4 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		return $name;
 	} // end findExtendedClassName()
 
-} // end class
+} // End class.

@@ -2,17 +2,21 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts usage of some variables.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
+ *                 Moved the file and renamed the class from
+ *                 `WordPress_Sniffs_Variables_VariableRestrictionsSniff` to
+ *                 `WordPress_AbstractVariableRestrictionsSniff`.
  */
 abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSniffer_Sniff {
 
@@ -48,7 +52,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 			T_DOUBLE_QUOTED_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Groups of variables to restrict.
@@ -76,7 +80,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return void
+	 * @return int|void If no groups are found, a stack pointer to indicate to skip the current one is passed.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens  = $phpcsFile->getTokens();
@@ -111,7 +115,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 				$var      = $token['content'];
 
 			} elseif ( in_array( $token['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON, T_DOUBLE_QUOTED_STRING ), true ) && ! empty( $group['object_vars'] ) ) {
-				// Object var, ex: $foo->bar / $foo::bar / Foo::bar / Foo::$bar
+				// Object var, ex: $foo->bar / $foo::bar / Foo::bar / Foo::$bar .
 				$patterns = array_merge( $patterns, $group['object_vars'] );
 
 				$owner = $phpcsFile->findPrevious( array( T_VARIABLE, T_STRING ), $stackPtr );
@@ -165,6 +169,12 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 
 	} // end process()
 
+	/**
+	 * Transform a wildcard pattern to a usable regex pattern.
+	 *
+	 * @param string $pattern Pattern.
+	 * @return string
+	 */
 	private function test_patterns( $pattern ) {
 		$pattern = preg_quote( $pattern, '#' );
 		$pattern = preg_replace(
@@ -173,6 +183,6 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 			$pattern
 		);
 		return $pattern;
-	} // end test_patterns()
+	}
 
-} // end class
+} // End class.

@@ -1,20 +1,23 @@
 <?php
 /**
- * Squiz_Sniffs_XSS_EscapeOutputSniff.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Weston Ruter <weston@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Verifies that all outputted strings are escaped.
  *
- * @link     http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
+ * @link    http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Weston Ruter <weston@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   2013-06-11
+ * @since   0.4.0 This class now extends WordPress_Sniff.
+ * @since   0.5.0 The various function list properties which used to be contained in this class
+ *                have been moved to the WordPress_Sniff parent class.
  */
 class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
@@ -39,8 +42,9 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	/**
 	 * Custom list of functions which escape values for output.
 	 *
-	 * @since 0.3.0
+	 * @since      0.3.0
 	 * @deprecated 0.5.0 Use $customEscapingFunctions instead.
+	 * @see        WordPress_Sniffs_XSS_EscapeOutputSniff::$customEscapingFunctions
 	 *
 	 * @var string[]
 	 */
@@ -102,7 +106,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			T_STRING,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -347,4 +351,4 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 	} // end process()
 
-} // end class
+} // End class.

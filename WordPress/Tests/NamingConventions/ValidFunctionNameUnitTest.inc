@@ -1,24 +1,24 @@
 <?php
 
-function myTemplateTags() {} // Bad, using camel caps
+function myTemplateTags() {} // Bad, using camel caps.
 
-function my_template_tags() {} // Good
+function my_template_tags() {} // Good.
 
-function _my_template_tags() {} // OK
+function _my_template_tags() {} // OK.
 
-function __my_template_tags() {} // Bad
+function __my_template_tags() {} // Bad.
 
 class My_Plugin {
 
-	public static function __my_init() {} // Bad, only PHP magic methods should be prefixed with double underscore
+	public static function __my_init() {} // Bad, only PHP magic methods should be prefixed with double underscore.
 
-	public function myInit() {} // Bad
+	public function myInit() {} // Bad.
 
-	public static function _my_init() {} // OK
+	public static function _my_init() {} // OK.
 
-	public function my_init() {} // OK
+	public function my_init() {} // OK.
 
-	public function __invoke() {} // OK
+	public function __invoke() {} // OK.
 }
 
 /**
@@ -26,14 +26,14 @@ class My_Plugin {
  */
 class Test extends WP_UnitTestCase {
 
-	public function setUp() {} // OK
+	public function setUp() {} // OK.
 }
 
 class Foo implements ArrayAccess {
-	function offsetSet( $key, $value ) {} // OK
-	function offsetUnset( $key ) {} // OK
-	function offsetExists( $key ) {} // OK
-	function offsetGet( $key ) {} // OK
+	function offsetSet( $key, $value ) {} // OK.
+	function offsetUnset( $key ) {} // OK.
+	function offsetExists( $key ) {} // OK.
+	function offsetGet( $key ) {} // OK.
 }
 
 

@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -12,11 +12,16 @@
  *
  * If alternative PHP open tags are found, this sniff can fix both the open and close tags.
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/580
+ * @link      https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/580
  *
- * @category PHP
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package   WPCS\WordPressCodingStandards
+ *
+ * @since     0.10.0
+ *
+ * {@internal If and when the upstream PR https://github.com/squizlabs/PHP_CodeSniffer/pull/1084
+ *            would be merged and the WPCS minimum PHPCS version would be upped to the version
+ *            that PR is contained in, this sniff and associated unit tests can be replaced by
+ *            the upstream sniff Generic.PHP.DisallowAlternativePHPTags.}}
  */
 class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSniffer_Sniff {
 
@@ -200,7 +205,7 @@ class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSn
 	 * @param int                  $close_tag_pointer Stack pointer to the PHP close tag.
 	 * @param bool                 $echo              Whether to add 'echo' or not.
 	 */
-	private function add_changeset( $phpcsFile, $tokens, $open_tag_pointer, $close_tag_pointer, $echo = false ) {
+	private function add_changeset( PHP_CodeSniffer_File $phpcsFile, $tokens, $open_tag_pointer, $close_tag_pointer, $echo = false ) {
 		// Build up the open tag replacement and make sure there's always whitespace behind it.
 		$open_replacement = '<?php';
 		if ( true === $echo ) {

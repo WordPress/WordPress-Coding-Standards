@@ -2,19 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_WP_Enqueued_Resources_Sniff
- *
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Shady Sharaf <shady@x-team.com>
+ * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#inline-resources
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
 class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Sniff {
 
@@ -30,7 +30,7 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 			T_INLINE_HTML,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -55,4 +55,4 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 
 	} // end process()
 
-} // end class
+} // End class.

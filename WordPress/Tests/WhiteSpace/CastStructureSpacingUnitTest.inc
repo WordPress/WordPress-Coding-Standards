@@ -7,7 +7,7 @@ $bool1 = (bool)$bool;
 $bool2 = (bool) $bool;
 
 $int1 = (int)$int;
-$int2 = (int) $int
+$int2 = (int) $int;
 
 $obj1 = ( object )$object;
 $obj2 = (object) $object;

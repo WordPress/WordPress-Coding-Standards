@@ -2,17 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Flag slow queries.
+ * Flag potentially slow queries.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
 class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
@@ -50,6 +52,8 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
@@ -65,7 +69,7 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 		}
 
 		parent::process( $phpcsFile, $stackPtr );
-	} // end process()
+	}
 
 	/**
 	 * Callback to process each confirmed key, to check value.
@@ -80,6 +84,6 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		return true;
-	} // end callback()
+	}
 
-} // end class
+} // End class.

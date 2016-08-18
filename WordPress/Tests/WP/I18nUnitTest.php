@@ -2,20 +2,22 @@
 /**
  * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Unit test class for the I18nUnit sniff.
+ * Unit test class for the I18n sniff.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.10.0
  */
 class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 
+	/**
+	 * Fill in the $text_domain_override property to test domain check functionality.
+	 */
 	protected function setUp() {
 		// @todo Should be possible via self::$phpcs->setSniffProperty( 'WordPress_Sniffs_WP_I18nSniff', 'text_domain', 'my-slug' );
 		WordPress_Sniffs_WP_I18nSniff::$text_domain_override = 'my-slug';
@@ -25,10 +27,7 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of errors that should occur on that line.
-	 *
-	 * @return array(int => int)
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		return array(
@@ -87,10 +86,7 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
-	 *
-	 * @return array(int => int)
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		return array(
@@ -101,6 +97,6 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			102 => 1,
 			103 => 1,
 		);
-	} // end getWarningList()
+	}
 
-} // end class.
+} // End class.

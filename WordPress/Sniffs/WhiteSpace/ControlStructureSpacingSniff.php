@@ -1,24 +1,24 @@
 <?php
 /**
- * Enforces spacing around logical operators and assignments, based upon Squiz code.
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Squiz_Sniffs_WhiteSpace_ControlStructureSpacingSniff.
+ * Enforces spacing around logical operators and assignments, based upon Squiz code.
  *
- * Checks that any array declarations are lower case.
+ * @package WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   John Godley <john@urbangiraffe.com>
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @since   0.1.0
+ * @since   2013-06-11 This sniff no longer supports JS.
+ * @since   0.3.0      This sniff now has the ability to fix most errors it flags.
+ * @since   0.7.0      This class now extends WordPress_Sniff.
+ *
+ * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
 class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
 
@@ -53,7 +53,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 	/**
 	 * How many spaces should be between a T_CLOSURE and T_OPEN_PARENTHESIS.
 	 *
-	 * function[*]() {...}
+	 * `function[*]() {...}`
 	 *
 	 * @since 0.7.0
 	 *
@@ -81,7 +81,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			T_USE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -526,4 +526,4 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 	} // end process()
 
-} // end class
+} // End class.

@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -12,8 +12,11 @@
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
- * @package WordPress-Coding-Standards
- * @since 0.8.0
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#formatting-sql-statements
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.8.0
  */
 class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
@@ -91,11 +94,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @since 0.8.0
-	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
+	 *
+	 * @since 0.8.0
 	 *
 	 * @return int|void
 	 */
@@ -240,4 +243,4 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		return true;
 	} // is_wpdb_method_call()
 
-} // end class.
+} // End class.

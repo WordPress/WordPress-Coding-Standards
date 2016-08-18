@@ -2,23 +2,23 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts usage of some functions.
  *
- * @deprecated 0.1.0 The functionality which used to be contained in this class has been moved to
- *                   the WordPress_AbstractFunctionRestrictionsSniff class.
- *                   This class is left here to prevent backward-compatibility breaks for
- *                   custom sniffs extending the old class and references to this
- *                   sniff from custom phpcs.xml files.
+ * @package    WPCS\WordPressCodingStandards
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @since      0.3.0
+ * @deprecated 0.10.0 The functionality which used to be contained in this class has been moved to
+ *                    the WordPress_AbstractFunctionRestrictionsSniff class.
+ *                    This class is left here to prevent backward-compatibility breaks for
+ *                    custom sniffs extending the old class and references to this
+ *                    sniff from custom phpcs.xml files.
+ * @see        WordPress_AbstractFunctionRestrictionsSniff
  */
 class WordPress_Sniffs_Functions_FunctionRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
@@ -39,4 +39,4 @@ class WordPress_Sniffs_Functions_FunctionRestrictionsSniff extends WordPress_Abs
 		return array();
 	}
 
-} // end class
+} // End class.

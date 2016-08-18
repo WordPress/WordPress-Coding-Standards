@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -15,11 +15,11 @@
  *  helps keep your code forward-compatible and, in cases where results are cached in memory,
  *  it can be many times faster."
  *
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.10.0
  */
 class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClassRestrictionsSniff {
 
@@ -52,4 +52,4 @@ class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClass
 		);
 	}
 
-} // end class
+} // End class.

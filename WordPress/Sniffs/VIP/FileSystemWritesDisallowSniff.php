@@ -2,9 +2,9 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
@@ -14,11 +14,11 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 /**
  * Disallow Filesystem writes.
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
 class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 
@@ -68,6 +68,8 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	/**
 	 * Generates the error or warning for this sniff.
 	 *
+	 * Overloads parent addError method.
+	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the forbidden function
 	 *                                        in the token array.
@@ -86,6 +88,6 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 			$phpcsFile->addWarning( $error, $stackPtr, 'FileWriteDetected', $data );
 		}
 
-	} // end addError()
+	}
 
-} // end class
+} // End class.

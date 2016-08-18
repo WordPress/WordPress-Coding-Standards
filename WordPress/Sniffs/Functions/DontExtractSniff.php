@@ -2,19 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts the usage of extract().
  *
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#dont-extract
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#dont-extract
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff.
  */
 class WordPress_Sniffs_Functions_DontExtractSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
@@ -45,4 +45,4 @@ class WordPress_Sniffs_Functions_DontExtractSniff extends WordPress_AbstractFunc
 		);
 	} // end getGroups()
 
-} // end class
+} // End class.

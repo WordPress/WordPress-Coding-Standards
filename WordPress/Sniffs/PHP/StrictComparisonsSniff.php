@@ -2,17 +2,22 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Enforces Strict Comparison checks, based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Matt Robinson
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.4.0
+ *
+ * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
+ * It is currently unclear whether this sniff is actually based on Squiz code on whether the above
+ * reference to it is a copy/paste oversight.
+ * @link    Possibly: https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Operators/ComparisonOperatorUsageSniff.php
  */
 class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 
@@ -27,7 +32,7 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 			T_IS_NOT_EQUAL,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -46,6 +51,6 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 			$phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
 		}
 
-	} // end process()
+	}
 
-} // end class
+} // End class.

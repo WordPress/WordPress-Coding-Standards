@@ -2,22 +2,22 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * WordPress_Sniffs_VIP_SessionVariableUsageSniff
- *
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/75
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.10.0 The sniff no longer needlessly extends the Generic_Sniffs_PHP_ForbiddenFunctionsSniff
+ *                 which it didn't use.
  */
 class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_Sniff {
 
@@ -31,7 +31,7 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_
 			T_VARIABLE,
 		);
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -51,6 +51,6 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_
 			$phpcsFile->addError( 'Usage of $_SESSION variable is prohibited.', $stackPtr, 'SessionVarsProhibited' );
 		}
 
-	} // end process()
+	}
 
-} // end class
+} // End class.

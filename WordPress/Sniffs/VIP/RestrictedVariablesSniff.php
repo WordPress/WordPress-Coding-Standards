@@ -2,17 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Restricts usage of some variables in VIP context.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
 class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVariableRestrictionsSniff {
 
@@ -33,6 +35,7 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVa
 	 */
 	public function getGroups() {
 		return array(
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#working-with-wp_users-and-user_meta
 			'user_meta' => array(
 				'type'        => 'error',
 				'message'     => 'Usage of users/usermeta tables is highly discouraged in VIP context, For storing user additional user metadata, you should look at User Attributes.',
@@ -41,6 +44,8 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVa
 					'$wpdb->usermeta',
 				),
 			),
+
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#caching-constraints
 			'cache_constraints' => array(
 				'type'          => 'warning',
 				'message'       => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
@@ -53,6 +58,6 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVa
 				),
 			),
 		);
-	} // end getGroups()
+	}
 
-} // end class
+} // End class.

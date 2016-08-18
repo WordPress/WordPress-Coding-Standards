@@ -2,20 +2,16 @@
 /**
  * Unit test class for WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Unit test class for the DisallowAlternativePHPTags sniff.
  *
- * A sniff unit test checks a .inc file for expected violations of a single
- * coding standard. Expected errors and warnings are stored in this class.
- *
- * @category PHP
- * @package  PHP\CodeSniffer\WordPress-Coding-Standards
- * @author   Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.10.0
  */
 class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest {
 
@@ -49,10 +45,7 @@ class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSni
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of errors that should occur on that line.
-	 *
-	 * @return array<int, int>
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		$errors = array(
@@ -75,10 +68,7 @@ class WordPress_Tests_PHP_DisallowAlternativePHPTagsUnitTest extends AbstractSni
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
-	 *
-	 * @return array<int, int>
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		$warnings = array();

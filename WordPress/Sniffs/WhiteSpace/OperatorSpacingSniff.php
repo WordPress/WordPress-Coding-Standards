@@ -1,20 +1,26 @@
 <?php
 /**
- * Modified version of Squiz operator white spacing, based upon Squiz code
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
- * Modified version of Squiz operator white spacing.
+ * Verify operator spacing, based upon Squiz code.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Greg Sherwood <gsherwood@squiz.net>
- * @author   Marc McIntyre <mmcintyre@squiz.net>
+ * "Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators."
+ *
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.1.0
+ * @since   0.3.0 This sniff now has the ability to fix the issues it flags.
+ *
+ * Last synced with base class December 2008 at commit f01746fd1c89e98174b16c76efd325825eb58bf1.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php
  */
 class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff {
 
@@ -43,7 +49,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 
 		return $tokens;
 
-	} // end register()
+	}
 
 	/**
 	 * Processes this sniff, when one of its tokens is encountered.
@@ -76,13 +82,13 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 		}
 
 		if ( T_BITWISE_AND === $tokens[ $stackPtr ]['code'] ) {
-			// If its not a reference, then we expect one space either side of the
+			/*
+			// If it's not a reference, then we expect one space either side of the
 			// bitwise operator.
-			// if ( false === $phpcsFile->isReference( $stackPtr ) ) {
-				// @todo Implement  or remove ?
-
-			// } // end if
-
+			if ( false === $phpcsFile->isReference( $stackPtr ) ) {
+				// @todo Implement or remove ?
+			}
+			*/
 			return;
 
 		} else {
@@ -205,4 +211,4 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 
 	} // end process()
 
-} // end class
+} // End class.

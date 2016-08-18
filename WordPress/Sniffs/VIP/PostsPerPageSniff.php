@@ -2,17 +2,19 @@
 /**
  * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @link     https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Flag returning high or infinite posts_per_page.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#no-limit-queries
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
  */
 class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
@@ -72,6 +74,6 @@ class WordPress_Sniffs_VIP_PostsPerPageSniff extends WordPress_AbstractArrayAssi
 				return 'Detected high pagination limit, `%s` is set to `%s`';
 			}
 		}
-	} // end callback()
+	}
 
-} // end class
+} // End class.

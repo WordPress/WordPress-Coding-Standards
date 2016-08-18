@@ -1,12 +1,12 @@
 <?php
 
 // These are ok.
-$regex = preg_quote( 'cool', '#' ); // Good
-$title = preg_match( 'cool', get_the_title() ); // Good
-$title = preg_match_all( 'cool', get_the_title(), $matches ); // Good
-$title = preg_replace( 'cool', 'not cool', get_the_title() ); // Good
-$title = preg_replace_callback( 'cool', 'callback_function', get_the_title() ); // Good
-$title = preg_split( 'cool', get_the_title() ); // Good
+$regex = preg_quote( 'cool', '#' ); // Good.
+$title = preg_match( 'cool', get_the_title() ); // Good.
+$title = preg_match_all( 'cool', get_the_title(), $matches ); // Good.
+$title = preg_replace( 'cool', 'not cool', get_the_title() ); // Good.
+$title = preg_replace_callback( 'cool', 'callback_function', get_the_title() ); // Good.
+$title = preg_split( 'cool', get_the_title() ); // Good.
 
 
 // These should all trigger an error.
