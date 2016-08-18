@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -13,8 +12,7 @@
  *
  * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#inline-resources
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
  */

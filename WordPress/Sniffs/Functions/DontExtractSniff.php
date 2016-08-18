@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -13,8 +12,7 @@
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#dont-extract
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff.
  */

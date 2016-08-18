@@ -2,8 +2,7 @@
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -13,8 +12,7 @@
  *
  * Provides a bootstrap for the sniffs, to reduce code duplication.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  J.D. Grimes <jdg@codesymphony.co>
+ * @package WPCS\WordPressCodingStandards
  * @since   0.4.0
  */
 abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {

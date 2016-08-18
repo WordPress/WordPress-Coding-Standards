@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -14,8 +13,7 @@
  * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries
  * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
  * @since   0.6.0 Removed the add_unique_message() function as it is no longer needed.

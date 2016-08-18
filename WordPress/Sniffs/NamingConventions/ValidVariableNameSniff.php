@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -17,8 +16,7 @@ if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) )
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  Weston Ruter <weston@x-team.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.9.0
  *

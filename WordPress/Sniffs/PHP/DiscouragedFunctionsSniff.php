@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -15,8 +14,7 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
 /**
  * Discourages the use of various functions and suggests (WordPress) alternatives.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  John Godley <john@urbangiraffe.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
  * @since   0.10.0 The checks for the POSIX functions have been replaced by the stand-alone

@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -11,8 +10,7 @@
 /**
  * Restricts usage of some functions.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
  * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.

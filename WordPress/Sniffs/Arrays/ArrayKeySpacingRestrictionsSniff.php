@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -13,8 +12,7 @@
  *
  * @link    http://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
  * @since   0.7.0 This sniff now has the ability to fix a number of the issues it flags.

@@ -2,8 +2,7 @@
 /**
  * WordPress Coding Standard.
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/
+ * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -17,8 +16,7 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
  *
- * @package PHP\CodeSniffer\WordPress-Coding-Standards
- * @author  John Godley <john@urbangiraffe.com>
+ * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
  * @since   0.5.0 Now extends `Squiz_Sniffs_Arrays_ArrayDeclarationSniff`.
