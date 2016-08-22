@@ -283,6 +283,15 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			// @link https://vip.wordpress.com/documentation/change-your-pretty-permalinks-or-add-custom-rewrite-rules/
+			'flush_rewrite_rules' => array(
+				'type'     => 'warning',
+				'message'   => '%s Using flush_rewrite_rules() is not required on WordPress.com VIP since it is done on every deploy and every theme switch. Using this will cause excessive writes to the database and slow down performance',
+				'functions' => array(
+					'flush_rewrite_rules',
+				),
+			),
+
 			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#mobile-detection
 			'wp_is_mobile' => array(
 				'type'      => 'error',
