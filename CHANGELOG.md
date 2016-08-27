@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 _Nothing yet._
 
-## [0.10.0] - 2016-08-22
+## [0.10.0] - 2016-08-29
 
 ### Added
 - `WordPress.WP.I18n` sniff to the `WordPress-Core` ruleset to flag dynamic translatable strings and textdomains.
