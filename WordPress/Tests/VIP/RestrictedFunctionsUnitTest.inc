@@ -88,3 +88,18 @@ PHPINFO(); // Error.
 CURL_getinfo(); // Error.
 
 curlyhair(); // Ok.
+
+get_previous_post_link(); // Error.
+get_next_post_link(); // Error.
+get_intermediate_image_sizes(); // Error.
+serialize(); // Warning.
+unserialize(); // Warning.
+error_log(); // Error.
+var_dump(); // Error.
+print_r(); // Error.
+trigger_error(); // Error.
+set_error_handler(); // Error.
+wp_redirect(); // Warning.
+wp_is_mobile(); // Error.
+urlencode(); // Warning.
+rawurlencode(); // Ok.
