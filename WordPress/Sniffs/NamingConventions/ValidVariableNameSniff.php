@@ -75,7 +75,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 *
 	 * @var bool
 	 */
-	public static $addedCustomVariables = false;
+	protected $addedCustomVariables = false;
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -88,12 +88,8 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
-		// Merge any custom variables with the defaults, if we haven't already.
-		if ( ! self::$addedCustomVariables ) {
-			$this->whitelisted_mixed_case_member_var_names = array_merge( $this->whitelisted_mixed_case_member_var_names, $this->customVariablesWhitelist );
-
-			self::$addedCustomVariables = true;
-		}
+		// Merge any custom variables with the defaults.
+		$this->mergeWhiteList();
 
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -173,6 +169,9 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected function processMemberVar( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
+		// Merge any custom variables with the defaults.
+		$this->mergeWhiteList();
+
 		$tokens = $phpcs_file->getTokens();
 
 		$var_name     = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -203,6 +202,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @return void
 	 */
 	protected function processVariableInString( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+
 		$tokens = $phpcs_file->getTokens();
 
 		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
@@ -230,6 +230,19 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	static function isSnakeCase( $var_name ) {
 		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
+	}
+
+	/**
+	 * Merge a custom whitelist provided via a custom ruleset with the predefined whitelist,
+	 * if we haven't already.
+	 *
+	 * @return void
+	 */
+	protected function mergeWhiteList() {
+		if ( false === $this->addedCustomVariables && ! empty( $this->customVariablesWhitelist ) ) {
+			$this->whitelisted_mixed_case_member_var_names = array_merge( $this->whitelisted_mixed_case_member_var_names, $this->customVariablesWhitelist );
+			$this->addedCustomVariables = true;
+		}
 	}
 
 } // End class.
