@@ -1,12 +1,10 @@
 <?php
-
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
@@ -14,10 +12,8 @@
  *
  * Provides a bootstrap for the sniffs, to reduce code duplication.
  *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @version   0.4.0
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.4.0
  */
 abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
@@ -29,9 +25,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $nonceVerificationFunctions = array(
-		'wp_verify_nonce' => true,
+		'wp_verify_nonce'     => true,
 		'check_admin_referer' => true,
-		'check_ajax_referer' => true,
+		'check_ajax_referer'  => true,
 	);
 
 	/**
@@ -42,37 +38,37 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $escapingFunctions = array(
-		'absint' => true,
-		'esc_attr__' => true,
-		'esc_attr_e' => true,
-		'esc_attr_x' => true,
-		'esc_attr' => true,
-		'esc_html__' => true,
-		'esc_html_e' => true,
-		'esc_html_x' => true,
-		'esc_html' => true,
-		'esc_js' => true,
-		'esc_sql' => true,
-		'esc_textarea' => true,
-		'esc_url_raw' => true,
-		'esc_url' => true,
-		'filter_input' => true,
-		'filter_var' => true,
-		'intval' => true,
-		'json_encode' => true,
-		'like_escape' => true,
-		'number_format' => true,
-		'rawurlencode' => true,
-		'sanitize_html_class' => true,
-		'sanitize_user_field' => true,
-		'tag_escape' => true,
-		'urlencode_deep' => true,
-		'urlencode' => true,
-		'wp_json_encode' => true,
+		'absint'               => true,
+		'esc_attr__'           => true,
+		'esc_attr_e'           => true,
+		'esc_attr_x'           => true,
+		'esc_attr'             => true,
+		'esc_html__'           => true,
+		'esc_html_e'           => true,
+		'esc_html_x'           => true,
+		'esc_html'             => true,
+		'esc_js'               => true,
+		'esc_sql'              => true,
+		'esc_textarea'         => true,
+		'esc_url_raw'          => true,
+		'esc_url'              => true,
+		'filter_input'         => true,
+		'filter_var'           => true,
+		'intval'               => true,
+		'json_encode'          => true,
+		'like_escape'          => true,
+		'number_format'        => true,
+		'rawurlencode'         => true,
+		'sanitize_html_class'  => true,
+		'sanitize_user_field'  => true,
+		'tag_escape'           => true,
+		'urlencode_deep'       => true,
+		'urlencode'            => true,
+		'wp_json_encode'       => true,
 		'wp_kses_allowed_html' => true,
-		'wp_kses_data' => true,
-		'wp_kses_post' => true,
-		'wp_kses' => true,
+		'wp_kses_data'         => true,
+		'wp_kses_post'         => true,
+		'wp_kses'              => true,
 	);
 
 	/**
@@ -83,150 +79,150 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $autoEscapedFunctions = array(
-		'allowed_tags' => true,
-		'bloginfo' => true,
-		'body_class' => true,
-		'calendar_week_mod' => true,
+		'allowed_tags'              => true,
+		'bloginfo'                  => true,
+		'body_class'                => true,
+		'calendar_week_mod'         => true,
 		'cancel_comment_reply_link' => true,
-		'category_description' => true,
-		'checked' => true,
+		'category_description'      => true,
+		'checked'                   => true,
 		'comment_author_email_link' => true,
-		'comment_author_email' => true,
-		'comment_author_IP' => true,
-		'comment_author_link' => true,
-		'comment_author_rss' => true,
-		'comment_author_url_link' => true,
-		'comment_author_url' => true,
-		'comment_author' => true,
-		'comment_class' => true,
-		'comment_date' => true,
-		'comment_excerpt' => true,
-		'comment_form_title' => true,
-		'comment_form' => true,
-		'comment_id_fields' => true,
-		'comment_ID' => true,
-		'comment_reply_link' => true,
-		'comment_text_rss' => true,
-		'comment_text' => true,
-		'comment_time' => true,
-		'comment_type' => true,
-		'comments_link' => true,
-		'comments_number' => true,
-		'comments_popup_link' => true,
-		'comments_popup_script' => true,
-		'comments_rss_link' => true,
-		'count' => true,
+		'comment_author_email'      => true,
+		'comment_author_IP'         => true,
+		'comment_author_link'       => true,
+		'comment_author_rss'        => true,
+		'comment_author_url_link'   => true,
+		'comment_author_url'        => true,
+		'comment_author'            => true,
+		'comment_class'             => true,
+		'comment_date'              => true,
+		'comment_excerpt'           => true,
+		'comment_form_title'        => true,
+		'comment_form'              => true,
+		'comment_id_fields'         => true,
+		'comment_ID'                => true,
+		'comment_reply_link'        => true,
+		'comment_text_rss'          => true,
+		'comment_text'              => true,
+		'comment_time'              => true,
+		'comment_type'              => true,
+		'comments_link'             => true,
+		'comments_number'           => true,
+		'comments_popup_link'       => true,
+		'comments_popup_script'     => true,
+		'comments_rss_link'         => true,
+		'count'                     => true,
 		'delete_get_calendar_cache' => true,
-		'disabled' => true,
-		'do_shortcode' => true,
-		'do_shortcode_tag' => true,
-		'edit_bookmark_link' => true,
-		'edit_comment_link' => true,
-		'edit_post_link' => true,
-		'edit_tag_link' => true,
-		'get_archives_link' => true,
-		'get_attachment_link' => true,
-		'get_avatar' => true,
-		'get_bookmark_field' => true,
-		'get_bookmark' => true,
-		'get_calendar' => true,
-		'get_comment_author_link' => true,
-		'get_comment_date' => true,
-		'get_comment_time' => true,
-		'get_current_blog_id' => true,
-		'get_delete_post_link' => true,
-		'get_footer' => true,
-		'get_header' => true,
-		'get_search_form' => true,
-		'get_search_query' => true,
-		'get_sidebar' => true,
-		'get_template_part' => true,
-		'get_the_author_link' => true,
-		'get_the_author' => true,
-		'get_the_date' => true,
-		'get_the_post_thumbnail' => true,
-		'get_the_term_list' => true,
-		'get_the_title' => true,
-		'has_post_thumbnail' => true,
-		'is_attachment' => true,
-		'next_comments_link' => true,
-		'next_image_link' => true,
-		'next_post_link' => true,
-		'next_posts_link' => true,
-		'paginate_comments_links' => true,
-		'permalink_anchor' => true,
-		'post_class' => true,
-		'post_password_required' => true,
-		'post_type_archive_title' => true,
-		'posts_nav_link' => true,
-		'previous_comments_link' => true,
-		'previous_image_link' => true,
-		'previous_post_link' => true,
-		'previous_posts_link' => true,
-		'selected' => true,
-		'single_cat_title' => true,
-		'single_month_title' => true,
-		'single_post_title' => true,
-		'single_tag_title' => true,
-		'single_term_title' => true,
-		'sticky_class' => true,
-		'tag_description' => true,
-		'term_description' => true,
-		'the_attachment_link' => true,
-		'the_author_link' => true,
-		'the_author_meta' => true,
-		'the_author_posts_link' => true,
-		'the_author_posts' => true,
-		'the_author' => true,
-		'the_category_rss' => true,
-		'the_category' => true,
-		'the_content_rss' => true,
-		'the_content' => true,
-		'the_date_xml' => true,
-		'the_date' => true,
-		'the_excerpt_rss' => true,
-		'the_excerpt' => true,
-		'the_feed_link' => true,
-		'the_ID' => true,
-		'the_meta' => true,
-		'the_modified_author' => true,
-		'the_modified_date' => true,
-		'the_modified_time' => true,
-		'the_permalink' => true,
-		'the_post_thumbnail' => true,
-		'the_search_query' => true,
-		'the_shortlink' => true,
-		'the_tags' => true,
-		'the_taxonomies' => true,
-		'the_terms' => true,
-		'the_time' => true,
-		'the_title_attribute' => true,
-		'the_title_rss' => true,
-		'the_title' => true,
-		'vip_powered_wpcom' => true,
-		'walk_nav_menu_tree' => true,
-		'wp_attachment_is_image' => true,
-		'wp_dropdown_categories' => true,
-		'wp_dropdown_users' => true,
-		'wp_enqueue_script' => true,
-		'wp_generate_tag_cloud' => true,
-		'wp_get_archives' => true,
-		'wp_get_attachment_image' => true,
-		'wp_get_attachment_link' => true,
-		'wp_link_pages' => true,
-		'wp_list_authors' => true,
-		'wp_list_bookmarks' => true,
-		'wp_list_categories' => true,
-		'wp_list_comments' => true,
-		'wp_login_form' => true,
-		'wp_loginout' => true,
-		'wp_meta' => true,
-		'wp_nav_menu' => true,
-		'wp_register' => true,
-		'wp_shortlink_header' => true,
-		'wp_shortlink_wp_head' => true,
-		'wp_tag_cloud' => true,
-		'wp_title' => true,
+		'disabled'                  => true,
+		'do_shortcode'              => true,
+		'do_shortcode_tag'          => true,
+		'edit_bookmark_link'        => true,
+		'edit_comment_link'         => true,
+		'edit_post_link'            => true,
+		'edit_tag_link'             => true,
+		'get_archives_link'         => true,
+		'get_attachment_link'       => true,
+		'get_avatar'                => true,
+		'get_bookmark_field'        => true,
+		'get_bookmark'              => true,
+		'get_calendar'              => true,
+		'get_comment_author_link'   => true,
+		'get_comment_date'          => true,
+		'get_comment_time'          => true,
+		'get_current_blog_id'       => true,
+		'get_delete_post_link'      => true,
+		'get_footer'                => true,
+		'get_header'                => true,
+		'get_search_form'           => true,
+		'get_search_query'          => true,
+		'get_sidebar'               => true,
+		'get_template_part'         => true,
+		'get_the_author_link'       => true,
+		'get_the_author'            => true,
+		'get_the_date'              => true,
+		'get_the_post_thumbnail'    => true,
+		'get_the_term_list'         => true,
+		'get_the_title'             => true,
+		'has_post_thumbnail'        => true,
+		'is_attachment'             => true,
+		'next_comments_link'        => true,
+		'next_image_link'           => true,
+		'next_post_link'            => true,
+		'next_posts_link'           => true,
+		'paginate_comments_links'   => true,
+		'permalink_anchor'          => true,
+		'post_class'                => true,
+		'post_password_required'    => true,
+		'post_type_archive_title'   => true,
+		'posts_nav_link'            => true,
+		'previous_comments_link'    => true,
+		'previous_image_link'       => true,
+		'previous_post_link'        => true,
+		'previous_posts_link'       => true,
+		'selected'                  => true,
+		'single_cat_title'          => true,
+		'single_month_title'        => true,
+		'single_post_title'         => true,
+		'single_tag_title'          => true,
+		'single_term_title'         => true,
+		'sticky_class'              => true,
+		'tag_description'           => true,
+		'term_description'          => true,
+		'the_attachment_link'       => true,
+		'the_author_link'           => true,
+		'the_author_meta'           => true,
+		'the_author_posts_link'     => true,
+		'the_author_posts'          => true,
+		'the_author'                => true,
+		'the_category_rss'          => true,
+		'the_category'              => true,
+		'the_content_rss'           => true,
+		'the_content'               => true,
+		'the_date_xml'              => true,
+		'the_date'                  => true,
+		'the_excerpt_rss'           => true,
+		'the_excerpt'               => true,
+		'the_feed_link'             => true,
+		'the_ID'                    => true,
+		'the_meta'                  => true,
+		'the_modified_author'       => true,
+		'the_modified_date'         => true,
+		'the_modified_time'         => true,
+		'the_permalink'             => true,
+		'the_post_thumbnail'        => true,
+		'the_search_query'          => true,
+		'the_shortlink'             => true,
+		'the_tags'                  => true,
+		'the_taxonomies'            => true,
+		'the_terms'                 => true,
+		'the_time'                  => true,
+		'the_title_attribute'       => true,
+		'the_title_rss'             => true,
+		'the_title'                 => true,
+		'vip_powered_wpcom'         => true,
+		'walk_nav_menu_tree'        => true,
+		'wp_attachment_is_image'    => true,
+		'wp_dropdown_categories'    => true,
+		'wp_dropdown_users'         => true,
+		'wp_enqueue_script'         => true,
+		'wp_generate_tag_cloud'     => true,
+		'wp_get_archives'           => true,
+		'wp_get_attachment_image'   => true,
+		'wp_get_attachment_link'    => true,
+		'wp_link_pages'             => true,
+		'wp_list_authors'           => true,
+		'wp_list_bookmarks'         => true,
+		'wp_list_categories'        => true,
+		'wp_list_comments'          => true,
+		'wp_login_form'             => true,
+		'wp_loginout'               => true,
+		'wp_meta'                   => true,
+		'wp_nav_menu'               => true,
+		'wp_register'               => true,
+		'wp_shortlink_header'       => true,
+		'wp_shortlink_wp_head'      => true,
+		'wp_tag_cloud'              => true,
+		'wp_title'                  => true,
 	);
 
 	/**
@@ -237,46 +233,46 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $sanitizingFunctions = array(
-		'_wp_handle_upload' => true,
-		'absint' => true,
-		'array_key_exists' => true,
-		'esc_url_raw' => true,
-		'filter_input' => true,
-		'filter_var' => true,
-		'hash_equals' => true,
-		'in_array' => true,
-		'intval' => true,
-		'is_array' => true,
-		'is_email' => true,
-		'number_format' => true,
-		'sanitize_bookmark_field' => true,
-		'sanitize_bookmark' => true,
-		'sanitize_email' => true,
-		'sanitize_file_name' => true,
-		'sanitize_html_class' => true,
-		'sanitize_key' => true,
-		'sanitize_meta' => true,
-		'sanitize_mime_type' => true,
-		'sanitize_option' => true,
-		'sanitize_sql_orderby' => true,
-		'sanitize_term_field' => true,
-		'sanitize_term' => true,
-		'sanitize_text_field' => true,
-		'sanitize_title_for_query' => true,
+		'_wp_handle_upload'          => true,
+		'absint'                     => true,
+		'array_key_exists'           => true,
+		'esc_url_raw'                => true,
+		'filter_input'               => true,
+		'filter_var'                 => true,
+		'hash_equals'                => true,
+		'in_array'                   => true,
+		'intval'                     => true,
+		'is_array'                   => true,
+		'is_email'                   => true,
+		'number_format'              => true,
+		'sanitize_bookmark_field'    => true,
+		'sanitize_bookmark'          => true,
+		'sanitize_email'             => true,
+		'sanitize_file_name'         => true,
+		'sanitize_html_class'        => true,
+		'sanitize_key'               => true,
+		'sanitize_meta'              => true,
+		'sanitize_mime_type'         => true,
+		'sanitize_option'            => true,
+		'sanitize_sql_orderby'       => true,
+		'sanitize_term_field'        => true,
+		'sanitize_term'              => true,
+		'sanitize_text_field'        => true,
+		'sanitize_title_for_query'   => true,
 		'sanitize_title_with_dashes' => true,
-		'sanitize_title' => true,
-		'sanitize_user_field' => true,
-		'sanitize_user' => true,
-		'validate_file' => true,
-		'wp_handle_sideload' => true,
-		'wp_handle_upload' => true,
-		'wp_kses_allowed_html' => true,
-		'wp_kses_data' => true,
-		'wp_kses_post' => true,
-		'wp_kses' => true,
-		'wp_parse_id_list' => true,
-		'wp_redirect' => true,
-		'wp_safe_redirect' => true,
+		'sanitize_title'             => true,
+		'sanitize_user_field'        => true,
+		'sanitize_user'              => true,
+		'validate_file'              => true,
+		'wp_handle_sideload'         => true,
+		'wp_handle_upload'           => true,
+		'wp_kses_allowed_html'       => true,
+		'wp_kses_data'               => true,
+		'wp_kses_post'               => true,
+		'wp_kses'                    => true,
+		'wp_parse_id_list'           => true,
+		'wp_redirect'                => true,
+		'wp_safe_redirect'           => true,
 	);
 
 	/**
@@ -287,10 +283,10 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $unslashingSanitizingFunctions = array(
-		'absint' => true,
-		'boolval' => true,
-		'intval' => true,
-		'is_array' => true,
+		'absint'       => true,
+		'boolval'      => true,
+		'intval'       => true,
+		'is_array'     => true,
 		'sanitize_key' => true,
 	);
 
@@ -309,12 +305,12 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public static $formattingFunctions = array(
 		'array_fill' => true,
-		'ent2ncr' => true,
-		'implode' => true,
-		'join' => true,
-		'nl2br' => true,
-		'sprintf' => true,
-		'vsprintf' => true,
+		'ent2ncr'    => true,
+		'implode'    => true,
+		'join'       => true,
+		'nl2br'      => true,
+		'sprintf'    => true,
+		'vsprintf'   => true,
 		'wp_sprintf' => true,
 	);
 
@@ -326,22 +322,24 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $printingFunctions = array(
-		'_deprecated_argument' => true,
-		'_deprecated_file' => true,
-		'_deprecated_function' => true,
-		'_doing_it_wrong' => true,
-		'_e' => true,
-		'_ex' => true,
-		'die' => true,
-		'echo' => true,
-		'exit' => true,
-		'print' => true,
-		'printf' => true,
-		'trigger_error' => true,
-		'user_error' => true,
-		'vprintf' => true,
-		'wp_die' => true,
-		'wp_dropdown_pages' => true,
+		'_deprecated_argument'    => true,
+		'_deprecated_constructor' => true,
+		'_deprecated_file'        => true,
+		'_deprecated_function'    => true,
+		'_deprecated_hook'        => true,
+		'_doing_it_wrong'         => true,
+		'_e'                      => true,
+		'_ex'                     => true,
+		'die'                     => true,
+		'echo'                    => true,
+		'exit'                    => true,
+		'print'                   => true,
+		'printf'                  => true,
+		'trigger_error'           => true,
+		'user_error'              => true,
+		'vprintf'                 => true,
+		'wp_die'                  => true,
+		'wp_dropdown_pages'       => true,
 	);
 
 	/**
@@ -352,9 +350,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	public static $SQLEscapingFunctions = array(
-		'absint' => true,
-		'esc_sql' => true,
-		'intval' => true,
+		'absint'      => true,
+		'esc_sql'     => true,
+		'intval'      => true,
 		'like_escape' => true,
 	);
 
@@ -404,6 +402,44 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * A list of functions that invoke WP hooks (filters/actions).
+	 *
+	 * @since 0.10.0
+	 *
+	 * @var array
+	 */
+	public static $hookInvokeFunctions = array(
+		'do_action'                => true,
+		'do_action_ref_array'      => true,
+		'do_action_deprecated'     => true,
+		'apply_filters'            => true,
+		'apply_filters_ref_array'  => true,
+		'apply_filters_deprecated' => true,
+	);
+
+	/**
+	 * A list of functions that are used to interact with the WP plugins API.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @var array <string function name> => <int position of the hook name argument in function signature>
+	 */
+	public static $hookFunctions = array(
+		'has_filter'         => 1,
+		'add_filter'         => 1,
+		'remove_filter'      => 1,
+		'remove_all_filters' => 1,
+		'doing_filter'       => 1, // Hook name optional.
+		'has_action'         => 1,
+		'add_action'         => 1,
+		'doing_action'       => 1, // Hook name optional.
+		'did_action'         => 1,
+		'remove_action'      => 1,
+		'remove_all_actions' => 1,
+		'current_filter'     => 0, // No hook name argument.
+	);
+
+	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
@@ -424,11 +460,18 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * A list of superglobals that incorporate user input.
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @var string[]
 	 */
-	protected static $input_superglobals = array( '$_COOKIE', '$_GET', '$_FILES', '$_POST', '$_REQUEST', '$_SERVER' );
+	protected static $input_superglobals = array(
+		'$_COOKIE',
+		'$_GET',
+		'$_FILES',
+		'$_POST',
+		'$_REQUEST',
+		'$_SERVER',
+	);
 
 	/**
 	 * Initialize the class for the current process.
@@ -442,7 +485,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function init( PHP_CodeSniffer_File $phpcsFile ) {
 		$this->phpcsFile = $phpcsFile;
-		$this->tokens = $phpcsFile->getTokens();
+		$this->tokens    = $phpcsFile->getTokens();
 	}
 
 	/**
@@ -457,9 +500,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function get_last_ptr_on_line( $stackPtr ) {
 
-		$tokens = $this->tokens;
+		$tokens      = $this->tokens;
 		$currentLine = $tokens[ $stackPtr ]['line'];
-		$nextPtr = $stackPtr + 1;
+		$nextPtr     = ( $stackPtr + 1 );
 
 		while ( isset( $tokens[ $nextPtr ] ) && $tokens[ $nextPtr ]['line'] === $currentLine ) {
 			$nextPtr++;
@@ -468,7 +511,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// We've made it to the next line, back up one to the last in the previous line.
 		// We do this for micro-optimization of the above loop.
-		$lastPtr = $nextPtr - 1;
+		$lastPtr = ( $nextPtr - 1 );
 
 		return $lastPtr;
 	}
@@ -501,21 +544,18 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
 		// we need to here.
-		$end_of_statement = $this->phpcsFile->findNext(
-			array( T_CLOSE_TAG, T_SEMICOLON )
-			, $stackPtr
-		);
+		$end_of_statement = $this->phpcsFile->findNext( array( T_CLOSE_TAG, T_SEMICOLON ), $stackPtr );
 
-		// Check at the end of the statement if it comes before the end of the line.
-		if ( $end_of_statement < $end_of_line ) {
+		// Check at the end of the statement if it comes before - or is - the end of the line.
+		if ( $end_of_statement <= $end_of_line ) {
 
 			// If the statement was ended by a semicolon, we find the next non-
 			// whitespace token. If the semicolon was left out and it was terminated
 			// by an ending tag, we need to look backwards.
 			if ( T_SEMICOLON === $this->tokens[ $end_of_statement ]['code'] ) {
-				$lastPtr = $this->phpcsFile->findNext( T_WHITESPACE, $end_of_statement + 1, null, true );
+				$lastPtr = $this->phpcsFile->findNext( T_WHITESPACE, ( $end_of_statement + 1 ), null, true );
 			} else {
-				$lastPtr = $this->phpcsFile->findPrevious( T_WHITESPACE, $end_of_statement - 1, null, true );
+				$lastPtr = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 		}
 
@@ -537,7 +577,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * $array['key'][ $foo ][ something() ] = $bar;
 	 *
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 *
 	 * @param int $stackPtr The index of the token in the stack. This must points to
 	 *                      either a T_VARIABLE or T_CLOSE_SQUARE_BRACKET token.
@@ -549,13 +589,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		$tokens = $this->phpcsFile->getTokens();
 
 		// Must be a variable or closing square bracket (see below).
-		if ( ! in_array( $tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ) ) ) {
+		if ( ! in_array( $tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ), true ) ) {
 			return false;
 		}
 
 		$next_non_empty = $this->phpcsFile->findNext(
 			PHP_CodeSniffer_Tokens::$emptyTokens
-			, $stackPtr + 1
+			, ( $stackPtr + 1 )
 			, null
 			, true
 			, null
@@ -568,11 +608,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If the next token is an assignment, that's all we need to know.
-		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens ) ) {
+		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
 			return true;
 		}
 
-		// Check if this is an array assignment, e.g., $var['key'] = 'val';
+		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
 		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
 			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'] );
 		}
@@ -592,20 +632,20 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function has_nonce_check( $stackPtr ) {
 
 		/**
-		 * @var array {
-		 *      A cache of the scope that we last checked for nonce verification in.
+		 * A cache of the scope that we last checked for nonce verification in.
 		 *
-		 *      @var string $file  The name of the file.
-		 *      @var int    $start The index of the token where the scope started.
-		 *      @var int    $end   The index of the token where the scope ended.
-		 *      @var bool|int $nonce_check The index of the token where an nonce
-		 *                         check was found, or false if none was found.
+		 * @var array {
+		 *      @var string   $file        The name of the file.
+		 *      @var int      $start       The index of the token where the scope started.
+		 *      @var int      $end         The index of the token where the scope ended.
+		 *      @var bool|int $nonce_check The index of the token where an nonce check
+		 *                                 was found, or false if none was found.
 		 * }
 		 */
 		static $last;
 
 		$start = 0;
-		$end = $stackPtr;
+		$end   = $stackPtr;
 
 		$tokens = $this->phpcsFile->getTokens();
 
@@ -694,7 +734,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		$open_parenthesis = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 		reset( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 
-		return in_array( $this->tokens[ $open_parenthesis - 1 ]['code'], array( T_ISSET, T_EMPTY ) );
+		return in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( T_ISSET, T_EMPTY ), true );
 	}
 
 	/**
@@ -744,16 +784,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Get the last non-empty token.
 		$prev = $this->phpcsFile->findPrevious(
 			PHP_CodeSniffer_Tokens::$emptyTokens
-			, $stackPtr - 1
+			, ( $stackPtr - 1 )
 			, null
 			, true
 		);
 
 		// Check if it is a safe cast.
-		return in_array(
-			$this->tokens[ $prev ]['code']
-			, array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST )
-		);
+		return in_array( $this->tokens[ $prev ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ), true );
 	}
 
 	/**
@@ -785,7 +822,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Get the function that it's in.
 		$function_closer = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 		$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$function = $this->tokens[ $function_opener - 1 ];
+		$function        = $this->tokens[ ( $function_opener - 1 ) ];
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
 		if ( T_UNSET === $function['code'] ) {
@@ -805,8 +842,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Check if wp_unslash() is being used.
 		if ( 'wp_unslash' === $functionName ) {
 
-			$is_unslashed = true;
-
+			$is_unslashed    = true;
 			$function_closer = prev( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 
 			// If there is no other function being used, this value is unsanitized.
@@ -815,7 +851,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 
 			$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-			$functionName = $this->tokens[ $function_opener - 1 ]['content'];
+			$functionName    = $this->tokens[ ( $function_opener - 1 ) ]['content'];
 
 		} else {
 
@@ -828,7 +864,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			// Get the first parameter (name of function being used on the array).
 			$mapped_function = $this->phpcsFile->findNext(
 				PHP_CodeSniffer_Tokens::$emptyTokens
-				, $function_opener + 1
+				, ( $function_opener + 1 )
 				, $function_closer
 				, true
 			);
@@ -881,7 +917,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Find the next non-empty token.
 		$open_bracket = $this->phpcsFile->findNext(
 			PHP_CodeSniffer_Tokens::$emptyTokens,
-			$stackPtr + 1,
+			( $stackPtr + 1 ),
 			null,
 			true
 		);
@@ -892,8 +928,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		$key = $this->phpcsFile->getTokensAsString(
-			$open_bracket + 1
-			, $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1
+			( $open_bracket + 1 )
+			, ( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
 		);
 
 		return trim( $key );
@@ -936,9 +972,10 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function is_validated( $stackPtr, $array_key = null, $in_condition_only = false ) {
 
 		if ( $in_condition_only ) {
-
-			// This is a stricter check, requiring the variable to be used only
-			// within the validation condition.
+			/*
+			   This is a stricter check, requiring the variable to be used only
+			   within the validation condition.
+			 */
 
 			// If there are no conditions, there's no validation.
 			if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
@@ -946,9 +983,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 
 			$conditions = $this->tokens[ $stackPtr ]['conditions'];
-			end( $conditions ); // Get closest condition
+			end( $conditions ); // Get closest condition.
 			$conditionPtr = key( $conditions );
-			$condition = $this->tokens[ $conditionPtr ];
+			$condition    = $this->tokens[ $conditionPtr ];
 
 			if ( ! isset( $condition['parenthesis_opener'] ) ) {
 
@@ -965,9 +1002,10 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$scope_end   = $condition['parenthesis_closer'];
 
 		} else {
-
-			// We are are more loose, requiring only that the variable be validated
-			// in the same function/file scope as it is used.
+			/*
+			   We are are more loose, requiring only that the variable be validated
+			   in the same function/file scope as it is used.
+			 */
 
 			// Check if we are in a function.
 			$function = $this->phpcsFile->findPrevious( T_FUNCTION, $stackPtr );
@@ -982,9 +1020,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$scope_end = $stackPtr;
 		}
 
-		for ( $i = $scope_start + 1; $i < $scope_end; $i++ ) {
+		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
-			if ( ! in_array( $this->tokens[ $i ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ) ) ) {
+			if ( ! in_array( $this->tokens[ $i ]['code'], array( T_ISSET, T_EMPTY, T_UNSET ), true ) ) {
 				continue;
 			}
 
@@ -992,7 +1030,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$issetCloser = $this->tokens[ $issetOpener ]['parenthesis_closer'];
 
 			// Look for this variable. We purposely stomp $i from the parent loop.
-			for ( $i = $issetOpener + 1; $i < $issetCloser; $i++ ) {
+			for ( $i = ( $issetOpener + 1 ); $i < $issetCloser; $i++ ) {
 
 				if ( T_VARIABLE !== $this->tokens[ $i ]['code'] ) {
 					continue;
@@ -1042,19 +1080,19 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// yoda conditions are usually expected.
 		$previous_token = $this->phpcsFile->findPrevious(
 			PHP_CodeSniffer_Tokens::$emptyTokens,
-			$stackPtr - 1,
+			( $stackPtr - 1 ),
 			null,
 			true
 		);
 
-		if ( in_array( $this->tokens[ $previous_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
+		if ( in_array( $this->tokens[ $previous_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens, true ) ) {
 			return true;
 		}
 
 		// Maybe the comparison operator is after this.
 		$next_token = $this->phpcsFile->findNext(
 			PHP_CodeSniffer_Tokens::$emptyTokens,
-			$stackPtr + 1,
+			( $stackPtr + 1 ),
 			null,
 			true
 		);
@@ -1064,13 +1102,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 			$next_token = $this->phpcsFile->findNext(
 				PHP_CodeSniffer_Tokens::$emptyTokens,
-				$this->tokens[ $next_token ]['bracket_closer'] + 1,
+				( $this->tokens[ $next_token ]['bracket_closer'] + 1 ),
 				null,
 				true
 			);
 		}
 
-		if ( in_array( $this->tokens[ $next_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens ) ) {
+		if ( in_array( $this->tokens[ $next_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens, true ) ) {
 			return true;
 		}
 
@@ -1089,6 +1127,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * This function will check the token and return 'closure', 'trait', or 'class',
 	 * based on which of these uses the use is being used for.
 	 *
+	 * @since 0.7.0
+	 *
 	 * @param int $stackPtr The position of the token to check.
 	 *
 	 * @return string The type of use.
@@ -1096,7 +1136,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function get_use_type( $stackPtr ) {
 
 		// USE keywords inside closures.
-		$next = $this->phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+		$next = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 
 		if ( T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code'] ) {
 			return 'closure';
@@ -1116,6 +1156,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * Check if '$' is followed by a valid variable name, and that it is not preceded by an escape sequence.
 	 *
+	 * @since 0.9.0
+	 *
 	 * @param string $string A T_DOUBLE_QUOTED_STRING token.
 	 *
 	 * @return array Variable names (without '$' sigil).
@@ -1124,13 +1166,12 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		$variables = array();
 		if ( preg_match_all( '/(?P<backslashes>\\\\*)\$(?P<symbol>\w+)/', $string, $match_sets, PREG_SET_ORDER ) ) {
 			foreach ( $match_sets as $matches ) {
-				if ( strlen( $matches['backslashes'] ) % 2 === 0 ) {
+				if ( ( strlen( $matches['backslashes'] ) % 2 ) === 0 ) {
 					$variables[] = $matches['symbol'];
 				}
 			}
 		}
 		return $variables;
-	}
-}
+	} // end get_interpolated_variables()
 
-// EOF
+}

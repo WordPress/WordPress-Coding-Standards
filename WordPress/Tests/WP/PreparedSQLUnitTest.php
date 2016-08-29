@@ -1,20 +1,26 @@
 <?php
 /**
- * Unit test class for the PreparedSQL sniff.
+ * Unit test class for WordPress Coding Standard.
  *
- * @package WordPress-Coding-Standards
- * @since 0.8.0
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Unit test class for the PreparedSQL sniff.
  *
- * @since 0.8.0
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.8.0
  */
 class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 
 	/**
+	 * Returns the lines where errors should occur.
+	 *
 	 * @since 0.8.0
+	 *
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		return array(
@@ -32,10 +38,15 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	}
 
 	/**
+	 * Returns the lines where warnings should occur.
+	 *
 	 * @since 0.8.0
+	 *
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		return array();
+
 	}
 
-} // end class.
+} // End class.

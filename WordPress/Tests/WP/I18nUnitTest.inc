@@ -1,0 +1,108 @@
+<?php
+
+__( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables.
+
+__( "hell\$varo", 'my-slug' ); // OK, Variable is not interpolated.
+__( "hell\\$varo", 'my-slug' ); // Bad, is interpolated.
+__( "hell\\\$varo", 'my-slug' ); // OK, variable is escaped.
+
+__( $var, 'my-slug' ); // Bad, shouldn't use variables.
+
+__( 'string', SOMETHING ); // Bad, shouldn't use CONSTANTS.
+
+__( 'string' . $var, 'my-slug' ); // Bad, shouldn't use variable for string.
+
+__( $var . 'string', 'my-slug' ); // Bad, shouldn't use variable for string.
+
+__( SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string.
+
+__( 'string' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string.
+
+__( SOMETHING . 'string', 'my-slug' ); // Bad, shouldn't use variable for string.
+
+__( 'string', $domain ); // Bad, shouldn't use variable for domain.
+
+__( 'string', 'my' . $domain ); // Bad, shouldn't use variable for domain.
+
+__( 'string', $domain . 'my-slug' ); // Bad, shouldn't use variable for domain.
+
+__( 'string', 'my-slug' ); // Good.
+
+_x( 'string', 'context', 'my-slug' ); // Good.
+
+_x( 'string', $var, 'my-slug' ); // Bad, shouldn't use variable for context.
+
+_x( 'string', 'context' . $var, 'my-slug' ); // Bad, shouldn't use variable for context.
+
+_x( 'string', $var . 'context', 'my-slug' ); // Bad, shouldn't use variable for context.
+
+_x( 'string', SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context.
+
+_x( 'string', SOMETHING . 'context', 'my-slug' ); // Bad, shouldn't use constant for context.
+
+_x( 'string', 'context' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context.
+
+_n( 'I have %d cat.', 'I have %d cats.', $number ); // Bad, no text domain.
+_n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug' ); // OK.
+_n( 'I have %d cat.', 'I have %d cats.', $number, "illegal $string" ); // Bad.
+_n( 'I have %d cat.', 'I have %d cats.', $number, SOMETHING ); // Bad.
+
+_n_noop( 'I have %d cat.', 'I have %d cats.' ); // Bad, no text domain.
+_n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug' ); // OK.
+_n_noop( 'I have %d cat.', 'I have %d cats.', "illegal $string" ); // Bad.
+_n_noop( 'I have %d cat.', 'I have %d cats.',  SOMETHING ); // Bad.
+
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.' ); // Bad, no text domain.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, $context ); // Bad.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // OK.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, $context, 'my-slug' ); // Bad.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.', "illegal $string" ); // Bad.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.', SOMETHING ); // Bad.
+
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.' ); // Bad, no text domain.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', $context ); // Bad, no text domain, variable context.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // OK.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', $context, 'my-slug' ); // Bad.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', "illegal $string" ); // Bad.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', SOMETHING ); // Bad.
+
+translate( 'foo', 'my-slug' ); // Bad, low-level API function.
+translate_with_gettext_context( 'foo', 'bar', 'my-slug' ); // Bad, low-level API function.
+
+_( 'foo', 'my-slug' ); // Bad.
+
+__( 'foo', 'my-slug', 'too-many-args' ); // Bad.
+_x( 'string', 'context', 'my-slug', 'too-many-args' ); // Bad.
+_n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug', 'too-many-args' ); // Bad.
+_n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug', 'too-many-args' ); // Bad.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
+
+// Make sure that multi-line string literals are accepted.
+_nx( 'I have
+%d cat.', 'I have
+%d cats.', $number, 'Not
+really.', 'my-slug' ); // OK.
+
+// Ensure lack of spaces doesn't cause i18n error.
+_n_noop('I have %d cat.', 'I have %d cats.', 'my-slug'); // OK.
+
+// Dollar sign in literal string is not interpolated, so OK.
+_n_noop( 'I have %d cat.', 'I have %d cats literal-string-so-$variable-not-interpolated.', 'my-slug' ); // OK.
+
+// Multiple placeholders should have orderable placeholders.
+__( 'There are %d monkeys in the %s', 'my-slug' ); // Multiple arguments should be numbered.
+__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK.
+_n( 'There is %d monkey in the %s', 'There are %d monkeys in the %s', $number, 'my-slug' ); // Multiple arguments should be numbered.
+_n( 'There is %1$d monkey in the %2$s', 'In the %2$s there are %1$d monkeys', $number, 'my-slug' ); // OK.
+
+// The singular form should use placeholders if the plural does.
+// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals
+_n( 'I have a cat.', 'I have %d cats.', $number, 'my-slug' ); // Bad, singular should have placeholder.
+_n_noop( 'I have a cat.', 'I have %d cats.', 'my-slug' ); // Bad, singular should have placeholder.
+_nx( 'I have a cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
+_nx_noop( 'I have a cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
+
+__( '%s', 'my-slug' ); // Bad, don't waste translator's time.
+__( '%1$s%2$s', 'my-slug' ); // Bad, don't waste translator's time.
+_n( 'I have %d cat.', '%d', $number, 'my-slug' ); // Bad, move the logic out of the translation.
+__( '\'%s\'', 'my-slug' ); // OK (ish. this is a technical test, not a great string).

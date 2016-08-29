@@ -67,22 +67,25 @@ Run the `phpcs` command line tool on a given file or directory, for example:
 Will result in following output:
 
 	--------------------------------------------------------------------------------
-	FOUND 13 ERROR(S) AFFECTING 7 LINE(S)
+	FOUND 8 ERRORS AND 2 WARNINGS AFFECTING 7 LINES
 	--------------------------------------------------------------------------------
-	  1 | ERROR | End of line character is invalid; expected "\n" but found "\r\n"
-	 22 | ERROR | No space after opening parenthesis of function  prohibited
-	 22 | ERROR | No space before closing parenthesis of function  prohibited
-	 26 | ERROR | No space before closing parenthesis of function  prohibited
-	 31 | ERROR | No space after opening parenthesis of function  prohibited
-	 31 | ERROR | No space before closing parenthesis of function  prohibited
-	 31 | ERROR | No space after opening parenthesis of function  prohibited
-	 31 | ERROR | No space before closing parenthesis of function  prohibited
-	 34 | ERROR | No space after opening parenthesis of function  prohibited
-	 34 | ERROR | No space before closing parenthesis of function  prohibited
-	 55 | ERROR | Detected usage of a non-validated input variable: $_SERVER
-	 55 | ERROR | Detected usage of a non-sanitized input variable: $_SERVER
-	 70 | ERROR | String "Create a Configuration File" does not require double
-		|       | quotes; use single quotes instead
+	  1 | ERROR   | [x] End of line character is invalid; expected "\n" but found "\r\n"
+	 36 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
+	 41 | WARNING | [ ] Silencing errors is discouraged
+	 41 | WARNING | [ ] Silencing errors is discouraged
+	 48 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
+	    |         |     question marks
+	 48 | ERROR   | [x] There must be no blank line following an inline comment
+	 76 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
+	    |         |     question marks
+	 92 | ERROR   | [x] String "Create a Configuration File" does not require double
+	    |         |     quotes; use single quotes instead
+	 94 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex for
+	    |         |     'Data Validation'), not '$die'
+	 94 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex for
+	    |         |     'Data Validation'), not '__'
+	--------------------------------------------------------------------------------
+	PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
 	--------------------------------------------------------------------------------
 
 ### PhpStorm
@@ -91,7 +94,34 @@ Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](htt
 
 ### Sublime Text
 
+##### sublime-phpcs package
 Install the [sublime-phpcs package](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
+
+##### SublimeLinter-phpcs
+sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/) can do that.
+
+- Install PHP Sniffer and WordPress Coding Standards per above.
+- Use [Package Control](https://packagecontrol.io/) to search for and install [SublimeLinter](http://www.sublimelinter.com) then [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/).
+- From the command palette, select `Preferences: SublimeLinter Settings - User` and change `user.linters.phpcs.standard` to the phpcs standard of your choice (e.g. `WordPress`, `WordPress-VIP`, etc.).
+
+![SublimeLinter-phpcs user settings](https://cloud.githubusercontent.com/assets/224636/12946250/068776ba-cfc1-11e5-816b-109e4e32d21b.png)
+
+- You may need to restart Sublime for these settings to take effect. Error messages appear in the bottom of the editor.
+
+![SublimeLinter-phpcs linting](https://cloud.githubusercontent.com/assets/224636/12946326/75986c3a-cfc1-11e5-8537-1243554bbab6.png)
+
+![SublimeLinter-phpcs error](https://cloud.githubusercontent.com/assets/224636/12946335/8bee5a30-cfc1-11e5-8b5f-b10e8e4a4909.png)
+
+### Atom
+
+- Install PHP Sniffer and WordPress Coding Standards per above.
+- Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager.
+- Run `which phpcs` to get your `phpcs` executable path.
+- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
+
+![Atom Linter WordPress Coding Standards configuration](https://cloud.githubusercontent.com/assets/224636/12740504/ce4e97b8-c941-11e5-8d83-c77a2470d58e.png)
+
+![Atom Linter in action using WordPress Coding Standards](https://cloud.githubusercontent.com/assets/224636/12740542/131c5894-c942-11e5-9e31-5e020c993224.png)
 
 ## Standards subsets
 
@@ -108,9 +138,26 @@ You can use the following as standard names when invoking `phpcs` to select snif
     - includes `WordPress-Core`
 
 
-### Using custom ruleset
+### Using a custom ruleset
 
 If you need to further customize selection of sniffs for your project — you can create custom `ruleset.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+
+### Recommended additional rulesets
+
+The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset comes highly recommended.
+The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) sniffs are designed to analyse your code for cross-PHP version compatibility.
+Install it as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
+
+Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will received compatibility information. The recommended setting for this at this moment is  `5.2-7.1` to support the same PHP versions as WordPress Core supports.
+
+For more information about setting the `testVersion`, see:
+* [PHPCompatibility: Using the compatibility sniffs](https://github.com/wimg/PHPCompatibility#using-the-compatibility-sniffs)
+* [PHPCompatibility: Using a custom ruleset](https://github.com/wimg/PHPCompatibility#using-a-custom-ruleset)
+
+## Fixing errors or whitelisting them
+
+You can find information on how to deal with some of the more frequent issues in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki).
+
 
 ## Contributing
 

@@ -1,12 +1,22 @@
 <?php
 /**
+ * WordPress Coding Standard.
+ *
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
+
+/**
  * Flag using orderby => rand.
  *
- * @link https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @link    https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.9.0
  */
-class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff {
+class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.
@@ -20,7 +30,7 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 				'keys' => array(
 					'orderby',
 				),
-			)
+			),
 		);
 	}
 
@@ -28,11 +38,11 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 	 * Callback to process each confirmed key, to check value
 	 * This must be extended to add the logic to check assignment value
 	 *
-	 * @param  string   $key   Array index / key
-	 * @param  mixed    $val   Assigned value
-	 * @param  int      $line  Token line
-	 * @param  array    $group Group definition
-	 * @return mixed           FALSE if no match, TRUE if matches, STRING if matches with custom error message passed to ->process()
+	 * @param  string $key   Array index / key.
+	 * @param  mixed  $val   Assigned value.
+	 * @param  int    $line  Token line.
+	 * @param  array  $group Group definition.
+	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		if ( 'rand' === strtolower( $val ) ) {
@@ -42,4 +52,4 @@ class WordPress_Sniffs_VIP_OrderByRandSniff extends WordPress_Sniffs_Arrays_Arra
 		}
 	}
 
-}//end class
+} // End class.

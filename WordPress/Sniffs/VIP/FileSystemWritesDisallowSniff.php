@@ -1,16 +1,26 @@
 <?php
 /**
- * Disallow Filesystem writes
+ * WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
-class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff
-{
+
+if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
+	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
+}
+
+/**
+ * Disallow Filesystem writes.
+ *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ */
+class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
 
 	/**
 	 * A list of forbidden functions with their alternatives.
@@ -21,32 +31,32 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	 * @var array(string => string|null)
 	 */
 	public $forbiddenFunctions = array(
-										'file_put_contents' => null,
-										'fwrite'            => null,
-										'fputcsv'           => null,
-										'fputs'             => null,
-										'ftruncate'         => null,
-										'link'              => null,
-										'symlink'           => null,
-										'mkdir'             => null,
-										'rename'            => null,
-										'rmdir'             => null,
-										'tempnam'           => null,
-										'touch'             => null,
-										'unlink'            => null,
-										'is_writable'       => null,
-										'is_writeable'      => null,
-										'lchgrp'            => null,
-										'lchown'            => null,
-										'fputcsv'           => null,
-										'delete'            => null,
-										'chmod'             => null,
-										'chown'             => null,
-										'chgrp'             => null,
-										'chmod'             => null,
-										'chmod'             => null,
-										'flock'             => null,
-									);
+		'file_put_contents' => null,
+		'fwrite'            => null,
+		'fputcsv'           => null,
+		'fputs'             => null,
+		'ftruncate'         => null,
+		'link'              => null,
+		'symlink'           => null,
+		'mkdir'             => null,
+		'rename'            => null,
+		'rmdir'             => null,
+		'tempnam'           => null,
+		'touch'             => null,
+		'unlink'            => null,
+		'is_writable'       => null,
+		'is_writeable'      => null,
+		'lchgrp'            => null,
+		'lchown'            => null,
+		'fputcsv'           => null,
+		'delete'            => null,
+		'chmod'             => null,
+		'chown'             => null,
+		'chgrp'             => null,
+		'chmod'             => null,
+		'chmod'             => null,
+		'flock'             => null,
+	);
 
 	/**
 	 * If true, an error will be thrown; otherwise a warning.
@@ -58,6 +68,8 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	/**
 	 * Generates the error or warning for this sniff.
 	 *
+	 * Overloads parent addError method.
+	 *
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the forbidden function
 	 *                                        in the token array.
@@ -66,18 +78,16 @@ class WordPress_Sniffs_VIP_FileSystemWritesDisallowSniff extends Generic_Sniffs_
 	 *
 	 * @return void
 	 */
-	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null )
-	{
-		$data  = array($function);
+	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null ) {
+		$data  = array( $function );
 		$error = 'Filesystem writes are forbidden, you should not be using %s()';
 
-		if ( $this->error === true ) {
+		if ( true === $this->error ) {
 			$phpcsFile->addError( $error, $stackPtr, 'FileWriteDetected', $data );
 		} else {
 			$phpcsFile->addWarning( $error, $stackPtr, 'FileWriteDetected', $data );
 		}
 
-	}//end addError()
+	}
 
-
-}//end class
+} // End class.

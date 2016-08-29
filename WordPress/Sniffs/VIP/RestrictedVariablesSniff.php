@@ -1,16 +1,25 @@
 <?php
 /**
- * Restricts usage of some variables in VIP context
+ * WordPress Coding Standard.
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
-class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_Sniffs_Variables_VariableRestrictionsSniff
-{
+
+/**
+ * Restricts usage of some variables in VIP context.
+ *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ */
+class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVariableRestrictionsSniff {
 
 	/**
-	 * Groups of variables to restrict
+	 * Groups of variables to restrict.
 	 *
 	 * Example: groups => array(
 	 * 	'wpdb' => array(
@@ -26,27 +35,29 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_Sniffs_Var
 	 */
 	public function getGroups() {
 		return array(
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#working-with-wp_users-and-user_meta
 			'user_meta' => array(
-				'type' => 'error',
-				'message' => 'Usage of users/usermeta tables is highly discouraged in VIP context, For storing user additional user metadata, you should look at User Attributes.',
+				'type'        => 'error',
+				'message'     => 'Usage of users/usermeta tables is highly discouraged in VIP context, For storing user additional user metadata, you should look at User Attributes.',
 				'object_vars' => array(
 					'$wpdb->users',
 					'$wpdb->usermeta',
-					),
 				),
+			),
+
+			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#caching-constraints
 			'cache_constraints' => array(
-				'type' => 'warning',
-				'message' => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
-				'variables' => array(
+				'type'          => 'warning',
+				'message'       => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
+				'variables'     => array(
 					'$_COOKIE',
 					),
 				'array_members' => array(
 					'$_SERVER[\'HTTP_USER_AGENT\']',
 					'$_SERVER[\'REMOTE_ADDR\']',
-					),
 				),
-			);
+			),
+		);
 	}
 
-
-}//end class
+} // End class.

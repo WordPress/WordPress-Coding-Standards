@@ -6,8 +6,61 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.10.0] - 2016-08-29
+
 ### Added
-- Sniff to flag dynamic translatable strings and textdomains.
+- `WordPress.WP.I18n` sniff to the `WordPress-Core` ruleset to flag dynamic translatable strings and textdomains.
+- `WordPress.PHP.DisallowAlternativePHPTags` sniff to the `WordPress-Core` ruleset to flag - and fix - ASP and `<script>` PHP open tags.
+- `WordPress.Classes.ClassOpeningStatement` sniff to the `WordPress-Core` ruleset to flag - and fix - class opening brace placement.
+- `WordPress.NamingConventions.ValidHookName` sniff to the `WordPress-Core` ruleset to flag filter and action hooks which don't comply with the guideline of lowercase letters and underscores. For maintaining backward-compatibility of hook names an `additionalWordDelimiters` property can be added via a custom ruleset.
+- `WordPress.Functions.DontExtract` sniff to the `WordPress-Core` ruleset to flag usage of the `extract()` function.
+- `WordPress.PHP.POSIXFunctions` sniff to the `WordPress-Core` ruleset to flag usage of regex functions from the POSIX PHP extension which was deprecated since PHP 5.3 and removed in PHP 7.
+- `WordPress.DB.RestrictedFunctions` and `WordPress.DB.RestrictedClasses` sniffs to the `WordPress-Core` ruleset to flag usage of direct database calls using PHP functions and classes rather than the WP functions for the same.
+- Abstract `AbstractClassRestrictions` parent class to allow for easier sniffing for usage of specific classes.
+- `Squiz.Strings.ConcatenationSpacing`, `PSR2.ControlStructures.ElseIfDeclaration`, `PSR2.Files.ClosingTag`, `Generic.NamingConventions.UpperCaseConstantName` to the `WordPress-Core` ruleset.
+- Ability to add arbitrary variables to the whitelist via a custom ruleset property for the `WordPress.NamingConventions.ValidVariableName` sniff.
+- Ability to use a whitelist comment for tax queries for the `WordPress.VIP.SlowDBQuery` sniff.
+- Instructions on how to use WPCS with Atom and SublimeLinter to the Readme.
+- Reference to the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki) to the Readme.
+- Recommendation to also use the [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset to the Readme.
+
+### Changed
+- The minimum required PHP_CodeSniffer version to 2.6.0.
+- Moved the `WordPress.WP.PreparedSQL` sniff from `WordPress-Extra` to `WordPress-Core`.
+- `WordPress.PHP.StrictInArray` will now also flag non-strict usage of `array_keys()` and `array_search()`.
+- Added `_deprecated_constructor()` and `_deprecated_hook()` to the list of printing functions.
+- Added numerous additional functions to sniff for to the `WordPress.VIP.RestrictedFunctions` sniff as per the VIP guidelines.
+- Upped the `posts_per_page` limit from 50 to 100 in `WordPress.VIP.PostsPerPage` sniff as per the VIP guidelines.
+- Added `cat_ID` to the whitelisted exceptions for the `WordPress.NamingConventions.ValidVariableName` sniff.
+- Added `__debugInfo` to the magic method whitelist for class methods starting with double underscore in the `WordPress.NamingConventions.ValidFunctionName` sniff.
+- An error will now also be thrown for non-magic _functions_ using a double underscore prefix - `WordPress.NamingConventions.ValidFunctionName` sniff.
+- The `WordPress.Arrays.ArrayAssignmentRestrictions`, `WordPress.Functions.FunctionRestrictions`, `WordPress.Variables.VariableRestrictions` sniffs weren't in actual fact sniffs, but parent classes for child sniffs. These have now all been turned into proper abstract parent classes and moved to the main `WordPress` directory.
+- The array provided to `AbstractFunctionRestrictions` can now take a `whitelist` key to whitelist select functions when blocking a group of functions by function prefix.
+- Updated installation instructions in the readme.
+- The `WordPress-Core` ruleset is now ordered according to the handbook
+- The WPCS code base itself now complies with the WordPress-Core, -Extra and -Docs coding standards.
+- Various other code quality and code consistency improvements under the hood.
+
+### Removed
+- `Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose` from the `WordPress-Core` standard (was causing duplicate messages for the same issue).
+- `Squiz.Commenting.FunctionComment.ScalarTypeHintMissing`, `Squiz.Commenting.InlineComment.NotCapital` from the `WordPress-Docs` standard.
+- Removed the sniffing for `get_pages()` from the `WordPress.VIP.RestrictedFunctions` sniff as per the VIP guidelines.
+- Removed the sniffing for `extract()` from the `WordPress.VIP.RestrictedFunctions` sniff as it's now covered in a separate sniff.
+- Removed the sniffing for the POSIX functions from the `WordPress.PHP.DiscouragedFunctions` sniff as it's now covered in a separate sniff.
+
+### Fixed
+- Error message precision for the `WordPress.NamingConventions.ValidVariableName` sniff.
+- Bug in the `WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd` sniff which was incorrectly being triggered on last method of class.
+- Function name sniffs based on the `AbstractFunctionRestrictions` parent class will now do a case-insensitive function name comparison.
+- Function name sniffs in the `WordPress.PHP.DiscouragedFunctions` sniff will now do a case-insensitive function name comparison.
+- Whitelist comments directly followed by a PHP closing tag were not being recognized.
+- Some PHP Magic constants were not recognized by the `WordPress.XSS.EscapeOutput` sniff.
+- An error message suggesting camel caps rather than the intended snake case format in the `WordPress.NamingConventions.ValidFunctionName` sniff.
+- `WordPress.WhiteSpace.ControlStructureSpacing` should no longer throw error notices during live code review.
+- Errors will be no longer be thrown for methods not complying with the naming conventions when the class extends a parent class or implements an interface - `WordPress.NamingConventions.ValidFunctionName` sniff.
+
 
 ## [0.9.0] - 2016-02-01
 
@@ -191,7 +244,8 @@ See the comparison for full list.
 
 Initial tagged release.
 
-[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.1...0.8.0
 [0.7.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.7.0...0.7.1

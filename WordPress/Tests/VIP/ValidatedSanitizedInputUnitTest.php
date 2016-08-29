@@ -1,29 +1,26 @@
 <?php
 /**
- * Unit test class for the ValidatedSanitizedInputSniff
+ * Unit test class for WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Shady Sharaf <shady@x-team.com>
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
-class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest
-{
-
+/**
+ * Unit test class for the ValidatedSanitizedInput sniff.
+ *
+ * @package WPCS\WordPressCodingStandards
+ * @since   0.3.0
+ */
+class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of errors that should occur on that line.
-	 *
-	 * @return array(int => int)
+	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList()
-	{
+	public function getErrorList() {
 		return array(
 			5 => 3,
 			7 => 1,
@@ -44,26 +41,18 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 			104 => 2,
 			105 => 1,
 			114 => 2,
-			);
+		);
 
-	}//end getErrorList()
-
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * The key of the array should represent the line number and the value
-	 * should represent the number of warnings that should occur on that line.
-	 *
-	 * @return array(int => int)
+	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList()
-	{
+	public function getWarningList() {
 		return array();
 
-	}//end getWarningList()
+	}
 
-
-}//end class
-
-?>
+} // End class.

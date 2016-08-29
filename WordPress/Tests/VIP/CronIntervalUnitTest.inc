@@ -25,7 +25,7 @@ class Foo {
 
 	static function my_add_quicklier( $schedules ) {
 		$schedules['every_5_mins'] = array(
-			'interval' => 20 * 60 - 15 * 60, // sneaky 5 minute interval
+			'interval' => 20 * 60 - 15 * 60, // Sneaky 5 minute interval.
 			'display' => __( 'Once every 5 minutes' )
 		);
 		return $schedules;

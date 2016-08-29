@@ -1,16 +1,24 @@
 <?php
 /**
- * Flag Database direct queries
+ * WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Shady Sharaf <shady@x-team.com>
- * @link     https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
-class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_Sniff
-{
+
+/**
+ * Flag Database direct queries.
+ *
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries
+ * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.3.0
+ * @since   0.6.0 Removed the add_unique_message() function as it is no longer needed.
+ */
+class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * List of custom cache get functions.
@@ -67,14 +75,12 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 *
 	 * @return array
 	 */
-	public function register()
-	{
+	public function register() {
 		return array(
-				T_VARIABLE,
-			   );
+			T_VARIABLE,
+		);
 
-	}//end register()
-
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -85,8 +91,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 *
 	 * @return int|void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr )
-	{
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		if ( ! isset( self::$methods['all'] ) ) {
 			self::$methods['all'] = array_merge( self::$methods['cachable'], self::$methods['noncachable'] );
 
@@ -108,49 +113,51 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		$tokens = $phpcsFile->getTokens();
 
-		// Check for $wpdb variable
-		if ( $tokens[$stackPtr]['content'] != '$wpdb' )
+		// Check for $wpdb variable.
+		if ( '$wpdb' !== $tokens[ $stackPtr ]['content'] ) {
 			return;
+		}
 
-		$is_object_call = $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), $stackPtr + 1, null, null, null, true );
-		if ( false == $is_object_call )
-			return; // This is not a call to the wpdb object
+		$is_object_call = $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, null, null, true );
+		if ( false === $is_object_call ) {
+			return; // This is not a call to the wpdb object.
+		}
 
-		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), $is_object_call + 1, null, true, null, true );
-		$method = $tokens[ $methodPtr ]['content'];
+		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
+		$method    = $tokens[ $methodPtr ]['content'];
 
 		if ( ! isset( self::$methods['all'][ $method ] ) ) {
 			return;
 		}
 
-		$endOfStatement = $phpcsFile->findNext( array( T_SEMICOLON ), $stackPtr + 1, null, null, null, true );
+		$endOfStatement   = $phpcsFile->findNext( array( T_SEMICOLON ), ( $stackPtr + 1 ), null, null, null, true );
 		$endOfLineComment = '';
-		for ( $i = $endOfStatement + 1; $i < count( $tokens ); $i++ ) {
+		$tokenCount       = count( $tokens );
+		for ( $i = ( $endOfStatement + 1 ); $i < $tokenCount; $i++ ) {
 
-			if ( $tokens[$i]['line'] !== $tokens[$endOfStatement]['line'] ) {
+			if ( $tokens[ $i ]['line'] !== $tokens[ $endOfStatement ]['line'] ) {
 				break;
 			}
 
-			if ( $tokens[$i]['code'] === T_COMMENT ) {
-				$endOfLineComment .= $tokens[$i]['content'];
+			if ( T_COMMENT === $tokens[ $i ]['code'] ) {
+				$endOfLineComment .= $tokens[ $i ]['content'];
 			}
-
 		}
 
 		$whitelisted_db_call = false;
-		if ( preg_match( '/db call\W*(ok|pass|clear|whitelist)/i', $endOfLineComment, $matches ) ) {
+		if ( preg_match( '/db call\W*(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
 			$whitelisted_db_call = true;
 		}
 
-		// Check for Database Schema Changes
+		// Check for Database Schema Changes.
 		$_pos = $stackPtr;
-		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), $_pos + 1, $endOfStatement, null, null, true ) ) {
-			if ( preg_match( '#\b(ALTER|CREATE|DROP)\b#i', $tokens[$_pos]['content'], $matches ) > 0 ) {
+		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), ( $_pos + 1 ), $endOfStatement, null, null, true ) ) {
+			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $tokens[ $_pos ]['content'] ) > 0 ) {
 				$phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
 		}
 
-		// Flag instance if not whitelisted
+		// Flag instance if not whitelisted.
 		if ( ! $whitelisted_db_call ) {
 			$phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 		}
@@ -160,27 +167,26 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		}
 
 		$whitelisted_cache = false;
-		$cached = $wp_cache_get = false;
-		if ( preg_match( '/cache\s+(ok|pass|clear|whitelist)/i', $endOfLineComment, $matches ) ) {
+		$cached            = $wp_cache_get = false;
+		if ( preg_match( '/cache\s+(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
 			$whitelisted_cache = true;
 		}
-		if ( ! $whitelisted_cache && ! empty( $tokens[$stackPtr]['conditions'] ) ) {
+		if ( ! $whitelisted_cache && ! empty( $tokens[ $stackPtr ]['conditions'] ) ) {
 			$scope_function = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
 			if ( $scope_function ) {
-				$scopeStart = $tokens[$scope_function]['scope_opener'];
-				$scopeEnd = $tokens[$scope_function]['scope_closer'];
+				$scopeStart = $tokens[ $scope_function ]['scope_opener'];
+				$scopeEnd   = $tokens[ $scope_function ]['scope_closer'];
 
-				for ( $i = $scopeStart + 1; $i < $scopeEnd; $i++ ) {
+				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 					if ( T_STRING === $tokens[ $i ]['code'] ) {
 
 						if ( isset( WordPress_Sniff::$cacheDeleteFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
-							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ) ) ) {
+							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 								$cached = true;
 								break;
 							}
-
 						} elseif ( isset( WordPress_Sniff::$cacheGetFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							$wp_cache_get = true;
@@ -204,6 +210,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		return $endOfStatement;
 
-	}//end process()
+	} // end process()
 
-}//end class
+} // End class.

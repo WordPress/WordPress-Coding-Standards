@@ -9,19 +9,26 @@ php:
     - 5.4
     - 5.5
     - 5.6
+    - 7.0
 
 env:
   - PHPCS_BRANCH=master
-  - PHPCS_BRANCH=2.2.0
+  - PHPCS_BRANCH=2.6.0
 
 matrix:
   fast_finish: true
   include:
+    # Run PHPCS against WPCS. I just picked to run it against 5.5.
+    - php: 5.5
+      env: PHPCS_BRANCH=master SNIFF=1
     # Run against PHPCS 3.0. I just picked to run it against 5.6.
     - php: 5.6
       env: PHPCS_BRANCH=3.0
     # Run against HHVM and PHP nightly.
     - php: hhvm
+      sudo: required
+      dist: trusty 
+      group: edge 
       env: PHPCS_BRANCH=master
     - php: nightly
       env: PHPCS_BRANCH=master
@@ -32,6 +39,7 @@ matrix:
     - env: PHPCS_BRANCH=3.0
 
 before_script:
+    - if [[ $TRAVIS_PHP_VERSION != "7.0" && $TRAVIS_PHP_VERSION != "nightly" && $TRAVIS_PHP_VERSION != "hhvm" ]]; then phpenv config-add myconfig.ini; fi
     - export PHPCS_DIR=/tmp/phpcs
     - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
@@ -40,3 +48,13 @@ before_script:
 script:
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
     - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
+    # WordPress Coding Standards.
+    # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+    # @link http://pear.php.net/package/PHP_CodeSniffer/
+    # -p flag: Show progress of the run.
+    # -s flag: Show sniff codes in all reports.
+    # -v flag: Print verbose output.
+    # -n flag: Do not print warnings. (shortcut for --warning-severity=0)
+    # --standard: Use WordPress as the standard.
+    # --extensions: Only sniff PHP files.
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n . --standard=./bin/phpcs.xml --extensions=php; fi

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards">
+	<description>The Coding standard for the WordPress Coding Standards itself.</description>
+
+	<rule ref="WordPress-Extra">
+		<exclude name="Generic.Files.LowercasedFilename" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName" />
+	</rule>
+
+	<rule ref="WordPress-Docs" />
+
+</ruleset>

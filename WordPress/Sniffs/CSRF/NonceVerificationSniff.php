@@ -1,25 +1,20 @@
 <?php
-
 /**
- * WordPress_Sniffs_CSRF_NonceVerificationSniff.
+ * WordPress Coding Standard.
  *
- * PHP version 5
- *
- * @since 0.5.0
- *
- * @category PHP
- * @package  PHP_CodeSniffer
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 /**
  * Checks that nonce verification accompanies form processing.
  *
- * @since 0.5.0
+ * @link    https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
  *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   J.D. Grimes <jdg@codesymphony.co>
- * @link     https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   0.5.0
  */
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
@@ -96,15 +91,14 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
 		$this->init( $phpcsFile );
 
-		$tokens = $phpcsFile->getTokens();
-		$instance = $tokens[ $stackPtr ];
+		$instance = $this->tokens[ $stackPtr ];
 
 		$superglobals = array_merge(
 			$this->errorForSuperGlobals
 			, $this->warnForSuperGlobals
 		);
 
-		if ( ! in_array( $instance['content'], $superglobals ) ) {
+		if ( ! in_array( $instance['content'], $superglobals, true ) ) {
 			return;
 		}
 
@@ -125,7 +119,7 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		}
 
 		// If we're still here, no nonce-verification function was found.
-		$severity = ( in_array( $instance['content'], $this->errorForSuperGlobals ) ) ? 0 : 'warning';
+		$severity = ( in_array( $instance['content'], $this->errorForSuperGlobals, true ) ) ? 0 : 'warning';
 
 		$phpcsFile->addError(
 			'Processing form data without nonce verification.'
@@ -137,4 +131,4 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
 	} // end process()
 
-} // end class
+} // End class.

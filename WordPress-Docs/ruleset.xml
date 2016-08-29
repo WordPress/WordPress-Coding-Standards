@@ -61,6 +61,8 @@
 
 		<!-- Exclude to allow duplicate hooks to be documented -->
 		<exclude name="Squiz.Commenting.InlineComment.DocBlock"/>
+		<!-- Excluded to allow /* translators: ... */ comments -->
+		<exclude name="Squiz.Commenting.InlineComment.NotCapital"/>
 
 		<!-- Not in Inline Docs standard, and a code smell -->
 		<exclude name="Squiz.Commenting.LongConditionClosingComment"/>
@@ -74,6 +76,9 @@
 		<exclude name="Squiz.Commenting.VariableComment.TagNotAllowed"/>
 		<!-- WP prefers @since first -->
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
+
+		<!-- It is too early for PHP7 features to be required -->
+		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" />
 	</rule>
 
 	<rule ref="Generic.Commenting">
