@@ -90,7 +90,7 @@ Will result in following output:
 
 ### PhpStorm
 
-Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](https://www.jetbrains.com/phpstorm/help/using-php-code-sniffer-tool.html)” in PhpStorm documentation.
+Please see “[Configuring WordPress Code Style](https://www.jetbrains.com/help/phpstorm/2016.2/wordpress-specific-coding-assistance.html#dynaProc2)” in PhpStorm documentation.
 
 ### Sublime Text
 
