@@ -153,7 +153,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 
 		}
 
-	} // end process()
+	} // End process().
 
 	/**
 	 * Prepare the class name for use in a regular expression.

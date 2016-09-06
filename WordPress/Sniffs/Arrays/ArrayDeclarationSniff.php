@@ -127,7 +127,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 			if ( true === $fix ) {
 				$phpcsFile->fixer->addNewlineBefore( $arrayEnd );
 			}
-		} // end if
+		}
 
 		$nextToken  = $stackPtr;
 		$keyUsed    = false;
@@ -263,11 +263,12 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 					$indices[]  = array( 'value' => $valueContent );
 					$singleUsed = true;
-				} // end if
+				} // End if().
 
 				$lastToken = $nextToken;
 				continue;
-			} // end if
+
+			} // End if().
 
 			if ( T_DOUBLE_ARROW === $tokens[ $nextToken ]['code'] ) {
 
@@ -302,8 +303,8 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				$currentEntry['value'] = $nextContent;
 				$indices[]             = $currentEntry;
 				$lastToken             = $nextToken;
-			} // end if
-		} // end for
+			} // End if().
+		} // End for().
 
 		// Check for mutli-line arrays that should be single-line.
 		$singleValue = false;
@@ -372,11 +373,11 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 						$phpcsFile->fixer->addNewlineBefore( $value['value'] );
 					}
-				} // end if
+				}
 
 				$lastValueLine = $tokens[ $value['value'] ]['line'];
-			} // end foreach
-		} // end if
+			}
+		} // End if().
 
 		/*
 			Below the actual indentation of the array is checked.
@@ -486,7 +487,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					$nextComma = $i;
 					break;
 				}
-			} // End for.
+			} // End for().
 
 			if ( false === $nextComma ) {
 				$error = 'Each line in an array declaration must end in a comma';
@@ -519,8 +520,8 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					$phpcsFile->fixer->replaceToken( ( $nextComma - 1 ), '' );
 				}
 			}
-		} // end foreach
+		} // End foreach().
 
-	} // end processMultiLineArray()
+	} // End processMultiLineArray().
 
 } // End class.

@@ -124,9 +124,9 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 			default:
 				return array();
 
-		}
+		} // End switch().
 
-	} // end getErrorList()
+	} // End getErrorList().
 
 	/**
 	 * Returns the lines where warnings should occur.

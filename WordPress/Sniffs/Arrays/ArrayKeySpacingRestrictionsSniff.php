@@ -84,6 +84,6 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 			}
 		}
 
-	} // end process()
+	} // End process().
 
 } // End class.

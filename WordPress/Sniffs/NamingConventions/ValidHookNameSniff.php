@@ -168,7 +168,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 					$underscores++;
 				}
 			}
-		}
+		} // End for().
 
 		$data = array(
 			implode( '', $expected ),
@@ -184,7 +184,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 			$phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
 		}
 
-	} // end process()
+	} // End process().
 
 	/**
 	 * Prepare the punctuation regular expression.
@@ -203,7 +203,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 
 		return sprintf( $this->punctuation_regex, $extra );
 
-	} // end prepare_regex()
+	} // End prepare_regex().
 
 	/**
 	 * Transform an arbitrary string to lowercase and replace punctuation and spaces with underscores.
@@ -227,7 +227,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 			default:
 				return preg_replace( $regex, '_', strtolower( $string ) );
 		}
-	} // end transform()
+	} // End transform().
 
 	/**
 	 * Transform a complex string which may contain variable extrapolation.
@@ -279,6 +279,6 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 		}
 
 		return implode( '', $output );
-	} // end transform_complex_string()
+	} // End transform_complex_string().
 
 } // End class.

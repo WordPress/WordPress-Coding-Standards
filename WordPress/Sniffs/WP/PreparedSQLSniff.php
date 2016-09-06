@@ -183,11 +183,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				'NotPrepared',
 				array( $this->tokens[ $this->i ]['content'] )
 			);
-		}
+		} // End for().
 
 		return $this->end;
 
-	} // end process().
+	} // End process().
 
 	/**
 	 * Checks whether this is a call to a $wpdb method that we want to sniff.
@@ -241,6 +241,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		return true;
-	} // is_wpdb_method_call()
+	} // End is_wpdb_method_call().
 
 } // End class.

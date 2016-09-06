@@ -48,7 +48,7 @@ class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSn
 			T_INLINE_HTML,
 		);
 
-	} // end register()
+	} // End register().
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -148,7 +148,7 @@ class WordPress_Sniffs_PHP_DisallowAlternativePHPTagsSniff implements PHP_CodeSn
 				$phpcsFile->addWarning( $error, $stackPtr, 'MaybeASPOpenTagFound', $data );
 			}
 		}
-	} // end process()
+	} // End process().
 
 	/**
 	 * Get a snippet from a HTML token.

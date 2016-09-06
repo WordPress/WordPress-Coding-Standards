@@ -172,7 +172,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					}
 				}
 			}
-		}
+		} // End if().
 
 		$parenthesisOpener = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
@@ -237,7 +237,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$scopeOpener = $usePtr;
 				}
 			}
-		}
+		} // End if().
 
 		if (
 			T_COLON !== $this->tokens[ $parenthesisOpener ]['code']
@@ -280,7 +280,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$phpcsFile->addError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 				}
 			}
-		}
+		} // End if().
 
 		if (
 			T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code']
@@ -377,7 +377,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					}
 				} else {
 					$phpcsFile->addError( $error, $parenthesisOpener, 'OpenBraceNotSameLine' );
-				} // end if
+				}
 				return;
 
 			} elseif (
@@ -399,8 +399,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$phpcsFile->fixer->replaceToken( ( $parenthesisCloser + 1 ), ' ' );
 					$phpcsFile->fixer->endChangeset();
 				}
-			}
-		} // end if
+			} // End if().
+		} // End if().
 
 		if ( true === $this->blank_line_check ) {
 			$firstContent = $phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
@@ -448,12 +448,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 							}
 						} else {
 							$phpcsFile->addError( $error, $i, 'BlankLineBeforeEnd' );
-						} // end if
+						}
 						break;
-					} // end if
-				} // end for
-			} // end if
-		} // end if
+					} // End if().
+				} // End for().
+			} // End if().
+		} // End if().
 
 		$trailingContent = $phpcsFile->findNext( T_WHITESPACE, ( $scopeCloser + 1 ), null, true );
 		if ( T_ELSE === $this->tokens[ $trailingContent ]['code'] ) {
@@ -522,8 +522,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$phpcsFile->addError( $error, $scopeCloser, 'BlankLineAfterEnd' );
 				}
 			}
-		} // end if
+		} // End if().
 
-	} // end process()
+	} // End process().
 
 } // End class.

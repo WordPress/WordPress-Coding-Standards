@@ -73,7 +73,7 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
 			103 => 1,
 		);
 
-	} // end getErrorList()
+	} // End getErrorList().
 
 	/**
 	 * Returns the lines where warnings should occur.

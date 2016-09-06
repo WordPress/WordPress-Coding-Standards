@@ -330,6 +330,6 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 			),
 
 		);
-	} // end getGroups()
+	} // End getGroups().
 
 } // End class.

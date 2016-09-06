@@ -374,6 +374,6 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		if ( empty( $non_placeholder_content ) ) {
 			$phpcs_file->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
 		}
-	} // end check_text()
+	} // End check_text().
 
 }

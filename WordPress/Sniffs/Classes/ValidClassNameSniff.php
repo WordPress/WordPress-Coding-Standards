@@ -70,6 +70,6 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
 			$phpcsFile->addError( $error, $stackPtr, 'NotCamelCaps' );
 		}
 
-	} // end process()
+	} // End process().
 
 } // End class.

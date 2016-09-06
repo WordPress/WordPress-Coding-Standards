@@ -97,7 +97,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
 
-	} // end processTokenOutsideScope()
+	} // End processTokenOutsideScope().
 
 	/**
 	 * Processes the tokens within the scope.
@@ -170,7 +170,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 
-	} // end processTokenWithinScope()
+	} // End processTokenWithinScope().
 
 	/**
 	 * Returns the name of the interface that the specified class implements.
@@ -218,6 +218,6 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return false;
 		}
 		return $name;
-	} // end findExtendedClassName()
+	} // End findExtendedClassName().
 
 } // End class.
