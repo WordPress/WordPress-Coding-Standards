@@ -74,7 +74,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 *
 	 * @var string
 	 */
-	public static $unordered_sprintf_placeholder_regex = '/(?:%%|(?:%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX]))/';
+	public static $unordered_sprintf_placeholder_regex = '/(?:(?<!%)%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX])/';
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

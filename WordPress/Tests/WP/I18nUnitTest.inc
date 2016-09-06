@@ -106,3 +106,8 @@ __( '%s', 'my-slug' ); // Bad, don't waste translator's time.
 __( '%1$s%2$s', 'my-slug' ); // Bad, don't waste translator's time.
 _n( 'I have %d cat.', '%d', $number, 'my-slug' ); // Bad, move the logic out of the translation.
 __( '\'%s\'', 'my-slug' ); // OK (ish. this is a technical test, not a great string).
+
+// Issue #681.
+__( 'String with a literal %%', 'my-slug'); // Ok, replacement would be a single %.
+__( 'String with a literal %% and a %s placeholder', 'my-slug'); // Ok.
+__( 'A replacement variable can not start with "%%cf_" or "%%ct_" as these are reserved for the WPSEO standard variable variables for custom fields and custom taxonomies. Try making your variable name unique.', 'my-slug' ); // Ok.
