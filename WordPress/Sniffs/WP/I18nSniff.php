@@ -253,7 +253,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $content, '\'""' ) !== $this->text_domain ) {
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( trim( $content, '\'""' ), array( $this->text_domain, 'default' ), true ) ) {
 				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $content ) );
 				return false;
 			}
