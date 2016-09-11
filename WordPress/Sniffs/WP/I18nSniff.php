@@ -25,7 +25,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * @todo Eventually this should be able to be auto-supplied via looking at $phpcs_file->getFilename()
 	 * @link https://youtrack.jetbrains.com/issue/WI-17740
 	 *
-	 * @var string
+	 * @var array
 	 */
 	public $text_domain;
 
@@ -102,6 +102,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		if ( ! empty( self::$text_domain_override ) ) {
 			$this->text_domain = self::$text_domain_override;
+		}
+		if ( is_string( $this->text_domain ) ) {
+			$this->text_domain = explode( ',', $this->text_domain );
 		}
 
 		if ( '_' === $token['content'] ) {
@@ -253,8 +256,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( trim( $content, '\'""' ), array( $this->text_domain, 'default' ), true ) ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $content ) );
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( trim( $content, '\'""' ), $this->text_domain, true ) ) {
+				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( join( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
 			return true;
@@ -268,8 +271,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && trim( $content, '\'""' ) !== $this->text_domain ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( $this->text_domain, $content ) );
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( trim( $content, '\'""' ), $this->text_domain, true ) ) {
+				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( join( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
 			return true;
