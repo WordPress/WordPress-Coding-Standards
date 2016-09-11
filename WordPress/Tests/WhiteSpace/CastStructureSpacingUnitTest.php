@@ -36,9 +36,9 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 			 6 => 1,
 			 9 => 1,
 			 12 => 2,
-			 15 => 1,
-			 18 => 1,
-			 21 => 1,
+			 15 => 2,
+			 18 => 2,
+			 21 => 2,
 		);
 
 	}

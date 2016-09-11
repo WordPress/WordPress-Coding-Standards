@@ -150,6 +150,9 @@
 		<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
 		<rule ref="Generic.Formatting.SpaceAfterCast"/>
 		<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+		<rule ref="WordPress.WhiteSpace.CastStructureSpacing.ContainsWhiteSpace">
+			<type>warning</type>
+		</rule>
 
 		<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 		<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
