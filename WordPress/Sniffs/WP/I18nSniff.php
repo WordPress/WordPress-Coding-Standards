@@ -104,7 +104,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$this->text_domain = self::$text_domain_override;
 		}
 		if ( is_string( $this->text_domain ) ) {
-			$this->text_domain = explode( ',', $this->text_domain );
+			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $this->text_domain ) ) );
 		}
 
 		if ( '_' === $token['content'] ) {
