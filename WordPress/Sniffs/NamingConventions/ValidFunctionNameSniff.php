@@ -135,7 +135,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		}
 
 		$extended  = $phpcsFile->findExtendedClassName( $currScope );
-		$interface = $this->findImplementedInterfaceName( $currScope, $phpcsFile );
+		$interface = $this->findImplementedInterfaceNames( $currScope, $phpcsFile );
 
 		// If this is a child class or interface implementation, it may have to use camelCase or double underscores.
 		if ( $extended || $interface ) {
@@ -182,13 +182,16 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 	 * @param int                  $stackPtr  The stack position of the class.
 	 * @param PHP_CodeSniffer_File $phpcsFile The stack position of the class.
 	 *
-	 * @see PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff::findExtendedClassName()
+	 * @see PHP_CodeSniffer_File::findExtendedClassName()
 	 *
-	 * @todo This needs to be upstreamed and made part of PHP_CodeSniffer_File.
+	 * {@internal A PR to add this upstream has been opened. If and when the upstream
+	 *            PR {@link https://github.com/squizlabs/PHP_CodeSniffer/pull/1098}
+	 *            would be merged and the WPCS minimum PHPCS version would be upped
+	 *            to the version that PR is contained in, this method can be removed.}}
 	 *
-	 * @return string
+	 * @return array|false
 	 */
-	public function findImplementedInterfaceName( $stackPtr, $phpcsFile ) {
+	public function findImplementedInterfaceNames( $stackPtr, $phpcsFile ) {
 		$tokens = $phpcsFile->getTokens();
 
 		// Check for the existence of the token.
@@ -201,23 +204,30 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		if ( ! isset( $tokens[ $stackPtr ]['scope_closer'] ) ) {
 			return false;
 		}
+
 		$classOpenerIndex = $tokens[ $stackPtr ]['scope_opener'];
-		$extendsIndex     = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classOpenerIndex );
-		if ( false === $extendsIndex ) {
+		$implementsIndex  = $phpcsFile->findNext( T_IMPLEMENTS, $stackPtr, $classOpenerIndex );
+		if ( false === $implementsIndex ) {
 			return false;
 		}
+
 		$find = array(
 			T_NS_SEPARATOR,
 			T_STRING,
 			T_WHITESPACE,
+			T_COMMA,
 		);
-		$end  = $phpcsFile->findNext( $find, ( $extendsIndex + 1 ), ( $classOpenerIndex + 1 ), true );
-		$name = $phpcsFile->getTokensAsString( ( $extendsIndex + 1 ), ( $end - $extendsIndex - 1 ) );
+		$end  = $phpcsFile->findNext( $find, ( $implementsIndex + 1 ), ( $classOpenerIndex + 1 ), true );
+		$name = $phpcsFile->getTokensAsString( ( $implementsIndex + 1 ), ( $end - $implementsIndex - 1 ) );
 		$name = trim( $name );
+
 		if ( '' === $name ) {
 			return false;
+		} else {
+			$names = explode( ',', $name );
+			$names = array_map( 'trim', $names );
+			return $names;
 		}
-		return $name;
 	} // end findExtendedClassName()
 
 } // End class.

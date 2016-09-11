@@ -102,3 +102,11 @@ class My_Soap extends somethingElse {
 	public function __setSoapHeaders() {} // Ok.
 	public function __soapCall() {} // Ok.
 }
+
+// Test for class implementing more than one interface.
+class Foo implements ArrayAccess, PHP_CodeSniffer_Sniff {
+	function offsetSet( $key, $value ) {} // OK
+	function offsetUnset( $key ) {} // OK
+	function offsetExists( $key ) {} // OK
+	function offsetGet( $key ) {} // OK
+}
