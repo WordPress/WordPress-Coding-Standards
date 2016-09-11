@@ -111,3 +111,7 @@ __( '\'%s\'', 'my-slug' ); // OK (ish. this is a technical test, not a great str
 __( 'String with a literal %%', 'my-slug'); // Ok, replacement would be a single %.
 __( 'String with a literal %% and a %s placeholder', 'my-slug'); // Ok.
 __( 'A replacement variable can not start with "%%cf_" or "%%ct_" as these are reserved for the WPSEO standard variable variables for custom fields and custom taxonomies. Try making your variable name unique.', 'my-slug' ); // Ok.
+
+// The domain 'default' was also added to the text domains.
+__( 'String default text domain.', 'default' ); // Ok.
+__( "String default text domain.", "default" ); // Ok.
