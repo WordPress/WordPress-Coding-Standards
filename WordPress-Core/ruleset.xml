@@ -94,7 +94,7 @@
 	-->
 		<!-- Covers rule: Never use shorthand PHP start tags. Always use full PHP tags. -->
 		<rule ref="Generic.PHP.DisallowShortOpenTag"/>
-		<rule ref="WordPress.PHP.DisallowAlternativePHPTags"/>
+		<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
 
 	<!--
@@ -289,7 +289,7 @@
 		<rule ref="Generic.PHP.LowerCaseKeyword"/>
 
 		<!-- Class opening braces should be on the same line as the statement. -->
-		<rule ref="WordPress.Classes.ClassOpeningStatement"/>
+		<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
 
 	<!--
