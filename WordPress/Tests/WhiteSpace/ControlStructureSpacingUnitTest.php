@@ -23,7 +23,7 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 	 * @return bool Whether to skip this test.
 	 */
 	protected function shouldSkipTest() {
-		return version_compare( PHP_VERSION, '5.3.0', '<' );
+		return ( PHP_VERSION_ID < 50300 );
 	}
 
 	/**
