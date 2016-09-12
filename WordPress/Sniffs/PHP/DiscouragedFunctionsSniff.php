@@ -68,24 +68,4 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_
 	 */
 	public $error = false;
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * {@internal Temporarily overrule the parent register() method until bugfix has
-	 * been merged into PHPCS upstream and WPCS minimum PHPCS version has caught up.
-	 * {@link https://github.com/squizlabs/PHP_CodeSniffer/pull/1076} }}
-	 *
-	 * @return array
-	 */
-	public function register() {
-		$register = parent::register();
-
-		if ( true !== $this->patternMatch ) {
-			$this->forbiddenFunctionNames = array_map( 'strtolower', $this->forbiddenFunctionNames );
-			$this->forbiddenFunctions     = array_combine( $this->forbiddenFunctionNames, $this->forbiddenFunctions );
-		}
-
-		return $register;
-	}
-
 } // End class.
