@@ -138,7 +138,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		$interface = $this->findImplementedInterfaceName( $currScope, $phpcsFile );
 
 		// If this is a child class or interface implementation, it may have to use camelCase or double underscores.
-		if ( $extended || $interface ) {
+		if ( ! empty( $extended ) || ! empty( $interface ) ) {
 			return;
 		}
 

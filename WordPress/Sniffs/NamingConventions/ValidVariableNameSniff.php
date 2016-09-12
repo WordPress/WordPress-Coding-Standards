@@ -228,7 +228,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @param string $var_name Variable name.
 	 * @return bool
 	 */
-	static function isSnakeCase( $var_name ) {
+	public static function isSnakeCase( $var_name ) {
 		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
 	}
 

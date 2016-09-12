@@ -93,12 +93,16 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		$opening = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $functionPtr );
+		if ( false === $opening ) {
+			return;
+		}
+
 		$closing = $tokens[ $opening ]['bracket_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
 			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
 				if ( 'interval' === trim( $tokens[ $i ]['content'], '\'"' ) ) {
-					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, null, null, true );
+					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( empty( $operator ) ) {
 						$this->confused( $phpcsFile, $stackPtr );
 					}

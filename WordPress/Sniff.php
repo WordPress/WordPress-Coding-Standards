@@ -561,11 +561,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		$last = $this->tokens[ $lastPtr ];
 
-		if ( T_COMMENT === $last['code'] ) {
-			return preg_match( '#' . preg_quote( $comment ) . '#i', $last['content'] );
-		} else {
+		// Ignore if not a comment.
+		if ( T_COMMENT !== $last['code'] ) {
 			return false;
 		}
+
+		// Now let's see if the comment contains the whitelist remark we're looking for.
+		return ( preg_match( '#' . preg_quote( $comment ) . '#i', $last['content'] ) === 1 );
 	}
 
 	/**
@@ -870,7 +872,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			);
 
 			// If we're able to resolve the function name, do so.
-			if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
+			if ( false !== $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
 				$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
 			}
 		}
@@ -1038,7 +1040,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 				// If we're checking for a specific array key (ex: 'hello' in
 				// $_POST['hello']), that mush match too.
-				if ( $array_key && $this->get_array_access_key( $i ) !== $array_key ) {
+				if ( isset( $array_key ) && $this->get_array_access_key( $i ) !== $array_key ) {
 					continue;
 				}
 
