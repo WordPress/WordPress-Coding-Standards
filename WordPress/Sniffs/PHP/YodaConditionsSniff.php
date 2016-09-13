@@ -50,7 +50,7 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff 
 			, array( T_IF, T_ELSEIF )
 		);
 
-		$beginning = $phpcsFile->findPrevious( $beginners, $stackPtr, null, null, null, true );
+		$beginning = $phpcsFile->findPrevious( $beginners, $stackPtr, null, false, null, true );
 
 		$needs_yoda = false;
 

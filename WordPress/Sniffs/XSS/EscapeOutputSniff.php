@@ -186,7 +186,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 				// If there is a ternary skip over the part before the ?. However, if
 				// the ternary is within parentheses, it will be handled in the loop.
-				if ( $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
+				if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
 					$stackPtr = $ternary;
 				}
 			}
@@ -219,7 +219,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 					// Skip over the condition part of a ternary (i.e., to after the ?).
 					$ternary = $phpcsFile->findNext( T_INLINE_THEN, $i, $this->tokens[ $i ]['parenthesis_closer'] );
 
-					if ( $ternary ) {
+					if ( false !== $ternary ) {
 
 						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
 
@@ -290,10 +290,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
-				$function_opener        = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), ( $i + 1 ), null, null, null, true );
+				$function_opener        = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), ( $i + 1 ), null, false, null, true );
 				$is_formatting_function = isset( self::$formattingFunctions[ $functionName ] );
 
-				if ( $function_opener ) {
+				if ( false !== $function_opener ) {
 
 					if ( 'array_map' === $functionName ) {
 

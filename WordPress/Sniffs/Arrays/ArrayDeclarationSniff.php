@@ -73,7 +73,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				'Expected 1 space after array opener, found %s.',
 				$arrayStart,
 				'SpaceAfterArrayOpener',
-				strlen( $tokens[ ( $arrayStart + 1 ) ]['content'] )
+				array( strlen( $tokens[ ( $arrayStart + 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
@@ -95,7 +95,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				'Expected 1 space before array closer, found %s.',
 				$arrayEnd,
 				'SpaceAfterArrayCloser',
-				strlen( $tokens[ ( $arrayEnd - 1 ) ]['content'] )
+				array( strlen( $tokens[ ( $arrayEnd - 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
@@ -129,7 +129,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 			}
 		}
 
-		$nextToken  = $stackPtr;
 		$keyUsed    = false;
 		$singleUsed = false;
 		$indices    = array();
@@ -152,49 +151,22 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				continue;
 			}
 
-			if ( T_ARRAY === $tokens[ $nextToken ]['code'] ) {
+			if ( in_array( $tokens[ $nextToken ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY, T_CLOSURE ), true ) ) {
 				// Let subsequent calls of this test handle nested arrays.
 				if ( T_DOUBLE_ARROW !== $tokens[ $lastToken ]['code'] ) {
 					$indices[] = array( 'value' => $nextToken );
 					$lastToken = $nextToken;
 				}
 
-				$nextToken = $tokens[ $tokens[ $nextToken ]['parenthesis_opener'] ]['parenthesis_closer'];
-				$nextToken = $phpcsFile->findNext( T_WHITESPACE, ( $nextToken + 1 ), null, true );
-				if ( T_COMMA !== $tokens[ $nextToken ]['code'] ) {
-					$nextToken--;
+				if ( T_ARRAY === $tokens[ $nextToken ]['code'] ) {
+					$nextToken = $tokens[ $tokens[ $nextToken ]['parenthesis_opener'] ]['parenthesis_closer'];
+				} elseif ( T_OPEN_SHORT_ARRAY === $tokens[ $nextToken ]['code'] ) {
+					$nextToken = $tokens[ $nextToken ]['bracket_closer'];
 				} else {
-					$lastToken = $nextToken;
+					// T_CLOSURE.
+					$tokens[ $nextToken ]['scope_closer'];
 				}
 
-				continue;
-			}
-
-			if ( T_OPEN_SHORT_ARRAY === $tokens[ $nextToken ]['code'] ) {
-				// Let subsequent calls of this test handle nested arrays.
-				if ( T_DOUBLE_ARROW !== $tokens[ $lastToken ]['code'] ) {
-					$indices[] = array( 'value' => $nextToken );
-					$lastToken = $nextToken;
-				}
-
-				$nextToken = $tokens[ $nextToken ]['bracket_closer'];
-				$nextToken = $phpcsFile->findNext( T_WHITESPACE, ( $nextToken + 1 ), null, true );
-				if ( T_COMMA !== $tokens[ $nextToken ]['code'] ) {
-					$nextToken--;
-				} else {
-					$lastToken = $nextToken;
-				}
-
-				continue;
-			}
-
-			if ( T_CLOSURE === $tokens[ $nextToken ]['code'] ) {
-				if ( T_DOUBLE_ARROW !== $tokens[ $lastToken ]['code'] ) {
-					$indices[] = array( 'value' => $nextToken );
-					$lastToken = $nextToken;
-				}
-
-				$nextToken = $tokens[ $nextToken ]['scope_closer'];
 				$nextToken = $phpcsFile->findNext( T_WHITESPACE, ( $nextToken + 1 ), null, true );
 				if ( T_COMMA !== $tokens[ $nextToken ]['code'] ) {
 					$nextToken--;
@@ -410,9 +382,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 
 		$indicesStart  = ( $keywordStart + 1 );
 		$arrowStart    = ( $indicesStart + $maxLength + 1 );
-		$valueStart    = ( $arrowStart + 3 );
 		$indexLine     = $tokens[ $stackPtr ]['line'];
-		$lastIndexLine = null;
 		foreach ( $indices as $index ) {
 			if ( ! isset( $index['index'] ) ) {
 				// Array value only.

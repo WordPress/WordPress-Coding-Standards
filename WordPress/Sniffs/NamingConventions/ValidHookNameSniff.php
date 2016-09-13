@@ -86,12 +86,12 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 		$regex  = $this->prepare_regex();
 
 		// Check if one of the hook functions was found.
-		if ( ! isset( WordPress_Sniff::$hookInvokeFunctions[ $tokens[ $stackPtr ]['content'] ] ) ) {
+		if ( ! isset( WordPress_Sniff::$hookInvokeFunctions[ $token['content'] ] ) ) {
 			return;
 		}
 
 		// Ignore deprecated hook names.
-		if ( strpos( $tokens[ $stackPtr ]['content'], '_deprecated' ) > 0 ) {
+		if ( strpos( $token['content'], '_deprecated' ) > 0 ) {
 			return;
 		}
 

@@ -229,7 +229,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			// Scoped namespace {}.
 			foreach ( $tokens[ $search_from ]['conditions'] as $pointer => $type ) {
 				if ( T_NAMESPACE === $type && $tokens[ $pointer ]['scope_closer'] > $search_from ) {
-					$namespace = $this->get_namespace_name( $phpcsFile, $tokens, $pointer );
+					$namespace = $this->get_namespace_name( $phpcsFile, $pointer );
 				}
 				break; // We only need to check the highest level condition.
 			}
@@ -237,8 +237,8 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			// Let's see if we can find a file namespace instead.
 			$first = $phpcsFile->findNext( array( T_NAMESPACE ), 0, $search_from );
 
-			if ( empty( $tokens[ $first ]['scope_condition'] ) ) {
-				$namespace = $this->get_namespace_name( $phpcsFile, $tokens, $first );
+			if ( false !== $first && empty( $tokens[ $first ]['scope_condition'] ) ) {
+				$namespace = $this->get_namespace_name( $phpcsFile, $first );
 			}
 		}
 
@@ -248,15 +248,14 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * Get the namespace name based on the position of the namespace scope opener.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile         The file being scanned.
-	 * @param array                $tokens            The token stack for this file.
-	 * @param int                  $t_namespace_token The token position to search from.
+	 * @param PHP_CodeSniffer_File $phpcsFile       The file being scanned.
+	 * @param int                  $namespace_token The token position to search from.
 	 * @return string Namespace name.
 	 */
-	protected function get_namespace_name( PHP_CodeSniffer_File $phpcsFile, $tokens, $t_namespace_token ) {
-		$nameEnd = ( $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET, T_WHITESPACE, T_SEMICOLON ), ( $t_namespace_token + 2 ) ) - 1 );
-		$length    = ( $nameEnd - ( $t_namespace_token + 1 ) );
-		$namespace = $phpcsFile->getTokensAsString( ( $t_namespace_token + 2 ), $length );
+	protected function get_namespace_name( PHP_CodeSniffer_File $phpcsFile, $namespace_token ) {
+		$nameEnd   = ( $phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET, T_WHITESPACE, T_SEMICOLON ), ( $namespace_token + 2 ) ) - 1 );
+		$length    = ( $nameEnd - ( $namespace_token + 1 ) );
+		$namespace = $phpcsFile->getTokensAsString( ( $namespace_token + 2 ), $length );
 
 		return $namespace;
 	}
