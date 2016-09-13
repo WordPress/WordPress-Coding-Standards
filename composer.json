@@ -11,7 +11,7 @@
 		}
 	],
 	"require"    : {
-		"squizlabs/php_codesniffer": "^2.6"
+		"squizlabs/php_codesniffer": "^2.7"
 	},
 	"minimum-stability" : "RC",
 	"support"    : {

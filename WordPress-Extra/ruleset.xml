@@ -4,6 +4,7 @@
 
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
+	<rule ref="Generic.PHP.BacktickOperator"/>
 	<rule ref="Generic.Functions.CallTimePassByReference"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement" />
