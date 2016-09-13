@@ -21,6 +21,7 @@ if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_CastSpacingSniff', true ) ) {
  * @since   0.3.0
  * @since   0.11.0 This sniff now extends the Squiz_Sniffs_WhiteSpace_CastSpacingSniff class it was based upon.
  * @since   0.11.0 This sniff now has the ability to fix the issues it flags.
+ * @since   0.11.0 The error level for all errors thrown by this sniff has been raised from warning to error.
  *
  * Last synced with parent class August 2016 at commit 5def2acbe3911e2aea08ac8b8eb4e4d64330021f.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/CastSpacingSniff.php
@@ -43,7 +44,7 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff extends Squiz_Sniffs
 
 		if ( T_WHITESPACE !== $tokens[ ( $stackPtr - 1 ) ]['code'] ) {
 			$error = 'No space before opening casting parenthesis is prohibited';
-			$fix   = $phpcsFile->addFixableWarning( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 			if ( true === $fix ) {
 				$phpcsFile->fixer->addContentBefore( $stackPtr, ' ' );
 			}
@@ -51,7 +52,7 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff extends Squiz_Sniffs
 
 		if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
 			$error = 'No space after closing casting parenthesis is prohibited';
-			$fix   = $phpcsFile->addFixableWarning( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
+			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
 			if ( true === $fix ) {
 				$phpcsFile->fixer->addContent( $stackPtr, ' ' );
 			}
