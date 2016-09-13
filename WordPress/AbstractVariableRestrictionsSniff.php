@@ -165,9 +165,9 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 
 			return; // Show one error only.
 
-		}
+		} // End foreach().
 
-	} // end process()
+	} // End process().
 
 	/**
 	 * Transform a wildcard pattern to a usable regex pattern.

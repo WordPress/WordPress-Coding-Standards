@@ -49,6 +49,6 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 
 		return ( $phpcsFile->numTokens + 1 );
 
-	} // end process()
+	} // End process().
 
 } // End class.

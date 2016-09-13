@@ -179,11 +179,9 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 					);
 				}
 			}
+		} // End foreach().
 
-			// return; // Show one error only.
-		}
-
-	} // end process()
+	} // End process().
 
 	/**
 	 * Callback to process each confirmed key, to check value.

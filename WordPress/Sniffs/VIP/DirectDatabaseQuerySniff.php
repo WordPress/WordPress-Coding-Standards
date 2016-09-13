@@ -210,6 +210,6 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		return $endOfStatement;
 
-	} // end process()
+	} // End process().
 
 } // End class.

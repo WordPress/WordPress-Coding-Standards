@@ -52,9 +52,15 @@
 			<severity>0</severity>
 		</rule>
 
-		<!-- Rule: If you consider a long block unavoidable, please put a short comment at the end ...
-			 - typically this is appropriate for a logic block, longer than about 35 rows.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/606 -->
+		<!-- Covers rule: If you consider a long block unavoidable, please put a short comment at the end ...
+			 - typically this is appropriate for a logic block, longer than about 35 rows. -->
+		<rule ref="Squiz.Commenting.LongConditionClosingComment">
+			<properties>
+				<property name="lineLimit" value="35" />
+				<property name="commentFormat" value="// End %s()." />
+			</properties>
+			<exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore" />
+		</rule>
 
 		<!-- Covers rule: Braces should always be used, even when they are not required. -->
 		<rule ref="Generic.ControlStructures.InlineControlStructure" />
@@ -291,5 +297,6 @@
 	-->
 		<!-- Check for correct usage of the WP i18n functions. -->
 		<rule ref="WordPress.WP.I18n"/>
+
 
 </ruleset>

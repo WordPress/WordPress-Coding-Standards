@@ -43,6 +43,6 @@ class WordPress_Sniffs_Functions_DontExtractSniff extends WordPress_AbstractFunc
 			),
 
 		);
-	} // end getGroups()
+	} // End getGroups().
 
 } // End class.

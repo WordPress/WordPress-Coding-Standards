@@ -129,7 +129,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 			return;
 		}
 
-	} // end process()
+	} // End process().
 
 	/**
 	 * Add warning about unclear cron schedule change.

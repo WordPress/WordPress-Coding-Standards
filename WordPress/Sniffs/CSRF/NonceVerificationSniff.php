@@ -129,6 +129,6 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			, $severity
 		);
 
-	} // end process()
+	} // End process().
 
 } // End class.

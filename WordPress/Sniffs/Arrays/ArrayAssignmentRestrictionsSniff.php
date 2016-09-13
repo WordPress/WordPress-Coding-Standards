@@ -54,6 +54,6 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		return true;
-	} // end callback()
+	}
 
 } // End class.

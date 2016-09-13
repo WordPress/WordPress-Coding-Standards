@@ -134,7 +134,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 						}
 					}
 				}
-			} // end if
+			} // End if().
 
 			$operator = $tokens[ $stackPtr ]['content'];
 
@@ -172,7 +172,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 						$phpcsFile->addError( $error, $stackPtr, 'SpacingBefore', $data );
 					}
 				}
-			} // end if
+			} // End if().
 
 			if ( '-' !== $operator ) {
 				if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
@@ -205,10 +205,10 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 					} else {
 						$phpcsFile->addError( $error, $stackPtr, 'SpacingAfter', $data );
 					}
-				} // end if
-			} // end if
-		} // end if
+				} // End if().
+			} // End if().
+		} // End if().
 
-	} // end process()
+	} // End process().
 
 } // End class.

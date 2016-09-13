@@ -337,7 +337,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			} else {
 				$content = $this->tokens[ $i ]['content'];
 				$ptr     = $i;
-			}
+			} // End if().
 
 			$this->phpcsFile->addError(
 				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
@@ -345,10 +345,10 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 				'OutputNotEscaped',
 				$content
 			);
-		}
+		} // End for().
 
 		return $end_of_statement;
 
-	} // end process()
+	} // End process().
 
 } // End class.

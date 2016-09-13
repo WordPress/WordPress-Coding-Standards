@@ -193,7 +193,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 
 		}
 
-	} // end process()
+	} // End process().
 
 	/**
 	 * Prepare the function name for use in a regular expression.

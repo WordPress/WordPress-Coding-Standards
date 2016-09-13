@@ -100,6 +100,6 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff 
 
 		$phpcsFile->addError( 'Use Yoda Condition checks, you must', $stackPtr, 'NotYoda' );
 
-	} // end process()
+	} // End process().
 
 } // End class.

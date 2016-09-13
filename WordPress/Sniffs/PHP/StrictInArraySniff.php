@@ -127,6 +127,6 @@ class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 			$phpcsFile->addWarning( 'Not using strict comparison for %s; supply true for third argument.', $lastToken, 'MissingTrueStrict', $errorData );
 			return;
 		}
-	} // end process()
+	} // End process().
 
 } // End class.
