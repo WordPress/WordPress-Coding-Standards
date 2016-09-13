@@ -13,7 +13,7 @@ php:
 
 env:
   - PHPCS_BRANCH=master
-  - PHPCS_BRANCH=2.6.0
+  - PHPCS_BRANCH=2.7.0
 
 matrix:
   fast_finish: true
