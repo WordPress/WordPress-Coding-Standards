@@ -16,8 +16,11 @@
  *
  * @since   0.1.0
  *
- * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Classes/ValidClassNameSniff.php
+ * Last synced with base class August 2016 at commit 0a474f9ad5756b00e50b9d5b0a8bdb0c8d6fcd99.
+ * The only difference between this class and the base class - other than code style -
+ * is on line 76, where the WP standard allows for underscores in class names and the
+ * Squiz standard does not.
+ * @link     https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Classes/ValidClassNameSniff.php
  */
 class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sniff {
 
@@ -47,10 +50,9 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
 		$tokens = $phpcsFile->getTokens();
 
 		if ( ! isset( $tokens[ $stackPtr ]['scope_opener'] ) ) {
-			$error	= 'Possible parse error: ';
-			$error .= $tokens[ $stackPtr ]['content'];
-			$error .= ' missing opening or closing brace';
-			$phpcsFile->addWarning( $error, $stackPtr, 'MissingBrace' );
+			$error = 'Possible parse error: %s missing opening or closing brace';
+			$data  = array( $tokens[ $stackPtr ]['content'] );
+			$phpcsFile->addWarning( $error, $stackPtr, 'MissingBrace', $data );
 			return;
 		}
 
@@ -60,14 +62,25 @@ class WordPress_Sniffs_Classes_ValidClassNameSniff implements PHP_CodeSniffer_Sn
 		$opener    = $tokens[ $stackPtr ]['scope_opener'];
 		$nameStart = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), $opener, true );
 		$nameEnd   = $phpcsFile->findNext( T_WHITESPACE, $nameStart, $opener );
-		$name	   = trim( $phpcsFile->getTokensAsString( $nameStart, ( $nameEnd - $nameStart ) ) );
+		if ( false === $nameEnd ) {
+			$name = $tokens[ $nameStart ]['content'];
+		} else {
+			$name = trim( $phpcsFile->getTokensAsString( $nameStart, ( $nameEnd - $nameStart ) ) );
+		}
 
 		// Check for camel caps format.
 		$valid = PHP_CodeSniffer::isCamelCaps( str_replace( '_', '', $name ), true, true, false );
 		if ( false === $valid ) {
 			$type  = ucfirst( $tokens[ $stackPtr ]['content'] );
-			$error = "$type name \"$name\" is not in camel caps format";
-			$phpcsFile->addError( $error, $stackPtr, 'NotCamelCaps' );
+			$error = '%s name "%s" is not in camel caps format';
+			$data  = array(
+				$type,
+				$name,
+			);
+			$phpcsFile->addError( $error, $stackPtr, 'NotCamelCaps', $data );
+			$phpcsFile->recordMetric( $stackPtr, 'CamelCase class name', 'no' );
+		} else {
+			$phpcsFile->recordMetric( $stackPtr, 'CamelCase class name', 'yes' );
 		}
 
 	} // End process().
