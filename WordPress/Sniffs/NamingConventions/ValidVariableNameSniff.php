@@ -147,7 +147,6 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 					$error      = 'Object property "%s" is not in valid snake_case format';
 					$error_name = 'NotSnakeCaseMemberVar';
 				} else {
-					var_dump( $this->whitelisted_mixed_case_member_var_names );
 					$error      = 'Variable "%s" is not in valid snake_case format';
 					$error_name = 'NotSnakeCase';
 				}
