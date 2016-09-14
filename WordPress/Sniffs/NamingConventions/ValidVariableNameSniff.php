@@ -142,12 +142,15 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		}
 
 		if ( self::isSnakeCase( $var_name ) === false ) {
-			if ( $in_class && ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) ) {
-				$error      = 'Object property "%s" is not in valid snake_case format';
-				$error_name = 'NotSnakeCaseMemberVar';
-			} elseif ( ! $in_class ) {
-				$error      = 'Variable "%s" is not in valid snake_case format';
-				$error_name = 'NotSnakeCase';
+			if ( ! in_array( $var_name, $this->whitelisted_mixed_case_member_var_names, true ) ) {
+				if ( $in_class ) {
+					$error      = 'Object property "%s" is not in valid snake_case format';
+					$error_name = 'NotSnakeCaseMemberVar';
+				} else {
+					var_dump( $this->whitelisted_mixed_case_member_var_names );
+					$error      = 'Variable "%s" is not in valid snake_case format';
+					$error_name = 'NotSnakeCase';
+				}
 			}
 
 			if ( isset( $error, $error_name ) ) {
