@@ -2,7 +2,6 @@
 	"name"       : "wp-coding-standards/wpcs",
 	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
 	"type"       : "phpcs-standard",
-	"version": "9.0",
 	"keywords"   : ["phpcs", "standards", "WordPress"],
 	"license"    : "MIT",
 	"authors"    : [
