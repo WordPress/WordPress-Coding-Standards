@@ -200,7 +200,7 @@
 		<rule ref="WordPress.NamingConventions.ValidVariableName"/>
 
 		<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
-		<rule ref="WordPress.Classes.ValidClassName"/>
+		<rule ref="PEAR.NamingConventions.ValidClassName"/>
 
 		<!-- Covers rule: Constants should be in all upper-case with underscores separating words. -->
 		<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
