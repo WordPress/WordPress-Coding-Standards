@@ -1,24 +1,20 @@
 <?php
 
-switch_to_blog( $blogid ); // Bad.
+switch_to_blog( $blogid ); // Error.
 
-eval( 'some_code' ); // Bad.
+file_get_contents( $url ); // Warning.
 
-create_function( 'foo', 'bar(foo);' ); // Bad.
+vip_wp_file_get_contents( $url ); // Warning.
 
-file_get_contents( $url ); // Bad.
+wp_remote_get( $url ); // Warning.
 
-vip_wp_file_get_contents( $url ); // Bad.
+$ch = curl_init(); // Warning.
 
-wp_remote_get( $url ); // Bad.
-
-$ch = curl_init(); // Bad.
-
-curl_close( $ch ); // Bad.
+curl_close( $ch ); // Warning.
 
 // Empty line - function moved to another sniff.
 
-add_role( 'test' ); // Bad.
+add_role( 'test' ); // Error.
 
 array_pop( $array ); // Ok.
 
@@ -33,21 +29,21 @@ $x->add_role(); // Ok.
 $y = Bar::add_role(); // Ok.
 \SomeNamespace\add_role(); // Ok.
 
-\add_role(); // Bad.
+\add_role(); // Error.
 
-get_term_link( $term ); // Bad.
+get_term_link( $term ); // Error.
 
-get_page_by_path( $path ); // Bad.
+get_page_by_path( $path ); // Error.
 
-get_page_by_title( $page_title ); // Bad.
+get_page_by_title( $page_title ); // Error.
 
-get_term_by( $field, $value, $taxonomy ); // Bad.
+get_term_by( $field, $value, $taxonomy ); // Error.
 
-get_category_by_slug( $slug ); // Bad.
+get_category_by_slug( $slug ); // Error.
 
-url_to_postid( $url ); // Bad.
+url_to_postid( $url ); // Error.
 
-attachment_url_to_postid( $url ); // Bad.
+attachment_url_to_postid( $url ); // Error.
 wpcom_vip_attachment_url_to_postid( $url ); // Ok.
 
 get_tag_link(); // Error.
@@ -69,37 +65,13 @@ wp_old_slug_redirect(); // Error.
 get_adjacent_post(); // Error.
 get_previous_post(); // Error.
 get_next_post(); // Error.
-parse_url( 'http://example.com/' ); // Warning.
 
-dl(); // Error.
-error_reporting(); // Error.
-ini_alter(); // Error.
-ini_restore(); // Error.
-ini_set(); // Error.
-magic_quotes_runtime(); // Error.
-set_magic_quotes_runtime(); // Error.
-apache_setenv(); // Error.
-putenv(); // Error.
-set_include_path(); // Error.
-restore_include_path(); // Error.
-phpinfo(); // Error.
-
-PHPINFO(); // Error.
-CURL_getinfo(); // Error.
-
+CURL_getinfo(); // Warning.
 curlyhair(); // Ok.
 
 get_previous_post_link(); // Error.
 get_next_post_link(); // Error.
 get_intermediate_image_sizes(); // Error.
-serialize(); // Warning.
-unserialize(); // Warning.
-error_log(); // Error.
-var_dump(); // Error.
-print_r(); // Error.
-trigger_error(); // Error.
-set_error_handler(); // Error.
+
 wp_redirect(); // Warning.
 wp_is_mobile(); // Error.
-urlencode(); // Warning.
-rawurlencode(); // Ok.

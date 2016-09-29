@@ -7,65 +7,69 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
-}
-
 /**
- * Discourages the use of various functions and suggests (WordPress) alternatives.
+ * Discourages the use of various functions and suggests alternatives.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
  * @since   0.10.0 The checks for the POSIX functions have been replaced by the stand-alone
  *                 sniff WordPress_Sniffs_PHP_POSIXFunctionsSniff.
+ * @since   0.11.0 The checks for the PHP development functions have been replaced by the
+ *                 stand-alone sniff WordPress_Sniffs_PHP_DevelopmentFunctionsSniff.
+ *                 The check for the `register_globals` has been removed as there is no such
+ *                 function. To check for `register_globals` ini directive use
+ *                 PHPCompatibility_Sniffs_PHP_DeprecatedIniDirectivesSniff.
+ *                 The checks for the WP deprecated functions have been replaced by the
+ *                 stand-alone sniff WordPress_Sniffs_WP_DeprecatedFunctionsSniff.
+ *                 The checks for the PHP functions which have a WP alternative has been replaced
+ *                 by the stand-alone sniff WordPress_Sniffs_WP_AlternativeFunctionsSniff.
+ *                 The checks for the WP discouraged functions have been replaced by the
+ *                 stand-alone sniff WordPress_Sniffs_WP_DiscouragedFunctionsSniff.
  */
-class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
+class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * A list of forbidden functions with their alternatives.
+	 * Groups of functions to discourage.
 	 *
-	 * The value is NULL if no alternative exists. I.e. the
-	 * function should just not be used.
+	 * Example: groups => array(
+	 * 	'lambda' => array(
+	 * 		'type'      => 'error' | 'warning',
+	 * 		'message'   => 'Use anonymous functions instead please!',
+	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 	)
+	 * )
 	 *
-	 * @var array(string => string|null)
+	 * @return array
 	 */
-	public $forbiddenFunctions = array(
-		// Development.
-		'print_r'                  => null,
-		'debug_print_backtrace'    => null,
-		'var_dump'                 => null,
-		'var_export'               => null,
+	public function getGroups() {
+		return array(
+			'create_function' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged, please use anonymous functions instead.',
+				'functions' => array(
+					'create_function',
+				),
+			),
 
-		// Discouraged.
-		'json_encode'              => 'wp_json_encode',
+			'serialize' => array(
+				'type'      => 'warning',
+				'message'   => '%s() Serialized data has <a href=\'https://www.owasp.org/index.php/PHP_Object_Injection\'>known vulnerability problems</a> with Object Injection. JSON is generally a better approach for serializing data.',
+				'functions' => array(
+					'serialize',
+					'unserialize',
+				),
+			),
 
-		// WordPress deprecated.
-		'find_base_dir'            => 'WP_Filesystem::abspath',
-		'get_base_dir'             => 'WP_Filesystem::abspath',
-		'dropdown_categories'      => 'wp_link_category_checklist',
-		'dropdown_link_categories' => 'wp_link_category_checklist',
-		'get_link'                 => 'get_bookmark',
-		'get_catname'              => 'get_cat_name',
-		'register_globals'         => null,
-		'wp_setcookie'             => 'wp_set_auth_cookie',
-		'wp_get_cookie_login'      => null,
-		'wp_login'                 => 'wp_signon',
-		'get_the_attachment_link'  => 'wp_get_attachment_link',
-		'get_attachment_icon_src'  => 'wp_get_attachment_image_src',
-		'get_attachment_icon'      => 'wp_get_attachment_image',
-		'get_attachment_innerHTML' => 'wp_get_attachment_image',
+			'urlencode' => array(
+				'type'      => 'warning',
+				'message'   => '%s() should only be used when dealing with legacy applications rawurlencode should now de used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
+				'functions' => array(
+					'urlencode',
+				),
+			),
 
-		// WordPress discouraged.
-		'query_posts'              => 'WP_Query',
-		'wp_reset_query'           => 'wp_reset_postdata',
-	);
-
-	/**
-	 * If true, an error will be thrown; otherwise a warning.
-	 *
-	 * @var bool
-	 */
-	public $error = false;
+		);
+	} // end getGroups()
 
 } // End class.

@@ -38,7 +38,7 @@ class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctio
 		return array(
 			'ereg' => array(
 				'type'      => 'error',
-				'message'   => '%s has been deprecated since PHP 5.3 and removed in PHP 7.0, please use preg_match() instead.',
+				'message'   => '%s() has been deprecated since PHP 5.3 and removed in PHP 7.0, please use preg_match() instead.',
 				'functions' => array(
 					'ereg',
 					'eregi',
@@ -48,7 +48,7 @@ class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctio
 
 			'ereg_replace' => array(
 				'type'      => 'error',
-				'message'   => '%s has been deprecated since PHP 5.3 and removed in PHP 7.0, please use preg_replace() instead.',
+				'message'   => '%s() has been deprecated since PHP 5.3 and removed in PHP 7.0, please use preg_replace() instead.',
 				'functions' => array(
 					'ereg_replace',
 					'eregi_replace',
@@ -57,7 +57,7 @@ class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctio
 
 			'split' => array(
 				'type'      => 'error',
-				'message'   => '%s  has been deprecated since PHP 5.3 and removed in PHP 7.0, please use explode(), str_split() or preg_split() instead.',
+				'message'   => '%s()  has been deprecated since PHP 5.3 and removed in PHP 7.0, please use explode(), str_split() or preg_split() instead.',
 				'functions' => array(
 					'split',
 					'spliti',

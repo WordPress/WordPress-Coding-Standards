@@ -35,7 +35,27 @@
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="Squiz.PHP.CommentedOutCode" />
 
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
+	<!--https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
+	<rule ref="WordPress.PHP.RestrictedFunctions" />
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#serializing-data -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#encoding-values-used-when-creating-a-url-or-passed-to-add_query_arg -->
+	<rule ref="WordPress.PHP.DiscouragedFunctions" />
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
+	<rule ref="WordPress.PHP.DevelopmentFunctions" />
+
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray" />
 
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_parse_url-instead-of-parse_url -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_json_encode-over-json_encode -->
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<properties>
+			<!-- VIP recommends other functions -->
+			<property name="exclude" value="curl,file_get_contents"/>
+		</properties>
+	</rule>
 </ruleset>
