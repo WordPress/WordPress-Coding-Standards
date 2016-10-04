@@ -22,6 +22,9 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
  *
  * Last synced with parent class July 2016 up to commit 4fea2e651109e41066a81e22e004d851fb1287f6.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
+ *
+ * {@internal While this class extends the PEAR parent, it does not actually use the checks
+ * contained in the parent. It only uses the properties and the token registration from the parent.}}
  */
 class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff {
 
