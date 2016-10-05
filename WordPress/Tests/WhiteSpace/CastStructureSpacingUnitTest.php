@@ -22,9 +22,9 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	 */
 	public function getErrorList() {
 		return array(
-			 3 => 1,
-			 6 => 1,
-			 9 => 1,
+			 3 => 2,
+			 6 => 2,
+			 9 => 2,
 			 12 => 2,
 			 15 => 2,
 			 18 => 2,

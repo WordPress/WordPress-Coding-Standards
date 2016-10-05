@@ -40,6 +40,13 @@
 		<rule ref="WordPress.Arrays.ArrayDeclaration">
 			<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
 		</rule>
+		<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
+			<!-- Exclude the upstream checks which are already thrown by the
+			     WordPress.Arrays.ArrayDeclaration sniff. -->
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NotLowerCase" />
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceAfterKeyword" />
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray" />
+		</rule>
 
 
 	<!--
@@ -155,6 +162,7 @@
 
 		<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
 		<rule ref="Generic.Formatting.SpaceAfterCast"/>
+		<rule ref="Squiz.WhiteSpace.CastSpacing" />
 		<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 
 		<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
