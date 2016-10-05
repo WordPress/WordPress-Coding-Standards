@@ -19,7 +19,9 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
- * @since   0.5.0 Now extends `Squiz_Sniffs_Arrays_ArrayDeclarationSniff`.
+ * @since   0.5.0  Now extends `Squiz_Sniffs_Arrays_ArrayDeclarationSniff`.
+ * @since   0.11.0 The additional single-line array checks have been moved to their own
+ *                 sniff WordPress.Arrays.ArrayDeclarationSpacing.
  *
  * @todo    Check whether the upstream PRs have been merged and released and if possible,
  *          remove duplicate logic.
@@ -35,74 +37,6 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {
-
-	/**
-	 * Process a single line array.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
-	 * @param int                  $stackPtr   The position of the current token
-	 *                                         in the stack passed in $tokens.
-	 * @param int                  $arrayStart Position of the array opener in the token stack.
-	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
-	 */
-	public function processSingleLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
-
-		parent::processSingleLineArray( $phpcsFile, $stackPtr, $arrayStart, $arrayEnd );
-
-		// This array is empty, so the below checks aren't necessary.
-		if ( ( $arrayStart + 1 ) === $arrayEnd ) {
-			return;
-		}
-
-		$tokens = $phpcsFile->getTokens();
-
-		// Check that there is a single space after the array opener.
-		if ( T_WHITESPACE !== $tokens[ ( $arrayStart + 1 ) ]['code'] ) {
-
-			$warning = 'Missing space after array opener.';
-			$fix     = $phpcsFile->addFixableError( $warning, $arrayStart, 'NoSpaceAfterOpenParenthesis' );
-
-			if ( true === $fix ) {
-				$phpcsFile->fixer->addContent( $arrayStart, ' ' );
-			}
-		} elseif ( ' ' !== $tokens[ ( $arrayStart + 1 ) ]['content'] ) {
-
-			$fix = $phpcsFile->addFixableError(
-				'Expected 1 space after array opener, found %s.',
-				$arrayStart,
-				'SpaceAfterArrayOpener',
-				array( strlen( $tokens[ ( $arrayStart + 1 ) ]['content'] ) )
-			);
-
-			if ( true === $fix ) {
-				$phpcsFile->fixer->replaceToken( ( $arrayStart + 1 ), ' ' );
-			}
-		}
-
-		if ( T_WHITESPACE !== $tokens[ ( $arrayEnd - 1 ) ]['code'] ) {
-
-			$warning = 'Missing space before array closer.';
-			$fix     = $phpcsFile->addFixableError( $warning, $arrayEnd, 'NoSpaceAfterOpenParenthesis' );
-
-			if ( true === $fix ) {
-				$phpcsFile->fixer->addContentBefore( $arrayEnd, ' ' );
-			}
-		} elseif ( ' ' !== $tokens[ ( $arrayEnd - 1 ) ]['content'] ) {
-
-			$fix = $phpcsFile->addFixableError(
-				'Expected 1 space before array closer, found %s.',
-				$arrayEnd,
-				'SpaceAfterArrayCloser',
-				array( strlen( $tokens[ ( $arrayEnd - 1 ) ]['content'] ) )
-			);
-
-			if ( true === $fix ) {
-				$phpcsFile->fixer->replaceToken( ( $arrayEnd - 1 ), ' ' );
-			}
-		}
-	}
 
 	/**
 	 * Process a multi-line array.
