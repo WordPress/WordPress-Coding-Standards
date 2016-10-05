@@ -22,18 +22,20 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
  * @since   0.5.0  Now extends `Squiz_Sniffs_Arrays_ArrayDeclarationSniff`.
  * @since   0.11.0 The additional single-line array checks have been moved to their own
  *                 sniff WordPress.Arrays.ArrayDeclarationSpacing.
+ *                 This class now only contains a slimmed down version of the upstream sniff.
  *
- * @todo    Check whether the upstream PRs have been merged and released and if possible,
- *          remove duplicate logic.
- *          Ref: commit 3ea49d2b56f248d83bed890f9f5246d67c775d54
- *          "The upstream version is similar, except that we exclude a few errors.
- *          Unfortunately we have to actually comment out the code rather than just
- *          using the upstream sniff and `<exclude>` in our ruleset, due to a bug
- *          (squizlabs/PHP_CodeSniffer#582). (I've also included a fix for another
- *          bug, squizlabs/PHP_CodeSniffer#584.) Because of this, we cannot yet
- *          eliminate duplicated logic from this child sniff."
+ * DO NOT MAKE CHANGES TO THIS SNIFF - other than syncing with upstream -.
+ * ANY CHANGES NECESSARY SHOULD BE PULLED TO THE UPSTREAM SNIFF AND SYNCED IN AFTER MERGE!
+ * The code style of this sniff should be ignored so as to facilitate easy syncing with
+ * upstream.
  *
- * Last synced with parent class ?[unknown date]? at commit ?[unknown commit]?.
+ * {@internal The upstream version is similar, except that we exclude a few errors.
+ * Unfortunately we have to actually comment out the code rather than just using
+ * the upstream sniff and `<exclude>` in our ruleset, due to a bug/non-configurability
+ * of the sniff.
+ * {@see https://github.com/squizlabs/PHP_CodeSniffer/issues/582} }}
+ *
+ * Last synced with parent class October 5 2016 at commit ea32814346ecf29791de701b3fa464a9ca43f45b.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {

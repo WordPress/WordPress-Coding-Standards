@@ -1,0 +1,13 @@
+/**
+ * THIS SNIFF IS INTENTIONALLY NOT TESTED HERE.
+ *
+ * The WordPress.Arrays.ArrayDeclaration sniff is a duplicate of the upstream
+ * Squiz.Arrays.ArrayDeclaration sniff with some checks commented out.
+ *
+ * As such all checks contained in the sniff are already tested upstream and
+ * the tests should not be duplicated here.
+ *
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
