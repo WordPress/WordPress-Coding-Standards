@@ -155,6 +155,7 @@
 
 		<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
 		<rule ref="Generic.Formatting.SpaceAfterCast"/>
+		<rule ref="Squiz.WhiteSpace.CastSpacing" />
 		<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 
 		<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->

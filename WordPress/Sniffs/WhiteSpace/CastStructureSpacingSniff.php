@@ -7,10 +7,6 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_CastSpacingSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Squiz_Sniffs_WhiteSpace_CastSpacingSniff not found' );
-}
-
 /**
  * Ensure cast statements don't contain whitespace, but *are* surrounded by whitespace, based upon Squiz code.
  *
@@ -19,14 +15,20 @@ if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_CastSpacingSniff', true ) ) {
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.11.0 This sniff now extends the Squiz_Sniffs_WhiteSpace_CastSpacingSniff class it was based upon.
  * @since   0.11.0 This sniff now has the ability to fix the issues it flags.
  * @since   0.11.0 The error level for all errors thrown by this sniff has been raised from warning to error.
- *
- * Last synced with parent class August 2016 at commit 5def2acbe3911e2aea08ac8b8eb4e4d64330021f.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/CastSpacingSniff.php
  */
-class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff extends Squiz_Sniffs_WhiteSpace_CastSpacingSniff {
+class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
+
+	/**
+	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @return array
+	 */
+	public function register() {
+		return PHP_CodeSniffer_Tokens::$castTokens;
+	}
+
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -38,8 +40,6 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff extends Squiz_Sniffs
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		parent::process( $phpcsFile, $stackPtr );
-
 		$tokens = $phpcsFile->getTokens();
 
 		if ( T_WHITESPACE !== $tokens[ ( $stackPtr - 1 ) ]['code'] ) {
