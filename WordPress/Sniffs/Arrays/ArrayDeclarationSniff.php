@@ -545,6 +545,14 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					continue;
 				}
 
+				// Skip to the end of multi-line strings.
+				if (isset(PHP_CodeSniffer_Tokens::$stringTokens[$tokens[$i]['code']]) === true) {
+					$i = $phpcsFile->findNext($tokens[$i]['code'], ($i + 1), null, true);
+					$i--;
+					$valueLine = $tokens[$i]['line'];
+					continue;
+				}
+
 				if ($tokens[$i]['code'] === T_OPEN_SHORT_ARRAY) {
 					$i         = $tokens[ $i ]['bracket_closer'];
 					$valueLine = $tokens[ $i ]['line'];
@@ -563,13 +571,13 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				}
 			}//end for
 
-			if ( false === $nextComma ) {
+			if ($nextComma === false || ($tokens[$nextComma]['line'] !== $valueLine)) {
 				$error = 'Each line in an array declaration must end in a comma';
 				$fix   = $phpcsFile->addFixableError( $error, $index['value'], 'NoComma' );
 
 				if ($fix === true) {
 					// Find the end of the line and put a comma there.
-					for ( $i = ( $index['value'] + 1 ); $i < $phpcsFile->numTokens; $i++ ) {
+					for ($i = ($index['value'] + 1); $i < $arrayEnd; $i++) {
 						if ( $tokens[ $i ]['line'] > $valueLine ) {
 							break;
 						}
