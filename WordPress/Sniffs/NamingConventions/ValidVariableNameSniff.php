@@ -69,22 +69,33 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	);
 
 	/**
-	 * Custom list of variables which can have mixed case.
+	 * Custom list of properties which can have mixed case.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]
+	 */
+	public $customPropertiesWhitelist = array();
+
+	/**
+	 * Whether the custom whitelisted properties were added to the default list yet.
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Name changed from $addedCustomVariables.
+	 *
+	 * @var bool
+	 */
+	protected $addedCustomProperties = false;
+
+	/**
+	 * Custom list of properties which can have mixed case.
+	 *
+	 * @since 0.10.0
+	 * @deprecated 0.11.0 Use $customPropertiesWhitelist instead.
 	 *
 	 * @var string[]
 	 */
 	public $customVariablesWhitelist = array();
-
-	/**
-	 * Whether the custom whitelisted variables were added to the default list yet.
-	 *
-	 * @since 0.10.0
-	 *
-	 * @var bool
-	 */
-	protected $addedCustomVariables = false;
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -98,7 +109,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
 		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList();
+		$this->mergeWhiteList( $phpcs_file );
 
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -184,7 +195,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	protected function processMemberVar( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
 		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList();
+		$this->mergeWhiteList( $phpcs_file );
 
 		$tokens = $phpcs_file->getTokens();
 
@@ -250,12 +261,34 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * Merge a custom whitelist provided via a custom ruleset with the predefined whitelist,
 	 * if we haven't already.
 	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 *
 	 * @return void
 	 */
-	protected function mergeWhiteList() {
-		if ( false === $this->addedCustomVariables && ! empty( $this->customVariablesWhitelist ) ) {
-			$this->whitelisted_mixed_case_member_var_names = array_merge( $this->whitelisted_mixed_case_member_var_names, $this->customVariablesWhitelist );
-			$this->addedCustomVariables = true;
+	protected function mergeWhiteList( $phpcs_file ) {
+		if ( $this->addedCustomProperties ) {
+			return;
+		}
+
+		if ( ! empty( $this->customVariablesWhitelist ) ) {
+			$this->customPropertiesWhitelist = array_merge(
+				$this->customPropertiesWhitelist,
+				$this->customVariablesWhitelist
+			);
+
+			$phpcs_file->addWarning(
+				'The customVariablesWhitelist property is deprecated in favor of customPropertiesWhitelist.',
+				0,
+				'DeprecatedCustomVariablesWhitelist'
+			);
+		}
+
+		if ( ! empty( $this->customPropertiesWhitelist ) ) {
+			$this->whitelisted_mixed_case_member_var_names = array_merge(
+				$this->whitelisted_mixed_case_member_var_names,
+				$this->customPropertiesWhitelist
+			);
+			$this->addedCustomProperties = true;
 		}
 	}
 
