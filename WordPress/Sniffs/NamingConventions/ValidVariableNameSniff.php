@@ -46,6 +46,15 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	);
 
 	/**
+	 * Mixed-case variables used by WordPress.
+	 *
+	 * @var array
+	 */
+	protected $wordpress_mixed_case_vars = array(
+		'EZSQL_ERROR' => true,
+	);
+
+	/**
 	 * List of member variables that can have mixed case.
 	 *
 	 * @var array
@@ -96,6 +105,11 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 
 		// If it's a php reserved var, then its ok.
 		if ( in_array( $var_name, $this->php_reserved_vars, true ) ) {
+			return;
+		}
+
+		// Likewise if it is a mixed-case var used by WordPress core.
+		if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
 			return;
 		}
 

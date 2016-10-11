@@ -120,3 +120,5 @@ if ( is_category() ) {
 	$cat_id = $category->cat_ID;
 	$cat_ID = $category->cat_ID; // Bad.
 }
+
+$EZSQL_ERROR = array(); // OK
