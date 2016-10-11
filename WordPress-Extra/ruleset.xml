@@ -5,6 +5,7 @@
 	<!-- Generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
+	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
 	<rule ref="Generic.Functions.CallTimePassByReference"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
