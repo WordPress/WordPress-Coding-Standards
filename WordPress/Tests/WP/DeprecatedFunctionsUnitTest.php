@@ -22,7 +22,7 @@ class WordPress_Tests_WP_DeprecatedFunctionsUnitTest extends AbstractSniffUnitTe
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array_fill( 10, 226, 1 );
+		return array_fill( 10, 227, 1 );
 
 	}
 
@@ -32,7 +32,7 @@ class WordPress_Tests_WP_DeprecatedFunctionsUnitTest extends AbstractSniffUnitTe
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array_fill( 238, 10, 1 );
+		return array_fill( 239, 10, 1 );
 
 	}
 
