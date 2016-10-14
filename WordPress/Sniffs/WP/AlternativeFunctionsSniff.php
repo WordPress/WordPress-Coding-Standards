@@ -91,7 +91,21 @@ class WordPress_Sniffs_WP_AlternativeFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
-		);
-	} // end getGroups()
+			'file_system_read' => array(
+				'type'      => 'warning',
+				'message'   => 'File operations should use the WP_Filesystem methods instead of direct PHP filesystem calls %s()',
+				'functions' => array(
+					'readfile',
+					'fopen',
+					'fsockopen',
+					'pfsockopen',
+					'fclose',
+					'fread',
+					'fwrite',
+				),
+			),
 
-} // end class
+		);
+	} // End getGroups().
+
+} // End class.
