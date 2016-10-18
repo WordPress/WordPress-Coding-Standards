@@ -966,10 +966,63 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '4.2'
 		),
 
+		'preview_theme' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'_preview_theme_template_filter' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'_preview_theme_stylesheet_filter' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'preview_theme_ob_filter' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'preview_theme_ob_filter_callback' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'wp_richedit_pre' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'wp_htmledit_pre' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+		'wp_ajax_wp_fullscreen_save_post' => array(
+			'alt'     => '',
+			'version' => '4.3'
+		),
+
+		'post_permalink' => array(
+			'alt'     => 'get_permalink',
+			'version' => '4.4'
+		),
+		'force_ssl_login' => array(
+			'alt'     => 'force_ssl_admin',
+			'version' => '4.4'
+		),
+		'create_empty_blog' => array(
+			'alt'     => '',
+			'version' => '4.4'
+		),
+		'get_admin_users_for_domain' => array(
+			'alt'     => '',
+			'version' => '4.4'
+		),
 		'wp_get_http' => array(
 			'alt'     => 'WP_Http',
 			'version' => '4.4'
 		),
+//		'WP_Widget_Recent_Comments::flush_widget_cache' => array(
+//			'alt'     => '',
+//			'version' => '4.4'
+//		),
 
 		'is_comments_popup' => array(
 			'alt'     => '',
@@ -1025,9 +1078,8 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 	 */
 	public function getGroups() {
 		foreach ( $this->depreacted_functions as $depreacted_function => $data ) {
-			if ( version_compare( $data['version'], $this->minimum_supported_version, '<' ) ) {
-				$type = 'error';
-			} else {
+			$type = 'error';
+			if ( version_compare( $data['version'], $this->minimum_supported_version, '>=' ) ) {
 				$type = 'warning';
 			}
 			if ( empty( $data['alt'] ) ) {

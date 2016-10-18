@@ -236,6 +236,17 @@ prepreview_added_widget_instance();
 remove_prepreview_filters();
 
 // Warning.
+preview_theme();
+_preview_theme_template_filter
+_preview_theme_stylesheet_filter();
+preview_theme_ob_filter();
+preview_theme_ob_filter_callback();
+wp_richedit_pre();
+wp_ajax_wp_fullscreen_save_post();
+post_permalink();
+force_ssl_login();
+create_empty_blog();
+get_admin_users_for_domain();
 wp_get_http();
 is_comments_popup();
 add_object_page();
