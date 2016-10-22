@@ -333,8 +333,18 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		// UnorderedPlaceholders: Check for multiple unordered placeholders.
 		$unordered_matches_count = preg_match_all( self::UNORDERED_SPRINTF_PLACEHOLDER_REGEX, $content, $unordered_matches );
 		$unordered_matches       = $unordered_matches[0];
+		$all_matches_count       = preg_match_all( self::SPRINTF_PLACEHOLDER_REGEX, $content, $all_matches );
 
-		if ( $unordered_matches_count >= 2 ) {
+		if ( $unordered_matches_count > 0 && $unordered_matches_count !== $all_matches_count && $all_matches_count > 1 ) {
+			$code = 'MixedOrderedPlaceholders' . ucfirst( $arg_name );
+			$phpcs_file->addError(
+				'Multiple placeholders should be ordered. Mix of ordered and non-ordered placeholders found. Found: %s.',
+				$stack_ptr,
+				$code,
+				array( implode( ', ', $all_matches[0] ) )
+			);
+
+		} elseif ( $unordered_matches_count >= 2 ) {
 			$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
 
 			$suggestions     = array();
@@ -367,7 +377,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$phpcs_file->fixer->replaceToken( $stack_ptr, $fixed_str );
 				$phpcs_file->fixer->endChangeset();
 			}
-		}
+		} // End if().
 
 		/*
 		 * NoEmptyStrings.

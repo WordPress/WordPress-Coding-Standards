@@ -123,3 +123,7 @@ __( '%% - %b - %c - %d - %e - %E - %f - %F - %g - %G - %o - %s - %u - %x - %X', 
 __( "%d for %d 'item'", 'my-slug' ); // Bad - Multiple of the same placeholders in a double quoted string.
 __( '%04d for %02d item', 'my-slug' ); // Bad - Placeholder with other specifier, but no position.
 __( "%04d for %'.9d item", 'my-slug' ); // Bad - Placeholder with other specifier, but no position, double quoted string.
+
+// Related to issue #698 - mixed ordered and non-ordered placeholders.
+__( '%1$d for %d item', 'my-slug' ); // Bad.
+__( '%1$d for %d and %d item', 'my-slug' ); // Bad.
