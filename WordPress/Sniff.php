@@ -54,6 +54,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'esc_url'              => true,
 		'filter_input'         => true,
 		'filter_var'           => true,
+		'htmlspecialchars'     => true,
 		'intval'               => true,
 		'json_encode'          => true,
 		'like_escape'          => true,
