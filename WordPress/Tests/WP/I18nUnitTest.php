@@ -80,6 +80,12 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 			105 => 1,
 			106 => 1,
 			107 => 1,
+			120 => 1,
+			121 => 1,
+			122 => 1,
+			123 => 1,
+			124 => 1,
+			125 => 1,
 		);
 	} // end getErrorList()
 
