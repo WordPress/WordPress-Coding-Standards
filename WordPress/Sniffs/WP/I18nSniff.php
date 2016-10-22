@@ -22,12 +22,12 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
 	 */
-	const SPRINTF_PLACEHOLDER_REGEX = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
+	const SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeEufFgGosxX]))/';
 
 	/**
 	 * "Unordered" means there's no position specifier: '%s', not '%2$s'.
 	 */
-	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX])/';
+	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeEufFgGosxX])/';
 
 	/**
 	 * Text domain.
