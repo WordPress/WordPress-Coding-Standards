@@ -22,12 +22,12 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
 	 */
-	const SPRINTF_PLACEHOLDER_REGEX = '/(?:%%|(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFos]))/';
+	const SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeEufFgGosxX]))/';
 
 	/**
 	 * "Unordered" means there's no position specifier: '%s', not '%2$s'.
 	 */
-	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeufFosxX])/';
+	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeEufFgGosxX])/';
 
 	/**
 	 * Text domain.
@@ -331,33 +331,53 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
 
 		// UnorderedPlaceholders: Check for multiple unordered placeholders.
-		preg_match_all( self::UNORDERED_SPRINTF_PLACEHOLDER_REGEX, $content, $unordered_matches );
+		$unordered_matches_count = preg_match_all( self::UNORDERED_SPRINTF_PLACEHOLDER_REGEX, $content, $unordered_matches );
 		$unordered_matches       = $unordered_matches[0];
-		$unordered_matches_count = count( $unordered_matches );
+		$all_matches_count       = preg_match_all( self::SPRINTF_PLACEHOLDER_REGEX, $content, $all_matches );
 
-		if ( $unordered_matches_count >= 2 ) {
+		if ( $unordered_matches_count > 0 && $unordered_matches_count !== $all_matches_count && $all_matches_count > 1 ) {
+			$code = 'MixedOrderedPlaceholders' . ucfirst( $arg_name );
+			$phpcs_file->addError(
+				'Multiple placeholders should be ordered. Mix of ordered and non-ordered placeholders found. Found: %s.',
+				$stack_ptr,
+				$code,
+				array( implode( ', ', $all_matches[0] ) )
+			);
+
+		} elseif ( $unordered_matches_count >= 2 ) {
 			$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
 
-			$suggestions = array();
+			$suggestions     = array();
+			$replace_regexes = array();
+			$replacements    = array();
 			for ( $i = 0; $i < $unordered_matches_count; $i++ ) {
-				$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], ( $i + 1 ) . '$', 1, 0 );
+				$to_insert         = ( $i + 1 );
+				$to_insert        .= ( '"' !== $content[0] ) ? '$' : '\$';
+				$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], $to_insert, 1, 0 );
+
+				// Prepare the strings for use a regex.
+				$replace_regexes[ $i ] = '`\Q' . $unordered_matches[ $i ] . '\E`';
+				// Note: the initial \\ is a literal \, the four \ in the replacement translate to also to a literal \.
+				$replacements[ $i ]    = str_replace( '\\', '\\\\', $suggestions[ $i ] );
+				// Note: the $ needs escaping to prevent numeric sequences after the $ being interpreted as match replacements.
+				$replacements[ $i ]    = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
 			$fix = $phpcs_file->$fixable_method(
 				'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
 				$stack_ptr,
 				$code,
-				array( join( ', ', $suggestions ), join( ',', $unordered_matches ) )
+				array( implode( ', ', $suggestions ), implode( ', ', $unordered_matches ) )
 			);
 
 			if ( true === $fix ) {
-				$fixed_str = str_replace( $unordered_matches, $suggestions, $content );
+				$fixed_str = preg_replace( $replace_regexes, $replacements, $content, 1 );
 
 				$phpcs_file->fixer->beginChangeset();
 				$phpcs_file->fixer->replaceToken( $stack_ptr, $fixed_str );
 				$phpcs_file->fixer->endChangeset();
 			}
-		}
+		} // End if().
 
 		/*
 		 * NoEmptyStrings.

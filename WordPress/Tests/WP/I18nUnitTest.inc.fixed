@@ -115,3 +115,15 @@ __( 'A replacement variable can not start with "%%cf_" or "%%ct_" as these are r
 // The domain 'default' was also added to the text domains.
 __( 'String default text domain.', 'default' ); // Ok.
 __( "String default text domain.", "default" ); // Ok.
+
+// Issue #698 - fix for auto-fixing placeholder ordering.
+__( '%1$s - %2$s - %3$s - %4$s', 'my-slug' ); // Bad - Multiple of the same placeholders.
+__( '%1$d - %2$d - %3$d - %4$d', 'my-slug' ); // Bad - Multiple of the same placeholders.
+__( '%% - %1$b - %2$c - %3$d - %4$e - %5$E - %6$f - %7$F - %8$g - %9$G - %10$o - %11$s - %12$u - %13$x - %14$X', 'my-slug' ); // Bad - All simple variations.
+__( "%1\$d for %2\$d 'item'", 'my-slug' ); // Bad - Multiple of the same placeholders in a double quoted string.
+__( '%1$04d for %2$02d item', 'my-slug' ); // Bad - Placeholder with other specifier, but no position.
+__( "%1\$04d for %2\$'.9d item", 'my-slug' ); // Bad - Placeholder with other specifier, but no position, double quoted string.
+
+// Related to issue #698 - mixed ordered and non-ordered placeholders.
+__( '%1$d for %d item', 'my-slug' ); // Bad.
+__( '%1$d for %d and %d item', 'my-slug' ); // Bad.
