@@ -273,6 +273,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'wp_parse_id_list'           => true,
 		'wp_redirect'                => true,
 		'wp_safe_redirect'           => true,
+		'wp_strip_all_tags'          => true,
 	);
 
 	/**
