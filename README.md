@@ -17,7 +17,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 Standards can be installed with [Composer](https://getcomposer.org/) dependency manager:
 
-    composer create-project wp-coding-standards/wpcs:dev-master --no-dev
+    composer create-project wp-coding-standards/wpcs --no-dev
 
 Running this command will:
 
