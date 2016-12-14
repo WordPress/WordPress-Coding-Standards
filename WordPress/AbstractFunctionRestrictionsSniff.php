@@ -58,14 +58,19 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * This method should be overridden in extending classes.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
+	 *     'lambda' => array(
+	 *         'type'      => 'error' | 'warning',
+	 *         'message'   => 'Use anonymous functions instead please!',
+	 *         'functions' => array( 'eval', 'create_function', 'mysql_*' ),
+	 *         // Only useful when using wildcards:
+	 *         'whitelist' => array( 'mysql_to_rfc3339' => true, ),
+	 *     )
 	 * )
 	 *
 	 * You can use * wildcards to target a group of functions.
+	 * When you use * wildcards, you may inadvertently restrict too many
+	 * functions. In that case you can add the `whitelist` key to
+	 * whitelist individual functions to prevent false positives.
 	 *
 	 * @return array
 	 */
