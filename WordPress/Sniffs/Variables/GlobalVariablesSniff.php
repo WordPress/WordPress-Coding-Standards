@@ -323,19 +323,27 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			$search = array(); // Array of globals to watch for.
 			$ptr    = ( $stackPtr + 1 );
 			while ( $ptr ) {
-				$ptr++;
+				if ( ! isset( $this->tokens[ $ptr ] ) ) {
+					break;
+				}
+
 				$var = $this->tokens[ $ptr ];
+
+				// Halt the loop at end of statement.
+				if ( T_SEMICOLON === $var['code'] ) {
+					break;
+				}
+
 				if ( T_VARIABLE === $var['code'] ) {
-					$varname = substr( $var['content'], 1 );
-					if ( in_array( $varname, $this->globals, true ) ) {
-						$search[] = $varname;
+					if ( in_array( substr( $var['content'], 1 ), $this->globals, true ) ) {
+						$search[] = $var['content'];
 					}
 				}
-				// Halt the loop.
-				if ( T_SEMICOLON === $var['code'] ) {
-					$ptr = false;
-				}
+
+				$ptr++;
 			}
+			unset( $var );
+
 			if ( empty( $search ) ) {
 				return;
 			}
