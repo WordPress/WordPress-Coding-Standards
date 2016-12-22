@@ -303,10 +303,16 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				return;
 			}
 
-			$varPtr   = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'], true );
-			$varToken = $this->tokens[ $varPtr ];
+			// Retrieve the array key and avoid getting tripped up by some simple obfuscation.
+			$var_name = '';
+			$start    = ( $bracketPtr + 1 );
+			for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
+				if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
+					$var_name .= trim( $this->tokens[ $ptr ]['content'], '\'"' );
+				}
+			}
 
-			if ( ! in_array( trim( $varToken['content'], '\'"' ), $this->globals, true ) ) {
+			if ( ! in_array( $var_name, $this->globals, true ) ) {
 				return;
 			}
 
