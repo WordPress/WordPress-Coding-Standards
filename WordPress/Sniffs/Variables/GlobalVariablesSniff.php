@@ -348,14 +348,15 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 	} // End process().
 
 	/**
-	 * Add the error if there is no whitelist comment present.
+	 * Add the error if there is no whitelist comment present and the assignment
+	 * is not done from within a test method.
 	 *
 	 * @param int $stackPtr The position of the token to throw the error for.
 	 *
 	 * @return void
 	 */
 	public function maybe_add_error( $stackPtr ) {
-		if ( ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
+		if ( ! $this->is_token_in_test_method( $stackPtr ) && ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
 			$this->phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
 		}
 	}
