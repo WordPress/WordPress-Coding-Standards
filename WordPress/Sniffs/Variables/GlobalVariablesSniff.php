@@ -351,6 +351,12 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			// Check for assignments to collected global vars.
 			foreach ( $this->tokens as $ptr => $token ) {
 				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
+					// Don't throw false positives for static class properties.
+					$previous = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
+					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
+						continue;
+					}
+
 					if ( true === $this->is_assignment( $ptr ) ) {
 						$this->maybe_add_error( $ptr );
 					}
