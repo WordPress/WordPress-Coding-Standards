@@ -297,6 +297,12 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				return;
 			}
 
+			// Bow out if the array key contains a variable.
+			$has_variable = $phpcsFile->findNext( T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
+			if ( false !== $has_variable ) {
+				return;
+			}
+
 			$varPtr   = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'], true );
 			$varToken = $this->tokens[ $varPtr ];
 
