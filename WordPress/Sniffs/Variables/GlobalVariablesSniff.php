@@ -352,6 +352,22 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			$start        = ( $phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
 			$end          = count( $this->tokens );
 
+			// Is the global statement within a function call or closure ?
+			// If so, limit the token walking to the function scope.
+			$function_token = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			if ( false === $function_token ) {
+				$function_token = $phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			}
+
+			if ( false !== $function_token ) {
+				if ( ! isset( $this->tokens[ $function_token ]['scope_closer'] ) ) {
+					// Live coding, unfinished function.
+					return;
+				}
+
+				$end          = $this->tokens[ $function_token ]['scope_closer'];
+			}
+
 			// Check for assignments to collected global vars.
 			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
