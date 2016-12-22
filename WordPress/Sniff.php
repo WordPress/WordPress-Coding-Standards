@@ -572,6 +572,47 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Check if a token is used within a unit test.
+	 *
+	 * Unit test methods are identified as such:
+	 * - Method name starts with `test_`.
+	 * - Method is within a class which either extends WP_UnitTestCase or PHPUnit_Framework_TestCase.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the token to be examined.
+	 *
+	 * @return bool True if the token is within a unit test, false otherwise.
+	 */
+	protected function is_token_in_test_method( $stackPtr ) {
+		// Is the token inside of a function definition ?
+		$functionToken = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		if ( false === $functionToken ) {
+			return false;
+		}
+
+		// Does the function name start with 'test_' ?
+		$functionName = $this->phpcsFile->getDeclarationName( $functionToken );
+		if ( 0 !== strpos( $functionName, 'test_' ) ) {
+			return false;
+		}
+
+		// Is method inside of a class ?
+		$classToken = $this->phpcsFile->getCondition( $functionToken, T_CLASS );
+		if ( false === $classToken ) {
+			return false;
+		}
+
+		// Does the class extend either of the start with 'test_' ?
+		$extendedClassName = $this->phpcsFile->findExtendedClassName( $classToken );
+		if ( in_array( $extendedClassName, array( 'WP_UnitTestCase', 'PHPUnit_Framework_TestCase' ), true ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check if this variable is being assigned a value.
 	 *
 	 * E.g., $var = 'foo';
