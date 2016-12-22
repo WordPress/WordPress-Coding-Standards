@@ -290,32 +290,28 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 		$this->init( $phpcsFile );
 		$token = $this->tokens[ $stackPtr ];
 
-		$search = array(); // Array of globals to watch for.
-
 		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
-			$bracketPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
+			$bracketPtr = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-			if ( T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] ) {
+			if ( false === $bracketPtr || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				return;
 			}
 
-			$varPtr   = $phpcsFile->findNext( T_WHITESPACE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'], true );
+			$varPtr   = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'], true );
 			$varToken = $this->tokens[ $varPtr ];
 
 			if ( ! in_array( trim( $varToken['content'], '\'"' ), $this->globals, true ) ) {
 				return;
 			}
 
-			$assignment = $phpcsFile->findNext( T_WHITESPACE, ( $this->tokens[ $bracketPtr ]['bracket_closer'] + 1 ), null, true );
+			$assignment = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $this->tokens[ $bracketPtr ]['bracket_closer'] + 1 ), null, true );
 
 			if ( false !== $assignment && T_EQUAL === $this->tokens[ $assignment ]['code'] ) {
 				$this->maybe_add_error( $stackPtr );
 			}
-
-			return;
-
 		} elseif ( T_GLOBAL === $token['code'] ) {
-			$ptr = ( $stackPtr + 1 );
+			$search = array(); // Array of globals to watch for.
+			$ptr    = ( $stackPtr + 1 );
 			while ( $ptr ) {
 				$ptr++;
 				$var = $this->tokens[ $ptr ];
