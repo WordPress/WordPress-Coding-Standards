@@ -304,9 +304,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				return;
 			}
 
-			$assignment = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $this->tokens[ $bracketPtr ]['bracket_closer'] + 1 ), null, true );
-
-			if ( false !== $assignment && T_EQUAL === $this->tokens[ $assignment ]['code'] ) {
+			if ( true === $this->is_assignment( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				$this->maybe_add_error( $stackPtr );
 			}
 		} elseif ( T_GLOBAL === $token['code'] ) {
@@ -333,8 +331,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			// Check for assignments to collected global vars.
 			foreach ( $this->tokens as $ptr => $token ) {
 				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
-					$next = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr + 1 ), null, true, null, true );
-					if ( false !== $next && T_EQUAL === $this->tokens[ $next ]['code'] ) {
+					if ( true === $this->is_assignment( $ptr ) ) {
 						$this->maybe_add_error( $ptr );
 					}
 				}
