@@ -348,9 +348,16 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				return;
 			}
 
+			// Only search from the end of the "global ...;" statement onwards.
+			$start        = ( $phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
+			$end          = count( $this->tokens );
+
 			// Check for assignments to collected global vars.
-			foreach ( $this->tokens as $ptr => $token ) {
-				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
+			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
+
+				if ( T_VARIABLE === $this->tokens[ $ptr ]['code']
+					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
+				) {
 					// Don't throw false positives for static class properties.
 					$previous = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
 					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
