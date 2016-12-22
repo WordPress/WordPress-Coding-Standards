@@ -288,9 +288,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$this->init( $phpcsFile );
-		$token      = $this->tokens[ $stackPtr ];
-		$error      = 'Overriding WordPress globals is prohibited';
-		$error_code = 'OverrideProhibited';
+		$token = $this->tokens[ $stackPtr ];
 
 		$search = array(); // Array of globals to watch for.
 
@@ -311,10 +309,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			$assignment = $phpcsFile->findNext( T_WHITESPACE, ( $this->tokens[ $bracketPtr ]['bracket_closer'] + 1 ), null, true );
 
 			if ( false !== $assignment && T_EQUAL === $this->tokens[ $assignment ]['code'] ) {
-				if ( ! $this->has_whitelist_comment( 'override', $assignment ) ) {
-					$phpcsFile->addError( $error, $stackPtr, $error_code );
-					return;
-				}
+				$this->maybe_add_error( $stackPtr );
 			}
 
 			return;
@@ -344,14 +339,25 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
 					$next = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr + 1 ), null, true, null, true );
 					if ( false !== $next && T_EQUAL === $this->tokens[ $next ]['code'] ) {
-						if ( ! $this->has_whitelist_comment( 'override', $next ) ) {
-							$phpcsFile->addError( $error, $ptr, $error_code );
-						}
+						$this->maybe_add_error( $ptr );
 					}
 				}
 			}
 		} // End if().
 
 	} // End process().
+
+	/**
+	 * Add the error if there is no whitelist comment present.
+	 *
+	 * @param int $stackPtr The position of the token to throw the error for.
+	 *
+	 * @return void
+	 */
+	public function maybe_add_error( $stackPtr ) {
+		if ( ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
+			$this->phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
+		}
+	}
 
 } // End class.
