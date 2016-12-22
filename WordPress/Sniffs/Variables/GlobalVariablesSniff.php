@@ -351,6 +351,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			// Only search from the end of the "global ...;" statement onwards.
 			$start        = ( $phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
 			$end          = count( $this->tokens );
+			$global_scope = true;
 
 			// Is the global statement within a function call or closure ?
 			// If so, limit the token walking to the function scope.
@@ -366,10 +367,22 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 				}
 
 				$end          = $this->tokens[ $function_token ]['scope_closer'];
+				$global_scope = false;
 			}
 
 			// Check for assignments to collected global vars.
 			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
+
+				// If the global statement was in the global scope, skip over functions, classes and the likes.
+				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+					if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
+						// Live coding, skip the rest of the file.
+						return;
+					}
+
+					$ptr = $this->tokens[ $ptr ]['scope_closer'];
+					continue;
+				}
 
 				if ( T_VARIABLE === $this->tokens[ $ptr ]['code']
 					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
