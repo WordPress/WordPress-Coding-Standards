@@ -597,13 +597,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 
-		// Is method inside of a class ?
+		// Is this a method inside of a class ?
 		$classToken = $this->phpcsFile->getCondition( $functionToken, T_CLASS );
 		if ( false === $classToken ) {
 			return false;
 		}
 
-		// Does the class extend either of the start with 'test_' ?
+		// Does the class extend either of whitelisted test classes ?
 		$extendedClassName = $this->phpcsFile->findExtendedClassName( $classToken );
 		if ( in_array( $extendedClassName, array( 'WP_UnitTestCase', 'PHPUnit_Framework_TestCase' ), true ) ) {
 			return true;
