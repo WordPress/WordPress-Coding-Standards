@@ -141,8 +141,8 @@ You can use the following as standard names when invoking `phpcs` to select snif
 
  - `WordPress` — complete set with all of the sniffs in the project
   - `WordPress-Core` — main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
-  - `WordPress-Docs` — additional ruleset for inline documentation
-  - `WordPress-Extra` — extended ruleset for optional best practices sniffs
+  - `WordPress-Docs` — additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
+  - `WordPress-Extra` — extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
   - `WordPress-VIP` — extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
     - includes `WordPress-Core`
