@@ -13,6 +13,11 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ## Installation
 
+### Requirements
+
+The WordPress Coding Standards require the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.7.0** or higher.
+The WordPress Coding Standards are currently [not compatible with the upcoming PHPCS 3 release](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/718).
+
 ### Composer
 
 Standards can be installed with [Composer](https://getcomposer.org/) dependency manager:
@@ -32,7 +37,7 @@ For convenience of using `phpcs` as global command you might want to add path to
 
 1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, PEAR, or Git checkout).
 
-  Do ensure, if for example you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV), that PHP_CodeSniffer's version matches our requirements (you can check the required version in [composer.json](composer.json#L18)).
+  Do ensure, if for example you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV), that PHP_CodeSniffer's version matches our [requirements](#requirements).
 
 2. Clone WordPress standards repository:
 
