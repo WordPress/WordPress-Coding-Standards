@@ -57,8 +57,16 @@ add_filter( "comments_open", function( $open, $post_id ) {
 
 $page = 'test'; // Ok, check against cross-contaminiation from within a closure.
 
-// Allow overriding globals in unit tests.
+// Allow overriding globals in functions within unit test classes.
 // https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/300#issuecomment-158778606
+class WP_UnitTestCase {
+
+	public function test_something() {
+		global $tabs;
+		$tabs = 50; // Ok.
+	}
+}
+
 class Test_Class_A extends WP_UnitTestCase {
 
 	public function test_something() {
@@ -68,7 +76,7 @@ class Test_Class_A extends WP_UnitTestCase {
 
 	private function arbitrary_function() {
 		global $post_ID;
-		$post_ID = 50; // Bad - not a test function.
+		$post_ID = 50; // Ok.
 	}
 }
 
@@ -78,18 +86,13 @@ class Test_Class_B extends PHPUnit_Framework_TestCase {
 		global $cat_id;
 		$cat_id = 50; // Ok.
 	}
-
-	private function arbitrary_function() {
-		global $names;
-		$names = 50; // Bad - not a test function.
-	}
 }
 
-interface Test_Class_C extends NonTestClass {
+trait Test_Class_C extends NonTestClass {
 
 	public function test_something() {
 		global $cat_id;
-		$cat_id = 50; // Bad - class does not extend either of the two acceptable testcase classes.
+		$cat_id = 50; // Bad - trait does not extend either of the two acceptable testcase classes.
 	}
 }
 
@@ -103,3 +106,14 @@ trait My_Class {
 		$post = 'test'; // Ok, local variable.
 	}
 }
+
+// Test adding additional test classes to the whitelist.
+// @codingStandardsChangeSetting WordPress.Variables.GlobalVariables custom_test_class_whitelist My_TestClass
+class Test_Class_D extends My_TestClass {
+
+	public function test_something() {
+		global $tabs;
+		$tabs = 50; // Ok.
+	}
+}
+// @codingStandardsChangeSetting WordPress.Variables.GlobalVariables custom_test_class_whitelist null

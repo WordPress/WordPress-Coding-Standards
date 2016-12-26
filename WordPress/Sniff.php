@@ -441,6 +441,40 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * Whitelist of classes which test classes can extend.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]
+	 */
+	protected $test_class_whitelist = array(
+		'WP_UnitTestCase',
+		'PHPUnit_Framework_TestCase',
+	);
+
+	/**
+	 * Custom list of classes which test classes can extend.
+	 *
+	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property will need to be set for each sniff which uses the
+	 * `is_token_in_test_method()` method.
+	 * Currently the method is only used by the `WordPress.Variables.GlobalVariables`
+	 * sniff.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.[Subset].[Sniffname]">
+	 *  <properties>
+	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]
+	 */
+	public $custom_test_class_whitelist = array();
+
+	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
@@ -591,21 +625,33 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 
-		// Does the function name start with 'test_' ?
-		$functionName = $this->phpcsFile->getDeclarationName( $functionToken );
-		if ( 0 !== strpos( $functionName, 'test_' ) ) {
-			return false;
-		}
-
-		// Is this a method inside of a class ?
+		// Is this a method inside of a class or a trait ?
 		$classToken = $this->phpcsFile->getCondition( $functionToken, T_CLASS );
-		if ( false === $classToken ) {
+		$traitToken = $this->phpcsFile->getCondition( $functionToken, T_TRAIT );
+		if ( false === $classToken && false === $traitToken ) {
 			return false;
 		}
 
-		// Does the class extend either of whitelisted test classes ?
-		$extendedClassName = $this->phpcsFile->findExtendedClassName( $classToken );
-		if ( in_array( $extendedClassName, array( 'WP_UnitTestCase', 'PHPUnit_Framework_TestCase' ), true ) ) {
+		$structureToken = $classToken;
+		if ( false !== $traitToken ) {
+			$structureToken = $traitToken;
+		}
+
+		// Add any potentially whitelisted custom test classes to the whitelist.
+		$whitelist = $this->test_class_whitelist;
+		if ( ! empty( $this->custom_test_class_whitelist ) ) {
+			$whitelist = array_merge( $this->test_class_whitelist, (array) $this->custom_test_class_whitelist );
+		}
+
+		// Is the class/trait one of the whitelisted test classes ?
+		$className = $this->phpcsFile->getDeclarationName( $structureToken );
+		if ( in_array( $className, $whitelist, true ) ) {
+			return true;
+		}
+
+		// Does the class/trait extend one of the whitelisted test classes ?
+		$extendedClassName = $this->phpcsFile->findExtendedClassName( $structureToken );
+		if ( in_array( $extendedClassName, $whitelist, true ) ) {
 			return true;
 		}
 
