@@ -2,6 +2,11 @@
 <ruleset name="WordPress Docs">
 	<description>WordPress Coding Standards for Inline Documentation and Comments</description>
 
+	<!--
+		Handbook: PHP Documentation Standards
+		Ref: https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/php/
+	-->
+
 	<rule ref="Squiz.Commenting">
 		<!-- Excluded to allow /* translators: ... */ comments -->
 		<exclude name="Squiz.Commenting.BlockComment.SingleLine"/>
