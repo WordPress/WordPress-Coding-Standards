@@ -234,6 +234,21 @@
 
 
 	<!--
+		Handbook: PHP - Interpolation for Naming Dynamic Hooks.
+		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#interpolation-for-naming-dynamic-hooks
+
+		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/751
+	-->
+		<!-- Rule: Dynamic hooks should be named using interpolation rather than concatenation. -->
+
+		<!-- Rule: Variables used in hook tags should be wrapped in curly braces { and },
+			 with the complete outer tag name wrapped in double quotes. -->
+
+		<!-- Rule: Where possible, dynamic values in tag names should also be as succinct
+			 and to the point as possible. -->
+
+
+	<!--
 		Handbook: PHP - Ternary Operator.
 		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#ternary-operator
 	-->
