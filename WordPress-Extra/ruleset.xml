@@ -2,9 +2,10 @@
 <ruleset name="WordPress Extra">
 	<description>Best practices beyond core WordPress Coding Standards</description>
 
+	<!-- Generic PHP best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
-	<rule ref="Generic.PHP.BacktickOperator"/>
 	<rule ref="Generic.Functions.CallTimePassByReference"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement" />
@@ -28,16 +29,36 @@
 	<rule ref="WordPress-Core"/>
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
+
+	<!-- Verify that a nonce check is done before using values in superglobals.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
 	<rule ref="WordPress.CSRF.NonceVerification" />
+
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
+
+	<!-- Scripts & style should be enqueued.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
+
+	<!-- Warn against overriding WP global variables.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/26 -->
 	<rule ref="WordPress.Variables.GlobalVariables"/>
+
+	<!-- Encourage the use of strict ( === and !== ) comparisons.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->
 	<rule ref="WordPress.PHP.StrictComparisons" />
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
+	<!-- Check that in_array() and array_search() use strict comparisons.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/399
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
 	<rule ref="WordPress.PHP.StrictInArray" />
 
-	<!-- Check for PHP Parse errors. -->
+	<!-- Discourage use of the backtick operator (execution of shell commands).
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/646 -->
+	<rule ref="Generic.PHP.BacktickOperator"/>
+
+	<!-- Check for PHP Parse errors.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/522 -->
 	<rule ref="Generic.PHP.Syntax" />
 
 </ruleset>
