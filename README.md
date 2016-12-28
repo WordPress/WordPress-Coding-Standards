@@ -3,6 +3,30 @@
 
 # WordPress Coding Standards for PHP_CodeSniffer
 
+* [Introduction](#introduction)
+* [Project history](#project-history)
+* [Installation](#installation)
+    + [Requirements](#requirements)
+    + [Composer](#composer)
+    + [Standalone](#standalone)
+* [Rulesets](#rulesets)
+    + [Standards subsets](#standards-subsets)
+    + [Using a custom ruleset](#using-a-custom-ruleset)
+    + [Recommended additional rulesets](#recommended-additional-rulesets)
+* [How to use](#how-to-use)
+    + [Command line](#command-line)
+    + [PhpStorm](#phpstorm)
+    + [Sublime Text](#sublime-text)
+    + [Atom](#atom)
+    + [Visual Studio](#visual-studio)
+* [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
+    + [[Travis CI](https://travis-ci.org/)](#-travis-ci--https---travis-ciorg--)
+* [Fixing errors or whitelisting them](#fixing-errors-or-whitelisting-them)
+* [Contributing](#contributing)
+* [License](#license)
+
+## Introduction
+
 This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
 
 ## Project history
@@ -26,7 +50,7 @@ Standards can be installed with [Composer](https://getcomposer.org/) dependency 
 
 Running this command will:
 
-1. Install WordPress standards into `wpcs` directory.  
+1. Install WordPress standards into `wpcs` directory.
 2. Install PHP_CodeSniffer.
 3. Register WordPress standards in PHP_CodeSniffer configuration.
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
@@ -37,7 +61,7 @@ For convenience of using `phpcs` as global command you might want to add path to
 
 1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, PEAR, or Git checkout).
 
-  Do ensure, if for example you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV), that PHP_CodeSniffer's version matches our [requirements](#requirements).
+   Do ensure, if for example you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV), that PHP_CodeSniffer's version matches our [requirements](#requirements).
 
 2. Clone WordPress standards repository:
 
@@ -61,6 +85,38 @@ cd phpcs
 And then add the `~/projects/phpcs/scripts` directory to your `PATH` environment variable via your `.bashrc`.
 
 You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
+
+##  Rulesets
+
+### Standards subsets
+
+The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example those specific to WordPress VIP coding requirements.
+
+You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
+
+* `WordPress` — complete set with all of the sniffs in the project
+  - `WordPress-Core` — main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
+  - `WordPress-Docs` — additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
+  - `WordPress-Extra` — extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
+    - includes `WordPress-Core`
+  - `WordPress-VIP` — extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+    - includes `WordPress-Core`
+
+### Using a custom ruleset
+
+If you need to further customize selection of sniffs for your project — you can create custom `ruleset.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+
+### Recommended additional rulesets
+
+The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset comes highly recommended.
+The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) sniffs are designed to analyse your code for cross-PHP version compatibility.
+Install it as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
+
+Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will received compatibility information. The recommended setting for this at this moment is  `5.2-7.1` to support the same PHP versions as WordPress Core supports.
+
+For more information about setting the `testVersion`, see:
+* [PHPCompatibility: Using the compatibility sniffs](https://github.com/wimg/PHPCompatibility#using-the-compatibility-sniffs)
+* [PHPCompatibility: Using a custom ruleset](https://github.com/wimg/PHPCompatibility#using-a-custom-ruleset)
 
 ## How to use
 
@@ -175,37 +231,6 @@ script:
   - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p . --standard=WordPress; fi
 ```
 
-
-## Standards subsets
-
-The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example those specific to WordPress VIP coding requirements.
-
-You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
-
- - `WordPress` — complete set with all of the sniffs in the project
-  - `WordPress-Core` — main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
-  - `WordPress-Docs` — additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
-  - `WordPress-Extra` — extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
-    - includes `WordPress-Core`
-  - `WordPress-VIP` — extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
-    - includes `WordPress-Core`
-
-
-### Using a custom ruleset
-
-If you need to further customize selection of sniffs for your project — you can create custom `ruleset.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
-
-### Recommended additional rulesets
-
-The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset comes highly recommended.
-The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) sniffs are designed to analyse your code for cross-PHP version compatibility.
-Install it as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
-
-Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will received compatibility information. The recommended setting for this at this moment is  `5.2-7.1` to support the same PHP versions as WordPress Core supports.
-
-For more information about setting the `testVersion`, see:
-* [PHPCompatibility: Using the compatibility sniffs](https://github.com/wimg/PHPCompatibility#using-the-compatibility-sniffs)
-* [PHPCompatibility: Using a custom ruleset](https://github.com/wimg/PHPCompatibility#using-a-custom-ruleset)
 
 ## Fixing errors or whitelisting them
 
