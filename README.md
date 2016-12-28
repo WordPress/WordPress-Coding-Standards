@@ -133,6 +133,49 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 
 Please see “[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)”, a tutorial by Tom McFarlin.
 
+
+## Running your code through WPCS automatically using CI tools
+
+### [Travis CI](https://travis-ci.org/)
+
+To integrate PHPCS with WPCS with Travis CI, you'll need to install both `before_install` and add the run command to the `script`.
+If your project uses Composer, the typical instructions might be different.
+
+If you use a matrix setup in Travis to test your code against different PHP and/or WordPress versions, you don't need to run PHPCS on each variant of the matrix as the results will be same.
+You can set an environment variable in the Travis matrix to only run the sniffs against one setup in the matrix.
+
+#### Travis CI example
+```yaml
+language: php
+
+matrix:
+  include:
+    # Arbitrary PHP version to run the sniffs against.
+    - php: '7.0'
+      env: SNIFF=1
+
+before_install:
+  - if [[ "$SNIFF" == "1" ]]; export PHPCS_DIR=/tmp/phpcs; fi
+  - if [[ "$SNIFF" == "1" ]]; export SNIFFS_DIR=/tmp/sniffs; fi
+  # Install PHP CodeSniffer.
+  - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
+  # Install WordPress Coding Standards.
+  - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR; fi
+  # Set install path for WordPress Coding Standards.
+  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs --config-set installed_paths $SNIFFS_DIR; fi
+  # After CodeSniffer install you should refresh your path.
+  - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
+
+script:
+  # Run against WordPress Coding Standards.
+  # If you use a custom ruleset, change `--standard=WordPress` to point to your ruleset file,
+  # for example: `--standard=wpcs.xml`.
+  # You can use any of the normal PHPCS command line arguments in the command:
+  # https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage
+  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p . --standard=WordPress; fi
+```
+
+
 ## Standards subsets
 
 The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example those specific to WordPress VIP coding requirements.
