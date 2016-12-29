@@ -8,9 +8,9 @@ vip_wp_file_get_contents( $url ); // Warning.
 
 wp_remote_get( $url ); // Warning.
 
-$ch = curl_init(); // Warning.
 
-curl_close( $ch ); // Warning.
+
+
 
 // Empty line - function moved to another sniff.
 
@@ -50,7 +50,7 @@ get_tag_link(); // Error.
 get_category_link(); // Error.
 get_cat_ID(); // Error.
 url_to_post_id(); // Error.
-attachment_url_to_postid(); // Error.
+
 get_posts(); // Warning.
 wp_get_recent_posts(); // Warning.
 
@@ -66,8 +66,8 @@ get_adjacent_post(); // Error.
 get_previous_post(); // Error.
 get_next_post(); // Error.
 
-CURL_getinfo(); // Warning.
-curlyhair(); // Ok.
+
+
 
 get_previous_post_link(); // Error.
 get_next_post_link(); // Error.
@@ -75,3 +75,10 @@ get_intermediate_image_sizes(); // Error.
 
 wp_redirect(); // Warning.
 wp_is_mobile(); // Error.
+
+setcookie( 'cookie[three]', 'cookiethree' ); // Warning.
+
+get_user_meta(); // Error.
+update_user_meta(); // Error.
+delete_user_meta(); // Error.
+add_user_meta(); // Error.

@@ -18,12 +18,12 @@
  *                 WordPress_Sniffs_PHP_POSIXFunctionsSniff respectively.
  * @since   0.11.0 The checks for `create_function()`, `serialize()`/`unserialize()` and
  *                 `urlencode` have been moved to the stand-alone sniff
- *                 WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
+ *                 WordPress_Sniffs_PHP_DiscouragedPHPFunctionsSniff.
  *                 The checks for PHP developer functions, `error_reporting` and `phpinfo`have been
  *                 moved to the stand-alone sniff WordPress_Sniffs_PHP_DevelopmentFunctionsSniff.
- *                 The checks for `parse_url()` hs been moved to the stand-alone sniff
+ *                 The check for `parse_url()` and `curl_*` have been moved to the stand-alone sniff
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
- *                 The checks for `eval()` hs been moved to the stand-alone sniff
+ *                 The check for `eval()` has been moved to the stand-alone sniff
  *                 WordPress_Sniffs_PHP_RestrictedFunctionsSniff.
  */
 class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
@@ -79,7 +79,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 
 			'get_page_by_title' => array(
 				'type'      => 'error',
-				'message'   => '%s is prohibited, please use wpcom_vip_get_page_by_title() instead.',
+				'message'   => '%s() is prohibited, please use wpcom_vip_get_page_by_title() instead.',
 				'functions' => array(
 					'get_page_by_title',
 				),
@@ -96,7 +96,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 
 			'get_category_by_slug' => array(
 				'type'      => 'error',
-				'message'   => '%s is prohibited, please use wpcom_vip_get_category_by_slug() instead.',
+				'message'   => '%s() is prohibited, please use wpcom_vip_get_category_by_slug() instead.',
 				'functions' => array(
 					'get_category_by_slug',
 				),
@@ -128,19 +128,10 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls
-			'curl' => array(
-				'type'      => 'warning',
-				'message'   => 'Using cURL functions is highly discouraged within VIP context. Check (Fetching Remote Data) on VIP Documentation.',
-				'functions' => array(
-					'curl_*',
-				),
-			),
-
 			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#custom-roles
 			'custom_role' => array(
 				'type'      => 'error',
-				'message'   => 'Use wpcom_vip_add_role() instead of add_role()',
+				'message'   => 'Use wpcom_vip_add_role() instead of %s()',
 				'functions' => array(
 					'add_role',
 				),
@@ -236,7 +227,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect
 			'wp_redirect' => array(
 				'type'     => 'warning',
-				'message'   => '%s() Using wp_safe_redirect(), along with the allowed_redirect_hosts filter, can help avoid any chances of malicious redirects within code. It’s also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
+				'message'   => '%s() found. Using wp_safe_redirect(), along with the allowed_redirect_hosts filter, can help avoid any chances of malicious redirects within code. It is also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
 				'functions' => array(
 					'wp_redirect',
 				),
@@ -245,7 +236,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#mobile-detection
 			'wp_is_mobile' => array(
 				'type'      => 'error',
-				'message'   => '%s() When targeting mobile visitors, jetpack_is_mobile() should be used instead of wp_is_mobile. It is more robust and works better with full page caching.',
+				'message'   => '%s() found. When targeting mobile visitors, jetpack_is_mobile() should be used instead of wp_is_mobile. It is more robust and works better with full page caching.',
 				'functions' => array(
 					'wp_is_mobile',
 				),

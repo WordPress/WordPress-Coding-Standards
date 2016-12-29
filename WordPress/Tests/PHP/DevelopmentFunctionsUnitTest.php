@@ -22,6 +22,16 @@ class WordPress_Tests_PHP_DevelopmentFunctionsUnitTest extends AbstractSniffUnit
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
+		return array();
+
+	}
+
+	/**
+	 * Returns the lines where warnings should occur.
+	 *
+	 * @return array <int line number> => <int number of warnings>
+	 */
+	public function getWarningList() {
 		return array(
 			3 => 1,
 			4 => 1,
@@ -36,16 +46,6 @@ class WordPress_Tests_PHP_DevelopmentFunctionsUnitTest extends AbstractSniffUnit
 			15 => 1,
 			16 => 1,
 		);
-
-	}
-
-	/**
-	 * Returns the lines where warnings should occur.
-	 *
-	 * @return array <int line number> => <int number of warnings>
-	 */
-	public function getWarningList() {
-		return array();
 
 	}
 

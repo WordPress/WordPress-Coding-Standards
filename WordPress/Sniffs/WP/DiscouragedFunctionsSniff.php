@@ -33,7 +33,7 @@ class WordPress_Sniffs_WP_DiscouragedFunctionsSniff extends WordPress_AbstractFu
 		return array(
 			'query_posts' => array(
 				'type'      => 'warning',
-				'message'   => '%s is discouraged. Use WP_Query instead.',
+				'message'   => '%s() is discouraged. Use WP_Query instead.',
 				'functions' => array(
 					'query_posts',
 				),
@@ -41,7 +41,7 @@ class WordPress_Sniffs_WP_DiscouragedFunctionsSniff extends WordPress_AbstractFu
 
 			'wp_reset_query' => array(
 				'type'      => 'warning',
-				'message'   => '%s is discouraged. Use the wp_reset_postdata instead.',
+				'message'   => '%s() is discouraged. Use the wp_reset_postdata() instead.',
 				'functions' => array(
 					'wp_reset_query',
 				),

@@ -17,7 +17,7 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff
- *                 and the WordPress_Sniffs_PHP_DiscouragedFunctionsSniff.
+ *                 and the WordPress_Sniffs_PHP_DiscouragedPHPFunctionsSniff.
  */
 class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
@@ -57,7 +57,7 @@ class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctio
 
 			'split' => array(
 				'type'      => 'error',
-				'message'   => '%s()  has been deprecated since PHP 5.3 and removed in PHP 7.0, please use explode(), str_split() or preg_split() instead.',
+				'message'   => '%s() has been deprecated since PHP 5.3 and removed in PHP 7.0, please use explode(), str_split() or preg_split() instead.',
 				'functions' => array(
 					'split',
 					'spliti',

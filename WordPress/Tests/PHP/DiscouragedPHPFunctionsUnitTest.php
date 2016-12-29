@@ -8,12 +8,12 @@
  */
 
 /**
- * Unit test class for the PHP_DiscouragedFunctions sniff.
+ * Unit test class for the PHP_DiscouragedPHPFunctions sniff.
  *
  * @package WPCS\WordPressCodingStandards
- * @since   2013-06-11
+ * @since   0.11.0
  */
-class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_PHP_DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -32,10 +32,32 @@ class WordPress_Tests_PHP_DiscouragedFunctionsUnitTest extends AbstractSniffUnit
 	 */
 	public function getWarningList() {
 		return array(
-			3 => 1,
-			7 => 1,
-			8 => 1,
+			5  => 1,
+			9  => 1,
 			10 => 1,
+			12 => 1,
+			15 => 1,
+			16 => 1,
+			17 => 1,
+			18 => 1,
+			19 => 1,
+			20 => 1,
+			21 => 1,
+			22 => 1,
+			23 => 1,
+			24 => 1,
+			25 => 1,
+			28 => 1,
+			29 => 1,
+			30 => 1,
+			31 => 1,
+			32 => 1,
+			35 => 1,
+			36 => 1,
+			37 => 1,
+			38 => 1,
+			39 => 1,
+			40 => 1,
 		);
 
 	}

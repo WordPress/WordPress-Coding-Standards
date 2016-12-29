@@ -32,8 +32,8 @@ class WordPress_Sniffs_PHP_DevelopmentFunctionsSniff extends WordPress_AbstractF
 	public function getGroups() {
 		return array(
 			'error_log' => array(
-				'type'      => 'error',
-				'message'   => '%s() Debug code is not to be used in Production',
+				'type'      => 'warning',
+				'message'   => '%s() found. Debug code should not normally be used in production.',
 				'functions' => array(
 					'error_log',
 					'var_dump',
@@ -48,8 +48,8 @@ class WordPress_Sniffs_PHP_DevelopmentFunctionsSniff extends WordPress_AbstractF
 			),
 
 			'prevent_path_disclosure' => array(
-				'type'      => 'error',
-				'message'   => '%s() is prohibited as it can lead to full path disclosure.',
+				'type'      => 'warning',
+				'message'   => '%s() can lead to full path disclosure.',
 				'functions' => array(
 					'error_reporting',
 					'phpinfo',

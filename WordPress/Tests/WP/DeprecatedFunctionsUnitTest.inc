@@ -2,11 +2,11 @@
 
 // DEPRECATED WORDPRESS FUNCTIONS.
 
-WP_Filesystem_Base::find_base_dir(); // Bad, use WP_Filesystem::abspath instead.
-WP_Filesystem_Base::get_base_dir(); // Bad, use WP_Filesystem::abspath instead.
-
-
 // Error.
+
+// The methods are being checked till https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/731 is solved.
+find_base_dir(); // WP_Filesystem_Base::find_base_dir() use WP_Filesystem::abspath instead.
+get_base_dir(); // WP_Filesystem_Base::get_base_dir() use WP_Filesystem::abspath instead.
 the_category_id();
 the_category_head();
 permalink_link();
@@ -56,7 +56,7 @@ get_author_rss_link();
 get_the_attachment_link();
 get_attachment_icon_src();
 get_attachment_icon();
-get_attachment_innerhtml();
+get_attachment_innerHTML();
 documentation_link();
 gzip_compression();
 wp_setcookie();
@@ -234,8 +234,6 @@ setup_widget_addition_previews();
 prepreview_added_sidebars_widgets();
 prepreview_added_widget_instance();
 remove_prepreview_filters();
-
-// Warning.
 preview_theme();
 _preview_theme_template_filter
 _preview_theme_stylesheet_filter();
@@ -243,6 +241,9 @@ preview_theme_ob_filter();
 preview_theme_ob_filter_callback();
 wp_richedit_pre();
 wp_ajax_wp_fullscreen_save_post();
+
+// Warning.
+flush_widget_cache(); // WP_Widget_Recent_Comments::flush_widget_cache()
 post_permalink();
 force_ssl_login();
 create_empty_blog();
