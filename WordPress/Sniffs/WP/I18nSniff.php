@@ -16,6 +16,7 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
+ * @since   0.11.0 Now also checks for translators comments.
  */
 class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
@@ -71,6 +72,16 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		'_n_noop'                        => 'noopnumber',
 		'_nx_noop'                       => 'noopnumber_context',
 	);
+
+	/**
+	 * Toggle whether or not to check for translators comments for text string containing placeholders.
+	 *
+	 * Intended to make this part of the sniff unit testable, but can be used by end-users too,
+	 * though they can just as easily disable this via the sniff code.
+	 *
+	 * @var bool
+	 */
+	public $check_translator_comments = true;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -213,6 +224,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$plural_context = $argument_assertions[1];
 
 			$this->compare_single_and_plural_arguments( $phpcs_file, $stack_ptr, $single_context, $plural_context );
+		}
+
+		if ( true === $this->check_translator_comments ) {
+			$this->check_for_translator_comment( $phpcs_file, $stack_ptr, $argument_assertions );
 		}
 	}
 
@@ -391,5 +406,119 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$phpcs_file->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
 		}
 	} // End check_text().
+
+	/**
+	 * Check for the presence of a translators comment if one of the text strings contains a placeholder.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param int                  $stack_ptr  The position of the gettext call token
+	 *                                         in the stack.
+	 * @param array                $args       The function arguments.
+	 * @return void
+	 */
+	protected function check_for_translator_comment( PHP_CodeSniffer_File $phpcs_file, $stack_ptr, $args ) {
+		$tokens = $phpcs_file->getTokens();
+
+		foreach ( $args as $arg ) {
+			if ( false === in_array( $arg['arg_name'], array( 'text', 'single', 'plural' ), true ) ) {
+				continue;
+			}
+
+			foreach ( $arg['tokens'] as $token ) {
+				if ( empty( $token['content'] ) ) {
+					continue;
+				}
+
+				if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $token['content'], $placeholders ) < 1 ) {
+					// No placeholders found.
+					continue;
+				}
+
+				$previous_comment = $phpcs_file->findPrevious( PHP_CodeSniffer_Tokens::$commentTokens, ( $stack_ptr - 1 ) );
+
+				if ( false !== $previous_comment ) {
+					/*
+					 * Check that the comment is either on the line before the gettext call or
+					 * if it's not, that there is only whitespace between.
+					 */
+					$correctly_placed = false;
+
+					if ( ( $tokens[ $previous_comment ]['line'] + 1 ) === $tokens[ $stack_ptr ]['line'] ) {
+						$correctly_placed = true;
+					} else {
+						$next_non_whitespace = $phpcs_file->findNext( T_WHITESPACE, ( $previous_comment + 1 ), $stack_ptr, true );
+						if ( false === $next_non_whitespace || $tokens[ $next_non_whitespace ]['line'] === $tokens[ $stack_ptr ]['line'] ) {
+							// No non-whitespace found or next non-whitespace is on same line as gettext call.
+							$correctly_placed = true;
+						}
+						unset( $next_non_whitespace );
+					}
+
+					/*
+					 * Check that the comment starts with 'translators:'.
+					 */
+					if ( true === $correctly_placed ) {
+
+						if ( T_COMMENT === $tokens[ $previous_comment ]['code'] ) {
+							$comment_text = trim( $tokens[ $previous_comment ]['content'] );
+
+			  		   		// If it's multi-line /* */ comment, collect all the parts.
+			  		   		if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
+								for ( $i = ( $previous_comment - 1 ); 0 <= $i; $i-- ) {
+									if ( T_COMMENT !== $tokens[ $i ]['code'] ) {
+										break;
+									}
+
+									$comment_text = trim( $tokens[ $i ]['content'] ) . $comment_text;
+								}
+							}
+
+			  		   		if ( true === $this->is_translators_comment( $comment_text ) ) {
+								// Comment is ok.
+								return;
+							}
+						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $tokens[ $previous_comment ]['code'] ) {
+							// If it's docblock comment (wrong style) make sure that it's a translators comment.
+							$db_start      = $phpcs_file->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
+							$db_first_text = $phpcs_file->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ),  $previous_comment );
+
+							if ( true === $this->is_translators_comment( $tokens[ $db_first_text ]['content'] ) ) {
+								$phpcs_file->addWarning(
+									'A "translators:" comment must be a "/* */" style comment. Docblock comments will not be picked up by the tools to generate a ".pot" file.',
+									$stack_ptr,
+									'TranslatorsCommentWrongStyle'
+								);
+								return;
+							}
+						}
+					} // End if().
+
+				} // End if().
+
+				// Found placeholders but no translators comment.
+				$phpcs_file->addWarning(
+					'A gettext call containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.',
+					$stack_ptr,
+					'MissingTranslatorsComment'
+				);
+				return;
+			} // End foreach().
+
+		} // End foreach().
+
+	} // End check_for_translator_comment().
+
+	/**
+	 * Check if a (collated) comment string starts with 'translators:'.
+	 *
+	 * @param string $content Comment string content.
+	 * @return bool
+	 */
+	private function is_translators_comment( $content ) {
+		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`', $content, $matches ) === 1 ) {
+			return true;
+		}
+		return false;
+	}
 
 }
