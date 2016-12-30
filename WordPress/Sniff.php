@@ -54,6 +54,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'esc_url'              => true,
 		'filter_input'         => true,
 		'filter_var'           => true,
+		'floatval'             => true,
 		'intval'               => true,
 		'json_encode'          => true,
 		'like_escape'          => true,
@@ -239,6 +240,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'esc_url_raw'                => true,
 		'filter_input'               => true,
 		'filter_var'                 => true,
+		'floatval'                   => true,
 		'hash_equals'                => true,
 		'in_array'                   => true,
 		'intval'                     => true,
@@ -286,6 +288,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	public static $unslashingSanitizingFunctions = array(
 		'absint'       => true,
 		'boolval'      => true,
+		'floatval'     => true,
 		'intval'       => true,
 		'is_array'     => true,
 		'sanitize_key' => true,
@@ -353,6 +356,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	public static $SQLEscapingFunctions = array(
 		'absint'      => true,
 		'esc_sql'     => true,
+		'floatval'    => true,
 		'intval'      => true,
 		'like_escape' => true,
 	);
