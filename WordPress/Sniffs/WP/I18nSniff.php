@@ -515,7 +515,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * @return bool
 	 */
 	private function is_translators_comment( $content ) {
-		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`', $content, $matches ) === 1 ) {
+		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`i', $content, $matches ) === 1 ) {
 			return true;
 		}
 		return false;

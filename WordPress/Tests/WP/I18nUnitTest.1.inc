@@ -51,6 +51,12 @@ _n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // Bad - doesn't star
 /* this is for translators: %d: number of cats. */
 _n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // Bad - doesn't *start* with 'translators:'
 
+/* Translators: %d: number of cats. */
+_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - Capitalized translators.
+
+/* TRANSLATORS: %d: number of cats. */
+_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - All caps translators.
+
 
 /* Testing comment placement ***************************************************/
 
@@ -83,3 +89,10 @@ printf(
 
 /* translators: number of monkeys, location. */
 printf( __( 'There are %1$d monkeys in the %2$s', 'my-slug' ), intval( $number ), esc_html( $string ) ); // Ok - comment is directly before line containing the gettext call.
+
+/* translators: number of monkeys, location. */
+printf( __(
+	'There are %1$d monkeys in the %2$s', 'my-slug' ),
+	intval( $number ),
+	esc_html( $string )
+); // Ok - comment is directly before line containing the gettext call.
