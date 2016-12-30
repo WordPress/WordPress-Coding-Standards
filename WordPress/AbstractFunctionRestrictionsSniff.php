@@ -97,7 +97,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * Set up the regular expressions for each group.
 	 *
 	 * @param string $key The group array index key where the input for the regular expression can be found.
-	 * @return bool True is the groups were setup. False if not.
+	 * @return bool True if the groups were setup. False if not.
 	 */
 	protected function setup_groups( $key ) {
 		// Prepare the function group regular expressions only once.

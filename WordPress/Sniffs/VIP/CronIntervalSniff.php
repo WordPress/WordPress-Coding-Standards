@@ -118,7 +118,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 
 					// If all digits and operators, eval!
 					if ( preg_match( '#^[\s\d\+\*\-\/]+$#', $value ) > 0 ) {
-						$interval = eval( "return ( $value );" ); // No harm here.
+						$interval = eval( "return ( $value );" ); // @codingStandardsIgnoreLine - No harm here.
 						break;
 					}
 

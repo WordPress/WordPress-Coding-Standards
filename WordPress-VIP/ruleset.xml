@@ -35,7 +35,45 @@
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="Squiz.PHP.CommentedOutCode" />
 
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
+	<rule ref="WordPress.PHP.RestrictedFunctions" />
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#serializing-data -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#encoding-values-used-when-creating-a-url-or-passed-to-add_query_arg -->
+	<!-- https://github.com/Automattic/vip-scanner/blob/master/vip-scanner/checks/ForbiddenPHPFunctionsCheck.php -->
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
+		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/633#issuecomment-266634811 -->
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.obfuscation" />
+	</rule>
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration">
+		<type>error</type>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
+	<rule ref="WordPress.PHP.DevelopmentFunctions" />
+	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log">
+		<type>error</type>
+	</rule>
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
+	<rule ref="WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure">
+		<type>error</type>
+	</rule>
+
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray" />
 
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_parse_url-instead-of-parse_url -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_json_encode-over-json_encode -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls -->
+	<rule ref="WordPress.WP.AlternativeFunctions" />
+	<!-- VIP recommends other functions -->
+	<rule ref="WordPress.WP.AlternativeFunctions.curl">
+		<message>Using cURL functions is highly discouraged within VIP context. Check (Fetching Remote Data) on VIP Documentation.</message>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.file_get_contents">
+		<message>%s() is highly discouraged, please use vip_safe_wp_remote_get() instead.</message>
+	</rule>
 </ruleset>
