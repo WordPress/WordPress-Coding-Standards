@@ -41,7 +41,7 @@ class WordPress_Tests_WP_AlternativeFunctionsUnitTest extends AbstractSniffUnitT
 
 			12 => 1,
 
-			14 => 1,
+			14 => 2,
 
 			16 => 1,
 			17 => 1,
@@ -50,6 +50,7 @@ class WordPress_Tests_WP_AlternativeFunctionsUnitTest extends AbstractSniffUnitT
 			20 => 1,
 			21 => 1,
 			22 => 1,
+			23 => 1,
 		);
 
 	}

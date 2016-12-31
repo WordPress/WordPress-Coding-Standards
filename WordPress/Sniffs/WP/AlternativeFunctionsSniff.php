@@ -74,6 +74,8 @@ class WordPress_Sniffs_WP_AlternativeFunctionsSniff extends WordPress_AbstractFu
 					'fclose',
 					'fread',
 					'fwrite',
+					'file_put_contents',
+					'file_get_contents',
 				),
 			),
 
