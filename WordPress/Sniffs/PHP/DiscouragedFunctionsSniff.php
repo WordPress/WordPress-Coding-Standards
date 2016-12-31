@@ -29,4 +29,29 @@
  *                    function. To check for `register_globals` ini directive use
  *                    PHPCompatibility_Sniffs_PHP_DeprecatedIniDirectivesSniff from wimg/PHPCompatibility.
  */
-class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff {}
+class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff {
+
+	/**
+	 * Don't use.
+	 *
+	 * @deprecated 0.11.0
+	 *
+	 * @return int[]
+	 */
+	public function register() {
+		return array();
+	}
+
+	/**
+	 * Don't use.
+	 *
+	 * @deprecated 0.11.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile A PHP_CodeSniffer file.
+	 * @param int                  $stackPtr  The position of the token.
+	 *
+	 * @return void
+	 */
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {}
+
+}
