@@ -14,7 +14,7 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 
 TL;DR
 
-If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), then you can navigate to the directory where the `phpcs` repo is checked out (e.g. `vendor/squizlabs/PHP_CodeSniffer/`) and do:
+If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#installation), then you can navigate to the directory where the `phpcs` repo is checked out (e.g. `vendor/squizlabs/PHP_CodeSniffer/`) and do:
 
 ```sh
 composer install
