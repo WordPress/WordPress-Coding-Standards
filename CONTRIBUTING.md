@@ -12,13 +12,19 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 
 # Unit Testing
 
-TL;DR
-
-If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#installation), then you can navigate to the directory where the `phpcs` repo is checked out (e.g. `vendor/squizlabs/PHP_CodeSniffer/`) and do:
+When contributing to WPCS, it's recommended that the project has its own copy of `phpcs`, installed via Composer:
 
 ```sh
-composer install
-vendor/bin/phpunit --filter WordPress tests/AllTests.php
+$ composer install --prefer-source
+```
+
+Please note the `--prefer-source` option; the distributed version of PHP_CodeSniffer does not include the unit testing framework for `phpcs`, which is required to write tests for WPCS.
+
+Next, `cd` into `vendor/squizlabs/PHP_CodeSniffer/` and run:
+
+```sh
+$ composer install
+$ vendor/bin/phpunit --filter WordPress tests/AllTests.php
 ```
 
 Expected output:
