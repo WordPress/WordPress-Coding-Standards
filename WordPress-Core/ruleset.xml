@@ -274,6 +274,7 @@
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
 		<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
 		<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+		<rule ref="Squiz.PHP.DisallowInlineIf"/>
 
 
 	<!--
