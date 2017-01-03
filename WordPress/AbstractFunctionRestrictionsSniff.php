@@ -140,30 +140,27 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+		$tokens        = $phpcsFile->getTokens();
+		$token         = $tokens[ $stackPtr ];
+		$token_content = strtolower( $token['content'] );
 
 		// Exclude function definitions, class methods, and namespaced calls.
-		if (
-			T_STRING === $token['code']
-			&&
-			( $prev = $phpcsFile->findPrevious( T_WHITESPACE, ( $stackPtr - 1 ), null, true ) )
-			&&
-			(
-				// Skip sniffing if calling a method, or on function definitions.
-				in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true )
-				||
-				(
-					// Skip namespaced functions, ie: \foo\bar() not \bar().
-					T_NS_SEPARATOR === $tokens[ $prev ]['code']
-					&&
-					( $pprev = $phpcsFile->findPrevious( T_WHITESPACE, ( $prev - 1 ), null, true ) )
-					&&
-					T_STRING === $tokens[ $pprev ]['code']
-				)
-			)
-			) {
-			return;
+		if ( T_STRING === $token['code'] && isset( $tokens[ ( $stackPtr - 1 ) ] ) ) {
+			$prev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+
+			if ( false !== $prev ) {
+				// Skip sniffing if calling a same-named method, or on function definitions.
+				if ( in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true ) ) {
+					return;
+				}
+
+				// Skip namespaced functions, ie: \foo\bar() not \bar().
+				$pprev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
+				if ( false !== $pprev && T_NS_SEPARATOR === $tokens[ $prev ]['code'] && T_STRING === $tokens[ $pprev ]['code'] ) {
+					return;
+				}
+			}
+			unset( $prev, $pprev );
 		}
 
 		$exclude = explode( ',', $this->exclude );
@@ -174,11 +171,11 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 				continue;
 			}
 
-			if ( isset( $group['whitelist'][ $token['content'] ] ) ) {
+			if ( isset( $group['whitelist'][ $token_content ] ) ) {
 				continue;
 			}
 
-			if ( preg_match( $group['regex'], $token['content'] ) < 1 ) {
+			if ( preg_match( $group['regex'], $token_content ) < 1 ) {
 				continue;
 			}
 
@@ -193,7 +190,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 				$group['message'],
 				$stackPtr,
 				$groupName,
-				array( $token['content'] )
+				array( $token_content )
 			);
 
 		}

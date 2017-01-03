@@ -29,7 +29,6 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeS
 		return PHP_CodeSniffer_Tokens::$castTokens;
 	}
 
-
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *

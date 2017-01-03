@@ -545,7 +545,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function has_whitelist_comment( $comment, $stackPtr ) {
 
-		$end_of_line = $lastPtr = $this->get_last_ptr_on_line( $stackPtr );
+		$lastPtr     = $this->get_last_ptr_on_line( $stackPtr );
+		$end_of_line = $lastPtr;
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
 		// we need to here.
