@@ -242,8 +242,12 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$stack_ptr = $context['stack_ptr'];
 		$tokens    = $context['tokens'];
 		$arg_name  = $context['arg_name'];
-		$method    = empty( $context['warning'] ) ? 'addError' : 'addWarning';
 		$content   = $tokens[0]['content'];
+
+		$method    = 'addWarning';
+		if ( empty( $context['warning'] ) ) {
+			$method = 'addError';
+		}
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
@@ -343,7 +347,11 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$stack_ptr      = $context['stack_ptr'];
 		$arg_name       = $context['arg_name'];
 		$content        = $context['tokens'][0]['content'];
-		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
+
+		$fixable_method = 'addFixableWarning';
+		if ( empty( $context['warning'] ) ) {
+			$fixable_method = 'addFixableError';
+		}
 
 		// UnorderedPlaceholders: Check for multiple unordered placeholders.
 		$unordered_matches_count = preg_match_all( self::UNORDERED_SPRINTF_PLACEHOLDER_REGEX, $content, $unordered_matches );
@@ -366,8 +374,13 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$replace_regexes = array();
 			$replacements    = array();
 			for ( $i = 0; $i < $unordered_matches_count; $i++ ) {
-				$to_insert         = ( $i + 1 );
-				$to_insert        .= ( '"' !== $content[0] ) ? '$' : '\$';
+				$to_insert = ( $i + 1 );
+				if ( '"' !== $content[0] ) {
+					$to_insert .= '$';
+				} else {
+					$to_insert .= '\$';
+				}
+
 				$suggestions[ $i ] = substr_replace( $unordered_matches[ $i ], $to_insert, 1, 0 );
 
 				// Prepare the strings for use a regex.

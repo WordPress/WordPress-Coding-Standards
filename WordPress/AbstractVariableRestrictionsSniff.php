@@ -139,7 +139,11 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 
 			$patterns = array_map( array( $this, 'test_patterns' ), $patterns );
 			$pattern  = implode( '|', $patterns );
-			$delim    = ( T_OPEN_SQUARE_BRACKET !== $token['code'] ) ? '\b' : '';
+
+			$delim = '';
+			if ( T_OPEN_SQUARE_BRACKET !== $token['code'] ) {
+				$delim = '\b';
+			}
 
 			if ( T_DOUBLE_QUOTED_STRING === $token['code'] ) {
 				$var = $token['content'];
