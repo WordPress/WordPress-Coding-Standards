@@ -230,7 +230,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$method    = empty( $context['warning'] ) ? 'addError' : 'addWarning';
 		$content   = $tokens[0]['content'];
 
-		if ( 0 === count( $tokens ) ) {
+		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = 'MissingArg' . ucfirst( $arg_name );
 			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
 				$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
