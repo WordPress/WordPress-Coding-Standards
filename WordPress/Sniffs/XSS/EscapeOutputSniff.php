@@ -208,6 +208,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 			if ( T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 
+				if ( ! isset( $this->tokens[ $i ]['parenthesis_closer'] ) ) {
+					// Live coding or parse error.
+					break;
+				}
+
 				if ( $in_cast ) {
 
 					// Skip to the end of a function call if it has been casted to a safe value.
@@ -224,7 +229,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 						$next_paren = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
 
 						// We only do it if the ternary isn't within a subset of parentheses.
-						if ( ! $next_paren || $ternary > $this->tokens[ $next_paren ]['parenthesis_closer'] ) {
+						if ( false === $next_paren || ( isset( $this->tokens[ $next_paren ]['parenthesis_closer'] ) && $ternary > $this->tokens[ $next_paren ]['parenthesis_closer'] ) ) {
 							$i = $ternary;
 						}
 					}
@@ -319,7 +324,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 						$i     = ( $function_opener + 1 );
 						$watch = true;
 					} else {
-						$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
+						if ( isset( $this->tokens[ $function_opener ]['parenthesis_closer'] ) ) {
+							$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
+						} else {
+							// Live coding or parse error.
+							break;
+						}
 					}
 				}
 
