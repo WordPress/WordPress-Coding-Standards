@@ -100,7 +100,6 @@ class WordPress_Sniffs_PHP_StrictInArraySniff implements PHP_CodeSniffer_Sniff {
 
 		// Gracefully handle syntax error.
 		if ( ! isset( $tokens[ $openParenthesis ]['parenthesis_closer'] ) ) {
-			$phpcsFile->addError( 'Missing closing parenthesis for in_array().', $openParenthesis, 'MissingClosingParenthesis' );
 			return;
 		}
 
