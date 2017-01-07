@@ -22,8 +22,16 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			6 => 1,
+			3  => 1,
+			6  => 1,
+			16 => 1,
+			17 => 1,
+			18 => 1,
+			25 => 1,
+			35 => 1,
+			36 => 1,
+			54 => 1,
+			95 => 1,
 		);
 
 	}

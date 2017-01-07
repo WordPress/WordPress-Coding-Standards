@@ -445,6 +445,40 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * Whitelist of classes which test classes can extend.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]
+	 */
+	protected $test_class_whitelist = array(
+		'WP_UnitTestCase',
+		'PHPUnit_Framework_TestCase',
+	);
+
+	/**
+	 * Custom list of classes which test classes can extend.
+	 *
+	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property will need to be set for each sniff which uses the
+	 * `is_token_in_test_method()` method.
+	 * Currently the method is only used by the `WordPress.Variables.GlobalVariables`
+	 * sniff.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.[Subset].[Sniffname]">
+	 *  <properties>
+	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]
+	 */
+	public $custom_test_class_whitelist = array();
+
+	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
@@ -576,6 +610,59 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Check if a token is used within a unit test.
+	 *
+	 * Unit test methods are identified as such:
+	 * - Method name starts with `test_`.
+	 * - Method is within a class which either extends WP_UnitTestCase or PHPUnit_Framework_TestCase.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the token to be examined.
+	 *
+	 * @return bool True if the token is within a unit test, false otherwise.
+	 */
+	protected function is_token_in_test_method( $stackPtr ) {
+		// Is the token inside of a function definition ?
+		$functionToken = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		if ( false === $functionToken ) {
+			return false;
+		}
+
+		// Is this a method inside of a class or a trait ?
+		$classToken = $this->phpcsFile->getCondition( $functionToken, T_CLASS );
+		$traitToken = $this->phpcsFile->getCondition( $functionToken, T_TRAIT );
+		if ( false === $classToken && false === $traitToken ) {
+			return false;
+		}
+
+		$structureToken = $classToken;
+		if ( false !== $traitToken ) {
+			$structureToken = $traitToken;
+		}
+
+		// Add any potentially whitelisted custom test classes to the whitelist.
+		$whitelist = $this->test_class_whitelist;
+		if ( ! empty( $this->custom_test_class_whitelist ) ) {
+			$whitelist = array_merge( $this->test_class_whitelist, (array) $this->custom_test_class_whitelist );
+		}
+
+		// Is the class/trait one of the whitelisted test classes ?
+		$className = $this->phpcsFile->getDeclarationName( $structureToken );
+		if ( in_array( $className, $whitelist, true ) ) {
+			return true;
+		}
+
+		// Does the class/trait extend one of the whitelisted test classes ?
+		$extendedClassName = $this->phpcsFile->findExtendedClassName( $structureToken );
+		if ( in_array( $extendedClassName, $whitelist, true ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check if this variable is being assigned a value.
 	 *
 	 * E.g., $var = 'foo';
@@ -593,10 +680,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function is_assignment( $stackPtr ) {
 
-		$tokens = $this->phpcsFile->getTokens();
-
 		// Must be a variable or closing square bracket (see below).
-		if ( ! in_array( $tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ), true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ), true ) ) {
 			return false;
 		}
 
@@ -615,13 +700,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If the next token is an assignment, that's all we need to know.
-		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
+		if ( isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
 			return true;
 		}
 
 		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
-		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
-			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'] );
+		if ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code'] ) {
+			return $this->is_assignment( $this->tokens[ $next_non_empty ]['bracket_closer'] );
 		}
 
 		return false;
