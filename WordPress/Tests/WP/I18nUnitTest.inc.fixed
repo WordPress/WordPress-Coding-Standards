@@ -1,5 +1,5 @@
 <?php
-
+// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
 __( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables.
 
 __( "hell\$varo", 'my-slug' ); // OK, Variable is not interpolated.
@@ -127,3 +127,6 @@ __( "%1\$04d for %2\$'.9d item", 'my-slug' ); // Bad - Placeholder with other sp
 // Related to issue #698 - mixed ordered and non-ordered placeholders.
 __( '%1$d for %d item', 'my-slug' ); // Bad.
 __( '%1$d for %d and %d item', 'my-slug' ); // Bad.
+
+
+// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
