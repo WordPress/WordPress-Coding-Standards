@@ -22,7 +22,7 @@ _n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - single line /
 /* translators:
    - number of monkeys,
    - location. */
-esc_html__( 'There are %1$d monkeys in the %2$s', 'my-slug' ), // OK - multi-line /* */ style.
+esc_html__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK - multi-line /* */ style.
 
 /*
  * translators: %d: number of cats.

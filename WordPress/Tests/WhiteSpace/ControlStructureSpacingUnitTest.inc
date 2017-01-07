@@ -30,11 +30,11 @@ if(true){}
 
 
 if ( true ) {
-    while ( false ) {
+	while ( false ) {
 
-        echo 'OK';
+		echo 'OK';
 
-    }
+	}
 
 }
 

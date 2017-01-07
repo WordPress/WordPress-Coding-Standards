@@ -211,7 +211,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * @return string Regex escaped function name.
 	 */
 	protected function prepare_name_for_regex( $function ) {
-		$function = str_replace( array( '.*', '*' ) , '#', $function ); // Replace wildcards with placeholder.
+		$function = str_replace( array( '.*', '*' ), '#', $function ); // Replace wildcards with placeholder.
 		$function = preg_quote( $function, '`' );
 		$function = str_replace( '#', '.*', $function ); // Replace placeholder with regex wildcard.
 
