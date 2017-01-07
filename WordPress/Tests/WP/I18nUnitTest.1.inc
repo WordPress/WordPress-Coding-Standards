@@ -96,3 +96,6 @@ printf( __(
 	intval( $number ),
 	esc_html( $string )
 ); // Ok - comment is directly before line containing the gettext call.
+
+// Issue 776 - regex issue.
+__( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
