@@ -62,6 +62,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'rawurlencode'         => true,
 		'sanitize_html_class'  => true,
 		'sanitize_user_field'  => true,
+		'strip_tags'           => true,
 		'tag_escape'           => true,
 		'urlencode_deep'       => true,
 		'urlencode'            => true,
