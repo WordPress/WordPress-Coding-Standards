@@ -86,9 +86,9 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-	    return array(
-		    T_VARIABLE,
-	    );
+		return array(
+			T_VARIABLE,
+		);
 	}
 
 	/**

@@ -235,7 +235,7 @@ prepreview_added_sidebars_widgets();
 prepreview_added_widget_instance();
 remove_prepreview_filters();
 preview_theme();
-_preview_theme_template_filter
+_preview_theme_template_filter();
 _preview_theme_stylesheet_filter();
 preview_theme_ob_filter();
 preview_theme_ob_filter_callback();

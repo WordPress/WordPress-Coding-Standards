@@ -44,22 +44,22 @@ function local_var_only() {
 	$pagenow = 'test'; // Ok, function scope.
 }
 
-add_filter( "comments_open", function( $open, $post_id ) {
-    $post = get_post( $post_id ); // Ok, non-global variable in function scope.
-    return "page" === $page->post_type;
+add_filter( 'comments_open', function( $open, $post_id ) {
+	$post = get_post( $post_id ); // Ok, non-global variable in function scope.
+	return 'page' === $page->post_type;
 }, 10, 2 );
 
-add_filter( "comments_open", function( $open, $post_id ) {
+add_filter( 'comments_open', function( $open, $post_id ) {
 	global $page;
-    $page = get_post( $post_id ); // Bad.
-    return "page" === $page->post_type;
+	$page = get_post( $post_id ); // Bad.
+	return 'page' === $page->post_type;
 }, 10, 2 );
 
 $page = 'test'; // Ok, check against cross-contaminiation from within a closure.
 
 // Allow overriding globals in functions within unit test classes.
 // https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/300#issuecomment-158778606
-class WP_UnitTestCase {
+trait WP_UnitTestCase {
 
 	public function test_something() {
 		global $tabs;
@@ -88,7 +88,7 @@ class Test_Class_B extends PHPUnit_Framework_TestCase {
 	}
 }
 
-trait Test_Class_C extends NonTestClass {
+class Test_Class_C extends NonTestClass {
 
 	public function test_something() {
 		global $cat_id;
@@ -103,7 +103,7 @@ trait My_Class {
 	public function do_something() {
 		global $page;
 		self::$page = 'test'; // Ok, class property, not global variable.
-		$post = 'test'; // Ok, local variable.
+		$post       = 'test'; // Ok, local variable.
 	}
 }
 
