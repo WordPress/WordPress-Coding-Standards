@@ -186,12 +186,13 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			} elseif ( T_BITWISE_AND === $this->tokens[ $parenthesisOpener ]['code'] ) {
 
 				// This function returns by reference (function &function_name() {}).
-				$function_name_ptr = $parenthesisOpener = $phpcsFile->findNext(
+				$parenthesisOpener = $phpcsFile->findNext(
 					PHP_CodeSniffer_Tokens::$emptyTokens,
 					( $parenthesisOpener + 1 ),
 					null,
 					true
 				);
+				$function_name_ptr = $parenthesisOpener;
 			}
 
 			if ( isset( $function_name_ptr ) ) {

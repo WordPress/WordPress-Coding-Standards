@@ -1125,4 +1125,5 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		return $groups;
 	} // End getGroups()
+
 }

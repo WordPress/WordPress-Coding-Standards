@@ -136,7 +136,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$argument_tokens  = array();
 
 		// Look at arguments.
-		for ( $i = ( $func_open_paren_token + 1 ); $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i += 1 ) {
+		for ( $i = ( $func_open_paren_token + 1 ); $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
 			$this_token                = $tokens[ $i ];
 			$this_token['token_index'] = $i;
 			if ( in_array( $this_token['code'], PHP_CodeSniffer_Tokens::$emptyTokens, true ) ) {
@@ -150,7 +150,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
 			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || 'T_DOUBLE_QUOTED_STRING' === $this_token['type'] ) {
-				for ( $j = ( $i + 1 ); $j < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $j += 1 ) {
+				for ( $j = ( $i + 1 ); $j < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
 					if ( $this_token['code'] === $tokens[ $j ]['code'] ) {
 						$this_token['content'] .= $tokens[ $j ]['content'];
 						$i                      = $j;
@@ -163,7 +163,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 			// Include everything up to and including the parenthesis_closer if this token has one.
 			if ( ! empty( $this_token['parenthesis_closer'] ) ) {
-				for ( $j = ( $i + 1 ); $j <= $this_token['parenthesis_closer']; $j += 1 ) {
+				for ( $j = ( $i + 1 ); $j <= $this_token['parenthesis_closer']; $j++ ) {
 					$tokens[ $j ]['token_index'] = $j;
 					$argument_tokens[]           = $tokens[ $j ];
 				}

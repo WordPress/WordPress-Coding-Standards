@@ -167,7 +167,8 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		}
 
 		$whitelisted_cache = false;
-		$cached            = $wp_cache_get = false;
+		$cached            = false;
+		$wp_cache_get      = false;
 		if ( preg_match( '/cache\s+(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
 			$whitelisted_cache = true;
 		}

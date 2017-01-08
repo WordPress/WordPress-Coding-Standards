@@ -272,6 +272,8 @@
 	-->
 		<!-- Rule: In general, readability is more important than cleverness or brevity.
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+		<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
+		<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
 
 	<!--
