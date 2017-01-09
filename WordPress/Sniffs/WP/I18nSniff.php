@@ -22,13 +22,49 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 * and adjusted for better precision and updated specs.
 	 */
-	const SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)(%(?:[0-9]+\$)?[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeEufFgGosxX]))/';
+	const SPRINTF_PLACEHOLDER_REGEX = '/(?:
+		(?<!%)                     # Don\'t match a literal % (%%).
+		(
+			%                          # Start of placeholder.
+			(?:[0-9]+\$)?              # Optional ordering of the placeholders.
+			[+-]?                      # Optional sign specifier.
+			(?:
+				(?:0|\'.)?                 # Optional padding specifier - excluding the space.
+				-?                         # Optional alignment specifier.
+				[0-9]*                     # Optional width specifier.
+				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
+				|                      # Only recognize the space as padding in combination with a width specifier.
+				(?:[ ])?                   # Optional space padding specifier.
+				-?                         # Optional alignment specifier.
+				[0-9]+                     # Width specifier.
+				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
+			)
+			[bcdeEfFgGosuxX]           # Type specifier.
+		)
+	)/x';
 
 	/**
 	 * "Unordered" means there's no position specifier: '%s', not '%2$s'.
 	 */
-	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:(?<!%)%[+-]?(?:[ 0]|\'.)?-?[0-9]*(?:\.[0-9]+)?[bcdeEufFgGosxX])/';
+	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:
+		(?<!%)                     # Don\'t match a literal % (%%).
+		%                          # Start of placeholder.
+		[+-]?                      # Optional sign specifier.
+		(?:
+			(?:0|\'.)?                 # Optional padding specifier - excluding the space.
+			-?                         # Optional alignment specifier.
+			[0-9]*                     # Optional width specifier.
+			(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
+			|                      # Only recognize the space as padding in combination with a width specifier.
+			(?:[ ])?                   # Optional space padding specifier.
+			-?                         # Optional alignment specifier.
+			[0-9]+                     # Width specifier.
+			(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
+		)
+		[bcdeEfFgGosuxX]           # Type specifier.
+	)/x';
 
 	/**
 	 * Text domain.
