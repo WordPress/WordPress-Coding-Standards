@@ -180,3 +180,5 @@ echo '<option name="' . esc_attr( $name ) . '"' .
 
 _deprecated_hook( 'some_filter', '1.3.0', esc_html__( 'The $arg is deprecated.' ), 'some_other_filter' ); // Ok.
 _deprecated_hook( "filter_{$context}", '1.3.0', __( 'The $arg is deprecated.' ), sprintf( __( 'Some parsed message %s', $variable ) ) ); // Bad.
+
+echo add_filter( get_the_excerpt( get_the_ID() ) ; // Bad, but ignored as code contains a parse error.
