@@ -150,24 +150,32 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 
 			if ( false !== $prev ) {
 				// Skip sniffing if calling a same-named method, or on function definitions.
-				if ( in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true ) ) {
+				$skipped = array(
+					T_FUNCTION        => T_FUNCTION,
+					T_DOUBLE_COLON    => T_DOUBLE_COLON,
+					T_OBJECT_OPERATOR => T_OBJECT_OPERATOR,
+				);
+
+				if ( isset( $skipped[ $tokens[ $prev ]['code'] ] ) ) {
 					return;
 				}
 
 				// Skip namespaced functions, ie: \foo\bar() not \bar().
-				$pprev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
-				if ( false !== $pprev && T_NS_SEPARATOR === $tokens[ $prev ]['code'] && T_STRING === $tokens[ $pprev ]['code'] ) {
-					return;
+				if ( T_NS_SEPARATOR === $tokens[ $prev ]['code'] ) {
+					$pprev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
+					if ( false !== $pprev && T_STRING === $tokens[ $pprev ]['code'] ) {
+						return;
+					}
 				}
 			}
-			unset( $prev, $pprev );
+			unset( $prev, $pprev, $skipped );
 		}
 
-		$exclude = explode( ',', $this->exclude );
+		$exclude = array_flip( explode( ',', $this->exclude ) );
 
 		foreach ( $this->groups as $groupName => $group ) {
 
-			if ( in_array( $groupName, $exclude, true ) ) {
+			if ( isset( $exclude[ $groupName ] ) ) {
 				continue;
 			}
 
