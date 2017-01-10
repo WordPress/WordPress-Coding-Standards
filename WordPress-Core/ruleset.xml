@@ -33,13 +33,12 @@
 		<arg name="tab-width" value="4"/>
 		<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 
-		<!-- Rule: For associative arrays, values should start on a new line.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/638 -->
-
 		<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
 		<rule ref="WordPress.Arrays.ArrayDeclaration">
 			<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
 		</rule>
+		<!-- Covers rule: For associative arrays, values should start on a new line.
+			 Also covers various single-line array whitespace issues. -->
 		<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
 			<!-- Exclude the upstream checks which are already thrown by the
 			     WordPress.Arrays.ArrayDeclaration sniff. -->
