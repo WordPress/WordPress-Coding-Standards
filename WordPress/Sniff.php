@@ -251,6 +251,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'sanitize_bookmark'          => true,
 		'sanitize_email'             => true,
 		'sanitize_file_name'         => true,
+		'sanitize_hex_color_no_hash' => true,
+		'sanitize_hex_color'	     => true,
 		'sanitize_html_class'        => true,
 		'sanitize_key'               => true,
 		'sanitize_meta'              => true,
