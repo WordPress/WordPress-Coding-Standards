@@ -17,8 +17,9 @@
  *                 Moved the file and renamed the class from
  *                 `WordPress_Sniffs_Functions_FunctionRestrictionsSniff` to
  *                 `WordPress_AbstractFunctionRestrictionsSniff`.
+ * @since   0.11.0 Extends the WordPress_Sniff class.
  */
-abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSniffer_Sniff {
+abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sniff {
 
 	/**
 	 * Exclude groups.
@@ -34,6 +35,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * Don't use this in extended classes, override getGroups() instead.
 	 * This is only used for Unit tests.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @var array
 	 */
 	public static $unittest_groups = array();
@@ -41,12 +44,16 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	/**
 	 * Regex pattern with placeholder for the function names.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @var string
 	 */
 	protected $regex_pattern = '`\b(?:%s)\b`i';
 
 	/**
 	 * Cache for the group information.
+	 *
+	 * @since 0.10.0
 	 *
 	 * @var array
 	 */
@@ -105,6 +112,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	/**
 	 * Set up the regular expressions for each group.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @param string $key The group array index key where the input for the regular expression can be found.
 	 * @return bool True if the groups were setup. False if not.
 	 */
@@ -157,13 +166,30 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 			return;
 		}
 
-		$tokens        = $phpcsFile->getTokens();
-		$token         = $tokens[ $stackPtr ];
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcsFile );
+
+		$this->is_targetted_token( $stackPtr );
+
+	} // End process().
+
+	/**
+	 * Verify is the current token is a function call and one of the targetted functions.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
+	 */
+	public function is_targetted_token( $stackPtr ) {
+
+		$token         = $this->tokens[ $stackPtr ];
 		$token_content = strtolower( $token['content'] );
 
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( T_STRING === $token['code'] && isset( $tokens[ ( $stackPtr - 1 ) ] ) ) {
-			$prev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( T_STRING === $token['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
+			$prev = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 			if ( false !== $prev ) {
 				// Skip sniffing if calling a same-named method, or on function definitions.
@@ -173,14 +199,14 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 					T_OBJECT_OPERATOR => T_OBJECT_OPERATOR,
 				);
 
-				if ( isset( $skipped[ $tokens[ $prev ]['code'] ] ) ) {
+				if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
 					return;
 				}
 
 				// Skip namespaced functions, ie: \foo\bar() not \bar().
-				if ( T_NS_SEPARATOR === $tokens[ $prev ]['code'] ) {
-					$pprev = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
-					if ( false !== $pprev && T_STRING === $tokens[ $pprev ]['code'] ) {
+				if ( T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
+					$pprev = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
+					if ( false !== $pprev && T_STRING === $this->tokens[ $pprev ]['code'] ) {
 						return;
 					}
 				}
@@ -198,27 +224,40 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 				continue;
 			}
 
-			if ( preg_match( $group['regex'], $token_content ) < 1 ) {
-				continue;
+			if ( preg_match( $group['regex'], $token_content ) === 1 ) {
+				$this->process_matched_token( $stackPtr, $groupName, $token_content );
 			}
-
-			if ( 'warning' === $group['type'] ) {
-				$addWhat = array( $phpcsFile, 'addWarning' );
-			} else {
-				$addWhat = array( $phpcsFile, 'addError' );
-			}
-
-			call_user_func(
-				$addWhat,
-				$group['message'],
-				$stackPtr,
-				$groupName,
-				array( $token_content )
-			);
-
 		}
 
-	} // End process().
+	} // End is_targetted_token().
+
+	/**
+	 * Process a matched token.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 *
+	 * @return void
+	 */
+	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+
+		if ( 'warning' === $this->groups[ $group_name ]['type'] ) {
+			$addWhat = array( $this->phpcsFile, 'addWarning' );
+		} else {
+			$addWhat = array( $this->phpcsFile, 'addError' );
+		}
+
+		call_user_func(
+			$addWhat,
+			$this->groups[ $group_name ]['message'],
+			$stackPtr,
+			$group_name,
+			array( $matched_content )
+		);
+	} // End process_matched_token().
 
 	/**
 	 * Prepare the function name for use in a regular expression.
@@ -226,6 +265,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * The getGroups() method allows for providing function names with a wildcard * to target
 	 * a group of functions. This prepare routine takes that into account while still safely
 	 * escaping the function name for use in a regular expression.
+	 *
+	 * @since 0.10.0
 	 *
 	 * @param string $function Function name.
 	 * @return string Regex escaped function name.
