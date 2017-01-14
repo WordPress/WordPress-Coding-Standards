@@ -17,7 +17,7 @@ $y = Bar::mysql_info(); // Ok.
 prefix_mysql_info(); // Ok.
 
 
-/**
+/*
  * All the below should give an error.
  */
 
@@ -76,7 +76,7 @@ maxdb_real_query();
 maxdb_stat();
 
 
-/**
+/*
  * And these shouldn't give an error.
  */
 

@@ -21,7 +21,7 @@ class My_Plugin {
 	public function __invoke() {} // OK.
 }
 
-/**
+/*
  * Verify that CamelCase is not checked for extended classes or interfaces.
  */
 class Test extends WP_UnitTestCase {
@@ -37,7 +37,7 @@ class Foo implements ArrayAccess {
 }
 
 
-/**
+/*
  * Verify all PHP supported magic methods.
  */
 class Its_A_Kind_Of_Magic {
@@ -58,7 +58,7 @@ class Its_A_Kind_Of_Magic {
 	function __debugInfo() {} // Ok.
 }
 
-/**
+/*
  * Verify SoapClient magic methods.
  */
 class My_Soap extends SoapClient {
