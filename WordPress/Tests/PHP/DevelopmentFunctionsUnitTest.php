@@ -45,6 +45,9 @@ class WordPress_Tests_PHP_DevelopmentFunctionsUnitTest extends AbstractSniffUnit
 			13 => 1,
 			15 => 1,
 			16 => 1,
+			24 => 1,
+			33 => 1,
+			34 => 1,
 		);
 
 	}
