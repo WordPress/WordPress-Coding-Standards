@@ -38,6 +38,22 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 					'$taz',
 				),
 			),
+			'another' => array(
+				'type'          => 'error',
+				'message'       => 'Detected usage of %s',
+				'object_vars'   => array(
+					'$bar->bar',
+					'BAR::var',
+					'BAR::reg*',
+					'BAR::$static',
+				),
+				'array_members' => array(
+					'$bar[\'test\']',
+				),
+				'variables'     => array(
+					'$tallyho',
+				),
+			),
 		);
 	}
 
@@ -55,6 +71,18 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 			17 => 1,
 			21 => 1,
 			23 => 1,
+			27 => 1,
+			28 => 1,
+			29 => 1,
+			40 => 1,
+			41 => 1,
+			42 => 1,
+			56 => 1,
+			57 => 1,
+			58 => 1,
+			60 => 1,
+			61 => 1,
+			62 => 1,
 		);
 
 	}

@@ -75,6 +75,12 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 					37 => 1,
 					39 => 1,
 					40 => 1,
+					42 => 1,
+					51 => 1,
+					52 => 1,
+					63 => 1,
+					65 => 1,
+					66 => 1,
 				);
 
 			case 'RestrictedClassesUnitTest.2.inc':

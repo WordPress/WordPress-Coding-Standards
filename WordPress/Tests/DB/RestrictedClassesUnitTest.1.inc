@@ -10,7 +10,7 @@ echo parent::VERSION; // Ok.
 echo self::$property; // Ok.
 echo self::some_function(); // Ok.
 
-/**
+/*
  * All the below should give an error.
  */
 
@@ -39,3 +39,28 @@ PDO::getAvailableDrivers();
 $db7 = new PDOStatement;
 $db8 = new \PDOStatement();
 
+$db9 = new \My\DBlayer;
+
+/*
+ * Test exclude property.
+ */
+// Exclude one group:
+// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude test
+$db9 = new \My\DBlayer; // Ok - within excluded group.
+
+echo mysqli::$affected_rows; // Error.
+class YourMysqli extends \mysqli {} // Error.
+
+// Exclude all groups:
+// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude test,mysql
+$db9 = new \My\DBlayer; // Ok - within excluded group.
+
+echo mysqli::$affected_rows; // Ok - within excluded group.
+class YourMysqli extends \mysqli {} // Ok - within excluded group.
+
+// Reset group exclusions.
+// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude null
+$db9 = new \My\DBlayer; // Error.
+
+echo mysqli::$affected_rows; // Error.
+class YourMysqli extends \mysqli {} // Error.

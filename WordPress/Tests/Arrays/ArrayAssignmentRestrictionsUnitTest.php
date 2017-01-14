@@ -43,6 +43,7 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 			3 => 1,
 			5 => 1,
 			7 => 2,
+			20 => 1,
 		 );
 
 	}
