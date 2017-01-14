@@ -85,6 +85,14 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+		$this->excluded_groups = array_flip( explode( ',', $this->exclude ) );
+		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
+			// All groups have been excluded.
+			// Don't remove the listener as the exclude property can be changed inline.
+			return;
+		}
+
 		$tokens    = $phpcsFile->getTokens();
 		$token     = $tokens[ $stackPtr ];
 		$classname = '';
@@ -125,11 +133,9 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			return;
 		}
 
-		$exclude   = explode( ',', $this->exclude );
-
 		foreach ( $this->groups as $groupName => $group ) {
 
-			if ( in_array( $groupName, $exclude, true ) ) {
+			if ( isset( $this->excluded_groups[ $groupName ] ) ) {
 				continue;
 			}
 
