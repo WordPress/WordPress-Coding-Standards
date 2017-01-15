@@ -126,7 +126,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 		 */
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
-			if ( T_CLOSE_SQUARE_BRACKET === $token['code']  ) {
+			if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 				$operator = $phpcsFile->findNext( array( T_EQUAL ), ( $stackPtr + 1 ) );
 			}
 
