@@ -465,6 +465,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				// IF with ELSE.
 				return;
 			}
+		if ( false === $trailingContent ) {
+			return;
 		}
 
 		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code'] ) {
