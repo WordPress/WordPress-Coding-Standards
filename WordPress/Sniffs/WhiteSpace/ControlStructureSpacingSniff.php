@@ -401,7 +401,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 			if ( $firstContent !== $scopeCloser ) {
 				$lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
-				if ( ( $this->tokens[ $scopeCloser ]['line'] - 1 ) !== $this->tokens[ $lastContent ]['line'] ) {
+				if ( $this->tokens[ $lastContent ]['line'] <= ( $this->tokens[ $scopeCloser ]['line'] - 2 ) ) {
 					for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
 						if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
 							&& T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
