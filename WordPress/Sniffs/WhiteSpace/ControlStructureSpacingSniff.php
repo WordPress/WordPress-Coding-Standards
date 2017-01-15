@@ -111,15 +111,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			)
 		) {
 			$error = 'Space after opening control structure is required';
-			if ( isset( $phpcsFile->fixer ) ) {
-				$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
-				if ( true === $fix ) {
-					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContent( $stackPtr, ' ' );
-					$phpcsFile->fixer->endChangeset();
-				}
-			} else {
-				$phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
+			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
+
+			if ( true === $fix ) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent( $stackPtr, ' ' );
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 
@@ -143,34 +140,24 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 				if ( T_WHITESPACE !== $this->tokens[ ( $scopeOpener - 1 ) ]['code'] ) {
 					$error = 'Space between opening control structure and T_COLON is required';
+					$fix   = $phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceBetweenStructureColon' );
 
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceBetweenStructureColon' );
-
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $stackPtr, 'NoSpaceBetweenStructureColon' );
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				}
 			} elseif ( 'forbidden' === $this->space_before_colon ) {
 
 				if ( T_WHITESPACE === $this->tokens[ ( $scopeOpener - 1 ) ]['code'] ) {
 					$error = 'Extra space between opening control structure and T_COLON found';
+					$fix   = $phpcsFile->addFixableError( $error, ( $scopeOpener - 1 ), 'SpaceBetweenStructureColon' );
 
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, ( $scopeOpener - 1 ), 'SpaceBetweenStructureColon' );
-
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->replaceToken( ( $scopeOpener - 1 ), '' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $stackPtr, 'SpaceBetweenStructureColon' );
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->replaceToken( ( $scopeOpener - 1 ), '' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
@@ -258,6 +245,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					// Checking this: function[*](...) {}.
 					$error = 'Space before closure opening parenthesis is prohibited';
 					$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'SpaceBeforeClosureOpenParenthesis' );
+
 					if ( true === $fix ) {
 						$phpcsFile->fixer->beginChangeset();
 						$phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
@@ -274,15 +262,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 				// Checking this: if[*](...) {}.
 				$error = 'No space before opening parenthesis is prohibited';
-				if ( isset( $phpcsFile->fixer ) ) {
-					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
-						$phpcsFile->fixer->addContent( $stackPtr, ' ' );
-						$phpcsFile->fixer->endChangeset();
-					}
-				} else {
-					$phpcsFile->addError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+				$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+
+				if ( true === $fix ) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->addContent( $stackPtr, ' ' );
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 		} // End if().
@@ -293,7 +278,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 		) {
 			// Checking this: if [*](...) {}.
 			$error = 'Expected exactly one space before opening parenthesis; "%s" found.';
-			$fix = $phpcsFile->addFixableError(
+			$fix   = $phpcsFile->addFixableError(
 				$error,
 				$stackPtr,
 				'ExtraSpaceBeforeOpenParenthesis',
@@ -312,15 +297,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 		) {
 			// Checking this: $value = my_function([*]...).
 			$error = 'No space after opening parenthesis is prohibited';
-			if ( isset( $phpcsFile->fixer ) ) {
-				$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterOpenParenthesis' );
-				if ( true === $fix ) {
-					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContent( $parenthesisOpener, ' ' );
-					$phpcsFile->fixer->endChangeset();
-				}
-			} else {
-				$phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterOpenParenthesis' );
+			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterOpenParenthesis' );
+
+			if ( true === $fix ) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent( $parenthesisOpener, ' ' );
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 
@@ -332,15 +314,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 				if ( T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser - 1 ) ]['code'] ) {
 					$error = 'No space before closing parenthesis is prohibited';
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis' );
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->addContentBefore( $parenthesisCloser, ' ' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis' );
+					$fix   = $phpcsFile->addFixableError( $error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis' );
+
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->addContentBefore( $parenthesisCloser, ' ' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				}
 
@@ -349,17 +328,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					&& ( isset( $scopeOpener ) && T_COLON !== $this->tokens[ $scopeOpener ]['code'] )
 				) {
 					$error = 'Space between opening control structure and closing parenthesis is required';
+					$fix   = $phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceAfterCloseParenthesis' );
 
-					if ( isset( $phpcsFile->fixer ) ) {
-						$fix = $phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceAfterCloseParenthesis' );
-
-						if ( true === $fix ) {
-							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
-							$phpcsFile->fixer->endChangeset();
-						}
-					} else {
-						$phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
+					if ( true === $fix ) {
+						$phpcsFile->fixer->beginChangeset();
+						$phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
+						$phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
@@ -369,20 +343,17 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				&& $this->tokens[ $parenthesisCloser ]['line'] !== $this->tokens[ $scopeOpener ]['line'] )
 			) {
 				$error = 'Opening brace should be on the same line as the declaration';
-				if ( isset( $phpcsFile->fixer ) ) {
-					$fix = $phpcsFile->addFixableError( $error, $parenthesisOpener, 'OpenBraceNotSameLine' );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
+				$fix   = $phpcsFile->addFixableError( $error, $parenthesisOpener, 'OpenBraceNotSameLine' );
 
-						for ( $i = ( $parenthesisCloser + 1 ); $i < $scopeOpener; $i++ ) {
-							$phpcsFile->fixer->replaceToken( $i, '' );
-						}
+				if ( true === $fix ) {
+					$phpcsFile->fixer->beginChangeset();
 
-						$phpcsFile->fixer->addContent( $parenthesisCloser, ' ' );
-						$phpcsFile->fixer->endChangeset();
+					for ( $i = ( $parenthesisCloser + 1 ); $i < $scopeOpener; $i++ ) {
+						$phpcsFile->fixer->replaceToken( $i, '' );
 					}
-				} else {
-					$phpcsFile->addError( $error, $parenthesisOpener, 'OpenBraceNotSameLine' );
+
+					$phpcsFile->fixer->addContent( $parenthesisCloser, ' ' );
+					$phpcsFile->fixer->endChangeset();
 				}
 				return;
 
@@ -393,7 +364,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 				// Checking this: if (...) [*]{}.
 				$error = 'Expected exactly one space between closing parenthesis and opening control structure; "%s" found.';
-				$fix = $phpcsFile->addFixableError(
+				$fix   = $phpcsFile->addFixableError(
 					$error,
 					$stackPtr,
 					'ExtraSpaceAfterCloseParenthesis',
@@ -414,20 +385,17 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				&& false === in_array( $this->tokens[ $firstContent ]['code'], array( T_CLOSE_TAG, T_COMMENT ), true )
 			) {
 				$error = 'Blank line found at start of control structure';
-				if ( isset( $phpcsFile->fixer ) ) {
-					$fix = $phpcsFile->addFixableError( $error, $scopeOpener, 'BlankLineAfterStart' );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
+				$fix   = $phpcsFile->addFixableError( $error, $scopeOpener, 'BlankLineAfterStart' );
 
-						for ( $i = ( $scopeOpener + 1 ); $i < $firstContent; $i++ ) {
-							$phpcsFile->fixer->replaceToken( $i, '' );
-						}
+				if ( true === $fix ) {
+					$phpcsFile->fixer->beginChangeset();
 
-						$phpcsFile->fixer->addNewline( $scopeOpener );
-						$phpcsFile->fixer->endChangeset();
+					for ( $i = ( $scopeOpener + 1 ); $i < $firstContent; $i++ ) {
+						$phpcsFile->fixer->replaceToken( $i, '' );
 					}
-				} else {
-					$phpcsFile->addError( $error, $scopeOpener, 'BlankLineAfterStart' );
+
+					$phpcsFile->fixer->addNewline( $scopeOpener );
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 
@@ -440,20 +408,17 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 						) {
 							// TODO: Reporting error at empty line won't highlight it in IDE.
 							$error = 'Blank line found at end of control structure';
-							if ( isset( $phpcsFile->fixer ) ) {
-								$fix = $phpcsFile->addFixableError( $error, $i, 'BlankLineBeforeEnd' );
-								if ( true === $fix ) {
-									$phpcsFile->fixer->beginChangeset();
-	
-									for ( $j = ( $lastContent + 1 ); $j < $scopeCloser; $j++ ) {
-										$phpcsFile->fixer->replaceToken( $j, '' );
-									}
-	
-									$phpcsFile->fixer->addNewlineBefore( $scopeCloser );
-									$phpcsFile->fixer->endChangeset();
+							$fix   = $phpcsFile->addFixableError( $error, $i, 'BlankLineBeforeEnd' );
+
+							if ( true === $fix ) {
+								$phpcsFile->fixer->beginChangeset();
+
+								for ( $j = ( $lastContent + 1 ); $j < $scopeCloser; $j++ ) {
+									$phpcsFile->fixer->replaceToken( $j, '' );
 								}
-							} else {
-								$phpcsFile->addError( $error, $i, 'BlankLineBeforeEnd' );
+
+								$phpcsFile->fixer->addNewlineBefore( $scopeCloser );
+								$phpcsFile->fixer->endChangeset();
 							}
 							break;
 						} // End if().
@@ -506,21 +471,18 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			if ( ( $this->tokens[ $scopeCloser ]['line'] + 1 ) !== $this->tokens[ $trailingContent ]['line'] ) {
 				// TODO: Won't cover following case: "} echo 'OK';".
 				$error = 'Blank line found after control structure';
-				if ( isset( $phpcsFile->fixer ) ) {
-					$fix = $phpcsFile->addFixableError( $error, $scopeCloser, 'BlankLineAfterEnd' );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
+				$fix   = $phpcsFile->addFixableError( $error, $scopeCloser, 'BlankLineAfterEnd' );
 
-						for ( $i = ( $scopeCloser + 1 ); $i < $trailingContent; $i++ ) {
-							$phpcsFile->fixer->replaceToken( $i, '' );
-						}
+				if ( true === $fix ) {
+					$phpcsFile->fixer->beginChangeset();
 
-						// TODO: Instead a separate error should be triggered when content comes right after closing brace.
-						$phpcsFile->fixer->addNewlineBefore( $trailingContent );
-						$phpcsFile->fixer->endChangeset();
+					for ( $i = ( $scopeCloser + 1 ); $i < $trailingContent; $i++ ) {
+						$phpcsFile->fixer->replaceToken( $i, '' );
 					}
-				} else {
-					$phpcsFile->addError( $error, $scopeCloser, 'BlankLineAfterEnd' );
+
+					// TODO: Instead a separate error should be triggered when content comes right after closing brace.
+					$phpcsFile->fixer->addNewlineBefore( $trailingContent );
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 		} // End if().
