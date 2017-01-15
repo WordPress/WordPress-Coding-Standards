@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Test sniffing for translator comments.
  */
 

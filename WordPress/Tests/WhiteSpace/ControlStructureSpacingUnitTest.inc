@@ -108,7 +108,7 @@ function ( $arg ) {} // Ok.
 $closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
 $closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
 
-/**
+/*
  * Test for bug where this sniff was triggering a "Blank line found after control structure" error
  * if there is a blank line after the last method in a class.
  *
