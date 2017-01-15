@@ -238,6 +238,11 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 					continue;
 				}
 
+				// Likewise if it is a mixed-case var used by WordPress core.
+				if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
+					return;
+				}
+
 				if ( false === self::isSnakeCase( $var_name ) ) {
 					$error = 'Variable "%s" is not in valid snake_case format';
 					$data  = array( $var_name );
