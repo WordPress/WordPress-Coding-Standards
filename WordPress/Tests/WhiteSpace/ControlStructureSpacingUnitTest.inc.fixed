@@ -144,3 +144,27 @@ if ( $one ) {
 do {
 	echo 'hi';
 } while ( $blah );
+
+// Upstream bug GH #782
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+if ( $foo ) {
+
+
+    /**
+     * Comment
+     */
+    function foo() {
+        // Code here
+    }
+
+
+    /**
+     * Comment
+     */
+    class bar() {
+
+    }//end class
+
+
+}
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false

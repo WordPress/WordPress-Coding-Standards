@@ -381,8 +381,20 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 		if ( true === $this->blank_line_check && isset( $scopeOpener ) ) {
 			$firstContent = $phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
-			if ( $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
-				&& false === in_array( $this->tokens[ $firstContent ]['code'], array( T_CLOSE_TAG, T_COMMENT ), true )
+
+			// We ignore spacing for some structures that tend to have their own rules.
+			$ignore = array(
+				T_FUNCTION             => true,
+				T_CLASS                => true,
+				T_INTERFACE            => true,
+				T_TRAIT                => true,
+				T_DOC_COMMENT_OPEN_TAG => true,
+				T_CLOSE_TAG            => true,
+				T_COMMENT              => true,
+			);
+
+			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
+				&& $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
 			) {
 				$error = 'Blank line found at start of control structure';
 				$fix   = $phpcsFile->addFixableError( $error, $scopeOpener, 'BlankLineAfterStart' );
@@ -401,7 +413,17 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 			if ( $firstContent !== $scopeCloser ) {
 				$lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
-				if ( $this->tokens[ $lastContent ]['line'] <= ( $this->tokens[ $scopeCloser ]['line'] - 2 ) ) {
+				
+				$lastNonEmptyContent = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ($scopeCloser - 1), null, true );
+
+				$checkToken = $lastContent;
+				if ( isset( $this->tokens[ $lastNonEmptyContent ]['scope_condition'] ) ) {
+					$checkToken = $this->tokens[ $lastNonEmptyContent ]['scope_condition'];
+				}
+
+				if ( ! isset( $ignore[ $this->tokens[ $checkToken ]['code'] ] )
+					&& $this->tokens[ $lastContent ]['line'] <= ( $this->tokens[ $scopeCloser ]['line'] - 2 )
+				) {
 					for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
 						if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
 							&& T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
