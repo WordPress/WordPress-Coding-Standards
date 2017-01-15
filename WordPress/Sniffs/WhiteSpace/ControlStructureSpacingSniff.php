@@ -79,6 +79,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			T_FUNCTION,
 			T_CLOSURE,
 			T_USE,
+			T_TRY,
+			T_CATCH,
 		);
 
 	}

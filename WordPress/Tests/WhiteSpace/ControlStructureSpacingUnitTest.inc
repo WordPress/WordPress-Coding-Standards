@@ -130,3 +130,10 @@ class Foo_Bar {
 	}
 
 }
+
+// Handle try/catch statements as well.
+try{ // Bad.
+	// Something
+} catch(Exception $e){ // Bad.
+	// Something
+}
