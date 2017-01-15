@@ -102,13 +102,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 		if ( isset( $this->tokens[ ( $stackPtr + 1 ) ] ) && T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code']
 			&& ! ( T_ELSE === $this->tokens[ $stackPtr ]['code'] && T_COLON === $this->tokens[ ( $stackPtr + 1 ) ]['code'] )
-			&& ! (
-				T_CLOSURE === $this->tokens[ $stackPtr ]['code']
-				&& (
-					0 === (int) $this->spaces_before_closure_open_paren
-					|| -1 === (int) $this->spaces_before_closure_open_paren
-				)
-			)
+			&& ! ( T_CLOSURE === $this->tokens[ $stackPtr ]['code']
+				&& 0 >= (int) $this->spaces_before_closure_open_paren )
 		) {
 			$error = 'Space after opening control structure is required';
 			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
