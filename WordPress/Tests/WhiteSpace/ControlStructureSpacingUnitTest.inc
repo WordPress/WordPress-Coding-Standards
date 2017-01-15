@@ -137,3 +137,10 @@ try{ // Bad.
 } catch(Exception $e){ // Bad.
 	// Something
 }
+
+// Upstream bug PEAR #20248.
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+if ( $one ) {
+
+}
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false

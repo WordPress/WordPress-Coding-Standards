@@ -430,32 +430,34 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				}
 			}
 
-			$lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
-			if ( ( $this->tokens[ $scopeCloser ]['line'] - 1 ) !== $this->tokens[ $lastContent ]['line'] ) {
-				for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
-					if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
-						&& T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
-					) {
-						// TODO: Reporting error at empty line won't highlight it in IDE.
-						$error = 'Blank line found at end of control structure';
-						if ( isset( $phpcsFile->fixer ) ) {
-							$fix = $phpcsFile->addFixableError( $error, $i, 'BlankLineBeforeEnd' );
-							if ( true === $fix ) {
-								$phpcsFile->fixer->beginChangeset();
-
-								for ( $j = ( $lastContent + 1 ); $j < $scopeCloser; $j++ ) {
-									$phpcsFile->fixer->replaceToken( $j, '' );
+			if ( $firstContent !== $scopeCloser ) {
+				$lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
+				if ( ( $this->tokens[ $scopeCloser ]['line'] - 1 ) !== $this->tokens[ $lastContent ]['line'] ) {
+					for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
+						if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
+							&& T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
+						) {
+							// TODO: Reporting error at empty line won't highlight it in IDE.
+							$error = 'Blank line found at end of control structure';
+							if ( isset( $phpcsFile->fixer ) ) {
+								$fix = $phpcsFile->addFixableError( $error, $i, 'BlankLineBeforeEnd' );
+								if ( true === $fix ) {
+									$phpcsFile->fixer->beginChangeset();
+	
+									for ( $j = ( $lastContent + 1 ); $j < $scopeCloser; $j++ ) {
+										$phpcsFile->fixer->replaceToken( $j, '' );
+									}
+	
+									$phpcsFile->fixer->addNewlineBefore( $scopeCloser );
+									$phpcsFile->fixer->endChangeset();
 								}
-
-								$phpcsFile->fixer->addNewlineBefore( $scopeCloser );
-								$phpcsFile->fixer->endChangeset();
+							} else {
+								$phpcsFile->addError( $error, $i, 'BlankLineBeforeEnd' );
 							}
-						} else {
-							$phpcsFile->addError( $error, $i, 'BlankLineBeforeEnd' );
-						}
-						break;
-					} // End if().
-				} // End for().
+							break;
+						} // End if().
+					} // End for().
+				} // End if().
 			} // End if().
 		} // End if().
 
