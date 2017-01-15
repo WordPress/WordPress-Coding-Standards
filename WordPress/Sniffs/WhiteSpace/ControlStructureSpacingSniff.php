@@ -128,7 +128,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			if ( T_USE === $this->tokens[ $stackPtr ]['code'] && 'closure' === $this->get_use_type( $stackPtr ) ) {
 				$scopeOpener = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, ( $stackPtr + 1 ) );
 				$scopeCloser = $this->tokens[ $scopeOpener ]['scope_closer'];
-			} else {
+			} elseif ( T_WHILE !== $this->tokens[ $stackPtr ]['code'] ) {
 				return;
 			}
 		} else {
@@ -137,7 +137,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 		}
 
 		// Alternative syntax.
-		if ( T_COLON === $this->tokens[ $scopeOpener ]['code'] ) {
+		if ( isset( $scopeOpener ) && T_COLON === $this->tokens[ $scopeOpener ]['code'] ) {
 
 			if ( 'required' === $this->space_before_colon ) {
 
@@ -346,7 +346,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 				if (
 					T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
-					&& T_COLON !== $this->tokens[ $scopeOpener ]['code']
+					&& ( isset( $scopeOpener ) && T_COLON !== $this->tokens[ $scopeOpener ]['code'] )
 				) {
 					$error = 'Space between opening control structure and closing parenthesis is required';
 
@@ -365,7 +365,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			}
 
 			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
-				&& $this->tokens[ $parenthesisCloser ]['line'] !== $this->tokens[ $scopeOpener ]['line']
+				&& ( isset( $scopeOpener )
+				&& $this->tokens[ $parenthesisCloser ]['line'] !== $this->tokens[ $scopeOpener ]['line'] )
 			) {
 				$error = 'Opening brace should be on the same line as the declaration';
 				if ( isset( $phpcsFile->fixer ) ) {
@@ -407,7 +408,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			} // End if().
 		} // End if().
 
-		if ( true === $this->blank_line_check ) {
+		if ( true === $this->blank_line_check && isset( $scopeOpener ) ) {
 			$firstContent = $phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
 			if ( $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
 				&& false === in_array( $this->tokens[ $firstContent ]['code'], array( T_CLOSE_TAG, T_COMMENT ), true )
@@ -460,6 +461,10 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				} // End if().
 			} // End if().
 		} // End if().
+
+		if ( ! isset( $scopeCloser ) ) {
+			return;
+		}
 
 		$trailingContent = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
 		if ( false === $trailingContent ) {

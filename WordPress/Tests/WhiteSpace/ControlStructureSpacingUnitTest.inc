@@ -144,3 +144,8 @@ if ( $one ) {
 
 }
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+// Upstream bug PEAR #20247.
+do {
+	echo 'hi';
+} while ($blah);
