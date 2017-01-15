@@ -462,7 +462,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			} // End if().
 		} // End if().
 
-		if ( ! isset( $scopeCloser ) ) {
+		if ( ! isset( $scopeCloser ) || false === $this->blank_line_after_check ) {
 			return;
 		}
 
@@ -503,9 +503,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				}
 			}
 
-			if ( true === $this->blank_line_after_check
-				&& ( $this->tokens[ $scopeCloser ]['line'] + 1 ) !== $this->tokens[ $trailingContent ]['line']
-			) {
+			if ( ( $this->tokens[ $scopeCloser ]['line'] + 1 ) !== $this->tokens[ $trailingContent ]['line'] ) {
 				// TODO: Won't cover following case: "} echo 'OK';".
 				$error = 'Blank line found after control structure';
 				if ( isset( $phpcsFile->fixer ) ) {
