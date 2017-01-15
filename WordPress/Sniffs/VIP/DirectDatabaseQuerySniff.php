@@ -48,6 +48,51 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	public $customCacheDeleteFunctions = array();
 
 	/**
+	 * A list of functions that get data from the cache.
+	 *
+	 * This list is comprised of WP native functions and custom functions as provided via
+	 * the public property.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var array
+	 */
+	private $cacheGetFunctions = array();
+
+	/**
+	 * A list of functions that set data in the cache.
+	 *
+	 * This list is comprised of WP native functions and custom functions as provided via
+	 * the public property.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var array
+	 */
+	private $cacheSetFunctions = array();
+
+	/**
+	 * A list of functions that delete data from the cache.
+	 *
+	 * This list is comprised of WP native functions and custom functions as provided via
+	 * the public property.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var array
+	 */
+	private $cacheDeleteFunctions = array();
+
+	/**
+	 * Whether the custom properties were merged yet with the WP native lists.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var bool
+	 */
+	protected $addedCustomFunctions = false;
+
+	/**
 	 * The lists of $wpdb methods.
 	 *
 	 * @since 0.6.0
@@ -92,24 +137,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 * @return int|void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		if ( ! isset( self::$methods['all'] ) ) {
-			self::$methods['all'] = array_merge( self::$methods['cachable'], self::$methods['noncachable'] );
-
-			WordPress_Sniff::$cacheGetFunctions = array_merge(
-				WordPress_Sniff::$cacheGetFunctions,
-				array_flip( $this->customCacheGetFunctions )
-			);
-
-			WordPress_Sniff::$cacheSetFunctions = array_merge(
-				WordPress_Sniff::$cacheSetFunctions,
-				array_flip( $this->customCacheSetFunctions )
-			);
-
-			WordPress_Sniff::$cacheDeleteFunctions = array_merge(
-				WordPress_Sniff::$cacheDeleteFunctions,
-				array_flip( $this->customCacheDeleteFunctions )
-			);
-		}
+		$this->mergeFunctionLists();
 
 		$tokens = $phpcsFile->getTokens();
 
@@ -182,17 +210,17 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 					if ( T_STRING === $tokens[ $i ]['code'] ) {
 
-						if ( isset( WordPress_Sniff::$cacheDeleteFunctions[ $tokens[ $i ]['content'] ] ) ) {
+						if ( isset( $this->cacheDeleteFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 								$cached = true;
 								break;
 							}
-						} elseif ( isset( WordPress_Sniff::$cacheGetFunctions[ $tokens[ $i ]['content'] ] ) ) {
+						} elseif ( isset( $this->cacheGetFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							$wp_cache_get = true;
 
-						} elseif ( isset( WordPress_Sniff::$cacheSetFunctions[ $tokens[ $i ]['content'] ] ) ) {
+						} elseif ( isset( $this->cacheSetFunctions[ $tokens[ $i ]['content'] ] ) ) {
 
 							if ( $wp_cache_get ) {
 								$cached = true;
@@ -212,5 +240,49 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		return $endOfStatement;
 
 	} // End process().
+
+	/**
+	 * Merge a list of cache functions provided via a custom ruleset with a list of the
+	 * WP native cache functions, if we haven't already.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @return void
+	 */
+	protected function mergeFunctionLists() {
+		if ( ! isset( self::$methods['all'] ) ) {
+			self::$methods['all'] = array_merge( self::$methods['cachable'], self::$methods['noncachable'] );
+		}
+
+		if ( $this->addedCustomFunctions ) {
+			return;
+		}
+
+		$this->cacheGetFunctions = WordPress_Sniff::$cacheGetFunctions;
+		if ( ! empty( $this->customCacheGetFunctions ) ) {
+			$this->cacheGetFunctions = array_merge(
+				$this->cacheGetFunctions,
+				array_flip( (array) $this->customCacheGetFunctions )
+			);
+		}
+
+		$this->cacheSetFunctions = WordPress_Sniff::$cacheSetFunctions;
+		if ( ! empty( $this->customCacheSetFunctions ) ) {
+			$this->cacheSetFunctions = array_merge(
+				$this->cacheSetFunctions,
+				array_flip( (array) $this->customCacheSetFunctions )
+			);
+		}
+
+		$this->cacheDeleteFunctions = WordPress_Sniff::$cacheDeleteFunctions;
+		if ( ! empty( $this->customCacheDeleteFunctions ) ) {
+			$this->cacheDeleteFunctions = array_merge(
+				$this->cacheDeleteFunctions,
+				array_flip( (array) $this->customCacheDeleteFunctions )
+			);
+		}
+
+		$this->addedCustomFunctions = true;
+	}
 
 } // End class.
