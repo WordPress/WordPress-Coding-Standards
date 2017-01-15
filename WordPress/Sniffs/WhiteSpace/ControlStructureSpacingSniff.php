@@ -17,7 +17,9 @@
  * @since   0.3.0      This sniff now has the ability to fix most errors it flags.
  * @since   0.7.0      This class now extends WordPress_Sniff.
  *
- * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
+ * Last synced with base class 2017-01-15 at commit b024ad84656c37ef5733c6998ebc1e60957b2277.
+ * Note: This class has diverged quite far from the original. All the same, checking occassionally
+ * to see if there are upstream fixes made from which this sniff can benefit, is warranted.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
 class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
@@ -408,7 +410,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 			if ( $firstContent !== $scopeCloser ) {
 				$lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
-				
+
 				$lastNonEmptyContent = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ($scopeCloser - 1), null, true );
 
 				$checkToken = $lastContent;

@@ -140,6 +140,7 @@ try{ // Bad.
 
 // Upstream bug PEAR #20248.
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+// Bad.
 if ( $one ) {
 
 }
@@ -148,7 +149,7 @@ if ( $one ) {
 // Upstream bug PEAR #20247.
 do {
 	echo 'hi';
-} while ($blah);
+} while ($blah); // Bad.
 
 // Upstream bug GH #782
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
