@@ -276,11 +276,39 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			return;
 		}
 
+		if ( ! empty( $this->customPropertiesWhitelist ) ) {
+			if ( ! is_array( $this->customPropertiesWhitelist ) ) {
+				// Incorrectly set property.
+				$phpcs_file->addWarning(
+					'The customVariablesWhitelist property should be provided with type="array".',
+					0,
+					'WrongFormatCustomVariablesWhitelist'
+				);
+			}
+
+			// Potentially correct incorrect format.
+			if ( is_string( $this->customPropertiesWhitelist ) ) {
+				$this->customPropertiesWhitelist = array_map( 'trim', explode( ',', $this->customPropertiesWhitelist ) );
+			} else {
+				// Otherwise, disregard the value.
+				$this->customPropertiesWhitelist = array();
+			}
+		}
+
 		if ( ! empty( $this->customVariablesWhitelist ) ) {
-			$this->customPropertiesWhitelist = array_merge(
-				$this->customPropertiesWhitelist,
-				$this->customVariablesWhitelist
-			);
+			if ( ! is_array( $this->customVariablesWhitelist ) ) {
+				// Incorrectly set property, disregard it.
+				$phpcs_file->addWarning(
+					'The customVariablesWhitelist property should be provided with type="array".',
+					0,
+					'WrongFormatCustomVariablesWhitelist'
+				);
+			} else {
+				$this->customPropertiesWhitelist = array_merge(
+					$this->customPropertiesWhitelist,
+					$this->customVariablesWhitelist
+				);
+			}
 
 			$phpcs_file->addWarning(
 				'The customVariablesWhitelist property is deprecated in favor of customPropertiesWhitelist.',
