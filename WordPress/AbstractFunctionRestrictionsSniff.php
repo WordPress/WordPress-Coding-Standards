@@ -53,6 +53,15 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	protected $groups = array();
 
 	/**
+	 * Cache for the excluded groups information.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var array
+	 */
+	protected $excluded_groups = array();
+
+	/**
 	 * Groups of functions to restrict.
 	 *
 	 * This method should be overridden in extending classes.
@@ -140,6 +149,14 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+		$this->excluded_groups = array_flip( explode( ',', $this->exclude ) );
+		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
+			// All groups have been excluded.
+			// Don't remove the listener as the exclude property can be changed inline.
+			return;
+		}
+
 		$tokens        = $phpcsFile->getTokens();
 		$token         = $tokens[ $stackPtr ];
 		$token_content = strtolower( $token['content'] );
@@ -171,11 +188,9 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff implements PHP_CodeSn
 			unset( $prev, $pprev, $skipped );
 		}
 
-		$exclude = array_flip( explode( ',', $this->exclude ) );
-
 		foreach ( $this->groups as $groupName => $group ) {
 
-			if ( isset( $exclude[ $groupName ] ) ) {
+			if ( isset( $this->excluded_groups[ $groupName ] ) ) {
 				continue;
 			}
 

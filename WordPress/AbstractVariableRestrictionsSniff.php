@@ -39,6 +39,15 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 	public static $groups = array();
 
 	/**
+	 * Cache for the excluded groups information.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var array
+	 */
+	protected $excluded_groups = array();
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -83,13 +92,20 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 	 * @return int|void If no groups are found, a stack pointer to indicate to skip the current one is passed.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens  = $phpcsFile->getTokens();
-		$token   = $tokens[ $stackPtr ];
-		$exclude = explode( ',', $this->exclude );
-		$groups  = $this->getGroups();
+		$tokens = $phpcsFile->getTokens();
+		$token  = $tokens[ $stackPtr ];
+		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
-			return ( count( $tokens ) + 1 );
+			$phpcsFile->removeTokenListener( $this, $this->register() );
+			return;
+		}
+
+		$this->excluded_groups = array_flip( explode( ',', $this->exclude ) );
+		if ( array_diff_key( $groups, $this->excluded_groups ) === array() ) {
+			// All groups have been excluded.
+			// Don't remove the listener as the exclude property can be changed inline.
+			return;
 		}
 
 		// Check if it is a function not a variable.
@@ -103,7 +119,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 
 		foreach ( $groups as $groupName => $group ) {
 
-			if ( in_array( $groupName, $exclude, true ) ) {
+			if ( isset( $this->excluded_groups[ $groupName ] ) ) {
 				continue;
 			}
 
