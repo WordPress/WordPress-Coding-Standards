@@ -10,6 +10,36 @@ To contribute an improvement to this project, fork the repo and open a pull requ
 
 Once a commit is made to `develop`, a PR should be opened from `develop` into `master` and named "Next release". This PR will then serve provide a second round of Travis CI checks (especially for any hotfixes pushed directly to the `develop` branch), and provide collaborators with a forum to discuss the upcoming stable release.
 
+# Considerations when writing sniffs
+
+## Whitelist comments
+
+Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
+If the sniff you are writing is susceptible to this, please consider adding the ability to [whitelist lines of code](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
+
+To this end, the `WordPress_Sniff::has_whitelist_comment()` method was introduced.
+
+Example usage:
+```php
+class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
+
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+		$this->init( $phpcsFile );
+		
+		// Check something.
+		
+		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
+			return;
+		}
+		
+		$phpcsFile->addError( ... );
+	}
+}
+```
+
+When you introduce a new whitelist comment, please don't forget to update the [whitelisting code wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) with the relevant details once your PR has been merged into the `develop` branch.
+
+
 # Unit Testing
 
 TL;DR
