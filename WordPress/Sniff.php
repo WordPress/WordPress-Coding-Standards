@@ -1127,7 +1127,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 				}
 
 				// If we're checking for a specific array key (ex: 'hello' in
-				// $_POST['hello']), that mush match too.
+				// $_POST['hello']), that must match too.
 				if ( isset( $array_key ) && $this->get_array_access_key( $i ) !== $array_key ) {
 					continue;
 				}
