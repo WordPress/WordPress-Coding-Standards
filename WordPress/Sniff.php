@@ -1083,13 +1083,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$condition    = $this->tokens[ $conditionPtr ];
 
 			if ( ! isset( $condition['parenthesis_opener'] ) ) {
-
-				$this->phpcsFile->addError(
-					'Possible parse error, condition missing open parenthesis.',
-					$conditionPtr,
-					'IsValidatedMissingConditionOpener'
-				);
-
+				// Live coding or parse error.
 				return false;
 			}
 
