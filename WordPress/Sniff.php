@@ -1103,10 +1103,10 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			 */
 
 			// Check if we are in a function.
-			$function = $this->phpcsFile->findPrevious( T_FUNCTION, $stackPtr );
+			$function = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
 			// If so, we check only within the function, otherwise the whole file.
-			if ( false !== $function && $stackPtr < $this->tokens[ $function ]['scope_closer'] ) {
+			if ( false !== $function ) {
 				$scope_start = $this->tokens[ $function ]['scope_opener'];
 			} else {
 				$scope_start = 0;
