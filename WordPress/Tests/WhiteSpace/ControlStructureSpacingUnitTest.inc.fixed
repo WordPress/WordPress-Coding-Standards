@@ -126,3 +126,46 @@ class Foo_Bar {
 	}
 
 }
+
+// Handle try/catch statements as well.
+try { // Bad.
+	// Something
+} catch ( Exception $e ) { // Bad.
+	// Something
+}
+
+// Upstream bug PEAR #20248.
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+// Bad.
+if ( $one ) {
+}
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+// Upstream bug PEAR #20247.
+do {
+	echo 'hi';
+} while ( $blah ); // Bad.
+
+// Upstream bug GH #782
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+if ( $foo ) {
+
+
+    /**
+     * Comment
+     */
+    function foo() {
+        // Code here
+    }
+
+
+    /**
+     * Comment
+     */
+    class bar() {
+
+    }//end class
+
+
+}
+// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false

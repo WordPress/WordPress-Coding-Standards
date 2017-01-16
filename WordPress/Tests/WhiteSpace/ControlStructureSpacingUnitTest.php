@@ -55,6 +55,10 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 			95 => 1,
 			97 => 1,
 			98 => 1,
+			135 => 2,
+			137 => 5,
+			144 => 1,
+			152 => 2,
 		);
 
 		/*

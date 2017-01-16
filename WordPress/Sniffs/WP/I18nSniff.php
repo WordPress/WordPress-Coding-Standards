@@ -528,7 +528,6 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 							}
 						}
 					} // End if().
-
 				} // End if().
 
 				// Found placeholders but no translators comment.
@@ -539,7 +538,6 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				);
 				return;
 			} // End foreach().
-
 		} // End foreach().
 
 	} // End check_for_translator_comment().
