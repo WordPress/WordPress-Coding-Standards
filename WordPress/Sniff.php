@@ -544,6 +544,21 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Convert an arbitrary string to an alphanumeric string with underscores.
+	 *
+	 * Pre-empt issues with arbitrary strings being used as error codes in XML and PHP.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $base_string Arbitrary string.
+	 *
+	 * @return string
+	 */
+	protected function string_to_errorcode( $base_string ) {
+		return preg_replace( '`[^a-z0-9_]`i', '_', strtolower( $base_string ) );
+	}
+
+	/**
 	 * Get the last pointer in a line.
 	 *
 	 * @since 0.4.0
