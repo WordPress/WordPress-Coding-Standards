@@ -189,7 +189,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 						$addWhat,
 						$message,
 						$stackPtr,
-						$groupName,
+						$this->string_to_errorcode( $groupName . '_' . $key ),
 						array( $key, $val )
 					);
 				}

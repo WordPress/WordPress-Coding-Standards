@@ -17,8 +17,9 @@
  *                 Moved the file and renamed the class from
  *                 `WordPress_Sniffs_Variables_VariableRestrictionsSniff` to
  *                 `WordPress_AbstractVariableRestrictionsSniff`.
+ * @since   0.11.0 Extends the WordPress_Sniff class.
  */
-abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSniffer_Sniff {
+abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sniff {
 
 	/**
 	 * Exclude groups.
@@ -175,7 +176,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 				$addWhat,
 				$group['message'],
 				$stackPtr,
-				$groupName,
+				$this->string_to_errorcode( $groupName . '_' . $match[1] ),
 				array( $var )
 			);
 

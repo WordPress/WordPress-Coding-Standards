@@ -279,7 +279,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$content   = $tokens[0]['content'];
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
-			$code = 'MissingArg' . ucfirst( $arg_name );
+			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
 			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
 				$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
 			}
@@ -290,7 +290,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			foreach ( $tokens as $token ) {
 				$contents .= $token['content'];
 			}
-			$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
+			$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
 			$phpcs_file->$method( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $contents ) );
 			return false;
 		}
@@ -309,7 +309,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
-				$code = 'InterpolatedVariable' . ucfirst( $arg_name );
+				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
 				$phpcs_file->$method( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $code, array( $arg_name, $interpolated_variable ) );
 			}
 			if ( ! empty( $interpolated_variables ) ) {
@@ -322,7 +322,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			return true;
 		}
 
-		$code = 'NonSingularStringLiteral' . ucfirst( $arg_name );
+		$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
 		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $content ) );
 		return false;
 	}
@@ -384,7 +384,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$all_matches_count       = preg_match_all( self::SPRINTF_PLACEHOLDER_REGEX, $content, $all_matches );
 
 		if ( $unordered_matches_count > 0 && $unordered_matches_count !== $all_matches_count && $all_matches_count > 1 ) {
-			$code = 'MixedOrderedPlaceholders' . ucfirst( $arg_name );
+			$code = $this->string_to_errorcode( 'MixedOrderedPlaceholders' . ucfirst( $arg_name ) );
 			$phpcs_file->addError(
 				'Multiple placeholders should be ordered. Mix of ordered and non-ordered placeholders found. Found: %s.',
 				$stack_ptr,
@@ -393,7 +393,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			);
 
 		} elseif ( $unordered_matches_count >= 2 ) {
-			$code = 'UnorderedPlaceholders' . ucfirst( $arg_name );
+			$code = $this->string_to_errorcode( 'UnorderedPlaceholders' . ucfirst( $arg_name ) );
 
 			$suggestions     = array();
 			$replace_regexes = array();

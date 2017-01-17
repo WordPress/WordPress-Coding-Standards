@@ -254,7 +254,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			$addWhat,
 			$this->groups[ $group_name ]['message'],
 			$stackPtr,
-			$group_name,
+			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
 	} // End process_matched_token().
