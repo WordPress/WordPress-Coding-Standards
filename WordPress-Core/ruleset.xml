@@ -215,16 +215,13 @@
 
 		<!-- Covers rule: Files should be named descriptively using lowercase letters.
 			 Hyphens should separate words. -->
-		<rule ref="Generic.Files.LowercasedFilename"/>
-		<rule ref="WordPress.Files.FileName"/>
-
-		<!-- Rule: Class file names should be based on the class name with "class-"
+		<!-- Covers rule: Class file names should be based on the class name with "class-"
 			 prepended and the underscores in the class name replaced with hyphens.
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
-
-		<!-- Rule: Files containing template tags in wp-includes should have "-template"
+		<!-- Covers rule: Files containing template tags in wp-includes should have "-template"
 			 appended to the end of the name.
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
+		<rule ref="WordPress.Files.FileName"/>
 
 
 	<!--
