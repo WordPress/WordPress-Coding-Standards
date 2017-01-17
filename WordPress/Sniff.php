@@ -530,6 +530,20 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Strip quotes surrounding an arbitrary string.
+	 *
+	 * Intended for use with the content of a T_CONSTANT_ENCAPSED_STRING / T_DOUBLE_QUOTED_STRING.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $string The raw string.
+	 * @return string String without quotes around it.
+	 */
+	public function strip_quotes( $string ) {
+		return preg_replace( '`^([\'"])(.*)\1$`Ds', '$2', $string );
+	}
+
+	/**
 	 * Get the last pointer in a line.
 	 *
 	 * @since 0.4.0
