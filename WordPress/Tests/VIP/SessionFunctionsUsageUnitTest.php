@@ -21,7 +21,7 @@ class WordPress_Tests_VIP_SessionFunctionsUsageUnitTest extends AbstractSniffUni
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array_fill( 3, 22, 1 );
+		return array_fill( 3, 26, 1 );
 	}
 
 	/**
