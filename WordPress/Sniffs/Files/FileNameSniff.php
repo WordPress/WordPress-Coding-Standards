@@ -15,6 +15,7 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
+ * @since   0.11.0 - This sniff will now also check for all lowercase file names.
  */
 class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 
@@ -39,13 +40,22 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-		$fileName = basename( $phpcsFile->getFileName() );
+		$file     = $phpcsFile->getFileName();
+		$fileName = basename( $file );
+		$expected = strtolower( str_replace( '_', '-', $fileName ) );
 
-		if ( false !== strpos( $fileName, '_' ) ) {
-			$expected = str_replace( '_', '-', $fileName );
-			$error    = 'Filename "' . $fileName . '" with underscores found; use ' . $expected . ' instead';
-			$phpcsFile->addError( $error, 0, 'UnderscoresNotAllowed' );
+		/*
+		 * Generic check for lowercase hyphenated file names.
+		 */
+		if ( $fileName !== $expected ) {
+			$phpcsFile->addError(
+				'Filenames should be all lowercase with hyphens as word separators. Expected %s, but found %s.',
+				0,
+				'NotHyphenatedLowercase',
+				array( $expected, $fileName )
+			);
 		}
+		unset( $expected );
 
 		// Only run this sniff once per file, no need to run it again.
 		return ( $phpcsFile->numTokens + 1 );
