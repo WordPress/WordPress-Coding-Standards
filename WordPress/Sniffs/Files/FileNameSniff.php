@@ -17,6 +17,8 @@
  * @since   0.1.0
  * @since   0.11.0 - This sniff will now also check for all lowercase file names.
  *                 - This sniff will now also verify that files containing a class start with `class-`.
+ *                 - This sniff will now also verify that files in `wp-includes` containing
+ *                   template tags end in `-template`. Based on @subpackage file DocBlock tag.
  *                 - This sniff will now allow for underscores in file names for certain theme
  *                   specific exceptions if the `$is_theme` property is set to `true`.
  */
@@ -148,7 +150,37 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 				);
 			}
 			unset( $expected );
-		}
+
+		} elseif ( false !== strpos( $file, DIRECTORY_SEPARATOR . 'wp-includes' . DIRECTORY_SEPARATOR ) ) {
+			/*
+			 * Check files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
+			 */
+			$subpackage_tag = $phpcsFile->findNext( T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
+			if ( false !== $subpackage_tag ) {
+				$subpackage = $phpcsFile->findNext( T_DOC_COMMENT_STRING, $subpackage_tag );
+				if ( false !== $subpackage ) {
+					$tokens       = $phpcsFile->getTokens();
+					$fileName_end = substr( $fileName, -13 );
+
+					if ( ( 'Template' === trim( $tokens[ $subpackage ]['content'] )
+						&& $tokens[ $subpackage_tag ]['line'] === $tokens[ $subpackage ]['line'] )
+						&& ( ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
+						|| ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
+					) {
+						$phpcsFile->addError(
+							'Files containing template tags should have "-template" appended to the end of the file name. Expected %s, but found %s.',
+							0,
+							'InvalidTemplateTagFileName',
+							array(
+								substr( $fileName, 0, -4 ) . '-template.php',
+								$fileName,
+							)
+						);
+					}
+				}
+			}
+		} // End if().
+
 		// Only run this sniff once per file, no need to run it again.
 		return ( $phpcsFile->numTokens + 1 );
 
