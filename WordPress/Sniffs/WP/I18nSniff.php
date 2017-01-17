@@ -251,7 +251,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			} else {
 				$argument_assertion_context['stack_ptr'] = $argument_assertion_context['tokens'][0]['token_index'];
 			}
-			call_user_func( array( $this, 'check_argument_tokens' ), $phpcs_file, $argument_assertion_context );
+			$this->check_argument_tokens( $phpcs_file, $argument_assertion_context );
 		}
 
 		// For _n*() calls, compare the singular and plural strings.
