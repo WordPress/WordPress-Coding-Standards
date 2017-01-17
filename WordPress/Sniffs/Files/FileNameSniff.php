@@ -17,10 +17,50 @@
  * @since   0.1.0
  * @since   0.11.0 - This sniff will now also check for all lowercase file names.
  *                 - This sniff will now also verify that files containing a class start with `class-`.
+ *                 - This sniff will now allow for underscores in file names for certain theme
+ *                   specific exceptions if the `$is_theme` property is set to `true`.
  */
 class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
+	 * Regex for the theme specific exceptions.
+	 *
+	 * N.B. This regex currently does not allow for mimetype sublevel only file names,
+	 * such as `plain.php`.
+	 *
+	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#custom-taxonomies
+	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#custom-post-types
+	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#embeds
+	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#attachment
+	 * @link https://en.wikipedia.org/wiki/Media_type#Naming
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string
+	 */
+	const THEME_EXCEPTIONS_REGEX = '`
+		^                    # Anchor to the beginning of the string.
+		(?:
+			(?:archive|embed|single|taxonomy) # Template prefixes which can have exceptions
+			-[^\.]+          # These need to be followed by a dash and some chars.
+		|
+			(?:application|audio|example|image|message|model|multipart|text|video) #Top-level mime-types
+			(?:_[^\.]+)?     # Optionally followed by an underscore and a sub-type.
+		)\.(?:php|inc)$      # End in .php (or .inc for the test files) and anchor to the end of the string.
+	`Dx';
+
+	/**
+	 * Whether the codebase being sniffed is a theme.
+	 *
+	 * If true, it will allow for certain typical theme specific exceptions to the filename rules.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var bool
+	 */
+	public $is_theme = false;
+
 	/**
 	 * Historical exceptions in WP core to the class name rule.
 	 *
@@ -78,7 +118,7 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 		/*
 		 * Generic check for lowercase hyphenated file names.
 		 */
-		if ( $fileName !== $expected ) {
+		if ( $fileName !== $expected && ( false === $this->is_theme || 1 !== preg_match( self::THEME_EXCEPTIONS_REGEX, $fileName ) ) ) {
 			$phpcsFile->addError(
 				'Filenames should be all lowercase with hyphens as word separators. Expected %s, but found %s.',
 				0,
