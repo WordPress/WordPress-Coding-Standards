@@ -308,7 +308,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			$start    = ( $bracketPtr + 1 );
 			for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
 				if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
-					$var_name .= trim( $this->tokens[ $ptr ]['content'], '\'"' );
+					$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
 				}
 			}
 

@@ -132,16 +132,16 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 
 			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
 			if ( ! is_numeric( $tokens[ $keyIdx ]['content'] ) ) {
-				$key            = trim( $tokens[ $keyIdx ]['content'], '\'"' );
+				$key            = $this->strip_quotes( $tokens[ $keyIdx ]['content'] );
 				$valStart       = $phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
 				$valEnd         = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 				$val            = $phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
-				$val            = trim( $val, '\'"' );
+				$val            = $this->strip_quotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
 		} elseif ( in_array( $token['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
 			// $foo = 'bar=taz&other=thing';
-			if ( preg_match_all( '#[\'"&]([a-z_]+)=([^\'"&]*)#i', $token['content'], $matches ) <= 0 ) {
+			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', $this->strip_quotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
 			}
 			foreach ( $matches[1] as $i => $_k ) {

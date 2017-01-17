@@ -980,7 +980,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 			// If we're able to resolve the function name, do so.
 			if ( false !== $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
-				$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
+				$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
 			}
 		}
 
