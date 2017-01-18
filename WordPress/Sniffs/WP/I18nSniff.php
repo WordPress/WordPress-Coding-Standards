@@ -16,7 +16,10 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
- * @since   0.11.0 Now also checks for translators comments.
+ * @since   0.11.0 - Now also checks for translators comments.
+ *                 - Now has the ability to handle text-domain set via the command-line
+ *                   as a comma-delimited list.
+ *                   `phpcs --runtime-set text_domain my-slug,default`
  */
 class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
@@ -77,15 +80,6 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	public $text_domain;
 
 	/**
-	 * Allow unit tests to override the supplied text_domain.
-	 *
-	 * @todo While it doesn't work, ideally this should be able to be done in \WordPress_Tests_WP_I18nUnitTest::setUp()
-	 *
-	 * @var array|string
-	 */
-	public static $text_domain_override;
-
-	/**
 	 * The I18N functions in use in WP.
 	 *
 	 * @var array <string function name> => <string function type>
@@ -143,9 +137,12 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$tokens = $phpcs_file->getTokens();
 		$token  = $tokens[ $stack_ptr ];
 
-		if ( ! empty( self::$text_domain_override ) ) {
-			$this->text_domain = self::$text_domain_override;
+		// Allow overruling the text_domain set in a ruleset via the command line.
+		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
+		if ( ! empty( $cl_text_domain ) ) {
+			$this->text_domain = $cl_text_domain;
 		}
+
 		if ( is_string( $this->text_domain ) ) {
 			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $this->text_domain ) ) );
 		}
