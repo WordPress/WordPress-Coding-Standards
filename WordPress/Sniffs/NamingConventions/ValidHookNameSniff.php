@@ -20,8 +20,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
+ * @since   0.11.0 Extends the WordPress_Sniff class.
  */
-class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Sniff {
 
 	/**
 	 * Additional word separators.
@@ -135,17 +136,17 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff implements PHP_CodeS
 			$expected[ $i ] = $tokens[ $i ]['content'];
 
 			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+				$string = $this->strip_quotes( $tokens[ $i ]['content'] );
+
 				/*
 				   Here be dragons - a double quoted string can contain extrapolated variables
 				   which don't have to comply with these rules.
 				 */
 				if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
-					$string          = trim( $tokens[ $i ]['content'], '"' );
 					$transform       = $this->transform_complex_string( $string, $regex );
 					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
 					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
 				} else {
-					$string          = trim( $tokens[ $i ]['content'], '\'"' );
 					$transform       = $this->transform( $string, $regex );
 					$case_transform  = $this->transform( $string, $regex, 'case' );
 					$punct_transform = $this->transform( $string, $regex, 'punctuation' );

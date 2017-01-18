@@ -303,7 +303,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( trim( $content, '\'""' ), $this->text_domain, true ) ) {
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
 				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
@@ -318,7 +318,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( trim( $content, '\'""' ), $this->text_domain, true ) ) {
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
 				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
@@ -435,7 +435,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		 *
 		 * Strip placeholders and surrounding quotes.
 		 */
-		$non_placeholder_content = trim( $content, "'" );
+		$non_placeholder_content = $this->strip_quotes( $content );
 		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $non_placeholder_content );
 
 		if ( empty( $non_placeholder_content ) ) {

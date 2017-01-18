@@ -15,8 +15,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
+ * @since   0.11.0 Extends the WordPress_Sniff class.
  */
-class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -44,7 +45,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		if ( 'cron_schedules' !== trim( $token['content'], '"\'' ) ) {
+		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
 			return;
 		}
 
@@ -76,7 +77,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 
 		// Search for the function in tokens.
 		if ( in_array( $tokens[ $callbackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-			$functionName = trim( $tokens[ $callbackPtr ]['content'], '"\'' );
+			$functionName = $this->strip_quotes( $tokens[ $callbackPtr ]['content'] );
 
 			foreach ( $tokens as $ptr => $_token ) {
 				if ( T_STRING === $_token['code'] && $_token['content'] === $functionName ) {
@@ -101,7 +102,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff implements PHP_CodeSniffer_Sniff {
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
 			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-				if ( 'interval' === trim( $tokens[ $i ]['content'], '\'"' ) ) {
+				if ( 'interval' === $this->strip_quotes( $tokens[ $i ]['content'] ) ) {
 					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( empty( $operator ) ) {
 						$this->confused( $phpcsFile, $stackPtr );

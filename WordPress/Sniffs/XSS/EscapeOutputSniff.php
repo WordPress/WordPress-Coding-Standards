@@ -312,7 +312,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 						// If we're able to resolve the function name, do so.
 						if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
-							$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
+							$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
 							$ptr = $mapped_function;
 						}
 					}
