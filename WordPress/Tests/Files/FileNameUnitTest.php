@@ -12,17 +12,89 @@
  *
  * @package WPCS\WordPressCodingStandards
  * @since   2013-06-11
+ * @since   0.11.0     Actually added tests ;-)
  */
 class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 
 	/**
+	 * Error files with the expected nr of errors.
+	 *
+	 * @var array
+	 */
+	private $expected_results = array(
+
+		/*
+		 * In /FileNameUnitTests.
+		 */
+
+		// File names generic.
+		'some_file.inc' => 1,
+		'SomeFile.inc'  => 1,
+		'some-File.inc' => 1,
+
+		// Class file names.
+		'my-class.inc'              => 1,
+		'class-different-class.inc' => 1,
+		'ClassMyClass.inc'          => 2,
+
+		// Theme specific exceptions in a non-theme context.
+		'single-my_post_type.inc'                    => 1,
+		'taxonomy-post_format-post-format-audio.inc' => 1,
+
+		/*
+		 * In /FileNameUnitTests/ThemeExceptions.
+		 */
+
+		// Files in a theme context.
+		'front_page.inc'       => 1,
+		'FrontPage.inc'        => 1,
+		'author-nice_name.inc' => 1,
+
+		/*
+		 * In /FileNameUnitTests/wp-includes.
+		 */
+
+		// Files containing template tags.
+		'general.inc' => 1,
+
+		// Fall-back file in case glob() fails.
+		'FileNameUnitTest.inc' => 1,
+	);
+
+	/**
+	 * Get a list of all test files to check.
+	 *
+	 * @param string $testFileBase The base path that the unit tests files will have.
+	 *
+	 * @return string[]
+	 */
+	protected function getTestFiles( $testFileBase ) {
+		$sep             = DIRECTORY_SEPARATOR;
+		$test_files      = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . 'ThemeExceptions' . $sep . ',' . $sep . 'wp-includes' . $sep . '}*.inc', GLOB_BRACE );
+
+		if ( ! empty( $test_files ) ) {
+			return $test_files;
+		}
+
+		return array( $testFileBase . '.inc' );
+
+	} // End getTestFiles().
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
-		return array();
+	public function getErrorList( $testFile = '' ) {
 
+		if ( isset( $this->expected_results[ $testFile ] ) ) {
+			return array(
+				1 => $this->expected_results[ $testFile ],
+			);
+		}
+
+		return array();
 	}
 
 	/**
