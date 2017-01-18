@@ -169,3 +169,40 @@ if ( $foo ) {
 
 }
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+// Check for too many spaces as long as the next non-blank token is on the same line.
+function test( $blah ) {} // Bad.
+function(   $bar ) {}  // Bad.
+
+if ( 'abc' === $test ) { // Bad.
+	echo 'hi';
+} elseif ( false === $foo ) { // Bad.
+	echo 'bye';
+}
+
+do {
+	echo 'hi';
+} while ( $blah ); // Bad.
+
+while ( $blah ) { // Bad.
+	echo 'bye bye';
+}
+
+for ( $i = 0; $i < 1; $++ ) { // Bad.
+	echo 'hi';
+}
+
+foreach ( $foo as $bar ) { // Bad.
+	echo 'hi';
+}
+
+if (
+	'abc' === $test
+) { // Ok.
+	echo 'hi';
+} elseif (
+	false === $foo
+	&& true === $bar
+) { // Ok.
+	echo 'bye';
+}
