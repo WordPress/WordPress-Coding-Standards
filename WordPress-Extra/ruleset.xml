@@ -15,7 +15,11 @@
 	<rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
 	<rule ref="Generic.Classes.DuplicateClassName"/>
-	<rule ref="Generic.Strings.UnnecessaryStringConcat"/>
+	<rule ref="Generic.Strings.UnnecessaryStringConcat">
+		<properties>
+			<property name="allowMultiline" value="true" />
+		</properties>
+	</rule>
 
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
