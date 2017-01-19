@@ -16,12 +16,11 @@
 class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Fill in the $text_domain_override property to test domain check functionality.
+	 * Fill in the $text_domain property to test domain check functionality.
 	 */
 	protected function setUp() {
-		// @todo Should be possible via self::$phpcs->setSniffProperty( 'WordPress_Sniffs_WP_I18nSniff', 'text_domain', 'my-slug' );
-		WordPress_Sniffs_WP_I18nSniff::$text_domain_override = array( 'my-slug', 'default' );
 		parent::setUp();
+		PHP_CodeSniffer::setConfigData( 'text_domain', 'my-slug,default', true );
 	}
 
 	/**
