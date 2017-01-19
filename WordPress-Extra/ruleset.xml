@@ -24,6 +24,10 @@
 	<rule ref="Squiz.Operators.ValidLogicalOperators"/>
 	<rule ref="Squiz.Functions.FunctionDuplicateArgument"/>
 
+	<!-- And even more generic PHP best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
+	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops" />
+
 	<!-- This sniff is not refined enough for general use -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
 	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
