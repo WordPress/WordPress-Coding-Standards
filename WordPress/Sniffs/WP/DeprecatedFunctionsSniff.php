@@ -1093,37 +1093,52 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 	/**
 	 * Groups of functions to restrict.
 	 *
-	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
-	 * )
-	 *
 	 * @return array
 	 */
 	public function getGroups() {
-		$groups = array();
-		foreach ( $this->deprecated_functions as $deprecated_function => $data ) {
-			$type = 'error';
-			if ( version_compare( $data['version'], $this->minimum_supported_version, '>=' ) ) {
-				$type = 'warning';
-			}
-			$message = '%s() has been deprecated since WordPress version ' . $data['version'] . '.';
-			if ( ! empty( $data['alt'] ) ) {
-				$message .= ' Use ' . $data['alt'] . ' instead.';
-			}
-			$groups[ $deprecated_function ] = array(
-				'type'      => $type,
-				'message'   => $message,
-				'functions' => array(
-					$deprecated_function,
-				),
-			);
+		// Make sure all array keys are lowercase.
+		$keys = array_keys( $this->deprecated_functions );
+		$keys = array_map( 'strtolower', $keys );
+		$this->deprecated_functions = array_combine( $keys, $this->deprecated_functions );
+
+		return array(
+			'deprecated_functions' => array(
+				'functions' => $keys,
+			),
+		);
+
+	} // End getGroups().
+
+	/**
+	 * Process a matched token.
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched. Will
+	 *                                always be 'deprecated_functions'.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 *
+	 * @return void
+	 */
+	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+		$function_name = strtolower( $matched_content );
+
+		$message = '%s() has been deprecated since WordPress version %s.';
+		$data    = array(
+			$matched_content,
+			$this->deprecated_functions[ $function_name ]['version'],
+		);
+
+		if ( ! empty( $this->deprecated_functions[ $function_name ]['alt'] ) ) {
+			$message .= ' Use %s instead.';
+			$data[]   = $this->deprecated_functions[ $function_name ]['alt'];
 		}
 
-		return $groups;
-	} // End getGroups()
+		if ( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_supported_version, '>=' ) ) {
+			$this->phpcsFile->addWarning( $message, $stackPtr, $matched_content . 'Found', $data );
+		} else {
+			$this->phpcsFile->addError( $message, $stackPtr, $matched_content . 'Found', $data );
+		}
+
+	} // End process_matched_token().
 
 }
