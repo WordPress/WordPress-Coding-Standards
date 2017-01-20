@@ -64,6 +64,18 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 	public $is_theme = false;
 
 	/**
+	 * Whether to apply strict class file name rules.
+	 *
+	 * If true, it demands that classes are prefixed with `class-` and that the rest of the
+	 * file name reflects the class name.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var bool
+	 */
+	public $strict_class_file_names = true;
+
+	/**
 	 * Historical exceptions in WP core to the class name rule.
 	 *
 	 * @since 0.11.0
@@ -131,41 +143,47 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 		unset( $expected );
 
 		/*
-		 * Check files containing a class for the "class-" prefix.
+		 * Check files containing a class for the "class-" prefix and that the rest of
+		 * the file name reflects the class name.
 		 */
-		$has_class = $phpcsFile->findNext( T_CLASS, $stackPtr );
-		if ( false !== $has_class ) {
-			$class_name = $phpcsFile->getDeclarationName( $has_class );
-			$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
+		if ( true === $this->strict_class_file_names ) {
+			$has_class = $phpcsFile->findNext( T_CLASS, $stackPtr );
+			if ( false !== $has_class ) {
+				$class_name = $phpcsFile->getDeclarationName( $has_class );
+				$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 
-			if ( substr( $fileName, 0, -4 ) !== $expected && ! isset( $this->class_exceptions[ $fileName ] ) ) {
-				$phpcsFile->addError(
-					'Class file names should be based on the class name with "class-" prepended. Expected %s, but found %s.',
-					0,
-					'InvalidClassFileName',
-					array(
-						$expected . '.php',
-						$fileName,
-					)
-				);
+				if ( substr( $fileName, 0, -4 ) !== $expected && ! isset( $this->class_exceptions[ $fileName ] ) ) {
+					$phpcsFile->addError(
+						'Class file names should be based on the class name with "class-" prepended. Expected %s, but found %s.',
+						0,
+						'InvalidClassFileName',
+						array(
+							$expected . '.php',
+							$fileName,
+						)
+					);
+				}
+				unset( $expected );
 			}
-			unset( $expected );
+		}
 
-		} elseif ( false !== strpos( $file, DIRECTORY_SEPARATOR . 'wp-includes' . DIRECTORY_SEPARATOR ) ) {
-			/*
-			 * Check files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
-			 */
+		/*
+		 * Check non-class files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
+		 */
+		if ( false !== strpos( $file, DIRECTORY_SEPARATOR . 'wp-includes' . DIRECTORY_SEPARATOR ) ) {
 			$subpackage_tag = $phpcsFile->findNext( T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
 			if ( false !== $subpackage_tag ) {
 				$subpackage = $phpcsFile->findNext( T_DOC_COMMENT_STRING, $subpackage_tag );
 				if ( false !== $subpackage ) {
 					$tokens       = $phpcsFile->getTokens();
 					$fileName_end = substr( $fileName, -13 );
+					$has_class    = $phpcsFile->findNext( T_CLASS, $stackPtr );
 
 					if ( ( 'Template' === trim( $tokens[ $subpackage ]['content'] )
 						&& $tokens[ $subpackage_tag ]['line'] === $tokens[ $subpackage ]['line'] )
 						&& ( ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
 						|| ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
+						&& false === $has_class
 					) {
 						$phpcsFile->addError(
 							'Files containing template tags should have "-template" appended to the end of the file name. Expected %s, but found %s.',

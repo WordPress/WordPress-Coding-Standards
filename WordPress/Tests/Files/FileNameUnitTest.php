@@ -42,6 +42,13 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 		'taxonomy-post_format-post-format-audio.inc' => 1,
 
 		/*
+		 * In /FileNameUnitTests/NonStrictClassNames.
+		 */
+
+		// Non-strict class names still have to comply with lowercase hyphenated.
+		'ClassNonStrictClass.inc' => 1,
+
+		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
 		 */
 
@@ -56,6 +63,10 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 
 		// Files containing template tags.
 		'general.inc' => 1,
+
+		/*
+		 * In /.
+		 */
 
 		// Fall-back file in case glob() fails.
 		'FileNameUnitTest.inc' => 1,
