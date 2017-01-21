@@ -134,7 +134,11 @@
 		<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 
 		<!-- Covers rule: Define a function like so: function my_function( $param1 = 'foo', $param2 = 'bar' ) { -->
-		<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+		<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
+			<properties>
+				<property name="checkClosures" value="true" />
+			</properties>
+		</rule>
 		<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
 			<properties>
 				<property name="equalsSpacing" value="1" />
