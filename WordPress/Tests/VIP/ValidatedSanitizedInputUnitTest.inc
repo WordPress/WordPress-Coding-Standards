@@ -115,3 +115,8 @@ output( "some string \\$_POST[some_var] $_GET[evil]" ); // Bad x2.
 
 echo esc_html( wp_strip_all_tags( wp_unslash( $_GET['a'] ) ) ); // Ok.
 
+// Test validation check vs anonymous functions.
+isset( $_POST['abc'] ); // Validation in global scope, not function scope.
+$b = function () {
+	return sanitize_text_field( wp_unslash( $_POST['abc'] ) ); // Error for no validation.
+};

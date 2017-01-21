@@ -760,8 +760,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// If we're in a function, only look inside of it.
 		$f = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
-		if ( $f ) {
+		if ( false !== $f ) {
 			$start = $tokens[ $f ]['scope_opener'];
+		} else {
+			$f = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			if ( false !== $f ) {
+				$start = $tokens[ $f ]['scope_opener'];
+			}
 		}
 
 		$in_isset = $this->is_in_isset_or_empty( $stackPtr );
@@ -1110,6 +1115,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			   in the same function/file scope as it is used.
 			 */
 
+			$scope_start = 0;
+
 			// Check if we are in a function.
 			$function = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
@@ -1117,7 +1124,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			if ( false !== $function ) {
 				$scope_start = $this->tokens[ $function ]['scope_opener'];
 			} else {
-				$scope_start = 0;
+				// Check if we are in a closure.
+				$closure = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+
+				// If so, we check only within the closure.
+				if ( false !== $closure ) {
+					$scope_start = $this->tokens[ $closure ]['scope_opener'];
+				}
 			}
 
 			$scope_end = $stackPtr;
@@ -1247,7 +1260,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// USE keywords for traits.
-		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_TRAIT ) ) ) {
+		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_TRAIT ) ) ) {
 			return 'trait';
 		}
 

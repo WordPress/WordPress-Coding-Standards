@@ -437,7 +437,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			// We ignore spacing for some structures that tend to have their own rules.
 			$ignore = array(
 				T_FUNCTION             => true,
+				T_CLOSURE              => true,
 				T_CLASS                => true,
+				T_ANON_CLASS           => true,
 				T_INTERFACE            => true,
 				T_TRAIT                => true,
 				T_DOC_COMMENT_OPEN_TAG => true,
@@ -536,7 +538,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			// Another control structure's closing brace.
 			if ( isset( $this->tokens[ $trailingContent ]['scope_condition'] ) ) {
 				$owner = $this->tokens[ $trailingContent ]['scope_condition'];
-				if ( in_array( $this->tokens[ $owner ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+				if ( in_array( $this->tokens[ $owner ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
 					// The next content is the closing brace of a function, class, interface or trait
 					// so normal function/class rules apply and we can ignore it.
 					return;

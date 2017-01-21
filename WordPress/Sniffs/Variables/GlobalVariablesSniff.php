@@ -374,7 +374,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
 				// If the global statement was in the global scope, skip over functions, classes and the likes.
-				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
 					if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
 						// Live coding, skip the rest of the file.
 						return;
