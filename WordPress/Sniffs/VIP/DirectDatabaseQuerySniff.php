@@ -203,7 +203,11 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 		if ( ! $whitelisted_cache && ! empty( $tokens[ $stackPtr ]['conditions'] ) ) {
 			$scope_function = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
-			if ( $scope_function ) {
+			if ( false === $scope_function ) {
+				$scope_function = $phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			}
+
+			if ( false !== $scope_function ) {
 				$scopeStart = $tokens[ $scope_function ]['scope_opener'];
 				$scopeEnd   = $tokens[ $scope_function ]['scope_closer'];
 

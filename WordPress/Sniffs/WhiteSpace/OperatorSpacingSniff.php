@@ -74,7 +74,9 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 				$bracket = end( $tokens[ $stackPtr ]['nested_parenthesis'] );
 				if ( isset( $tokens[ $bracket ]['parenthesis_owner'] ) ) {
 					$function = $tokens[ $bracket ]['parenthesis_owner'];
-					if ( T_FUNCTION === $tokens[ $function ]['code'] ) {
+					if ( T_FUNCTION === $tokens[ $function ]['code']
+						|| T_CLOSURE === $tokens[ $function ]['code']
+					) {
 						return;
 					}
 				}
