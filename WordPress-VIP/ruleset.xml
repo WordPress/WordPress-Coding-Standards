@@ -36,7 +36,11 @@
 	<rule ref="Squiz.PHP.CommentedOutCode" />
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
-	<rule ref="WordPress.PHP.RestrictedFunctions" />
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.Eval.Discouraged">
+		<type>error</type>
+		<message>eval() is a security risk so not allowed.</message>
+	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#serializing-data -->

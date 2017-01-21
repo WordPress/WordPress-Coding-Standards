@@ -77,7 +77,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 *     'lambda' => array(
 	 *         'type'      => 'error' | 'warning',
 	 *         'message'   => 'Use anonymous functions instead please!',
-	 *         'functions' => array( 'eval', 'create_function', 'mysql_*' ),
+	 *         'functions' => array( 'file_get_contents', 'create_function', 'mysql_*' ),
 	 *         // Only useful when using wildcards:
 	 *         'whitelist' => array( 'mysql_to_rfc3339' => true, ),
 	 *     )
@@ -105,7 +105,6 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 
 		return array(
 			T_STRING,
-			T_EVAL,
 		);
 	}
 
