@@ -117,3 +117,15 @@ class Test_Class_D extends My_TestClass {
 	}
 }
 // @codingStandardsChangeSetting WordPress.Variables.GlobalVariables custom_test_class_whitelist null
+
+// Test detecting within and skipping over anonymous classes.
+global $year;
+add_filter( 'comments_open', new class {
+	public $year = 2017; // Ok.
+
+	public function __construct( $open, $post_id ) {
+		global $page;
+		$page = get_post( $post_id ); // Bad.
+		return 'page' === $page->post_type;
+	}
+}, 10, 2 );

@@ -41,10 +41,11 @@ class WordPress_Tests_VIP_DirectDatabaseQueryUnitTest extends AbstractSniffUnitT
 	 */
 	public function getWarningList() {
 		return array(
-			6  => 1,
-			17 => 1,
-			38 => 1,
-			50 => 1,
+			6   => 1,
+			17  => 1,
+			38  => 1,
+			50  => 1,
+			112 => 1,
 		);
 
 	}

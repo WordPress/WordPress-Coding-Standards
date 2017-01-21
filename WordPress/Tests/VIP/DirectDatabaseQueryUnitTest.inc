@@ -103,3 +103,15 @@ function cache_add_instead_of_set() {
 		wp_cache_add( 'baz', $baz );
 	}
 }
+
+// Database calls in a closure.
+$b = function () {
+	global $wpdb;
+
+	if ( ! ( $listofthings = wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning.
+		wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+};

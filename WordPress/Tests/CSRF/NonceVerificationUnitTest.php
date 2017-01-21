@@ -23,15 +23,17 @@ class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTe
 	public function getErrorList() {
 
 		return array(
-			5 => 1,
-			9 => 1,
-			31 => 1,
-			44 => 1,
-			48 => 1,
-			69 => 1,
-			89 => 1,
+			5   => 1,
+			9   => 1,
+			31  => 1,
+			44  => 1,
+			48  => 1,
+			69  => 1,
+			89  => 1,
 			113 => 1,
 			114 => 1,
+			122 => 1,
+			126 => 1,
 		);
 	}
 
