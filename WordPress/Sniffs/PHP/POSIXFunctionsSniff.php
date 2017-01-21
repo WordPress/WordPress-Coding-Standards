@@ -28,7 +28,7 @@ class WordPress_Sniffs_PHP_POSIXFunctionsSniff extends WordPress_AbstractFunctio
 	 * 	'lambda' => array(
 	 * 		'type'      => 'error' | 'warning',
 	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
 	 * 	)
 	 * )
 	 *

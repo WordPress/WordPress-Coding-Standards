@@ -53,10 +53,15 @@
 		<!-- WP core still supports PHP 5.2+  -->
 		<exclude name="WordPress.WP.DiscouragedFunctions.create_function" />
 	</rule>
-	<rule ref="WordPress.PHP.RestrictedFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="WordPress.WP.AlternativeFunctions"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
+
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.Eval.Discouraged">
+		<type>error</type>
+		<message>eval() is a security risk so not allowed.</message>
+	</rule>
 
 	<!-- Scripts & style should be enqueued.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/35 -->

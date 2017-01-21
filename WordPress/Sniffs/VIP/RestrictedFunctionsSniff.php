@@ -23,8 +23,7 @@
  *                 moved to the stand-alone sniff WordPress_Sniffs_PHP_DevelopmentFunctionsSniff.
  *                 The check for `parse_url()` and `curl_*` have been moved to the stand-alone sniff
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
- *                 The check for `eval()` has been moved to the stand-alone sniff
- *                 WordPress_Sniffs_PHP_RestrictedFunctionsSniff.
+ *                 The check for `eval()` now defers to the upstream Squiz.PHP.Eval sniff.
  */
 class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
@@ -35,7 +34,7 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 	 * 	'lambda' => array(
 	 * 		'type'      => 'error' | 'warning',
 	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
 	 * 	)
 	 * )
 	 *
