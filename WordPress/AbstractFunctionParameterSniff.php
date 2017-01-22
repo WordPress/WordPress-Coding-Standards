@@ -29,8 +29,9 @@ abstract class WordPress_AbstractFunctionParameterSniff extends WordPress_Abstra
 	 * Functions this sniff is looking for. Should be defined in the child class.
 	 *
 	 * @var array The only requirement for this array is that the top level
-	 * array keys are the names of the functions you're looking for.
-	 * Other than that, the array can have arbitrary content depending on your needs.
+	 *            array keys are the names of the functions you're looking for.
+	 *            Other than that, the array can have arbitrary content
+	 *            depending on your needs.
 	 */
 	protected $target_functions = array();
 

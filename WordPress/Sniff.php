@@ -1391,10 +1391,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Expects to be passed the T_STRING stack pointer for the function call.
 	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
 	 *
-	 * Will return an multi-dimentional array with the start token pointer, end token
-	 * pointer and raw parameter value for all parameters. Index will be 1-based.
-	 * If no parameters are found, will return an empty array.
-	 *
 	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
 	 * it will tokenize the values / key/value pairs contained in the array call.
 	 *
@@ -1402,7 +1398,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @param int $stackPtr The position of the function call token.
 	 *
-	 * @return array
+	 * @return array Multi-dimentional array with parameter details or
+	 *               empty array if no parameter are found.
+	 *
+	 *               @type int $position 1-based index position of the parameter. {
+	 *                   @type int $start Stack pointer for the start of the parameter.
+	 *                   @type int $end   Stack pointer for the end of parameter.
+	 *                   @type int $raw   Trimmed raw parameter content.
+	 *               }
 	 */
 	public function get_function_call_parameters( $stackPtr ) {
 		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
