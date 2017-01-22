@@ -57,8 +57,9 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+		$this->init( $phpcsFile );
+
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
 			return;
@@ -66,7 +67,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 
 		// If within add_filter.
 		$functionPtr = $phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
-		if ( 'add_filter' !== $tokens[ $functionPtr ]['content'] ) {
+		if ( 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
 			return;
 		}
 
@@ -74,16 +75,16 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		$callbackPtr = $phpcsFile->findNext( array( T_COMMA, T_WHITESPACE ), ( $stackPtr + 1 ), null, true, null, true );
 
 		// If callback is array, get second element.
-		if ( T_ARRAY === $tokens[ $callbackPtr ]['code'] ) {
+		if ( T_ARRAY === $this->tokens[ $callbackPtr ]['code'] ) {
 			$comma = $phpcsFile->findNext( T_COMMA, ( $callbackPtr + 1 ) );
 			if ( false === $comma ) {
-				$this->confused( $phpcsFile, $stackPtr );
+				$this->confused( $stackPtr );
 				return;
 			}
 
 			$callbackPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $comma + 1 ), null, true, null, true );
 			if ( false === $callbackPtr ) {
-				$this->confused( $phpcsFile, $stackPtr );
+				$this->confused( $stackPtr );
 				return;
 			}
 		}
@@ -91,20 +92,20 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		$functionPtr = null;
 
 		// Search for the function in tokens.
-		if ( in_array( $tokens[ $callbackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-			$functionName = $this->strip_quotes( $tokens[ $callbackPtr ]['content'] );
+		if ( in_array( $this->tokens[ $callbackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+			$functionName = $this->strip_quotes( $this->tokens[ $callbackPtr ]['content'] );
 
-			foreach ( $tokens as $ptr => $_token ) {
+			foreach ( $this->tokens as $ptr => $_token ) {
 				if ( T_STRING === $_token['code'] && $_token['content'] === $functionName ) {
 					$functionPtr = $ptr;
 				}
 			}
-		} elseif ( T_CLOSURE === $tokens[ $callbackPtr ]['code'] ) { // Closure.
+		} elseif ( T_CLOSURE === $this->tokens[ $callbackPtr ]['code'] ) { // Closure.
 			$functionPtr = $callbackPtr;
 		}
 
 		if ( is_null( $functionPtr ) ) {
-			$this->confused( $phpcsFile, $stackPtr );
+			$this->confused( $stackPtr );
 			return;
 		}
 
@@ -113,14 +114,14 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			return;
 		}
 
-		$closing = $tokens[ $opening ]['bracket_closer'];
+		$closing = $this->tokens[ $opening ]['bracket_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
-			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-				if ( 'interval' === $this->strip_quotes( $tokens[ $i ]['content'] ) ) {
+			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+				if ( 'interval' === $this->strip_quotes( $this->tokens[ $i ]['content'] ) ) {
 					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( empty( $operator ) ) {
-						$this->confused( $phpcsFile, $stackPtr );
+						$this->confused( $stackPtr );
 					}
 
 					$valueStart = $phpcsFile->findNext( T_WHITESPACE, ( $operator + 1 ), null, true, null, true );
@@ -141,7 +142,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 						break;
 					}
 
-					$this->confused( $phpcsFile, $stackPtr );
+					$this->confused( $stackPtr );
 					return;
 				}
 			}
@@ -157,12 +158,10 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 	/**
 	 * Add warning about unclear cron schedule change.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 */
-	public function confused( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$phpcsFile->addWarning(
+	public function confused( $stackPtr ) {
+		$this->phpcsFile->addWarning(
 			'Detected changing of cron_schedules, but could not detect the interval value.',
 			$stackPtr,
 			'ChangeDetected'
