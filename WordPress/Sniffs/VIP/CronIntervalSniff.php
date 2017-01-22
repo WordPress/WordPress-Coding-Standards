@@ -15,9 +15,24 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.11.0 Extends the WordPress_Sniff class.
+ * @since   0.11.0 - Extends the WordPress_Sniff class.
+ *                 - Now deals correctly with WP time constants.
  */
 class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
+
+	/**
+	 * Known WP Time constant names and their value.
+	 *
+	 * @var array
+	 */
+	protected $wp_time_constants = array(
+		'MINUTE_IN_SECONDS' => 60,
+		'HOUR_IN_SECONDS'   => 3600,
+		'DAY_IN_SECONDS'    => 86400,
+		'WEEK_IN_SECONDS'   => 604800,
+		'MONTH_IN_SECONDS'  => 2592000,
+		'YEAR_IN_SECONDS'   => 31536000,
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -116,6 +131,9 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 						$interval = $value;
 						break;
 					}
+
+					// Deal correctly with WP time constants.
+					$value = str_replace( array_keys( $this->wp_time_constants ), array_values( $this->wp_time_constants ), $value );
 
 					// If all digits and operators, eval!
 					if ( preg_match( '#^[\s\d\+\*\-\/]+$#', $value ) > 0 ) {
