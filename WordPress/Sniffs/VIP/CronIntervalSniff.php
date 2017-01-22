@@ -109,12 +109,12 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			return;
 		}
 
-		$opening = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $functionPtr );
-		if ( false === $opening ) {
+		if ( ! isset( $this->tokens[ $functionPtr ]['scope_opener'], $this->tokens[ $functionPtr ]['scope_closer'] ) ) {
 			return;
 		}
 
-		$closing = $this->tokens[ $opening ]['bracket_closer'];
+		$opening = $this->tokens[ $functionPtr ]['scope_opener'];
+		$closing = $this->tokens[ $functionPtr ]['scope_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
 			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
