@@ -28,8 +28,8 @@ matrix:
     # Run against HHVM and PHP nightly.
     - php: hhvm
       sudo: required
-      dist: trusty 
-      group: edge 
+      dist: trusty
+      group: edge
       env: PHPCS_BRANCH=master
     - php: nightly
       env: PHPCS_BRANCH=master
@@ -48,6 +48,8 @@ before_script:
 script:
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
     - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
+    # Test the XML rulesets.
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -q ./bin/functions.php  --standard=WordPress; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
