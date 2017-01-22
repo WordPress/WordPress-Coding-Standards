@@ -20,9 +20,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
- * @since   0.11.0 Extends the WordPress_Sniff class.
+ * @since   0.11.0 Extends the WordPress_AbstractFunctionParameterSniff class.
  */
-class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Sniff {
+class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_AbstractFunctionParameterSniff {
 
 	/**
 	 * Additional word separators.
@@ -59,90 +59,58 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Sn
 	protected $punctuation_regex = '`[^\w%s]`';
 
 	/**
-	 * Register this sniff.
+	 * Groups of function to restrict.
 	 *
-	 * Prepares the punctuation regex and returns an array of tokens this test wants to listen for.
+	 * @since 0.11.0
 	 *
 	 * @return array
 	 */
-	public function register() {
-		return array(
-			T_STRING,
-		);
-
+	public function getGroups() {
+		$this->target_functions = WordPress_Sniff::$hookInvokeFunctions;
+		return parent::getGroups();
 	}
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Process the parameters of a matched function.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @since 0.11.0
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
-		$regex  = $this->prepare_regex();
-
-		// Check if one of the hook functions was found.
-		if ( ! isset( WordPress_Sniff::$hookInvokeFunctions[ $token['content'] ] ) ) {
-			return;
-		}
-
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		// Ignore deprecated hook names.
-		if ( strpos( $token['content'], '_deprecated' ) > 0 ) {
+		if ( strpos( $matched_content, '_deprecated' ) > 0 ) {
 			return;
 		}
 
-		$prev = $phpcsFile->findPrevious( T_WHITESPACE, ( $stackPtr - 1 ), null, true );
-
-		if ( false !== $prev ) {
-			// Skip sniffing if calling a same-named method, or on function definitions.
-			if ( in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_DOUBLE_COLON, T_OBJECT_OPERATOR ), true ) ) {
-				return;
-			}
-
-			// Skip namespaced functions, ie: \foo\bar() not \bar().
-			$pprev = $phpcsFile->findPrevious( T_WHITESPACE, ( $prev - 1 ), null, true );
-			if ( false !== $pprev && T_NS_SEPARATOR === $tokens[ $prev ]['code'] && T_STRING === $tokens[ $pprev ]['code'] ) {
-				return;
-			}
+		if ( ! isset( $parameters[1] ) ) {
+			return;
 		}
-		unset( $prev, $pprev );
 
-		/*
-		   Ok, so we have a proper hook call, let's find the position of the tokens
-		   which together comprise the hook name.
-		 */
-		$start = $phpcsFile->findNext( array( T_WHITESPACE, T_OPEN_PARENTHESIS ), ( $stackPtr + 1 ), null, true, null, true );
-		$open  = $phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $stackPtr + 1 ), null, false, null, true );
-		$end   = $phpcsFile->findNext( T_COMMA, ( $start + 1 ), null, false, null, true );
-		if ( false === $end || $end > $tokens[ $open ]['parenthesis_closer'] ) {
-			$end = $tokens[ $open ]['parenthesis_closer'];
-		}
-		if ( T_WHITESPACE === $tokens[ ( $end - 1 ) ]['code'] ) {
-			$end--;
-		}
+		$regex  = $this->prepare_regex();
 
 		$case_errors = 0;
 		$underscores = 0;
 		$content     = array();
 		$expected    = array();
 
-		for ( $i = $start; $i < $end; $i++ ) {
-			$content[ $i ]  = $tokens[ $i ]['content'];
-			$expected[ $i ] = $tokens[ $i ]['content'];
+		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+			$content[ $i ]  = $this->tokens[ $i ]['content'];
+			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-				$string = $this->strip_quotes( $tokens[ $i ]['content'] );
+			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
 
 				/*
 				   Here be dragons - a double quoted string can contain extrapolated variables
 				   which don't have to comply with these rules.
 				 */
-				if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
+				if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
 					$transform       = $this->transform_complex_string( $string, $regex );
 					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
 					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
@@ -156,7 +124,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Sn
 					continue;
 				}
 
-				if ( T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
+				if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
 					$expected[ $i ] = '"' . $transform . '"';
 				} else {
 					$expected[ $i ] = '\'' . $transform . '\'';
@@ -178,11 +146,11 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Sn
 
 		if ( $case_errors > 0 ) {
 			$error = 'Hook names should be lowercase. Expected: %s, but found: %s.';
-			$phpcsFile->addError( $error, $stackPtr, 'NotLowercase', $data );
+			$this->phpcsFile->addError( $error, $stackPtr, 'NotLowercase', $data );
 		}
 		if ( $underscores > 0 ) {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
-			$phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
+			$this->phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
 		}
 
 	} // End process().
