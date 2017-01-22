@@ -22,10 +22,13 @@ class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			10 => 1,
-			15 => 1,
-			35 => 1,
-			39 => 1,
+			12 => 1,
+			17 => 1,
+			37 => 1,
+			43 => 1,
+			53 => 1,
+			56 => 1, // False positive.
+			67 => 1,
 		);
 
 	}
@@ -37,7 +40,9 @@ class WordPress_Tests_VIP_CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			37 => 1,
+			39 => 1,
+			41 => 1,
+			76 => 1,
 		);
 
 	}
