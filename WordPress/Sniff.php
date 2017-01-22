@@ -1291,4 +1291,224 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		return $variables;
 	}
 
+	/**
+	 * Checks if a function call has parameters.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer, it
+	 * will detect whether the array has values or is empty.
+	 *
+	 * @link https://github.com/wimg/PHPCompatibility/issues/120
+	 * @link https://github.com/wimg/PHPCompatibility/issues/152
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return bool
+	 */
+	public function does_function_call_have_parameters( $stackPtr ) {
+
+		// Check for the existence of the token.
+		if ( false === isset( $this->tokens[ $stackPtr ] ) ) {
+			return false;
+		}
+
+		// Is this one of the tokens this function handles ?
+		if ( false === in_array( $this->tokens[ $stackPtr ]['code'], array( T_STRING, T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
+			return false;
+		}
+
+		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+
+		// Deal with short array syntax.
+		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
+			if ( false === isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+				return false;
+			}
+
+			if ( $next_non_empty === $this->tokens[ $stackPtr ]['bracket_closer'] ) {
+				// No parameters.
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		// Deal with function calls & long arrays.
+		// Next non-empty token should be the open parenthesis.
+		if ( false === $next_non_empty && T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code'] ) {
+			return false;
+		}
+
+		if ( false === isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$close_parenthesis   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
+		$next_next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
+
+		if ( $next_next_non_empty === $close_parenthesis ) {
+			// No parameters.
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Count the number of parameters a function call has been passed.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
+	 * it will return the number of values in the array.
+	 *
+	 * @link https://github.com/wimg/PHPCompatibility/issues/111
+	 * @link https://github.com/wimg/PHPCompatibility/issues/114
+	 * @link https://github.com/wimg/PHPCompatibility/issues/151
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return int
+	 */
+	public function get_function_call_parameter_count( $stackPtr ) {
+		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
+			return 0;
+		}
+
+		return count( $this->get_function_call_parameters( $stackPtr ) );
+	}
+
+	/**
+	 * Get information on all parameters passed to a function call.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Will return an multi-dimentional array with the start token pointer, end token
+	 * pointer and raw parameter value for all parameters. Index will be 1-based.
+	 * If no parameters are found, will return an empty array.
+	 *
+	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
+	 * it will tokenize the values / key/value pairs contained in the array call.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return array
+	 */
+	public function get_function_call_parameters( $stackPtr ) {
+		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
+			return array();
+		}
+
+		/*
+		 * Ok, we know we have a T_STRING, T_ARRAY or T_OPEN_SHORT_ARRAY with parameters
+		 * and valid open & close brackets/parenthesis.
+		 */
+
+		// Mark the beginning and end tokens.
+		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
+			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+
+			$nestedParenthesisCount = 0;
+		} else {
+			$opener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+			$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+
+			$nestedParenthesisCount = 1;
+		}
+
+		// Which nesting level is the one we are interested in ?
+		if ( isset( $this->tokens[ $opener ]['nested_parenthesis'] ) ) {
+			$nestedParenthesisCount += count( $this->tokens[ $opener ]['nested_parenthesis'] );
+		}
+
+		$parameters  = array();
+		$next_comma  = $opener;
+		$param_start = ( $opener + 1 );
+		$cnt         = 1;
+		while ( $next_comma = $this->phpcsFile->findNext( array( T_COMMA, $this->tokens[ $closer ]['code'], T_OPEN_SHORT_ARRAY ), ( $next_comma + 1 ), ( $closer + 1 ) ) ) {
+			// Ignore anything within short array definition brackets.
+			if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $next_comma ]['type']
+				&& ( isset( $this->tokens[ $next_comma ]['bracket_opener'] )
+					&& $this->tokens[ $next_comma ]['bracket_opener'] === $next_comma )
+				&& isset( $this->tokens[ $next_comma ]['bracket_closer'] )
+			) {
+				// Skip forward to the end of the short array definition.
+				$next_comma = $this->tokens[ $next_comma ]['bracket_closer'];
+				continue;
+			}
+
+			// Ignore comma's at a lower nesting level.
+			if ( T_COMMA === $this->tokens[ $next_comma ]['code']
+				&& isset( $this->tokens[ $next_comma ]['nested_parenthesis'] )
+				&& count( $this->tokens[ $next_comma ]['nested_parenthesis'] ) !== $nestedParenthesisCount
+			) {
+				continue;
+			}
+
+			// Ignore closing parenthesis/bracket if not 'ours'.
+			if ( $this->tokens[ $next_comma ]['type'] === $this->tokens[ $closer ]['type'] && $next_comma !== $closer ) {
+				continue;
+			}
+
+			// Ok, we've reached the end of the parameter.
+			$parameters[ $cnt ]['start'] = $param_start;
+			$parameters[ $cnt ]['end']   = ( $next_comma - 1 );
+			$parameters[ $cnt ]['raw']   = trim( $this->phpcsFile->getTokensAsString( $param_start, ( $next_comma - $param_start ) ) );
+
+			/*
+			 * Check if there are more tokens before the closing parenthesis.
+			 * Prevents code like the following from setting a third parameter:
+			 * functionCall( $param1, $param2, );
+			 */
+			$has_next_param = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
+			if ( false === $has_next_param ) {
+				break;
+			}
+
+			// Prepare for the next parameter.
+			$param_start = ( $next_comma + 1 );
+			$cnt++;
+		} // End while().
+
+		return $parameters;
+	}
+
+	/**
+	 * Get information on a specific parameter passed to a function call.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Will return a array with the start token pointer, end token pointer and the raw value
+	 * of the parameter at a specific offset.
+	 * If the specified parameter is not found, will return false.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr     The position of the function call token.
+	 * @param int $param_offset The 1-based index position of the parameter to retrieve.
+	 *
+	 * @return array|false
+	 */
+	public function get_function_call_parameter( $stackPtr, $param_offset ) {
+		$parameters = $this->get_function_call_parameters( $stackPtr );
+
+		if ( false === isset( $parameters[ $param_offset ] ) ) {
+			return false;
+		}
+
+		return $parameters[ $param_offset ];
+	}
+
 }
