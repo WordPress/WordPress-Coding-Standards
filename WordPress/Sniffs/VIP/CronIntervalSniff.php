@@ -147,7 +147,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			}
 		}
 
-		if ( isset( $interval ) && $interval < ( 15 * 60 ) ) {
+		if ( isset( $interval ) && $interval < 900 ) {
 			$phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'CronSchedulesInterval', array( $interval ) );
 			return;
 		}
