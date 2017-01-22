@@ -121,7 +121,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			}
 		}
 
-		if ( is_null( $functionPtr ) ) {
+		if ( ! isset( $functionPtr ) ) {
 			$this->confused( $stackPtr );
 			return;
 		}
@@ -137,8 +137,9 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
 				if ( 'interval' === $this->strip_quotes( $this->tokens[ $i ]['content'] ) ) {
 					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
-					if ( empty( $operator ) ) {
+					if ( false === $operator ) {
 						$this->confused( $stackPtr );
+						return;
 					}
 
 					$valueStart = $phpcsFile->findNext( T_WHITESPACE, ( $operator + 1 ), null, true, null, true );
