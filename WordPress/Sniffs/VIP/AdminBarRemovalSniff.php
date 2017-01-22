@@ -22,6 +22,15 @@
 class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFunctionParameterSniff {
 
 	/**
+	 * A list of tokenizers this sniff supports.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var array
+	 */
+	public $supportedTokenizers = array( 'PHP', 'CSS' );
+
+	/**
 	 * Whether or not the sniff only checks for removal of the admin bar
 	 * or any manipulation to the visibility of the admin bar.
 	 *
@@ -133,6 +142,9 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 
 		$this->string_tokens = $targets;
 
+		// Add CSS style target.
+		$targets[] = T_STYLE;
+
 		// Set the target selectors regex only once.
 		$selectors = array_map( 'preg_quote', $this->target_css_selectors, array_fill( 0, count( $this->target_css_selectors ), '`' ) );
 		$this->target_css_selectors_regex = sprintf( $this->target_css_selectors_regex, implode( '|', $selectors ) );
@@ -159,7 +171,13 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 		$this->init( $phpcsFile );
 
 		$file_name      = $phpcsFile->getFileName();
-		if ( isset( $this->string_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
+		$file_extension = substr( strrchr( $file_name, '.' ), 1 );
+
+		if ( 'css' === $file_extension ) {
+			if ( T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
+				$this->process_css_style( $stackPtr );
+			}
+		} elseif ( isset( $this->string_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 			/*
 			 * Set $in_style && $in_target_selector to false if it is the first time
 			 * this sniff is run on a file.
@@ -311,6 +329,59 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 							if ( true === $valid ) {
 								$error = false;
 							}
+						}
+					}
+
+					if ( true === $error ) {
+						$this->phpcsFile->addError( 'Hiding of the admin bar is not allowed.', $stackPtr, 'HidingDetected' );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Processes this test for T_STYLE tokens in CSS files.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr  The position of the current token in the stack passed in $tokens.
+	 *
+	 * @return void
+	 */
+	protected function process_css_style( $stackPtr ) {
+		if ( ! isset( $this->target_css_properties[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
+			// Not one of the CSS properties we're interested in.
+			return;
+		}
+
+		$css_property = $this->target_css_properties[ $this->tokens[ $stackPtr ]['content'] ];
+
+		// Check if the CSS selector matches.
+		$opener = $this->phpcsFile->findPrevious( T_OPEN_CURLY_BRACKET, $stackPtr );
+		if ( false !== $opener ) {
+			for ( $i = ( $opener - 1 ); $i >= 0; $i-- ) {
+				if ( isset( PHP_CodeSniffer_Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
+					|| T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
+				) {
+					break;
+				}
+			}
+			$start = ( $i + 1 );
+			$selector = trim( $this->phpcsFile->getTokensAsString( $start, ( $opener - $start ) ) );
+			unset( $i );
+
+			foreach ( $this->target_css_selectors as $target_selector ) {
+				if ( false !== strpos( $selector, $target_selector ) ) {
+					$error = true;
+
+					if ( true === $this->remove_only ) {
+						// Check the value of the CSS property.
+						$valuePtr = $this->phpcsFile->findNext( array( T_COLON, T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
+						$value    = $this->tokens[ $valuePtr ]['content'];
+						$valid    = $this->validate_css_property_value( $value, $css_property['type'], $css_property['value'] );
+						if ( true === $valid ) {
+							$error = false;
 						}
 					}
 
