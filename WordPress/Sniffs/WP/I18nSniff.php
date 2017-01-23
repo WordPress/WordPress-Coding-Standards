@@ -109,6 +109,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * Intended to make this part of the sniff unit testable, but can be used by end-users too,
 	 * though they can just as easily disable this via the sniff code.
 	 *
+	 * @since 0.11.0
+	 *
 	 * @var bool
 	 */
 	public $check_translator_comments = true;
@@ -443,6 +445,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	/**
 	 * Check for the presence of a translators comment if one of the text strings contains a placeholder.
 	 *
+	 * @since 0.11.0
+	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
 	 * @param int                  $stack_ptr  The position of the gettext call token
 	 *                                         in the stack.
@@ -541,6 +545,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 	/**
 	 * Check if a (collated) comment string starts with 'translators:'.
+	 *
+	 * @since 0.11.0
 	 *
 	 * @param string $content Comment string content.
 	 * @return bool
