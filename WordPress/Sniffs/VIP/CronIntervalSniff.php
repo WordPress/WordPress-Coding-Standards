@@ -71,37 +71,54 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			return;
 		}
 
+		$callback = $this->get_function_call_parameter( $functionPtr, 2 );
+		if ( false === $callback ) {
+			return;
+		}
+
 		// Detect callback function name.
-		$callbackPtr = $phpcsFile->findNext( array( T_COMMA, T_WHITESPACE ), ( $stackPtr + 1 ), null, true, null, true );
+		$callbackArrayPtr = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
 
 		// If callback is array, get second element.
-		if ( T_ARRAY === $this->tokens[ $callbackPtr ]['code'] ) {
-			$comma = $phpcsFile->findNext( T_COMMA, ( $callbackPtr + 1 ) );
-			if ( false === $comma ) {
-				$this->confused( $stackPtr );
-				return;
-			}
+		if ( false !== $callbackArrayPtr
+			&& ( T_ARRAY === $this->tokens[ $callbackArrayPtr ]['code']
+				|| T_OPEN_SHORT_ARRAY === $this->tokens[ $callbackArrayPtr ]['code'] )
+		) {
+			$callback = $this->get_function_call_parameter( $callbackArrayPtr, 2 );
 
-			$callbackPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $comma + 1 ), null, true, null, true );
-			if ( false === $callbackPtr ) {
+			if ( false === $callback ) {
 				$this->confused( $stackPtr );
 				return;
 			}
 		}
 
-		$functionPtr = null;
+		unset( $functionPtr );
 
 		// Search for the function in tokens.
-		if ( in_array( $this->tokens[ $callbackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-			$functionName = $this->strip_quotes( $this->tokens[ $callbackPtr ]['content'] );
+		$callbackFunctionPtr = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_CLOSURE ), $callback['start'], ( $callback['end'] + 1 ) );
 
-			foreach ( $this->tokens as $ptr => $_token ) {
-				if ( T_STRING === $_token['code'] && $_token['content'] === $functionName ) {
-					$functionPtr = $ptr;
+		if ( false === $callbackFunctionPtr ) {
+			$this->confused( $stackPtr );
+			return;
+		}
+
+		if ( T_CLOSURE === $this->tokens[ $callbackFunctionPtr ]['code'] ) {
+			$functionPtr = $callbackFunctionPtr;
+		} else {
+			$functionName = $this->strip_quotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
+
+			for ( $ptr = 0; $ptr < $phpcsFile->numTokens; $ptr++ ) {
+				if ( T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
+					$foundName = $phpcsFile->getDeclarationName( $ptr );
+					if ( $foundName === $functionName ) {
+						$functionPtr = $ptr;
+						break;
+					} elseif ( isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
+						// Skip to the end of the function definition.
+						$ptr = $this->tokens[ $ptr ]['scope_closer'];
+					}
 				}
 			}
-		} elseif ( T_CLOSURE === $this->tokens[ $callbackPtr ]['code'] ) { // Closure.
-			$functionPtr = $callbackPtr;
 		}
 
 		if ( is_null( $functionPtr ) ) {
