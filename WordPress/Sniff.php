@@ -623,7 +623,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// Now let's see if the comment contains the whitelist remark we're looking for.
-		return ( preg_match( '#' . preg_quote( $comment ) . '#i', $last['content'] ) === 1 );
+		return ( preg_match( '#' . preg_quote( $comment, '#' ) . '#i', $last['content'] ) === 1 );
 	}
 
 	/**
