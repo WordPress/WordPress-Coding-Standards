@@ -1,0 +1,55 @@
+#wpadminbar {
+	display: block; /* OK. */
+	visibility: visible; /* OK. */
+	opacity: 1; /* OK. */
+	color: red; /* OK. */
+}
+
+#not-wpadminbar {
+	display: none; /* OK. */
+	visibility: hidden; /* OK. */
+	opacity: 0; /* OK. */
+}
+
+#wpadminbar {
+	display: none; /* Bad. */
+	visibility: hidden; /* Bad. */
+	opacity: 0; /* Bad. */
+}
+
+/* With !important. */
+#wpadminbar {
+	display: none !important; /* Bad. */
+	visibility: hidden !important; /* Bad. */
+	opacity: 0.0 !important; /* Bad. */
+}
+
+/* Indented. */
+	.show-admin-bar {
+		visibility: hidden; /* Bad. */
+		display: none !important; /* Bad. */
+		opacity: 0; /* Bad. */
+	}
+	
+/* Multi-line selector. */
+.something-else,
+.show-admin-bar,
+#identifier {
+	visibility: hidden; /* Bad. */
+	display: none !important; /* Bad. */
+	opacity: 0; /* Bad. */
+}
+
+
+/* @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only false */
+#wpadminbar {
+	display: block; /* Bad. */
+	visibility: visible; /* Bad. */
+	opacity: 1; /* Bad. */
+}
+#not-wpadminbar {
+	display: none; /* OK. */
+	visibility: hidden; /* OK. */
+	opacity: 0; /* OK. */
+}
+/* @codingStandardsChangeSetting WordPress.VIP.AdminBarRemoval remove_only true */
