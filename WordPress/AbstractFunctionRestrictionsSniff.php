@@ -154,7 +154,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
@@ -168,7 +169,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 		// Make phpcsFile and tokens available as properties.
 		$this->init( $phpcsFile );
 
-		$this->is_targetted_token( $stackPtr );
+		return $this->is_targetted_token( $stackPtr );
 
 	} // End process().
 
@@ -179,7 +180,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function is_targetted_token( $stackPtr ) {
 
@@ -213,6 +215,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			unset( $prev, $pprev, $skipped );
 		}
 
+		$skip_to = null;
+
 		foreach ( $this->groups as $groupName => $group ) {
 
 			if ( isset( $this->excluded_groups[ $groupName ] ) ) {
@@ -224,9 +228,11 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			}
 
 			if ( preg_match( $group['regex'], $token_content ) === 1 ) {
-				$this->process_matched_token( $stackPtr, $groupName, $token_content );
+				$skip_to = $this->process_matched_token( $stackPtr, $groupName, $token_content );
 			}
 		}
+
+		return $skip_to;
 
 	} // End is_targetted_token().
 
@@ -239,7 +245,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
@@ -256,6 +263,8 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			$group_name,
 			array( $matched_content )
 		);
+
+		return;
 	} // End process_matched_token().
 
 	/**

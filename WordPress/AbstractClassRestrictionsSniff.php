@@ -73,7 +73,8 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function is_targetted_token( $stackPtr ) {
 
@@ -123,7 +124,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			}
 
 			if ( preg_match( $group['regex'], $classname ) === 1 ) {
-				$this->process_matched_token( $stackPtr, $groupName, $classname );
+				return $this->process_matched_token( $stackPtr, $groupName, $classname );
 			}
 		}
 
