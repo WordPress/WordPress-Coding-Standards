@@ -169,27 +169,25 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 		// Make phpcsFile and tokens available as properties.
 		$this->init( $phpcsFile );
 
-		return $this->is_targetted_token( $stackPtr );
+		if ( true === $this->is_targetted_token( $stackPtr ) ) {
+			return $this->check_for_matches( $stackPtr );
+		}
 
 	} // End process().
 
 	/**
-	 * Verify is the current token is a function call and one of the targetted functions.
+	 * Verify is the current token is a function call.
 	 *
-	 * @since 0.11.0
+	 * @since 0.11.0 Split out from the `process()` method.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return bool
 	 */
 	public function is_targetted_token( $stackPtr ) {
 
-		$token         = $this->tokens[ $stackPtr ];
-		$token_content = strtolower( $token['content'] );
-
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( T_STRING === $token['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
+		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
 			$prev = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 			if ( false !== $prev ) {
@@ -201,21 +199,38 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 				);
 
 				if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
-					return;
+					return false;
 				}
 
 				// Skip namespaced functions, ie: \foo\bar() not \bar().
 				if ( T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
 					$pprev = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
 					if ( false !== $pprev && T_STRING === $this->tokens[ $pprev ]['code'] ) {
-						return;
+						return false;
 					}
 				}
 			}
-			unset( $prev, $pprev, $skipped );
+
+			return true;
 		}
 
-		$skip_to = null;
+		return false;
+
+	} // End is_targetted_token().
+
+	/**
+	 * Verify if the current token is one of the targetted functions.
+	 *
+	 * @since 0.11.0 Split out from the `process()` method.
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function check_for_matches( $stackPtr ) {
+		$token_content = strtolower( $this->tokens[ $stackPtr ]['content'] );
+		$skip_to       = array();
 
 		foreach ( $this->groups as $groupName => $group ) {
 
@@ -228,18 +243,22 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			}
 
 			if ( preg_match( $group['regex'], $token_content ) === 1 ) {
-				$skip_to = $this->process_matched_token( $stackPtr, $groupName, $token_content );
+				$skip_to[] = $this->process_matched_token( $stackPtr, $groupName, $token_content );
 			}
 		}
 
-		return $skip_to;
+		if ( empty( $skip_to ) || min( $skip_to ) === 0 ) {
+			return;
+		}
 
-	} // End is_targetted_token().
+		return min( $skip_to );
+
+	} // End check_for_matches().
 
 	/**
 	 * Process a matched token.
 	 *
-	 * @since 0.11.0
+	 * @since 0.11.0 Split out from the `process()` method.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.
