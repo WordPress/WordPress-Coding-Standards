@@ -155,7 +155,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 					$value = str_replace( array_keys( $this->wp_time_constants ), array_values( $this->wp_time_constants ), $value );
 
 					// If all digits and operators, eval!
-					if ( preg_match( '#^[\s\d\+\*\-\/]+$#', $value ) > 0 ) {
+					if ( preg_match( '#^[\s\d+*/-]+$#', $value ) > 0 ) {
 						$interval = eval( "return ( $value );" ); // @codingStandardsIgnoreLine - No harm here.
 						break;
 					}
