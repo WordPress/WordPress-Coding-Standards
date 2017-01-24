@@ -134,7 +134,8 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return int|void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$this->mergeFunctionLists();
