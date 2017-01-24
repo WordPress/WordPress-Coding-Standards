@@ -59,16 +59,17 @@ abstract class WordPress_AbstractFunctionParameterSniff extends WordPress_Abstra
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
 		$parameters = $this->get_function_call_parameters( $stackPtr );
 
 		if ( empty( $parameters ) ) {
-			$this->process_no_parameters( $stackPtr, $group_name, $matched_content );
+			return $this->process_no_parameters( $stackPtr, $group_name, $matched_content );
 		} else {
-			$this->process_parameters( $stackPtr, $group_name, $matched_content, $parameters );
+			return $this->process_parameters( $stackPtr, $group_name, $matched_content, $parameters );
 		}
 	}
 
@@ -82,21 +83,23 @@ abstract class WordPress_AbstractFunctionParameterSniff extends WordPress_Abstra
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	abstract public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters );
 
 	/**
 	 * Process the function if no parameters were found.
 	 *
-	 * Default to doing nothing. Can be overloaded in child classes to handle functions
+	 * Defaults to doing nothing. Can be overloaded in child classes to handle functions
 	 * were parameters are expected, but none found.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {
 		return;

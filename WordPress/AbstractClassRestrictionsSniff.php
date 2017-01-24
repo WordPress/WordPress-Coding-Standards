@@ -24,6 +24,13 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	protected $regex_pattern = '`^\\\\(?:%s)$`i';
 
 	/**
+	 * Temporary storage for retrieved class name.
+	 *
+	 * @var string
+	 */
+	protected $classname;
+
+	/**
 	 * Groups of classes to restrict.
 	 *
 	 * This method should be overridden in extending classes.
@@ -67,13 +74,30 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	}
 
 	/**
-	 * Verify is the current token relates to one of the targetted classes.
+	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the current token
+	 *                                        in the stack passed in $tokens.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+		// Reset the temporary storage before processing the token.
+		unset( $this->classname );
+
+		return parent::process( $phpcsFile, $stackPtr );
+	}
+
+	/**
+	 * Determine if we have a valid classname for the target token.
 	 *
 	 * @since 0.11.0 This logic was originally contained in the `process()` method.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function is_targetted_token( $stackPtr ) {
 
@@ -108,13 +132,31 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 
 		// Stop if we couldn't determine a classname.
 		if ( empty( $classname ) ) {
-			return;
+			return false;
 		}
 
 		// Nothing to do if 'parent', 'self' or 'static'.
 		if ( in_array( $classname, array( 'parent', 'self', 'static' ), true ) ) {
-			return;
+			return false;
 		}
+
+		$this->classname = $classname;
+		return true;
+
+	} // End is_targetted_token().
+
+	/**
+	 * Verify if the current token is one of the targetted classes.
+	 *
+	 * @since 0.11.0 Split out from the `process()` method.
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function check_for_matches( $stackPtr ) {
+		$skip_to = array();
 
 		foreach ( $this->groups as $groupName => $group ) {
 
@@ -122,10 +164,16 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 				continue;
 			}
 
-			if ( preg_match( $group['regex'], $classname ) === 1 ) {
-				$this->process_matched_token( $stackPtr, $groupName, $classname );
+			if ( preg_match( $group['regex'], $this->classname ) === 1 ) {
+				$skip_to[] = $this->process_matched_token( $stackPtr, $groupName, $this->classname );
 			}
 		}
+
+		if ( empty( $skip_to ) || min( $skip_to ) === 0 ) {
+			return;
+		}
+
+		return min( $skip_to );
 
 	} // End is_targetted_token().
 
