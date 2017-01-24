@@ -89,7 +89,8 @@ abstract class WordPress_AbstractVariableRestrictionsSniff implements PHP_CodeSn
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
 	 *
-	 * @return int|void If no groups are found, a stack pointer to indicate to skip the current one is passed.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
