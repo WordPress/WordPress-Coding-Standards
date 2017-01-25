@@ -66,7 +66,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Ab
 	 * @return array
 	 */
 	public function getGroups() {
-		$this->target_functions = WordPress_Sniff::$hookInvokeFunctions;
+		$this->target_functions = $this->hookInvokeFunctions;
 		return parent::getGroups();
 	}
 

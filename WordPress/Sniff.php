@@ -317,10 +317,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * more difficult.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $formattingFunctions = array(
+	protected $formattingFunctions = array(
 		'array_fill' => true,
 		'ent2ncr'    => true,
 		'implode'    => true,
@@ -364,10 +365,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions that escape values for use in SQL queries.
 	 *
 	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $SQLEscapingFunctions = array(
+	protected $SQLEscapingFunctions = array(
 		'absint'      => true,
 		'esc_sql'     => true,
 		'floatval'    => true,
@@ -379,10 +381,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions whose output is automatically escaped for use in SQL queries.
 	 *
 	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $SQLAutoEscapedFunctions = array(
+	protected $SQLAutoEscapedFunctions = array(
 		'count' => true,
 	);
 
@@ -427,10 +430,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that invoke WP hooks (filters/actions).
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $hookInvokeFunctions = array(
+	protected $hookInvokeFunctions = array(
 		'do_action'                => true,
 		'do_action_ref_array'      => true,
 		'do_action_deprecated'     => true,
@@ -443,10 +447,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that are used to interact with the WP plugins API.
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array <string function name> => <int position of the hook name argument in function signature>
 	 */
-	public static $hookFunctions = array(
+	protected $hookFunctions = array(
 		'has_filter'         => 1,
 		'add_filter'         => 1,
 		'remove_filter'      => 1,
@@ -517,10 +522,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of superglobals that incorporate user input.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from static to non-static.
 	 *
 	 * @var string[]
 	 */
-	protected static $input_superglobals = array(
+	protected $input_superglobals = array(
 		'$_COOKIE',
 		'$_GET',
 		'$_FILES',

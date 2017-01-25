@@ -154,8 +154,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 			if ( T_STRING === $this->tokens[ $this->i ]['code'] ) {
 
 				if (
-					isset( self::$SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
-					|| isset( self::$SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					isset( $this->SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					|| isset( $this->SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
 				) {
 
 					// Find the opening parenthesis.
@@ -170,7 +170,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-				} elseif ( isset( self::$formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
+				} elseif ( isset( $this->formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
 					continue;
 				}
 			}

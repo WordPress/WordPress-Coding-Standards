@@ -82,7 +82,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 	 */
 	public function process_token( $stackPtr ) {
 
-		$superglobals = self::$input_superglobals;
+		$superglobals = $this->input_superglobals;
 
 		// Handling string interpolation.
 		if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
