@@ -63,10 +63,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 * Printing functions that incorporate unsafe values.
 	 *
 	 * @since 0.4.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $unsafePrintingFunctions = array(
+	protected $unsafePrintingFunctions = array(
 		'_e'  => 'esc_html_e() or esc_attr_e()',
 		'_ex' => 'esc_html_ex() or esc_attr_ex()',
 	);
@@ -158,8 +159,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			return;
 		}
 
-		if ( isset( $end_of_statement, self::$unsafePrintingFunctions[ $function ] ) ) {
-			$error = $this->phpcsFile->addError( "Expected next thing to be an escaping function (like %s), not '%s'", $stackPtr, 'UnsafePrintingFunction', array( self::$unsafePrintingFunctions[ $function ], $function ) );
+		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
+			$error = $this->phpcsFile->addError( "Expected next thing to be an escaping function (like %s), not '%s'", $stackPtr, 'UnsafePrintingFunction', array( $this->unsafePrintingFunctions[ $function ], $function ) );
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {
