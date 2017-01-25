@@ -48,6 +48,8 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * Mixed-case variables used by WordPress.
 	 *
+	 * @since 0.11.0
+	 *
 	 * @var array
 	 */
 	protected $wordpress_mixed_case_vars = array(
@@ -266,6 +268,8 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * Merge a custom whitelist provided via a custom ruleset with the predefined whitelist,
 	 * if we haven't already.
+	 *
+	 * @since 0.10.0
 	 *
 	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
 	 *

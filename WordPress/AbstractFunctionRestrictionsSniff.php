@@ -261,7 +261,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
