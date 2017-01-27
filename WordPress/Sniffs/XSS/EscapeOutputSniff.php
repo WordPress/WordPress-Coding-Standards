@@ -26,7 +26,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 *
 	 * @since 0.5.0
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $customEscapingFunctions = array();
 
@@ -35,7 +35,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $customAutoEscapedFunctions = array();
 
@@ -46,7 +46,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 * @deprecated 0.5.0 Use $customEscapingFunctions instead.
 	 * @see        WordPress_Sniffs_XSS_EscapeOutputSniff::$customEscapingFunctions
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $customSanitizingFunctions = array();
 
@@ -55,7 +55,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 *
 	 * @since 0.4.0
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $customPrintingFunctions = array();
 
@@ -72,11 +72,22 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	);
 
 	/**
-	 * Whether the custom functions were added to the default lists yet.
+	 * Cache of previously added custom functions.
 	 *
-	 * @var bool
+	 * Prevents having to do the same merges over and over again.
+	 *
+	 * @since 0.4.0
+	 * @since 0.11.0 - Changed from public static to protected non-static.
+	 *               - Changed the format from simple bool to array.
+	 *
+	 * @var array
 	 */
-	public static $addedCustomFunctions = false;
+	protected $addedCustomFunctions = array(
+		'escape'     => null,
+		'autoescape' => null,
+		'sanitize'   => null,
+		'print'      => null,
+	);
 
 	/**
 	 * List of names of the tokens representing PHP magic constants.
@@ -117,19 +128,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		// Merge any custom functions with the defaults, if we haven't already.
-		if ( ! self::$addedCustomFunctions ) {
-			self::$escapingFunctions    = array_merge( self::$escapingFunctions, array_flip( $this->customEscapingFunctions ) );
-			self::$autoEscapedFunctions = array_merge( self::$autoEscapedFunctions, array_flip( $this->customAutoEscapedFunctions ) );
-			self::$printingFunctions    = array_merge( self::$printingFunctions, array_flip( $this->customPrintingFunctions ) );
 
-			if ( ! empty( $this->customSanitizingFunctions ) ) {
-				self::$escapingFunctions = array_merge( self::$escapingFunctions, array_flip( $this->customSanitizingFunctions ) );
-				$this->phpcsFile->addWarning( 'The customSanitizingFunctions property is deprecated in favor of customEscapingFunctions.', 0, 'DeprecatedCustomSanitizingFunctions' );
-			}
-
-			self::$addedCustomFunctions = true;
-		}
+		$this->mergeFunctionLists();
 
 		$function = $this->tokens[ $stackPtr ]['content'];
 
@@ -139,7 +139,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		// If function, not T_ECHO nor T_PRINT.
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if it is a function but is not of the printing functions.
-			if ( ! isset( self::$printingFunctions[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
+			if ( ! isset( $this->printingFunctions[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
 				return;
 			}
 
@@ -333,8 +333,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 				// If this is a safe function, we don't flag it.
 				if (
 					$is_formatting_function
-					|| isset( self::$autoEscapedFunctions[ $functionName ] )
-					|| isset( self::$escapingFunctions[ $functionName ] )
+					|| isset( $this->autoEscapedFunctions[ $functionName ] )
+					|| isset( $this->escapingFunctions[ $functionName ] )
 				) {
 					continue;
 				}
@@ -357,5 +357,58 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		return $end_of_statement;
 
 	} // End process().
+
+	/**
+	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
+	 *
+	 * @since 0.11.0 Split out from the `process()` method.
+	 *
+	 * @return void
+	 */
+	protected function mergeFunctionLists() {
+		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape']
+			|| $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
+		) {
+			$customEscapeFunctions = $this->merge_custom_array( $this->customEscapingFunctions, array(), false );
+
+			if ( ! empty( $this->customSanitizingFunctions ) ) {
+				$customEscapeFunctions = $this->merge_custom_array(
+					$this->customSanitizingFunctions,
+					$customEscapeFunctions,
+					false
+				);
+
+				$this->phpcsFile->addWarning(
+					'The customSanitizingFunctions property is deprecated in favor of customEscapingFunctions.',
+					0,
+					'DeprecatedCustomSanitizingFunctions'
+				);
+			}
+
+			$this->escapingFunctions = $this->merge_custom_array(
+				$customEscapeFunctions,
+				$this->escapingFunctions
+			);
+			$this->addedCustomFunctions['escape']   = $this->customEscapingFunctions;
+			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
+		}
+
+		if ( $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] ) {
+			$this->autoEscapedFunctions = $this->merge_custom_array(
+				$this->customAutoEscapedFunctions,
+				$this->autoEscapedFunctions
+			);
+			$this->addedCustomFunctions['autoescape'] = $this->customAutoEscapedFunctions;
+		}
+
+		if ( $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] ) {
+
+			$this->printingFunctions = $this->merge_custom_array(
+				$this->customPrintingFunctions,
+				$this->printingFunctions
+			);
+			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
+		}
+	}
 
 } // End class.

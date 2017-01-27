@@ -35,10 +35,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions that escape values for display.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $escapingFunctions = array(
+	protected $escapingFunctions = array(
 		'absint'               => true,
 		'esc_attr__'           => true,
 		'esc_attr_e'           => true,
@@ -77,10 +78,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions whose output is automatically escaped for display.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $autoEscapedFunctions = array(
+	protected $autoEscapedFunctions = array(
 		'allowed_tags'              => true,
 		'bloginfo'                  => true,
 		'body_class'                => true,
@@ -333,10 +335,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions which print output incorporating the values passed to them.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $printingFunctions = array(
+	protected $printingFunctions = array(
 		'_deprecated_argument'    => true,
 		'_deprecated_constructor' => true,
 		'_deprecated_file'        => true,
