@@ -236,10 +236,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * list if they do.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $sanitizingFunctions = array(
+	protected $sanitizingFunctions = array(
 		'_wp_handle_upload'          => true,
 		'array_key_exists'           => true,
 		'esc_url_raw'                => true,
@@ -290,10 +291,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * if they don't.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $unslashingSanitizingFunctions = array(
+	protected $unslashingSanitizingFunctions = array(
 		'absint'       => true,
 		'boolval'      => true,
 		'floatval'     => true,
@@ -1166,12 +1168,12 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If slashing is required, give an error.
-		if ( ! $is_unslashed && $require_unslash && ! isset( self::$unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( ! $is_unslashed && $require_unslash && ! isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
 			$this->add_unslash_error( $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
-		if ( isset( self::$sanitizingFunctions[ $functionName ] ) || isset( self::$unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( isset( $this->sanitizingFunctions[ $functionName ] ) || isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
 			return true;
 		}
 
