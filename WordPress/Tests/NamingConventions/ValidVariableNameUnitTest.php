@@ -77,9 +77,7 @@ class WordPress_Tests_NamingConventions_ValidVariableNameUnitTest extends Abstra
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			1 => 1, // Warning about property setting.
-		);
+		return array();
 
 	}
 
