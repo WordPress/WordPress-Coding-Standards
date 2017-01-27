@@ -29,6 +29,6 @@ trigger_error(); // Ok - within excluded group.
 phpinfo(); // Ok - within excluded group.
 
 // Reset group exclusions.
-// @codingStandardsChangeSetting WordPress.PHP.DevelopmentFunctions exclude null
+// @codingStandardsChangeSetting WordPress.PHP.DevelopmentFunctions exclude false
 trigger_error(); // Error.
 phpinfo(); // Error.

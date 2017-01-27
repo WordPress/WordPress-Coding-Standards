@@ -133,3 +133,4 @@ echo "This is $PHP_SELF with $HTTP_RAW_POST_DATA"; // Ok.
 echo MyClass::$varName; // Ok, whitelisted.
 echo $this->varName; // Ok, whitelisted.
 echo $object->varName;  // Ok, whitelisted.
+// @codingStandardsChangeSetting WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist false

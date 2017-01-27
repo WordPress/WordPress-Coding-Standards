@@ -116,7 +116,7 @@ class Test_Class_D extends My_TestClass {
 		$tabs = 50; // Ok.
 	}
 }
-// @codingStandardsChangeSetting WordPress.Variables.GlobalVariables custom_test_class_whitelist null
+// @codingStandardsChangeSetting WordPress.Variables.GlobalVariables custom_test_class_whitelist false
 
 // Test detecting within and skipping over anonymous classes.
 global $year;
