@@ -21,10 +21,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * List of the functions which verify nonces.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $nonceVerificationFunctions = array(
+	protected $nonceVerificationFunctions = array(
 		'wp_verify_nonce'     => true,
 		'check_admin_referer' => true,
 		'check_ajax_referer'  => true,
@@ -995,7 +996,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( self::$nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
 				$last['nonce_check'] = $i;
 				return true;
 			}
