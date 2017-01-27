@@ -390,10 +390,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that get data from the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheGetFunctions = array(
+	protected $cacheGetFunctions = array(
 		'wp_cache_get' => true,
 	);
 
@@ -401,10 +402,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that set data in the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheSetFunctions = array(
+	protected $cacheSetFunctions = array(
 		'wp_cache_set' => true,
 		'wp_cache_add' => true,
 	);
@@ -413,10 +415,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that delete data from the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheDeleteFunctions = array(
+	protected $cacheDeleteFunctions = array(
 		'wp_cache_delete' => true,
 	);
 
