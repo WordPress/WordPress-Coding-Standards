@@ -664,6 +664,62 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Merge a pre-set array with a ruleset provided array or inline provided string.
+	 *
+	 * - Will correctly handle custom array properties which were set without
+	 *   the `type="array"` indicator.
+	 *   This also allows for making these custom array properties testable using
+	 *   a `@codingStandardsChangeSetting` comment in the unit tests.
+	 * - By default flips custom lists to allow for using `isset()` instead
+	 *   of `in_array()`.
+	 * - When `$flip` is true:
+	 *   * Presumes the base array is in a `'value' => true` format.
+	 *   * Any custom items will be given the value `false` to be able to
+	 *     distinguish them from pre-set (base array) values.
+	 *   * Will filter previously added custom items out from the base array
+	 *     before merging/returning to allow for resetting to the base array.
+	 *
+	 * {@internal Function is static as it doesn't use any of the properties or others
+	 * methods anyway and this way the `WordPress_Sniffs_NamingConventions_ValidVariableNameSniff`
+	 * which extends an upstream sniff can also use it.}}
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param array|string $custom Custom list as provided via a ruleset.
+	 *                             Can be either a comma-delimited string or
+	 *                             an array of values.
+	 * @param array        $base   Optional. Base list. Defaults to an empty array.
+	 *                             Expects `value => true` format when `$flip` is true.
+	 * @param bool         $flip   Optional. Whether or not to flip the custom list.
+	 *                             Defaults to true.
+	 * @return array
+	 */
+	public static function merge_custom_array( $custom, $base = array(), $flip = true ) {
+		if ( true === $flip ) {
+			$base = array_filter( $base );
+		}
+
+		if ( empty( $custom ) || ( ! is_array( $custom ) && ! is_string( $custom ) ) ) {
+			return $base;
+		}
+
+		// Allow for a comma delimited list.
+		if ( is_string( $custom ) ) {
+			$custom = array_filter( array_map( 'trim', explode( ',', $custom ) ) );
+		}
+
+		if ( true === $flip ) {
+			$custom = array_fill_keys( $custom, false );
+		}
+
+		if ( empty( $base ) ) {
+			return $custom;
+		}
+
+		return array_merge( $base, $custom );
+	}
+
+	/**
 	 * Get the last pointer in a line.
 	 *
 	 * @since 0.4.0
