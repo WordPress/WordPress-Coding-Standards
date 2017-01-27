@@ -182,3 +182,27 @@ _deprecated_hook( 'some_filter', '1.3.0', esc_html__( 'The $arg is deprecated.' 
 _deprecated_hook( "filter_{$context}", '1.3.0', __( 'The $arg is deprecated.' ), sprintf( __( 'Some parsed message %s', $variable ) ) ); // Bad.
 
 echo add_filter( get_the_excerpt( get_the_ID() ) ; // Bad, but ignored as code contains a parse error.
+
+
+/*
+ * Test using custom properties, setting & unsetting (resetting).
+ */
+// @codingStandardsChangeSetting WordPress.XSS.EscapeOutput customPrintingFunctions to_screen,my_print
+to_screen( $var1, esc_attr( $var2 ) ); // Bad x 1.
+my_print( $var1, $var2 ); // Bad x 2.
+
+// @codingStandardsChangeSetting WordPress.XSS.EscapeOutput customEscapingFunctions esc_form_field
+// @codingStandardsChangeSetting WordPress.XSS.EscapeOutput customAutoEscapedFunctions post_info,cpt_info
+
+echo esc_form_field( $var ); // Ok.
+echo post_info( $post_id, 'field' ); // Ok.
+echo cpt_info( $post_type, 'query' ); // Ok.
+to_screen( esc_form_field( $var1), esc_attr( $var2 ) ); // Ok.
+
+// @codingStandardsChangeSetting WordPress.XSS.EscapeOutput customPrintingFunctions false
+// @codingStandardsChangeSetting WordPress.XSS.EscapeOutput customEscapingFunctions false
+// @codingStandardsChangeSetting WordPress.XSS.EscapeOutput customAutoEscapedFunctions false
+
+echo esc_form_field( $var ); // Bad.
+echo post_info( $post_id, 'field' ); // Bad.
+echo cpt_info( $post_type, 'query' ); // Bad.
