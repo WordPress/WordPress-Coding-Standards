@@ -108,21 +108,18 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$phpcsFile = $this->phpcsFile;
-		$tokens    = $this->tokens;
-
 		// Check for $wpdb variable.
-		if ( '$wpdb' !== $tokens[ $stackPtr ]['content'] ) {
+		if ( '$wpdb' !== $this->tokens[ $stackPtr ]['content'] ) {
 			return;
 		}
 
-		$is_object_call = $phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
+		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return; // This is not a call to the wpdb object.
 		}
 
-		$methodPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
-		$method    = $tokens[ $methodPtr ]['content'];
+		$methodPtr = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
+		$method    = $this->tokens[ $methodPtr ]['content'];
 
 		$this->mergeFunctionLists();
 
@@ -130,16 +127,16 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$endOfStatement   = $phpcsFile->findNext( array( T_SEMICOLON ), ( $stackPtr + 1 ), null, false, null, true );
+		$endOfStatement   = $this->phpcsFile->findNext( array( T_SEMICOLON ), ( $stackPtr + 1 ), null, false, null, true );
 		$endOfLineComment = '';
-		for ( $i = ( $endOfStatement + 1 ); $i < $phpcsFile->numTokens; $i++ ) {
+		for ( $i = ( $endOfStatement + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
 
-			if ( $tokens[ $i ]['line'] !== $tokens[ $endOfStatement ]['line'] ) {
+			if ( $this->tokens[ $i ]['line'] !== $this->tokens[ $endOfStatement ]['line'] ) {
 				break;
 			}
 
-			if ( T_COMMENT === $tokens[ $i ]['code'] ) {
-				$endOfLineComment .= $tokens[ $i ]['content'];
+			if ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+				$endOfLineComment .= $this->tokens[ $i ]['content'];
 			}
 		}
 
@@ -150,15 +147,15 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 
 		// Check for Database Schema Changes.
 		$_pos = $stackPtr;
-		while ( $_pos = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
-			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $tokens[ $_pos ]['content'] ) > 0 ) {
-				$phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
+		while ( $_pos = $this->phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
+			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
+				$this->phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
 		}
 
 		// Flag instance if not whitelisted.
 		if ( ! $whitelisted_db_call ) {
-			$phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
+			$this->phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 		}
 
 		if ( ! isset( $this->methods['cachable'][ $method ] ) ) {
@@ -171,31 +168,31 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 		if ( preg_match( '/cache\s+(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
 			$whitelisted_cache = true;
 		}
-		if ( ! $whitelisted_cache && ! empty( $tokens[ $stackPtr ]['conditions'] ) ) {
-			$scope_function = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		if ( ! $whitelisted_cache && ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+			$scope_function = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
 			if ( false === $scope_function ) {
-				$scope_function = $phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+				$scope_function = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
 			}
 
 			if ( false !== $scope_function ) {
-				$scopeStart = $tokens[ $scope_function ]['scope_opener'];
-				$scopeEnd   = $tokens[ $scope_function ]['scope_closer'];
+				$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
+				$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
 
 				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
-					if ( T_STRING === $tokens[ $i ]['code'] ) {
+					if ( T_STRING === $this->tokens[ $i ]['code'] ) {
 
-						if ( isset( $this->cacheDeleteFunctions[ $tokens[ $i ]['content'] ] ) ) {
+						if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
 							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 								$cached = true;
 								break;
 							}
-						} elseif ( isset( $this->cacheGetFunctions[ $tokens[ $i ]['content'] ] ) ) {
+						} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
 							$wp_cache_get = true;
 
-						} elseif ( isset( $this->cacheSetFunctions[ $tokens[ $i ]['content'] ] ) ) {
+						} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
 							if ( $wp_cache_get ) {
 								$cached = true;
@@ -209,7 +206,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 
 		if ( ! $cached && ! $whitelisted_cache ) {
 			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set or wp_cache_delete.';
-			$phpcsFile->addError( $message, $stackPtr, 'NoCaching' );
+			$this->phpcsFile->addError( $message, $stackPtr, 'NoCaching' );
 		}
 
 		return $endOfStatement;
