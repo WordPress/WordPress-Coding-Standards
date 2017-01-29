@@ -119,14 +119,11 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		}
 
 		// If we're still here, no nonce-verification function was found.
-		$severity = ( in_array( $instance['content'], $this->errorForSuperGlobals, true ) ) ? 0 : 'warning';
-
-		$phpcsFile->addError(
-			'Processing form data without nonce verification.'
-			, $stackPtr
-			, 'NoNonceVerification'
-			, array()
-			, $severity
+		$this->addMessage(
+			'Processing form data without nonce verification.',
+			$stackPtr,
+			( in_array( $instance['content'], $this->errorForSuperGlobals, true ) ),
+			'NoNonceVerification'
 		);
 
 	} // End process().

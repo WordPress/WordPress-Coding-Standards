@@ -136,6 +136,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcs_file );
+
 		$tokens = $phpcs_file->getTokens();
 		$token  = $tokens[ $stack_ptr ];
 
@@ -277,13 +281,13 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$stack_ptr = $context['stack_ptr'];
 		$tokens    = $context['tokens'];
 		$arg_name  = $context['arg_name'];
-		$method    = empty( $context['warning'] ) ? 'addError' : 'addWarning';
+		$is_error  = empty( $context['warning'] );
 		$content   = $tokens[0]['content'];
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
 			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
-				$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
+				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
 			return false;
 		}
@@ -293,7 +297,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$contents .= $token['content'];
 			}
 			$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-			$phpcs_file->$method( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $contents ) );
+			$this->addMessage( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $contents ) );
 			return false;
 		}
 
@@ -303,7 +307,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
+				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
 			return true;
@@ -312,20 +316,20 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
 				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
-				$phpcs_file->$method( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $code, array( $arg_name, $interpolated_variable ) );
+				$this->addMessage( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $is_error, $code, array( $arg_name, $interpolated_variable ) );
 			}
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
+				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
 			return true;
 		}
 
 		$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $content ) );
+		$this->addMessage( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $content ) );
 		return false;
 	}
 
@@ -375,10 +379,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * @return void
 	 */
 	protected function check_text( PHP_CodeSniffer_File $phpcs_file, $context ) {
-		$stack_ptr      = $context['stack_ptr'];
-		$arg_name       = $context['arg_name'];
-		$content        = $context['tokens'][0]['content'];
-		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
+		$stack_ptr = $context['stack_ptr'];
+		$arg_name  = $context['arg_name'];
+		$content   = $context['tokens'][0]['content'];
+		$is_error  = empty( $context['warning'] );
 
 		// UnorderedPlaceholders: Check for multiple unordered placeholders.
 		$unordered_matches_count = preg_match_all( self::UNORDERED_SPRINTF_PLACEHOLDER_REGEX, $content, $unordered_matches );
@@ -413,9 +417,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$replacements[ $i ]    = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
-			$fix = $phpcs_file->$fixable_method(
+			$fix = $this->addFixableMessage(
 				'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
 				$stack_ptr,
+				$is_error,
 				$code,
 				array( implode( ', ', $suggestions ), implode( ', ', $unordered_matches ) )
 			);

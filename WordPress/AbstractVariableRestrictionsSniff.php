@@ -94,6 +94,10 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 	 *                  normal file processing.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcsFile );
+
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 		$groups = $this->getGroups();
@@ -167,16 +171,10 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 				continue;
 			}
 
-			if ( 'warning' === $group['type'] ) {
-				$addWhat = array( $phpcsFile, 'addWarning' );
-			} else {
-				$addWhat = array( $phpcsFile, 'addError' );
-			}
-
-			call_user_func(
-				$addWhat,
+			$this->addMessage(
 				$group['message'],
 				$stackPtr,
+				( 'error' === $group['type'] ),
 				$this->string_to_errorcode( $groupName . '_' . $match[1] ),
 				array( $var )
 			);

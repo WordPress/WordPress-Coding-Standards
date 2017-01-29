@@ -106,6 +106,9 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			return;
 		}
 
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcsFile );
+
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
@@ -179,16 +182,10 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 						$message = $output;
 					}
 
-					if ( 'warning' === $group['type'] ) {
-						$addWhat = array( $phpcsFile, 'addWarning' );
-					} else {
-						$addWhat = array( $phpcsFile, 'addError' );
-					}
-
-					call_user_func(
-						$addWhat,
+					$this->addMessage(
 						$message,
 						$stackPtr,
+						( 'error' === $group['type'] ),
 						$this->string_to_errorcode( $groupName . '_' . $key ),
 						array( $key, $val )
 					);
