@@ -33,7 +33,11 @@
 	<rule ref="WordPress.WP.PreparedSQL" />
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
-	<rule ref="Squiz.PHP.CommentedOutCode" />
+	<rule ref="Squiz.PHP.CommentedOutCode">
+	    <properties>
+	        <property name="maxPercentage" value="45" />
+	    </properties>
+	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
 	<rule ref="Squiz.PHP.Eval"/>

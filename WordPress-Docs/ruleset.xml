@@ -86,6 +86,13 @@
 		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" />
 	</rule>
 
+	<!-- Make this sniff less likely to trigger on end comments. -->
+	<rule ref="Squiz.PHP.CommentedOutCode">
+	    <properties>
+	        <property name="maxPercentage" value="45" />
+	    </properties>
+	</rule>
+
 	<rule ref="Generic.Commenting">
 		<!-- WP has different alignment of tag values -->
 		<exclude name="Generic.Commenting.DocComment.TagValueIndent"/>
