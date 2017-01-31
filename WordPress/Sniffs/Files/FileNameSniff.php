@@ -43,8 +43,12 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 
 		if ( false !== strpos( $fileName, '_' ) ) {
 			$expected = str_replace( '_', '-', $fileName );
-			$error    = 'Filename "' . $fileName . '" with underscores found; use ' . $expected . ' instead';
-			$phpcsFile->addError( $error, $stackPtr, 'UnderscoresNotAllowed' );
+			$error    = 'Filename "%s" with underscores found; use %s instead';
+			$data     = array(
+				$fileName,
+				$expected,
+			);
+			$phpcsFile->addError( $error, $stackPtr, 'UnderscoresNotAllowed', $data );
 		}
 
 		return ( $phpcsFile->numTokens + 1 );
