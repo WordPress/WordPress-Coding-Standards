@@ -99,3 +99,6 @@ printf( __(
 
 // Issue 776 - regex issue.
 __( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
+
+// Issue #830.
+_e(); // Bad.
