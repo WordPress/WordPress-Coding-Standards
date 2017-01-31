@@ -94,6 +94,10 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 				);
 
 			case 'I18nUnitTest.1.inc':
+				return array(
+					104 => 2,
+				);
+
 			default:
 				return array();
 
