@@ -161,8 +161,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff implements PHP_CodeSniffer_S
 
 		$endOfStatement   = $phpcsFile->findNext( array( T_SEMICOLON ), ( $stackPtr + 1 ), null, false, null, true );
 		$endOfLineComment = '';
-		$tokenCount       = count( $tokens );
-		for ( $i = ( $endOfStatement + 1 ); $i < $tokenCount; $i++ ) {
+		for ( $i = ( $endOfStatement + 1 ); $i < $phpcsFile->numTokens; $i++ ) {
 
 			if ( $tokens[ $i ]['line'] !== $tokens[ $endOfStatement ]['line'] ) {
 				break;

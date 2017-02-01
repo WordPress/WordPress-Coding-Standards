@@ -866,7 +866,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// If this is inside an isset(), check after it as well, all the way to the
 		// end of the scope.
 		if ( $in_isset ) {
-			$end = ( 0 === $start ) ? count( $tokens ) : $tokens[ $start ]['scope_closer'];
+			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $tokens[ $start ]['scope_closer'];
 		}
 
 		// Check if we've looked here before.
