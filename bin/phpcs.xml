@@ -8,7 +8,7 @@
 	<exclude-pattern>/WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php</exclude-pattern>
 
 	<rule ref="WordPress-Extra">
-		<exclude name="Generic.Files.LowercasedFilename" />
+		<exclude name="WordPress.Files.FileName" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName" />
 	</rule>
 
