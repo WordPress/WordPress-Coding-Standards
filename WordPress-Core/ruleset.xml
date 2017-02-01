@@ -24,8 +24,10 @@
 		<!-- Covers rule: Your indentation should always reflect logical structure. -->
 		<rule ref="Generic.WhiteSpace.ScopeIndent">
 			<properties>
+				<property name="exact" value="false" />
 				<property name="indent" value="4"/>
 				<property name="tabIndent" value="true"/>
+				<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML" />
 			</properties>
 		</rule>
 
