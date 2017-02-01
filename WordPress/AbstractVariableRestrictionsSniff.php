@@ -94,8 +94,11 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 	 *                  normal file processing.
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcsFile );
+
+		$token  = $this->tokens[ $stackPtr ];
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
@@ -114,7 +117,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 		if ( in_array( $token['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON ), true ) ) { // This only works for object vars and array members.
 			$method               = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			$possible_parenthesis = $phpcsFile->findNext( T_WHITESPACE, ( $method + 1 ), null, true );
-			if ( T_OPEN_PARENTHESIS === $tokens[ $possible_parenthesis ]['code'] ) {
+			if ( T_OPEN_PARENTHESIS === $this->tokens[ $possible_parenthesis ]['code'] ) {
 				return; // So .. it is a function after all !
 			}
 		}
@@ -138,7 +141,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 
 				$owner = $phpcsFile->findPrevious( array( T_VARIABLE, T_STRING ), $stackPtr );
 				$child = $phpcsFile->findNext( array( T_STRING, T_VAR, T_VARIABLE ), $stackPtr );
-				$var   = implode( '', array( $tokens[ $owner ]['content'], $token['content'], $tokens[ $child ]['content'] ) );
+				$var   = implode( '', array( $this->tokens[ $owner ]['content'], $token['content'], $this->tokens[ $child ]['content'] ) );
 
 			} elseif ( in_array( $token['code'], array( T_OPEN_SQUARE_BRACKET, T_DOUBLE_QUOTED_STRING ), true ) && ! empty( $group['array_members'] ) ) {
 				// Array members.
@@ -146,7 +149,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 
 				$owner  = $phpcsFile->findPrevious( array( T_VARIABLE ), $stackPtr );
 				$inside = $phpcsFile->getTokensAsString( $stackPtr, ( $token['bracket_closer'] - $stackPtr + 1 ) );
-				$var    = implode( '', array( $tokens[ $owner ]['content'], $inside ) );
+				$var    = implode( '', array( $this->tokens[ $owner ]['content'], $inside ) );
 			} else {
 				continue;
 			}
@@ -167,16 +170,10 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 				continue;
 			}
 
-			if ( 'warning' === $group['type'] ) {
-				$addWhat = array( $phpcsFile, 'addWarning' );
-			} else {
-				$addWhat = array( $phpcsFile, 'addError' );
-			}
-
-			call_user_func(
-				$addWhat,
+			$this->addMessage(
 				$group['message'],
 				$stackPtr,
+				( 'error' === $group['type'] ),
 				$this->string_to_errorcode( $groupName . '_' . $match[1] ),
 				array( $var )
 			);

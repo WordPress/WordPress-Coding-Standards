@@ -1132,13 +1132,14 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			$message .= ' Use %s instead.';
 			$data[]   = $this->deprecated_functions[ $function_name ]['alt'];
 		}
-		$error_code = $this->string_to_errorcode( $matched_content . 'Found' );
 
-		if ( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_supported_version, '>=' ) ) {
-			$this->phpcsFile->addWarning( $message, $stackPtr, $error_code, $data );
-		} else {
-			$this->phpcsFile->addError( $message, $stackPtr, $error_code, $data );
-		}
+		$this->addMessage(
+			$message,
+			$stackPtr,
+			( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_supported_version, '<' ) ),
+			$this->string_to_errorcode( $matched_content . 'Found' ),
+			$data
+		);
 
 	} // End process_matched_token().
 

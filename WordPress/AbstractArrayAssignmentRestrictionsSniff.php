@@ -106,12 +106,14 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			return;
 		}
 
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcsFile );
+
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ), true ) ) {
 			$equal = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
-			if ( T_EQUAL !== $tokens[ $equal ]['code'] ) {
+			if ( T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!
 			}
 		}
@@ -131,8 +133,8 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			}
 
 			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
-			if ( ! is_numeric( $tokens[ $keyIdx ]['content'] ) ) {
-				$key            = $this->strip_quotes( $tokens[ $keyIdx ]['content'] );
+			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
+				$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart       = $phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
 				$valEnd         = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 				$val            = $phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
@@ -179,16 +181,10 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 						$message = $output;
 					}
 
-					if ( 'warning' === $group['type'] ) {
-						$addWhat = array( $phpcsFile, 'addWarning' );
-					} else {
-						$addWhat = array( $phpcsFile, 'addError' );
-					}
-
-					call_user_func(
-						$addWhat,
+					$this->addMessage(
 						$message,
 						$stackPtr,
+						( 'error' === $group['type'] ),
 						$this->string_to_errorcode( $groupName . '_' . $key ),
 						array( $key, $val )
 					);

@@ -136,8 +136,11 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
-		$tokens = $phpcs_file->getTokens();
-		$token  = $tokens[ $stack_ptr ];
+
+		// Make phpcsFile and tokens available as properties.
+		$this->init( $phpcs_file );
+
+		$token  = $this->tokens[ $stack_ptr ];
 
 		// Allow overruling the text_domain set in a ruleset via the command line.
 		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
@@ -163,16 +166,17 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		$func_open_paren_token = $phpcs_file->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
-		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $tokens[ $func_open_paren_token ]['code'] ) {
+		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
 			 return;
 		}
 
 		$arguments_tokens = array();
 		$argument_tokens  = array();
+		$tokens           = $this->tokens;
 
 		// Look at arguments.
-		for ( $i = ( $func_open_paren_token + 1 ); $i < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
-			$this_token                = $tokens[ $i ];
+		for ( $i = ( $func_open_paren_token + 1 ); $i < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
+			$this_token                = $this->tokens[ $i ];
 			$this_token['token_index'] = $i;
 			if ( in_array( $this_token['code'], PHP_CodeSniffer_Tokens::$emptyTokens, true ) ) {
 				continue;
@@ -185,9 +189,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
 			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || 'T_DOUBLE_QUOTED_STRING' === $this_token['type'] ) {
-				for ( $j = ( $i + 1 ); $j < $tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
-					if ( $this_token['code'] === $tokens[ $j ]['code'] ) {
-						$this_token['content'] .= $tokens[ $j ]['content'];
+				for ( $j = ( $i + 1 ); $j < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
+					if ( $this_token['code'] === $this->tokens[ $j ]['code'] ) {
+						$this_token['content'] .= $this->tokens[ $j ]['content'];
 						$i                      = $j;
 					} else {
 						break;
@@ -250,7 +254,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			} else {
 				$argument_assertion_context['stack_ptr'] = $argument_assertion_context['tokens'][0]['token_index'];
 			}
-			$this->check_argument_tokens( $phpcs_file, $argument_assertion_context );
+			$this->check_argument_tokens( $argument_assertion_context );
 		}
 
 		// For _n*() calls, compare the singular and plural strings.
@@ -258,32 +262,31 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$single_context = $argument_assertions[0];
 			$plural_context = $argument_assertions[1];
 
-			$this->compare_single_and_plural_arguments( $phpcs_file, $stack_ptr, $single_context, $plural_context );
+			$this->compare_single_and_plural_arguments( $stack_ptr, $single_context, $plural_context );
 		}
 
 		if ( true === $this->check_translator_comments ) {
-			$this->check_for_translator_comment( $phpcs_file, $stack_ptr, $argument_assertions );
+			$this->check_for_translator_comment( $stack_ptr, $argument_assertions );
 		}
 	}
 
 	/**
 	 * Check if supplied tokens represent a translation text string literal.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array                $context    Context (@todo needs better description).
+	 * @param array $context Context (@todo needs better description).
 	 * @return bool
 	 */
-	protected function check_argument_tokens( PHP_CodeSniffer_File $phpcs_file, $context ) {
+	protected function check_argument_tokens( $context ) {
 		$stack_ptr = $context['stack_ptr'];
 		$tokens    = $context['tokens'];
 		$arg_name  = $context['arg_name'];
-		$method    = empty( $context['warning'] ) ? 'addError' : 'addWarning';
+		$is_error  = empty( $context['warning'] );
 		$content   = $tokens[0]['content'];
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
 			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
-				$phpcs_file->$method( 'Missing $%s arg.', $stack_ptr, $code, array( $arg_name ) );
+				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
 			return false;
 		}
@@ -293,17 +296,17 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$contents .= $token['content'];
 			}
 			$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-			$phpcs_file->$method( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $contents ) );
+			$this->addMessage( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $contents ) );
 			return false;
 		}
 
 		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ), true ) ) {
-			$this->check_text( $phpcs_file, $context );
+			$this->check_text( $context );
 		}
 
 		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
+				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
 			return true;
@@ -312,34 +315,32 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
 				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
-				$phpcs_file->$method( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $code, array( $arg_name, $interpolated_variable ) );
+				$this->addMessage( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $is_error, $code, array( $arg_name, $interpolated_variable ) );
 			}
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$phpcs_file->$method( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
+				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
 				return false;
 			}
 			return true;
 		}
 
 		$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-		$phpcs_file->$method( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $code, array( $arg_name, $content ) );
+		$this->addMessage( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $content ) );
 		return false;
 	}
 
 	/**
 	 * Check for inconsistencies between single and plural arguments.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file     The file being scanned.
-	 * @param int                  $stack_ptr      The position of the current token
-	 *                                             in the stack.
-	 * @param array                $single_context Single context (@todo needs better description).
-	 * @param array                $plural_context Plural context (@todo needs better description).
+	 * @param int   $stack_ptr      The position of the current token in the stack.
+	 * @param array $single_context Single context (@todo needs better description).
+	 * @param array $plural_context Plural context (@todo needs better description).
 	 * @return void
 	 */
-	protected function compare_single_and_plural_arguments( PHP_CodeSniffer_File $phpcs_file, $stack_ptr, $single_context, $plural_context ) {
+	protected function compare_single_and_plural_arguments( $stack_ptr, $single_context, $plural_context ) {
 		$single_content = $single_context['tokens'][0]['content'];
 		$plural_content = $plural_context['tokens'][0]['content'];
 
@@ -355,7 +356,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$error_string = 'Missing singular placeholder, needed for some languages. See https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals';
 			$single_index = $single_context['tokens'][0]['token_index'];
 
-			$phpcs_file->addError( $error_string, $single_index, 'MissingSingularPlaceholder' );
+			$this->phpcsFile->addError( $error_string, $single_index, 'MissingSingularPlaceholder' );
 		}
 
 		// Reordering is fine, but mismatched placeholders is probably wrong.
@@ -363,22 +364,21 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		sort( $plural_placeholders );
 
 		if ( $single_placeholders !== $plural_placeholders ) {
-			$phpcs_file->addWarning( 'Mismatched placeholders is probably an error', $stack_ptr, 'MismatchedPlaceholders' );
+			$this->phpcsFile->addWarning( 'Mismatched placeholders is probably an error', $stack_ptr, 'MismatchedPlaceholders' );
 		}
 	}
 
 	/**
 	 * Check the string itself for problems.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param array                $context    Context (@todo needs better description).
+	 * @param array $context Context (@todo needs better description).
 	 * @return void
 	 */
-	protected function check_text( PHP_CodeSniffer_File $phpcs_file, $context ) {
-		$stack_ptr      = $context['stack_ptr'];
-		$arg_name       = $context['arg_name'];
-		$content        = $context['tokens'][0]['content'];
-		$fixable_method = empty( $context['warning'] ) ? 'addFixableError' : 'addFixableWarning';
+	protected function check_text( $context ) {
+		$stack_ptr = $context['stack_ptr'];
+		$arg_name  = $context['arg_name'];
+		$content   = $context['tokens'][0]['content'];
+		$is_error  = empty( $context['warning'] );
 
 		// UnorderedPlaceholders: Check for multiple unordered placeholders.
 		$unordered_matches_count = preg_match_all( self::UNORDERED_SPRINTF_PLACEHOLDER_REGEX, $content, $unordered_matches );
@@ -387,7 +387,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		if ( $unordered_matches_count > 0 && $unordered_matches_count !== $all_matches_count && $all_matches_count > 1 ) {
 			$code = $this->string_to_errorcode( 'MixedOrderedPlaceholders' . ucfirst( $arg_name ) );
-			$phpcs_file->addError(
+			$this->phpcsFile->addError(
 				'Multiple placeholders should be ordered. Mix of ordered and non-ordered placeholders found. Found: %s.',
 				$stack_ptr,
 				$code,
@@ -413,9 +413,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$replacements[ $i ]    = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
-			$fix = $phpcs_file->$fixable_method(
+			$fix = $this->addFixableMessage(
 				'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
 				$stack_ptr,
+				$is_error,
 				$code,
 				array( implode( ', ', $suggestions ), implode( ', ', $unordered_matches ) )
 			);
@@ -423,9 +424,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( true === $fix ) {
 				$fixed_str = preg_replace( $replace_regexes, $replacements, $content, 1 );
 
-				$phpcs_file->fixer->beginChangeset();
-				$phpcs_file->fixer->replaceToken( $stack_ptr, $fixed_str );
-				$phpcs_file->fixer->endChangeset();
+				$this->phpcsFile->fixer->beginChangeset();
+				$this->phpcsFile->fixer->replaceToken( $stack_ptr, $fixed_str );
+				$this->phpcsFile->fixer->endChangeset();
 			}
 		} // End if().
 
@@ -438,24 +439,18 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $non_placeholder_content );
 
 		if ( empty( $non_placeholder_content ) ) {
-			$phpcs_file->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
+			$this->phpcsFile->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
 		}
 	} // End check_text().
 
 	/**
 	 * Check for the presence of a translators comment if one of the text strings contains a placeholder.
 	 *
-	 * @since 0.11.0
-	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the gettext call token
-	 *                                         in the stack.
-	 * @param array                $args       The function arguments.
+	 * @param int   $stack_ptr  The position of the gettext call token in the stack.
+	 * @param array $args       The function arguments.
 	 * @return void
 	 */
-	protected function check_for_translator_comment( PHP_CodeSniffer_File $phpcs_file, $stack_ptr, $args ) {
-		$tokens = $phpcs_file->getTokens();
-
+	protected function check_for_translator_comment( $stack_ptr, $args ) {
 		foreach ( $args as $arg ) {
 			if ( false === in_array( $arg['arg_name'], array( 'text', 'single', 'plural' ), true ) ) {
 				continue;
@@ -475,7 +470,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					continue;
 				}
 
-				$previous_comment = $phpcs_file->findPrevious( PHP_CodeSniffer_Tokens::$commentTokens, ( $stack_ptr - 1 ) );
+				$previous_comment = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$commentTokens, ( $stack_ptr - 1 ) );
 
 				if ( false !== $previous_comment ) {
 					/*
@@ -484,11 +479,11 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					 */
 					$correctly_placed = false;
 
-					if ( ( $tokens[ $previous_comment ]['line'] + 1 ) === $tokens[ $stack_ptr ]['line'] ) {
+					if ( ( $this->tokens[ $previous_comment ]['line'] + 1 ) === $this->tokens[ $stack_ptr ]['line'] ) {
 						$correctly_placed = true;
 					} else {
-						$next_non_whitespace = $phpcs_file->findNext( T_WHITESPACE, ( $previous_comment + 1 ), $stack_ptr, true );
-						if ( false === $next_non_whitespace || $tokens[ $next_non_whitespace ]['line'] === $tokens[ $stack_ptr ]['line'] ) {
+						$next_non_whitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $previous_comment + 1 ), $stack_ptr, true );
+						if ( false === $next_non_whitespace || $this->tokens[ $next_non_whitespace ]['line'] === $this->tokens[ $stack_ptr ]['line'] ) {
 							// No non-whitespace found or next non-whitespace is on same line as gettext call.
 							$correctly_placed = true;
 						}
@@ -500,17 +495,17 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					 */
 					if ( true === $correctly_placed ) {
 
-						if ( T_COMMENT === $tokens[ $previous_comment ]['code'] ) {
-							$comment_text = trim( $tokens[ $previous_comment ]['content'] );
+						if ( T_COMMENT === $this->tokens[ $previous_comment ]['code'] ) {
+							$comment_text = trim( $this->tokens[ $previous_comment ]['content'] );
 
 			  		   		// If it's multi-line /* */ comment, collect all the parts.
 			  		   		if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
 								for ( $i = ( $previous_comment - 1 ); 0 <= $i; $i-- ) {
-									if ( T_COMMENT !== $tokens[ $i ]['code'] ) {
+									if ( T_COMMENT !== $this->tokens[ $i ]['code'] ) {
 										break;
 									}
 
-									$comment_text = trim( $tokens[ $i ]['content'] ) . $comment_text;
+									$comment_text = trim( $this->tokens[ $i ]['content'] ) . $comment_text;
 								}
 							}
 
@@ -518,13 +513,13 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 								// Comment is ok.
 								return;
 							}
-						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $tokens[ $previous_comment ]['code'] ) {
+						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
 							// If it's docblock comment (wrong style) make sure that it's a translators comment.
-							$db_start      = $phpcs_file->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
-							$db_first_text = $phpcs_file->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ),  $previous_comment );
+							$db_start      = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
+							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ),  $previous_comment );
 
-							if ( true === $this->is_translators_comment( $tokens[ $db_first_text ]['content'] ) ) {
-								$phpcs_file->addWarning(
+							if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
+								$this->phpcsFile->addWarning(
 									'A "translators:" comment must be a "/* */" style comment. Docblock comments will not be picked up by the tools to generate a ".pot" file.',
 									$stack_ptr,
 									'TranslatorsCommentWrongStyle'
@@ -536,7 +531,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				} // End if().
 
 				// Found placeholders but no translators comment.
-				$phpcs_file->addWarning(
+				$this->phpcsFile->addWarning(
 					'A gettext call containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.',
 					$stack_ptr,
 					'MissingTranslatorsComment'
