@@ -350,7 +350,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 
 			// Only search from the end of the "global ...;" statement onwards.
 			$start        = ( $phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
-			$end          = count( $this->tokens );
+			$end          = $phpcsFile->numTokens;
 			$global_scope = true;
 
 			// Is the global statement within a function call or closure ?

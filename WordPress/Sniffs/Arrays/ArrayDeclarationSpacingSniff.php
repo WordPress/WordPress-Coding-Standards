@@ -112,7 +112,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends Squiz_Sniffs_
 				static $current_loop = array();
 
 				if ( ! isset( $current_loop[ $phpcsFile->fixer->loops ] ) ) {
-					$current_loop[ $phpcsFile->fixer->loops ] = array_fill( 0, count( $tokens ), false );
+					$current_loop[ $phpcsFile->fixer->loops ] = array_fill( 0, $phpcsFile->numTokens, false );
 				}
 
 				if ( false === $current_loop[ $phpcsFile->fixer->loops ][ $arrayStart ] ) {
