@@ -33,7 +33,9 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
  - In April 2009 original project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
  - In May 2011 the project was forked on GitHub by [Chris Adams](http://chrisadams.me.uk/).
- - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to the development and currently maintains the project, along with [J.D. Grimes](https://github.com/JDGrimes) and [Gary Jones](https://github.com/GaryJones).
+ - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to development and lead creation of the the sniffs and rulesets for `WordPress-Core`, `WordPress-VIP` (WordPress.com VIP), and `WordPress-Extra`.
+ - In 2015, [J.D. Grimes](https://github.com/JDGrimes) began significant contributions, along with maintanance from [Gary Jones](https://github.com/GaryJones).
+ - In 2016, [Juliette Reinders Folmer](https://github.com/jrfnl) began contributing heavily, adding more commits in a year than anyone else in 5 years previous since the project's inception.
 
 ## Installation
 
