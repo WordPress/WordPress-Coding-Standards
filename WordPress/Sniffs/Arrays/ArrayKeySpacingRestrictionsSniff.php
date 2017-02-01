@@ -56,8 +56,15 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 			true
 		);
 
-		$spaced1 = ( T_WHITESPACE === $tokens[ ( $stackPtr + 1 ) ]['code'] );
-		$spaced2 = ( T_WHITESPACE === $tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
+		$spaced1 = false;
+		if ( T_WHITESPACE === $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
+			$spaced1 = true;
+		}
+
+		$spaced2 = false;
+		if ( T_WHITESPACE === $tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] ) {
+			$spaced2 = true;
+		}
 
 		// It should have spaces only if it only has strings or numbers as the key.
 		if ( false !== $need_spaces && ! ( $spaced1 && $spaced2 ) ) {
