@@ -216,33 +216,90 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		$argument_assertions = array();
 		if ( 'simple' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'text',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'domain',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 		} elseif ( 'context' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( 'arg_name' => 'text',    'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'text',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'context',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'domain',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 		} elseif ( 'number' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'single',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'plural',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 			array_shift( $arguments_tokens );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'domain',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 		} elseif ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'single',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'plural',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 			array_shift( $arguments_tokens );
-			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'context',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'domain',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 		} elseif ( 'noopnumber' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
+			$argument_assertions[] = array(
+				'arg_name' => 'single',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'plural',
+				'tokens' => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'domain',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
 		} elseif ( 'noopnumber_context' === $this->i18n_functions[ $translation_function ] ) {
-			$argument_assertions[] = array( 'arg_name' => 'single',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'plural',  'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'context', 'tokens' => array_shift( $arguments_tokens ) );
-			$argument_assertions[] = array( 'arg_name' => 'domain',  'tokens' => array_shift( $arguments_tokens ) );
-		}
+			$argument_assertions[] = array(
+				'arg_name' => 'single',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'plural',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'context',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+			$argument_assertions[] = array(
+				'arg_name' => 'domain',
+				'tokens'   => array_shift( $arguments_tokens ),
+			);
+		} // End if().
 
 		if ( ! empty( $arguments_tokens ) ) {
 			$phpcs_file->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
