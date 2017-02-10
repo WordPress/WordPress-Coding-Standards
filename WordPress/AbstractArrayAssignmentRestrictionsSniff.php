@@ -84,18 +84,16 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process_token( $stackPtr ) {
 
 		$groups = $this->getGroups();
 
 		if ( empty( $groups ) ) {
-			$phpcsFile->removeTokenListener( $this, $this->register() );
+			$this->phpcsFile->removeTokenListener( $this, $this->register() );
 			return;
 		}
 
@@ -106,13 +104,10 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 			return;
 		}
 
-		// Make phpcsFile and tokens available as properties.
-		$this->init( $phpcsFile );
-
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ), true ) ) {
-			$equal = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+			$equal = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			if ( T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!
 			}
@@ -129,15 +124,15 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-				$operator = $phpcsFile->findNext( array( T_EQUAL ), ( $stackPtr + 1 ) );
+				$operator = $this->phpcsFile->findNext( array( T_EQUAL ), ( $stackPtr + 1 ) );
 			}
 
-			$keyIdx = $phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
+			$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
 			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
 				$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
-				$valStart       = $phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
-				$valEnd         = $phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
-				$val            = $phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
+				$valStart       = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
+				$valEnd         = $this->phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
+				$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
 				$val            = $this->strip_quotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}

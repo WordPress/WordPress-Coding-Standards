@@ -72,7 +72,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	/**
 	 * Text domain.
 	 *
-	 * @todo Eventually this should be able to be auto-supplied via looking at $phpcs_file->getFilename()
+	 * @todo Eventually this should be able to be auto-supplied via looking at $this->phpcsFile->getFilename()
 	 * @link https://youtrack.jetbrains.com/issue/WI-17740
 	 *
 	 * @var array
@@ -129,18 +129,12 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the current token
-	 *                                         in the stack.
+	 * @param int $stack_ptr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
-
-		// Make phpcsFile and tokens available as properties.
-		$this->init( $phpcs_file );
-
-		$token  = $this->tokens[ $stack_ptr ];
+	public function process_token( $stack_ptr ) {
+		$token = $this->tokens[ $stack_ptr ];
 
 		// Allow overruling the text_domain set in a ruleset via the command line.
 		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
@@ -153,7 +147,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		if ( '_' === $token['content'] ) {
-			$phpcs_file->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
+			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
 		}
 
 		if ( ! isset( $this->i18n_functions[ $token['content'] ] ) ) {
@@ -162,10 +156,10 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$translation_function = $token['content'];
 
 		if ( in_array( $translation_function, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
-			$phpcs_file->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $translation_function ) );
+			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $translation_function ) );
 		}
 
-		$func_open_paren_token = $phpcs_file->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
+		$func_open_paren_token = $this->phpcsFile->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
 			 return;
 		}
@@ -302,7 +296,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		} // End if().
 
 		if ( ! empty( $arguments_tokens ) ) {
-			$phpcs_file->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
+			$this->phpcsFile->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
 		}
 
 		foreach ( $argument_assertions as $argument_assertion_context ) {

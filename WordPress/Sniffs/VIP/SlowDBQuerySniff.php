@@ -54,21 +54,18 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-
-		$this->init( $phpcsFile );
+	public function process_token( $stackPtr ) {
 
 		if ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
 			return;
 		}
 
-		parent::process( $phpcsFile, $stackPtr );
+		return parent::process_token( $stackPtr );
 	}
 
 	/**

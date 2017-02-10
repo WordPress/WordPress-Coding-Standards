@@ -76,18 +76,16 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process_token( $stackPtr ) {
 		// Reset the temporary storage before processing the token.
 		unset( $this->classname );
 
-		return parent::process( $phpcsFile, $stackPtr );
+		return parent::process_token( $stackPtr );
 	}
 
 	/**

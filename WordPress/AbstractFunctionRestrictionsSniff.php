@@ -150,14 +150,12 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process_token( $stackPtr ) {
 
 		$this->excluded_groups = array_flip( explode( ',', $this->exclude ) );
 		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
@@ -165,9 +163,6 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			// Don't remove the listener as the exclude property can be changed inline.
 			return;
 		}
-
-		// Make phpcsFile and tokens available as properties.
-		$this->init( $phpcsFile );
 
 		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 			return $this->check_for_matches( $stackPtr );
