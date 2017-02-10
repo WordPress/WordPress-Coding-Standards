@@ -50,23 +50,19 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
-
-		$token = $this->tokens[ $stackPtr ];
+	public function process_token( $stackPtr ) {
+		$token  = $this->tokens[ $stackPtr ];
 
 		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
 			return;
 		}
 
 		// If within add_filter.
-		$functionPtr = $phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
+		$functionPtr = $this->phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
 		if ( 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
 			return;
 		}
@@ -77,7 +73,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		}
 
 		// Detect callback function name.
-		$callbackArrayPtr = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
+		$callbackArrayPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
 
 		// If callback is array, get second element.
 		if ( false !== $callbackArrayPtr
@@ -95,7 +91,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		unset( $functionPtr );
 
 		// Search for the function in tokens.
-		$callbackFunctionPtr = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_CLOSURE ), $callback['start'], ( $callback['end'] + 1 ) );
+		$callbackFunctionPtr = $this->phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_CLOSURE ), $callback['start'], ( $callback['end'] + 1 ) );
 
 		if ( false === $callbackFunctionPtr ) {
 			$this->confused( $stackPtr );
@@ -107,9 +103,9 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		} else {
 			$functionName = $this->strip_quotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
 
-			for ( $ptr = 0; $ptr < $phpcsFile->numTokens; $ptr++ ) {
+			for ( $ptr = 0; $ptr < $this->phpcsFile->numTokens; $ptr++ ) {
 				if ( T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
-					$foundName = $phpcsFile->getDeclarationName( $ptr );
+					$foundName = $this->phpcsFile->getDeclarationName( $ptr );
 					if ( $foundName === $functionName ) {
 						$functionPtr = $ptr;
 						break;
@@ -136,15 +132,15 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 
 			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
 				if ( 'interval' === $this->strip_quotes( $this->tokens[ $i ]['content'] ) ) {
-					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
+					$operator = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( false === $operator ) {
 						$this->confused( $stackPtr );
 						return;
 					}
 
-					$valueStart = $phpcsFile->findNext( T_WHITESPACE, ( $operator + 1 ), null, true, null, true );
-					$valueEnd   = $phpcsFile->findNext( array( T_COMMA, T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
-					$value      = $phpcsFile->getTokensAsString( $valueStart, ( $valueEnd - $valueStart ) );
+					$valueStart = $this->phpcsFile->findNext( T_WHITESPACE, ( $operator + 1 ), null, true, null, true );
+					$valueEnd   = $this->phpcsFile->findNext( array( T_COMMA, T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
+					$value      = $this->phpcsFile->getTokensAsString( $valueStart, ( $valueEnd - $valueStart ) );
 
 					if ( is_numeric( $value ) ) {
 						$interval = $value;
@@ -167,7 +163,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		}
 
 		if ( isset( $interval ) && $interval < 900 ) {
-			$phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'CronSchedulesInterval', array( $interval ) );
+			$this->phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'CronSchedulesInterval', array( $interval ) );
 			return;
 		}
 

@@ -23,16 +23,15 @@ Example usage:
 ```php
 class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
-		
+	public function process_token( $stackPtr ) {
+
 		// Check something.
 		
 		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
 			return;
 		}
 		
-		$phpcsFile->addError( ... );
+		$this->phpcsFile->addError( ... );
 	}
 }
 ```

@@ -161,21 +161,19 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
+	public function process_token( $stackPtr ) {
 
-		$file_name      = $phpcsFile->getFileName();
+		$file_name      = $this->phpcsFile->getFileName();
 		$file_extension = substr( strrchr( $file_name, '.' ), 1 );
 
 		if ( 'css' === $file_extension ) {
 			if ( T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
-				$this->process_css_style( $stackPtr );
+				return $this->process_css_style( $stackPtr );
 			}
 		} elseif ( isset( $this->string_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 			/*
@@ -189,10 +187,10 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 				$this->in_target_selector[ $file_name ] = false;
 			}
 
-			$this->process_text_for_style( $stackPtr, $file_name );
+			return $this->process_text_for_style( $stackPtr, $file_name );
 
 		} else {
-			parent::process( $phpcsFile, $stackPtr );
+			return parent::process_token( $stackPtr );
 		}
 
 	} // End process().

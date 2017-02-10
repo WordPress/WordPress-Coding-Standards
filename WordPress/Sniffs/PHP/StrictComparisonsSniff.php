@@ -37,18 +37,15 @@ class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in the
-	 *                                        stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
+	public function process_token( $stackPtr ) {
 
 		if ( ! $this->has_whitelist_comment( 'loose comparison', $stackPtr ) ) {
 			$error  = 'Found: ' . $this->tokens[ $stackPtr ]['content'] . '. Use strict comparisons (=== or !==).';
-			$phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
+			$this->phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
 		}
 
 	}

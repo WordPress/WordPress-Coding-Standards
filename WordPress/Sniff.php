@@ -521,6 +521,35 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * Set sniff properties and hand off to child class for processing of the token.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the current token
+	 *                                        in the stack passed in $tokens.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+		$this->init( $phpcsFile );
+		return $this->process_token( $stackPtr );
+	}
+
+	/**
+	 * Processes a sniff when one of its tokens is encountered.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	abstract public function process_token( $stackPtr );
+
+	/**
 	 * Initialize the class for the current process.
 	 *
 	 * This method must be called by child classes before using many of the methods

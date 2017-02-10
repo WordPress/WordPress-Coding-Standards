@@ -280,25 +280,22 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
+	public function process_token( $stackPtr ) {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
-			$bracketPtr = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			$bracketPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 			if ( false === $bracketPtr || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				return;
 			}
 
 			// Bow out if the array key contains a variable.
-			$has_variable = $phpcsFile->findNext( T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
+			$has_variable = $this->phpcsFile->findNext( T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
 			if ( false !== $has_variable ) {
 				return;
 			}
@@ -349,15 +346,15 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			}
 
 			// Only search from the end of the "global ...;" statement onwards.
-			$start        = ( $phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
-			$end          = $phpcsFile->numTokens;
+			$start        = ( $this->phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
+			$end          = $this->phpcsFile->numTokens;
 			$global_scope = true;
 
 			// Is the global statement within a function call or closure ?
 			// If so, limit the token walking to the function scope.
-			$function_token = $phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			$function_token = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 			if ( false === $function_token ) {
-				$function_token = $phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+				$function_token = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
 			}
 
 			if ( false !== $function_token ) {
@@ -388,7 +385,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
 				) {
 					// Don't throw false positives for static class properties.
-					$previous = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
+					$previous = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
 					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
 						continue;
 					}

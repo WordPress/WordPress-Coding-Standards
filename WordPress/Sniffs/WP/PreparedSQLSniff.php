@@ -94,17 +94,14 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
 	 * @since 0.8.0
 	 *
-	 * @return int|void
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-
-		$this->init( $phpcsFile );
+	public function process_token( $stackPtr ) {
 
 		// Check for $wpdb variable.
 		if ( '$wpdb' !== $this->tokens[ $stackPtr ]['content'] ) {
@@ -133,7 +130,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				);
 
 				foreach ( $bad_variables as $bad_variable ) {
-					$phpcsFile->addError(
+					$this->phpcsFile->addError(
 						'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
 						$this->i,
 						'NotPrepared',
@@ -177,7 +174,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				}
 			}
 
-			$phpcsFile->addError(
+			$this->phpcsFile->addError(
 				'Use placeholders and $wpdb->prepare(); found %s',
 				$this->i,
 				'NotPrepared',
