@@ -460,8 +460,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var string[]
 	 */
 	protected $test_class_whitelist = array(
-		'WP_UnitTestCase',
-		'PHPUnit_Framework_TestCase',
+		'WP_UnitTestCase'            => true,
+		'PHPUnit_Framework_TestCase' => true,
 	);
 
 	/**
@@ -482,7 +482,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $custom_test_class_whitelist = array();
 
@@ -835,20 +835,20 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// Add any potentially whitelisted custom test classes to the whitelist.
-		$whitelist = $this->test_class_whitelist;
-		if ( ! empty( $this->custom_test_class_whitelist ) ) {
-			$whitelist = array_merge( $this->test_class_whitelist, (array) $this->custom_test_class_whitelist );
-		}
+		$whitelist = $this->merge_custom_array(
+			$this->custom_test_class_whitelist,
+			$this->test_class_whitelist
+		);
 
 		// Is the class/trait one of the whitelisted test classes ?
 		$className = $this->phpcsFile->getDeclarationName( $structureToken );
-		if ( in_array( $className, $whitelist, true ) ) {
+		if ( isset( $whitelist[ $className ] ) ) {
 			return true;
 		}
 
 		// Does the class/trait extend one of the whitelisted test classes ?
 		$extendedClassName = $this->phpcsFile->findExtendedClassName( $structureToken );
-		if ( in_array( $extendedClassName, $whitelist, true ) ) {
+		if ( isset( $whitelist[ $extendedClassName ] ) ) {
 			return true;
 		}
 

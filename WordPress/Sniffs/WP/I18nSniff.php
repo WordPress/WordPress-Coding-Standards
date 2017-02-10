@@ -142,9 +142,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$this->text_domain = $cl_text_domain;
 		}
 
-		if ( is_string( $this->text_domain ) ) {
-			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $this->text_domain ) ) );
-		}
+		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
 
 		if ( '_' === $token['content'] ) {
 			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
