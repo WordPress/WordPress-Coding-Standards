@@ -734,7 +734,36 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		$open_parenthesis = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 		reset( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
 
-		return in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( T_ISSET, T_EMPTY ), true );
+		// Simple test
+		if ( in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( T_ISSET, T_EMPTY ), true ) ) {
+			return true;
+		}
+
+		// Null coalescing operator test
+
+		// Maybe the comparison operator is after this.
+		$next_token = $this->phpcsFile->findNext(
+			PHP_CodeSniffer_Tokens::$emptyTokens,
+			( $stackPtr + 1 ),
+			null,
+			true
+		);
+		// This might be an opening square bracket in the case of arrays ($var['a']).
+		while ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
+
+			$next_token = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				( $this->tokens[ $next_token ]['bracket_closer'] + 1 ),
+				null,
+				true
+			);
+		}
+
+		if ( 'T_COALESCE' === $this->tokens[ $next_token ]['type'] ){
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
