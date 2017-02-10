@@ -15,9 +15,24 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.11.0 Extends the WordPress_Sniff class.
+ * @since   0.11.0 - Extends the WordPress_Sniff class.
+ *                 - Now deals correctly with WP time constants.
  */
 class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
+
+	/**
+	 * Known WP Time constant names and their value.
+	 *
+	 * @var array
+	 */
+	protected $wp_time_constants = array(
+		'MINUTE_IN_SECONDS' => 60,
+		'HOUR_IN_SECONDS'   => 3600,
+		'DAY_IN_SECONDS'    => 86400,
+		'WEEK_IN_SECONDS'   => 604800,
+		'MONTH_IN_SECONDS'  => 2592000,
+		'YEAR_IN_SECONDS'   => 31536000,
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -42,8 +57,9 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+		$this->init( $phpcsFile );
+
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
 			return;
@@ -51,61 +67,79 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 
 		// If within add_filter.
 		$functionPtr = $phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
-		if ( 'add_filter' !== $tokens[ $functionPtr ]['content'] ) {
+		if ( 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
+			return;
+		}
+
+		$callback = $this->get_function_call_parameter( $functionPtr, 2 );
+		if ( false === $callback ) {
 			return;
 		}
 
 		// Detect callback function name.
-		$callbackPtr = $phpcsFile->findNext( array( T_COMMA, T_WHITESPACE ), ( $stackPtr + 1 ), null, true, null, true );
+		$callbackArrayPtr = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
 
 		// If callback is array, get second element.
-		if ( T_ARRAY === $tokens[ $callbackPtr ]['code'] ) {
-			$comma = $phpcsFile->findNext( T_COMMA, ( $callbackPtr + 1 ) );
-			if ( false === $comma ) {
-				$this->confused( $phpcsFile, $stackPtr );
-				return;
-			}
+		if ( false !== $callbackArrayPtr
+			&& ( T_ARRAY === $this->tokens[ $callbackArrayPtr ]['code']
+				|| T_OPEN_SHORT_ARRAY === $this->tokens[ $callbackArrayPtr ]['code'] )
+		) {
+			$callback = $this->get_function_call_parameter( $callbackArrayPtr, 2 );
 
-			$callbackPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $comma + 1 ), null, true, null, true );
-			if ( false === $callbackPtr ) {
-				$this->confused( $phpcsFile, $stackPtr );
+			if ( false === $callback ) {
+				$this->confused( $stackPtr );
 				return;
 			}
 		}
 
-		$functionPtr = null;
+		unset( $functionPtr );
 
 		// Search for the function in tokens.
-		if ( in_array( $tokens[ $callbackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-			$functionName = $this->strip_quotes( $tokens[ $callbackPtr ]['content'] );
+		$callbackFunctionPtr = $phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_CLOSURE ), $callback['start'], ( $callback['end'] + 1 ) );
 
-			foreach ( $tokens as $ptr => $_token ) {
-				if ( T_STRING === $_token['code'] && $_token['content'] === $functionName ) {
-					$functionPtr = $ptr;
+		if ( false === $callbackFunctionPtr ) {
+			$this->confused( $stackPtr );
+			return;
+		}
+
+		if ( T_CLOSURE === $this->tokens[ $callbackFunctionPtr ]['code'] ) {
+			$functionPtr = $callbackFunctionPtr;
+		} else {
+			$functionName = $this->strip_quotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
+
+			for ( $ptr = 0; $ptr < $phpcsFile->numTokens; $ptr++ ) {
+				if ( T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
+					$foundName = $phpcsFile->getDeclarationName( $ptr );
+					if ( $foundName === $functionName ) {
+						$functionPtr = $ptr;
+						break;
+					} elseif ( isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
+						// Skip to the end of the function definition.
+						$ptr = $this->tokens[ $ptr ]['scope_closer'];
+					}
 				}
 			}
-		} elseif ( T_CLOSURE === $tokens[ $callbackPtr ]['code'] ) { // Closure.
-			$functionPtr = $callbackPtr;
 		}
 
-		if ( is_null( $functionPtr ) ) {
-			$this->confused( $phpcsFile, $stackPtr );
+		if ( ! isset( $functionPtr ) ) {
+			$this->confused( $stackPtr );
 			return;
 		}
 
-		$opening = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $functionPtr );
-		if ( false === $opening ) {
+		if ( ! isset( $this->tokens[ $functionPtr ]['scope_opener'], $this->tokens[ $functionPtr ]['scope_closer'] ) ) {
 			return;
 		}
 
-		$closing = $tokens[ $opening ]['bracket_closer'];
+		$opening = $this->tokens[ $functionPtr ]['scope_opener'];
+		$closing = $this->tokens[ $functionPtr ]['scope_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
-			if ( in_array( $tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-				if ( 'interval' === $this->strip_quotes( $tokens[ $i ]['content'] ) ) {
+			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+				if ( 'interval' === $this->strip_quotes( $this->tokens[ $i ]['content'] ) ) {
 					$operator = $phpcsFile->findNext( T_DOUBLE_ARROW, $i, null, false, null, true );
-					if ( empty( $operator ) ) {
-						$this->confused( $phpcsFile, $stackPtr );
+					if ( false === $operator ) {
+						$this->confused( $stackPtr );
+						return;
 					}
 
 					$valueStart = $phpcsFile->findNext( T_WHITESPACE, ( $operator + 1 ), null, true, null, true );
@@ -117,19 +151,22 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 						break;
 					}
 
+					// Deal correctly with WP time constants.
+					$value = str_replace( array_keys( $this->wp_time_constants ), array_values( $this->wp_time_constants ), $value );
+
 					// If all digits and operators, eval!
-					if ( preg_match( '#^[\s\d\+\*\-\/]+$#', $value ) > 0 ) {
+					if ( preg_match( '#^[\s\d+*/-]+$#', $value ) > 0 ) {
 						$interval = eval( "return ( $value );" ); // @codingStandardsIgnoreLine - No harm here.
 						break;
 					}
 
-					$this->confused( $phpcsFile, $stackPtr );
+					$this->confused( $stackPtr );
 					return;
 				}
 			}
 		}
 
-		if ( isset( $interval ) && $interval < ( 15 * 60 ) ) {
+		if ( isset( $interval ) && $interval < 900 ) {
 			$phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'CronSchedulesInterval', array( $interval ) );
 			return;
 		}
@@ -139,12 +176,10 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 	/**
 	 * Add warning about unclear cron schedule change.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 */
-	public function confused( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$phpcsFile->addWarning(
+	public function confused( $stackPtr ) {
+		$this->phpcsFile->addWarning(
 			'Detected changing of cron_schedules, but could not detect the interval value.',
 			$stackPtr,
 			'ChangeDetected'
