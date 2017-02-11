@@ -28,9 +28,12 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * PHP Reserved Vars.
 	 *
+	 * @since 0.9.0
+	 * @since 0.11.0 Changed visibility from public to protected.
+	 *
 	 * @var array
 	 */
-	public $php_reserved_vars = array(
+	protected $php_reserved_vars = array(
 		'_SERVER'              => true,
 		'_GET'                 => true,
 		'_POST'                => true,

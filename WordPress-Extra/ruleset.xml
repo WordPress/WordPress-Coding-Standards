@@ -51,7 +51,9 @@
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- WP core still supports PHP 5.2+  -->
-		<exclude name="WordPress.WP.DiscouragedFunctions.create_function" />
+		<properties>
+			<property name="exclude" value="create_function" />
+		</properties>
 	</rule>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="WordPress.WP.AlternativeFunctions"/>

@@ -22,9 +22,12 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 	/**
 	 * List of global WP variables.
 	 *
+	 * @since 0.3.0
+	 * @since 0.11.0 Changed visibility from public to protected.
+	 *
 	 * @var array
 	 */
-	public $globals = array(
+	protected $globals = array(
 		'comment',
 		'comment_alt',
 		'comment_depth',

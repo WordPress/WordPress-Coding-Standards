@@ -52,7 +52,9 @@
 	<!-- https://github.com/Automattic/vip-scanner/blob/master/vip-scanner/checks/ForbiddenPHPFunctionsCheck.php -->
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/633#issuecomment-266634811 -->
-		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.obfuscation" />
+		<properties>
+			<property name="exclude" value="obfuscation" />
+		</properties>
 	</rule>
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration">

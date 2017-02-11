@@ -22,10 +22,11 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 * Superglobals to give an error for when not accompanied by an nonce check.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed visibility from public to protected.
 	 *
 	 * @var array
 	 */
-	public $errorForSuperGlobals = array( '$_POST', '$_FILE' );
+	protected $errorForSuperGlobals = array( '$_POST', '$_FILE' );
 
 	/**
 	 * Superglobals to give a warning for when not accompanied by an nonce check.
@@ -33,10 +34,11 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 * If the variable is also in the error list, that takes precedence.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed visibility from public to protected.
 	 *
 	 * @var array
 	 */
-	public $warnForSuperGlobals = array( '$_GET', '$_REQUEST' );
+	protected $warnForSuperGlobals = array( '$_GET', '$_REQUEST' );
 
 	/**
 	 * Custom list of functions which verify nonces.
