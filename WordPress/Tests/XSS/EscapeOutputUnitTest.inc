@@ -183,7 +183,6 @@ _deprecated_hook( "filter_{$context}", '1.3.0', __( 'The $arg is deprecated.' ),
 
 echo add_filter( get_the_excerpt( get_the_ID() ) ; // Bad, but ignored as code contains a parse error.
 
-
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
