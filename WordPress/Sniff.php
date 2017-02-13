@@ -140,6 +140,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'get_template_part'         => true,
 		'get_the_author_link'       => true,
 		'get_the_author'            => true,
+		'get_the_category_list'     => true,
 		'get_the_date'              => true,
 		'get_the_ID'                => true,
 		'get_the_post_thumbnail'    => true,
