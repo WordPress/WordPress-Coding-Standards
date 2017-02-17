@@ -293,8 +293,10 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			// Potentially correct incorrect format.
 			if ( is_string( $this->customPropertiesWhitelist ) ) {
 				$this->customPropertiesWhitelist = array_map( 'trim', explode( ',', $this->customPropertiesWhitelist ) );
-			} else {
-				// Otherwise, disregard the value.
+			}
+
+			// Otherwise, disregard the value.
+			if ( ! is_array( $this->customPropertiesWhitelist ) ) {
 				$this->customPropertiesWhitelist = array();
 			}
 		}
