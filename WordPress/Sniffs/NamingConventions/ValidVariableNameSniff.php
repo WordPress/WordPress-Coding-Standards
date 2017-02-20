@@ -54,6 +54,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected $wordpress_mixed_case_vars = array(
 		'EZSQL_ERROR' => true,
+		'$is_IIS'     => true,
 		'PHP_SELF'    => true,
 	);
 
