@@ -28,9 +28,12 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * PHP Reserved Vars.
 	 *
+	 * @since 0.9.0
+	 * @since 0.11.0 Changed visibility from public to protected.
+	 *
 	 * @var array
 	 */
-	public $php_reserved_vars = array(
+	protected $php_reserved_vars = array(
 		'_SERVER'              => true,
 		'_GET'                 => true,
 		'_POST'                => true,
@@ -65,9 +68,12 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * List of member variables that can have mixed case.
 	 *
+	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public to protected.
+	 *
 	 * @var array
 	 */
-	public $whitelisted_mixed_case_member_var_names = array(
+	protected $whitelisted_mixed_case_member_var_names = array(
 		'ID'                => true,
 		'comment_ID'        => true,
 		'comment_post_ID'   => true,
@@ -81,19 +87,25 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 *
 	 * @since 0.11.0
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $customPropertiesWhitelist = array();
 
 	/**
-	 * Whether the custom whitelisted properties were added to the default list yet.
+	 * Cache of previously added custom functions.
+	 *
+	 * Prevents having to do the same merges over and over again.
 	 *
 	 * @since 0.10.0
-	 * @since 0.11.0 Name changed from $addedCustomVariables.
+	 * @since 0.11.0 - Name changed from $addedCustomVariables.
+	 *               - Changed the format from simple bool to array.
 	 *
-	 * @var bool
+	 * @var array
 	 */
-	protected $addedCustomProperties = false;
+	protected $addedCustomProperties = array(
+		'properties' => null,
+		'variables'  => null,
+	);
 
 	/**
 	 * Custom list of properties which can have mixed case.
@@ -101,7 +113,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @since 0.10.0
 	 * @deprecated 0.11.0 Use $customPropertiesWhitelist instead.
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $customVariablesWhitelist = array();
 
@@ -116,9 +128,6 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
-		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList( $phpcs_file );
-
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
@@ -126,6 +135,9 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		if ( isset( $this->php_reserved_vars[ $var_name ] ) ) {
 			return;
 		}
+
+		// Merge any custom variables with the defaults.
+		$this->mergeWhiteList( $phpcs_file );
 
 		// Likewise if it is a mixed-case var used by WordPress core.
 		if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
@@ -202,9 +214,6 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 */
 	protected function processMemberVar( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
 
-		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList( $phpcs_file );
-
 		$tokens = $phpcs_file->getTokens();
 
 		$var_name     = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -216,6 +225,9 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			// we can ignore it.
 			return;
 		}
+
+		// Merge any custom variables with the defaults.
+		$this->mergeWhiteList( $phpcs_file );
 
 		$error_data = array( $var_name );
 		if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
@@ -239,6 +251,10 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 		$tokens = $phpcs_file->getTokens();
 
 		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
+
+			// Merge any custom variables with the defaults.
+			$this->mergeWhiteList( $phpcs_file );
+
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
 				if ( isset( $this->php_reserved_vars[ $var_name ] ) ) {
@@ -281,57 +297,32 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 * @return void
 	 */
 	protected function mergeWhiteList( $phpcs_file ) {
-		if ( $this->addedCustomProperties ) {
-			return;
-		}
+		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties']
+			|| $this->customVariablesWhitelist !== $this->addedCustomProperties['variables']
+		) {
+			// Fix property potentially passed as comma-delimited string.
+			$customProperties = WordPress_Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
 
-		if ( ! empty( $this->customPropertiesWhitelist ) ) {
-			if ( ! is_array( $this->customPropertiesWhitelist ) ) {
-				// Incorrectly set property.
+			if ( ! empty( $this->customVariablesWhitelist ) ) {
+				$properties = WordPress_Sniff::merge_custom_array(
+					$this->customVariablesWhitelist,
+					$customProperties,
+					false
+				);
+
 				$phpcs_file->addWarning(
-					'The customVariablesWhitelist property should be provided with type="array".',
+					'The customVariablesWhitelist property is deprecated in favor of customPropertiesWhitelist.',
 					0,
-					'WrongFormatCustomVariablesWhitelist'
+					'DeprecatedCustomVariablesWhitelist'
 				);
 			}
 
-			// Potentially correct incorrect format.
-			if ( is_string( $this->customPropertiesWhitelist ) ) {
-				$this->customPropertiesWhitelist = array_map( 'trim', explode( ',', $this->customPropertiesWhitelist ) );
-			} else {
-				// Otherwise, disregard the value.
-				$this->customPropertiesWhitelist = array();
-			}
-		}
-
-		if ( ! empty( $this->customVariablesWhitelist ) ) {
-			if ( ! is_array( $this->customVariablesWhitelist ) ) {
-				// Incorrectly set property, disregard it.
-				$phpcs_file->addWarning(
-					'The customVariablesWhitelist property should be provided with type="array".',
-					0,
-					'WrongFormatCustomVariablesWhitelist'
-				);
-			} else {
-				$this->customPropertiesWhitelist = array_merge(
-					$this->customPropertiesWhitelist,
-					$this->customVariablesWhitelist
-				);
-			}
-
-			$phpcs_file->addWarning(
-				'The customVariablesWhitelist property is deprecated in favor of customPropertiesWhitelist.',
-				0,
-				'DeprecatedCustomVariablesWhitelist'
+			$this->whitelisted_mixed_case_member_var_names = WordPress_Sniff::merge_custom_array(
+				$customProperties,
+				$this->whitelisted_mixed_case_member_var_names
 			);
-		}
-
-		if ( ! empty( $this->customPropertiesWhitelist ) ) {
-			$this->whitelisted_mixed_case_member_var_names = array_merge(
-				$this->whitelisted_mixed_case_member_var_names,
-				array_flip( $this->customPropertiesWhitelist )
-			);
-			$this->addedCustomProperties = true;
+			$this->addedCustomProperties['properties'] = $this->customPropertiesWhitelist;
+			$this->addedCustomProperties['variables']  = $this->customVariablesWhitelist;
 		}
 	}
 

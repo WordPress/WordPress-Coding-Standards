@@ -40,7 +40,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		// Check for global input variable.
-		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], self::$input_superglobals, true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], $this->input_superglobals, true ) ) {
 			return;
 		}
 

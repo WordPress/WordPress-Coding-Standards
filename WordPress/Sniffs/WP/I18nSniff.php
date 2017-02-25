@@ -75,16 +75,19 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 	 * @todo Eventually this should be able to be auto-supplied via looking at $this->phpcsFile->getFilename()
 	 * @link https://youtrack.jetbrains.com/issue/WI-17740
 	 *
-	 * @var array
+	 * @var string[]|string
 	 */
 	public $text_domain;
 
 	/**
 	 * The I18N functions in use in WP.
 	 *
+	 * @since 0.10.0
+	 * @since 0.11.0 Changed visibility from public to protected.
+	 *
 	 * @var array <string function name> => <string function type>
 	 */
-	public $i18n_functions = array(
+	protected $i18n_functions = array(
 		'translate'                      => 'simple',
 		'__'                             => 'simple',
 		'esc_attr__'                     => 'simple',
@@ -142,9 +145,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			$this->text_domain = $cl_text_domain;
 		}
 
-		if ( is_string( $this->text_domain ) ) {
-			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $this->text_domain ) ) );
-		}
+		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
 
 		if ( '_' === $token['content'] ) {
 			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );

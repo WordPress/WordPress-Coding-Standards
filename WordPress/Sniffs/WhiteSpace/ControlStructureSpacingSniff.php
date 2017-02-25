@@ -25,13 +25,6 @@
 class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress_Sniff {
 
 	/**
-	 * A list of tokenizers this sniff supports.
-	 *
-	 * @var array
-	 */
-	public $supportedTokenizers = array( 'PHP' );
-
-	/**
 	 * Check for blank lines on start/end of control structures.
 	 *
 	 * @var boolean
@@ -113,13 +106,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-		$this->blank_line_check 	  = (bool) $this->blank_line_check;
-		$this->blank_line_after_check = (bool) $this->blank_line_after_check;
+		$this->spaces_before_closure_open_paren = (int) $this->spaces_before_closure_open_paren;
 
 		if ( isset( $this->tokens[ ( $stackPtr + 1 ) ] ) && T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code']
 			&& ! ( T_ELSE === $this->tokens[ $stackPtr ]['code'] && T_COLON === $this->tokens[ ( $stackPtr + 1 ) ]['code'] )
 			&& ! ( T_CLOSURE === $this->tokens[ $stackPtr ]['code']
-				&& 0 >= (int) $this->spaces_before_closure_open_paren )
+				&& 0 >= $this->spaces_before_closure_open_paren )
 		) {
 			$error = 'Space after opening control structure is required';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
@@ -249,7 +241,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 
 			if (
 				T_CLOSURE === $this->tokens[ $stackPtr ]['code']
-				&& 0 === (int) $this->spaces_before_closure_open_paren
+				&& 0 === $this->spaces_before_closure_open_paren
 			) {
 
 				if ( ( $stackPtr + 1 ) !== $parenthesisOpener ) {
@@ -266,7 +258,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			} elseif (
 				(
 					T_CLOSURE !== $this->tokens[ $stackPtr ]['code']
-					|| 1 === (int) $this->spaces_before_closure_open_paren
+					|| 1 === $this->spaces_before_closure_open_paren
 				)
 				&& ( $stackPtr + 1 ) === $parenthesisOpener
 			) {
@@ -427,7 +419,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			} // End if().
 		} // End if().
 
-		if ( true === $this->blank_line_check && isset( $scopeOpener ) ) {
+		if ( false !== $this->blank_line_check && isset( $scopeOpener ) ) {
 			$firstContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
 
 			// We ignore spacing for some structures that tend to have their own rules.
@@ -500,7 +492,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			unset( $ignore );
 		} // End if().
 
-		if ( ! isset( $scopeCloser ) || false === $this->blank_line_after_check ) {
+		if ( ! isset( $scopeCloser ) || true !== $this->blank_line_after_check ) {
 			return;
 		}
 

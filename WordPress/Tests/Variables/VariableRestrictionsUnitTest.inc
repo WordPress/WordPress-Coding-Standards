@@ -52,7 +52,7 @@ test( $bar->bar ); // Ok - within excluded group.
 BAR::var; // Ok - within excluded group.
 
 // Reset group exclusions.
-// @codingStandardsChangeSetting WordPress.Variables.VariableRestrictions exclude null
+// @codingStandardsChangeSetting WordPress.Variables.VariableRestrictions exclude false
 bar( $taz ); // Error.
 test( $foo->bar ); // Error.
 FOO::regex; // Error.

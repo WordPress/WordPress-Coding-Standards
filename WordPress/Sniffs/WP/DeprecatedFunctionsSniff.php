@@ -36,7 +36,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 	 *
 	 * @var string WordPress versions.
 	 */
-	public $minimum_supported_version = 4.4;
+	public $minimum_supported_version = '4.4';
 
 	/**
 	 * List of deprecated functions with alternative when available.

@@ -21,10 +21,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * List of the functions which verify nonces.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $nonceVerificationFunctions = array(
+	protected $nonceVerificationFunctions = array(
 		'wp_verify_nonce'     => true,
 		'check_admin_referer' => true,
 		'check_ajax_referer'  => true,
@@ -34,10 +35,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions that escape values for display.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $escapingFunctions = array(
+	protected $escapingFunctions = array(
 		'absint'               => true,
 		'esc_attr__'           => true,
 		'esc_attr_e'           => true,
@@ -76,10 +78,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions whose output is automatically escaped for display.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $autoEscapedFunctions = array(
+	protected $autoEscapedFunctions = array(
 		'allowed_tags'              => true,
 		'bloginfo'                  => true,
 		'body_class'                => true,
@@ -236,10 +239,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * list if they do.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $sanitizingFunctions = array(
+	protected $sanitizingFunctions = array(
 		'_wp_handle_upload'          => true,
 		'array_key_exists'           => true,
 		'esc_url_raw'                => true,
@@ -290,10 +294,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * if they don't.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $unslashingSanitizingFunctions = array(
+	protected $unslashingSanitizingFunctions = array(
 		'absint'       => true,
 		'boolval'      => true,
 		'floatval'     => true,
@@ -312,10 +317,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * more difficult.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $formattingFunctions = array(
+	protected $formattingFunctions = array(
 		'array_fill' => true,
 		'ent2ncr'    => true,
 		'implode'    => true,
@@ -330,10 +336,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions which print output incorporating the values passed to them.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $printingFunctions = array(
+	protected $printingFunctions = array(
 		'_deprecated_argument'    => true,
 		'_deprecated_constructor' => true,
 		'_deprecated_file'        => true,
@@ -358,10 +365,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions that escape values for use in SQL queries.
 	 *
 	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $SQLEscapingFunctions = array(
+	protected $SQLEscapingFunctions = array(
 		'absint'      => true,
 		'esc_sql'     => true,
 		'floatval'    => true,
@@ -373,10 +381,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions whose output is automatically escaped for use in SQL queries.
 	 *
 	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $SQLAutoEscapedFunctions = array(
+	protected $SQLAutoEscapedFunctions = array(
 		'count' => true,
 	);
 
@@ -384,10 +393,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that get data from the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheGetFunctions = array(
+	protected $cacheGetFunctions = array(
 		'wp_cache_get' => true,
 	);
 
@@ -395,10 +405,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that set data in the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheSetFunctions = array(
+	protected $cacheSetFunctions = array(
 		'wp_cache_set' => true,
 		'wp_cache_add' => true,
 	);
@@ -407,10 +418,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that delete data from the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheDeleteFunctions = array(
+	protected $cacheDeleteFunctions = array(
 		'wp_cache_delete' => true,
 	);
 
@@ -418,10 +430,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that invoke WP hooks (filters/actions).
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $hookInvokeFunctions = array(
+	protected $hookInvokeFunctions = array(
 		'do_action'                => true,
 		'do_action_ref_array'      => true,
 		'do_action_deprecated'     => true,
@@ -434,10 +447,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that are used to interact with the WP plugins API.
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array <string function name> => <int position of the hook name argument in function signature>
 	 */
-	public static $hookFunctions = array(
+	protected $hookFunctions = array(
 		'has_filter'         => 1,
 		'add_filter'         => 1,
 		'remove_filter'      => 1,
@@ -460,8 +474,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var string[]
 	 */
 	protected $test_class_whitelist = array(
-		'WP_UnitTestCase',
-		'PHPUnit_Framework_TestCase',
+		'WP_UnitTestCase'            => true,
+		'PHPUnit_Framework_TestCase' => true,
 	);
 
 	/**
@@ -482,7 +496,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @var string[]
+	 * @var string|string[]
 	 */
 	public $custom_test_class_whitelist = array();
 
@@ -508,10 +522,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of superglobals that incorporate user input.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from static to non-static.
 	 *
 	 * @var string[]
 	 */
-	protected static $input_superglobals = array(
+	protected $input_superglobals = array(
 		'$_COOKIE',
 		'$_GET',
 		'$_FILES',
@@ -664,6 +679,62 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Merge a pre-set array with a ruleset provided array or inline provided string.
+	 *
+	 * - Will correctly handle custom array properties which were set without
+	 *   the `type="array"` indicator.
+	 *   This also allows for making these custom array properties testable using
+	 *   a `@codingStandardsChangeSetting` comment in the unit tests.
+	 * - By default flips custom lists to allow for using `isset()` instead
+	 *   of `in_array()`.
+	 * - When `$flip` is true:
+	 *   * Presumes the base array is in a `'value' => true` format.
+	 *   * Any custom items will be given the value `false` to be able to
+	 *     distinguish them from pre-set (base array) values.
+	 *   * Will filter previously added custom items out from the base array
+	 *     before merging/returning to allow for resetting to the base array.
+	 *
+	 * {@internal Function is static as it doesn't use any of the properties or others
+	 * methods anyway and this way the `WordPress_Sniffs_NamingConventions_ValidVariableNameSniff`
+	 * which extends an upstream sniff can also use it.}}
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param array|string $custom Custom list as provided via a ruleset.
+	 *                             Can be either a comma-delimited string or
+	 *                             an array of values.
+	 * @param array        $base   Optional. Base list. Defaults to an empty array.
+	 *                             Expects `value => true` format when `$flip` is true.
+	 * @param bool         $flip   Optional. Whether or not to flip the custom list.
+	 *                             Defaults to true.
+	 * @return array
+	 */
+	public static function merge_custom_array( $custom, $base = array(), $flip = true ) {
+		if ( true === $flip ) {
+			$base = array_filter( $base );
+		}
+
+		if ( empty( $custom ) || ( ! is_array( $custom ) && ! is_string( $custom ) ) ) {
+			return $base;
+		}
+
+		// Allow for a comma delimited list.
+		if ( is_string( $custom ) ) {
+			$custom = array_filter( array_map( 'trim', explode( ',', $custom ) ) );
+		}
+
+		if ( true === $flip ) {
+			$custom = array_fill_keys( $custom, false );
+		}
+
+		if ( empty( $base ) ) {
+			return $custom;
+		}
+
+		return array_merge( $base, $custom );
+	}
+
+	/**
 	 * Get the last pointer in a line.
 	 *
 	 * @since 0.4.0
@@ -779,20 +850,20 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// Add any potentially whitelisted custom test classes to the whitelist.
-		$whitelist = $this->test_class_whitelist;
-		if ( ! empty( $this->custom_test_class_whitelist ) ) {
-			$whitelist = array_merge( $this->test_class_whitelist, (array) $this->custom_test_class_whitelist );
-		}
+		$whitelist = $this->merge_custom_array(
+			$this->custom_test_class_whitelist,
+			$this->test_class_whitelist
+		);
 
 		// Is the class/trait one of the whitelisted test classes ?
 		$className = $this->phpcsFile->getDeclarationName( $structureToken );
-		if ( in_array( $className, $whitelist, true ) ) {
+		if ( isset( $whitelist[ $className ] ) ) {
 			return true;
 		}
 
 		// Does the class/trait extend one of the whitelisted test classes ?
 		$extendedClassName = $this->phpcsFile->findExtendedClassName( $structureToken );
-		if ( in_array( $extendedClassName, $whitelist, true ) ) {
+		if ( isset( $whitelist[ $extendedClassName ] ) ) {
 			return true;
 		}
 
@@ -937,7 +1008,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( self::$nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
 				$last['nonce_check'] = $i;
 				return true;
 			}
@@ -1110,12 +1181,12 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If slashing is required, give an error.
-		if ( ! $is_unslashed && $require_unslash && ! isset( self::$unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( ! $is_unslashed && $require_unslash && ! isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
 			$this->add_unslash_error( $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
-		if ( isset( self::$sanitizingFunctions[ $functionName ] ) || isset( self::$unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( isset( $this->sanitizingFunctions[ $functionName ] ) || isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
 			return true;
 		}
 

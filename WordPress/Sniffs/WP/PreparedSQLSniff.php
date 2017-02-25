@@ -24,10 +24,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * The lists of $wpdb methods.
 	 *
 	 * @since 0.8.0
+	 * @since 0.11.0 Changed from static to non-static.
 	 *
 	 * @var array
 	 */
-	protected static $methods = array(
+	protected $methods = array(
 		'get_var'     => true,
 		'get_col'     => true,
 		'get_row'     => true,
@@ -153,8 +154,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 			if ( T_STRING === $this->tokens[ $this->i ]['code'] ) {
 
 				if (
-					isset( self::$SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
-					|| isset( self::$SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					isset( $this->SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					|| isset( $this->SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
 				) {
 
 					// Find the opening parenthesis.
@@ -169,7 +170,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-				} elseif ( isset( self::$formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
+				} elseif ( isset( $this->formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
 					continue;
 				}
 			}
@@ -226,7 +227,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		// Check that this is one of the methods that we are interested in.
-		if ( ! isset( self::$methods[ $method ] ) ) {
+		if ( ! isset( $this->methods[ $method ] ) ) {
 			return false;
 		}
 

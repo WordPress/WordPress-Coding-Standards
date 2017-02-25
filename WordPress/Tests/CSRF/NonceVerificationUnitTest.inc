@@ -125,3 +125,38 @@ $b = function () {
 
 	do_something( $_POST['abc'] ); // Bad.
 };
+
+/*
+ * Test using custom properties, setting & unsetting (resetting).
+ */
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customNonceVerificationFunctions my_nonce_check
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customSanitizingFunctions sanitize_pc,sanitize_twitter
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customUnslashingSanitizingFunctions do_something
+
+function foo_5() {
+
+	sanitize_twitter( $_POST['foo'] ); // OK.
+	sanitize_pc( $_POST['bar'] ); // OK.
+	my_nonce_check( do_something( $_POST['tweet'] ) ); // OK.
+}
+
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customSanitizingFunctions sanitize_pc
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customUnslashingSanitizingFunctions false
+
+function foo_5() {
+
+	do_something( $_POST['foo'] ); // Bad.
+	sanitize_pc( $_POST['bar'] ); // OK.
+	sanitize_twitter( $_POST['bar'] ); // Bad.
+	my_nonce_check( sanitize_twitter( $_POST['tweet'] ) ); // OK.
+}
+
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customNonceVerificationFunctions false
+// @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customSanitizingFunctions false
+
+function foo_5() {
+
+	do_something( $_POST['foo'] ); // Bad.
+	sanitize_pc( $_POST['bar'] ); // Bad.
+	my_nonce_check( sanitize_twitter( $_POST['tweet'] ) ); // Bad.
+}

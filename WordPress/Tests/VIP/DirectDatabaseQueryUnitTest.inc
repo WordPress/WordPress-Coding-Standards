@@ -115,3 +115,79 @@ $b = function () {
 
 	return $listofthings;
 };
+
+/*
+ * Test using custom properties, setting & unsetting (resetting).
+ */
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions my_cacheget
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions my_cacheset,my_other_cacheset
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheDeleteFunctions my_cachedel
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; OK.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; OK.
+		my_other_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // DB call ok; OK.
+	my_cachedel( 'key', 'group' );
+}
+
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions my_cacheset
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheDeleteFunctions false
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; OK.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; Bad.
+		my_other_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // DB call ok; Bad.
+	my_cachedel( 'key', 'group' );
+}
+
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions false
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions false
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$quux = $wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; Bad.
+		my_cacheset( 'key', 'group' );
+	}
+}

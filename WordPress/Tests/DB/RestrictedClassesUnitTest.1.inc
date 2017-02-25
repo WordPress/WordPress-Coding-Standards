@@ -59,7 +59,7 @@ echo mysqli::$affected_rows; // Ok - within excluded group.
 class YourMysqli extends \mysqli {} // Ok - within excluded group.
 
 // Reset group exclusions.
-// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude null
+// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude false
 $db9 = new \My\DBlayer; // Error.
 
 echo mysqli::$affected_rows; // Error.

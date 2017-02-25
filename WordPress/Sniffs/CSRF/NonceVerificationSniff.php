@@ -22,10 +22,11 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 * Superglobals to give an error for when not accompanied by an nonce check.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed visibility from public to protected.
 	 *
 	 * @var array
 	 */
-	public $errorForSuperGlobals = array( '$_POST', '$_FILE' );
+	protected $errorForSuperGlobals = array( '$_POST', '$_FILE' );
 
 	/**
 	 * Superglobals to give a warning for when not accompanied by an nonce check.
@@ -33,28 +34,55 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 * If the variable is also in the error list, that takes precedence.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed visibility from public to protected.
 	 *
 	 * @var array
 	 */
-	public $warnForSuperGlobals = array( '$_GET', '$_REQUEST' );
+	protected $warnForSuperGlobals = array( '$_GET', '$_REQUEST' );
 
 	/**
 	 * Custom list of functions which verify nonces.
 	 *
 	 * @since 0.5.0
 	 *
-	 * @var array
+	 * @var string|string[]
 	 */
 	public $customNonceVerificationFunctions = array();
 
 	/**
-	 * Whether the custom functions have been added to the default list yet.
+	 * Custom list of functions that sanitize the values passed to them.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string|string[]
+	 */
+	public $customSanitizingFunctions = array();
+
+	/**
+	 * Custom sanitizing functions that implicitly unslash the values passed to them.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string|string[]
+	 */
+	public $customUnslashingSanitizingFunctions = array();
+
+	/**
+	 * Cache of previously added custom functions.
+	 *
+	 * Prevents having to do the same merges over and over again.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 - Changed from public static to protected non-static.
+	 *               - Changed the format from simple bool to array.
 	 *
-	 * @var bool
+	 * @var array
 	 */
-	public static $addedCustomFunctions = false;
+	protected $addedCustomFunctions = array(
+		'nonce'           => null,
+		'sanitize'        => null,
+		'unslashsanitize' => null,
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -77,16 +105,6 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		// Merge any custom functions with the defaults, if we haven't already.
-		if ( ! self::$addedCustomFunctions ) {
-			self::$nonceVerificationFunctions = array_merge(
-				self::$nonceVerificationFunctions
-				, array_flip( $this->customNonceVerificationFunctions )
-			);
-
-			self::$addedCustomFunctions = true;
-		}
-
 		$instance = $this->tokens[ $stackPtr ];
 
 		$superglobals = array_merge(
@@ -106,6 +124,8 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 			return;
 		}
 
+		$this->mergeFunctionLists();
+
 		if ( $this->is_only_sanitized( $stackPtr ) ) {
 			return;
 		}
@@ -123,5 +143,38 @@ class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
 		);
 
 	} // End process().
+
+	/**
+	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
+	 *
+	 * @since 0.11.0 Split out from the `process()` method.
+	 *
+	 * @return void
+	 */
+	protected function mergeFunctionLists() {
+		if ( $this->customNonceVerificationFunctions !== $this->addedCustomFunctions['nonce'] ) {
+			$this->nonceVerificationFunctions = $this->merge_custom_array(
+				$this->customNonceVerificationFunctions,
+				$this->nonceVerificationFunctions
+			);
+			$this->addedCustomFunctions['nonce'] = $this->customNonceVerificationFunctions;
+		}
+
+		if ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] ) {
+			$this->sanitizingFunctions = $this->merge_custom_array(
+				$this->customSanitizingFunctions,
+				$this->sanitizingFunctions
+			);
+			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
+		}
+
+		if ( $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] ) {
+			$this->unslashingSanitizingFunctions = $this->merge_custom_array(
+				$this->customUnslashingSanitizingFunctions,
+				$this->unslashingSanitizingFunctions
+			);
+			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
+		}
+	}
 
 } // End class.

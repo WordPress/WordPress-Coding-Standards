@@ -157,7 +157,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	 */
 	public function process_token( $stackPtr ) {
 
-		$this->excluded_groups = array_flip( explode( ',', $this->exclude ) );
+		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
 		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.
