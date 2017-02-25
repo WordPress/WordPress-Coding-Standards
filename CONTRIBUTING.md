@@ -12,6 +12,13 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 
 # Considerations when writing sniffs
 
+## Public properties
+
+When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
+Only make a property `public` if that is the intended behaviour.
+
+When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
+
 ## Whitelist comments
 
 Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.

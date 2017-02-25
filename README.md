@@ -12,6 +12,7 @@
 * [Rulesets](#rulesets)
     + [Standards subsets](#standards-subsets)
     + [Using a custom ruleset](#using-a-custom-ruleset)
+    + [Customizing sniff behaviour](#customizing-sniff-behaviour)
     + [Recommended additional rulesets](#recommended-additional-rulesets)
 * [How to use](#how-to-use)
     + [Command line](#command-line)
@@ -106,7 +107,13 @@ You can use the following as standard names when invoking `phpcs` to select snif
 
 ### Using a custom ruleset
 
-If you need to further customize selection of sniffs for your project — you can create custom `ruleset.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project — you can create a custom `phpcs.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+
+### Customizing sniff behaviour
+
+The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `ruleset.xml` file.
+
+You can find a complete list of all the properties you can change in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties).
 
 ### Recommended additional rulesets
 
