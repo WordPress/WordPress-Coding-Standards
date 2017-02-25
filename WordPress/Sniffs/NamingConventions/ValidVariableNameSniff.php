@@ -304,7 +304,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			$customProperties = WordPress_Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
 
 			if ( ! empty( $this->customVariablesWhitelist ) ) {
-				$properties = WordPress_Sniff::merge_custom_array(
+				$customProperties = WordPress_Sniff::merge_custom_array(
 					$this->customVariablesWhitelist,
 					$customProperties,
 					false
