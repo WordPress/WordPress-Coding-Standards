@@ -19,6 +19,7 @@
 		"wiki"  : "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki",
 		"source": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards"
 	},
+	"type"       : "phpcodesniffer-standard",
 	"scripts"    : {
 		"post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..",
 		"post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths ../../.."
