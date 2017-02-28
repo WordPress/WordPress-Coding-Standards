@@ -145,18 +145,41 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	);
 
 	/**
+	 * Status of short_open_tag feature
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var bool
+	 */
+	private $short_open_tag_enabled = true;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
-		return array(
+		// Check whether short_open_tag is disabled on PHP version < 5.4 (it's enabled by default in later versions).
+		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			$this->short_open_tag_enabled = false;
+		}
+
+		$tokens = array(
 			T_ECHO,
 			T_PRINT,
 			T_EXIT,
 			T_STRING,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 
+		/*
+		 * In case short_open_tag is turned off, we can attempt to regex T_INLINE_HTML
+		 * which is how short open tags are being handled in that case.
+		 */
+		if ( false === $this->short_open_tag_enabled ) {
+			$tokens[] = T_INLINE_HTML;
+		}
+		return $tokens;
 	}
 
 	/**
@@ -191,6 +214,24 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
+		} else if ( false === $this->short_open_tag_enabled && T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+			// Skip if no PHP short_open_tag is in the string.
+			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
+				return;
+			}
+
+			// Report on what very likely is a PHP short open tag outputting variable.
+			if ( preg_match( '/\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:(?:->\S+|\[[^\]]+\]))*)[\s]*;?[\s]*\?\>/', $this->tokens[ $stackPtr ]['content'], $matches ) ) {
+				$this->phpcsFile->addError( 'Expected next thing to be an escaping function, not %s.', $stackPtr, 'OutputNotEscaped', $matches[1] );
+				return;
+			}
+
+			// Throw warning in case the T_INLINE_HTML looks like a open_short_tag.
+			if ( false !== strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
+				$this->phpcsFile->addWarning( 'Possible use of PHP short open tag ( "<?=" ) detected. Needs manual inspection.', $stackPtr, 'PossibleShortOpenTag' );
+				return;
+			}
+			return;
 		}
 
 		// Checking for the ignore comment, ex: //xss ok.
