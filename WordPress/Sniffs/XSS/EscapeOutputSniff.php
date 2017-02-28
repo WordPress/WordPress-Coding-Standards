@@ -116,6 +116,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			T_PRINT,
 			T_EXIT,
 			T_STRING,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 
 	}
