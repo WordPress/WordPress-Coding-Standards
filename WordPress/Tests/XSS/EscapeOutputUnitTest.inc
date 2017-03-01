@@ -206,13 +206,8 @@ echo esc_form_field( $var ); // Bad.
 echo post_info( $post_id, 'field' ); // Bad.
 echo cpt_info( $post_type, 'query' ); // Bad.
 
-// Bad.
 ?>
-<?= $var ?>
-<?php
-
-// Ok.
-?>
-<?= esc_html( $var ); ?>
+<?= $var ?><!-- Bad. -->
+<?= esc_html( $var ); ?><!-- Ok. -->
 <?php
 
