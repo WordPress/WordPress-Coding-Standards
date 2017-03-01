@@ -212,6 +212,7 @@ echo cpt_info( $post_type, 'query' ); // Bad.
 <?php
 
 // Ok.
+?>
 <?= esc_html( $var ); ?>
 <?php
 
