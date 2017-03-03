@@ -424,6 +424,17 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected $cacheDeleteFunctions = array(
 		'wp_cache_delete' => true,
+		'clean_attachment_cache' => true,
+		'clean_blog_cache' => true,
+		'clean_bookmark_cache' => true,
+		'clean_category_cache' => true,
+		'clean_comment_cache' => true,
+		'clean_network_cache' => true,
+		'clean_object_term_cache' => true,
+		'clean_page_cache' => true,
+		'clean_post_cache' => true,
+		'clean_term_cache' => true,
+		'clean_user_cache' => true,
 	);
 
 	/**

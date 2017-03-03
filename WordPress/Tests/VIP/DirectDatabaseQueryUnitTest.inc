@@ -191,3 +191,54 @@ function cache_custom() {
 		my_cacheset( 'key', 'group' );
 	}
 }
+
+function custom_modify_attachment() {
+	global $wpdb;
+	$wpdb->update( $wpdb->posts, array( 'post_title' => 'Hello' ), array( 'ID' => 1 ) ); // DB call ok; OK.
+	clean_attachment_cache( 1 );
+}
+function custom_modify_post() {
+	global $wpdb;
+	$wpdb->update( $wpdb->posts, array( 'post_title' => 'Hello' ), array( 'ID' => 1 ) ); // DB call ok; OK.
+	clean_post_cache( 1 );
+}
+function custom_modify_term() {
+	global $wpdb;
+	$wpdb->update( $wpdb->terms, array( 'slug' => 'test' ), array( 'term_id' => 1 ) ); // DB call ok; OK.
+	clean_term_cache( 1 );
+}
+function custom_clean_category_cache() {
+	global $wpdb;
+	$wpdb->update( $wpdb->terms, array( 'slug' => 'test' ), array( 'term_id' => 1 ) ); // DB call ok; OK.
+	clean_category_cache( 1 );
+}
+function custom_modify_links() {
+	global $wpdb;
+	$wpdb->update( $wpdb->links, array( 'link_name' => 'Test' ), array( 'link_id' => 1 ) ); // DB call ok; OK.
+	clean_bookmark_cache( 1 );
+}
+function custom_modify_comments() {
+	global $wpdb;
+	$wpdb->update( $wpdb->comments, array( 'comment_content' => 'Test' ), array( 'comment_ID' => 1 ) ); // DB call ok; OK.
+	clean_comment_cache( 1 );
+}
+function custom_modify_users() {
+	global $wpdb;
+	$wpdb->update( $wpdb->users, array( 'user_email' => 'Test' ), array( 'ID' => 1 ) ); // DB call ok; OK.
+	clean_user_cache( 1 );
+}
+function custom_modify_blogs() {
+	global $wpdb;
+	$wpdb->update( $wpdb->blogs, array( 'domain' => 'example.com' ), array( 'blog_id' => 1 ) ); // DB call ok; OK.
+	clean_blog_cache( 1 );
+}
+function custom_modify_sites() {
+	global $wpdb;
+	$wpdb->update( $wpdb->sites, array( 'domain' => 'example.com' ), array( 'id' => 1 ) ); // DB call ok; OK.
+	clean_network_cache( 1 );
+}
+function custom_modify_term_relationship() {
+	global $wpdb;
+	$wpdb->update( $wpdb->term_relationships, array( 'term_order' => 1 ), array( 'object_id' => 1 ) ); // DB call ok; OK.
+	clean_object_term_cache( 1 );
+}
