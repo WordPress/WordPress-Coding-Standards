@@ -74,8 +74,14 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		$list = array();
 
+		//Adding Warning which is triggerred in case open_short_tag is set to Off
+		if ( false === (bool) ini_get( 'short_open_tag' ) ) {
+			$list[211] = 1;
+		}
+
+		return $list;
 	}
 
 } // End class.

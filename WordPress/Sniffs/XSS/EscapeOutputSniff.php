@@ -111,14 +111,24 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
+		$tokens =  array(
 			T_ECHO,
 			T_PRINT,
 			T_EXIT,
 			T_STRING,
-			T_OPEN_TAG_WITH_ECHO,
 		);
 
+		// We can successfully report on unescaped open_short_tags only if they are enabled.
+		if ( true === (bool) ini_get( 'short_open_tag' ) ) {
+			$tokens[] = T_OPEN_TAG_WITH_ECHO;
+		} else {
+			/**
+			 * In case open_short_tag are turned off, we can attempt to regex T_INLINE_HTML
+			 * which is how open_short_tags are being handled in that case.
+			 */
+			$tokens[] = T_INLINE_HTML;
+		}
+		return $tokens;
 	}
 
 	/**
@@ -153,6 +163,24 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
+		} else if ( false === (bool) ini_get( 'short_open_tag' ) && T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+			// Skip if no PHP short_open_tag is in the string.
+			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
+				return;
+			}
+
+			// Report on what very likely is a PHP short open tag outputing variable
+			if ( preg_match( '/\<\?\=[\s\t]*(\$[a-zA-Z_][[:alnum:]_]+)[\s\t]*\;?[\s\t]*\?\>/', $this->tokens[ $stackPtr ]['content'], $matches ) ) {
+				$this->phpcsFile->addError( "Expected next thing to be an escaping function, not %s.", $stackPtr, 'OutputNotEscaped', $matches[1] );
+				return;
+			}
+
+			// Throw warning in case the T_INLINE_HTML looks like a open_short_tag
+			if ( false !== strpos( $this->tokens[$stackPtr]['content'], '<?=' ) ) {
+				$this->phpcsFile->addWarning( 'Possible use of PHP short open tag ( "<?=" ) detected. Needs manual inspection.', $stackPtr, 'PossibleShortOpenTag' );
+				return;	
+			}
+			return;
 		}
 
 		// Checking for the ignore comment, ex: //xss ok.
