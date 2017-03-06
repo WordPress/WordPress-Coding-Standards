@@ -123,7 +123,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			$this->short_open_tag_enabled = false;
 		}
 
-		$tokens =  array(
+		$tokens = array(
 			T_ECHO,
 			T_PRINT,
 			T_EXIT,
