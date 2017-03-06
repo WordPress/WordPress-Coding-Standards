@@ -124,7 +124,6 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		 * which is how open short tags are being handled in that case.
 		 */
 		if ( false === $this->is_short_open_tag_enabled() ) {
-			var_export( 'Short open tag is disabled!' );
 			$tokens[] = T_INLINE_HTML;
 		}
 		return $tokens;
