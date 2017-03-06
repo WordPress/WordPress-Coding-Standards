@@ -179,16 +179,16 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 				return;
 			}
 
-			// Report on what very likely is a PHP short open tag outputing variable
+			// Report on what very likely is a PHP short open tag outputing variable.
 			if ( preg_match( '/\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[\s]*;?[\s]*\?\>/', $this->tokens[ $stackPtr ]['content'], $matches ) ) {
-				$this->phpcsFile->addError( "Expected next thing to be an escaping function, not %s.", $stackPtr, 'OutputNotEscaped', $matches[1] );
+				$this->phpcsFile->addError( 'Expected next thing to be an escaping function, not %s.', $stackPtr, 'OutputNotEscaped', $matches[1] );
 				return;
 			}
 
-			// Throw warning in case the T_INLINE_HTML looks like a open_short_tag
-			if ( false !== strpos( $this->tokens[$stackPtr]['content'], '<?=' ) ) {
+			// Throw warning in case the T_INLINE_HTML looks like a open_short_tag.
+			if ( false !== strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
 				$this->phpcsFile->addWarning( 'Possible use of PHP short open tag ( "<?=" ) detected. Needs manual inspection.', $stackPtr, 'PossibleShortOpenTag' );
-				return;	
+				return;
 			}
 			return;
 		}
