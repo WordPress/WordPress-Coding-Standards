@@ -119,7 +119,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 */
 	public function register() {
 		// Check whether short_open_tag is disabled on PHP version < 5.4 (it''s enabled by default in later versions).
-		if ( true === version_compare(phpversion(), '5.4', '<' ) && false === (bool) ini_get( 'short_open_tag' ) ) {
+		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
 			$this->short_open_tag_enabled = false;
 		}
 
