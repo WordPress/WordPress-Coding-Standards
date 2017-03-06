@@ -77,7 +77,7 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 		$list = array();
 
 		//Adding Warning which is triggerred in case open_short_tag is set to Off
-		if ( false === (bool) ini_get( 'short_open_tag' ) ) {
+		if ( true === version_compare(phpversion(), '5.4', '<' ) && false === (bool) ini_get( 'short_open_tag' ) ) {
 			$list[211] = 1;
 		}
 

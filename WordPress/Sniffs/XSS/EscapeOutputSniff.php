@@ -116,16 +116,15 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			T_PRINT,
 			T_EXIT,
 			T_STRING,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 
-		// We can successfully report on unescaped open_short_tags only if they are enabled.
-		if ( true === (bool) ini_get( 'short_open_tag' ) ) {
-			$tokens[] = T_OPEN_TAG_WITH_ECHO;
-		} else {
-			/**
-			 * In case open_short_tag are turned off, we can attempt to regex T_INLINE_HTML
-			 * which is how open_short_tags are being handled in that case.
-			 */
+		/**
+		 * In case open_short_tag are turned off, we can attempt to regex T_INLINE_HTML
+		 * which is how open_short_tags are being handled in that case.
+		 */
+		if ( false === $this->is_short_open_tag_enabled() ) {
+			var_export( 'Short open tag is disabled!' );
 			$tokens[] = T_INLINE_HTML;
 		}
 		return $tokens;
@@ -163,7 +162,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
-		} else if ( false === (bool) ini_get( 'short_open_tag' ) && T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+		} else if ( false === $this->is_short_open_tag_enabled() && T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if no PHP short_open_tag is in the string.
 			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
 				return;
@@ -440,5 +439,19 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
 		}
 	}
+
+	/**
+	 * Checks whether short_open_tag is enabled.
+	 *
+	 * Since PHP 5.4, <?= is always available.
+	 *
+	 * @return bool False if short_open_tag is not enabled, true otherwise
+	 */
+	public function is_short_open_tag_enabled() {
+		if ( true === version_compare(phpversion(), '5.4', '<' ) && false === (bool) ini_get( 'short_open_tag' ) ) {
+			return false;
+		}
+		return true;
+	} 
 
 } // End class.
