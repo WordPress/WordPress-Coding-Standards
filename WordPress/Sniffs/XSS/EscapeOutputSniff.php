@@ -106,11 +106,23 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	);
 
 	/**
+	 * Status of short_open_tag feature
+	 *
+	 * @var bool
+	 */
+	private $short_open_tag_enabled = true;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
+		// Check whether short_open_tag is disabled on PHP version < 5.4 (it''s enabled by default in later versions).
+		if ( true === version_compare(phpversion(), '5.4', '<' ) && false === (bool) ini_get( 'short_open_tag' ) ) {
+			$this->short_open_tag_enabled = false;
+		}
+
 		$tokens =  array(
 			T_ECHO,
 			T_PRINT,
@@ -123,7 +135,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		 * In case open_short_tag is turned off, we can attempt to regex T_INLINE_HTML
 		 * which is how open short tags are being handled in that case.
 		 */
-		if ( false === $this->is_short_open_tag_enabled() ) {
+		if ( false === $this->short_open_tag_enabled ) {
 			$tokens[] = T_INLINE_HTML;
 		}
 		return $tokens;
@@ -161,7 +173,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
-		} else if ( false === $this->is_short_open_tag_enabled() && T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+		} else if ( false === $this->short_open_tag_enabled && T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if no PHP short_open_tag is in the string.
 			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
 				return;
@@ -438,19 +450,5 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
 		}
 	}
-
-	/**
-	 * Checks whether short_open_tag is enabled.
-	 *
-	 * Since PHP 5.4, <?= is always available.
-	 *
-	 * @return bool False if short_open_tag is not enabled, true otherwise
-	 */
-	public function is_short_open_tag_enabled() {
-		if ( true === version_compare(phpversion(), '5.4', '<' ) && false === (bool) ini_get( 'short_open_tag' ) ) {
-			return false;
-		}
-		return true;
-	} 
 
 } // End class.
