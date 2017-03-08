@@ -108,6 +108,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	/**
 	 * Status of short_open_tag feature
 	 *
+	 * @since 0.11.0
+	 *
 	 * @var bool
 	 */
 	private $short_open_tag_enabled = true;
