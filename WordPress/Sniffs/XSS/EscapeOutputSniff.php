@@ -131,7 +131,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			T_OPEN_TAG_WITH_ECHO,
 		);
 
-		/**
+		/*
 		 * In case open_short_tag is turned off, we can attempt to regex T_INLINE_HTML
 		 * which is how open short tags are being handled in that case.
 		 */
