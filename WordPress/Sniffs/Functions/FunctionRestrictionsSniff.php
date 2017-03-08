@@ -42,7 +42,15 @@ class FunctionRestrictionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @return array
 	 */
 	public function getGroups() {
-		return array();
+		return array(
+			'foobar' => array(
+				'type'      => 'warning',
+				'message'   => 'Callback functions test.',
+				'functions' => array(
+					'foobar*',
+				),
+			),
+		);
 	}
 
 }
