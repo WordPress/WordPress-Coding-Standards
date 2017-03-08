@@ -209,5 +209,7 @@ echo cpt_info( $post_type, 'query' ); // Bad.
 ?>
 <?= $var ?><!-- Bad. -->
 <?= esc_html( $var ); ?><!-- Ok. -->
+<?= $var['foo']; ?><!-- Bad. -->
+<?= $var->foo ?><!-- Bad. -->
 <?php
 
