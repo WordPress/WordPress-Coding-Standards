@@ -686,7 +686,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @return string
 	 */
 	protected function string_to_errorcode( $base_string ) {
-		return preg_replace( '`[^a-z0-9_]`i', '_', strtolower( $base_string ) );
+		return preg_replace( '`[^a-z0-9_]`i', '_', $base_string );
 	}
 
 	/**
