@@ -33,6 +33,9 @@ matrix:
       env: PHPCS_BRANCH=master
     - php: nightly
       env: PHPCS_BRANCH=master
+    # Test PHP 5.3 with short_open_tags set to On (is Off by default)
+    - php: 5.3
+      env: PHPCS_BRANCH=master SHORT_OPEN_TAGS=true
   allow_failures:
     # Allow failures for unstable builds.
     - php: nightly
@@ -44,6 +47,7 @@ before_script:
     - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_BIN --config-set installed_paths $(pwd)
+    - if [[ "$SHORT_OPEN_TAGS" == "true" ]]; then echo "short_open_tag = On" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
 script:
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
