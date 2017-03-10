@@ -305,7 +305,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function check_for_matches( $stackPtr ) {
-		$token_content = strtolower( $this->strip_quotes( $this->tokens[ $stackPtr ]['content'] ) );
+		$token_content = strtolower( $this->tokens[ $stackPtr ]['content'] );
 		$skip_to       = array();
 
 		foreach ( $this->groups as $groupName => $group ) {
@@ -337,7 +337,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void If a callback was found return stackPtr for where to skip to, false if the function call is not a callback.
+	 * @return int|void If a callback was found return stackPtr for where to skip to.
 	 */
 	public function check_for_callback_matches( $stackPtr ) {
 
@@ -377,7 +377,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				return;
 			}
 
-			$skip_to[] = $this->check_for_matches( $callback );
+			$skip_to[] = $this->check_for_matches( $this->strip_quotes( $callback ) );
 		}
 
 		if ( empty( $skip_to ) || min( $skip_to ) === 0 ) {
