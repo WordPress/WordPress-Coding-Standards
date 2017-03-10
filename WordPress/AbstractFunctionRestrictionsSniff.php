@@ -84,6 +84,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
 	/**
 	 * List of known PHP and WP function which take a callback as an argument.
+	 * List of known PHP and WP functions which take a callback as an argument.
 	 *
 	 * Sorted alphabetically. Last updated on 8th March 2017.
 	 *
@@ -240,7 +241,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 
 			$callback_matches = $this->check_for_callback_matches( $stackPtr );
-			if ( $callback_matches ) {
+			if ( ! empty( $callback_matches ) ) {
 				return $callback_matches;
 			}
 
@@ -336,7 +337,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|false
+	 * @return int|void If a callback was found return stackPtr for where to skip to, false if the function call is not a callback.
 	 */
 	public function check_for_callback_matches( $stackPtr ) {
 
@@ -344,7 +345,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
 		// Check if the function is used as a callback.
 		if ( ! isset( $this->callback_functions[ $token_content ] ) ) {
-			return false;
+			return;
 		}
 
 		$skip_to    = array();
@@ -359,28 +360,28 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			}
 
 			if ( ! isset( $parameters[ $position ] ) ) {
-				return false;
+				return;
 			}
 
 			// Only get function name not anonymous funtions.
 			$callback = $this->phpcsFile->findNext(
 				array( T_CONSTANT_ENCAPSED_STRING ),
 				$parameters[ $position ]['start'],
-				null,
+				null, // Do not deine the end so to catch the second callback.
 				false,
 				null,
 				true
 			);
 
 			if ( ! $callback ) {
-				return false;
+				return;
 			}
 
 			$skip_to[] = $this->check_for_matches( $callback );
 		}
 
 		if ( empty( $skip_to ) || min( $skip_to ) === 0 ) {
-			return false;
+			return;
 		}
 
 		return min( $skip_to );

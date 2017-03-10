@@ -8,12 +8,35 @@
  */
 
 /**
- * Unit test class for the DontExtract sniff.
+ * Unit test class for the FunctionRestrictions sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.10.0
  */
 class WordPress_Tests_Functions_FunctionRestrictionsUnitTest extends AbstractSniffUnitTest {
+
+	/**
+	 * Add a number of extra restricted functions to unit test the abstract
+	 * FunctionRestrictions class.
+	 *
+	 * Note: as that class extends the abstract FunctionRestrictions class, that's
+	 * where we are passing the parameters to.
+	 */
+	protected function setUp() {
+		parent::setUp();
+
+		WordPress_AbstractFunctionRestrictionsSniff::$unittest_groups = array(
+			'test' => array(
+				'type'      => 'warning',
+				'message'   => 'Detected usage of %s.',
+				'functions' => array(
+					'foobar',
+					'barfoo',
+				),
+			),
+
+		);
+	}
 
 	/**
 	 * Returns the lines where errors should occur.
