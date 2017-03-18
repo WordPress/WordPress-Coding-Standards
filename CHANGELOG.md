@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 _Nothing yet._
 
-## [0.11.0] - 2017-03-08
+## [0.11.0] - 2017-03-20
 
 ### Important notes for end-users:
 
