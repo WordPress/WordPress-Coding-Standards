@@ -39,7 +39,7 @@ matrix:
     - php: hhvm
     - env: PHPCS_BRANCH=3.0
 
-before_script:
+before_install:
     - export PHPCS_DIR=/tmp/phpcs
     - export PHPUNIT_DIR=/tmp/phpunit
     - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
