@@ -7,10 +7,6 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
-}
-
 /**
  * Discourages the use of session functions.
  *
@@ -19,60 +15,59 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
+ * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
+ *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
  */
-class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
+class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * A list of forbidden functions with their alternatives.
+	 * Groups of functions to restrict.
 	 *
-	 * The value is NULL if no alternative exists. I.e. the
-	 * function should just not be used.
+	 * Example: groups => array(
+	 * 	'lambda' => array(
+	 * 		'type'      => 'error' | 'warning',
+	 * 		'message'   => 'Use anonymous functions instead please!',
+	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 	)
+	 * )
 	 *
-	 * @var array(string => string|null)
+	 * @return array
 	 */
-	public $forbiddenFunctions = array(
-		'session_cache_expire'      => null,
-		'session_cache_limiter'     => null,
-		'session_commit'            => null,
-		'session_decode'            => null,
-		'session_destroy'           => null,
-		'session_encode'            => null,
-		'session_get_cookie_params' => null,
-		'session_id'                => null,
-		'session_is_registered'     => null,
-		'session_module_name'       => null,
-		'session_name'              => null,
-		'session_regenerate_id'     => null,
-		'session_register_shutdown' => null,
-		'session_register'          => null,
-		'session_save_path'         => null,
-		'session_set_cookie_params' => null,
-		'session_set_save_handler'  => null,
-		'session_start'             => null,
-		'session_status'            => null,
-		'session_unregister'        => null,
-		'session_unset'             => null,
-		'session_write_close'       => null,
-	);
-
-	/**
-	 * Generates the error or warning for this sniff.
-	 *
-	 * Overloads parent addError method.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the forbidden function
-	 *                                        in the token array.
-	 * @param string               $function  The name of the forbidden function.
-	 * @param string               $pattern   The pattern used for the match.
-	 *
-	 * @return void
-	 */
-	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null ) {
-		$data  = array( $function );
-		$error = 'The use of PHP session function %s() is prohibited.';
-
-		$phpcsFile->addError( $error, $stackPtr, $function, $data );
-	}
+	public function getGroups() {
+		return array(
+			'session' => array(
+				'type'      => 'error',
+				'message'   => 'The use of PHP session function %s() is prohibited.',
+				'functions' => array(
+					'session_abort',
+					'session_cache_expire',
+					'session_cache_limiter',
+					'session_commit',
+					'session_create_id',
+					'session_decode',
+					'session_destroy',
+					'session_encode',
+					'session_gc',
+					'session_get_cookie_params',
+					'session_id',
+					'session_is_registered',
+					'session_module_name',
+					'session_name',
+					'session_regenerate_id',
+					'session_register_shutdown',
+					'session_register',
+					'session_reset',
+					'session_save_path',
+					'session_set_cookie_params',
+					'session_set_save_handler',
+					'session_start',
+					'session_status',
+					'session_unregister',
+					'session_unset',
+					'session_write_close',
+				),
+			),
+		);
+	} // End getGroups().
 
 } // End class.

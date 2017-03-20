@@ -34,17 +34,13 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
-
+	public function process_token( $stackPtr ) {
 		// Check for global input variable.
-		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], self::$input_superglobals, true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], $this->input_superglobals, true ) ) {
 			return;
 		}
 
@@ -57,7 +53,7 @@ class WordPress_Sniffs_VIP_SuperGlobalInputUsageSniff extends WordPress_Sniff {
 
 		// Check for whitelisting comment.
 		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
-			$phpcsFile->addWarning( 'Detected access of super global var %s, probably needs manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
+			$this->phpcsFile->addWarning( 'Detected access of super global var %s, probably needs manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
 
 	}

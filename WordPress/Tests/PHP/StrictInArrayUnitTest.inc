@@ -3,9 +3,6 @@
 in_array( 1, array( '1', 1, true ), true ); // Ok.
 
 in_array( 1, array( '1', 1, true ) ); // Warning.
-
-in_array( 1, array( '1', 1, true ); // Error.
-
 in_array( 1, array( '1', 1, true ), false ); // Warning.
 IN_ARRAY( 1, array( '1', 1, true ), false ); // Warning.
 

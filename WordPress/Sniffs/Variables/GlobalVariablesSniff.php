@@ -22,9 +22,12 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 	/**
 	 * List of global WP variables.
 	 *
+	 * @since 0.3.0
+	 * @since 0.11.0 Changed visibility from public to protected.
+	 *
 	 * @var array
 	 */
-	public $globals = array(
+	protected $globals = array(
 		'comment',
 		'comment_alt',
 		'comment_depth',
@@ -280,75 +283,137 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
-		$token  = $this->tokens[ $stackPtr ];
-
-		$search = array(); // Array of globals to watch for.
+	public function process_token( $stackPtr ) {
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
-			$bracketPtr = $phpcsFile->findNext( array( T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
+			$bracketPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-			if ( T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] ) {
+			if ( false === $bracketPtr || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				return;
 			}
 
-			$varPtr   = $phpcsFile->findNext( T_WHITESPACE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'], true );
-			$varToken = $this->tokens[ $varPtr ];
-
-			if ( ! in_array( trim( $varToken['content'], '\'"' ), $this->globals, true ) ) {
+			// Bow out if the array key contains a variable.
+			$has_variable = $this->phpcsFile->findNext( T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
+			if ( false !== $has_variable ) {
 				return;
 			}
 
-			$assignment = $phpcsFile->findNext( T_WHITESPACE, ( $this->tokens[ $bracketPtr ]['bracket_closer'] + 1 ), null, true );
-
-			if ( $assignment && T_EQUAL === $this->tokens[ $assignment ]['code'] ) {
-				if ( ! $this->has_whitelist_comment( 'override', $assignment ) ) {
-					$phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
-					return;
+			// Retrieve the array key and avoid getting tripped up by some simple obfuscation.
+			$var_name = '';
+			$start    = ( $bracketPtr + 1 );
+			for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
+				if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
+					$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
 				}
 			}
 
-			return;
+			if ( ! in_array( $var_name, $this->globals, true ) ) {
+				return;
+			}
 
+			if ( true === $this->is_assignment( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
+				$this->maybe_add_error( $stackPtr );
+			}
 		} elseif ( T_GLOBAL === $token['code'] ) {
-			$ptr = ( $stackPtr + 1 );
+			$search = array(); // Array of globals to watch for.
+			$ptr    = ( $stackPtr + 1 );
 			while ( $ptr ) {
-				$ptr++;
+				if ( ! isset( $this->tokens[ $ptr ] ) ) {
+					break;
+				}
+
 				$var = $this->tokens[ $ptr ];
+
+				// Halt the loop at end of statement.
+				if ( T_SEMICOLON === $var['code'] ) {
+					break;
+				}
+
 				if ( T_VARIABLE === $var['code'] ) {
-					$varname = substr( $var['content'], 1 );
-					if ( in_array( $varname, $this->globals, true ) ) {
-						$search[] = $varname;
+					if ( in_array( substr( $var['content'], 1 ), $this->globals, true ) ) {
+						$search[] = $var['content'];
 					}
 				}
-				// Halt the loop.
-				if ( T_SEMICOLON === $var['code'] ) {
-					$ptr = false;
-				}
+
+				$ptr++;
 			}
+			unset( $var );
+
 			if ( empty( $search ) ) {
 				return;
 			}
 
+			// Only search from the end of the "global ...;" statement onwards.
+			$start        = ( $this->phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
+			$end          = $this->phpcsFile->numTokens;
+			$global_scope = true;
+
+			// Is the global statement within a function call or closure ?
+			// If so, limit the token walking to the function scope.
+			$function_token = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			if ( false === $function_token ) {
+				$function_token = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			}
+
+			if ( false !== $function_token ) {
+				if ( ! isset( $this->tokens[ $function_token ]['scope_closer'] ) ) {
+					// Live coding, unfinished function.
+					return;
+				}
+
+				$end          = $this->tokens[ $function_token ]['scope_closer'];
+				$global_scope = false;
+			}
+
 			// Check for assignments to collected global vars.
-			foreach ( $this->tokens as $ptr => $token ) {
-				if ( T_VARIABLE === $token['code'] && in_array( substr( $token['content'], 1 ), $search, true ) ) {
-					$next = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr + 1 ), null, true, null, true );
-					if ( T_EQUAL === $this->tokens[ $next ]['code'] ) {
-						if ( ! $this->has_whitelist_comment( 'override', $next ) ) {
-							$phpcsFile->addError( 'Overriding WordPress globals is prohibited', $ptr, 'OverrideProhibited' );
-						}
+			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
+
+				// If the global statement was in the global scope, skip over functions, classes and the likes.
+				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+					if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
+						// Live coding, skip the rest of the file.
+						return;
+					}
+
+					$ptr = $this->tokens[ $ptr ]['scope_closer'];
+					continue;
+				}
+
+				if ( T_VARIABLE === $this->tokens[ $ptr ]['code']
+					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
+				) {
+					// Don't throw false positives for static class properties.
+					$previous = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
+					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
+						continue;
+					}
+
+					if ( true === $this->is_assignment( $ptr ) ) {
+						$this->maybe_add_error( $ptr );
 					}
 				}
 			}
+		} // End if().
+
+	} // End process().
+
+	/**
+	 * Add the error if there is no whitelist comment present and the assignment
+	 * is not done from within a test method.
+	 *
+	 * @param int $stackPtr The position of the token to throw the error for.
+	 *
+	 * @return void
+	 */
+	public function maybe_add_error( $stackPtr ) {
+		if ( ! $this->is_token_in_test_method( $stackPtr ) && ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
+			$this->phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
 		}
-	} // end process()
+	}
 
 } // End class.

@@ -22,7 +22,7 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 		parent::setUp();
 
 		WordPress_AbstractArrayAssignmentRestrictionsSniff::$groups = array(
-			'posts_per_page' => array(
+			'foobar' => array(
 				'type'    => 'error',
 				'message' => 'Found assignment value of %s to be %s',
 				'keys'    => array(
@@ -43,6 +43,7 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 			3 => 1,
 			5 => 1,
 			7 => 2,
+			20 => 1,
 		 );
 
 	}

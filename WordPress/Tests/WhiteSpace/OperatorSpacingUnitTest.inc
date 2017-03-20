@@ -49,3 +49,7 @@ for ( $i =  0; $i < sizeof( $posts ); $i++ ) {
 if (  ! $var ) {
 	// ...
 }
+
+// Ok: Test skipping of default values in function declarations.
+function my_test( $a=true, $b = 123, $c=  'string' ) {}
+$a = function ( $a=true, $b = 123, $c=  'string' ) {};

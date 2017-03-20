@@ -2,10 +2,11 @@
 <ruleset name="WordPress Extra">
 	<description>Best practices beyond core WordPress Coding Standards</description>
 
+	<!-- Generic PHP best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
 	<rule ref="Generic.Functions.CallTimePassByReference"/>
-	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement" />
 	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
 	<rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
@@ -14,7 +15,22 @@
 	<rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
 	<rule ref="Generic.Classes.DuplicateClassName"/>
-	<rule ref="Generic.Strings.UnnecessaryStringConcat"/>
+	<rule ref="Generic.Strings.UnnecessaryStringConcat">
+		<properties>
+			<property name="allowMultiline" value="true" />
+		</properties>
+	</rule>
+
+	<!-- More generic PHP best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+	<rule ref="Squiz.PHP.NonExecutableCode"/>
+	<rule ref="Squiz.Operators.IncrementDecrementUsage"/>
+	<rule ref="Squiz.Operators.ValidLogicalOperators"/>
+	<rule ref="Squiz.Functions.FunctionDuplicateArgument"/>
+
+	<!-- And even more generic PHP best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
+	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops" />
 
 	<!-- This sniff is not refined enough for general use -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
@@ -27,16 +43,59 @@
 	<rule ref="WordPress-Core"/>
 
 	<rule ref="WordPress.XSS.EscapeOutput"/>
+
+	<!-- Verify that a nonce check is done before using values in superglobals.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
 	<rule ref="WordPress.CSRF.NonceVerification" />
-	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
+
+	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
+		<!-- WP core still supports PHP 5.2+  -->
+		<properties>
+			<property name="exclude" value="create_function" />
+		</properties>
+	</rule>
+	<rule ref="WordPress.WP.DeprecatedFunctions"/>
+	<rule ref="WordPress.WP.AlternativeFunctions"/>
+	<rule ref="WordPress.WP.DiscouragedFunctions"/>
+
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.Eval.Discouraged">
+		<type>error</type>
+		<message>eval() is a security risk so not allowed.</message>
+	</rule>
+
+	<!-- Scripts & style should be enqueued.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
+
+	<!-- Warn against overriding WP global variables.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/26 -->
 	<rule ref="WordPress.Variables.GlobalVariables"/>
+
+	<!-- Encourage the use of strict ( === and !== ) comparisons.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->
 	<rule ref="WordPress.PHP.StrictComparisons" />
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
+	<!-- Check that in_array() and array_search() use strict comparisons.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/399
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
 	<rule ref="WordPress.PHP.StrictInArray" />
 
-	<!-- Check for PHP Parse errors. -->
+	<!-- Discourage use of the backtick operator (execution of shell commands).
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/646 -->
+	<rule ref="Generic.PHP.BacktickOperator"/>
+
+	<!-- Check for PHP Parse errors.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/522 -->
 	<rule ref="Generic.PHP.Syntax" />
+
+	<!-- Make the translators comment check which is included in core stricter. -->
+	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.I18n.TranslatorsCommentWrongStyle">
+		<type>error</type>
+	</rule>
 
 </ruleset>

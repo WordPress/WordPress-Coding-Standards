@@ -25,7 +25,7 @@ class WordPress_Sniffs_Functions_DontExtractSniff extends WordPress_AbstractFunc
 	 * 	'lambda' => array(
 	 * 		'type'      => 'error' | 'warning',
 	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
 	 * 	)
 	 * )
 	 *
@@ -43,6 +43,6 @@ class WordPress_Sniffs_Functions_DontExtractSniff extends WordPress_AbstractFunc
 			),
 
 		);
-	} // end getGroups()
+	} // End getGroups().
 
 } // End class.

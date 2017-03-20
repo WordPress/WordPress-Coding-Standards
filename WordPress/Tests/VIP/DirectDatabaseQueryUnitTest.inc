@@ -103,3 +103,142 @@ function cache_add_instead_of_set() {
 		wp_cache_add( 'baz', $baz );
 	}
 }
+
+// Database calls in a closure.
+$b = function () {
+	global $wpdb;
+
+	if ( ! ( $listofthings = wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning.
+		wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+};
+
+/*
+ * Test using custom properties, setting & unsetting (resetting).
+ */
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions my_cacheget
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions my_cacheset,my_other_cacheset
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheDeleteFunctions my_cachedel
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; OK.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; OK.
+		my_other_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // DB call ok; OK.
+	my_cachedel( 'key', 'group' );
+}
+
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions my_cacheset
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheDeleteFunctions false
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; OK.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; Bad.
+		my_other_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // DB call ok; Bad.
+	my_cachedel( 'key', 'group' );
+}
+
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions false
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions false
+
+function cache_custom() {
+	global $wpdb;
+
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$quux = $wpdb->get_results( 'SELECT X FROM Y' ); // DB call ok; Bad.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function custom_modify_attachment() {
+	global $wpdb;
+	$wpdb->update( $wpdb->posts, array( 'post_title' => 'Hello' ), array( 'ID' => 1 ) ); // DB call ok; OK.
+	clean_attachment_cache( 1 );
+}
+function custom_modify_post() {
+	global $wpdb;
+	$wpdb->update( $wpdb->posts, array( 'post_title' => 'Hello' ), array( 'ID' => 1 ) ); // DB call ok; OK.
+	clean_post_cache( 1 );
+}
+function custom_modify_term() {
+	global $wpdb;
+	$wpdb->update( $wpdb->terms, array( 'slug' => 'test' ), array( 'term_id' => 1 ) ); // DB call ok; OK.
+	clean_term_cache( 1 );
+}
+function custom_clean_category_cache() {
+	global $wpdb;
+	$wpdb->update( $wpdb->terms, array( 'slug' => 'test' ), array( 'term_id' => 1 ) ); // DB call ok; OK.
+	clean_category_cache( 1 );
+}
+function custom_modify_links() {
+	global $wpdb;
+	$wpdb->update( $wpdb->links, array( 'link_name' => 'Test' ), array( 'link_id' => 1 ) ); // DB call ok; OK.
+	clean_bookmark_cache( 1 );
+}
+function custom_modify_comments() {
+	global $wpdb;
+	$wpdb->update( $wpdb->comments, array( 'comment_content' => 'Test' ), array( 'comment_ID' => 1 ) ); // DB call ok; OK.
+	clean_comment_cache( 1 );
+}
+function custom_modify_users() {
+	global $wpdb;
+	$wpdb->update( $wpdb->users, array( 'user_email' => 'Test' ), array( 'ID' => 1 ) ); // DB call ok; OK.
+	clean_user_cache( 1 );
+}
+function custom_modify_blogs() {
+	global $wpdb;
+	$wpdb->update( $wpdb->blogs, array( 'domain' => 'example.com' ), array( 'blog_id' => 1 ) ); // DB call ok; OK.
+	clean_blog_cache( 1 );
+}
+function custom_modify_sites() {
+	global $wpdb;
+	$wpdb->update( $wpdb->sites, array( 'domain' => 'example.com' ), array( 'id' => 1 ) ); // DB call ok; OK.
+	clean_network_cache( 1 );
+}
+function custom_modify_term_relationship() {
+	global $wpdb;
+	$wpdb->update( $wpdb->term_relationships, array( 'term_order' => 1 ), array( 'object_id' => 1 ) ); // DB call ok; OK.
+	clean_object_term_cache( 1 );
+}

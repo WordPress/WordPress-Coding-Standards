@@ -21,7 +21,15 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array();
+		return array(
+			 3 => 2,
+			 6 => 2,
+			 9 => 2,
+			 12 => 2,
+			 15 => 2,
+			 18 => 2,
+			 21 => 2,
+		);
 
 	}
 
@@ -31,15 +39,7 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			 3 => 1,
-			 6 => 1,
-			 9 => 1,
-			 12 => 2,
-			 15 => 1,
-			 18 => 1,
-			 21 => 1,
-		);
+		return array();
 
 	}
 

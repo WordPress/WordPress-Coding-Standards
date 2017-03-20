@@ -7,10 +7,6 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Generic_Sniffs_PHP_ForbiddenFunctionsSniff not found' );
-}
-
 /**
  * Disallow the changing of timezone.
  *
@@ -19,38 +15,34 @@ if ( ! class_exists( 'Generic_Sniffs_PHP_ForbiddenFunctionsSniff', true ) ) {
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
+ * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
+ *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
  */
-class WordPress_Sniffs_VIP_TimezoneChangeSniff extends Generic_Sniffs_PHP_ForbiddenFunctionsSniff {
+class WordPress_Sniffs_VIP_TimezoneChangeSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * A list of forbidden functions with their alternatives.
+	 * Groups of functions to restrict.
 	 *
-	 * The value is NULL if no alternative exists. IE, the
-	 * function should just not be used.
+	 * Example: groups => array(
+	 * 	'lambda' => array(
+	 * 		'type'      => 'error' | 'warning',
+	 * 		'message'   => 'Use anonymous functions instead please!',
+	 * 		'functions' => array( 'eval', 'create_function' ),
+	 * 	)
+	 * )
 	 *
-	 * @var array(string => string|null)
+	 * @return array
 	 */
-	public $forbiddenFunctions = array(
-		'date_default_timezone_set' => null,
-	);
-
-	/**
-	 * Generates the error or warning for this sniff.
-	 *
-	 * Overloads parent addError method.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the forbidden function
-	 *                                        in the token array.
-	 * @param string               $function  The name of the forbidden function.
-	 * @param string               $pattern   The pattern used for the match.
-	 *
-	 * @return void
-	 */
-	protected function addError( $phpcsFile, $stackPtr, $function, $pattern = null ) {
-		$error = 'Using date_default_timezone_set() and similar isn\'t allowed, instead use WP internal timezone support.';
-		$phpcsFile->addError( $error, $stackPtr, $function );
-
-	}
+	public function getGroups() {
+		return array(
+			'timezone_change' => array(
+				'type'      => 'error',
+				'message'   => 'Using %s() and similar isn\'t allowed, instead use WP internal timezone support.',
+				'functions' => array(
+					'date_default_timezone_set',
+				),
+			),
+		);
+	} // End getGroups().
 
 } // End class.

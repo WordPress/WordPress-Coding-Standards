@@ -43,7 +43,7 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 	 * @return bool Whether to skip this test.
 	 */
 	protected function shouldSkipTest() {
-		return version_compare( PHP_VERSION, '5.3.0', '<' );
+		return ( PHP_VERSION_ID < 50300 );
 	}
 
 	/**
@@ -75,6 +75,12 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 					37 => 1,
 					39 => 1,
 					40 => 1,
+					42 => 1,
+					51 => 1,
+					52 => 1,
+					63 => 1,
+					65 => 1,
+					66 => 1,
 				);
 
 			case 'RestrictedClassesUnitTest.2.inc':
@@ -124,9 +130,9 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 			default:
 				return array();
 
-		}
+		} // End switch().
 
-	} // end getErrorList()
+	} // End getErrorList().
 
 	/**
 	 * Returns the lines where warnings should occur.

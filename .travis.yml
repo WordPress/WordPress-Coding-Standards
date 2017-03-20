@@ -10,10 +10,11 @@ php:
     - 5.5
     - 5.6
     - 7.0
+    - 7.1
 
 env:
   - PHPCS_BRANCH=master
-  - PHPCS_BRANCH=2.6.0
+  - PHPCS_BRANCH=2.8.1
 
 matrix:
   fast_finish: true
@@ -38,16 +39,20 @@ matrix:
     - php: hhvm
     - env: PHPCS_BRANCH=3.0
 
-before_script:
-    - if [[ $TRAVIS_PHP_VERSION != "7.0" && $TRAVIS_PHP_VERSION != "nightly" && $TRAVIS_PHP_VERSION != "hhvm" ]]; then phpenv config-add myconfig.ini; fi
+before_install:
     - export PHPCS_DIR=/tmp/phpcs
+    - export PHPUNIT_DIR=/tmp/phpunit
     - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_BIN --config-set installed_paths $(pwd)
+    # Download PHPUnit 5.x for builds on PHP 7, nightly and HHVM as
+    # PHPCS test suite is currently not compatible with PHPUnit 6.x.
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then wget -P $PHPUNIT_DIR https://phar.phpunit.de/phpunit-5.7.phar && chmod +x $PHPUNIT_DIR/phpunit-5.7.phar; fi
 
 script:
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
-    - phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then php $PHPUNIT_DIR/phpunit-5.7.phar --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
@@ -57,4 +62,4 @@ script:
     # -n flag: Do not print warnings. (shortcut for --warning-severity=0)
     # --standard: Use WordPress as the standard.
     # --extensions: Only sniff PHP files.
-    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n . --standard=./bin/phpcs.xml --extensions=php; fi
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -n . --standard=./bin/phpcs.xml --extensions=php; fi

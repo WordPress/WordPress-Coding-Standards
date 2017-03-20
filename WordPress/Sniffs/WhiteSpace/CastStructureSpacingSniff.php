@@ -15,9 +15,8 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- *
- * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/CastSpacingSniff.php
+ * @since   0.11.0 This sniff now has the ability to fix the issues it flags.
+ * @since   0.11.0 The error level for all errors thrown by this sniff has been raised from warning to error.
  */
 class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 
@@ -28,7 +27,6 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeS
 	 */
 	public function register() {
 		return PHP_CodeSniffer_Tokens::$castTokens;
-
 	}
 
 	/**
@@ -43,35 +41,21 @@ class WordPress_Sniffs_WhiteSpace_CastStructureSpacingSniff implements PHP_CodeS
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
-		$content  = $tokens[ $stackPtr ]['content'];
-		$expected = str_replace( ' ', '', $content );
-		$expected = str_replace( "\t", '', $expected );
-
-		if ( $content !== $expected ) {
-			$error = 'Cast statements must not contain whitespace; expected "%s" but found "%s"';
-			$data  = array(
-				$expected,
-				$content,
-			);
-			$phpcsFile->addWarning( $error, $stackPtr, 'ContainsWhiteSpace', $data );
-		}
-
 		if ( T_WHITESPACE !== $tokens[ ( $stackPtr - 1 ) ]['code'] ) {
 			$error = 'No space before opening casting parenthesis is prohibited';
-			$phpcsFile->addWarning( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
+			if ( true === $fix ) {
+				$phpcsFile->fixer->addContentBefore( $stackPtr, ' ' );
+			}
 		}
 
 		if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
 			$error = 'No space after closing casting parenthesis is prohibited';
-			$phpcsFile->addWarning( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
+			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
+			if ( true === $fix ) {
+				$phpcsFile->fixer->addContent( $stackPtr, ' ' );
+			}
 		}
-	} // end process()
-
-	/**
-	 * If true, an error will be thrown; otherwise a warning.
-	 *
-	 * @var bool
-	 */
-	public $error = false;
+	}
 
 } // End class.

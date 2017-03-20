@@ -15,70 +15,68 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
+ * @since   0.11.0 Refactored to extend the new WordPress_AbstractFunctionParameterSniff.
  */
-class WordPress_Sniffs_VIP_PluginMenuSlugSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_VIP_PluginMenuSlugSniff extends WordPress_AbstractFunctionParameterSniff {
+
+	/**
+	 * The group name for this group of functions.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string
+	 */
+	protected $group_name = 'add_menu_functions';
 
 	/**
 	 * Functions which can be used to add pages to the WP Admin menu.
 	 *
-	 * @var array
+	 * @since 0.3.0
+	 * @since 0.11.0 Renamed from $add_menu_functions to $target_functions
+	 *               and changed visibility to protected.
+	 *
+	 * @var array <string function name> => <array target parameter positions>
 	 */
-	public $add_menu_functions = array(
-		'add_menu_page',
-		'add_object_page',
-		'add_utility_page',
-		'add_submenu_page',
-		'add_dashboard_page',
-		'add_posts_page',
-		'add_media_page',
-		'add_links_page',
-		'add_pages_page',
-		'add_comments_page',
-		'add_theme_page',
-		'add_plugins_page',
-		'add_users_page',
-		'add_management_page',
-		'add_options_page',
+	protected $target_functions = array(
+		'add_menu_page'       => array( 4 ),
+		'add_object_page'     => array( 4 ),
+		'add_utility_page'    => array( 4 ),
+		'add_submenu_page'    => array( 1, 5 ),
+		'add_dashboard_page'  => array( 4 ),
+		'add_posts_page'      => array( 4 ),
+		'add_media_page'      => array( 4 ),
+		'add_links_page'      => array( 4 ),
+		'add_pages_page'      => array( 4 ),
+		'add_comments_page'   => array( 4 ),
+		'add_theme_page'      => array( 4 ),
+		'add_plugins_page'    => array( 4 ),
+		'add_users_page'      => array( 4 ),
+		'add_management_page' => array( 4 ),
+		'add_options_page'    => array( 4 ),
 	);
 
 	/**
-	 * Returns an array of tokens this test wants to listen for.
+	 * Process the parameters of a matched function.
 	 *
-	 * @return array
-	 */
-	public function register() {
-		return array(
-			T_STRING,
-		);
-
-	}
-
-	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * @since 0.11.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[ $stackPtr ];
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
+		foreach ( $this->target_functions[ $matched_content ] as $position ) {
+			if ( isset( $parameters[ $position ] ) ) {
+				$file_constant = $this->phpcsFile->findNext( T_FILE, $parameters[ $position ]['start'], ( $parameters[ $position ]['end'] + 1 ) );
 
-		if ( ! in_array( $token['content'], $this->add_menu_functions, true ) ) {
-			return;
+				if ( false !== $file_constant ) {
+					$this->phpcsFile->addError( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );
+				}
+			}
 		}
-
-		$opening = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $stackPtr );
-		$closing = $tokens[ $opening ]['parenthesis_closer'];
-
-		$string = $phpcsFile->findNext( T_FILE, $opening, $closing, null, '__FILE__', true );
-
-		if ( $string ) {
-			$phpcsFile->addError( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );
-		}
-
 	}
 
 } // End class.

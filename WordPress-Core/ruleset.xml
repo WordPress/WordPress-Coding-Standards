@@ -24,8 +24,10 @@
 		<!-- Covers rule: Your indentation should always reflect logical structure. -->
 		<rule ref="Generic.WhiteSpace.ScopeIndent">
 			<properties>
+				<property name="exact" value="false" />
 				<property name="indent" value="4"/>
 				<property name="tabIndent" value="true"/>
+				<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML" />
 			</properties>
 		</rule>
 
@@ -33,12 +35,18 @@
 		<arg name="tab-width" value="4"/>
 		<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 
-		<!-- Rule: For associative arrays, values should start on a new line.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/638 -->
-
 		<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
 		<rule ref="WordPress.Arrays.ArrayDeclaration">
 			<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+		</rule>
+		<!-- Covers rule: For associative arrays, values should start on a new line.
+			 Also covers various single-line array whitespace issues. -->
+		<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
+			<!-- Exclude the upstream checks which are already thrown by the
+			     WordPress.Arrays.ArrayDeclaration sniff. -->
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NotLowerCase" />
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceAfterKeyword" />
+			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray" />
 		</rule>
 
 
@@ -52,9 +60,15 @@
 			<severity>0</severity>
 		</rule>
 
-		<!-- Rule: If you consider a long block unavoidable, please put a short comment at the end ...
-			 - typically this is appropriate for a logic block, longer than about 35 rows.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/606 -->
+		<!-- Covers rule: If you consider a long block unavoidable, please put a short comment at the end ...
+			 - typically this is appropriate for a logic block, longer than about 35 rows. -->
+		<rule ref="Squiz.Commenting.LongConditionClosingComment">
+			<properties>
+				<property name="lineLimit" value="35" />
+				<property name="commentFormat" value="// End %s()." />
+			</properties>
+			<exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore" />
+		</rule>
 
 		<!-- Covers rule: Braces should always be used, even when they are not required. -->
 		<rule ref="Generic.ControlStructures.InlineControlStructure" />
@@ -76,7 +90,7 @@
 		<rule ref="WordPress.PHP.POSIXFunctions" />
 
 		<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/608 -->
+			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/632 -->
 
 		<!-- Rule: It's most convenient to use single-quoted strings for regular expressions.
 			 Already covered by Squiz.Strings.DoubleQuoteUsage -->
@@ -88,7 +102,7 @@
 	-->
 		<!-- Covers rule: Never use shorthand PHP start tags. Always use full PHP tags. -->
 		<rule ref="Generic.PHP.DisallowShortOpenTag"/>
-		<rule ref="WordPress.PHP.DisallowAlternativePHPTags"/>
+		<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
 
 	<!--
@@ -121,7 +135,11 @@
 		<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 
 		<!-- Covers rule: Define a function like so: function my_function( $param1 = 'foo', $param2 = 'bar' ) { -->
-		<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+		<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
+			<properties>
+				<property name="checkClosures" value="true" />
+			</properties>
+		</rule>
 		<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
 			<properties>
 				<property name="equalsSpacing" value="1" />
@@ -149,6 +167,7 @@
 
 		<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
 		<rule ref="Generic.Formatting.SpaceAfterCast"/>
+		<rule ref="Squiz.WhiteSpace.CastSpacing" />
 		<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 
 		<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
@@ -194,29 +213,41 @@
 		<rule ref="WordPress.NamingConventions.ValidVariableName"/>
 
 		<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
-		<rule ref="WordPress.Classes.ValidClassName"/>
+		<rule ref="PEAR.NamingConventions.ValidClassName"/>
 
 		<!-- Covers rule: Constants should be in all upper-case with underscores separating words. -->
 		<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
 
 		<!-- Covers rule: Files should be named descriptively using lowercase letters.
 			 Hyphens should separate words. -->
-		<rule ref="Generic.Files.LowercasedFilename"/>
-		<rule ref="WordPress.Files.FileName"/>
-
-		<!-- Rule: Class file names should be based on the class name with "class-"
+		<!-- Covers rule: Class file names should be based on the class name with "class-"
 			 prepended and the underscores in the class name replaced with hyphens.
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
-
-		<!-- Rule: Files containing template tags in wp-includes should have "-template"
+		<!-- Covers rule: Files containing template tags in wp-includes should have "-template"
 			 appended to the end of the name.
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
+		<rule ref="WordPress.Files.FileName"/>
 
 
 	<!--
 		Handbook: PHP - Self-Explanatory Flag Values for Function Arguments.
 		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#self-explanatory-flag-values-for-function-arguments
 	-->
+
+
+	<!--
+		Handbook: PHP - Interpolation for Naming Dynamic Hooks.
+		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#interpolation-for-naming-dynamic-hooks
+
+		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/751
+	-->
+		<!-- Rule: Dynamic hooks should be named using interpolation rather than concatenation. -->
+
+		<!-- Rule: Variables used in hook tags should be wrapped in curly braces { and },
+			 with the complete outer tag name wrapped in double quotes. -->
+
+		<!-- Rule: Where possible, dynamic values in tag names should also be as succinct
+			 and to the point as possible. -->
 
 
 	<!--
@@ -243,6 +274,8 @@
 	-->
 		<!-- Rule: In general, readability is more important than cleverness or brevity.
 			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+		<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
+		<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
 
 	<!--
@@ -283,13 +316,16 @@
 		<rule ref="Generic.PHP.LowerCaseKeyword"/>
 
 		<!-- Class opening braces should be on the same line as the statement. -->
-		<rule ref="WordPress.Classes.ClassOpeningStatement"/>
+		<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
 
 	<!--
 		Not in the coding standard handbook: WP specific sniffs.
+		Ref: https://make.wordpress.org/core/handbook/best-practices/internationalization/ (limited info)
+		Ref: https://developer.wordpress.org/plugins/internationalization/ (more extensive)
 	-->
 		<!-- Check for correct usage of the WP i18n functions. -->
 		<rule ref="WordPress.WP.I18n"/>
+
 
 </ruleset>

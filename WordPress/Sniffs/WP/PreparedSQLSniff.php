@@ -24,10 +24,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * The lists of $wpdb methods.
 	 *
 	 * @since 0.8.0
+	 * @since 0.11.0 Changed from static to non-static.
 	 *
 	 * @var array
 	 */
-	protected static $methods = array(
+	protected $methods = array(
 		'get_var'     => true,
 		'get_col'     => true,
 		'get_row'     => true,
@@ -86,25 +87,22 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-	    return array(
-		    T_VARIABLE,
-	    );
+		return array(
+			T_VARIABLE,
+		);
 	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
 	 * @since 0.8.0
 	 *
-	 * @return int|void
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-
-		$this->init( $phpcsFile );
+	public function process_token( $stackPtr ) {
 
 		// Check for $wpdb variable.
 		if ( '$wpdb' !== $this->tokens[ $stackPtr ]['content'] ) {
@@ -133,7 +131,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				);
 
 				foreach ( $bad_variables as $bad_variable ) {
-					$phpcsFile->addError(
+					$this->phpcsFile->addError(
 						'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
 						$this->i,
 						'NotPrepared',
@@ -156,8 +154,8 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 			if ( T_STRING === $this->tokens[ $this->i ]['code'] ) {
 
 				if (
-					isset( self::$SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
-					|| isset( self::$SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					isset( $this->SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					|| isset( $this->SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
 				) {
 
 					// Find the opening parenthesis.
@@ -172,22 +170,22 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-				} elseif ( isset( self::$formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
+				} elseif ( isset( $this->formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
 					continue;
 				}
 			}
 
-			$phpcsFile->addError(
+			$this->phpcsFile->addError(
 				'Use placeholders and $wpdb->prepare(); found %s',
 				$this->i,
 				'NotPrepared',
 				array( $this->tokens[ $this->i ]['content'] )
 			);
-		}
+		} // End for().
 
 		return $this->end;
 
-	} // end process().
+	} // End process().
 
 	/**
 	 * Checks whether this is a call to a $wpdb method that we want to sniff.
@@ -207,7 +205,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	protected function is_wpdb_method_call( $stackPtr ) {
 
 		// Check that this is a method call.
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, null, null, true );
+		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return false;
 		}
@@ -218,7 +216,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		// Find the opening parenthesis.
 		$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, ( $methodPtr + 1 ), null, true, null, true );
 
-		if ( ! $opening_paren ) {
+		if ( false === $opening_paren ) {
 			return false;
 		}
 
@@ -229,7 +227,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		// Check that this is one of the methods that we are interested in.
-		if ( ! isset( self::$methods[ $method ] ) ) {
+		if ( ! isset( $this->methods[ $method ] ) ) {
 			return false;
 		}
 
@@ -241,6 +239,6 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		}
 
 		return true;
-	} // is_wpdb_method_call()
+	} // End is_wpdb_method_call().
 
 } // End class.

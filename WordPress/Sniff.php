@@ -21,10 +21,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * List of the functions which verify nonces.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $nonceVerificationFunctions = array(
+	protected $nonceVerificationFunctions = array(
 		'wp_verify_nonce'     => true,
 		'check_admin_referer' => true,
 		'check_ajax_referer'  => true,
@@ -34,10 +35,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions that escape values for display.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $escapingFunctions = array(
+	protected $escapingFunctions = array(
 		'absint'               => true,
 		'esc_attr__'           => true,
 		'esc_attr_e'           => true,
@@ -54,6 +56,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'esc_url'              => true,
 		'filter_input'         => true,
 		'filter_var'           => true,
+		'floatval'             => true,
 		'intval'               => true,
 		'json_encode'          => true,
 		'like_escape'          => true,
@@ -75,10 +78,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions whose output is automatically escaped for display.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $autoEscapedFunctions = array(
+	protected $autoEscapedFunctions = array(
 		'allowed_tags'              => true,
 		'bloginfo'                  => true,
 		'body_class'                => true,
@@ -140,6 +144,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'get_the_author_link'       => true,
 		'get_the_author'            => true,
 		'get_the_date'              => true,
+		'get_the_ID'                => true,
 		'get_the_post_thumbnail'    => true,
 		'get_the_term_list'         => true,
 		'get_the_title'             => true,
@@ -151,7 +156,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'next_posts_link'           => true,
 		'paginate_comments_links'   => true,
 		'permalink_anchor'          => true,
-		'post_class'                => true,
 		'post_password_required'    => true,
 		'post_type_archive_title'   => true,
 		'posts_nav_link'            => true,
@@ -228,29 +232,34 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * Functions that sanitize values.
 	 *
+	 * This list is complementary to the `$unslashingSanitizingFunctions`
+	 * list.
+	 * Sanitizing functions should be added to this list if they do *not*
+	 * implicitely unslash data and to the `$unslashingsanitizingFunctions`
+	 * list if they do.
+	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $sanitizingFunctions = array(
+	protected $sanitizingFunctions = array(
 		'_wp_handle_upload'          => true,
-		'absint'                     => true,
 		'array_key_exists'           => true,
 		'esc_url_raw'                => true,
 		'filter_input'               => true,
 		'filter_var'                 => true,
 		'hash_equals'                => true,
 		'in_array'                   => true,
-		'intval'                     => true,
-		'is_array'                   => true,
 		'is_email'                   => true,
 		'number_format'              => true,
 		'sanitize_bookmark_field'    => true,
 		'sanitize_bookmark'          => true,
 		'sanitize_email'             => true,
 		'sanitize_file_name'         => true,
+		'sanitize_hex_color_no_hash' => true,
+		'sanitize_hex_color'	     => true,
 		'sanitize_html_class'        => true,
-		'sanitize_key'               => true,
 		'sanitize_meta'              => true,
 		'sanitize_mime_type'         => true,
 		'sanitize_option'            => true,
@@ -273,18 +282,26 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'wp_parse_id_list'           => true,
 		'wp_redirect'                => true,
 		'wp_safe_redirect'           => true,
+		'wp_strip_all_tags'          => true,
 	);
 
 	/**
 	 * Sanitizing functions that implicitly unslash the data passed to them.
 	 *
+	 * This list is complementary to the `$sanitizingFunctions` list.
+	 * Sanitizing functions should be added to this list if they also
+	 * implicitely unslash data and to the `$sanitizingFunctions` list
+	 * if they don't.
+	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $unslashingSanitizingFunctions = array(
+	protected $unslashingSanitizingFunctions = array(
 		'absint'       => true,
 		'boolval'      => true,
+		'floatval'     => true,
 		'intval'       => true,
 		'is_array'     => true,
 		'sanitize_key' => true,
@@ -300,10 +317,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * more difficult.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $formattingFunctions = array(
+	protected $formattingFunctions = array(
 		'array_fill' => true,
 		'ent2ncr'    => true,
 		'implode'    => true,
@@ -318,10 +336,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions which print output incorporating the values passed to them.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $printingFunctions = array(
+	protected $printingFunctions = array(
 		'_deprecated_argument'    => true,
 		'_deprecated_constructor' => true,
 		'_deprecated_file'        => true,
@@ -346,12 +365,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions that escape values for use in SQL queries.
 	 *
 	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $SQLEscapingFunctions = array(
+	protected $SQLEscapingFunctions = array(
 		'absint'      => true,
 		'esc_sql'     => true,
+		'floatval'    => true,
 		'intval'      => true,
 		'like_escape' => true,
 	);
@@ -360,10 +381,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * Functions whose output is automatically escaped for use in SQL queries.
 	 *
 	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $SQLAutoEscapedFunctions = array(
+	protected $SQLAutoEscapedFunctions = array(
 		'count' => true,
 	);
 
@@ -371,10 +393,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that get data from the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheGetFunctions = array(
+	protected $cacheGetFunctions = array(
 		'wp_cache_get' => true,
 	);
 
@@ -382,10 +405,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that set data in the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheSetFunctions = array(
+	protected $cacheSetFunctions = array(
 		'wp_cache_set' => true,
 		'wp_cache_add' => true,
 	);
@@ -394,21 +418,34 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that delete data from the cache.
 	 *
 	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $cacheDeleteFunctions = array(
+	protected $cacheDeleteFunctions = array(
 		'wp_cache_delete' => true,
+		'clean_attachment_cache' => true,
+		'clean_blog_cache' => true,
+		'clean_bookmark_cache' => true,
+		'clean_category_cache' => true,
+		'clean_comment_cache' => true,
+		'clean_network_cache' => true,
+		'clean_object_term_cache' => true,
+		'clean_page_cache' => true,
+		'clean_post_cache' => true,
+		'clean_term_cache' => true,
+		'clean_user_cache' => true,
 	);
 
 	/**
 	 * A list of functions that invoke WP hooks (filters/actions).
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array
 	 */
-	public static $hookInvokeFunctions = array(
+	protected $hookInvokeFunctions = array(
 		'do_action'                => true,
 		'do_action_ref_array'      => true,
 		'do_action_deprecated'     => true,
@@ -421,10 +458,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of functions that are used to interact with the WP plugins API.
 	 *
 	 * @since 0.10.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
 	 *
 	 * @var array <string function name> => <int position of the hook name argument in function signature>
 	 */
-	public static $hookFunctions = array(
+	protected $hookFunctions = array(
 		'has_filter'         => 1,
 		'add_filter'         => 1,
 		'remove_filter'      => 1,
@@ -438,6 +476,40 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'remove_all_actions' => 1,
 		'current_filter'     => 0, // No hook name argument.
 	);
+
+	/**
+	 * Whitelist of classes which test classes can extend.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]
+	 */
+	protected $test_class_whitelist = array(
+		'WP_UnitTestCase'            => true,
+		'PHPUnit_Framework_TestCase' => true,
+	);
+
+	/**
+	 * Custom list of classes which test classes can extend.
+	 *
+	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property will need to be set for each sniff which uses the
+	 * `is_token_in_test_method()` method.
+	 * Currently the method is only used by the `WordPress.Variables.GlobalVariables`
+	 * sniff.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.[Subset].[Sniffname]">
+	 *  <properties>
+	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string|string[]
+	 */
+	public $custom_test_class_whitelist = array();
 
 	/**
 	 * The current file being sniffed.
@@ -461,10 +533,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * A list of superglobals that incorporate user input.
 	 *
 	 * @since 0.5.0
+	 * @since 0.11.0 Changed from static to non-static.
 	 *
 	 * @var string[]
 	 */
-	protected static $input_superglobals = array(
+	protected $input_superglobals = array(
 		'$_COOKIE',
 		'$_GET',
 		'$_FILES',
@@ -472,6 +545,35 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'$_REQUEST',
 		'$_SERVER',
 	);
+
+	/**
+	 * Set sniff properties and hand off to child class for processing of the token.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+	 * @param int                  $stackPtr  The position of the current token
+	 *                                        in the stack passed in $tokens.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+		$this->init( $phpcsFile );
+		return $this->process_token( $stackPtr );
+	}
+
+	/**
+	 * Processes a sniff when one of its tokens is encountered.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	abstract public function process_token( $stackPtr );
 
 	/**
 	 * Initialize the class for the current process.
@@ -486,6 +588,161 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected function init( PHP_CodeSniffer_File $phpcsFile ) {
 		$this->phpcsFile = $phpcsFile;
 		$this->tokens    = $phpcsFile->getTokens();
+	}
+
+	/**
+	 * Strip quotes surrounding an arbitrary string.
+	 *
+	 * Intended for use with the content of a T_CONSTANT_ENCAPSED_STRING / T_DOUBLE_QUOTED_STRING.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $string The raw string.
+	 * @return string String without quotes around it.
+	 */
+	public function strip_quotes( $string ) {
+		return preg_replace( '`^([\'"])(.*)\1$`Ds', '$2', $string );
+	}
+
+	/**
+	 * Add a PHPCS message to the output stack as either a warning or an error.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $message   The message.
+	 * @param int    $stackPtr  The position of the token the message relates to.
+	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                          Defaults to true (error).
+	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data      Optional input for the data replacements.
+	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
+	 *                          the PHPCS default severity level.
+	 * @return bool
+	 */
+	protected function addMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0 ) {
+		return $this->throwMessage( $message, $stackPtr, $is_error, $code, $data, $severity, false );
+	}
+
+	/**
+	 * Add a fixable PHPCS message to the output stack as either a warning or an error.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $message   The message.
+	 * @param int    $stackPtr  The position of the token the message relates to.
+	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                          Defaults to true (error).
+	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data      Optional input for the data replacements.
+	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
+	 *                          the PHPCS default severity level.
+	 * @return bool
+	 */
+	protected function addFixableMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0 ) {
+		return $this->throwMessage( $message, $stackPtr, $is_error, $code, $data, $severity, true );
+	}
+
+	/**
+	 * Add a PHPCS message to the output stack as either a warning or an error.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $message   The message.
+	 * @param int    $stackPtr  The position of the token the message relates to.
+	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                          Defaults to true (error).
+	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data      Optional input for the data replacements.
+	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
+	 *                          the PHPCS default severity level.
+	 * @param bool   $fixable   Optional. Whether this is a fixable error. Defaults to false.
+	 * @return bool
+	 */
+	private function throwMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0, $fixable = false ) {
+
+		$method = 'add';
+		if ( true === $fixable ) {
+			$method .= 'Fixable';
+		}
+
+		if ( true === $is_error ) {
+			$method .= 'Error';
+		} else {
+			$method .= 'Warning';
+		}
+
+		return call_user_func( array( $this->phpcsFile, $method ), $message, $stackPtr, $code, $data, $severity );
+	}
+
+	/**
+	 * Convert an arbitrary string to an alphanumeric string with underscores.
+	 *
+	 * Pre-empt issues with arbitrary strings being used as error codes in XML and PHP.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $base_string Arbitrary string.
+	 *
+	 * @return string
+	 */
+	protected function string_to_errorcode( $base_string ) {
+		return preg_replace( '`[^a-z0-9_]`i', '_', $base_string );
+	}
+
+	/**
+	 * Merge a pre-set array with a ruleset provided array or inline provided string.
+	 *
+	 * - Will correctly handle custom array properties which were set without
+	 *   the `type="array"` indicator.
+	 *   This also allows for making these custom array properties testable using
+	 *   a `@codingStandardsChangeSetting` comment in the unit tests.
+	 * - By default flips custom lists to allow for using `isset()` instead
+	 *   of `in_array()`.
+	 * - When `$flip` is true:
+	 *   * Presumes the base array is in a `'value' => true` format.
+	 *   * Any custom items will be given the value `false` to be able to
+	 *     distinguish them from pre-set (base array) values.
+	 *   * Will filter previously added custom items out from the base array
+	 *     before merging/returning to allow for resetting to the base array.
+	 *
+	 * {@internal Function is static as it doesn't use any of the properties or others
+	 * methods anyway and this way the `WordPress_Sniffs_NamingConventions_ValidVariableNameSniff`
+	 * which extends an upstream sniff can also use it.}}
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param array|string $custom Custom list as provided via a ruleset.
+	 *                             Can be either a comma-delimited string or
+	 *                             an array of values.
+	 * @param array        $base   Optional. Base list. Defaults to an empty array.
+	 *                             Expects `value => true` format when `$flip` is true.
+	 * @param bool         $flip   Optional. Whether or not to flip the custom list.
+	 *                             Defaults to true.
+	 * @return array
+	 */
+	public static function merge_custom_array( $custom, $base = array(), $flip = true ) {
+		if ( true === $flip ) {
+			$base = array_filter( $base );
+		}
+
+		if ( empty( $custom ) || ( ! is_array( $custom ) && ! is_string( $custom ) ) ) {
+			return $base;
+		}
+
+		// Allow for a comma delimited list.
+		if ( is_string( $custom ) ) {
+			$custom = array_filter( array_map( 'trim', explode( ',', $custom ) ) );
+		}
+
+		if ( true === $flip ) {
+			$custom = array_fill_keys( $custom, false );
+		}
+
+		if ( empty( $base ) ) {
+			return $custom;
+		}
+
+		return array_merge( $base, $custom );
 	}
 
 	/**
@@ -540,7 +797,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function has_whitelist_comment( $comment, $stackPtr ) {
 
-		$end_of_line = $lastPtr = $this->get_last_ptr_on_line( $stackPtr );
+		$lastPtr     = $this->get_last_ptr_on_line( $stackPtr );
+		$end_of_line = $lastPtr;
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
 		// we need to here.
@@ -561,11 +819,66 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		$last = $this->tokens[ $lastPtr ];
 
-		if ( T_COMMENT === $last['code'] ) {
-			return preg_match( '#' . preg_quote( $comment ) . '#i', $last['content'] );
-		} else {
+		// Ignore if not a comment.
+		if ( T_COMMENT !== $last['code'] ) {
 			return false;
 		}
+
+		// Now let's see if the comment contains the whitelist remark we're looking for.
+		return ( preg_match( '#' . preg_quote( $comment, '#' ) . '#i', $last['content'] ) === 1 );
+	}
+
+	/**
+	 * Check if a token is used within a unit test.
+	 *
+	 * Unit test methods are identified as such:
+	 * - Method name starts with `test_`.
+	 * - Method is within a class which either extends WP_UnitTestCase or PHPUnit_Framework_TestCase.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the token to be examined.
+	 *
+	 * @return bool True if the token is within a unit test, false otherwise.
+	 */
+	protected function is_token_in_test_method( $stackPtr ) {
+		// Is the token inside of a function definition ?
+		$functionToken = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		if ( false === $functionToken ) {
+			return false;
+		}
+
+		// Is this a method inside of a class or a trait ?
+		$classToken = $this->phpcsFile->getCondition( $functionToken, T_CLASS );
+		$traitToken = $this->phpcsFile->getCondition( $functionToken, T_TRAIT );
+		if ( false === $classToken && false === $traitToken ) {
+			return false;
+		}
+
+		$structureToken = $classToken;
+		if ( false !== $traitToken ) {
+			$structureToken = $traitToken;
+		}
+
+		// Add any potentially whitelisted custom test classes to the whitelist.
+		$whitelist = $this->merge_custom_array(
+			$this->custom_test_class_whitelist,
+			$this->test_class_whitelist
+		);
+
+		// Is the class/trait one of the whitelisted test classes ?
+		$className = $this->phpcsFile->getDeclarationName( $structureToken );
+		if ( isset( $whitelist[ $className ] ) ) {
+			return true;
+		}
+
+		// Does the class/trait extend one of the whitelisted test classes ?
+		$extendedClassName = $this->phpcsFile->findExtendedClassName( $structureToken );
+		if ( isset( $whitelist[ $extendedClassName ] ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -586,10 +899,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function is_assignment( $stackPtr ) {
 
-		$tokens = $this->phpcsFile->getTokens();
-
 		// Must be a variable or closing square bracket (see below).
-		if ( ! in_array( $tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ), true ) ) {
+		if ( ! in_array( $this->tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ), true ) ) {
 			return false;
 		}
 
@@ -608,13 +919,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If the next token is an assignment, that's all we need to know.
-		if ( in_array( $tokens[ $next_non_empty ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
+		if ( isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
 			return true;
 		}
 
 		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
-		if ( T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code'] ) {
-			return $this->is_assignment( $tokens[ $next_non_empty ]['bracket_closer'] );
+		if ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code'] ) {
+			return $this->is_assignment( $this->tokens[ $next_non_empty ]['bracket_closer'] );
 		}
 
 		return false;
@@ -651,8 +962,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// If we're in a function, only look inside of it.
 		$f = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
-		if ( $f ) {
+		if ( false !== $f ) {
 			$start = $tokens[ $f ]['scope_opener'];
+		} else {
+			$f = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			if ( false !== $f ) {
+				$start = $tokens[ $f ]['scope_opener'];
+			}
 		}
 
 		$in_isset = $this->is_in_isset_or_empty( $stackPtr );
@@ -661,7 +977,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// If this is inside an isset(), check after it as well, all the way to the
 		// end of the scope.
 		if ( $in_isset ) {
-			$end = ( 0 === $start ) ? count( $tokens ) : $tokens[ $start ]['scope_closer'];
+			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $tokens[ $start ]['scope_closer'];
 		}
 
 		// Check if we've looked here before.
@@ -703,7 +1019,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( self::$nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
 				$last['nonce_check'] = $i;
 				return true;
 			}
@@ -870,18 +1186,22 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			);
 
 			// If we're able to resolve the function name, do so.
-			if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
-				$functionName = trim( $this->tokens[ $mapped_function ]['content'], '\'' );
+			if ( false !== $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
+				$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
 			}
 		}
 
 		// If slashing is required, give an error.
-		if ( ! $is_unslashed && $require_unslash && ! isset( self::$unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( ! $is_unslashed && $require_unslash && ! isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
 			$this->add_unslash_error( $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
-		return isset( self::$sanitizingFunctions[ $functionName ] );
+		if ( isset( $this->sanitizingFunctions[ $functionName ] ) || isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -988,13 +1308,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$condition    = $this->tokens[ $conditionPtr ];
 
 			if ( ! isset( $condition['parenthesis_opener'] ) ) {
-
-				$this->phpcsFile->addError(
-					'Possible parse error, condition missing open parenthesis.',
-					$conditionPtr,
-					'IsValidatedMissingConditionOpener'
-				);
-
+				// Live coding or parse error.
 				return false;
 			}
 
@@ -1007,18 +1321,27 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			   in the same function/file scope as it is used.
 			 */
 
+			$scope_start = 0;
+
 			// Check if we are in a function.
-			$function = $this->phpcsFile->findPrevious( T_FUNCTION, $stackPtr );
+			$function = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
 
 			// If so, we check only within the function, otherwise the whole file.
-			if ( false !== $function && $stackPtr < $this->tokens[ $function ]['scope_closer'] ) {
+			if ( false !== $function ) {
 				$scope_start = $this->tokens[ $function ]['scope_opener'];
 			} else {
-				$scope_start = 0;
+				// Check if we are in a closure.
+				$closure = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+
+				// If so, we check only within the closure.
+				if ( false !== $closure ) {
+					$scope_start = $this->tokens[ $closure ]['scope_opener'];
+				}
 			}
 
 			$scope_end = $stackPtr;
-		}
+
+		} // End if().
 
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
@@ -1037,8 +1360,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 				}
 
 				// If we're checking for a specific array key (ex: 'hello' in
-				// $_POST['hello']), that mush match too.
-				if ( $array_key && $this->get_array_access_key( $i ) !== $array_key ) {
+				// $_POST['hello']), that must match too.
+				if ( isset( $array_key ) && $this->get_array_access_key( $i ) !== $array_key ) {
 					continue;
 				}
 
@@ -1143,7 +1466,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// USE keywords for traits.
-		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_TRAIT ) ) ) {
+		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_TRAIT ) ) ) {
 			return 'trait';
 		}
 
@@ -1172,6 +1495,290 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			}
 		}
 		return $variables;
-	} // end get_interpolated_variables()
+	}
+
+	/**
+	 * Checks if a function call has parameters.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer, it
+	 * will detect whether the array has values or is empty.
+	 *
+	 * @link https://github.com/wimg/PHPCompatibility/issues/120
+	 * @link https://github.com/wimg/PHPCompatibility/issues/152
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return bool
+	 */
+	public function does_function_call_have_parameters( $stackPtr ) {
+
+		// Check for the existence of the token.
+		if ( false === isset( $this->tokens[ $stackPtr ] ) ) {
+			return false;
+		}
+
+		// Is this one of the tokens this function handles ?
+		if ( false === in_array( $this->tokens[ $stackPtr ]['code'], array( T_STRING, T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
+			return false;
+		}
+
+		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+
+		// Deal with short array syntax.
+		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
+			if ( false === isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+				return false;
+			}
+
+			if ( $next_non_empty === $this->tokens[ $stackPtr ]['bracket_closer'] ) {
+				// No parameters.
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		// Deal with function calls & long arrays.
+		// Next non-empty token should be the open parenthesis.
+		if ( false === $next_non_empty && T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code'] ) {
+			return false;
+		}
+
+		if ( false === isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$close_parenthesis   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
+		$next_next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
+
+		if ( $next_next_non_empty === $close_parenthesis ) {
+			// No parameters.
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Count the number of parameters a function call has been passed.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
+	 * it will return the number of values in the array.
+	 *
+	 * @link https://github.com/wimg/PHPCompatibility/issues/111
+	 * @link https://github.com/wimg/PHPCompatibility/issues/114
+	 * @link https://github.com/wimg/PHPCompatibility/issues/151
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return int
+	 */
+	public function get_function_call_parameter_count( $stackPtr ) {
+		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
+			return 0;
+		}
+
+		return count( $this->get_function_call_parameters( $stackPtr ) );
+	}
+
+	/**
+	 * Get information on all parameters passed to a function call.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
+	 * it will tokenize the values / key/value pairs contained in the array call.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return array Multi-dimentional array with parameter details or
+	 *               empty array if no parameter are found.
+	 *
+	 *               @type int $position 1-based index position of the parameter. {
+	 *                   @type int $start Stack pointer for the start of the parameter.
+	 *                   @type int $end   Stack pointer for the end of parameter.
+	 *                   @type int $raw   Trimmed raw parameter content.
+	 *               }
+	 */
+	public function get_function_call_parameters( $stackPtr ) {
+		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
+			return array();
+		}
+
+		/*
+		 * Ok, we know we have a T_STRING, T_ARRAY or T_OPEN_SHORT_ARRAY with parameters
+		 * and valid open & close brackets/parenthesis.
+		 */
+
+		// Mark the beginning and end tokens.
+		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
+			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+
+			$nestedParenthesisCount = 0;
+		} else {
+			$opener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+			$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+
+			$nestedParenthesisCount = 1;
+		}
+
+		// Which nesting level is the one we are interested in ?
+		if ( isset( $this->tokens[ $opener ]['nested_parenthesis'] ) ) {
+			$nestedParenthesisCount += count( $this->tokens[ $opener ]['nested_parenthesis'] );
+		}
+
+		$parameters  = array();
+		$next_comma  = $opener;
+		$param_start = ( $opener + 1 );
+		$cnt         = 1;
+		while ( $next_comma = $this->phpcsFile->findNext( array( T_COMMA, $this->tokens[ $closer ]['code'], T_OPEN_SHORT_ARRAY ), ( $next_comma + 1 ), ( $closer + 1 ) ) ) {
+			// Ignore anything within short array definition brackets.
+			if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $next_comma ]['type']
+				&& ( isset( $this->tokens[ $next_comma ]['bracket_opener'] )
+					&& $this->tokens[ $next_comma ]['bracket_opener'] === $next_comma )
+				&& isset( $this->tokens[ $next_comma ]['bracket_closer'] )
+			) {
+				// Skip forward to the end of the short array definition.
+				$next_comma = $this->tokens[ $next_comma ]['bracket_closer'];
+				continue;
+			}
+
+			// Ignore comma's at a lower nesting level.
+			if ( T_COMMA === $this->tokens[ $next_comma ]['code']
+				&& isset( $this->tokens[ $next_comma ]['nested_parenthesis'] )
+				&& count( $this->tokens[ $next_comma ]['nested_parenthesis'] ) !== $nestedParenthesisCount
+			) {
+				continue;
+			}
+
+			// Ignore closing parenthesis/bracket if not 'ours'.
+			if ( $this->tokens[ $next_comma ]['type'] === $this->tokens[ $closer ]['type'] && $next_comma !== $closer ) {
+				continue;
+			}
+
+			// Ok, we've reached the end of the parameter.
+			$parameters[ $cnt ]['start'] = $param_start;
+			$parameters[ $cnt ]['end']   = ( $next_comma - 1 );
+			$parameters[ $cnt ]['raw']   = trim( $this->phpcsFile->getTokensAsString( $param_start, ( $next_comma - $param_start ) ) );
+
+			/*
+			 * Check if there are more tokens before the closing parenthesis.
+			 * Prevents code like the following from setting a third parameter:
+			 * functionCall( $param1, $param2, );
+			 */
+			$has_next_param = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
+			if ( false === $has_next_param ) {
+				break;
+			}
+
+			// Prepare for the next parameter.
+			$param_start = ( $next_comma + 1 );
+			$cnt++;
+		} // End while().
+
+		return $parameters;
+	}
+
+	/**
+	 * Get information on a specific parameter passed to a function call.
+	 *
+	 * Expects to be passed the T_STRING stack pointer for the function call.
+	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
+	 *
+	 * Will return a array with the start token pointer, end token pointer and the raw value
+	 * of the parameter at a specific offset.
+	 * If the specified parameter is not found, will return false.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr     The position of the function call token.
+	 * @param int $param_offset The 1-based index position of the parameter to retrieve.
+	 *
+	 * @return array|false
+	 */
+	public function get_function_call_parameter( $stackPtr, $param_offset ) {
+		$parameters = $this->get_function_call_parameters( $stackPtr );
+
+		if ( false === isset( $parameters[ $param_offset ] ) ) {
+			return false;
+		}
+
+		return $parameters[ $param_offset ];
+	}
+
+	/**
+	 * Check if a content string contains a specific html open tag.
+	 *
+	 * {@internal For PHP 5.3+ this is straightforward, just check if $content
+	 * contains the tag.
+	 * PHP 5.2 however, creates a separate token for `<s` when used in inline HTML,
+	 * so in that case we need to check that the next token starts with the rest
+	 * of the tag.
+	 * I.e. PHP 5.2 tokenizes the inline HTML `text <span>text</span> text` as:
+	 * - T_INLINE_HTML 'text'
+	 * - T_INLINE_HTML '<s'
+	 * - T_INLINE_HTML 'pan>text</span> text'
+	 *
+	 * We don't need to worry about checking the rest of the content of the next
+	 * token as sniffs using this function will be sniffing for all text string
+	 * tokens, so the next token will be passed to the sniff in the next iteration
+	 * and checked then.
+	 * Similarly, no need to check content before the '<s' as the bug will break up the
+	 * inline html to several string tokens if it plays up.}}
+	 *
+	 * @link  https://bugs.php.net/bug.php?id=48446
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param string $tag_name The name of the HTML tag without brackets. So if
+	 *                         searching for '<span...', this would be 'span'.
+	 * @param int    $stackPtr The position of the current token in the token stack.
+	 * @param string $content  Optionally, the current content string, might be a
+	 *                         substring of the original string.
+	 *                         Defaults to `false` to distinguish between a passed
+	 *                         empty string and not passing the $content string.
+	 *
+	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
+	 */
+	public function has_html_open_tag( $tag_name, $stackPtr, $content = false ) {
+		if ( false === $content ) {
+			$content = $this->tokens[ $stackPtr ]['content'];
+		}
+
+		// Check for the open tag in normal string tokens and T_INLINE_HTML for PHP 5.3+.
+		if ( 's' !== $tag_name[0] || PHP_VERSION_ID >= 50300 || T_INLINE_HTML !== $this->tokens[ $stackPtr ]['code'] ) {
+			if ( false !== strpos( $content, '<' . $tag_name ) ) {
+				return true;
+			}
+		} elseif ( '<s' === $content ) {
+			// Ok, we might be coming across the token parser issue. Check the next token.
+			$next_ptr      = ( $stackPtr + 1 );
+			$rest_tag_name = substr( $tag_name, 1 );
+
+			if ( ! empty( $rest_tag_name )
+				&& isset( $this->tokens[ $next_ptr ] )
+				&& T_INLINE_HTML === $this->tokens[ $next_ptr ]['code']
+				&& 0 === strpos( $this->tokens[ $next_ptr ]['content'], $rest_tag_name )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 }

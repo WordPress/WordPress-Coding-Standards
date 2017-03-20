@@ -22,8 +22,10 @@ class WordPress_Tests_VIP_PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			5 => 1,
+			3  => 1,
+			5  => 1,
+			9  => 2,
+			14 => ( PHP_VERSION_ID < 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NS_SEPARATOR.
 		);
 
 	}
