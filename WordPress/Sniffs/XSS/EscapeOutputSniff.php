@@ -107,6 +107,20 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	);
 
 	/**
+	 * List of names of the cast tokens which can be considered as a safe escaping method.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $safe_cast_tokens = array(
+		'T_INT_CAST'    => true, // (int)
+		'T_DOUBLE_CAST' => true, // (float)
+		'T_BOOL_CAST'   => true, // (bool)
+		'T_UNSET_CAST'  => true, // (unset)
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -284,7 +298,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ), true ) ) {
+			if ( isset( $this->safe_cast_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}

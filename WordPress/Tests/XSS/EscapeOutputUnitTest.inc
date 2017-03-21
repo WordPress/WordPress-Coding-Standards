@@ -205,3 +205,5 @@ to_screen( esc_form_field( $var1), esc_attr( $var2 ) ); // Ok.
 echo esc_form_field( $var ); // Bad.
 echo post_info( $post_id, 'field' ); // Bad.
 echo cpt_info( $post_type, 'query' ); // Bad.
+
+echo (unset) $var; // Ok.
