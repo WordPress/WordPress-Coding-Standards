@@ -148,7 +148,7 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 		 */
 		if ( true === $this->strict_class_file_names ) {
 			$has_class = $this->phpcsFile->findNext( T_CLASS, $stackPtr );
-			if ( false !== $has_class ) {
+			if ( false !== $has_class && false === $this->is_test_class( $has_class ) ) {
 				$class_name = $this->phpcsFile->getDeclarationName( $has_class );
 				$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 

@@ -49,6 +49,16 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 		'ClassNonStrictClass.inc' => 1,
 
 		/*
+		 * In /FileNameUnitTests/TestFiles.
+		 */
+		'test-sample-phpunit.inc'     => 0,
+		'test-sample-phpunit6.inc'    => 0,
+		'test-sample-wpunit.inc'      => 0,
+		// @todo Fix this! False positive, custom property setting not recognized.
+		// Is issue with unit tests, not with the sniff. If the property is set from the ruleset, it "should" work.
+		'test-sample-custom-unit.inc' => 1,
+
+		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
 		 */
 
@@ -81,7 +91,12 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	protected function getTestFiles( $testFileBase ) {
 		$sep             = DIRECTORY_SEPARATOR;
-		$test_files      = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . 'ThemeExceptions' . $sep . ',' . $sep . 'wp-includes' . $sep . '}*.inc', GLOB_BRACE );
+		$test_files      = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . 'TestFiles' . $sep . ',' . $sep . 'ThemeExceptions' . $sep . ',' . $sep . 'wp-includes' . $sep . '}*.inc', GLOB_BRACE );
+
+		// Adjust the expected results array for PHP 5.2 as PHP 5.2 does not recognize namespaces.
+		if ( PHP_VERSION_ID < 50300 ) {
+			$this->expected_results['test-sample-phpunit6.inc'] = 1;
+		}
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
