@@ -487,6 +487,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	protected $test_class_whitelist = array(
 		'WP_UnitTestCase'            => true,
 		'PHPUnit_Framework_TestCase' => true,
+		'PHPUnit\Framework\TestCase' => true,
 	);
 
 	/**
@@ -494,9 +495,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
 	 * This property will need to be set for each sniff which uses the
-	 * `is_token_in_test_method()` method.
-	 * Currently the method is only used by the `WordPress.Variables.GlobalVariables`
-	 * sniff.
+	 * `is_test_class()` method.
+	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`
+	 * and the `WordPress.Files.Filename` sniffs.
 	 *
 	 * Example usage:
 	 * <rule ref="WordPress.[Subset].[Sniffname]">
@@ -833,7 +834,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * Unit test methods are identified as such:
 	 * - Method name starts with `test_`.
-	 * - Method is within a class which either extends WP_UnitTestCase or PHPUnit_Framework_TestCase.
+	 * - Method is within a unit test class.
 	 *
 	 * @since 0.11.0
 	 *
@@ -860,6 +861,32 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			$structureToken = $traitToken;
 		}
 
+		return $this->is_test_class( $structureToken );
+	}
+
+
+	/**
+	 * Check if a class token is part of a unit test suite.
+	 *
+	 * Unit test classes are identified as such:
+	 * - Class which either extends WP_UnitTestCase or PHPUnit_Framework_TestCase
+	 *   or a custom whitelisted unit test class.
+	 *
+	 * @since 0.12.0 Split off from the `is_token_in_test_method()` method.
+	 *
+	 * @param int $stackPtr The position of the token to be examined.
+	 *                      This should be a class, anonymous class or trait token.
+	 *
+	 * @return bool True if the class is a unit test class, false otherwise.
+	 */
+	protected function is_test_class( $stackPtr ) {
+
+		if ( ! isset( $this->tokens[ $stackPtr ] )
+			|| in_array( $this->tokens[ $stackPtr ]['type'], array( 'T_CLASS', 'T_ANON_CLASS', 'T_TRAIT' ), true ) === false
+		) {
+			return false;
+		}
+
 		// Add any potentially whitelisted custom test classes to the whitelist.
 		$whitelist = $this->merge_custom_array(
 			$this->custom_test_class_whitelist,
@@ -867,13 +894,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		);
 
 		// Is the class/trait one of the whitelisted test classes ?
-		$className = $this->phpcsFile->getDeclarationName( $structureToken );
+		$className = $this->phpcsFile->getDeclarationName( $stackPtr );
 		if ( isset( $whitelist[ $className ] ) ) {
 			return true;
 		}
 
 		// Does the class/trait extend one of the whitelisted test classes ?
-		$extendedClassName = $this->phpcsFile->findExtendedClassName( $structureToken );
+		$extendedClassName = $this->phpcsFile->findExtendedClassName( $stackPtr );
 		if ( isset( $whitelist[ $extendedClassName ] ) ) {
 			return true;
 		}

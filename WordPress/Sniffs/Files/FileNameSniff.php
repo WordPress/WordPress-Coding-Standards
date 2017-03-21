@@ -21,8 +21,9 @@
  *                   template tags end in `-template`. Based on @subpackage file DocBlock tag.
  *                 - This sniff will now allow for underscores in file names for certain theme
  *                   specific exceptions if the `$is_theme` property is set to `true`.
+ * @since   0.12.0 - Now extends the `WordPress_Sniff` class.
  */
-class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 
 	/**
 	 * Regex for the theme specific exceptions.
@@ -117,15 +118,14 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in the
-	 *                                        stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process_token( $stackPtr ) {
 
-		$file     = $phpcsFile->getFileName();
+		$file     = $this->phpcsFile->getFileName();
 		$fileName = basename( $file );
 		$expected = strtolower( str_replace( '_', '-', $fileName ) );
 
@@ -133,7 +133,7 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 		 * Generic check for lowercase hyphenated file names.
 		 */
 		if ( $fileName !== $expected && ( false === $this->is_theme || 1 !== preg_match( self::THEME_EXCEPTIONS_REGEX, $fileName ) ) ) {
-			$phpcsFile->addError(
+			$this->phpcsFile->addError(
 				'Filenames should be all lowercase with hyphens as word separators. Expected %s, but found %s.',
 				0,
 				'NotHyphenatedLowercase',
@@ -147,13 +147,13 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 		 * the file name reflects the class name.
 		 */
 		if ( true === $this->strict_class_file_names ) {
-			$has_class = $phpcsFile->findNext( T_CLASS, $stackPtr );
-			if ( false !== $has_class ) {
-				$class_name = $phpcsFile->getDeclarationName( $has_class );
+			$has_class = $this->phpcsFile->findNext( T_CLASS, $stackPtr );
+			if ( false !== $has_class && false === $this->is_test_class( $has_class ) ) {
+				$class_name = $this->phpcsFile->getDeclarationName( $has_class );
 				$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 
 				if ( substr( $fileName, 0, -4 ) !== $expected && ! isset( $this->class_exceptions[ $fileName ] ) ) {
-					$phpcsFile->addError(
+					$this->phpcsFile->addError(
 						'Class file names should be based on the class name with "class-" prepended. Expected %s, but found %s.',
 						0,
 						'InvalidClassFileName',
@@ -171,21 +171,20 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 		 * Check non-class files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
 		 */
 		if ( false !== strpos( $file, DIRECTORY_SEPARATOR . 'wp-includes' . DIRECTORY_SEPARATOR ) ) {
-			$subpackage_tag = $phpcsFile->findNext( T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
+			$subpackage_tag = $this->phpcsFile->findNext( T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
 			if ( false !== $subpackage_tag ) {
-				$subpackage = $phpcsFile->findNext( T_DOC_COMMENT_STRING, $subpackage_tag );
+				$subpackage = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, $subpackage_tag );
 				if ( false !== $subpackage ) {
-					$tokens       = $phpcsFile->getTokens();
 					$fileName_end = substr( $fileName, -13 );
-					$has_class    = $phpcsFile->findNext( T_CLASS, $stackPtr );
+					$has_class    = $this->phpcsFile->findNext( T_CLASS, $stackPtr );
 
-					if ( ( 'Template' === trim( $tokens[ $subpackage ]['content'] )
-						&& $tokens[ $subpackage_tag ]['line'] === $tokens[ $subpackage ]['line'] )
+					if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
+						&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
 						&& ( ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
 						|| ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
 						&& false === $has_class
 					) {
-						$phpcsFile->addError(
+						$this->phpcsFile->addError(
 							'Files containing template tags should have "-template" appended to the end of the file name. Expected %s, but found %s.',
 							0,
 							'InvalidTemplateTagFileName',
@@ -200,7 +199,7 @@ class WordPress_Sniffs_Files_FileNameSniff implements PHP_CodeSniffer_Sniff {
 		} // End if().
 
 		// Only run this sniff once per file, no need to run it again.
-		return ( $phpcsFile->numTokens + 1 );
+		return ( $this->phpcsFile->numTokens + 1 );
 
 	} // End process().
 
