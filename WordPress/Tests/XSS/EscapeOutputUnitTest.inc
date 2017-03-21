@@ -207,3 +207,10 @@ echo post_info( $post_id, 'field' ); // Bad.
 echo cpt_info( $post_type, 'query' ); // Bad.
 
 echo (unset) $var; // Ok.
+
+// Nowdocs are OK.
+echo <<<'EOD'
+Some Raw String
+EOD;
+
+echo 1.234; // Ok.
