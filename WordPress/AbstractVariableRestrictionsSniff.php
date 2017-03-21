@@ -60,6 +60,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 			T_DOUBLE_COLON,
 			T_OPEN_SQUARE_BRACKET,
 			T_DOUBLE_QUOTED_STRING,
+			T_HEREDOC,
 		);
 
 	}
@@ -126,13 +127,13 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 			$patterns = array();
 
 			// Simple variable.
-			if ( in_array( $token['code'], array( T_VARIABLE, T_DOUBLE_QUOTED_STRING ), true ) && ! empty( $group['variables'] ) ) {
+			if ( in_array( $token['code'], array( T_VARIABLE, T_DOUBLE_QUOTED_STRING, T_HEREDOC ), true ) && ! empty( $group['variables'] ) ) {
 				$patterns = array_merge( $patterns, $group['variables'] );
 				$var      = $token['content'];
 
 			}
 
-			if ( in_array( $token['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON, T_DOUBLE_QUOTED_STRING ), true ) && ! empty( $group['object_vars'] ) ) {
+			if ( in_array( $token['code'], array( T_OBJECT_OPERATOR, T_DOUBLE_COLON, T_DOUBLE_QUOTED_STRING, T_HEREDOC ), true ) && ! empty( $group['object_vars'] ) ) {
 				// Object var, ex: $foo->bar / $foo::bar / Foo::bar / Foo::$bar .
 				$patterns = array_merge( $patterns, $group['object_vars'] );
 
@@ -142,7 +143,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 
 			}
 
-			if ( in_array( $token['code'], array( T_OPEN_SQUARE_BRACKET, T_DOUBLE_QUOTED_STRING ), true ) && ! empty( $group['array_members'] ) ) {
+			if ( in_array( $token['code'], array( T_OPEN_SQUARE_BRACKET, T_DOUBLE_QUOTED_STRING, T_HEREDOC ), true ) && ! empty( $group['array_members'] ) ) {
 				// Array members.
 				$patterns = array_merge( $patterns, $group['array_members'] );
 
@@ -159,9 +160,9 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 
 			$patterns = array_map( array( $this, 'test_patterns' ), $patterns );
 			$pattern  = implode( '|', $patterns );
-			$delim    = ( T_OPEN_SQUARE_BRACKET !== $token['code'] ) ? '\b' : '';
+			$delim    = ( T_OPEN_SQUARE_BRACKET !== $token['code'] && T_HEREDOC !== $token['code'] ) ? '\b' : '';
 
-			if ( T_DOUBLE_QUOTED_STRING === $token['code'] ) {
+			if ( T_DOUBLE_QUOTED_STRING === $token['code'] || T_HEREDOC === $token['code'] ) {
 				$var = $token['content'];
 			}
 
