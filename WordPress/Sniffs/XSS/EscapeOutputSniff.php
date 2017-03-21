@@ -97,12 +97,51 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 */
 	private $magic_constant_tokens = array(
 		'T_CLASS_C'  => true, // __CLASS__
+		'T_DIR'      => true, // __DIR__
 		'T_FILE'     => true, // __FILE__
 		'T_FUNC_C'   => true, // __FUNCTION__
 		'T_LINE'     => true, // __LINE__
 		'T_METHOD_C' => true, // __METHOD__
 		'T_NS_C'     => true, // __NAMESPACE__
 		'T_TRAIT_C'  => true, // __TRAIT__
+	);
+
+	/**
+	 * List of names of the cast tokens which can be considered as a safe escaping method.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $safe_cast_tokens = array(
+		'T_INT_CAST'    => true, // (int)
+		'T_DOUBLE_CAST' => true, // (float)
+		'T_BOOL_CAST'   => true, // (bool)
+		'T_UNSET_CAST'  => true, // (unset)
+	);
+
+	/**
+	 * List of tokens which can be considered as a safe when directly part of the output.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $safe_components = array(
+		'T_CONSTANT_ENCAPSED_STRING' => true,
+		'T_LNUMBER'                  => true,
+		'T_MINUS'                    => true,
+		'T_PLUS'                     => true,
+		'T_MULTIPLY'                 => true,
+		'T_DIVIDE'                   => true,
+		'T_MODULUS'                  => true,
+		'T_TRUE'                     => true,
+		'T_FALSE'                    => true,
+		'T_NULL'                     => true,
+		'T_DNUMBER'                  => true,
+		'T_START_NOWDOC'             => true,
+		'T_NOWDOC'                   => true,
+		'T_END_NOWDOC'               => true,
 	);
 
 	/**
@@ -276,14 +315,14 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
 			// Also T_LNUMBER, e.g.: echo 45; exit -1; and booleans.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_MINUS, T_TRUE, T_FALSE, T_NULL ), true ) ) {
+			if ( isset( $this->safe_components[ $this->tokens[ $i ]['type'] ] ) ) {
 				continue;
 			}
 
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ), true ) ) {
+			if ( isset( $this->safe_cast_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
