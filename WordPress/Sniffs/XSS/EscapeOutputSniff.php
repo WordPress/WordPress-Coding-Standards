@@ -97,6 +97,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 */
 	private $magic_constant_tokens = array(
 		'T_CLASS_C'  => true, // __CLASS__
+		'T_DIR'      => true, // __DIR__
 		'T_FILE'     => true, // __FILE__
 		'T_FUNC_C'   => true, // __FUNCTION__
 		'T_LINE'     => true, // __LINE__
