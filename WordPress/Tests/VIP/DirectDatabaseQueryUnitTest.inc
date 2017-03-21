@@ -242,3 +242,60 @@ function custom_modify_term_relationship() {
 	$wpdb->update( $wpdb->term_relationships, array( 'term_order' => 1 ), array( 'object_id' => 1 ) ); // DB call ok; OK.
 	clean_object_term_cache( 1 );
 }
+
+// Test Nowdocs and Heredocs
+function foo() {
+	global $wpdb;
+
+	$listofthings = $wpdb->get_col( <<<'EOD'
+		SELECT something
+		FROM somewhere
+		WHERE someotherthing = 1
+EOD
+	); // Error + Warning.
+
+	$listofthings = $wpdb->get_col( <<<EOD
+		SELECT something
+		FROM somewhere
+		WHERE someotherthing = 1
+EOD
+	); // DB call okay ( No Warning, but Error for not caching! ).
+
+	return $listofthings;
+}
+
+function baz() {
+	global $wpdb;
+
+	$baz = wp_cache_get( 'baz' );
+	if ( false !== $baz ) {
+
+		$wpdb->query( <<<'EOD'
+			ALTER TABLE TO ADD SOME FIELDS
+EOD
+		); // DB call okay (but not really because ALTER TABLE!).
+		wp_cache_set( 'baz', $baz );
+	}
+}
+
+function cache_add_instead_of_set() {
+	global $wpdb;
+
+	$baz = wp_cache_get( 'baz' );
+
+	if ( false !== $baz ) {
+
+		$data = $where = array();
+
+		$wpdb->query( <<<EOD
+			SELECT X FROM Y
+EOD
+		); // DB call ok; OK.
+		$wpdb->get_row( <<<'EOD'
+			SELECT X FROM Y
+EOD
+		); // DB call ok; OK.
+
+		wp_cache_add( 'baz', $baz );
+	}
+}
