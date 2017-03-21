@@ -23,7 +23,7 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
+		$errors = array(
 			3 => 1,
 			4 => 1,
 			5 => 1,
@@ -34,7 +34,27 @@ class WordPress_Tests_WP_PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			18 => 1,
 			20 => 1,
 			21 => 1,
+			54 => 1,
+			64 => 1,
+			71 => 1,
 		);
+
+		// Deal with PHP 5.2 not recognizing quoted heredoc openers, nor nowdoc syntax.
+		// These are all false positives!
+		if ( PHP_VERSION_ID < 50300 ) {
+			$errors[68] = 2;
+			$errors[69] = 2;
+			$errors[70] = 2;
+			$errors[71] = 4;
+			$errors[75] = 2;
+			$errors[76] = 7;
+			$errors[77] = 4;
+			$errors[78] = 5;
+			$errors[79] = 7;
+			$errors[80] = 1;
+		}
+
+		return $errors;
 	}
 
 	/**

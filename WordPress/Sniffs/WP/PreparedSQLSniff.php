@@ -55,6 +55,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		T_CLOSE_SQUARE_BRACKET     => true,
 		T_COMMA                    => true,
 		T_LNUMBER                  => true,
+		T_START_HEREDOC            => true,
+		T_END_HEREDOC              => true,
+		T_START_NOWDOC             => true,
+		T_NOWDOC                   => true,
+		T_END_NOWDOC               => true,
 	);
 
 	/**
@@ -123,7 +128,9 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				continue;
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code'] ) {
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code']
+				|| T_HEREDOC === $this->tokens[ $this->i ]['code']
+			) {
 
 				$bad_variables = array_filter(
 					$this->get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
