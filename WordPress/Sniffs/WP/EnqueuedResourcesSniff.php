@@ -28,6 +28,8 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 			T_CONSTANT_ENCAPSED_STRING,
 			T_DOUBLE_QUOTED_STRING,
 			T_INLINE_HTML,
+			T_HEREDOC,
+			T_NOWDOC,
 		);
 
 	}
@@ -45,7 +47,7 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		if ( preg_match( '#rel=[\'"]?stylesheet[\'"]?#', $token['content'] ) > 0 ) {
+		if ( preg_match( '#rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $token['content'] ) > 0 ) {
 			$phpcsFile->addError( 'Stylesheets must be registered/enqueued via wp_enqueue_style', $stackPtr, 'NonEnqueuedStylesheet' );
 		}
 

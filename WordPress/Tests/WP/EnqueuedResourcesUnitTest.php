@@ -16,17 +16,6 @@
 class WordPress_Tests_WP_EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Skip this test on PHP 5.2.
-	 *
-	 * @since 0.9.0
-	 *
-	 * @return bool Whether to skip this test.
-	 */
-	protected function shouldSkipTest() {
-		return ( PHP_VERSION_ID < 50300 );
-	}
-
-	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @return array <int line number> => <int number of errors>
@@ -34,11 +23,21 @@ class WordPress_Tests_WP_EnqueuedResourcesUnitTest extends AbstractSniffUnitTest
 	public function getErrorList() {
 		return array(
 			1 => 1,
-			2 => 1,
+			2 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 has a bug tokenizing inline HTML / `<s`.
 			6 => 1,
-			7 => 1,
+			7 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 has a bug tokenizing inline HTML / `<s`.
 			10 => 1,
 			11 => 1,
+			13 => 1,
+			14 => 1,
+			16 => 1,
+			17 => 1,
+			20 => 1,
+			21 => 1,
+			25 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize double quoted T_HEREDOC.
+			26 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize double quoted T_HEREDOC.
+			30 => 1, // PHPCS on PHP 5.2 does not recognize T_NOWDOC, but sees this as a literal string anyway.
+			31 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
 		);
 
 	}
