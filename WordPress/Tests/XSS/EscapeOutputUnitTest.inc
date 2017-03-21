@@ -214,3 +214,7 @@ Some Raw String
 EOD;
 
 echo 1.234; // Ok.
+
+echo ( 1.234 + 10 + 2.5 ); // Ok.
+echo 10 % 2; // Ok.
+echo 8 * 1.2; // Ok.
