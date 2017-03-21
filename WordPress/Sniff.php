@@ -1177,17 +1177,24 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Arrays might be sanitized via array_map().
 		if ( 'array_map' === $functionName ) {
 
-			// Get the first parameter (name of function being used on the array).
-			$mapped_function = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens
-				, ( $function_opener + 1 )
-				, $function_closer
-				, true
-			);
+			// Get the first parameter.
+			$callback = $this->get_function_call_parameter( ( $function_opener - 1 ), 1 );
 
-			// If we're able to resolve the function name, do so.
-			if ( false !== $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
-				$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
+			if ( ! empty( $callback ) ) {
+				/*
+				 * If this is a function callback (not a method callback array) and we're able
+				 * to resolve the function name, do so.
+				 */
+				$first_non_empty = $this->phpcsFile->findNext(
+					PHP_CodeSniffer_Tokens::$emptyTokens,
+					$callback['start'],
+					( $callback['end'] + 1 ),
+					true
+				);
+
+				if ( false !== $first_non_empty && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
+					$functionName = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
+				}
 			}
 		}
 
