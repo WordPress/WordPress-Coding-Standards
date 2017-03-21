@@ -113,7 +113,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
+		$is_object_call = $this->phpcsFile->findNext( T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return; // This is not a call to the wpdb object.
 		}
@@ -127,7 +127,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$endOfStatement   = $this->phpcsFile->findNext( array( T_SEMICOLON ), ( $stackPtr + 1 ), null, false, null, true );
+		$endOfStatement   = $this->phpcsFile->findNext( T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
 		$endOfLineComment = '';
 		for ( $i = ( $endOfStatement + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
 

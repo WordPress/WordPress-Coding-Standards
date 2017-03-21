@@ -332,7 +332,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
-				$function_opener        = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), ( $i + 1 ), null, false, null, true );
+				$function_opener        = $this->phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
 				$is_formatting_function = isset( $this->formattingFunctions[ $functionName ] );
 
 				if ( false !== $function_opener ) {
