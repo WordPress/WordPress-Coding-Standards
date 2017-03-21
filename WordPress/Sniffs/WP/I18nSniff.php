@@ -380,7 +380,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		}
 
 		$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-		$this->addMessage( 'The $%s arg should be single a string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $content ) );
+		$this->addMessage( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $content ) );
 		return false;
 	}
 
