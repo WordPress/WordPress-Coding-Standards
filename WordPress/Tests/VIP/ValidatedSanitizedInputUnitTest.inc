@@ -149,3 +149,14 @@ function test_this() {
 
 	$abc = sanitize_twitter_handle( $_POST['abc_field'] ); // Bad x2, sanitize + unslash.
 }
+
+// Variables in heredocs.
+output( <<<EOD
+some string \$_POST[some_var]
+EOD
+); // Ok.
+
+output( <<<EOD
+some string {$_POST[some_var]} {$_GET['evil']}
+EOD
+); // Bad x2.

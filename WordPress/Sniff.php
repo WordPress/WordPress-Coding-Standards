@@ -1515,7 +1515,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.9.0
 	 *
-	 * @param string $string A T_DOUBLE_QUOTED_STRING token.
+	 * @param string $string A T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
 	 *
 	 * @return array Variable names (without '$' sigil).
 	 */
