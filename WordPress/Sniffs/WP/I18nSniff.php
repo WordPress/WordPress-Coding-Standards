@@ -183,7 +183,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
-			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || 'T_DOUBLE_QUOTED_STRING' === $this_token['type'] ) {
+			if ( T_CONSTANT_ENCAPSED_STRING === $this_token['code'] || 'T_DOUBLE_QUOTED_STRING' === $this_token['type']
+				|| T_HEREDOC === $this_token['code'] || 'T_NOWDOC' === $this_token['type']
+			) {
 				for ( $j = ( $i + 1 ); $j < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
 					if ( $this_token['code'] === $this->tokens[ $j ]['code'] ) {
 						$this_token['content'] .= $this->tokens[ $j ]['content'];
@@ -203,7 +205,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				}
 				$i = $this_token['parenthesis_closer'];
 			}
-		}
+		} // End for().
+
 		if ( ! empty( $argument_tokens ) ) {
 			$arguments_tokens[] = $argument_tokens;
 		}
@@ -363,7 +366,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 			return true;
 		}
-		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] ) {
+		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || T_HEREDOC === $tokens[0]['code'] ) {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
 				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
