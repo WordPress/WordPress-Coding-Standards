@@ -105,7 +105,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ), true ) ) {
+		if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 			$equal = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			if ( T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!

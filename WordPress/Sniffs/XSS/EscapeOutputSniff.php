@@ -291,13 +291,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			}
 
 			// Wake up on concatenation characters, another part to check.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_STRING_CONCAT ), true ) ) {
+			if ( T_STRING_CONCAT === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up after a ternary else (:).
-			if ( $ternary && in_array( $this->tokens[ $i ]['code'], array( T_INLINE_ELSE ), true ) ) {
+			if ( $ternary && T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
