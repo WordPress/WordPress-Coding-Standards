@@ -45,10 +45,9 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff implements PHP_CodeSniffer_Sniff 
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
-		$beginners = array_merge(
-			PHP_CodeSniffer_Tokens::$booleanOperators
-			, array( T_IF, T_ELSEIF )
-		);
+		$beginners   = PHP_CodeSniffer_Tokens::$booleanOperators;
+		$beginners[] = T_IF;
+		$beginners[] = T_ELSEIF;
 
 		$beginning = $phpcsFile->findPrevious( $beginners, $stackPtr, null, false, null, true );
 

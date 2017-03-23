@@ -166,7 +166,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 				$var = $token['content'];
 			}
 
-			if ( preg_match( '#(' . $pattern . ')' . $delim . '#', $var, $match ) !== 1 ) {
+			if ( empty( $var ) || preg_match( '#(' . $pattern . ')' . $delim . '#', $var, $match ) !== 1 ) {
 				continue;
 			}
 
