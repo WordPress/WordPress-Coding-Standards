@@ -212,7 +212,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	protected function is_wpdb_method_call( $stackPtr ) {
 
 		// Check that this is a method call.
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
+		$is_object_call = $this->phpcsFile->findNext( T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return false;
 		}

@@ -105,7 +105,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ), true ) ) {
+		if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 			$equal = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			if ( T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!
@@ -123,7 +123,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-				$operator = $this->phpcsFile->findNext( array( T_EQUAL ), ( $stackPtr + 1 ) );
+				$operator = $this->phpcsFile->findNext( T_EQUAL, ( $stackPtr + 1 ) );
 			}
 
 			$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );

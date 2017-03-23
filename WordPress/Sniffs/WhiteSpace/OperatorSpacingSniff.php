@@ -44,7 +44,8 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 		$operators	= PHP_CodeSniffer_Tokens::$operators;
 		$assignment = PHP_CodeSniffer_Tokens::$assignmentTokens;
 
-		$tokens   = array_unique( array_merge( $comparison, $operators, $assignment ) );
+		// Union the arrays - keeps the array keys and - in this case - automatically de-dups.
+		$tokens   = $comparison + $operators + $assignment;
 		$tokens[] = T_BOOLEAN_NOT;
 
 		return $tokens;
@@ -103,12 +104,12 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 					return;
 				}
 
-				if ( in_array( $tokens[ $prev ]['code'], PHP_CodeSniffer_Tokens::$operators, true ) ) {
+				if ( isset( PHP_CodeSniffer_Tokens::$operators[ $tokens[ $prev ]['code'] ] ) ) {
 					// Just trying to operate on a negative value; eg. ($var * -1).
 					return;
 				}
 
-				if ( in_array( $tokens[ $prev ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens, true ) ) {
+				if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $tokens[ $prev ]['code'] ] ) ) {
 					// Just trying to compare a negative value; eg. ($var === -1).
 					return;
 				}
@@ -130,7 +131,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 				if ( T_LNUMBER === $tokens[ $number ]['code'] ) {
 					$semi = $phpcsFile->findNext( T_WHITESPACE, ( $number + 1 ), null, true );
 					if ( T_SEMICOLON === $tokens[ $semi ]['code'] ) {
-						if ( false !== $prev && in_array( $tokens[ $prev ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
+						if ( false !== $prev && isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $tokens[ $prev ]['code'] ] ) ) {
 							// This is a negative assignment.
 							return;
 						}
@@ -152,7 +153,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 			} elseif ( 1 !== strlen( $tokens[ ( $stackPtr - 1 ) ]['content'] ) && 1 !== $tokens[ ( $stackPtr - 1 ) ]['column'] ) {
 				// Don't throw an error for assignments, because other standards allow
 				// multiple spaces there to align multiple assignments.
-				if ( false === in_array( $tokens[ $stackPtr ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
+				if ( false === isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $tokens[ $stackPtr ]['code'] ] ) ) {
 					$found = strlen( $tokens[ ( $stackPtr - 1 ) ]['content'] );
 					$error = 'Expected 1 space before "%s"; %s found';
 					$data  = array(

@@ -118,7 +118,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		}
 
 		if ( T_DOUBLE_COLON === $token['code'] ) {
-			$nameEnd   = $this->phpcsFile->findPrevious( array( T_STRING ), ( $stackPtr - 1 ) );
+			$nameEnd   = $this->phpcsFile->findPrevious( T_STRING, ( $stackPtr - 1 ) );
 			$nameStart = ( $this->phpcsFile->findPrevious( array( T_STRING, T_NS_SEPARATOR, T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
 			$length    = ( $nameEnd - ( $nameStart - 1) );
 			$classname = $this->phpcsFile->getTokensAsString( $nameStart, $length );
@@ -251,7 +251,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 			}
 		} else {
 			// Let's see if we can find a file namespace instead.
-			$first = $this->phpcsFile->findNext( array( T_NAMESPACE ), 0, $search_from );
+			$first = $this->phpcsFile->findNext( T_NAMESPACE, 0, $search_from );
 
 			if ( false !== $first && empty( $this->tokens[ $first ]['scope_condition'] ) ) {
 				$namespace = $this->get_namespace_name( $first );

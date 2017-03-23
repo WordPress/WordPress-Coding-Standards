@@ -148,7 +148,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 				$patterns = array_merge( $patterns, $group['array_members'] );
 
 				if ( isset( $token['bracket_closer'] ) ) {
-					$owner  = $this->phpcsFile->findPrevious( array( T_VARIABLE ), $stackPtr );
+					$owner  = $this->phpcsFile->findPrevious( T_VARIABLE, $stackPtr );
 					$inside = $this->phpcsFile->getTokensAsString( $stackPtr, ( $token['bracket_closer'] - $stackPtr + 1 ) );
 					$var    = implode( '', array( $this->tokens[ $owner ]['content'], $inside ) );
 				}
@@ -166,7 +166,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 				$var = $token['content'];
 			}
 
-			if ( preg_match( '#(' . $pattern . ')' . $delim . '#', $var, $match ) !== 1 ) {
+			if ( empty( $var ) || preg_match( '#(' . $pattern . ')' . $delim . '#', $var, $match ) !== 1 ) {
 				continue;
 			}
 

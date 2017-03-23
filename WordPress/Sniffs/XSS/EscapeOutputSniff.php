@@ -239,7 +239,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces and comments.
-			if ( in_array( $this->tokens[ $i ]['code'], PHP_CodeSniffer_Tokens::$emptyTokens, true ) ) {
+			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
@@ -291,13 +291,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			}
 
 			// Wake up on concatenation characters, another part to check.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_STRING_CONCAT ), true ) ) {
+			if ( T_STRING_CONCAT === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up after a ternary else (:).
-			if ( $ternary && in_array( $this->tokens[ $i ]['code'], array( T_INLINE_ELSE ), true ) ) {
+			if ( $ternary && T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
@@ -332,7 +332,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
-				$function_opener        = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), ( $i + 1 ), null, false, null, true );
+				$function_opener        = $this->phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
 				$is_formatting_function = isset( $this->formattingFunctions[ $functionName ] );
 
 				if ( false !== $function_opener ) {

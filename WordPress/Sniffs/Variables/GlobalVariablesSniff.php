@@ -10,7 +10,7 @@
 /**
  * WordPress_Sniffs_Variables_GlobalVariablesSniff.
  *
- * Warns about usage of global variables used by WordPress
+ * Warns about overwriting WordPress native global variables.
  *
  * @package WPCS\WordPressCodingStandards
  *

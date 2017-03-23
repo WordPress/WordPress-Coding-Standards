@@ -39,9 +39,6 @@ class WordPress_Sniffs_VIP_SessionVariableUsageSniff implements PHP_CodeSniffer_
 	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
 	 * @param int                  $stackPtr  The position of the current token
 	 *                                        in the stack passed in $tokens.
-	 *
-	 * @todo Allow T_CONSTANT_ENCAPSED_STRING?
-	 *
 	 * @return void
 	 */
 	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
