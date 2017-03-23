@@ -1442,7 +1442,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			true
 		);
 
-		if ( in_array( $this->tokens[ $previous_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens, true ) ) {
+		if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -1465,7 +1465,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			);
 		}
 
-		if ( in_array( $this->tokens[ $next_token ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens, true ) ) {
+		if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
 			return true;
 		}
 

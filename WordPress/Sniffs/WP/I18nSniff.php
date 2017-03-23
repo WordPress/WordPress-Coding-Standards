@@ -173,7 +173,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		for ( $i = ( $func_open_paren_token + 1 ); $i < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
 			$this_token                = $this->tokens[ $i ];
 			$this_token['token_index'] = $i;
-			if ( in_array( $this_token['code'], PHP_CodeSniffer_Tokens::$emptyTokens, true ) ) {
+			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
 				continue;
 			}
 			if ( T_COMMA === $this_token['code'] ) {
