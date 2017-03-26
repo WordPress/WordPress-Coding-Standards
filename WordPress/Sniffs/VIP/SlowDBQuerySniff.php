@@ -44,7 +44,6 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 * @since 0.10.0
 	 * @since 0.12.0 Added the 'slow query' comment.
 	 *
-	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
