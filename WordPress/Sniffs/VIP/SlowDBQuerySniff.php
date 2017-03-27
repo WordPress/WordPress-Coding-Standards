@@ -51,11 +51,12 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( $this->has_whitelist_comment( 'slow query', $stackPtr ) ) {
-			return;
-		}
+		if (
+			$this->has_whitelist_comment( 'slow query', $stackPtr )
+			||
+			$this->has_whitelist_comment( 'tax_query', $stackPtr )
+		) {
 
-		if ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
 			return;
 		}
 
