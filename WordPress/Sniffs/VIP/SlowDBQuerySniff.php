@@ -42,7 +42,7 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @since 0.10.0
-	 * @since 0.12.0 Introduced new 'slow_query' whitelist comment.
+	 * @since 0.12.0 Introduced new 'slow query' whitelist comment.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
