@@ -31,7 +31,7 @@ $test = array(
 	'tax_query' => array(), // WPCS: slow query ok.
 
 	// Multi-line statement.
-	'tax_query' => array( // WPCS: slow query ok.
+	'tax_query' => array( // WPCS: tax_query ok.
 		array(
 			'taxonomy' => 'foo',
 		),
