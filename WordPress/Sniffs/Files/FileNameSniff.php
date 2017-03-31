@@ -201,6 +201,6 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 		// Only run this sniff once per file, no need to run it again.
 		return ( $this->phpcsFile->numTokens + 1 );
 
-	} // End process().
+	} // End process_token().
 
 } // End class.

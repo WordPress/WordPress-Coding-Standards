@@ -182,7 +182,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 
 		} // End foreach().
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Transform a wildcard pattern to a usable regex pattern.

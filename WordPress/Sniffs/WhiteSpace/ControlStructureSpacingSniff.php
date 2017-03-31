@@ -552,6 +552,6 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			}
 		} // End if().
 
-	} // End process().
+	} // End process_token().
 
 } // End class.

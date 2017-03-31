@@ -192,7 +192,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 		return $this->end;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Checks whether this is a call to a $wpdb method that we want to sniff.

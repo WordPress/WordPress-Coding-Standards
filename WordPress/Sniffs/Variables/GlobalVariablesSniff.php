@@ -400,7 +400,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 			}
 		} // End if().
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Add the error if there is no whitelist comment present and the assignment
