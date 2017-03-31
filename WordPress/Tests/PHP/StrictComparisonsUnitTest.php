@@ -32,9 +32,11 @@ class WordPress_Tests_PHP_StrictComparisonsUnitTest extends AbstractSniffUnitTes
 	 */
 	public function getWarningList() {
 		return array(
-			3 => 1,
+			3  => 1,
 			10 => 1,
 			12 => 1,
+			24 => 1,
+			29 => 1,
 		);
 
 	}

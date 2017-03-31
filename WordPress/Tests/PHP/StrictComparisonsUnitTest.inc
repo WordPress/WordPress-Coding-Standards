@@ -19,3 +19,13 @@ if ( true != $true ) { // Bad.
 if ( true == $true ) { // Loose comparison, OK.
 	echo 'True';
 }
+
+// Test that whitelisting is not too eager.
+if ( true == $true ) {
+	// The line above has a loose comparison, but no whitelist comment.
+	echo 'True';
+}
+
+if ( true == $true ) { // Loose comparisons FTW!
+	echo 'True';
+}
