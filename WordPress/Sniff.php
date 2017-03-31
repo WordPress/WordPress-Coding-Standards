@@ -820,13 +820,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		$last = $this->tokens[ $lastPtr ];
 
-		// Ignore if not a comment.
-		if ( T_COMMENT !== $last['code'] ) {
+		// Ignore if not a comment or not on the same line.
+		if ( T_COMMENT !== $last['code'] || $last['line'] !== $this->tokens[ $end_of_line ]['line'] ) {
 			return false;
 		}
 
 		// Now let's see if the comment contains the whitelist remark we're looking for.
-		return ( preg_match( '#' . preg_quote( $comment, '#' ) . '#i', $last['content'] ) === 1 );
+		return ( preg_match( '#\b' . preg_quote( $comment, '#' ) . '\b#i', $last['content'] ) === 1 );
 	}
 
 	/**
