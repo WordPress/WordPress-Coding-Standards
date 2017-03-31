@@ -193,7 +193,7 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 			return parent::process_token( $stackPtr );
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Process the parameters of a matched function.

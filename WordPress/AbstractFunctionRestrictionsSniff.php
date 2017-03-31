@@ -168,7 +168,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			return $this->check_for_matches( $stackPtr );
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Verify is the current token is a function call.

@@ -396,7 +396,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 		return $end_of_statement;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.

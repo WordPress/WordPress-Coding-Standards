@@ -167,7 +167,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			return;
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Add warning about unclear cron schedule change.

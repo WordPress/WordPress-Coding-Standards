@@ -211,7 +211,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 
 		return $endOfStatement;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
