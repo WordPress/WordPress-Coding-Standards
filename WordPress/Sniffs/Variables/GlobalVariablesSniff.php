@@ -16,6 +16,8 @@
  *
  * @since   0.3.0
  * @since   0.4.0 This class now extends WordPress_Sniff.
+ *
+ * @uses    WordPress_Sniff::$custom_test_class_whitelist
  */
 class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 
