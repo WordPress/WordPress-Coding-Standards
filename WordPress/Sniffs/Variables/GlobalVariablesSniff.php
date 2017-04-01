@@ -226,7 +226,6 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 		'cat',
 		'lost',
 		'avail_post_mime_types',
-		'$var',
 		'errors',
 		'cat_id',
 		'orderby',
