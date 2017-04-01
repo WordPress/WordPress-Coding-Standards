@@ -232,47 +232,4 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		return $classname;
 	}
 
-	/**
-	 * Determine the namespace name based on whether this is a scoped namespace or a file namespace.
-	 *
-	 * @param int $search_from The token position to search up from.
-	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applied.
-	 */
-	protected function determine_namespace( $search_from ) {
-		$namespace = '';
-
-		if ( ! empty( $this->tokens[ $search_from ]['conditions'] ) ) {
-			// Scoped namespace {}.
-			foreach ( $this->tokens[ $search_from ]['conditions'] as $pointer => $type ) {
-				if ( T_NAMESPACE === $type && $this->tokens[ $pointer ]['scope_closer'] > $search_from ) {
-					$namespace = $this->get_namespace_name( $pointer );
-				}
-				break; // We only need to check the highest level condition.
-			}
-		} else {
-			// Let's see if we can find a file namespace instead.
-			$first = $this->phpcsFile->findNext( T_NAMESPACE, 0, $search_from );
-
-			if ( false !== $first && empty( $this->tokens[ $first ]['scope_condition'] ) ) {
-				$namespace = $this->get_namespace_name( $first );
-			}
-		}
-
-		return $namespace;
-	}
-
-	/**
-	 * Get the namespace name based on the position of the namespace scope opener.
-	 *
-	 * @param int $namespace_token The token position to search from.
-	 * @return string Namespace name.
-	 */
-	protected function get_namespace_name( $namespace_token ) {
-		$nameEnd   = ( $this->phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET, T_WHITESPACE, T_SEMICOLON ), ( $namespace_token + 2 ) ) - 1 );
-		$length    = ( $nameEnd - ( $namespace_token + 1 ) );
-		$namespace = $this->phpcsFile->getTokensAsString( ( $namespace_token + 2 ), $length );
-
-		return $namespace;
-	}
-
 } // End class.
