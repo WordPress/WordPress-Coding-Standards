@@ -739,6 +739,23 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
+	 * A list of superglobals that incorporate user input.
+	 *
+	 * @since 0.5.0
+	 * @since 0.11.0 Changed from static to non-static.
+	 *
+	 * @var string[]
+	 */
+	protected $input_superglobals = array(
+		'$_COOKIE',
+		'$_GET',
+		'$_FILES',
+		'$_POST',
+		'$_REQUEST',
+		'$_SERVER',
+	);
+
+	/**
 	 * Whitelist of classes which test classes can extend.
 	 *
 	 * @since 0.11.0
@@ -790,23 +807,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @var array
 	 */
 	protected $tokens;
-
-	/**
-	 * A list of superglobals that incorporate user input.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed from static to non-static.
-	 *
-	 * @var string[]
-	 */
-	protected $input_superglobals = array(
-		'$_COOKIE',
-		'$_GET',
-		'$_FILES',
-		'$_POST',
-		'$_REQUEST',
-		'$_SERVER',
-	);
 
 	/**
 	 * Set sniff properties and hand off to child class for processing of the token.
