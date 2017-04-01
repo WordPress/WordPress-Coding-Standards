@@ -1755,6 +1755,122 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Determine the namespace name an arbitrary token lives in.
+	 *
+	 * @since 0.10.0
+	 * @since 0.12.0 Moved from the WordPress_AbstractClassRestrictionsSniff to this sniff.
+	 *
+	 * @param int $stackPtr The token position for which to determine the namespace.
+	 *
+	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applies.
+	 */
+	public function determine_namespace( $stackPtr ) {
+
+		// Check for the existence of the token.
+		if ( ! isset( $this->tokens[ $stackPtr ] ) ) {
+			return '';
+		}
+
+		// Check for scoped namespace {}.
+		if ( ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+			$namespacePtr = $this->phpcsFile->getCondition( $stackPtr, T_NAMESPACE );
+			if ( false !== $namespacePtr ) {
+				$namespace = $this->get_declared_namespace_name( $namespacePtr );
+				if ( false !== $namespace ) {
+					return $namespace;
+				}
+
+				// We are in a scoped namespace, but couldn't determine the name.
+				// Searching for a global namespace is futile.
+				return '';
+			}
+		}
+
+		/*
+		 * Not in a scoped namespace, so let's see if we can find a non-scoped namespace instead.
+		 * Keeping in mind that:
+		 * - there can be multiple non-scoped namespaces in a file (bad practice, but it happens).
+		 * - the namespace keyword can also be used as part of a function/method call and such.
+		 * - that a non-named namespace resolves to the global namespace.
+		 */
+		$previousNSToken = $stackPtr;
+		$namespace       = false;
+		do {
+			$previousNSToken = $this->phpcsFile->findPrevious( T_NAMESPACE, ( $previousNSToken - 1 ) );
+
+			// Stop if we encounter a scoped namespace declaration as we already know we're not in one.
+			if ( ! empty( $this->tokens[ $previousNSToken ]['scope_condition'] )
+				&& $this->tokens[ $previousNSToken ]['scope_condition'] === $previousNSToken
+			) {
+				break;
+			}
+
+			$namespace = $this->get_declared_namespace_name( $previousNSToken );
+
+		} while ( false === $namespace && false !== $previousNSToken );
+
+		// If we still haven't got a namespace, return an empty string.
+		if ( false === $namespace ) {
+			return '';
+		}
+
+		return $namespace;
+	}
+
+	/**
+	 * Get the complete namespace name for a namespace declaration.
+	 *
+	 * For hierarchical namespaces, the name will be composed of several tokens,
+	 * i.e. MyProject\Sub\Level which will be returned together as one string.
+	 *
+	 * @since 0.12.0 A lesser variant of this method previously existed in the
+	 *               WordPress_AbstractClassRestrictionsSniff.
+	 *
+	 * @param int|bool $stackPtr The position of a T_NAMESPACE token.
+	 *
+	 * @return string|false Namespace name or false if not a namespace declaration.
+	 *                      Namespace name can be an empty string for global namespace declaration.
+	 */
+	public function get_declared_namespace_name( $stackPtr ) {
+
+		// Check for the existence of the token.
+		if ( false === $stackPtr || ! isset( $this->tokens[ $stackPtr ] ) ) {
+			return false;
+		}
+
+		if ( T_NAMESPACE !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		if ( T_NS_SEPARATOR === $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
+			// Not a namespace declaration, but use of, i.e. `namespace\someFunction();`.
+			return false;
+		}
+
+		$nextToken = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		if ( T_OPEN_CURLY_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
+			// Declaration for global namespace when using multiple namespaces in a file.
+			// I.e.: `namespace {}`.
+			return '';
+		}
+
+		// Ok, this should be a namespace declaration, so get all the parts together.
+		$validTokens = array(
+			T_STRING       => true,
+			T_NS_SEPARATOR => true,
+			T_WHITESPACE   => true,
+		);
+
+		$namespaceName = '';
+		while ( isset( $validTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
+			$namespaceName .= trim( $this->tokens[ $nextToken ]['content'] );
+			$nextToken++;
+		}
+
+		return $namespaceName;
+	}
+
+	/**
 	 * Check if a content string contains a specific html open tag.
 	 *
 	 * {@internal For PHP 5.3+ this is straightforward, just check if $content
