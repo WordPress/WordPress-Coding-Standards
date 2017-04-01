@@ -14,6 +14,17 @@
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.4.0
+ *
+ * {@internal This class contains numerous properties where the array format looks
+ *            like `'string' => true`, i.e. the array item is set as the array key.
+ *            This allows for sniffs to verify whether something is in one of these
+ *            lists using `isset()` rather than `in_array()` which is a much more
+ *            efficient (faster) check to execute and therefore improves the
+ *            performance of the sniffs.
+ *            The `true` value in those cases is used as a placeholder and has no
+ *            meaning in and of itself.
+ *            In the rare few cases where the array values *do* have meaning, this
+ *            is documented in the property documentation.}}
  */
 abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
