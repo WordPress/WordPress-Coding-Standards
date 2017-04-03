@@ -774,8 +774,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
 	 * This property will need to be set for each sniff which uses the
 	 * `is_test_class()` method.
-	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`
-	 * and the `WordPress.Files.Filename` sniffs.
+	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
+	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
 	 *
 	 * Example usage:
 	 * <rule ref="WordPress.[Subset].[Sniffname]">

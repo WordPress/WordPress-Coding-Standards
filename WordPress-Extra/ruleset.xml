@@ -97,5 +97,8 @@
 	<rule ref="WordPress.WP.I18n.TranslatorsCommentWrongStyle">
 		<type>error</type>
 	</rule>
+	
+	<!-- Verify that everything in the global namespace is prefixed. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals" />
 
 </ruleset>
