@@ -327,5 +327,7 @@
 		<!-- Check for correct usage of the WP i18n functions. -->
 		<rule ref="WordPress.WP.I18n"/>
 
+		<!-- Check for correct spelling of WordPress. -->
+		<rule ref="WordPress.WP.CapitalPDangit"/>
 
 </ruleset>
