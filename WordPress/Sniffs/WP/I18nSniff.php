@@ -553,8 +553,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 						if ( T_COMMENT === $this->tokens[ $previous_comment ]['code'] ) {
 							$comment_text = trim( $this->tokens[ $previous_comment ]['content'] );
 
-			  		   		// If it's multi-line /* */ comment, collect all the parts.
-			  		   		if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
+							// If it's multi-line /* */ comment, collect all the parts.
+							if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
 								for ( $i = ( $previous_comment - 1 ); 0 <= $i; $i-- ) {
 									if ( T_COMMENT !== $this->tokens[ $i ]['code'] ) {
 										break;
@@ -564,7 +564,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 								}
 							}
 
-			  		   		if ( true === $this->is_translators_comment( $comment_text ) ) {
+							if ( true === $this->is_translators_comment( $comment_text ) ) {
 								// Comment is ok.
 								return;
 							}
