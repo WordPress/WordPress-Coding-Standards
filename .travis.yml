@@ -40,6 +40,7 @@ matrix:
     - env: PHPCS_BRANCH=3.0
 
 before_install:
+    - export XMLLINT_INDENT="	"
     - export PHPCS_DIR=/tmp/phpcs
     - export PHPUNIT_DIR=/tmp/phpunit
     - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
@@ -50,7 +51,9 @@ before_install:
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then wget -P $PHPUNIT_DIR https://phar.phpunit.de/phpunit-5.7.phar && chmod +x $PHPUNIT_DIR/phpunit-5.7.phar; fi
 
 script:
+    # Lint the PHP files against parse errors.
     - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
+    # Run the unit tests.
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then php $PHPUNIT_DIR/phpunit-5.7.phar --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
     # WordPress Coding Standards.
@@ -63,3 +66,14 @@ script:
     # --standard: Use WordPress as the standard.
     # --extensions: Only sniff PHP files.
     - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -n . --standard=./bin/phpcs.xml --extensions=php; fi
+    # Validate the xml files.
+    # @link http://xmlsoft.org/xmllint.html
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./project.ruleset.xml.example; fi
+    # Check the code-style consistency of the xml files.
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml"); fi
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml"); fi
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml"); fi
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml"); fi
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-VIP/ruleset.xml <(xmllint --format "./WordPress-VIP/ruleset.xml"); fi
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./project.ruleset.xml.example <(xmllint --format "./project.ruleset.xml.example"); fi
