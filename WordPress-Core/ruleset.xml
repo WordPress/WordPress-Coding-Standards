@@ -3,329 +3,369 @@
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
 	<!--
-		Handbook: PHP - Single and Double Quotes.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#single-and-double-quotes
+	#############################################################################
+	Handbook: PHP - Single and Double Quotes.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#single-and-double-quotes
+	#############################################################################
 	-->
-		<!-- Covers rule: Use single and double quotes when appropriate.
-			 If you're not evaluating anything in the string, use single quotes. -->
-		<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
-		<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
-			<severity>0</severity>
-		</rule>
+	<!-- Covers rule: Use single and double quotes when appropriate.
+		 If you're not evaluating anything in the string, use single quotes. -->
+	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+		<severity>0</severity>
+	</rule>
 
-		<!-- Rule: Text that goes into attributes should be run through esc_attr().
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/527 -->
+	<!-- Rule: Text that goes into attributes should be run through esc_attr().
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/527 -->
 
 
 	<!--
-		Handbook: PHP - Indentation.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#indentation
+	#############################################################################
+	Handbook: PHP - Indentation.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#indentation
+	#############################################################################
 	-->
-		<!-- Covers rule: Your indentation should always reflect logical structure. -->
-		<rule ref="Generic.WhiteSpace.ScopeIndent">
-			<properties>
-				<property name="exact" value="false" />
-				<property name="indent" value="4"/>
-				<property name="tabIndent" value="true"/>
-				<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML" />
-			</properties>
-		</rule>
+	<!-- Covers rule: Your indentation should always reflect logical structure. -->
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="exact" value="false"/>
+			<property name="indent" value="4"/>
+			<property name="tabIndent" value="true"/>
+			<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML"/>
+		</properties>
+	</rule>
 
-		<!-- Covers rule: Use real tabs and not spaces. -->
-		<arg name="tab-width" value="4"/>
-		<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+	<!-- Covers rule: Use real tabs and not spaces. -->
+	<arg name="tab-width" value="4"/>
+	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 
-		<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
-		<rule ref="WordPress.Arrays.ArrayDeclaration">
-			<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
-		</rule>
-		<!-- Covers rule: For associative arrays, values should start on a new line.
-			 Also covers various single-line array whitespace issues. -->
-		<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
-			<!-- Exclude the upstream checks which are already thrown by the
-			     WordPress.Arrays.ArrayDeclaration sniff. -->
-			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NotLowerCase" />
-			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceAfterKeyword" />
-			<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray" />
-		</rule>
+	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
+	<rule ref="WordPress.Arrays.ArrayDeclaration">
+		<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>
+	</rule>
+	<!-- Covers rule: For associative arrays, values should start on a new line.
+		 Also covers various single-line array whitespace issues. -->
+	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
+		<!-- Exclude the upstream checks which are already thrown by the
+			 WordPress.Arrays.ArrayDeclaration sniff. -->
+		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NotLowerCase"/>
+		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceAfterKeyword"/>
+		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray"/>
+	</rule>
 
 
 	<!--
-		Handbook: PHP - Brace Style.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#brace-style
+	#############################################################################
+	Handbook: PHP - Brace Style.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#brace-style
+	#############################################################################
 	-->
-		<!-- Covers rule: Braces shall be used for all blocks. -->
-		<rule ref="Squiz.ControlStructures.ControlSignature" />
-		<rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
-			<severity>0</severity>
-		</rule>
+	<!-- Covers rule: Braces shall be used for all blocks. -->
+	<rule ref="Squiz.ControlStructures.ControlSignature"/>
+	<rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
+		<severity>0</severity>
+	</rule>
 
-		<!-- Covers rule: If you consider a long block unavoidable, please put a short comment at the end ...
-			 - typically this is appropriate for a logic block, longer than about 35 rows. -->
-		<rule ref="Squiz.Commenting.LongConditionClosingComment">
-			<properties>
-				<property name="lineLimit" value="35" />
-				<property name="commentFormat" value="// End %s()." />
-			</properties>
-			<exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore" />
-		</rule>
+	<!-- Covers rule: If you consider a long block unavoidable, please put a short comment at the end ...
+		 - typically this is appropriate for a logic block, longer than about 35 rows. -->
+	<rule ref="Squiz.Commenting.LongConditionClosingComment">
+		<properties>
+			<property name="lineLimit" value="35"/>
+			<property name="commentFormat" value="// End %s()."/>
+		</properties>
+		<exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore"/>
+	</rule>
 
-		<!-- Covers rule: Braces should always be used, even when they are not required. -->
-		<rule ref="Generic.ControlStructures.InlineControlStructure" />
+	<!-- Covers rule: Braces should always be used, even when they are not required. -->
+	<rule ref="Generic.ControlStructures.InlineControlStructure"/>
 
 
 	<!--
-		Handbook: PHP - Use elseif, not else if.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#use-elseif-not-else-if
+	#############################################################################
+	Handbook: PHP - Use elseif, not else if.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#use-elseif-not-else-if
+	#############################################################################
 	-->
-		<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
+	<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
 
 
 	<!--
-		Handbook: PHP - Regular Expressions.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#regular-expressions
+	#############################################################################
+	Handbook: PHP - Regular Expressions.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#regular-expressions
+	#############################################################################
 	-->
-		<!-- Covers rule: Perl compatible regular expressions should be used in preference
-		     to their POSIX counterparts. -->
-		<rule ref="WordPress.PHP.POSIXFunctions" />
+	<!-- Covers rule: Perl compatible regular expressions should be used in preference
+		 to their POSIX counterparts. -->
+	<rule ref="WordPress.PHP.POSIXFunctions"/>
 
-		<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/632 -->
+	<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/632 -->
 
-		<!-- Rule: It's most convenient to use single-quoted strings for regular expressions.
-			 Already covered by Squiz.Strings.DoubleQuoteUsage -->
+	<!-- Rule: It's most convenient to use single-quoted strings for regular expressions.
+		 Already covered by Squiz.Strings.DoubleQuoteUsage -->
 
 
 	<!--
-		Handbook: PHP - No Shorthand PHP Tags.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags
+	#############################################################################
+	Handbook: PHP - No Shorthand PHP Tags.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags
+	#############################################################################
 	-->
-		<!-- Covers rule: Never use shorthand PHP start tags. Always use full PHP tags. -->
-		<rule ref="Generic.PHP.DisallowShortOpenTag"/>
-		<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
+	<!-- Covers rule: Never use shorthand PHP start tags. Always use full PHP tags. -->
+	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
+	<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 
 
 	<!--
-		Handbook: PHP - Remove Trailing Spaces.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces
+	#############################################################################
+	Handbook: PHP - Remove Trailing Spaces.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#remove-trailing-spaces
+	#############################################################################
 	-->
-		<!-- Covers rule: Remove trailing whitespace at the end of each line of code. -->
-		<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+	<!-- Covers rule: Remove trailing whitespace at the end of each line of code. -->
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
 
-		<!-- Covers rule: Omitting the closing PHP tag at the end of a file is preferred. -->
-		<rule ref="PSR2.Files.ClosingTag"/>
+	<!-- Covers rule: Omitting the closing PHP tag at the end of a file is preferred. -->
+	<rule ref="PSR2.Files.ClosingTag"/>
 
 
 	<!--
-		Handbook: PHP - Space Usage.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
+	#############################################################################
+	Handbook: PHP - Space Usage.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
+	#############################################################################
 	-->
-		<!-- Covers rule: Always put spaces after commas, and on both sides of logical,
-			 comparison, string and assignment operators. -->
-		<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
-		<rule ref="Squiz.Strings.ConcatenationSpacing">
-			<properties>
-				<property name="spacing" value="1"/>
-				<property name="ignoreNewlines" value="true"/>
-			</properties>
-		</rule>
+	<!-- Covers rule: Always put spaces after commas, and on both sides of logical,
+		 comparison, string and assignment operators. -->
+	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
+	<rule ref="Squiz.Strings.ConcatenationSpacing">
+		<properties>
+			<property name="spacing" value="1"/>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
 
-		<!-- Covers rule: Put spaces on both sides of the opening and closing parenthesis of
-			 if, elseif, foreach, for, and switch blocks. -->
-		<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
+	<!-- Covers rule: Put spaces on both sides of the opening and closing parenthesis of
+		 if, elseif, foreach, for, and switch blocks. -->
+	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 
-		<!-- Covers rule: Define a function like so: function my_function( $param1 = 'foo', $param2 = 'bar' ) { -->
-		<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
-			<properties>
-				<property name="checkClosures" value="true" />
-			</properties>
-		</rule>
-		<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
-			<properties>
-				<property name="equalsSpacing" value="1" />
-				<property name="requiredSpacesAfterOpen" value="1" />
-				<property name="requiredSpacesBeforeClose" value="1" />
-			</properties>
-			<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose" />
-		</rule>
+	<!-- Covers rule: Define a function like so: function my_function( $param1 = 'foo', $param2 = 'bar' ) { -->
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
+		<properties>
+			<property name="checkClosures" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+		<properties>
+			<property name="equalsSpacing" value="1"/>
+			<property name="requiredSpacesAfterOpen" value="1"/>
+			<property name="requiredSpacesBeforeClose" value="1"/>
+		</properties>
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
+	</rule>
 
-		<!-- Covers rule: Call a function, like so: my_function( $param1, func_param( $param2 ) ); -->
-		<rule ref="PEAR.Functions.FunctionCallSignature">
-			<properties>
-				<property name="requiredSpacesAfterOpen" value="1" />
-				<property name="requiredSpacesBeforeClose" value="1" />
-			</properties>
-		</rule>
-		<rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket">
-			<severity>0</severity>
-		</rule>
-		<rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine">
-			<severity>0</severity>
-		</rule>
+	<!-- Covers rule: Call a function, like so: my_function( $param1, func_param( $param2 ) ); -->
+	<rule ref="PEAR.Functions.FunctionCallSignature">
+		<properties>
+			<property name="requiredSpacesAfterOpen" value="1"/>
+			<property name="requiredSpacesBeforeClose" value="1"/>
+		</properties>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine">
+		<severity>0</severity>
+	</rule>
 
-		<!-- Rule: Perform logical comparisons, like so: if ( ! $foo ) { -->
+	<!-- Rule: Perform logical comparisons, like so: if ( ! $foo ) { -->
 
-		<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
-		<rule ref="Generic.Formatting.SpaceAfterCast"/>
-		<rule ref="Squiz.WhiteSpace.CastSpacing" />
-		<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+	<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
+	<rule ref="Generic.Formatting.SpaceAfterCast"/>
+	<rule ref="Squiz.WhiteSpace.CastSpacing"/>
+	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 
-		<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
-		<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
+	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 
 
 	<!--
-		Handbook: PHP - Formatting SQL statements.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#formatting-sql-statements
+	#############################################################################
+	Handbook: PHP - Formatting SQL statements.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#formatting-sql-statements
+	#############################################################################
 	-->
-		<!-- Rule: Always capitalize the SQL parts of the statement like UPDATE or WHERE.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/639 -->
+	<!-- Rule: Always capitalize the SQL parts of the statement like UPDATE or WHERE.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/639 -->
 
-		<!-- Rule: Functions that update the database should expect their parameters to lack
-			 SQL slash escaping when passed.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
+	<!-- Rule: Functions that update the database should expect their parameters to lack
+		 SQL slash escaping when passed.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
 
-		<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"!
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/641 -->
+	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"!
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/641 -->
 
-		<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
-			 preferably by using $wpdb->prepare() -->
-		<rule ref="WordPress.WP.PreparedSQL"/>
+	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
+		 preferably by using $wpdb->prepare() -->
+	<rule ref="WordPress.WP.PreparedSQL"/>
 
 
 	<!--
-		Handbook: PHP - Database Queries.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#database-queries
+	#############################################################################
+	Handbook: PHP - Database Queries.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#database-queries
+	#############################################################################
 	-->
-		<!-- Covers rule: Avoid touching the database directly. -->
-		<rule ref="WordPress.DB.RestrictedFunctions"/>
-		<rule ref="WordPress.DB.RestrictedClasses"/>
+	<!-- Covers rule: Avoid touching the database directly. -->
+	<rule ref="WordPress.DB.RestrictedFunctions"/>
+	<rule ref="WordPress.DB.RestrictedClasses"/>
 
 
 	<!--
-		Handbook: PHP - Naming Conventions.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
+	#############################################################################
+	Handbook: PHP - Naming Conventions.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
+	#############################################################################
 	-->
-		<!-- Covers rule: Use lowercase letters in variable, action, and function names.
-			 Separate words via underscores. -->
-		<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
-		<rule ref="WordPress.NamingConventions.ValidHookName"/>
-		<rule ref="WordPress.NamingConventions.ValidVariableName"/>
+	<!-- Covers rule: Use lowercase letters in variable, action, and function names.
+		 Separate words via underscores. -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
+	<rule ref="WordPress.NamingConventions.ValidHookName"/>
+	<rule ref="WordPress.NamingConventions.ValidVariableName"/>
 
-		<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
-		<rule ref="PEAR.NamingConventions.ValidClassName"/>
+	<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
+	<rule ref="PEAR.NamingConventions.ValidClassName"/>
 
-		<!-- Covers rule: Constants should be in all upper-case with underscores separating words. -->
-		<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+	<!-- Covers rule: Constants should be in all upper-case with underscores separating words. -->
+	<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
 
-		<!-- Covers rule: Files should be named descriptively using lowercase letters.
-			 Hyphens should separate words. -->
-		<!-- Covers rule: Class file names should be based on the class name with "class-"
-			 prepended and the underscores in the class name replaced with hyphens.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
-		<!-- Covers rule: Files containing template tags in wp-includes should have "-template"
-			 appended to the end of the name.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
-		<rule ref="WordPress.Files.FileName"/>
+	<!-- Covers rule: Files should be named descriptively using lowercase letters.
+		 Hyphens should separate words. -->
+	<!-- Covers rule: Class file names should be based on the class name with "class-"
+		 prepended and the underscores in the class name replaced with hyphens.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
+	<!-- Covers rule: Files containing template tags in wp-includes should have "-template"
+		 appended to the end of the name.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
+	<rule ref="WordPress.Files.FileName"/>
 
 
 	<!--
-		Handbook: PHP - Self-Explanatory Flag Values for Function Arguments.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#self-explanatory-flag-values-for-function-arguments
+	#############################################################################
+	Handbook: PHP - Self-Explanatory Flag Values for Function Arguments.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#self-explanatory-flag-values-for-function-arguments
+	#############################################################################
 	-->
 
 
 	<!--
-		Handbook: PHP - Interpolation for Naming Dynamic Hooks.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#interpolation-for-naming-dynamic-hooks
+	#############################################################################
+	Handbook: PHP - Interpolation for Naming Dynamic Hooks.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#interpolation-for-naming-dynamic-hooks
 
-		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/751
+	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/751
+	#############################################################################
 	-->
-		<!-- Rule: Dynamic hooks should be named using interpolation rather than concatenation. -->
+	<!-- Rule: Dynamic hooks should be named using interpolation rather than concatenation. -->
 
-		<!-- Rule: Variables used in hook tags should be wrapped in curly braces { and },
-			 with the complete outer tag name wrapped in double quotes. -->
+	<!-- Rule: Variables used in hook tags should be wrapped in curly braces { and },
+		 with the complete outer tag name wrapped in double quotes. -->
 
-		<!-- Rule: Where possible, dynamic values in tag names should also be as succinct
-			 and to the point as possible. -->
+	<!-- Rule: Where possible, dynamic values in tag names should also be as succinct
+		 and to the point as possible. -->
 
 
 	<!--
-		Handbook: PHP - Ternary Operator.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#ternary-operator
+	#############################################################################
+	Handbook: PHP - Ternary Operator.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#ternary-operator
+	#############################################################################
 	-->
-		<!-- Rule: Always have Ternaries test if the statement is true, not false.
-			 An exception would be using ! empty(), as testing for false here is generally more intuitive.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/643 -->
+	<!-- Rule: Always have Ternaries test if the statement is true, not false.
+		 An exception would be using ! empty(), as testing for false here is generally more intuitive.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/643 -->
 
 
 	<!--
-		Handbook: PHP - Yoda Conditions.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#yoda-conditions
+	#############################################################################
+	Handbook: PHP - Yoda Conditions.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#yoda-conditions
+	#############################################################################
 	-->
-		<!-- Covers rule: When doing logical comparisons, always put the variable on the right side,
-			 constants or literals on the left. -->
-		<rule ref="WordPress.PHP.YodaConditions"/>
+	<!-- Covers rule: When doing logical comparisons, always put the variable on the right side,
+		 constants or literals on the left. -->
+	<rule ref="WordPress.PHP.YodaConditions"/>
 
 
 	<!--
-		Handbook: PHP - Clever Code.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#clever-code
+	#############################################################################
+	Handbook: PHP - Clever Code.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#clever-code
+	#############################################################################
 	-->
-		<!-- Rule: In general, readability is more important than cleverness or brevity.
-			 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
-		<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
-		<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+	<!-- Rule: In general, readability is more important than cleverness or brevity.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+	<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
+	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
 
 	<!--
-		Handbook: PHP - (No) Error Control Operator @.
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator
+	#############################################################################
+	Handbook: PHP - (No) Error Control Operator @.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator
+	#############################################################################
 	-->
-		<rule ref="Generic.PHP.NoSilencedErrors" />
+	<rule ref="Generic.PHP.NoSilencedErrors"/>
 
 
 	<!--
-		Handbook: PHP - Don't extract().
-		Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#dont-extract
+	#############################################################################
+	Handbook: PHP - Don't extract().
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#dont-extract
+	#############################################################################
 	-->
-		<rule ref="WordPress.Functions.DontExtract"/>
+	<rule ref="WordPress.Functions.DontExtract"/>
 
 
 	<!--
-		Not in the handbook: Generic sniffs.
+	#############################################################################
+	Not in the handbook: Generic sniffs.
+	#############################################################################
 	-->
-		<!-- Important to prevent issues with content being sent before headers. -->
-		<rule ref="Generic.Files.ByteOrderMark" />
+	<!-- Important to prevent issues with content being sent before headers. -->
+	<rule ref="Generic.Files.ByteOrderMark"/>
 
-		<!-- All line endings should be \n. -->
-		<rule ref="Generic.Files.LineEndings">
-			<properties>
-				<property name="eolChar" value="\n"/>
-			</properties>
-		</rule>
+	<!-- All line endings should be \n. -->
+	<rule ref="Generic.Files.LineEndings">
+		<properties>
+			<property name="eolChar" value="\n"/>
+		</properties>
+	</rule>
 
-		<!-- All files should end with a new line. -->
-		<rule ref="Generic.Files.EndFileNewline"/>
+	<!-- All files should end with a new line. -->
+	<rule ref="Generic.Files.EndFileNewline"/>
 
-		<!-- Lowercase PHP constants, like true, false and null. -->
-		<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
-		<rule ref="Generic.PHP.LowerCaseConstant"/>
+	<!-- Lowercase PHP constants, like true, false and null. -->
+	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
+	<rule ref="Generic.PHP.LowerCaseConstant"/>
 
-		<!-- Lowercase PHP keywords, like class, function and case. -->
-		<rule ref="Generic.PHP.LowerCaseKeyword"/>
+	<!-- Lowercase PHP keywords, like class, function and case. -->
+	<rule ref="Generic.PHP.LowerCaseKeyword"/>
 
-		<!-- Class opening braces should be on the same line as the statement. -->
-		<rule ref="Generic.Classes.OpeningBraceSameLine"/>
+	<!-- Class opening braces should be on the same line as the statement. -->
+	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
 
 	<!--
-		Not in the coding standard handbook: WP specific sniffs.
-		Ref: https://make.wordpress.org/core/handbook/best-practices/internationalization/ (limited info)
-		Ref: https://developer.wordpress.org/plugins/internationalization/ (more extensive)
+	#############################################################################
+	Not in the coding standard handbook: WP specific sniffs.
+	Ref: https://make.wordpress.org/core/handbook/best-practices/internationalization/ (limited info)
+	Ref: https://developer.wordpress.org/plugins/internationalization/ (more extensive)
+	#############################################################################
 	-->
-		<!-- Check for correct usage of the WP i18n functions. -->
-		<rule ref="WordPress.WP.I18n"/>
+	<!-- Check for correct usage of the WP i18n functions. -->
+	<rule ref="WordPress.WP.I18n"/>
 
 
 </ruleset>

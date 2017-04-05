@@ -83,14 +83,14 @@
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
 
 		<!-- It is too early for PHP7 features to be required -->
-		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" />
+		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
 	</rule>
 
 	<!-- Make this sniff less likely to trigger on end comments. -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
-	    <properties>
-	        <property name="maxPercentage" value="45" />
-	    </properties>
+		<properties>
+			<property name="maxPercentage" value="45"/>
+		</properties>
 	</rule>
 
 	<rule ref="Generic.Commenting">
