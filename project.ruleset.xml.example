@@ -28,7 +28,7 @@
 		exclude problematic sniffs like so.
 		-->
 
-		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing" />
-		<exclude name="WordPress.XSS.EscapeOutput" />
+		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+		<exclude name="WordPress.XSS.EscapeOutput"/>
 	</rule>
 </ruleset>
