@@ -195,7 +195,12 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 						return;
 					}
 
-					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
+					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
+					if ( function_exists( $item_name ) ) {
+						// Backfill for PHP native function.
+						return;
+					}
+
 					$error_text = 'Functions declared';
 					$error_code = 'NonPrefixedFunctionFound';
 					break;
@@ -212,7 +217,34 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 						return;
 					}
 
-					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
+					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
+					switch ( $this->tokens[ $stackPtr ]['type'] ) {
+						case 'T_CLASS':
+							if ( class_exists( $item_name ) ) {
+								// Backfill for PHP native class.
+								return;
+							}
+							break;
+
+						case 'T_INTERFACE':
+							if ( interface_exists( $item_name ) ) {
+								// Backfill for PHP native interface.
+								return;
+							}
+							break;
+
+						case 'T_TRAIT':
+							if ( function_exists( 'trait_exists' ) && trait_exists( $item_name ) ) {
+								// Backfill for PHP native trait.
+								return;
+							}
+							break;
+
+						default:
+							// Left empty on purpose.
+							break;
+					}
+
 					$error_text = 'Classes declared';
 					$error_code = 'NonPrefixedClassFound';
 					break;
@@ -230,6 +262,11 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					}
 
 					$item_name = $this->tokens[ $constant_name_ptr ]['content'];
+					if ( defined( $item_name ) ) {
+						// Backfill for PHP native constant.
+						return;
+					}
+
 					$error_text = 'Global constants defined';
 					$error_code = 'NonPrefixedConstantFound';
 					break;
@@ -405,6 +442,11 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		}
 
 		if ( 'define' === $matched_content ) {
+			if ( defined( $raw_content ) ) {
+				// Backfill for PHP native constant.
+				return;
+			}
+
 			$data       = array( 'Global constants defined' );
 			$error_code = 'NonPrefixedConstantFound';
 		} else {

@@ -46,6 +46,10 @@ class WordPress_Tests_NamingConventions_PrefixAllGlobalsUnitTest extends Abstrac
 					138 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
 					139 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
 					140 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
+					209 => ( function_exists( 'mb_strpos' ) ) ? 0 : 1,
+					214 => ( function_exists( 'array_column' ) ) ? 0 : 1,
+					218 => ( defined( 'E_DEPRECATED' ) ) ? 0 : 1,
+					222 => ( class_exists( 'IntlTimeZone' ) ) ? 0 : 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.1.inc':
