@@ -1125,7 +1125,6 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		return $this->is_test_class( $structureToken );
 	}
 
-
 	/**
 	 * Check if a class token is part of a unit test suite.
 	 *
@@ -1180,15 +1179,20 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.5.0
 	 *
-	 * @param int $stackPtr The index of the token in the stack. This must points to
+	 * @param int $stackPtr The index of the token in the stack. This must point to
 	 *                      either a T_VARIABLE or T_CLOSE_SQUARE_BRACKET token.
 	 *
 	 * @return bool Whether the token is a variable being assigned a value.
 	 */
 	protected function is_assignment( $stackPtr ) {
 
-		// Must be a variable or closing square bracket (see below).
-		if ( ! in_array( $this->tokens[ $stackPtr ]['code'], array( T_VARIABLE, T_CLOSE_SQUARE_BRACKET ), true ) ) {
+		static $valid = array(
+			T_VARIABLE             => true,
+			T_CLOSE_SQUARE_BRACKET => true,
+		);
+
+		// Must be a variable, constant or closing square bracket (see below).
+		if ( ! isset( $valid[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 			return false;
 		}
 
@@ -1538,7 +1542,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		);
 
 		// If it isn't a bracket, this isn't an array-access.
-		if ( T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code'] ) {
+		if ( false === $open_bracket || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code'] ) {
 			return false;
 		}
 
@@ -1784,7 +1788,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		$variables = array();
 		if ( preg_match_all( '/(?P<backslashes>\\\\*)\$(?P<symbol>\w+)/', $string, $match_sets, PREG_SET_ORDER ) ) {
 			foreach ( $match_sets as $matches ) {
-				if ( ( strlen( $matches['backslashes'] ) % 2 ) === 0 ) {
+				if ( ! isset( $matches['backslashes'] ) || ( strlen( $matches['backslashes'] ) % 2 ) === 0 ) {
 					$variables[] = $matches['symbol'];
 				}
 			}
