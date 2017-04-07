@@ -356,6 +356,13 @@
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
+	<!-- References to self in a class should be lower-case and not have extraneous spaces,
+		 per implicit conventions in the core codebase; the NotUsed code refers to using the
+		 fully-qualified class name instead of self, for which there are instances in core. -->
+	<rule ref="Squiz.Classes.SelfMemberReference"/>
+	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
+		<severity>0</severity>
+	</rule>
 
 	<!--
 	#############################################################################

@@ -42,6 +42,12 @@
 
 	<rule ref="WordPress-Core"/>
 
+	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
+	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
+		<!-- Restore default severity of 5 which WordPress-Core sets to 0. -->
+		<severity>5</severity>
+	</rule>
+
 	<rule ref="WordPress.XSS.EscapeOutput"/>
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
