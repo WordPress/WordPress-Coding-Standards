@@ -189,6 +189,13 @@
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 
+	<!-- References to self in a class should be lower-case and not have extraneous spaces,
+		 per implicit conventions in the core codebase; the NotUsed code refers to using the
+		 fully-qualified class name instead of self, for which there are instances in core. -->
+	<rule ref="Squiz.Classes.SelfMemberReference" />
+	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
+		<severity>0</severity>
+	</rule>
 
 	<!--
 	#############################################################################
