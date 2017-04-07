@@ -189,11 +189,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 */
 	protected function prepare_name_for_regex( $classname ) {
 		$classname = trim( $classname, '\\' ); // Make sure all classnames have a \ prefix, but only one.
-		$classname = str_replace( array( '.*', '*' ) , '#', $classname ); // Replace wildcards with placeholder.
-		$classname = preg_quote( $classname, '`' );
-		$classname = str_replace( '#', '.*', $classname ); // Replace placeholder with regex wildcard.
-
-		return $classname;
+		return parent::prepare_name_for_regex( $classname );
 	}
 
 	/**
