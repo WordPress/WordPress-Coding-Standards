@@ -87,15 +87,10 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 		}
 
 		if ( strtolower( $functionName ) !== $functionName ) {
-			$suggested = preg_replace( '/([A-Z])/', '_$1', $functionName );
-			$suggested = strtolower( $suggested );
-			$suggested = str_replace( '__', '_', $suggested );
-			$suggested = trim( $suggested, '_' );
-
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
-				$suggested,
+				$this->get_name_suggestion( $functionName ),
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
@@ -159,20 +154,29 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 
 		// Check for all lowercase.
 		if ( strtolower( $methodName ) !== $methodName ) {
-			$suggested = preg_replace( '/([A-Z])/', '_$1', $methodName );
-			$suggested = strtolower( $suggested );
-			$suggested = str_replace( '__', '_', $suggested );
-			$suggested = trim( $suggested, '_' );
-
 			$error     = 'Method name "%s" in class %s is not in snake case format, try "%s"';
 			$errorData = array(
 				$methodName,
 				$className,
-				$suggested,
+				$this->get_name_suggestion( $methodName ),
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 
 	} // End processTokenWithinScope().
+
+	/**
+	 * Transform the existing function/method name to one which complies with the naming conventions.
+	 *
+	 * @param string $name The function/method name.
+	 * @return string
+	 */
+	protected function get_name_suggestion( $name ) {
+		$suggested = preg_replace( '/([A-Z])/', '_$1', $name );
+		$suggested = strtolower( $suggested );
+		$suggested = str_replace( '__', '_', $suggested );
+		$suggested = trim( $suggested, '_' );
+		return $suggested;
+	}
 
 } // End class.
