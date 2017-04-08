@@ -465,11 +465,51 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			return;
 		}
 
+		$is_error     = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
 			return;
-		}
+		} else {
+			// This may be a dynamic hook/constant name.
+			$first_non_empty = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				$parameters[1]['start'],
+				( $parameters[1]['end'] + 1 ),
+				true
+			);
+
+			if ( false === $first_non_empty ) {
+				return;
+			}
+
+			$first_non_empty_content = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
+
+			// Try again with just the first token if it's a text string.
+			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
+				&& $this->is_prefixed( $first_non_empty_content ) === true
+			) {
+				return;
+			}
+
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
+				// If the first part of the parameter is a double quoted string, try again with only
+				// the part before the first variable (if any).
+				$exploded                = explode( '$', $first_non_empty_content );
+				$first                   = rtrim( $exploded[0], '{' );
+				if ( '' !== $first ) {
+					if ( $this->is_prefixed( $first ) === true ) {
+						return;
+					}
+				} else {
+					// Start of hook/constant name is dynamic, throw a warning.
+					$is_error = false;
+				}
+			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] ) ) {
+				// Dynamic hook/constant name, throw a warning.
+				$is_error = false;
+			}
+		} // End if().
 
 		if ( 'define' === $matched_content ) {
 			if ( defined( $raw_content ) ) {
@@ -486,7 +526,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 		$data[] = $raw_content;
 
-		$this->phpcsFile->addError( self::ERROR_MSG, $parameters[1]['start'], $error_code, $data );
+		$this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
 
 	} // End process_parameters().
 
