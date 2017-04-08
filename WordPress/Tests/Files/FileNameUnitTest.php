@@ -90,8 +90,8 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 	 * @return string[]
 	 */
 	protected function getTestFiles( $testFileBase ) {
-		$sep             = DIRECTORY_SEPARATOR;
-		$test_files      = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . 'TestFiles' . $sep . ',' . $sep . 'ThemeExceptions' . $sep . ',' . $sep . 'wp-includes' . $sep . '}*.inc', GLOB_BRACE );
+		$sep        = DIRECTORY_SEPARATOR;
+		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
 
 		// Adjust the expected results array for PHP 5.2 as PHP 5.2 does not recognize namespaces.
 		if ( PHP_VERSION_ID < 50300 ) {
