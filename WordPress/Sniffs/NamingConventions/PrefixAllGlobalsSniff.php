@@ -217,7 +217,10 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 						return;
 					}
 
-					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
+					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
+					$error_text = 'Classes declared';
+					$error_code = 'NonPrefixedClassFound';
+
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
 							if ( class_exists( $item_name ) ) {
@@ -231,6 +234,9 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 								// Backfill for PHP native interface.
 								return;
 							}
+
+							$error_text = 'Interfaces declared';
+							$error_code = 'NonPrefixedInterfaceFound';
 							break;
 
 						case 'T_TRAIT':
@@ -238,6 +244,9 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 								// Backfill for PHP native trait.
 								return;
 							}
+
+							$error_text = 'Traits declared';
+							$error_code = 'NonPrefixedTraitFound';
 							break;
 
 						default:
@@ -245,8 +254,6 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 							break;
 					}
 
-					$error_text = 'Classes declared';
-					$error_code = 'NonPrefixedClassFound';
 					break;
 
 				case 'T_CONST':
