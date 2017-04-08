@@ -314,10 +314,12 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 	protected function process_variable_assignment( $stackPtr ) {
 
 		// We're only concerned with variables which are being defined.
+		// `is_assigment()` will not recognize property assignments, which is good in this case.
 		if ( false === $this->is_assignment( $stackPtr ) ) {
 			return;
 		}
 
+		$is_error      = true;
 		$variable_name = substr( $this->tokens[ $stackPtr ]['content'], 1 ); // Strip the dollar sign.
 
 		// Bow out early if we know for certain no prefix is needed.
@@ -333,8 +335,8 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			}
 
 			$array_key = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $array_open + 1 ), null, true, null, true );
-			if ( false === $array_key || T_CONSTANT_ENCAPSED_STRING !== $this->tokens[ $array_key ]['code'] ) {
-				// Key is not a string, nothing to do.
+			if ( false === $array_key ) {
+				// No key found, nothing to do.
 				return;
 			}
 
@@ -342,8 +344,28 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			$variable_name = $this->strip_quotes( $this->tokens[ $array_key ]['content'] );
 
 			// Check whether a prefix is needed.
-			if ( $this->variable_prefixed_or_whitelisted( $variable_name ) === true ) {
+			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
+				&& $this->variable_prefixed_or_whitelisted( $variable_name ) === true
+			) {
 				return;
+			}
+
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $array_key ]['code'] ) {
+				// If the array key is a double quoted string, try again with only
+				// the part before the first variable (if any).
+				$exploded = explode( '$', $variable_name );
+				$first    = rtrim( $exploded[0], '{' );
+				if ( '' !== $first ) {
+					if ( $this->variable_prefixed_or_whitelisted( $first ) === true ) {
+						return;
+					}
+				} else {
+					// If the first part was dynamic, throw a warning.
+					$is_error = false;
+				}
+			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] ) ) {
+				// Dynamic array key, throw a warning.
+				$is_error = false;
 			}
 		} else {
 			// Function parameters do not need to be prefixed.
@@ -406,13 +428,14 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		} // End if().
 
 		// Still here ? In that case, the variable name should be prefixed.
-		$this->phpcsFile->addError(
+		$this->addMessage(
 			self::ERROR_MSG,
 			$stackPtr,
+			$is_error,
 			'NonPrefixedVariableFound',
 			array(
 				'Variables defined',
-				$variable_name,
+				'$' . $variable_name,
 			)
 		);
 
