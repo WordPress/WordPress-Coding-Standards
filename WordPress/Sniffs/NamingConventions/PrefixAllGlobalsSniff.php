@@ -339,7 +339,9 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		$maybe_assignment = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
 
 		while ( false !== $maybe_assignment
-			&& T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
+			&& ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
+			// Next line is temporary. Work around for bug 1381 which will be fixed in PHPCS 2.9.0.
+			|| T_OPEN_SHORT_ARRAY === $this->tokens[ $maybe_assignment ]['code'] )
 			&& isset( $this->tokens[ $maybe_assignment ]['bracket_closer'] )
 		) {
 			$maybe_assignment = $this->phpcsFile->findNext(
