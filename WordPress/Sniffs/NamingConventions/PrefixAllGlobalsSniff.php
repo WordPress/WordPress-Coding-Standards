@@ -99,6 +99,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			T_TRAIT     => T_TRAIT,
 			T_CONST     => T_CONST,
 			T_VARIABLE  => T_VARIABLE,
+			T_DOLLAR    => T_DOLLAR, // Variable variables.
 		);
 
 		// Add function call target for hook names and constants defined using define().
@@ -171,6 +172,10 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			$this->exclude = '';
 
 			return parent::process_token( $stackPtr );
+
+		} elseif ( T_DOLLAR === $this->tokens[ $stackPtr ]['code'] ) {
+
+			return $this->process_variable_variable( $stackPtr );
 
 		} elseif ( T_VARIABLE === $this->tokens[ $stackPtr ]['code'] ) {
 
@@ -300,6 +305,103 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		} // End if().
 
 	} // End process_token().
+
+	/**
+	 * Handle variable variable defined in the global namespace.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	protected function process_variable_variable( $stackPtr ) {
+		static $indicators = array(
+			T_OPEN_CURLY_BRACKET => true,
+			T_VARIABLE           => true,
+		);
+
+		// Is this a variable variable ?
+		// Not concerned with nested ones as those will be recognized on their own token.
+		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		if ( false === $next_non_empty || ! isset( $indicators[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
+			return;
+		}
+
+		if ( T_OPEN_CURLY_BRACKET === $this->tokens[ $next_non_empty ]['code']
+			&& isset( $this->tokens[ $next_non_empty ]['bracket_closer'] )
+		) {
+			// Skip over the variable part.
+			$next_non_empty = $this->tokens[ $next_non_empty ]['bracket_closer'];
+		}
+
+		$maybe_assignment = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
+
+		while ( false !== $maybe_assignment
+			&& T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
+			&& isset( $this->tokens[ $maybe_assignment ]['bracket_closer'] )
+		) {
+			$maybe_assignment = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				( $this->tokens[ $maybe_assignment ]['bracket_closer'] + 1 ),
+				null,
+				true,
+				null,
+				true
+			);
+		}
+
+		if ( false === $maybe_assignment ) {
+			return;
+		}
+
+		if ( ! isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $maybe_assignment ]['code'] ] ) ) {
+			// Not an assignment.
+			return;
+		}
+
+		$error = self::ERROR_MSG;
+
+		/*
+		 * Local variable variables in a function do not need to be prefixed.
+		 * But a variable variable could evaluate to the name of an imported global
+		 * variable.
+		 * Not concerned with imported variable variables (global.. ) as that has been
+		 * forbidden since PHP 7.0. Presuming cross-version code and if not, that
+		 * is for the PHPCompatibility standard to detect.
+		 */
+		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_FUNCTION, T_CLOSURE ) ) === true ) {
+			$condition = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			if ( false === $condition ) {
+				$condition = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			}
+
+			$has_global = $this->phpcsFile->findPrevious( T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $condition ]['scope_opener'] );
+			if ( false === $has_global ) {
+				// No variable import happening.
+				return;
+			}
+
+			$error = 'Variable variable which could potentially override an imported global variable detected. ' . $error;
+		}
+
+		$variable_name = $this->phpcsFile->getTokensAsString( $stackPtr, ( ( $next_non_empty - $stackPtr ) + 1 ) );
+
+		// Still here ? In that case, the variable name should be prefixed.
+		$this->phpcsFile->addWarning(
+			$error,
+			$stackPtr,
+			'NonPrefixedVariableFound',
+			array(
+				'Variables defined',
+				$variable_name,
+			)
+		);
+
+		// Skip over the variable part of the variable.
+		return ( $next_non_empty + 1 );
+	}
 
 	/**
 	 * Check that defined global variables are prefixed.
