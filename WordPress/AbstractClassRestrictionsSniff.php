@@ -17,7 +17,7 @@
 abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * Regex pattern with placeholder for the function names.
+	 * Regex pattern with placeholder for the class names.
 	 *
 	 * @var string
 	 */
@@ -76,6 +76,10 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * {@internal Unlike in the `WordPress_AbstractFunctionRestrictionsSniff`,
+	 *            we can't do a preliminary check on classes as at this point
+	 *            we don't know the class name yet.}}
+	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
@@ -85,7 +89,16 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		// Reset the temporary storage before processing the token.
 		unset( $this->classname );
 
-		return parent::process_token( $stackPtr );
+		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
+		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
+			// All groups have been excluded.
+			// Don't remove the listener as the exclude property can be changed inline.
+			return;
+		}
+
+		if ( true === $this->is_targetted_token( $stackPtr ) ) {
+			return $this->check_for_matches( $stackPtr );
+		}
 	}
 
 	/**
