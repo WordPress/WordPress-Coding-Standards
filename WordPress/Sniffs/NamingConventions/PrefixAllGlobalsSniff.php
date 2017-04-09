@@ -99,6 +99,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			T_TRAIT     => T_TRAIT,
 			T_CONST     => T_CONST,
 			T_VARIABLE  => T_VARIABLE,
+			T_DOLLAR    => T_DOLLAR, // Variable variables.
 		);
 
 		// Add function call target for hook names and constants defined using define().
@@ -172,6 +173,10 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 			return parent::process_token( $stackPtr );
 
+		} elseif ( T_DOLLAR === $this->tokens[ $stackPtr ]['code'] ) {
+
+			return $this->process_variable_variable( $stackPtr );
+
 		} elseif ( T_VARIABLE === $this->tokens[ $stackPtr ]['code'] ) {
 
 			return $this->process_variable_assignment( $stackPtr );
@@ -217,7 +222,10 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 						return;
 					}
 
-					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
+					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
+					$error_text = 'Classes declared';
+					$error_code = 'NonPrefixedClassFound';
+
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
 							if ( class_exists( $item_name ) ) {
@@ -231,6 +239,9 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 								// Backfill for PHP native interface.
 								return;
 							}
+
+							$error_text = 'Interfaces declared';
+							$error_code = 'NonPrefixedInterfaceFound';
 							break;
 
 						case 'T_TRAIT':
@@ -238,6 +249,9 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 								// Backfill for PHP native trait.
 								return;
 							}
+
+							$error_text = 'Traits declared';
+							$error_code = 'NonPrefixedTraitFound';
 							break;
 
 						default:
@@ -245,8 +259,6 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 							break;
 					}
 
-					$error_text = 'Classes declared';
-					$error_code = 'NonPrefixedClassFound';
 					break;
 
 				case 'T_CONST':
@@ -295,6 +307,105 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 	} // End process_token().
 
 	/**
+	 * Handle variable variable defined in the global namespace.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	protected function process_variable_variable( $stackPtr ) {
+		static $indicators = array(
+			T_OPEN_CURLY_BRACKET => true,
+			T_VARIABLE           => true,
+		);
+
+		// Is this a variable variable ?
+		// Not concerned with nested ones as those will be recognized on their own token.
+		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		if ( false === $next_non_empty || ! isset( $indicators[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
+			return;
+		}
+
+		if ( T_OPEN_CURLY_BRACKET === $this->tokens[ $next_non_empty ]['code']
+			&& isset( $this->tokens[ $next_non_empty ]['bracket_closer'] )
+		) {
+			// Skip over the variable part.
+			$next_non_empty = $this->tokens[ $next_non_empty ]['bracket_closer'];
+		}
+
+		$maybe_assignment = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
+
+		while ( false !== $maybe_assignment
+			&& ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
+			// Next line is temporary. Work around for bug 1381 which will be fixed in PHPCS 2.9.0.
+			|| T_OPEN_SHORT_ARRAY === $this->tokens[ $maybe_assignment ]['code'] )
+			&& isset( $this->tokens[ $maybe_assignment ]['bracket_closer'] )
+		) {
+			$maybe_assignment = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				( $this->tokens[ $maybe_assignment ]['bracket_closer'] + 1 ),
+				null,
+				true,
+				null,
+				true
+			);
+		}
+
+		if ( false === $maybe_assignment ) {
+			return;
+		}
+
+		if ( ! isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $maybe_assignment ]['code'] ] ) ) {
+			// Not an assignment.
+			return;
+		}
+
+		$error = self::ERROR_MSG;
+
+		/*
+		 * Local variable variables in a function do not need to be prefixed.
+		 * But a variable variable could evaluate to the name of an imported global
+		 * variable.
+		 * Not concerned with imported variable variables (global.. ) as that has been
+		 * forbidden since PHP 7.0. Presuming cross-version code and if not, that
+		 * is for the PHPCompatibility standard to detect.
+		 */
+		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_FUNCTION, T_CLOSURE ) ) === true ) {
+			$condition = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			if ( false === $condition ) {
+				$condition = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+			}
+
+			$has_global = $this->phpcsFile->findPrevious( T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $condition ]['scope_opener'] );
+			if ( false === $has_global ) {
+				// No variable import happening.
+				return;
+			}
+
+			$error = 'Variable variable which could potentially override an imported global variable detected. ' . $error;
+		}
+
+		$variable_name = $this->phpcsFile->getTokensAsString( $stackPtr, ( ( $next_non_empty - $stackPtr ) + 1 ) );
+
+		// Still here ? In that case, the variable name should be prefixed.
+		$this->phpcsFile->addWarning(
+			$error,
+			$stackPtr,
+			'NonPrefixedVariableFound',
+			array(
+				'Variables defined',
+				$variable_name,
+			)
+		);
+
+		// Skip over the variable part of the variable.
+		return ( $next_non_empty + 1 );
+	}
+
+	/**
 	 * Check that defined global variables are prefixed.
 	 *
 	 * @since 0.12.0
@@ -307,10 +418,12 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 	protected function process_variable_assignment( $stackPtr ) {
 
 		// We're only concerned with variables which are being defined.
+		// `is_assigment()` will not recognize property assignments, which is good in this case.
 		if ( false === $this->is_assignment( $stackPtr ) ) {
 			return;
 		}
 
+		$is_error      = true;
 		$variable_name = substr( $this->tokens[ $stackPtr ]['content'], 1 ); // Strip the dollar sign.
 
 		// Bow out early if we know for certain no prefix is needed.
@@ -326,8 +439,8 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			}
 
 			$array_key = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $array_open + 1 ), null, true, null, true );
-			if ( false === $array_key || T_CONSTANT_ENCAPSED_STRING !== $this->tokens[ $array_key ]['code'] ) {
-				// Key is not a string, nothing to do.
+			if ( false === $array_key ) {
+				// No key found, nothing to do.
 				return;
 			}
 
@@ -335,8 +448,28 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			$variable_name = $this->strip_quotes( $this->tokens[ $array_key ]['content'] );
 
 			// Check whether a prefix is needed.
-			if ( $this->variable_prefixed_or_whitelisted( $variable_name ) === true ) {
+			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
+				&& $this->variable_prefixed_or_whitelisted( $variable_name ) === true
+			) {
 				return;
+			}
+
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $array_key ]['code'] ) {
+				// If the array key is a double quoted string, try again with only
+				// the part before the first variable (if any).
+				$exploded = explode( '$', $variable_name );
+				$first    = rtrim( $exploded[0], '{' );
+				if ( '' !== $first ) {
+					if ( $this->variable_prefixed_or_whitelisted( $first ) === true ) {
+						return;
+					}
+				} else {
+					// If the first part was dynamic, throw a warning.
+					$is_error = false;
+				}
+			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] ) ) {
+				// Dynamic array key, throw a warning.
+				$is_error = false;
 			}
 		} else {
 			// Function parameters do not need to be prefixed.
@@ -399,13 +532,14 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		} // End if().
 
 		// Still here ? In that case, the variable name should be prefixed.
-		$this->phpcsFile->addError(
+		$this->addMessage(
 			self::ERROR_MSG,
 			$stackPtr,
+			$is_error,
 			'NonPrefixedVariableFound',
 			array(
 				'Variables defined',
-				$variable_name,
+				'$' . $variable_name,
 			)
 		);
 
@@ -435,11 +569,51 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			return;
 		}
 
+		$is_error     = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
 			return;
-		}
+		} else {
+			// This may be a dynamic hook/constant name.
+			$first_non_empty = $this->phpcsFile->findNext(
+				PHP_CodeSniffer_Tokens::$emptyTokens,
+				$parameters[1]['start'],
+				( $parameters[1]['end'] + 1 ),
+				true
+			);
+
+			if ( false === $first_non_empty ) {
+				return;
+			}
+
+			$first_non_empty_content = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
+
+			// Try again with just the first token if it's a text string.
+			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
+				&& $this->is_prefixed( $first_non_empty_content ) === true
+			) {
+				return;
+			}
+
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
+				// If the first part of the parameter is a double quoted string, try again with only
+				// the part before the first variable (if any).
+				$exploded                = explode( '$', $first_non_empty_content );
+				$first                   = rtrim( $exploded[0], '{' );
+				if ( '' !== $first ) {
+					if ( $this->is_prefixed( $first ) === true ) {
+						return;
+					}
+				} else {
+					// Start of hook/constant name is dynamic, throw a warning.
+					$is_error = false;
+				}
+			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] ) ) {
+				// Dynamic hook/constant name, throw a warning.
+				$is_error = false;
+			}
+		} // End if().
 
 		if ( 'define' === $matched_content ) {
 			if ( defined( $raw_content ) ) {
@@ -456,7 +630,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 		$data[] = $raw_content;
 
-		$this->phpcsFile->addError( self::ERROR_MSG, $parameters[1]['start'], $error_code, $data );
+		$this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
 
 	} // End process_parameters().
 
