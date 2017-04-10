@@ -69,6 +69,15 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 	protected $excluded_groups = array();
 
 	/**
+	 * Regex containing the name of all functions handled by a sniff.
+	 *
+	 * Set in `register()` and used to do an initial check.
+	 *
+	 * @var string
+	 */
+	private $prelim_check_regex;
+
+	/**
 	 * Groups of functions to restrict.
 	 *
 	 * This method should be overridden in extending classes.
@@ -129,12 +138,14 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 			$this->groups = array_merge( $this->groups, self::$unittest_groups );
 		}
 
+		$all_items = array();
 		foreach ( $this->groups as $groupName => $group ) {
 			if ( empty( $group[ $key ] ) ) {
 				unset( $this->groups[ $groupName ] );
 			} else {
-				$items = array_map( array( $this, 'prepare_name_for_regex' ), $group[ $key ] );
-				$items = implode( '|', $items );
+				$items       = array_map( array( $this, 'prepare_name_for_regex' ), $group[ $key ] );
+				$all_items[] = $items;
+				$items       = implode( '|', $items );
 
 				$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
 			}
@@ -143,6 +154,11 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 		if ( empty( $this->groups ) ) {
 			return false;
 		}
+
+		// Create one "super-regex" to allow for initial filtering.
+		$all_items                = call_user_func_array( 'array_merge', $all_items );
+		$all_items                = implode( '|', array_unique( $all_items ) );
+		$this->prelim_check_regex = sprintf( $this->regex_pattern, $all_items );
 
 		return true;
 	}
@@ -161,6 +177,13 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.
+			return;
+		}
+
+		// Preliminary check. If the content of the T_STRING is not one of the functions we're
+		// looking for, we can bow out before doing the heavy lifting of checking whether
+		// this is a function call.
+		if ( preg_match( $this->prelim_check_regex, $this->tokens[ $stackPtr ]['content'] ) !== 1 ) {
 			return;
 		}
 
