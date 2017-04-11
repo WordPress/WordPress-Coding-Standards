@@ -127,7 +127,7 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$file     = $this->phpcsFile->getFileName();
+		$file     = trim( $this->phpcsFile->getFileName(), "\x22\x27" );
 		$fileName = basename( $file );
 		$expected = strtolower( str_replace( '_', '-', $fileName ) );
 
