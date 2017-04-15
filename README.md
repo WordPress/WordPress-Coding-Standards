@@ -70,10 +70,14 @@ For convenience of using `phpcs` as global command you might want to add path to
 
         git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 
-3. Add its path to PHP_CodeSniffer configuration: 
+3. Add its path to the PHP_CodeSniffer configuration:
 
         phpcs --config-set installed_paths /path/to/wpcs
 
+   **Pro-tip:** Alternatively, you can tell PHP_CodeSniffer the path to the WordPress standards by adding the following snippet to your custom ruleset:
+   ```xml
+   <config name="installed_paths" value="/path/to/wpcs" />
+   ```
 
 To summarize:
 
