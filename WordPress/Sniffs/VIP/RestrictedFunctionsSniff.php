@@ -101,6 +101,64 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
+			'get_children' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use WP_Query instead.',
+				'functions' => array(
+					'get_children',
+				),
+			),
+
+			'wp_get_object_terms' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use get_the_terms() along with wp_list_pluck to extract the IDs.',
+				'functions' => array(
+					'wp_get_object_terms'
+				),
+			),
+			
+			'wp_get_post_(categories|tags|terms)' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use the equivalent get_the_* version instead (e.g. get_the_category())',
+				'functions' => array(
+					'wp_get_post_terms',
+					'wp_get_post_categories',
+					'wp_get_post_tags'
+				),
+			),
+
+			'get_category_by_slug' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_category_by_slug() instead.',
+				'functions' => array(
+					'get_category_by_slug',
+				), 
+			),
+			
+			'get_cat_ID' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_get_term_by() instead',
+				'functions' => array(
+					'get_cat_ID',
+				), 
+			),
+			
+			'count_user_posts' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_count_user_posts() instead',
+				'functions' => array(
+					'count_user_posts',
+				), 
+			),
+			
+			'wp_old_slug_redirect' => array(
+				'type' => 'error',
+				'message' => '%s is prohibited, please use wpcom_vip_old_slug_redirect() instead',
+				'functions' => array(
+					'wp_old_slug_redirect',
+				), 
+			),
+
 			'url_to_postid' => array(
 				'type'      => 'error',
 				'message'   => '%s() is prohibited, please use wpcom_vip_url_to_postid() instead.',
