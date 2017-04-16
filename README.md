@@ -111,7 +111,7 @@ You can use the following as standard names when invoking `phpcs` to select snif
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project — you can create a custom `phpcs.xml` standard. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project — you can create a custom ruleset file named either `phpcs.xml` or `phpcs.xml.dist`, and PHP_CodeSniffer will automatically locate it by walking up the directory tree so you don't have to supply a `--standard` arg; this is similar to what ESLint does with `.eslintrc`, as also other tools behave. See provided [project.ruleset.xml.example](project.ruleset.xml.example) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
