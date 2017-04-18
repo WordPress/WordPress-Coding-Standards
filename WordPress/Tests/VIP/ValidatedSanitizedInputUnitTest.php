@@ -22,11 +22,11 @@ class WordPress_Tests_VIP_ValidatedSanitizedInputUnitTest extends AbstractSniffU
 	 */
 	public function getErrorList() {
 		return array(
-			5 => 3,
+			5 => 2,
 			7 => 1,
 			10 => 1,
 			20 => 1,
-			33 => 3,
+			33 => 2,
 			65 => 1,
 			79 => 1,
 			80 => 1,
