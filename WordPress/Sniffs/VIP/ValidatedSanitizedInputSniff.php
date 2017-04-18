@@ -82,6 +82,8 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 	 */
 	public function process_token( $stackPtr ) {
 
+		$notValidated = $notSanitized = false;
+
 		$superglobals = $this->input_superglobals;
 
 		// Handling string interpolation.
@@ -122,8 +124,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {
-			$this->phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', $error_data );
-			// return; // Should we just return and not look for sanitizing functions ?
+			$notValidated = true;
 		}
 
 		if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
@@ -139,6 +140,14 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 
 		// Now look for sanitizing functions.
 		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
+			$notSanitized = true;
+		}
+
+		if ( true === $notValidated && true === $notSanitized  ) {
+			$this->phpcsFile->addError( 'Detected usage of a non-validated nor non-sanitized input variable: %s', $stackPtr, 'InputNotValidatedNotSanitized', $error_data );
+		} else if ( true === $notValidated ) {
+			$this->phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', $error_data );
+		} else if ( true === $notSanitized ) {
 			$this->phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
 
