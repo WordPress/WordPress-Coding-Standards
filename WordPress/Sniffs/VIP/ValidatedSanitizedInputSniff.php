@@ -82,7 +82,8 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 	 */
 	public function process_token( $stackPtr ) {
 
-		$notValidated = $notSanitized = false;
+		$notValidated = false;
+		$notSanitized = false;
 
 		$superglobals = $this->input_superglobals;
 
@@ -143,7 +144,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			$notSanitized = true;
 		}
 
-		if ( true === $notValidated && true === $notSanitized  ) {
+		if ( true === $notValidated && true === $notSanitized ) {
 			$this->phpcsFile->addError( 'Detected usage of a non-validated nor non-sanitized input variable: %s', $stackPtr, 'InputNotValidatedNotSanitized', $error_data );
 		} else if ( true === $notValidated ) {
 			$this->phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', $error_data );
