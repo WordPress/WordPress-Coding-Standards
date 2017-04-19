@@ -1,0 +1,50 @@
+_____Issue Title____
+[New sniff] Short rule description (for rules which have to be created from scratch)
+[Implement sniff] Short rule description (for rules which exist in WPCS and need to be added to the ruleset)
+
+_____Issue Content____
+#### Rule type:
+Error / Warning
+
+#### Rule:
+
+> Rule as it is found in the handbook.
+
+Ref: Link to the Theme Review handbook page & subsection where the rule can be found, i.e. https://make.wordpress.org/themes/handbook/review/....
+
+Add as much detailed information as is available about this rule.
+Use the information from the handbook as well as how the rule is applied in practice.
+This can include information about how the rule is currently implemented in Theme Check.
+This can also include information on how a (similar) rule is currently implemented in WPCS.
+
+If the handbook rule isn't clear enough or does not completely cover what is done in practice, in Theme Check or in an existing WPCS sniff, make sure you add the "Decision needed" section.
+
+If the rule/theme check uses a list of functions/variables etc to be checked and there is any doubt about whether this list is complete, make sure to add the "Decision needed" section as well and ask for review of this list.
+
+#### Theme check file covering this rule:
+https://github.com/Otto42/theme-check/blob/master/checks/file-name-of-the-check-file.php
+
+Note: Some check files cover several things and should be split into individual issues. Also sometimes, there are several Theme Check files which relate to the same rule. In that case, make sure you mention them all.
+
+#### [Optional Section] Decision needed:
+Explain what is different between the existing rule and either how it is applied or how an existing WPCS rule is applied.
+Or explain why for instance the rule type should change from "error" to "warning" or visa versa.
+Or explain why the rule should change (for instance because of changes in WP, changes in PHP).
+Etc...
+
+**_Advice/Request for decision_**: Make sure that you formulate a clear question to be answered or propose a solution/give an advice.
+
+##### Notes for implementation:
+* Add any code pointers which could be useful for whomever will be writing the sniff.
+* This could include pointers to existing sniffs which could be used as a basis.
+* And lists of functions, variables, etc in WP which need to be covered by the implementation.
+
+#### To do:
+- [ ] Here you add the action items related to this issue. You can find some examples below, but don't let yourself be limited by this!
+- [ ] Add the rule in the Theme Review handbook to the **_Requirements_** page.
+- [ ] Add the rule in the Theme Review handbook to the **_Recommended_** page.
+- [ ] Move the rule in the Theme Review handbook to the **_Requirements_** page.
+- [ ] Create unit tests
+- [ ] Create new sniff
+- [ ] Adjust existing WPCS / PHPCS sniff and send in PR upstream.
+- [ ] Add existing `sniffname` sniff to the ruleset.
