@@ -149,3 +149,11 @@ function test_this() {
 
 	$abc = sanitize_twitter_handle( $_POST['abc_field'] ); // Bad x2, sanitize + unslash.
 }
+
+function foo() {
+	// Following line should produce validation error.
+	$foo = $_POST['bar']; // sanitization OK.
+	if ( 'a' == $_POST['foo'] ) { // Bad. Only validation error. No sanitisation as it's a comparison.
+		;
+	}
+}
