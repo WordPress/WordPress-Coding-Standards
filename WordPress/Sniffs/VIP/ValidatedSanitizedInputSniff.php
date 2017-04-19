@@ -121,19 +121,19 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			return;
 		}
 
-		$error_data = array( $this->tokens[ $stackPtr ]['content'] );
-
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {
 			$notValidated = true;
 		}
 
 		if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
+			$this->maybeAddError( $notValidated, $notSanitized, $stackPtr );
 			return;
 		}
 
 		// If this is a comparison ('a' == $_POST['foo']), sanitization isn't needed.
 		if ( $this->is_comparison( $stackPtr ) ) {
+			$this->maybeAddError( $notValidated, $notSanitized, $stackPtr );
 			return;
 		}
 
@@ -144,6 +144,20 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			$notSanitized = true;
 		}
 
+		$this->maybeAddError( $notValidated, $notSanitized, $stackPtr );
+	} // End process().
+
+	/**
+	 * Decide whether we have any errors to display and add them if so.
+	 *
+	 * @param bool $notValidated Missing validation.
+	 * @param bool $notSanitized Missing sanitization.
+	 * @param bool $stackPtr     The position of the current token in the stack.
+	 *
+	 * @return void
+	 */
+	public function maybeAddError( $notValidated, $notSanitized, $stackPtr ) {
+		$error_data = array( $this->tokens[ $stackPtr ]['content'] );
 		if ( true === $notValidated && true === $notSanitized ) {
 			$this->phpcsFile->addError( 'Detected usage of a non-validated nor non-sanitized input variable: %s', $stackPtr, 'InputNotValidatedNotSanitized', $error_data );
 		} else if ( true === $notValidated ) {
@@ -151,8 +165,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		} else if ( true === $notSanitized ) {
 			$this->phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
-
-	} // End process().
+	} // End maybeAddError().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
