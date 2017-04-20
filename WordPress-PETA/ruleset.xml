@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress PETA">
+	<description>A custom set of rules for use in PETA WordPress projects</description>
+
+	<!--
+	Including WordPress-VIP ruleset with customizations excluded
+	-->
+	<rule ref="WordPress-VIP">
+		<!-- We don't have access to these wpcom_vip_ recommended functions -->
+		<exclude name="WordPress.VIP.RestrictedFunctions.file_get_contents" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_link" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_page_by_path" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_page_by_title" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_term_by" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_category_by_slug" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.url_to_postid" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.attachment_url_to_postid" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.custom_role" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.term_exists" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.count_user_posts" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.wp_old_slug_redirect" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_adjacent_post" />
+
+		<!-- VIP user problems don't apply to PETA sites in the same way -->
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
+		<exclude name="WordPress.VIP.RestrictedVariables.user_meta" />
+	</rule>
+
+	<!-- Additional rules not included in WordPress-VIP package -->
+	<rule ref="Generic.Commenting.Todo" />
+
+	<!-- Warnings that are being escalated to errors -->
+	<rule ref="Squiz.PHP.CommentedOutCode.Found">
+		<type>error</type>
+		<message>This comment is %s%% valid code. 'Don't suffer commented-out code to survive' (Martin, 'Clean Code' 287).</message>
+	</rule>
+	<rule ref="WordPress.PHP.StrictComparisons.LooseComparison">
+		<type>error</type>
+	</rule>
+	<rule ref="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.PHP.StrictInArray.MissingTrueStrict">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WhiteSpace.CastStructureSpacing.ContainsWhiteSpace">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.VIP.RestrictedFunctions.serialize">
+		<type>error</type>
+	</rule>
+
+	<!-- Rules that need more helpful descriptions -->
+	<rule ref="WordPress.VIP.RestrictedFunctions.wp_remote_get">
+		<message>Be careful with %s, as it is a blocking function by default. Consider loading content via AJAX instead.</message>
+	</rule>
+
+</ruleset>
