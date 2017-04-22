@@ -1942,7 +1942,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		$parameters  = array();
 		$next_comma  = $opener;
-		$param_start = ( $opener + 1 );
+		$param_start = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $opener + 1 ), null, true, null, true );
 		$cnt         = 1;
 		while ( $next_comma = $this->phpcsFile->findNext( array( T_COMMA, $this->tokens[ $closer ]['code'], T_OPEN_SHORT_ARRAY ), ( $next_comma + 1 ), ( $closer + 1 ) ) ) {
 			// Ignore anything within short array definition brackets.
