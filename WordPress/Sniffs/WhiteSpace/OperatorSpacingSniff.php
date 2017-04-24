@@ -71,12 +71,14 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 			}
 
 			// Skip default values in function declarations.
+			// Skip declare statements.
 			if ( isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				$bracket = end( $tokens[ $stackPtr ]['nested_parenthesis'] );
 				if ( isset( $tokens[ $bracket ]['parenthesis_owner'] ) ) {
 					$function = $tokens[ $bracket ]['parenthesis_owner'];
 					if ( T_FUNCTION === $tokens[ $function ]['code']
 						|| T_CLOSURE === $tokens[ $function ]['code']
+						|| T_DECLARE === $tokens[ $function ]['code']
 					) {
 						return;
 					}
