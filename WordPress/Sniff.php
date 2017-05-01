@@ -278,6 +278,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		'sanitize_term_field'        => true,
 		'sanitize_term'              => true,
 		'sanitize_text_field'        => true,
+		'sanitize_textarea_field'    => true,
 		'sanitize_title_for_query'   => true,
 		'sanitize_title_with_dashes' => true,
 		'sanitize_title'             => true,
