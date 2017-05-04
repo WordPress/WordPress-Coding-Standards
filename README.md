@@ -42,7 +42,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.2 or higher and the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.8.1** or higher.
+The WordPress Coding Standards require PHP 5.2 or higher and the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
 The WordPress Coding Standards are currently [not compatible with the upcoming PHPCS 3 release](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/718).
 
 ### Composer

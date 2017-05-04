@@ -24,14 +24,7 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff implements PHP_CodeSniffer_Snif
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			T_CONSTANT_ENCAPSED_STRING,
-			T_DOUBLE_QUOTED_STRING,
-			T_INLINE_HTML,
-			T_HEREDOC,
-			T_NOWDOC,
-		);
-
+		return PHP_CodeSniffer_Tokens::$textStringTokens;
 	}
 
 	/**
