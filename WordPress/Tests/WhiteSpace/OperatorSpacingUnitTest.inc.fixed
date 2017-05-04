@@ -56,3 +56,8 @@ $a = function ( $a=true, $b = 123, $c=  'string' ) {};
 
 // Upstream issue 1163.
 declare(strict_types=1);
+
+$a = $b ?? $c;
+$a = $b <=> $c;
+
+$a    ??= $b; // Multiple spaces before assignment is OK.

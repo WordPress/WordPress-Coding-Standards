@@ -26,6 +26,8 @@ class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUn
 			18 => 1,
 			45 => 1,
 			49 => 1,
+			60 => 2,
+			61 => 2,
 		);
 
 	}

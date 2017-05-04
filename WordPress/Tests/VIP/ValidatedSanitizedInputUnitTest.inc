@@ -160,3 +160,6 @@ output( <<<EOD
 some string {$_POST[some_var]} {$_GET['evil']}
 EOD
 ); // Bad x2.
+
+if ( ( $_POST['foo'] ?? 'post' ) === 'post' ) {} // OK.
+if ( ( $_POST['foo'] <=> 'post' ) === 0 ) {} // OK.
