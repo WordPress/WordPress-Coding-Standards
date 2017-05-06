@@ -115,7 +115,7 @@ class WordPress_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sni
 			return;
 		}
 
-		$className	= $phpcsFile->getDeclarationName( $currScope );
+		$className = $phpcsFile->getDeclarationName( $currScope );
 
 		// Ignore special functions.
 		if ( '' === ltrim( $methodName, '_' ) ) {

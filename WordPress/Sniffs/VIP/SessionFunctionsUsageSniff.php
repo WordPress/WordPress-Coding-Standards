@@ -24,11 +24,11 @@ class WordPress_Sniffs_VIP_SessionFunctionsUsageSniff extends WordPress_Abstract
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'eval', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
