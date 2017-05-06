@@ -132,14 +132,22 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 			return;
 		}
 
-		$expected_indent = "\t" . $indentation;
-		$expected_column = ( $column + $this->tab_width );
+		$expected_indent  = "\t" . $indentation;
+		$expected_column  = ( $column + $this->tab_width );
+		$end_of_last_item = $opener;
 
 		foreach ( $array_items as $item ) {
 			// Find the line on which the item starts.
 			$first_content = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $item['start'], ( $item['end'] + 1 ), true );
 			if ( false === $first_content ) {
+				$end_of_last_item = ( $item['end'] + 1 );
 				continue;
+			}
+
+			// Bow out from reporting and fixing mixed multi-line/single-line arrays.
+			// That is handled by the ArrayDeclarationSniff.
+			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_last_item ]['line'] ) {
+				return $closer;
 			}
 
 			$whitespace = '';
@@ -171,6 +179,9 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 					}
 				}
 			}
+
+			$end_of_last_item = ( $item['end'] + 1 );
+
 		} // End foreach().
 
 	} // End process_token().

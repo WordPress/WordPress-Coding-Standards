@@ -46,6 +46,7 @@ class WordPress_Tests_Arrays_ArrayIndentationUnitTest extends AbstractSniffUnitT
 			60 => 1,
 			61 => 1,
 			66 => 1,
+			80 => 1,
 		);
 	}
 
