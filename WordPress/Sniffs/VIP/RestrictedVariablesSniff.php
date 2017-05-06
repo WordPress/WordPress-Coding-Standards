@@ -51,7 +51,7 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVa
 				'message'       => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
 				'variables'     => array(
 					'$_COOKIE',
-					),
+				),
 				'array_members' => array(
 					'$_SERVER[\'HTTP_USER_AGENT\']',
 					'$_SERVER[\'REMOTE_ADDR\']',
