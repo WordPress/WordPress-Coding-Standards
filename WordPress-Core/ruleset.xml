@@ -54,6 +54,8 @@
 		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray"/>
 	</rule>
 
+	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
+	<rule ref="WordPress.WhiteSpace.DisallowInlineTabs"/>
 
 	<!--
 	#############################################################################
