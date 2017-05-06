@@ -34,6 +34,7 @@
 			<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML"/>
 		</properties>
 	</rule>
+	<rule ref="WordPress.Arrays.ArrayIndentation"/>
 
 	<!-- Covers rule: Use real tabs and not spaces. -->
 	<arg name="tab-width" value="4"/>
