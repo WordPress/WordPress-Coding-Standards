@@ -36,11 +36,11 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 * This method should be overridden in extending classes.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Avoid direct calls to the database.',
-	 * 		'classes'   => array( 'PDO', '\Namespace\Classname' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'    => 'error' | 'warning',
+	 *      'message' => 'Avoid direct calls to the database.',
+	 *      'classes' => array( 'PDO', '\Namespace\Classname' ),
+	 *  )
 	 * )
 	 *
 	 * You can use * wildcards to target a group of (namespaced) classes.

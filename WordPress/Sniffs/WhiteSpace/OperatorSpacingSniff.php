@@ -41,7 +41,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 	 */
 	public function register() {
 		$comparison = PHP_CodeSniffer_Tokens::$comparisonTokens;
-		$operators	= PHP_CodeSniffer_Tokens::$operators;
+		$operators  = PHP_CodeSniffer_Tokens::$operators;
 		$assignment = PHP_CodeSniffer_Tokens::$assignmentTokens;
 
 		// Union the arrays - keeps the array keys and - in this case - automatically de-dups.
