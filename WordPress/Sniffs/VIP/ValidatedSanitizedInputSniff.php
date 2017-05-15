@@ -95,7 +95,9 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			|| T_HEREDOC === $this->tokens[ $stackPtr ]['code']
 		) {
 			$interpolated_variables = array_map(
-				create_function( '$symbol', 'return "$" . $symbol;' ), // Replace with closure when 5.3 is minimum requirement for PHPCS.
+				function ( $symbol ) {
+					return '$' . $symbol;
+				},
 				$this->get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
 			);
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
