@@ -8,12 +8,12 @@
  */
 
 /**
- * Unit test class for the CastStructureSpacing sniff.
+ * Unit test class for the DisallowInlineTabs sniff.
  *
  * @package WPCS\WordPressCodingStandards
- * @since   0.3.0
+ * @since   0.12.0
  */
-class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_WhiteSpace_DisallowInlineTabsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,15 +22,12 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	 */
 	public function getErrorList() {
 		return array(
-			3  => 2,
-			6  => 2,
-			9  => 2,
-			12 => 2,
-			15 => 2,
-			18 => 2,
-			21 => 2,
+			17 => 1,
+			22 => 1,
+			23 => 1,
+			24 => 1,
+			26 => 1,
 		);
-
 	}
 
 	/**

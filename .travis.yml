@@ -13,37 +13,39 @@ php:
     - 7.1
 
 env:
-  - PHPCS_BRANCH=master
-  - PHPCS_BRANCH=2.8.1
+  # Branch for patches against 2.x. `master` is now 3.x which WPCS is not (yet) compatible with.
+  - PHPCS_BRANCH=2.9
+  # Tagged release
+  - PHPCS_BRANCH=2.9.0
 
 matrix:
   fast_finish: true
   include:
     # Run PHPCS against WPCS. I just picked to run it against 5.5.
     - php: 5.5
-      env: PHPCS_BRANCH=master SNIFF=1
+      env: PHPCS_BRANCH=2.9 SNIFF=1
     # Run against PHPCS 3.0. I just picked to run it against 5.6.
     - php: 5.6
-      env: PHPCS_BRANCH=3.0
+      env: PHPCS_BRANCH=master
     # Run against HHVM and PHP nightly.
     - php: hhvm
       sudo: required
       dist: trusty 
-      group: edge 
-      env: PHPCS_BRANCH=master
+      group: edge
+      env: PHPCS_BRANCH=2.9
     - php: nightly
-      env: PHPCS_BRANCH=master
+      env: PHPCS_BRANCH=2.9
   allow_failures:
     # Allow failures for unstable builds.
     - php: nightly
     - php: hhvm
-    - env: PHPCS_BRANCH=3.0
+    - env: PHPCS_BRANCH=master
 
 before_install:
     - export XMLLINT_INDENT="	"
     - export PHPCS_DIR=/tmp/phpcs
     - export PHPUNIT_DIR=/tmp/phpunit
-    - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == 3.0 ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
+    - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == master ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_BIN --config-set installed_paths $(pwd)
     # Download PHPUnit 5.x for builds on PHP 7, nightly and HHVM as

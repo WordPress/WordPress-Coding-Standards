@@ -41,7 +41,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 	 */
 	public function register() {
 		$comparison = PHP_CodeSniffer_Tokens::$comparisonTokens;
-		$operators	= PHP_CodeSniffer_Tokens::$operators;
+		$operators  = PHP_CodeSniffer_Tokens::$operators;
 		$assignment = PHP_CodeSniffer_Tokens::$assignmentTokens;
 
 		// Union the arrays - keeps the array keys and - in this case - automatically de-dups.
@@ -71,12 +71,14 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 			}
 
 			// Skip default values in function declarations.
+			// Skip declare statements.
 			if ( isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				$bracket = end( $tokens[ $stackPtr ]['nested_parenthesis'] );
 				if ( isset( $tokens[ $bracket ]['parenthesis_owner'] ) ) {
 					$function = $tokens[ $bracket ]['parenthesis_owner'];
 					if ( T_FUNCTION === $tokens[ $function ]['code']
 						|| T_CLOSURE === $tokens[ $function ]['code']
+						|| T_DECLARE === $tokens[ $function ]['code']
 					) {
 						return;
 					}

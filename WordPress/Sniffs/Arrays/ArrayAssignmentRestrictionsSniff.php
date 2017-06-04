@@ -27,13 +27,12 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 * Groups of variables to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'wpdb' => array(
-	 * 		'type' => 'error' | 'warning',
-	 * 		'message' => 'Dont use this one please!',
-	 * 		'variables' => array( '$val', '$var' ),
-	 * 		'object_vars' => array( '$foo->bar', .. ),
-	 * 		'array_members' => array( '$foo['bar']', .. ),
-	 * 	)
+	 *  'groupname' => array(
+	 *      'type'     => 'error' | 'warning',
+	 *      'message'  => 'Dont use this one please!',
+	 *      'keys'     => array( 'key1', 'another_key' ),
+	 *      'callback' => array( 'class', 'method' ), // Optional.
+	 *  )
 	 * )
 	 *
 	 * @return array

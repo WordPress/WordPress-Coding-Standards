@@ -53,3 +53,11 @@ if (  ! $var ) {
 // Ok: Test skipping of default values in function declarations.
 function my_test( $a=true, $b = 123, $c=  'string' ) {}
 $a = function ( $a=true, $b = 123, $c=  'string' ) {};
+
+// Upstream issue 1163.
+declare(strict_types=1);
+
+$a = $b??$c;
+$a = $b<=>$c;
+
+$a    ??= $b; // Multiple spaces before assignment is OK.

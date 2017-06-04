@@ -8,12 +8,12 @@
  */
 
 /**
- * Unit test class for the CastStructureSpacing sniff.
+ * Unit test class for the ArrayIndentation sniff.
  *
  * @package WPCS\WordPressCodingStandards
- * @since   0.3.0
+ * @since   0.12.0
  */
-class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_Arrays_ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,15 +22,32 @@ class WordPress_Tests_WhiteSpace_CastStructureSpacingUnitTest extends AbstractSn
 	 */
 	public function getErrorList() {
 		return array(
-			3  => 2,
-			6  => 2,
-			9  => 2,
-			12 => 2,
-			15 => 2,
-			18 => 2,
-			21 => 2,
+			23 => 1,
+			24 => 1,
+			25 => 1,
+			28 => 1,
+			29 => 1,
+			30 => 1,
+			33 => 1,
+			34 => 1,
+			36 => 1,
+			38 => 1,
+			39 => 1,
+			40 => 1,
+			44 => 1,
+			45 => 1,
+			46 => 1,
+			50 => 1,
+			51 => 1,
+			52 => 1,
+			55 => 1,
+			57 => 1,
+			58 => 1,
+			60 => 1,
+			61 => 1,
+			66 => 1,
+			80 => 1,
 		);
-
 	}
 
 	/**

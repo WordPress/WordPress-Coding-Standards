@@ -128,7 +128,11 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	public function process_token( $stackPtr ) {
 
 		// Usage of `strip_quotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
-		$file     = $this->strip_quotes( $this->phpcsFile->getFileName() );
+		$file = $this->strip_quotes( $this->phpcsFile->getFileName() );
+		if ( 'STDIN' === $file ) {
+			return;
+		}
+
 		$fileName = basename( $file );
 		$expected = strtolower( str_replace( '_', '-', $fileName ) );
 

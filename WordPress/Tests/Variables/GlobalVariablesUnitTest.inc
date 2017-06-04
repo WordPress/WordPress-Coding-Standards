@@ -129,3 +129,5 @@ add_filter( 'comments_open', new class {
 		return 'page' === $page->post_type;
 	}
 }, 10, 2 );
+
+$GLOBALS['totals']   ??= 10; // Bad.

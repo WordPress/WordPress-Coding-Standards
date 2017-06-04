@@ -33,6 +33,7 @@ class WordPress_Tests_Variables_GlobalVariablesUnitTest extends AbstractSniffUni
 			54  => 1,
 			95  => 1,
 			128 => 1,
+			133 => 1,
 		);
 
 	}
