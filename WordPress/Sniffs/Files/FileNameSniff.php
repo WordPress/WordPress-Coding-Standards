@@ -38,6 +38,7 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#custom-post-types
 	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#embeds
 	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#attachment
+	 * @link https://developer.wordpress.org/themes/template-files-section/partial-and-miscellaneous-template-files/#content-slug-php
 	 * @link https://en.wikipedia.org/wiki/Media_type#Naming
 	 *
 	 * @since 0.11.0
@@ -47,7 +48,7 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	const THEME_EXCEPTIONS_REGEX = '`
 		^                    # Anchor to the beginning of the string.
 		(?:
-			(?:archive|embed|single|taxonomy) # Template prefixes which can have exceptions
+			(?:archive|content|embed|single|taxonomy) # Template prefixes which can have exceptions
 			-[^\.]+          # These need to be followed by a dash and some chars.
 		|
 			(?:application|audio|example|image|message|model|multipart|text|video) #Top-level mime-types
