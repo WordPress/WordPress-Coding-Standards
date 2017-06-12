@@ -54,9 +54,7 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 		'test-sample-phpunit.inc'     => 0,
 		'test-sample-phpunit6.inc'    => 0,
 		'test-sample-wpunit.inc'      => 0,
-		// @todo Fix this! False positive, custom property setting not recognized.
-		// Is issue with unit tests, not with the sniff. If the property is set from the ruleset, it "should" work.
-		'test-sample-custom-unit.inc' => 1,
+		'test-sample-custom-unit.inc' => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
