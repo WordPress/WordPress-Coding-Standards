@@ -15,6 +15,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
+ * @since   0.12.0 Introduced new and more intuitively named 'slow query' whitelist
+ *                 comment, replacing the 'tax_query' whitelist comment which is now
+ *                 deprecated.
  */
 class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
 
@@ -42,7 +45,6 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @since 0.10.0
-	 * @since 0.12.0 Introduced new 'slow query' whitelist comment.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
@@ -51,11 +53,22 @@ class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssig
 	 */
 	public function process_token( $stackPtr ) {
 
-		if (
-			$this->has_whitelist_comment( 'slow query', $stackPtr )
-			||
-			$this->has_whitelist_comment( 'tax_query', $stackPtr )
-		) {
+		if ( $this->has_whitelist_comment( 'slow query', $stackPtr ) ) {
+			return;
+		}
+
+		if ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
+			/*
+			 * Only throw the warning about a deprecated comment when the sniff would otherwise
+			 * have been triggered on the array key.
+			 */
+			if ( in_array( $this->tokens[ $stackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+				$this->phpcsFile->addWarning(
+					'The "tax_query" whitelist comment is deprecated in favor of the "slow query" whitelist comment.',
+					$stackPtr,
+					'DeprecatedWhitelistFlagFound'
+				);
+			}
 
 			return;
 		}
