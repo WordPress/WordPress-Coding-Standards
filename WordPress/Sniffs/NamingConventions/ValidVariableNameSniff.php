@@ -166,9 +166,9 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 						$data  = array( $original_var_name );
 						$phpcs_file->addError( $error, $var, 'NotSnakeCaseMemberVar', $data );
 					}
-				} // End if().
-			} // End if().
-		} // End if().
+				}
+			}
+		}
 
 		$in_class     = false;
 		$obj_operator = $phpcs_file->findPrevious( array( T_WHITESPACE ), ( $stack_ptr - 1 ), null, true );

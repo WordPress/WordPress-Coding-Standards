@@ -137,7 +137,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Ab
 					$underscores++;
 				}
 			}
-		} // End for().
+		}
 
 		$data = array(
 			implode( '', $expected ),

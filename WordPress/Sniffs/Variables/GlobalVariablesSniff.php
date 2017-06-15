@@ -152,7 +152,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 					}
 				}
 			}
-		} // End if().
+		}
 
 	} // End process_token().
 

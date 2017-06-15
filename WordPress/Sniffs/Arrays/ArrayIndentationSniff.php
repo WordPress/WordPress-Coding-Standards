@@ -182,7 +182,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 
 			$end_of_last_item = ( $item['end'] + 1 );
 
-		} // End foreach().
+		}
 
 	} // End process_token().
 

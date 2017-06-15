@@ -253,7 +253,7 @@ class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
 
 				$this->phpcsFile->fixer->replaceToken( $stackPtr, $replacement );
 			}
-		} // End if().
+		}
 
 	} // End process_token().
 

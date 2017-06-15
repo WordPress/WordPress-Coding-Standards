@@ -188,7 +188,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				'NotPrepared',
 				array( $this->tokens[ $this->i ]['content'] )
 			);
-		} // End for().
+		}
 
 		return $this->end;
 

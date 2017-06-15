@@ -180,7 +180,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 
 			return; // Show one error only.
 
-		} // End foreach().
+		}
 
 	} // End process_token().
 

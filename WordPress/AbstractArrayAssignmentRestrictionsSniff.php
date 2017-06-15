@@ -184,7 +184,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 					);
 				}
 			}
-		} // End foreach().
+		}
 
 	} // End process_token().
 
