@@ -203,7 +203,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				}
 				$i = $this_token['parenthesis_closer'];
 			}
-		} // End for().
+		}
 
 		if ( ! empty( $argument_tokens ) ) {
 			$arguments_tokens[] = $argument_tokens;
@@ -295,7 +295,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} // End if().
+		}
 
 		if ( ! empty( $arguments_tokens ) ) {
 			$this->phpcsFile->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
@@ -481,7 +481,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				$this->phpcsFile->fixer->replaceToken( $stack_ptr, $fixed_str );
 				$this->phpcsFile->fixer->endChangeset();
 			}
-		} // End if().
+		}
 
 		/*
 		 * NoEmptyStrings.
@@ -580,8 +580,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 								return;
 							}
 						}
-					} // End if().
-				} // End if().
+					}
+				}
 
 				// Found placeholders but no translators comment.
 				$this->phpcsFile->addWarning(
@@ -590,8 +590,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					'MissingTranslatorsComment'
 				);
 				return;
-			} // End foreach().
-		} // End foreach().
+			}
+		}
 
 	} // End check_for_translator_comment().
 

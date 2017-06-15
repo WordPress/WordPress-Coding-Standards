@@ -139,7 +139,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 						}
 					}
 				}
-			} // End if().
+			}
 
 			$operator = $tokens[ $stackPtr ]['content'];
 
@@ -170,7 +170,7 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 						$phpcsFile->fixer->endChangeset();
 					}
 				}
-			} // End if().
+			}
 
 			if ( '-' !== $operator ) {
 				if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
@@ -197,9 +197,9 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 						$phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), ' ' );
 						$phpcsFile->fixer->endChangeset();
 					}
-				} // End if().
-			} // End if().
-		} // End if().
+				}
+			}
+		}
 
 	} // End process().
 

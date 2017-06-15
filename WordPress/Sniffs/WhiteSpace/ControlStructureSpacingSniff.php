@@ -164,7 +164,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					}
 				}
 			}
-		} // End if().
+		}
 
 		$parenthesisOpener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
@@ -232,7 +232,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$scopeOpener = $usePtr;
 				}
 			}
-		} // End if().
+		}
 
 		if (
 			T_COLON !== $this->tokens[ $parenthesisOpener ]['code']
@@ -273,7 +273,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
-		} // End if().
+		}
 
 		if (
 			T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code']
@@ -376,7 +376,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
-			} // End if().
+			}
 
 			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
 				&& ( isset( $scopeOpener )
@@ -416,8 +416,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$this->phpcsFile->fixer->replaceToken( ( $parenthesisCloser + 1 ), ' ' );
 					$this->phpcsFile->fixer->endChangeset();
 				}
-			} // End if().
-		} // End if().
+			}
+		}
 
 		if ( false !== $this->blank_line_check && isset( $scopeOpener ) ) {
 			$firstContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
@@ -485,12 +485,12 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 								$this->phpcsFile->fixer->endChangeset();
 							}
 							break;
-						} // End if().
-					} // End for().
-				} // End if().
-			} // End if().
+						}
+					}
+				}
+			}
 			unset( $ignore );
-		} // End if().
+		}
 
 		if ( ! isset( $scopeCloser ) || true !== $this->blank_line_after_check ) {
 			return;
@@ -550,7 +550,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
-		} // End if().
+		}
 
 	} // End process_token().
 

@@ -1641,7 +1641,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 			$scope_end = $stackPtr;
 
-		} // End if().
+		}
 
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
@@ -1988,7 +1988,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			// Prepare for the next parameter.
 			$param_start = ( $next_comma + 1 );
 			$cnt++;
-		} // End while().
+		}
 
 		return $parameters;
 	}

@@ -287,7 +287,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					// Left empty on purpose.
 					break;
 
-			} // End switch().
+			}
 
 			if ( empty( $item_name ) || $this->is_prefixed( $item_name ) === true ) {
 				return;
@@ -302,7 +302,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					$item_name,
 				)
 			);
-		} // End if().
+		}
 
 	} // End process_token().
 
@@ -526,8 +526,8 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 				unset( $condition, $has_global, $end_of_statement, $ptr, $imported );
 
-			} // End if().
-		} // End if().
+			}
+		}
 
 		// Still here ? In that case, the variable name should be prefixed.
 		$this->addMessage(
@@ -611,7 +611,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 				// Dynamic hook/constant name, throw a warning.
 				$is_error = false;
 			}
-		} // End if().
+		}
 
 		if ( 'define' === $matched_content ) {
 			if ( defined( $raw_content ) ) {

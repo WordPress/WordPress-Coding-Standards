@@ -95,7 +95,7 @@ class WordPress_Sniffs_WhiteSpace_DisallowInlineTabsSniff extends WordPress_Snif
 					$this->phpcsFile->fixer->replaceToken( $i, $newContent );
 				}
 			}
-		} // End for().
+		}
 
 		// Ignore the rest of the file.
 		return ( $this->phpcsFile->numTokens + 1 );
