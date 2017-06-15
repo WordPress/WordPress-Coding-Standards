@@ -28,10 +28,11 @@ $test = array(
 
 	// Single-line statements.
 	'tax_query' => array(), // Bad.
+	'tax_query' => array(), // WPCS: slow query ok.
 	'tax_query' => array(), // WPCS: tax_query ok.
 
 	// Multi-line statement.
-	'tax_query' => array( // WPCS: tax_query ok.
+	'tax_query' => array( // WPCS: slow query ok.
 		array(
 			'taxonomy' => 'foo',
 		),
