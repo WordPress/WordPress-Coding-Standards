@@ -15,9 +15,10 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.7.0 This sniff now has the ability to fix a number of the issues it flags.
+ * @since   0.7.0  This sniff now has the ability to fix a number of the issues it flags.
+ * @since   0.12.0 This class now extends WordPress_Sniff.
  */
-class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff extends WordPress_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -34,52 +35,49 @@ class WordPress_Sniffs_Arrays_ArrayKeySpacingRestrictionsSniff implements PHP_Co
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+	public function process_token( $stackPtr ) {
 
-		$token = $tokens[ $stackPtr ];
+		$token = $this->tokens[ $stackPtr ];
 		if ( ! isset( $token['bracket_closer'] ) ) {
-			$phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr, 'MissingBracketCloser' );
+			$this->phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr, 'MissingBracketCloser' );
 			return;
 		}
 
-		$need_spaces = $phpcsFile->findNext(
+		$need_spaces = $this->phpcsFile->findNext(
 			array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_WHITESPACE, T_MINUS ),
 			( $stackPtr + 1 ),
 			$token['bracket_closer'],
 			true
 		);
 
-		$spaced1 = ( T_WHITESPACE === $tokens[ ( $stackPtr + 1 ) ]['code'] );
-		$spaced2 = ( T_WHITESPACE === $tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
+		$spaced1 = ( T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
+		$spaced2 = ( T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
 
-		// It should have spaces only if it only has strings or numbers as the key.
+		// It should have spaces unless if it only has strings or numbers as the key.
 		if ( false !== $need_spaces && ! ( $spaced1 && $spaced2 ) ) {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
-			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
+			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
 			if ( true === $fix ) {
 				if ( ! $spaced1 ) {
-					$phpcsFile->fixer->addContentBefore( ( $stackPtr + 1 ), ' ' );
+					$this->phpcsFile->fixer->addContentBefore( ( $stackPtr + 1 ), ' ' );
 				}
 				if ( ! $spaced2 ) {
-					$phpcsFile->fixer->addContentBefore( $token['bracket_closer'], ' ' );
+					$this->phpcsFile->fixer->addContentBefore( $token['bracket_closer'], ' ' );
 				}
 			}
 		} elseif ( false === $need_spaces && ( $spaced1 || $spaced2 ) ) {
 			$error = 'Array keys must NOT be surrounded by spaces if they only contain a string or an integer.';
-			$fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacesAroundArrayKeys' );
+			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'SpacesAroundArrayKeys' );
 			if ( true === $fix ) {
 				if ( $spaced1 ) {
-					$phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
+					$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
 				}
 				if ( $spaced2 ) {
-					$phpcsFile->fixer->replaceToken( ( $token['bracket_closer'] - 1 ), '' );
+					$this->phpcsFile->fixer->replaceToken( ( $token['bracket_closer'] - 1 ), '' );
 				}
 			}
 		}
