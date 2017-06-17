@@ -20,6 +20,7 @@
 			<property name="allowMultiline" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
