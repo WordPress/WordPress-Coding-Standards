@@ -164,8 +164,11 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends Squiz_Sniffs_
 			}
 
 			if ( T_WHITESPACE === $tokens[ ( $i + 1 ) ]['code'] ) {
-				// Something weird going on with tabs vs spaces, but this fixes it.
-				$indentation = str_replace( '    ', "\t", $tokens[ ( $i + 1 ) ]['content'] );
+				// If the tokenizer replaced tabs with spaces, use the original content.
+				$indentation = $tokens[ ( $i + 1 ) ]['content'];
+				if ( isset( $tokens[ ( $i + 1 ) ]['orig_content'] ) ) {
+					$indentation = $tokens[ ( $i + 1 ) ]['orig_content'];
+				}
 			}
 			break;
 		}

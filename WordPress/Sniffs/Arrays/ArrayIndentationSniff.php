@@ -95,9 +95,12 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 			}
 
 			if ( T_WHITESPACE === $this->tokens[ ( $i + 1 ) ]['code'] ) {
-				// Something weird going on with tabs vs spaces, but this fixes it.
-				$indentation = str_replace( '    ', "\t", $this->tokens[ ( $i + 1 ) ]['content'] );
-				$column      = $this->tokens[ ( $i + 2 ) ]['column'];
+				// If the tokenizer replaced tabs with spaces, use the original content.
+				$indentation = $this->tokens[ ( $i + 1 ) ]['content'];
+				if ( isset( $this->tokens[ ( $i + 1 ) ]['orig_content'] ) ) {
+					$indentation = $this->tokens[ ( $i + 1 ) ]['orig_content'];
+				}
+				$column = $this->tokens[ ( $i + 2 ) ]['column'];
 			}
 			break;
 		}
