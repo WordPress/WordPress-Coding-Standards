@@ -496,7 +496,8 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			return;
 		}
 
-		$trailingContent = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
+		// {@internal This is just for the blank line check. Only whitespace should be considered.}}
+		$trailingContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeCloser + 1 ), null, true );
 		if ( false === $trailingContent ) {
 			return;
 		}
@@ -504,6 +505,16 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 		if ( T_ELSE === $this->tokens[ $trailingContent ]['code'] && T_IF === $this->tokens[ $stackPtr ]['code'] ) {
 			// IF with ELSE.
 			return;
+		}
+
+		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code'] ) {
+			if ( $this->tokens[ $trailingContent ]['line'] === $this->tokens[ $scopeCloser ]['line'] ) {
+				if ( '//end' === substr( $this->tokens[ $trailingContent ]['content'], 0, 5 ) ) {
+					// There is an end comment, so we have to get the next piece
+					// of content.
+					$trailingContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $trailingContent + 1), null, true );
+				}
+			}
 		}
 
 		if ( T_BREAK === $this->tokens[ $trailingContent ]['code'] ) {
