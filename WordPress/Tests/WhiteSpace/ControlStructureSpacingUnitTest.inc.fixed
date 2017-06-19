@@ -217,3 +217,43 @@ if ( isset( $submenu_file ) ) {
 } else {
 	$class[] = 'current';
 }
+
+// Test finding & fixing blank line after control structure.
+if ( $one ) {
+}
+elseif ( $two ) {
+}
+// else if something
+else if ( $three ) {
+} // else do something
+else {
+}
+
+do {
+}
+// Comment
+while ( $a === $b );
+
+if ( $foo ) {
+	try {
+		// Something
+	} catch ( Exception $e ) {
+		// Something
+	}
+}
+
+if ( $foo ) {
+	try {
+		// Something
+	} catch ( Exception $e ) {
+		// Something
+	}//end try/catch <- Bad: "blank line after".
+}
+
+if ( $foo ) {
+	try { // Bad.
+		// Something
+	} catch ( Exception $e ) {
+		// Something
+	} // End try/catch <- Bad: "blank line after".
+}
