@@ -38,7 +38,7 @@ class WordPress_Tests_DB_RestrictedFunctionsUnitTest extends AbstractSniffUnitTe
 			39 => 1,
 			40 => 1,
 			41 => 1,
-			
+			42 => 1,
 			43 => 1,
 			44 => 1,
 
