@@ -92,11 +92,11 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
-			'get_category_by_slug' => array(
+			'wpcom_vip_get_category_by_slug' => array(
 				'type'      => 'error',
-				'message'   => '%s() is prohibited, please use wpcom_vip_get_category_by_slug() instead.',
+				'message'   => '%s() is deprecated, please use get_category_by_slug() instead.',
 				'functions' => array(
-					'get_category_by_slug',
+					'wpcom_vip_get_category_by_slug',
 				),
 			),
 
