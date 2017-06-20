@@ -65,9 +65,6 @@
 	-->
 	<!-- Covers rule: Braces shall be used for all blocks. -->
 	<rule ref="Squiz.ControlStructures.ControlSignature"/>
-	<rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
-		<severity>0</severity>
-	</rule>
 
 	<!-- Covers rule: Braces should always be used, even when they are not required. -->
 	<rule ref="Generic.ControlStructures.InlineControlStructure"/>
