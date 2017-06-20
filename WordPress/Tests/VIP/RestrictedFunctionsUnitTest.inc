@@ -39,7 +39,7 @@ get_page_by_title( $page_title ); // Error.
 
 wpcom_vip_get_term_by( $field, $value, $taxonomy ); // Error.
 
-wpcom_vip_get_category_by_slug( $slug ); // Ok.
+wpcom_vip_get_category_by_slug( $slug ); // Error.
 
 url_to_postid( $url ); // Error.
 
