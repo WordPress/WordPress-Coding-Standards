@@ -2,6 +2,12 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
+	<!-- Treat all files as UTF-8. -->
+	<config name="encoding" value="utf-8"/>
+
+	<!-- Default tab width for indentation fixes and such. -->
+	<arg name="tab-width" value="4"/>
+
 	<!--
 	#############################################################################
 	Handbook: PHP - Single and Double Quotes.
@@ -37,7 +43,6 @@
 	<rule ref="WordPress.Arrays.ArrayIndentation"/>
 
 	<!-- Covers rule: Use real tabs and not spaces. -->
-	<arg name="tab-width" value="4"/>
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 
 	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
