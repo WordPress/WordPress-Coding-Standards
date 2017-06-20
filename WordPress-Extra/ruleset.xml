@@ -33,6 +33,15 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
+	<!-- Another generic PHP best practice sniff - inspect embedded PHP.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/465 -->
+	<rule ref="Squiz.PHP.EmbeddedPhp">
+		<exclude name="Squiz.PHP.EmbeddedPhp.SpacingBefore"/>
+		<exclude name="Squiz.PHP.EmbeddedPhp.Indent"/>
+		<exclude name="Squiz.PHP.EmbeddedPhp.OpenTagIndent"/>
+		<exclude name="Squiz.PHP.EmbeddedPhp.SpacingAfter"/>
+	</rule>
+
 	<!-- This sniff is not refined enough for general use -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
 	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
