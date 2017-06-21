@@ -45,6 +45,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 	 * Last updated for WordPress 4.8.
 	 *
 	 * Version numbers should be fully qualified.
+	 * Replacement functions should have parentheses.
+	 *
+	 * To retrieve a function list for comparison, the following tool is available:
+	 * https://github.com/JDGrimes/wp-deprecated-code-scanner
 	 *
 	 * @var array
 	 */
@@ -130,7 +134,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.1.0',
 		),
 		'get_archives' => array(
-			'alt'     => 'wp_get_archives',
+			'alt'     => 'wp_get_archives()',
 			'version' => '2.1.0',
 		),
 		'get_author_link' => array(
@@ -198,7 +202,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.1.0',
 		),
 		'list_cats' => array(
-			'alt'     => 'wp_list_categories',
+			'alt'     => 'wp_list_categories()',
 			'version' => '2.1.0',
 		),
 		'tinymce_include' => array(
@@ -218,7 +222,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.1.0',
 		),
 		'wp_list_cats' => array(
-			'alt'     => 'wp_list_categories',
+			'alt'     => 'wp_list_categories()',
 			'version' => '2.1.0',
 		),
 		'wp_set_post_cats' => array(
@@ -332,7 +336,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.8.0',
 		),
 		'get_category_children' => array(
-			'alt'     => 'get_term_children',
+			'alt'     => 'get_term_children()',
 			'version' => '2.8.0',
 		),
 		'get_catname' => array(
@@ -344,7 +348,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.8.0',
 		),
 		'get_the_author_description' => array(
-			'alt'     => "get_the_author_meta( 'description' )",
+			'alt'     => 'get_the_author_meta( \'description\' )',
 			'version' => '2.8.0',
 		),
 		'get_the_author_email' => array(
@@ -628,7 +632,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.2.0',
 		),
 		'wp_tiny_mce' => array(
-			'alt'     => 'wp_editor',
+			'alt'     => 'wp_editor()',
 			'version' => '3.2.0',
 		),
 
@@ -714,7 +718,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.3.0',
 		),
 		'the_editor' => array(
-			'alt'     => 'wp_editor',
+			'alt'     => 'wp_editor()',
 			'version' => '3.3.0',
 		),
 		'type_url_form_audio' => array(
@@ -798,7 +802,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 3.4.1.
 		'wp_explain_nonce' => array(
-			'alt'     => 'wp_nonce_ays',
+			'alt'     => 'wp_nonce_ays()',
 			'version' => '3.4.1',
 		),
 
@@ -820,7 +824,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.5.0',
 		),
 		'gd_edit_image_support' => array(
-			'alt'     => 'wp_image_editor_supports',
+			'alt'     => 'wp_image_editor_supports()',
 			'version' => '3.5.0',
 		),
 		'get_default_page_to_edit' => array(
@@ -1002,11 +1006,11 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 4.2.0.
 		'prepreview_added_sidebars_widgets' => array(
-			'alt'     => 'customize_dynamic_setting_args',
+			'alt'     => 'customize_dynamic_setting_args()',
 			'version' => '4.2.0',
 		),
 		'prepreview_added_widget_instance' => array(
-			'alt'     => 'customize_dynamic_setting_args',
+			'alt'     => 'customize_dynamic_setting_args()',
 			'version' => '4.2.0',
 		),
 		'remove_prepreview_filters' => array(
@@ -1014,7 +1018,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '4.2.0',
 		),
 		'setup_widget_addition_previews' => array(
-			'alt'     => 'customize_dynamic_setting_args',
+			'alt'     => 'customize_dynamic_setting_args()',
 			'version' => '4.2.0',
 		),
 
@@ -1058,7 +1062,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '4.4.0',
 		),
 		'force_ssl_login' => array(
-			'alt'     => 'force_ssl_admin',
+			'alt'     => 'force_ssl_admin()',
 			'version' => '4.4.0',
 		),
 		'get_admin_users_for_domain' => array(
@@ -1066,11 +1070,11 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '4.4.0',
 		),
 		'post_permalink' => array(
-			'alt'     => 'get_permalink',
+			'alt'     => 'get_permalink()',
 			'version' => '4.4.0',
 		),
 		'wp_get_http' => array(
-			'alt'     => 'WP_Http',
+			'alt'     => 'the WP_Http class',
 			'version' => '4.4.0',
 		),
 		// This is a method i.e. WP_Widget_Recent_Comments::flush_widget_cache() See #731.
@@ -1121,15 +1125,15 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 4.7.0.
 		'_sort_nav_menu_items' => array(
-			'alt'     => 'wp_list_sort',
+			'alt'     => 'wp_list_sort()',
 			'version' => '4.7.0',
 		),
 		'_usort_terms_by_ID' => array(
-			'alt'     => 'wp_list_sort',
+			'alt'     => 'wp_list_sort()',
 			'version' => '4.7.0',
 		),
 		'_usort_terms_by_name' => array(
-			'alt'     => 'wp_list_sort',
+			'alt'     => 'wp_list_sort()',
 			'version' => '4.7.0',
 		),
 		'get_paged_template' => array(
@@ -1137,7 +1141,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '4.7.0',
 		),
 		'wp_get_network' => array(
-			'alt'     => 'get_network',
+			'alt'     => 'get_network()',
 			'version' => '4.7.0',
 		),
 		'wp_kses_js_entities' => array(
