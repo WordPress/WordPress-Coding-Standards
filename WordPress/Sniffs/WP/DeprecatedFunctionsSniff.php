@@ -570,10 +570,6 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '',
 			'version' => '3.1',
 		),
-		'WP_User_Search' => array(
-			'alt'     => 'WP_User_Query',
-			'version' => '3.1',
-		),
 		'get_others_unpublished_posts' => array(
 			'alt'     => '',
 			'version' => '3.1',
