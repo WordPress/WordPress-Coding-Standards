@@ -989,36 +989,44 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 
 		// WP 4.1.0.
+		// This is a method from the WP_Customize_Image_Control class. See #731.
 		'add_tab' => array(
 			'alt'     => '',
 			'version' => '4.1.0',
 		),
+		// This is a method from the WP_Customize_Image_Control class. See #731.
 		'prepare_control' => array(
 			'alt'     => '',
 			'version' => '4.1.0',
 		),
+		// This is a method from the WP_Customize_Image_Control class. See #731.
 		'print_tab_image' => array(
 			'alt'     => '',
 			'version' => '4.1.0',
 		),
+		// This is a method from the WP_Customize_Image_Control class. See #731.
 		'remove_tab' => array(
 			'alt'     => '',
 			'version' => '4.1.0',
 		),
 
 		// WP 4.2.0.
+		// This is a method from the WP_Customize_Widgets class. See #731.
 		'prepreview_added_sidebars_widgets' => array(
 			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
+		// This is a method from the WP_Customize_Widgets class. See #731.
 		'prepreview_added_widget_instance' => array(
 			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
+		// This is a method from the WP_Customize_Widgets class. See #731.
 		'remove_prepreview_filters' => array(
 			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
+		// This is a method from the WP_Customize_Widgets class. See #731.
 		'setup_widget_addition_previews' => array(
 			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',

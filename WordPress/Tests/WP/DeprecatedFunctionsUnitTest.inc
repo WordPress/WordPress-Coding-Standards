@@ -249,15 +249,15 @@ get_all_category_ids();
 like_escape();
 url_is_accessable_via_ssl();
 /* ============ WP 4.1 ============ */
-add_tab();
-prepare_control();
-print_tab_image();
-remove_tab();
+add_tab(); // Issue #731 - method, not function.
+prepare_control(); // Issue #731 - method, not function.
+print_tab_image(); // Issue #731 - method, not function.
+remove_tab(); // Issue #731 - method, not function.
 /* ============ WP 4.2 ============ */
-prepreview_added_sidebars_widgets();
-prepreview_added_widget_instance();
-remove_prepreview_filters();
-setup_widget_addition_previews();
+prepreview_added_sidebars_widgets(); // Issue #731 - method, not function.
+prepreview_added_widget_instance(); // Issue #731 - method, not function.
+remove_prepreview_filters(); // Issue #731 - method, not function.
+setup_widget_addition_previews(); // Issue #731 - method, not function.
 /* ============ WP 4.3 ============ */
 _preview_theme_stylesheet_filter();
 _preview_theme_template_filter();
