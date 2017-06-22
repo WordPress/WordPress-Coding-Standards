@@ -8,13 +8,12 @@
  */
 
 /**
- * Unit test class for the WP_DeprecatedFunctions sniff.
+ * Unit test class for the WP_DeprecatedClasses sniff.
  *
  * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
+ * @since   0.12.0
  */
-class WordPress_Tests_WP_DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
+class WordPress_Tests_WP_DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,9 +21,9 @@ class WordPress_Tests_WP_DeprecatedFunctionsUnitTest extends AbstractSniffUnitTe
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array_fill( 8, 235, 1 );
+		return array_fill( 9, 7, 1 );
 
-	}
+	} // End getErrorList().
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -32,7 +31,7 @@ class WordPress_Tests_WP_DeprecatedFunctionsUnitTest extends AbstractSniffUnitTe
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array_fill( 245, 15, 1 );
+		return array();
 
 	}
 

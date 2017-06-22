@@ -132,7 +132,6 @@ get_author_user_ids();
 get_editable_authors();
 get_editable_user_ids();
 get_nonauthor_user_ids();
-WP_User_Search();
 get_others_unpublished_posts();
 get_others_drafts();
 get_others_pending();
