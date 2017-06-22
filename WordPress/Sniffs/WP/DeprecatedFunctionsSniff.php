@@ -72,6 +72,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 1.5.0.
 		'start_wp' => array(
+			// Verified correct alternative.
 			'alt'     => 'the Loop',
 			'version' => '1.5.0',
 		),
@@ -206,7 +207,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.1.0',
 		),
 		'tinymce_include' => array(
-			'alt'     => 'wp_tiny_mce()',
+			'alt'     => 'wp_editor()',
 			'version' => '2.1.0',
 		),
 		'wp_get_links' => array(
@@ -238,7 +239,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 2.3.0.
 		'permalink_single_rss' => array(
-			'alt'     => 'permalink_rss()',
+			'alt'     => 'the_permalink_rss()',
 			'version' => '2.3.0',
 		),
 
@@ -320,7 +321,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 2.8.0.
 		'__ngettext' => array(
-			'alt'     => '_n_noop()',
+			'alt'     => '_n()',
 			'version' => '2.8.0',
 		),
 		'__ngettext_noop' => array(
@@ -348,7 +349,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.8.0',
 		),
 		'get_the_author_description' => array(
-			'alt'     => 'get_the_author_meta( \'description\' )',
+			'alt'     => 'get_the_author_meta(\'description\')',
 			'version' => '2.8.0',
 		),
 		'get_the_author_email' => array(
@@ -372,7 +373,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.8.0',
 		),
 		'get_the_author_login' => array(
-			'alt'     => 'the_author_meta(\'login\')',
+			'alt'     => 'get_the_author_meta(\'login\')',
 			'version' => '2.8.0',
 		),
 		'get_the_author_msn' => array(
@@ -404,7 +405,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '2.8.0',
 		),
 		'sanitize_url' => array(
-			'alt'     => 'esc_url()',
+			'alt'     => 'esc_url_raw()',
 			'version' => '2.8.0',
 		),
 		'the_author_aim' => array(
@@ -536,7 +537,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.0.0',
 		),
 		'_nc' => array(
-			'alt'     => 'nx()',
+			'alt'     => '_nx()',
 			'version' => '3.0.0',
 		),
 		'remove_option_update_handler' => array(
@@ -566,19 +567,19 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 3.1.0.
 		'get_author_user_ids' => array(
-			'alt'     => '',
+			'alt'     => 'get_users()',
 			'version' => '3.1.0',
 		),
 		'get_editable_authors' => array(
-			'alt'     => '',
+			'alt'     => 'get_users()',
 			'version' => '3.1.0',
 		),
 		'get_editable_user_ids' => array(
-			'alt'     => '',
+			'alt'     => 'get_users()',
 			'version' => '3.1.0',
 		),
 		'get_nonauthor_user_ids' => array(
-			'alt'     => '',
+			'alt'     => 'get_users()',
 			'version' => '3.1.0',
 		),
 		'get_others_drafts' => array(
@@ -598,7 +599,8 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.1.0',
 		),
 		'is_plugin_page' => array(
-			'alt'     => '$plugin_page and/or get_plugin_page_hookname() hooks',
+			// Verified correct alternative.
+			'alt'     => 'global $plugin_page and/or get_plugin_page_hookname() hooks',
 			'version' => '3.1.0',
 		),
 		'update_category_cache' => array(
@@ -612,7 +614,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.2.0',
 		),
 		'wp_dashboard_quick_press_output' => array(
-			'alt'     => '',
+			'alt'     => 'wp_dashboard_quick_press()',
 			'version' => '3.2.0',
 		),
 		'wp_preload_dialogs' => array(
@@ -674,7 +676,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.3.0',
 		),
 		'is_blog_user' => array(
-			'alt'     => 'is_member_of_blog()',
+			'alt'     => 'is_user_member_of_blog()',
 			'version' => '3.3.0',
 		),
 		'media_upload_audio' => array(
@@ -722,19 +724,19 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.3.0',
 		),
 		'type_url_form_audio' => array(
-			'alt'     => 'wp_media_insert_url_form( \'audio\' )',
+			'alt'     => 'wp_media_insert_url_form(\'audio\')',
 			'version' => '3.3.0',
 		),
 		'type_url_form_file' => array(
-			'alt'     => 'wp_media_insert_url_form( \'file\' )',
+			'alt'     => 'wp_media_insert_url_form(\'file\')',
 			'version' => '3.3.0',
 		),
 		'type_url_form_image' => array(
-			'alt'     => 'wp_media_insert_url_form( \'image\' )',
+			'alt'     => 'wp_media_insert_url_form(\'image\')',
 			'version' => '3.3.0',
 		),
 		'type_url_form_video' => array(
-			'alt'     => 'wp_media_insert_url_form( \'video\' )',
+			'alt'     => 'wp_media_insert_url_form(\'video\')',
 			'version' => '3.3.0',
 		),
 		'wp_admin_bar_dashboard_view_site_menu' => array(
@@ -776,7 +778,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.4.0',
 		),
 		'get_theme' => array(
-			'alt'     => 'wp_get_theme()',
+			'alt'     => 'wp_get_theme( $stylesheet )',
 			'version' => '3.4.0',
 		),
 		'get_theme_data' => array(
@@ -828,7 +830,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.5.0',
 		),
 		'get_default_page_to_edit' => array(
-			'alt'     => 'get_default_post_to_edit()',
+			'alt'     => 'get_default_post_to_edit( \'page\' )',
 			'version' => '3.5.0',
 		),
 		'get_post_to_edit' => array(
@@ -888,15 +890,15 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '3.7.0',
 		),
 		'wp_update_core' => array(
-			'alt'     => 'new Core_Upgrader()',
+			'alt'     => 'new Core_Upgrader();',
 			'version' => '3.7.0',
 		),
 		'wp_update_plugin' => array(
-			'alt'     => 'new Plugin_Upgrader()',
+			'alt'     => 'new Plugin_Upgrader();',
 			'version' => '3.7.0',
 		),
 		'wp_update_theme' => array(
-			'alt'     => 'new Theme_Upgrader()',
+			'alt'     => 'new Theme_Upgrader();',
 			'version' => '3.7.0',
 		),
 
@@ -1006,19 +1008,19 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 
 		// WP 4.2.0.
 		'prepreview_added_sidebars_widgets' => array(
-			'alt'     => 'customize_dynamic_setting_args()',
+			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
 		'prepreview_added_widget_instance' => array(
-			'alt'     => 'customize_dynamic_setting_args()',
+			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
 		'remove_prepreview_filters' => array(
-			'alt'     => 'customize_dynamic_setting_args()',
+			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
 		'setup_widget_addition_previews' => array(
-			'alt'     => 'customize_dynamic_setting_args()',
+			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
 			'version' => '4.2.0',
 		),
 
@@ -1048,11 +1050,11 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'version' => '4.3.0',
 		),
 		'wp_htmledit_pre' => array(
-			'alt'     => '',
+			'alt'     => 'format_for_editor()',
 			'version' => '4.3.0',
 		),
 		'wp_richedit_pre' => array(
-			'alt'     => '',
+			'alt'     => 'format_for_editor()',
 			'version' => '4.3.0',
 		),
 
