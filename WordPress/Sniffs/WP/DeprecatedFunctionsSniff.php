@@ -470,12 +470,20 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '_x()',
 			'version' => '2.9.0',
 		),
+		'_nc' => array(
+			'alt'     => '_nx()',
+			'version' => '2.9.0',
+		),
 		'make_url_footnote' => array(
 			'alt'     => '',
 			'version' => '2.9.0',
 		),
 		'the_content_rss' => array(
 			'alt'     => 'the_content_feed()',
+			'version' => '2.9.0',
+		),
+		'translate_with_context' => array(
+			'alt'     => '_x()',
 			'version' => '2.9.0',
 		),
 
@@ -536,16 +544,8 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'term_exists()',
 			'version' => '3.0.0',
 		),
-		'_nc' => array(
-			'alt'     => '_nx()',
-			'version' => '3.0.0',
-		),
 		'remove_option_update_handler' => array(
 			'alt'     => 'unregister_setting()',
-			'version' => '3.0.0',
-		),
-		'translate_with_context' => array(
-			'alt'     => '_x()',
 			'version' => '3.0.0',
 		),
 		'update_usermeta' => array(
@@ -617,42 +617,14 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'wp_dashboard_quick_press()',
 			'version' => '3.2.0',
 		),
-		'wp_preload_dialogs' => array(
-			'alt'     => 'wp_editor()',
-			'version' => '3.2.0',
-		),
-		'wp_print_editor_js' => array(
-			'alt'     => 'wp_editor()',
-			'version' => '3.2.0',
-		),
-		'wp_quicktags' => array(
-			'alt'     => 'wp_editor()',
-			'version' => '3.2.0',
-		),
 		'wp_timezone_supported' => array(
 			'alt'     => '',
-			'version' => '3.2.0',
-		),
-		'wp_tiny_mce' => array(
-			'alt'     => 'wp_editor()',
 			'version' => '3.2.0',
 		),
 
 		// WP 3.3.0.
 		'add_contextual_help' => array(
 			'alt'     => 'get_current_screen()->add_help_tab()',
-			'version' => '3.3.0',
-		),
-		'debug_fclose' => array(
-			'alt'     => 'error_log()',
-			'version' => '3.3.0',
-		),
-		'debug_fopen' => array(
-			'alt'     => 'error_log()',
-			'version' => '3.3.0',
-		),
-		'debug_fwrite' => array(
-			'alt'     => 'error_log()',
 			'version' => '3.3.0',
 		),
 		'get_boundary_post_rel_link' => array(
@@ -743,6 +715,22 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '',
 			'version' => '3.3.0',
 		),
+		'wp_preload_dialogs' => array(
+			'alt'     => 'wp_editor()',
+			'version' => '3.3.0',
+		),
+		'wp_print_editor_js' => array(
+			'alt'     => 'wp_editor()',
+			'version' => '3.3.0',
+		),
+		'wp_quicktags' => array(
+			'alt'     => 'wp_editor()',
+			'version' => '3.3.0',
+		),
+		'wp_tiny_mce' => array(
+			'alt'     => 'wp_editor()',
+			'version' => '3.3.0',
+		),
 
 		// WP 3.4.0.
 		'add_custom_background' => array(
@@ -763,6 +751,18 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 		'current_theme_info' => array(
 			'alt'     => 'wp_get_theme()',
+			'version' => '3.4.0',
+		),
+		'debug_fclose' => array(
+			'alt'     => 'error_log()',
+			'version' => '3.4.0',
+		),
+		'debug_fopen' => array(
+			'alt'     => 'error_log()',
+			'version' => '3.4.0',
+		),
+		'debug_fwrite' => array(
+			'alt'     => 'error_log()',
 			'version' => '3.4.0',
 		),
 		'get_allowed_themes' => array(

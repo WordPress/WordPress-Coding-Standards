@@ -114,8 +114,10 @@ unregister_widget_control();
 wp_specialchars();
 /* ============ WP 2.9 ============ */
 _c();
+_nc();
 make_url_footnote();
 the_content_rss();
+translate_with_context();
 /* ============ WP 3.0 ============ */
 add_option_update_handler();
 automatic_feed_links();
@@ -131,9 +133,7 @@ get_usermeta();
 get_usernumposts();
 is_taxonomy();
 is_term();
-_nc();
 remove_option_update_handler();
-translate_with_context();
 update_usermeta();
 use_codepress();
 wp_dropdown_cats();
@@ -152,16 +152,9 @@ update_category_cache();
 /* ============ WP 3.2 ============ */
 favorite_actions();
 wp_dashboard_quick_press_output();
-wp_preload_dialogs();
-wp_print_editor_js();
-wp_quicktags();
 wp_timezone_supported();
-wp_tiny_mce();
 /* ============ WP 3.3 ============ */
 add_contextual_help();
-debug_fclose();
-debug_fopen();
-debug_fwrite();
 get_boundary_post_rel_link();
 get_index_rel_link();
 get_parent_post_rel_link();
@@ -184,12 +177,19 @@ type_url_form_file();
 type_url_form_image();
 type_url_form_video();
 wp_admin_bar_dashboard_view_site_menu();
+wp_preload_dialogs();
+wp_print_editor_js();
+wp_quicktags();
+wp_tiny_mce();
 /* ============ WP 3.4 ============ */
 add_custom_background();
 add_custom_image_header();
 clean_page_cache();
 clean_pre();
 current_theme_info();
+debug_fclose();
+debug_fopen();
+debug_fwrite();
 get_allowed_themes();
 get_broken_themes();
 get_current_theme();

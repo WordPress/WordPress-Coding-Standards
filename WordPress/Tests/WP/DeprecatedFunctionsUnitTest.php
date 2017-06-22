@@ -29,8 +29,8 @@ class WordPress_Tests_WP_DeprecatedFunctionsUnitTest extends AbstractSniffUnitTe
 		unset(
 			$errors[10],  $errors[12],  $errors[14],  $errors[16],  $errors[28],
 			$errors[54],  $errors[56],  $errors[58],  $errors[71],  $errors[74],
-			$errors[78],  $errors[115], $errors[119], $errors[141], $errors[152],
-			$errors[160], $errors[187], $errors[203], $errors[217], $errors[221],
+			$errors[78],  $errors[115], $errors[121], $errors[141], $errors[152],
+			$errors[156], $errors[184], $errors[203], $errors[217], $errors[221],
 			$errors[228], $errors[240], $errors[247], $errors[251], $errors[256],
 			$errors[261], $errors[269]
 		);
