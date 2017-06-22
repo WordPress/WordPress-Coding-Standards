@@ -6,7 +6,7 @@
  */
 /* ============ WP 0.71 ============ */
 the_category_head();
-the_category_id();
+the_category_ID();
 /* ============ WP 1.2 ============ */
 permalink_link();
 /* ============ WP 1.5 ============ */
@@ -131,7 +131,7 @@ get_usermeta();
 get_usernumposts();
 is_taxonomy();
 is_term();
-nc();
+_nc();
 remove_option_update_handler();
 translate_with_context();
 update_usermeta();
@@ -151,7 +151,7 @@ is_plugin_page();
 update_category_cache();
 /* ============ WP 3.2 ============ */
 favorite_actions();
-wp_dashboard_quick_press();
+wp_dashboard_quick_press_output();
 wp_preload_dialogs();
 wp_print_editor_js();
 wp_quicktags();

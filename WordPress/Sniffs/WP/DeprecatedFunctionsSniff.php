@@ -59,7 +59,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'get_the_category_by_ID()',
 			'version' => '0.71',
 		),
-		'the_category_id' => array(
+		'the_category_ID' => array(
 			'alt'     => 'get_the_category()',
 			'version' => '0.71',
 		),
@@ -535,7 +535,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'term_exists()',
 			'version' => '3.0.0',
 		),
-		'nc' => array(
+		'_nc' => array(
 			'alt'     => 'nx()',
 			'version' => '3.0.0',
 		),
@@ -611,7 +611,7 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'WP_Admin_Bar',
 			'version' => '3.2.0',
 		),
-		'wp_dashboard_quick_press' => array(
+		'wp_dashboard_quick_press_output' => array(
 			'alt'     => '',
 			'version' => '3.2.0',
 		),
