@@ -120,6 +120,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'current_user_can()',
 			'version' => '2.0.0',
 		),
+		'user_can_edit_post_date' => array(
+			'alt'     => 'current_user_can()',
+			'version' => '2.0.0',
+		),
 		'user_can_edit_user' => array(
 			'alt'     => 'current_user_can()',
 			'version' => '2.0.0',
@@ -280,6 +284,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '',
 			'version' => '2.5.0',
 		),
+		'wp_clearcookie' => array(
+			'alt'     => 'wp_clear_auth_cookie()',
+			'version' => '2.5.0',
+		),
 		'wp_get_cookie_login' => array(
 			'alt'     => '',
 			'version' => '2.5.0',
@@ -436,6 +444,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'the_author_meta(\'last_name\')',
 			'version' => '2.8.0',
 		),
+		'the_author_login' => array(
+			'alt'     => 'the_author_meta(\'login\')',
+			'version' => '2.8.0',
+		),
 		'the_author_msn' => array(
 			'alt'     => 'the_author_meta(\'msn\')',
 			'version' => '2.8.0',
@@ -474,6 +486,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '_nx()',
 			'version' => '2.9.0',
 		),
+		'get_real_file_to_edit' => array(
+			'alt'     => '',
+			'version' => '2.9.0',
+		),
 		'make_url_footnote' => array(
 			'alt'     => '',
 			'version' => '2.9.0',
@@ -488,6 +504,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 
 		// WP 3.0.0.
+		'activate_sitewide_plugin' => array(
+			'alt'     => 'activate_plugin()',
+			'version' => '3.0.0',
+		),
 		'add_option_update_handler' => array(
 			'alt'     => 'register_setting()',
 			'version' => '3.0.0',
@@ -500,12 +520,20 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'esc_url()',
 			'version' => '3.0.0',
 		),
+		'clear_global_post_cache' => array(
+			'alt'     => 'clean_post_cache()',
+			'version' => '3.0.0',
+		),
 		'codepress_footer_js' => array(
 			'alt'     => '',
 			'version' => '3.0.0',
 		),
 		'codepress_get_lang' => array(
 			'alt'     => '',
+			'version' => '3.0.0',
+		),
+		'deactivate_sitewide_plugin' => array(
+			'alt'     => 'deactivate_plugin()',
 			'version' => '3.0.0',
 		),
 		'delete_usermeta' => array(
@@ -520,12 +548,28 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '',
 			'version' => '3.0.0',
 		),
+		'generate_random_password' => array(
+			'alt'     => 'wp_generate_password()',
+			'version' => '3.0.0',
+		),
 		'get_alloptions' => array(
 			'alt'     => 'wp_load_alloptions()',
 			'version' => '3.0.0',
 		),
+		'get_blog_list' => array(
+			'alt'     => 'wp_get_sites()',
+			'version' => '3.0.0',
+		),
+		'get_most_active_blogs' => array(
+			'alt'     => '',
+			'version' => '3.0.0',
+		),
 		'get_profile' => array(
 			'alt'     => 'get_the_author_meta()',
+			'version' => '3.0.0',
+		),
+		'get_user_details' => array(
+			'alt'     => 'get_user_by()',
 			'version' => '3.0.0',
 		),
 		'get_usermeta' => array(
@@ -536,6 +580,18 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'count_user_posts()',
 			'version' => '3.0.0',
 		),
+		'graceful_fail' => array(
+			'alt'     => 'wp_die()',
+			'version' => '3.0.0',
+		),
+		'is_main_blog' => array(
+			'alt'     => 'is_main_site()',
+			'version' => '3.0.0',
+		),
+		'is_site_admin' => array(
+			'alt'     => 'is_super_admin()',
+			'version' => '3.0.0',
+		),
 		'is_taxonomy' => array(
 			'alt'     => 'taxonomy_exists()',
 			'version' => '3.0.0',
@@ -544,8 +600,20 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'term_exists()',
 			'version' => '3.0.0',
 		),
+		'is_wpmu_sitewide_plugin' => array(
+			'alt'     => 'is_network_only_plugin()',
+			'version' => '3.0.0',
+		),
+		'mu_options' => array(
+			'alt'     => '',
+			'version' => '3.0.0',
+		),
 		'remove_option_update_handler' => array(
 			'alt'     => 'unregister_setting()',
+			'version' => '3.0.0',
+		),
+		'set_current_user' => array(
+			'alt'     => 'wp_set_current_user()',
 			'version' => '3.0.0',
 		),
 		'update_usermeta' => array(
@@ -556,6 +624,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '',
 			'version' => '3.0.0',
 		),
+		'validate_email' => array(
+			'alt'     => 'is_email()',
+			'version' => '3.0.0',
+		),
 		'wp_dropdown_cats' => array(
 			'alt'     => 'wp_dropdown_categories()',
 			'version' => '3.0.0',
@@ -564,10 +636,22 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'wp_constrain_dimensions()',
 			'version' => '3.0.0',
 		),
+		'wpmu_checkAvailableSpace' => array(
+			'alt'     => 'is_upload_space_available()',
+			'version' => '3.0.0',
+		),
+		'wpmu_menu' => array(
+			'alt'     => '',
+			'version' => '3.0.0',
+		),
 
 		// WP 3.1.0.
 		'get_author_user_ids' => array(
 			'alt'     => 'get_users()',
+			'version' => '3.1.0',
+		),
+		'get_dashboard_blog' => array(
+			'alt'     => '',
 			'version' => '3.1.0',
 		),
 		'get_editable_authors' => array(
@@ -596,6 +680,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 		'get_users_of_blog' => array(
 			'alt'     => 'get_users()',
+			'version' => '3.1.0',
+		),
+		'install_themes_feature_list' => array(
+			'alt'     => 'get_theme_feature_list()',
 			'version' => '3.1.0',
 		),
 		'is_plugin_page' => array(
@@ -639,8 +727,16 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => '',
 			'version' => '3.3.0',
 		),
+		'get_user_by_email' => array(
+			'alt'     => 'get_user_by(\'email\')',
+			'version' => '3.3.0',
+		),
 		'get_user_metavalues' => array(
 			'alt'     => '',
+			'version' => '3.3.0',
+		),
+		'get_userdatabylogin' => array(
+			'alt'     => 'get_user_by(\'login\')',
 			'version' => '3.3.0',
 		),
 		'index_rel_link' => array(
@@ -731,6 +827,14 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'wp_editor()',
 			'version' => '3.3.0',
 		),
+		'wpmu_admin_do_redirect' => array(
+			'alt'     => '',
+			'version' => '3.3.0',
+		),
+		'wpmu_admin_redirect_add_updated_param' => array(
+			'alt'     => '',
+			'version' => '3.3.0',
+		),
 
 		// WP 3.4.0.
 		'add_custom_background' => array(
@@ -765,6 +869,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'error_log()',
 			'version' => '3.4.0',
 		),
+		'display_theme' => array(
+			'alt'     => '',
+			'version' => '3.4.0',
+		),
 		'get_allowed_themes' => array(
 			'alt'     => 'wp_get_themes( array( \'allowed\' => true ) )',
 			'version' => '3.4.0',
@@ -775,6 +883,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 		'get_current_theme' => array(
 			'alt'     => 'wp_get_theme()',
+			'version' => '3.4.0',
+		),
+		'get_site_allowed_themes' => array(
+			'alt'     => 'WP_Theme::get_allowed_on_network()',
 			'version' => '3.4.0',
 		),
 		'get_theme' => array(
@@ -789,6 +901,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'wp_get_themes()',
 			'version' => '3.4.0',
 		),
+		'logIO' => array(
+			'alt'     => 'error_log()',
+			'version' => '3.4.0',
+		),
 		'remove_custom_background' => array(
 			'alt'     => 'remove_theme_support( \'custom-background\' )',
 			'version' => '3.4.0',
@@ -801,6 +917,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'update_post_cache()',
 			'version' => '3.4.0',
 		),
+		'wpmu_get_blog_allowedthemes' => array(
+			'alt'     => 'WP_Theme::get_allowed_on_site()',
+			'version' => '3.4.0',
+		),
 
 		// WP 3.4.1.
 		'wp_explain_nonce' => array(
@@ -809,6 +929,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 
 		// WP 3.5.0.
+		'_flip_image_resource' => array(
+			'alt'     => 'WP_Image_Editor::flip()',
+			'version' => '3.5.0',
+		),
 		'_get_post_ancestors' => array(
 			'alt'     => '',
 			'version' => '3.5.0',
@@ -819,6 +943,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 		'_media_button' => array(
 			'alt'     => '',
+			'version' => '3.5.0',
+		),
+		'_rotate_image_resource' => array(
+			'alt'     => 'WP_Image_Editor::rotate()',
 			'version' => '3.5.0',
 		),
 		'_save_post_hook' => array(
@@ -837,6 +965,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 			'alt'     => 'get_post()',
 			'version' => '3.5.0',
 		),
+		'get_udims' => array(
+			'alt'     => 'wp_constrain_dimensions()',
+			'version' => '3.5.0',
+		),
 		'image_resize' => array(
 			'alt'     => 'wp_get_image_editor()',
 			'version' => '3.5.0',
@@ -847,6 +979,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 		'user_pass_ok' => array(
 			'alt'     => 'wp_authenticate()',
+			'version' => '3.5.0',
+		),
+		'wp_cache_reset' => array(
+			'alt'     => '',
 			'version' => '3.5.0',
 		),
 		'wp_create_thumbnail' => array(
@@ -1124,6 +1260,10 @@ class WordPress_Sniffs_WP_DeprecatedFunctionsSniff extends WordPress_AbstractFun
 		),
 
 		// WP 4.6.0.
+		'post_form_autocomplete_off' => array(
+			'alt'     => '',
+			'version' => '4.6.0',
+		),
 		'wp_embed_handler_googlevideo' => array(
 			'alt'     => '',
 			'version' => '4.6.0',
