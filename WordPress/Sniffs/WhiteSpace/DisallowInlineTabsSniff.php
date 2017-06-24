@@ -79,7 +79,7 @@ class WordPress_Sniffs_WhiteSpace_DisallowInlineTabsSniff extends WordPress_Snif
 			}
 
 			$fix = $this->phpcsFile->addFixableError(
-				'Spaces must be used for alignment; tabs are not allowed',
+				'Spaces must be used for mid-line alignment; tabs are not allowed',
 				$i,
 				'NonIndentTabsUsed'
 			);
