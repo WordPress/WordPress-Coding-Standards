@@ -156,6 +156,14 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 						continue;
 					}
 
+					if ( $item['start'] <= ( $first_non_empty - 1 )
+						&& T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
+					) {
+						// Remove whitespace which would otherwise becoming trailing
+						// (as it gives problems with the fixed file).
+						$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
+					}
+
 					$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
 				}
 
