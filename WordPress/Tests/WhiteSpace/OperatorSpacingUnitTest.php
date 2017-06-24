@@ -26,6 +26,16 @@ class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUn
 		return array(
 			23 => 2,
 			28 => 2,
+			40 => 2,
+			41 => 2,
+			42 => 2,
+			43 => 2,
+			44 => 2,
+			47 => 2,
+			48 => 2,
+			49 => 2,
+			50 => 2,
+			51 => 2,
 		);
 
 	}
