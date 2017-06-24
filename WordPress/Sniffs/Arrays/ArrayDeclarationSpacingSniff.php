@@ -66,7 +66,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-
 		/*
 		 * Determine the array opener & closer.
 		 */
@@ -90,11 +89,97 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 			return;
 		}
 
-		// Check that there is a single space after the array opener.
+		/*
+		 * Check that associative arrays are always multi-line.
+		 */
+		$array_has_keys = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $opener, $closer );
+		if ( false !== $array_has_keys ) {
+
+			$array_items = $this->get_function_call_parameters( $stackPtr );
+
+			if ( ! empty( $array_items ) ) {
+				/*
+				 * Make sure the double arrow is for *this* array, not for a nested one.
+				 */
+				$array_has_keys = false; // Reset before doing more detailed check.
+				foreach ( $array_items as $item ) {
+					for ( $ptr = $item['start']; $ptr <= $item['end']; $ptr++ ) {
+						if ( T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
+							$array_has_keys = true;
+							break 2;
+						}
+
+						// Skip passed any nested arrays.
+						if ( isset( $this->targets[ $this->tokens[ $ptr ]['code'] ] ) ) {
+							$nested_array_open_close = $this->find_array_open_close( $ptr );
+							if ( false === $nested_array_open_close ) {
+								// Nested array open/close could not be determined.
+								continue;
+							}
+
+							$ptr = $nested_array_open_close['closer'];
+						}
+					}
+				}
+
+				if ( true === $array_has_keys ) {
+
+					$fix = $this->phpcsFile->addFixableError(
+						'When an array uses associative keys, each value should start on a new line.',
+						$closer,
+						'AssociativeKeyFound'
+					);
+
+					if ( true === $fix ) {
+
+						$this->phpcsFile->fixer->beginChangeset();
+
+						foreach ( $array_items as $item ) {
+							/*
+							 * Add a line break before the first non-empty token in the array item.
+							 * Prevents extraneous whitespace at the start of the line which could be
+							 * interpreted as alignment whitespace.
+							 */
+							$first_non_empty = $this->phpcsFile->findNext(
+								PHP_CodeSniffer_Tokens::$emptyTokens,
+								$item['start'],
+								( $item['end'] + 1 ),
+								true
+							);
+							if ( false === $first_non_empty ) {
+								continue;
+							}
+
+							if ( $item['start'] <= ( $first_non_empty - 1 )
+								&& T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
+							) {
+								// Remove whitespace which would otherwise becoming trailing
+								// (as it gives problems with the fixed file).
+								$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
+							}
+
+							$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
+						}
+
+						$this->phpcsFile->fixer->endChangeset();
+					}
+
+					// No need to check for spacing around parentheses as this array should be multi-line.
+					return;
+				}
+			}
+		}
+
+		/*
+		 * Check that there is a single space after the array opener and before the array closer.
+		 */
 		if ( T_WHITESPACE !== $this->tokens[ ( $opener + 1 ) ]['code'] ) {
 
-			$warning = 'Missing space after array opener.';
-			$fix     = $this->phpcsFile->addFixableError( $warning, $opener, 'NoSpaceAfterArrayOpener' );
+			$fix = $this->phpcsFile->addFixableError(
+				'Missing space after array opener.',
+				$opener,
+				'NoSpaceAfterArrayOpener'
+			);
 
 			if ( true === $fix ) {
 				$this->phpcsFile->fixer->addContent( $opener, ' ' );
@@ -115,8 +200,11 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 
 		if ( T_WHITESPACE !== $this->tokens[ ( $closer - 1 ) ]['code'] ) {
 
-			$warning = 'Missing space before array closer.';
-			$fix     = $this->phpcsFile->addFixableError( $warning, $closer, 'NoSpaceBeforeArrayCloser' );
+			$fix = $this->phpcsFile->addFixableError(
+				'Missing space before array closer.',
+				$closer,
+				'NoSpaceBeforeArrayCloser'
+			);
 
 			if ( true === $fix ) {
 				$this->phpcsFile->fixer->addContentBefore( $closer, ' ' );
@@ -132,83 +220,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 
 			if ( true === $fix ) {
 				$this->phpcsFile->fixer->replaceToken( ( $closer - 1 ), ' ' );
-			}
-		}
-
-		$array_has_keys = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $opener, $closer );
-		if ( false !== $array_has_keys ) {
-
-			$array_items = $this->get_function_call_parameters( $stackPtr );
-			if ( empty( $array_items ) ) {
-				// Strange, no array items found.
-				return;
-			}
-
-			/*
-			 * Make sure the double arrow is for *this* array, not for a nested one.
-			 */
-			$array_has_keys = false; // Reset before doing more detailed check.
-			foreach ( $array_items as $item ) {
-				for ( $ptr = $item['start']; $ptr <= $item['end']; $ptr++ ) {
-					if ( T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
-						$array_has_keys = true;
-						break 2;
-					}
-
-					// Skip passed any nested arrays.
-					if ( isset( $this->targets[ $this->tokens[ $ptr ]['code'] ] ) ) {
-						$nested_array_open_close = $this->find_array_open_close( $ptr );
-						if ( false === $nested_array_open_close ) {
-							// Nested array open/close could not be determined.
-							continue;
-						}
-						
-						$ptr = $nested_array_open_close['closer'];
-					}
-				}
-			}
-
-			if ( true === $array_has_keys ) {
-	
-				$fix = $this->phpcsFile->addFixableError(
-					'When an array uses associative keys, each value should start on a new line.',
-					$closer,
-					'AssociativeKeyFound'
-				);
-	
-				if ( true === $fix ) {
-	
-					$this->phpcsFile->fixer->beginChangeset();
-	
-					foreach( $array_items as $item ) {
-						/*
-						 * Add a line break before the first non-empty token in the array item.
-						 * Prevents extraneous whitespace at the start of the line which could be
-						 * interpreted as alignment whitespace.
-						 */
-						$first_non_empty = $this->phpcsFile->findNext(
-							PHP_CodeSniffer_Tokens::$emptyTokens,
-							$item['start'],
-							( $item['end'] + 1 ),
-							true
-						);
-						if ( false === $first_non_empty ) {
-							continue;
-						}
-
-						if ( $item['start'] <= ( $first_non_empty - 1 )
-							&& T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
-						) {
-							// Remove whitespace which would otherwise becoming trailing
-							// (as it gives problems with the fixed file).
-							$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
-						}
-
-						$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
-					}
-	
-					$this->phpcsFile->fixer->endChangeset();
-				}
 			}
 		}
 	}
