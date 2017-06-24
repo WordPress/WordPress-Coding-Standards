@@ -25,10 +25,12 @@ class WordPress_Tests_Arrays_ArrayDeclarationSpacingUnitTest extends AbstractSni
 			5 => 2,
 			8 => 2,
 			10 => 1,
-			13 => 6,
-			17 => 5,
+			13 => 4,
+			17 => 2,
 			19 => 1,
-			24 => 1,
+			23 => 1,
+			26 => 1,
+			29 => 1,
 		);
 	}
 

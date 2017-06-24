@@ -51,13 +51,7 @@
 	</rule>
 	<!-- Covers rule: For associative arrays, values should start on a new line.
 		 Also covers various single-line array whitespace issues. -->
-	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing">
-		<!-- Exclude the upstream checks which are already thrown by the
-			 WordPress.Arrays.ArrayDeclaration sniff. -->
-		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NotLowerCase"/>
-		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceAfterKeyword"/>
-		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.SpaceInEmptyArray"/>
-	</rule>
+	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
 
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
 	<rule ref="WordPress.WhiteSpace.DisallowInlineTabs"/>
