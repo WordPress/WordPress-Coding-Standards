@@ -36,7 +36,7 @@ class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
 	 *
 	 * @var string
 	 */
-	const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif))#i';
+	const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif|pot))#i';
 
 	/**
 	 * Regex to match a large number or spelling variations of WordPress in class names.
