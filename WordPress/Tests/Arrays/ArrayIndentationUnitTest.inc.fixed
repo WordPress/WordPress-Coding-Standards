@@ -79,3 +79,10 @@ $mixed_2 = array(
 		),
 	'something', 'else',
 );
+
+// Issue 998: don't fix the indentation for the closer if it's not on its own line.
+$a = array(
+	'foo' => bar(1, 29));
+
+$a = array(
+	'foo' => bar(1, 29) );

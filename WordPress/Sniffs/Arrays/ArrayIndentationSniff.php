@@ -119,13 +119,31 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 				$found,
 			);
 
-			$fix = $this->phpcsFile->addFixableError( $error, $closer, 'CloseBraceNotAligned', $data );
-			if ( true === $fix ) {
-				if ( 0 === $found ) {
-					$this->phpcsFile->fixer->addContent( ( $closer - 1 ), $indentation );
-				} else {
-					$this->phpcsFile->fixer->replaceToken( ( $closer - 1 ), $indentation );
+			/**
+			 * Report & fix the issue if the close brace is on its own line with
+			 * nothing or only indentation whitespace before it.
+			 */
+			if ( 0 === $found
+				|| ( T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
+					&& 1 === $this->tokens[ ( $closer - 1 ) ]['column'] )
+			) {
+
+				$fix = $this->phpcsFile->addFixableError( $error, $closer, 'CloseBraceNotAligned', $data );
+				if ( true === $fix ) {
+					if ( 0 === $found ) {
+						$this->phpcsFile->fixer->addContentBefore( $closer, $indentation );
+					} else {
+						$this->phpcsFile->fixer->replaceToken( ( $closer - 1 ), $indentation );
+					}
 				}
+			} else {
+				/*
+				 * Otherwise, only report the error, don't try and fix it (yet).
+				 *
+				 * It will get corrected in a future loop of the fixer once the closer
+				 * has been moved to its own line by the `ArrayDeclaration` sniff.
+				 */
+				$this->phpcsFile->addError( $error, $closer, 'CloseBraceNotAligned', $data );
 			}
 		}
 
@@ -149,7 +167,10 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 
 			// Bow out from reporting and fixing mixed multi-line/single-line arrays.
 			// That is handled by the ArrayDeclarationSniff.
-			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_last_item ]['line'] ) {
+			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_last_item ]['line']
+				|| ( 1 !== $this->tokens[ $first_content ]['column']
+					&& T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )
+			) {
 				return $closer;
 			}
 
@@ -176,7 +197,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 				$fix = $this->phpcsFile->addFixableError( $error, $first_content, 'ItemNotAligned', $data );
 				if ( true === $fix ) {
 					if ( 0 === $found ) {
-						$this->phpcsFile->fixer->addContent( ( $first_content - 1 ), $expected_indent );
+						$this->phpcsFile->fixer->addContentBefore( $first_content, $expected_indent );
 					} else {
 						$this->phpcsFile->fixer->replaceToken( ( $first_content - 1 ), $expected_indent );
 					}
