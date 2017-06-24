@@ -7,12 +7,14 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Squiz_Sniffs_Arrays_ArrayDeclarationSniff not found' );
-}
-
 /**
- * Enforces WordPress array format, based upon Squiz code.
+ * Enforces WordPress array spacing format.
+ *
+ * WordPress specific checks which are not covered by the `WordPress.Arrays.ArrayDeclaration`/
+ * `Squiz.Arrays.ArrayDeclaration` sniff.
+ *
+ * - Checks for one space after the array opener / before the array closer in single-line arrays.
+ * - Checks that associative arrays are multi-line.
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
  *
@@ -22,88 +24,109 @@ if ( ! class_exists( 'Squiz_Sniffs_Arrays_ArrayDeclarationSniff', true ) ) {
  *                 from the WordPress_Sniffs_Arrays_ArrayDeclaration sniff into
  *                 this sniff.
  *                 - Added sniffing & fixing for associative arrays.
- *
- * {@internal This sniff only extends the upstream sniff to get the benefit of the
- * process logic which routes the processing to the single-line/multi-line methods.
- * Other than that, the actual sniffing from the upstream sniff is disregarded.
- * In other words: no real syncing with upstream necessary.}}
- *
- * Last synced with parent class October 5 2016 at commit ea32814346ecf29791de701b3fa464a9ca43f45b.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php
+ * @since   0.12.0 Decoupled this sniff from the upstream sniff completely.
+ *                 This sniff now extends the `WordPress_Sniff` instead.
  */
-class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends Squiz_Sniffs_Arrays_ArrayDeclarationSniff {
+class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sniff {
 
 	/**
-	 * Process a single line array.
+	 * Returns an array of tokens this test wants to listen for.
 	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Moved from WordPress_Sniffs_Arrays_ArrayDeclaration to this sniff.
+	 * @since 0.12.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
-	 * @param int                  $stackPtr   The position of the current token
-	 *                                         in the stack passed in $tokens.
-	 * @param int                  $arrayStart Position of the array opener in the token stack.
-	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
+	 * @return array
 	 */
-	public function processSingleLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
+	public function register() {
+		return array(
+			T_ARRAY,
+			T_OPEN_SHORT_ARRAY,
+		);
+	}
 
-		// This array is empty, so the below checks aren't necessary.
-		if ( ( $arrayStart + 1 ) === $arrayEnd ) {
+	/**
+	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @since 0.12.0 The actual checks contained in this method used to
+	 *               be in the `processSingleLineArray()` method.
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
+	 */
+	public function process_token( $stackPtr ) {
+
+		/*
+		 * Determine the array opener & closer.
+		 */
+		$array_open_close = $this->find_array_open_close( $stackPtr );
+		if ( false === $array_open_close ) {
+			// Array open/close could not be determined.
 			return;
 		}
 
-		$tokens = $phpcsFile->getTokens();
+		$opener = $array_open_close['opener'];
+		$closer = $array_open_close['closer'];
+
+		// This array is empty, so the below checks aren't necessary.
+		if ( ( $opener + 1 ) === $closer ) {
+			return;
+		}
+
+		// We're only interested in single-line arrays.
+		if ( $this->tokens[ $opener ]['line'] !== $this->tokens[ $closer ]['line'] ) {
+			return;
+		}
 
 		// Check that there is a single space after the array opener.
-		if ( T_WHITESPACE !== $tokens[ ( $arrayStart + 1 ) ]['code'] ) {
+		if ( T_WHITESPACE !== $this->tokens[ ( $opener + 1 ) ]['code'] ) {
 
 			$warning = 'Missing space after array opener.';
-			$fix     = $phpcsFile->addFixableError( $warning, $arrayStart, 'NoSpaceAfterArrayOpener' );
+			$fix     = $this->phpcsFile->addFixableError( $warning, $opener, 'NoSpaceAfterArrayOpener' );
 
 			if ( true === $fix ) {
-				$phpcsFile->fixer->addContent( $arrayStart, ' ' );
+				$this->phpcsFile->fixer->addContent( $opener, ' ' );
 			}
-		} elseif ( ' ' !== $tokens[ ( $arrayStart + 1 ) ]['content'] ) {
+		} elseif ( ' ' !== $this->tokens[ ( $opener + 1 ) ]['content'] ) {
 
-			$fix = $phpcsFile->addFixableError(
+			$fix = $this->phpcsFile->addFixableError(
 				'Expected 1 space after array opener, found %s.',
-				$arrayStart,
+				$opener,
 				'SpaceAfterArrayOpener',
-				array( strlen( $tokens[ ( $arrayStart + 1 ) ]['content'] ) )
+				array( strlen( $this->tokens[ ( $opener + 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
-				$phpcsFile->fixer->replaceToken( ( $arrayStart + 1 ), ' ' );
+				$this->phpcsFile->fixer->replaceToken( ( $opener + 1 ), ' ' );
 			}
 		}
 
-		if ( T_WHITESPACE !== $tokens[ ( $arrayEnd - 1 ) ]['code'] ) {
+		if ( T_WHITESPACE !== $this->tokens[ ( $closer - 1 ) ]['code'] ) {
 
 			$warning = 'Missing space before array closer.';
-			$fix     = $phpcsFile->addFixableError( $warning, $arrayEnd, 'NoSpaceBeforeArrayCloser' );
+			$fix     = $this->phpcsFile->addFixableError( $warning, $closer, 'NoSpaceBeforeArrayCloser' );
 
 			if ( true === $fix ) {
-				$phpcsFile->fixer->addContentBefore( $arrayEnd, ' ' );
+				$this->phpcsFile->fixer->addContentBefore( $closer, ' ' );
 			}
-		} elseif ( ' ' !== $tokens[ ( $arrayEnd - 1 ) ]['content'] ) {
+		} elseif ( ' ' !== $this->tokens[ ( $closer - 1 ) ]['content'] ) {
 
-			$fix = $phpcsFile->addFixableError(
+			$fix = $this->phpcsFile->addFixableError(
 				'Expected 1 space before array closer, found %s.',
-				$arrayEnd,
+				$closer,
 				'SpaceBeforeArrayCloser',
-				array( strlen( $tokens[ ( $arrayEnd - 1 ) ]['content'] ) )
+				array( strlen( $this->tokens[ ( $closer - 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
-				$phpcsFile->fixer->replaceToken( ( $arrayEnd - 1 ), ' ' );
+				$this->phpcsFile->fixer->replaceToken( ( $closer - 1 ), ' ' );
 			}
 		}
 
-		$array_has_keys = $phpcsFile->findNext( T_DOUBLE_ARROW, $arrayStart, $arrayEnd );
+		$array_has_keys = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $opener, $closer );
 		if ( false !== $array_has_keys ) {
-			$fix = $phpcsFile->addFixableError(
+			$fix = $this->phpcsFile->addFixableError(
 				'When an array uses associative keys, each value should start on a new line.',
-				$arrayEnd,
+				$closer,
 				'AssociativeKeyFound'
 			);
 
@@ -111,36 +134,20 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends Squiz_Sniffs_
 				// Only deal with one nesting level per loop to have the best chance of getting the indentation right.
 				static $current_loop = array();
 
-				if ( ! isset( $current_loop[ $phpcsFile->fixer->loops ] ) ) {
-					$current_loop[ $phpcsFile->fixer->loops ] = array_fill( 0, $phpcsFile->numTokens, false );
+				if ( ! isset( $current_loop[ $this->phpcsFile->fixer->loops ] ) ) {
+					$current_loop[ $this->phpcsFile->fixer->loops ] = array_fill( 0, $this->phpcsFile->numTokens, false );
 				}
 
-				if ( false === $current_loop[ $phpcsFile->fixer->loops ][ $arrayStart ] ) {
-					for ( $i = $arrayStart; $i <= $arrayEnd; $i++ ) {
-						$current_loop[ $phpcsFile->fixer->loops ][ $i ] = true;
+				if ( false === $current_loop[ $this->phpcsFile->fixer->loops ][ $opener ] ) {
+					for ( $i = $opener; $i <= $closer; $i++ ) {
+						$current_loop[ $this->phpcsFile->fixer->loops ][ $i ] = true;
 					}
 
-					$this->fix_associative_array( $phpcsFile, $arrayStart, $arrayEnd );
+					$this->fix_associative_array( $this->phpcsFile, $opener, $closer );
 				}
 			}
 		}
 	}
-
-	/**
-	 * (Don't) Process a multi-line array.
-	 *
-	 * {@internal Multi-line arrays are handled by the upstream sniff via the
-	 * WordPress_Sniffs_Arrays_ArrayDeclaration sniff.}}
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile  The file being scanned.
-	 * @param int                  $stackPtr   The position of the current token
-	 *                                         in the stack passed in $tokens.
-	 * @param int                  $arrayStart Position of the array opener in the token stack.
-	 * @param int                  $arrayEnd   Position of the array closer in the token stack.
-	 */
-	public function processMultiLineArray( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $arrayStart, $arrayEnd ) {
-		return;
-	} // End processMultiLineArray().
 
 	/**
 	 * Create & apply a changeset for a single line array with associative keys.
