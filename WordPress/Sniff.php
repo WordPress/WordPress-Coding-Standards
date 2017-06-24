@@ -2021,6 +2021,45 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
+	 *
+	 * @param int $stackPtr The stack pointer to the array token.
+	 *
+	 * @return array|bool Array with two keys `opener`, `closer` or false if
+	 *                    either or these could not be determined.
+	 */
+	protected function find_array_open_close( $stackPtr ) {
+		/*
+		 * Determine the array opener & closer.
+		 */
+		if ( T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
+			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
+				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
+
+				if ( isset( $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
+					$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+				}
+			}
+		} else {
+			// Short array syntax.
+			$opener = $stackPtr;
+
+			if ( isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+			}
+		}
+
+		if ( isset( $opener, $closer ) ) {
+			return array(
+				'opener' => $opener,
+				'closer' => $closer,
+			);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Determine the namespace name an arbitrary token lives in.
 	 *
 	 * @since 0.10.0
