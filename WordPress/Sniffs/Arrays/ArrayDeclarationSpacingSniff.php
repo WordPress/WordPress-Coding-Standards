@@ -30,6 +30,21 @@
 class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sniff {
 
 	/**
+	 * Token this sniff targets.
+	 *
+	 * Also used for distinguishing between the array and an array value
+	 * which is also an array.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $targets = array(
+		T_ARRAY            => T_ARRAY,
+		T_OPEN_SHORT_ARRAY => T_OPEN_SHORT_ARRAY,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.12.0
@@ -37,10 +52,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
-		);
+		return $this->targets;
 	}
 
 	/**
@@ -66,6 +78,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 
 		$opener = $array_open_close['opener'];
 		$closer = $array_open_close['closer'];
+		unset( $array_open_close );
 
 		// This array is empty, so the below checks aren't necessary.
 		if ( ( $opener + 1 ) === $closer ) {
@@ -124,50 +137,78 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 
 		$array_has_keys = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $opener, $closer );
 		if ( false !== $array_has_keys ) {
-			$fix = $this->phpcsFile->addFixableError(
-				'When an array uses associative keys, each value should start on a new line.',
-				$closer,
-				'AssociativeKeyFound'
-			);
 
-			if ( true === $fix ) {
+			$array_items = $this->get_function_call_parameters( $stackPtr );
+			if ( empty( $array_items ) ) {
+				// Strange, no array items found.
+				return;
+			}
 
-				$array_items = $this->get_function_call_parameters( $stackPtr );
-				if ( empty( $array_items ) ) {
-					// Strange, no array items found.
-					return;
-				}
-
-				$this->phpcsFile->fixer->beginChangeset();
-
-				foreach( $array_items as $item ) {
-					/*
-					 * Add a line break before the first non-empty token in the array item.
-					 * Prevents extraneous whitespace at the start of the line which could be
-					 * interpreted as alignment whitespace.
-					 */
-					$first_non_empty = $this->phpcsFile->findNext(
-						PHP_CodeSniffer_Tokens::$emptyTokens,
-						$item['start'],
-						( $item['end'] + 1 ),
-						true
-					);
-					if ( false === $first_non_empty ) {
-						continue;
+			/*
+			 * Make sure the double arrow is for *this* array, not for a nested one.
+			 */
+			$array_has_keys = false; // Reset before doing more detailed check.
+			foreach ( $array_items as $item ) {
+				for ( $ptr = $item['start']; $ptr <= $item['end']; $ptr++ ) {
+					if ( T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
+						$array_has_keys = true;
+						break 2;
 					}
 
-					if ( $item['start'] <= ( $first_non_empty - 1 )
-						&& T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
-					) {
-						// Remove whitespace which would otherwise becoming trailing
-						// (as it gives problems with the fixed file).
-						$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
+					// Skip passed any nested arrays.
+					if ( isset( $this->targets[ $this->tokens[ $ptr ]['code'] ] ) ) {
+						$nested_array_open_close = $this->find_array_open_close( $ptr );
+						if ( false === $nested_array_open_close ) {
+							// Nested array open/close could not be determined.
+							continue;
+						}
+						
+						$ptr = $nested_array_open_close['closer'];
 					}
-
-					$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
 				}
+			}
 
-				$this->phpcsFile->fixer->endChangeset();
+			if ( true === $array_has_keys ) {
+	
+				$fix = $this->phpcsFile->addFixableError(
+					'When an array uses associative keys, each value should start on a new line.',
+					$closer,
+					'AssociativeKeyFound'
+				);
+	
+				if ( true === $fix ) {
+	
+					$this->phpcsFile->fixer->beginChangeset();
+	
+					foreach( $array_items as $item ) {
+						/*
+						 * Add a line break before the first non-empty token in the array item.
+						 * Prevents extraneous whitespace at the start of the line which could be
+						 * interpreted as alignment whitespace.
+						 */
+						$first_non_empty = $this->phpcsFile->findNext(
+							PHP_CodeSniffer_Tokens::$emptyTokens,
+							$item['start'],
+							( $item['end'] + 1 ),
+							true
+						);
+						if ( false === $first_non_empty ) {
+							continue;
+						}
+
+						if ( $item['start'] <= ( $first_non_empty - 1 )
+							&& T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
+						) {
+							// Remove whitespace which would otherwise becoming trailing
+							// (as it gives problems with the fixed file).
+							$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
+						}
+
+						$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
+					}
+	
+					$this->phpcsFile->fixer->endChangeset();
+				}
 			}
 		}
 	}

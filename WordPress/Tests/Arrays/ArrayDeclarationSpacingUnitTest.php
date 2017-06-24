@@ -30,6 +30,7 @@ class WordPress_Tests_Arrays_ArrayDeclarationSpacingUnitTest extends AbstractSni
 			19 => 1,
 			23 => 1,
 			26 => 1,
+			29 => 1,
 		);
 	}
 
