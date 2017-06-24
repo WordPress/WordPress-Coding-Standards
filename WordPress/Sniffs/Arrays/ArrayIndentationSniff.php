@@ -59,25 +59,14 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 		/*
 		 * Determine the array opener & closer.
 		 */
-		if ( T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
-			if ( ! isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
-				return; // Live coding.
-			}
-			$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
-
-			if ( ! isset( $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
-				return; // Live coding.
-			}
-			$closer = $this->tokens[ $opener ]['parenthesis_closer'];
-		} else {
-			// Short array syntax.
-			$opener = $stackPtr;
-
-			if ( ! isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
-				return; // Live coding.
-			}
-			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+		$array_open_close = $this->find_array_open_close( $stackPtr );
+		if ( false === $array_open_close ) {
+			// Array open/close could not be determined.
+			return;
 		}
+
+		$opener = $array_open_close['opener'];
+		$closer = $array_open_close['closer'];
 
 		if ( $this->tokens[ $opener ]['line'] === $this->tokens[ $closer ]['line'] ) {
 			// Not interested in single line arrays.
