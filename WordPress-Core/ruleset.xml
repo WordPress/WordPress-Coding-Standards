@@ -45,10 +45,18 @@
 	<!-- Covers rule: Use real tabs and not spaces. -->
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 
-	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
+	<!-- Generic array layout check. -->
 	<rule ref="WordPress.Arrays.ArrayDeclaration">
 		<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>
+		<exclude name="WordPress.Arrays.ArrayDeclaration.CommaAfterLast"/>
+		<exclude name="WordPress.Arrays.ArrayDeclaration.NoSpaceAfterComma"/>
+		<exclude name="WordPress.Arrays.ArrayDeclaration.SpaceAfterComma"/>
+		<exclude name="WordPress.Arrays.ArrayDeclaration.SpaceBeforeComma"/>
 	</rule>
+
+	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
+	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
+
 	<!-- Covers rule: For associative arrays, values should start on a new line.
 		 Also covers various single-line array whitespace issues. -->
 	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
