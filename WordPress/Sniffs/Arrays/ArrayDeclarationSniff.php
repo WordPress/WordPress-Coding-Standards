@@ -142,6 +142,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 			$currentEntry = array();
 
 			if ($tokens[$nextToken]['code'] === T_COMMA) {
+				/*
 				$stackPtrCount = 0;
 				if (isset($tokens[$stackPtr]['nested_parenthesis']) === true) {
 					$stackPtrCount = count( $tokens[ $stackPtr ]['nested_parenthesis'] );
@@ -163,7 +164,6 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					continue;
 				}
 
-				/*
 				if ($keyUsed === true && $tokens[$lastToken]['code'] === T_COMMA) {
 					$error = 'No key specified for array entry; first entry specifies key';
 					$phpcsFile->addError( $error, $nextToken, 'NoKeySpecified' );
@@ -172,6 +172,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				*/
 
 				if ($keyUsed === false) {
+					/*
 					if ($tokens[($nextToken - 1)]['code'] === T_WHITESPACE) {
 						$content = $tokens[ ( $nextToken - 2 ) ]['content'];
 						if ( $tokens[ ( $nextToken - 1 ) ]['content'] === $phpcsFile->eolChar ) {
@@ -191,6 +192,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 							$phpcsFile->fixer->replaceToken( ( $nextToken - 1 ), '' );
 						}
 					}
+					*/
 
 					$valueContent = $phpcsFile->findNext(
 						PHP_CodeSniffer_Tokens::$emptyTokens,
@@ -200,7 +202,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					);
 
 					$indices[]  = array( 'value' => $valueContent );
-					$singleUsed = true;
+					// $singleUsed = true;
 				}//end if
 
 				$lastToken = $nextToken;
@@ -320,6 +322,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 				true
 			);
 
+			/*
 			if ($tokens[$trailingContent]['code'] !== T_COMMA) {
 				$phpcsFile->recordMetric( $stackPtr, 'Array end comma', 'no' );
 				$error = 'Comma required after last value in array declaration';
@@ -330,6 +333,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 			} else {
 				$phpcsFile->recordMetric( $stackPtr, 'Array end comma', 'yes' );
 			}
+			*/
 
 			$lastValueLine = false;
 			foreach ( $indices as $value ) {
@@ -531,6 +535,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 			*/
 
 			// Check each line ends in a comma.
+			/*
 			$valueLine = $tokens[ $index['value'] ]['line'];
 			$nextComma = false;
 			for ( $i = $index['value']; $i < $arrayEnd; $i++ ) {
@@ -604,6 +609,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSniff extends Squiz_Sniffs_Arrays_
 					$phpcsFile->fixer->replaceToken( ( $nextComma - 1 ), '' );
 				}
 			}
+			*/
 		}//end foreach
 
 	}//end processMultiLineArray()
