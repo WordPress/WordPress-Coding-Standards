@@ -47,7 +47,7 @@ The WordPress Coding Standards are currently [not compatible with the upcoming P
 
 ### Composer
 
-Standards can be installed with [Composer](https://getcomposer.org/) dependency manager:
+Standards can be installed with the [Composer](https://getcomposer.org/) dependency manager:
 
     composer create-project wp-coding-standards/wpcs --no-dev
 
@@ -59,6 +59,16 @@ Running this command will:
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
 
 For convenience of using `phpcs` as global command you might want to add path to `wpcs/vendor/bin` directory to a `PATH` environment of your operating system.
+
+#### Installing WPCS as a dependency
+
+When installing the WordPress Coding Standards as a dependency in a larger project, the above mentioned step 3 will not be executed automatically.
+
+There are two actively maintained Composer plugins which can handle the registration of standards with PHP_CodeSniffer for you:
+* [composer-phpcodesniffer-standards-plugin](https://github.com/higidi/composer-phpcodesniffer-standards-plugin)
+* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer)
+
+It is strongly suggested to `require` one of these plugins in your project to handle the registration of external standards with PHPCS for you.
 
 ### Standalone
 
