@@ -11,19 +11,18 @@
 	<exclude-pattern>/docroot/wp-content/plugins/*</exclude-pattern>
 	<exclude-pattern>*.twig</exclude-pattern>
 
-	<!-- Exclude Composer Vendor directory. -->
+	<!-- Exclude the Composer Vendor directory. -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
 
-	<!--
-	We may also want to to include all the rules in a standard.
-	-->
+	<!-- Include the WordPress-Extra standard. -->
 	<rule ref="WordPress-Extra">
 		<!--
 		We may want a middle ground though. The best way to do this is add the
 		entire ruleset, then rule by rule, remove ones that don't suit a project.
-		We can do this by running `phpcs` with the '-s' flag, to see the names of
-		the different Sniffs, as their rules are broken. From here, we can opt to
-		exclude problematic sniffs like so.
+		We can do this by running `phpcs` with the '-s' flag, which allows us to
+		see the names of the sniffs reporting errors.
+		Once we know the sniff names, we can opt to exclude sniffs which don't
+		suit our project like so.
 		-->
 
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
@@ -67,6 +66,12 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array" value="my_prefix"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.DeprecatedClasses">
+		<properties>
+			<property name="minimum_supported_version" value="4.5"/>
 		</properties>
 	</rule>
 
