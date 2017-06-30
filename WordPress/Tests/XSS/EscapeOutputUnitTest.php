@@ -64,6 +64,9 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			206 => 1,
 			207 => 1,
 			212 => ( PHP_VERSION_ID < 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			223 => 1,
+			225 => 1,
+			226 => 1,
 		);
 
 	} // end getErrorList()

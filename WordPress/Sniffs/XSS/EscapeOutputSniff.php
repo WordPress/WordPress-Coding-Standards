@@ -15,9 +15,11 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   2013-06-11
- * @since   0.4.0 This class now extends WordPress_Sniff.
- * @since   0.5.0 The various function list properties which used to be contained in this class
- *                have been moved to the WordPress_Sniff parent class.
+ * @since   0.4.0  This class now extends WordPress_Sniff.
+ * @since   0.5.0  The various function list properties which used to be contained in this class
+ *                 have been moved to the WordPress_Sniff parent class.
+ * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
+ *                 echo tags `<?=`.
  */
 class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
@@ -93,6 +95,8 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	/**
 	 * List of names of the tokens representing PHP magic constants.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @var array
 	 */
 	private $magic_constant_tokens = array(
@@ -150,13 +154,28 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
+
+		$tokens = array(
 			T_ECHO,
 			T_PRINT,
 			T_EXIT,
 			T_STRING,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 
+		/*
+		 * Check whether short open echo tags are disabled and if so, register the
+		 * T_INLINE_HTML token which is how short open tags are being handled in that case.
+		 *
+		 * In PHP < 5.4, support for short open echo tags depended on whether the
+		 * `short_open_tag` ini directive was set to `true`.
+		 * For PHP >= 5.4, the `short_open_tag` no longer affects the short open
+		 * echo tags and these are now always enabled.
+		 */
+		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			$tokens[] = T_INLINE_HTML;
+		}
+		return $tokens;
 	}
 
 	/**
@@ -191,6 +210,24 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
+		} elseif ( T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+			// Skip if no PHP short_open_tag is found in the string.
+			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
+				return;
+			}
+
+			// Report on what is very likely a PHP short open echo tag outputting a variable.
+			if ( preg_match( '`\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:(?:->\S+|\[[^\]]+\]))*)[\s]*;?[\s]*\?\>`', $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
+				$this->phpcsFile->addError(
+					'Expected next thing to be an escaping function, not %s.',
+					$stackPtr,
+					'OutputNotEscaped',
+					array( $matches[1] )
+				);
+				return;
+			}
+
+			return;
 		}
 
 		// Checking for the ignore comment, ex: //xss ok.
@@ -199,7 +236,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		}
 
 		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
-			$error = $this->phpcsFile->addError( "Expected next thing to be an escaping function (like %s), not '%s'", $stackPtr, 'UnsafePrintingFunction', array( $this->unsafePrintingFunctions[ $function ], $function ) );
+			$error = $this->phpcsFile->addError(
+				"Expected next thing to be an escaping function (like %s), not '%s'",
+				$stackPtr,
+				'UnsafePrintingFunction',
+				array( $this->unsafePrintingFunctions[ $function ], $function )
+			);
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {

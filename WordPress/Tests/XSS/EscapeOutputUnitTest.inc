@@ -218,3 +218,10 @@ echo 1.234; // Ok.
 echo ( 1.234 + 10 + 2.5 ); // Ok.
 echo 10 % 2; // Ok.
 echo 8 * 1.2; // Ok.
+
+?>
+<?= $var ?><!-- Bad. -->
+<?= esc_html( $var ); ?><!-- Ok. -->
+<?= $var['foo']; ?><!-- Bad. -->
+<?= $var->foo ?><!-- Bad. -->
+<?php
