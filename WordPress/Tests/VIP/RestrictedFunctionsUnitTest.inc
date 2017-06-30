@@ -55,10 +55,10 @@ get_posts(); // Warning.
 wp_get_recent_posts(); // Warning.
 
 get_children(); // Warning.
-wp_get_post_terms(); // Error.
-wp_get_post_categories(); // Error.
-wp_get_post_tags(); // Error.
-wp_get_object_terms(); // Error.
+
+
+
+
 term_exists(); // Error.
 count_user_posts(); // Error.
 wp_old_slug_redirect(); // Error.
