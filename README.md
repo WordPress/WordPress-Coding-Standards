@@ -58,13 +58,13 @@ Running this command will:
 3. Register WordPress standards in PHP_CodeSniffer configuration.
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
 
-For the convenience of using `phpcs` as global command, you might want to add path to `wpcs/vendor/bin` directory to a `PATH` environment of your operating system.
+For the convenience of using `phpcs` as a global command, you may want to add the `wpcs/vendor/bin` path to a PATH environment in your operating system.
 
 ### Standalone
 
 1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, PEAR, or Git checkout).
 
-   Do ensure, if for example, you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV), that PHP_CodeSniffer's version matches our [requirements](#requirements).
+   Do ensure that PHP_CodeSniffer's version matches our requirements(#requirements), if, for example, you're using VVV(https://github.com/Varying-Vagrant-Vagrants/VVV).
 
 2. Clone WordPress standards repository:
 
