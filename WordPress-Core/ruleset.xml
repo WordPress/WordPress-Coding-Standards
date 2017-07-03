@@ -105,6 +105,22 @@
 
 	<!--
 	#############################################################################
+	Handbook: PHP - Opening and Closing PHP Tags.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#opening-and-closing-php-tags
+	#############################################################################
+	-->
+	<!-- Covers rule: When embedding multi-line PHP snippets within a HTML block, the
+	     PHP open and close tags must be on a line by themselves. -->
+	<rule ref="Squiz.PHP.EmbeddedPhp">
+		<exclude name="Squiz.PHP.EmbeddedPhp.SpacingBefore"/>
+		<exclude name="Squiz.PHP.EmbeddedPhp.Indent"/>
+		<exclude name="Squiz.PHP.EmbeddedPhp.OpenTagIndent"/>
+		<exclude name="Squiz.PHP.EmbeddedPhp.SpacingAfter"/>
+	</rule>
+
+
+	<!--
+	#############################################################################
 	Handbook: PHP - No Shorthand PHP Tags.
 	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#no-shorthand-php-tags
 	#############################################################################
