@@ -21,7 +21,7 @@
     + [Atom](#atom)
     + [Visual Studio](#visual-studio)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
-    + [[Travis CI](https://travis-ci.org/)](#-travis-ci--https---travis-ciorg--)
+    + [Travis CI](#travis-ci)
 * [Fixing errors or whitelisting them](#fixing-errors-or-whitelisting-them)
 * [Contributing](#contributing)
 * [License](#license)
