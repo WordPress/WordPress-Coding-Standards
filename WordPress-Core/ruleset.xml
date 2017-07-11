@@ -67,6 +67,7 @@
 		<!-- Prevent duplicate messages for the same issue. Covered by other sniffs. -->
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.NotLower"/>
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BreakNotNewLine"/>
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLine"/>
 	</rule>
 
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
@@ -211,17 +212,6 @@
 
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
-
-
-	<!--
-	#############################################################################
-	Handbook: PHP - Blank Lines.
-	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#blank-lines
-	#############################################################################
-	-->
-	<!-- Rule: The first line of a new code block should not be blank.
-	           This includes classes, functions, and all flow control blocks. -->
-	<!-- Covered by several different sniffs, but largely covered. -->
 
 
 	<!--
