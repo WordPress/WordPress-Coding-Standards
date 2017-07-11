@@ -61,6 +61,15 @@
 		 Also covers various single-line array whitespace issues. -->
 	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
 
+	<!-- Covers rule: For switch structures case should indent one tab from the
+	     switch statement and break one tab from the case statement. -->
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration">
+		<!-- Prevent duplicate messages for the same issue. Covered by other sniffs. -->
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration.NotLower"/>
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BreakNotNewLine"/>
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLine"/>
+	</rule>
+
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
 	<rule ref="WordPress.WhiteSpace.DisallowInlineTabs"/>
 
@@ -323,6 +332,10 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+
+	<!-- Rule: In a switch statement... If a case contains a block, then falls through
+	     to the next block, this must be explicitly commented. -->
+	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
 
 	<!--
