@@ -25,3 +25,15 @@
 				$expected_value => 'data',
 				$found			=> 'more_data', // Bad.
 			);
+
+/*
+ * Test that the tab replacements do not negatively influence the existing mid-line alignments.
+ */
+$a		  = true;
+$aa		  = true;
+$aaa	  = true;
+$aaaa	  = true;
+$aaaaa	  = true;
+$aaaaaa	  = true;
+$aaaaaaa  = true;
+$aaaaaaaa = true;

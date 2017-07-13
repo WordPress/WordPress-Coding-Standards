@@ -16,6 +16,17 @@
 class WordPress_Tests_WhiteSpace_DisallowInlineTabsUnitTest extends AbstractSniffUnitTest {
 
 	/**
+	 * Get a list of CLI values to set before the file is tested.
+	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
+	 * @return array
+	 */
+	public function getCliValues( $testFile ) {
+		return array( '--tab-width=4' );
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @return array <int line number> => <int number of errors>
@@ -27,6 +38,12 @@ class WordPress_Tests_WhiteSpace_DisallowInlineTabsUnitTest extends AbstractSnif
 			23 => 1,
 			24 => 1,
 			26 => 1,
+			32 => 1,
+			33 => 1,
+			34 => 1,
+			35 => 1,
+			36 => 1,
+			37 => 1,
 		);
 	}
 
