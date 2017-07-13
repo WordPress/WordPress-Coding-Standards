@@ -157,8 +157,6 @@ class WordPress_Sniffs_Arrays_CommaAfterArrayItemSniff extends WordPress_Sniff {
 				for ( $i = $item['end']; $i > $last_content; $i-- ) {
 
 					if ( T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
-						$this->phpcsFile->fixer->replaceToken( $i, '' );
-
 						if ( $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar ) {
 							$newlines++;
 						} else {
