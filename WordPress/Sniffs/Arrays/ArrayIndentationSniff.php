@@ -264,12 +264,10 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 			}
 
 			$found_spaces_on_line2    = $this->get_indentation_size( $first_content_on_line2 );
-			$line2_indent_diff        = 0;
 			$expected_spaces_on_line2 = $expected_spaces;
 
 			if ( $found_spaces < $found_spaces_on_line2 ) {
-				$line2_indent_diff         = ( $found_spaces_on_line2 - $found_spaces );
-				$expected_spaces_on_line2 += $line2_indent_diff;
+				$expected_spaces_on_line2 += ( $found_spaces_on_line2 - $found_spaces );
 			}
 
 			if ( $found_spaces_on_line2 !== $expected_spaces_on_line2 ) {
