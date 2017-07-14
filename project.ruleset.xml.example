@@ -2,17 +2,22 @@
 <ruleset name="Example Project">
 	<description>A custom set of rules to check for a WPized WordPress project</description>
 
-	<!-- Exclude select folders and files from being checked. -->
+	<!-- Exclude WP Core folders and files from being checked. -->
 	<exclude-pattern>/docroot/wp-admin/*</exclude-pattern>
 	<exclude-pattern>/docroot/wp-includes/*</exclude-pattern>
 	<exclude-pattern>/docroot/wp-*.php</exclude-pattern>
 	<exclude-pattern>/docroot/index.php</exclude-pattern>
 	<exclude-pattern>/docroot/xmlrpc.php</exclude-pattern>
 	<exclude-pattern>/docroot/wp-content/plugins/*</exclude-pattern>
-	<exclude-pattern>*.twig</exclude-pattern>
 
 	<!-- Exclude the Composer Vendor directory. -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
+
+	<!-- Exclude the Node Modules directory. -->
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<!-- Exclude minified Javascript files. -->
+	<exclude-pattern>*.min.js</exclude-pattern>
 
 	<!-- Include the WordPress-Extra standard. -->
 	<rule ref="WordPress-Extra">
