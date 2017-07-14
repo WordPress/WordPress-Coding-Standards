@@ -77,11 +77,11 @@ script:
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
     - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
-    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./project.ruleset.xml.example; fi
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./phpcs.xml.dist.sample; fi
     # Check the code-style consistency of the xml files.
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-VIP/ruleset.xml <(xmllint --format "./WordPress-VIP/ruleset.xml"); fi
-    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./project.ruleset.xml.example <(xmllint --format "./project.ruleset.xml.example"); fi
+    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample"); fi
