@@ -14,7 +14,7 @@ php:
 
 env:
   # Branch for patches against 2.x. `master` is now 3.x which WPCS is not (yet) compatible with.
-  - PHPCS_BRANCH=2.9
+  - PHPCS_BRANCH=2.9 LINT=1
   # Tagged release
   - PHPCS_BRANCH=2.9.0
 
@@ -32,9 +32,9 @@ matrix:
       sudo: required
       dist: trusty 
       group: edge
-      env: PHPCS_BRANCH=2.9
+      env: PHPCS_BRANCH=2.9 LINT=1
     - php: nightly
-      env: PHPCS_BRANCH=2.9
+      env: PHPCS_BRANCH=2.9 LINT=1
     # Test PHP 5.3 with short_open_tags set to On (is Off by default)
     - php: 5.3
       env: PHPCS_BRANCH=2.9 SHORT_OPEN_TAGS=true
@@ -60,7 +60,7 @@ before_install:
 
 script:
     # Lint the PHP files against parse errors.
-    - if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi;
+    - if [[ "$LINT" == "1" ]]; then if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
