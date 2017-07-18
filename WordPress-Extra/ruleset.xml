@@ -109,4 +109,8 @@
 	<!-- Verify that everything in the global namespace is prefixed. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals"/>
 
+	<!-- Check that object instantiations always have braces & are not assigned by reference.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
+	<rule ref="WordPress.Classes.ClassInstantiation"/>
+
 </ruleset>
