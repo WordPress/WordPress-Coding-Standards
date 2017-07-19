@@ -46,6 +46,8 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 		$beginners   = PHP_CodeSniffer_Tokens::$booleanOperators;
 		$beginners[] = T_IF;
 		$beginners[] = T_ELSEIF;
+		$beginners[] = T_RETURN;
+		$beginners = array_merge( $beginners, PHP_CodeSniffer_Tokens::$assignmentTokens );
 
 		$beginning = $this->phpcsFile->findPrevious( $beginners, $stackPtr, null, false, null, true );
 
@@ -68,7 +70,7 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ), true ) ) {
+			if ( T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 				return;
 			}
 		}

@@ -90,3 +90,9 @@ if ( $GLOBALS['wpdb']->num_rows === 0 ) {} // Bad.
 if ( $true == strtolower( $check ) ) {} // Bad.
 
 $update = 'yes' === strtolower( $this->from_post( 'update' ) ); // Ok.
+$sample = false !== strpos( $link, '%pagename%' ); // Ok.
+$sample = true !== strpos( $link, '%pagename%' ); // Ok.
+$sample = null !== strpos( $link, '%pagename%' ); // Ok.
+$sample = SOME_CONSTANT !== strpos( $link, '%pagename%' ); // Ok.
+$sample = foo() !== strpos( $link, '%pagename%' ); // Ok.
+$sample = foo( $var ) !== strpos( $link, '%pagename%' ); // Ok.
