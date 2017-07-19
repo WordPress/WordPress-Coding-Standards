@@ -35,12 +35,14 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 	 */
 	public function register() {
 
-		$this->condition_start_tokens  = PHP_CodeSniffer_Tokens::$booleanOperators;
-		$this->condition_start_tokens += PHP_CodeSniffer_Tokens::$assignmentTokens;
-		$this->condition_start_tokens[ T_CASE ] = T_CASE;
-		$this->condition_start_tokens[ T_RETURN ] = T_RETURN;
-		$this->condition_start_tokens[ T_SEMICOLON ] = T_SEMICOLON;
-		$this->condition_start_tokens[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
+		$starters                       = PHP_CodeSniffer_Tokens::$booleanOperators;
+		$starters                      += PHP_CodeSniffer_Tokens::$assignmentTokens;
+		$starters[ T_CASE ]             = T_CASE;
+		$starters[ T_RETURN ]           = T_RETURN;
+		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
+		$starters[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
+
+		$this->condition_start_tokens = $starters;
 
 		return array(
 			T_IS_EQUAL,
