@@ -117,9 +117,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
 
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
-				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 
@@ -146,9 +144,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceBetweenStructureColon' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			} elseif ( 'forbidden' === $this->space_before_colon ) {
@@ -158,9 +154,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, ( $scopeOpener - 1 ), 'SpaceBetweenStructureColon' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->replaceToken( ( $scopeOpener - 1 ), '' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
@@ -207,9 +201,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					);
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->replaceToken( ( $function_name_ptr + 1 ), '' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
@@ -250,9 +242,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'SpaceBeforeClosureOpenParenthesis' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			} elseif (
@@ -268,9 +258,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
@@ -289,9 +277,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			);
 
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), ' ' );
-				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 
@@ -302,9 +288,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterOpenParenthesis' );
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->addContent( $parenthesisOpener, ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			} elseif ( ( ' ' !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['content']
 				&& "\n" !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['content']
@@ -321,9 +305,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				);
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $parenthesisOpener + 1 ), ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
@@ -340,9 +322,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->addContentBefore( $parenthesisCloser, ' ' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				} elseif ( ' ' !== $this->tokens[ ( $parenthesisCloser - 1 ) ]['content'] ) {
 					$prevNonEmpty = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $parenthesisCloser - 1 ), null, true );
@@ -356,9 +336,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 						);
 
 						if ( true === $fix ) {
-							$this->phpcsFile->fixer->beginChangeset();
 							$this->phpcsFile->fixer->replaceToken( ( $parenthesisCloser - 1 ), ' ' );
-							$this->phpcsFile->fixer->endChangeset();
 						}
 					}
 				}
@@ -371,9 +349,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceAfterCloseParenthesis' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
@@ -412,9 +388,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				);
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $parenthesisCloser + 1 ), ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
 		}

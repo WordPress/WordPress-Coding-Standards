@@ -477,9 +477,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( true === $fix ) {
 				$fixed_str = preg_replace( $replace_regexes, $replacements, $content, 1 );
 
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->replaceToken( $stack_ptr, $fixed_str );
-				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 
