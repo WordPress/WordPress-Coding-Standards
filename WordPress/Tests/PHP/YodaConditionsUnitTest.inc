@@ -96,3 +96,33 @@ $sample = null !== strpos( $link, '%pagename%' ); // Ok.
 $sample = SOME_CONSTANT !== strpos( $link, '%pagename%' ); // Ok.
 $sample = foo() !== strpos( $link, '%pagename%' ); // Ok.
 $sample = foo( $var ) !== strpos( $link, '%pagename%' ); // Ok.
+
+if ( $sample = false !== strpos( $link, '%pagename%' ) ) {} // Ok.
+if ( $sample = ( false !== strpos( $link, '%pagename%' ) ) ) {} // Ok.
+if ( ( $sample = false ) !== strpos( $link, '%pagename%' ) ) {} // Ok.
+
+switch ( true ) {
+	case $sample === 'something': // Bad.
+		// Do something.
+	break;
+
+	case 'something' === $sample: // OK.
+		// Do something.
+	break;
+}
+
+for ( $i = 0; $i !== 100; $i++ ) {} // Bad.
+for ( $i = 0; 100 != $i; $i++ ) {} // OK.
+
+do {
+	// Something.
+} while ( $sample === false ); // Bad.
+
+do {
+	// Something.
+} while ( CONSTANT_A === $sample ); // OK.
+
+while ( $sample === false ) {} // Bad.
+while ( false != $sample ) {} // OK.
+
+$a = ( $sample ) === 'yes'; // OK.
