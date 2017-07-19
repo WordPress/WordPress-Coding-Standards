@@ -1,0 +1,17 @@
+<?php
+/**
+ * Test cases which can't be tested on PHP 5.2.
+ */
+
+/*
+ * All OK.
+ */
+$a = new \MyClass();
+$a = new \MyNamespace\MyClass();
+
+
+/*
+ * Bad.
+ */
+$a = new \MyClass();
+$a = new \MyNamespace\MyClass();
