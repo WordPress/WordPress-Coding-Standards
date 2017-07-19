@@ -20,11 +20,27 @@
 class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 
 	/**
+	 * The tokens that indicate the start of a condition.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	protected $condition_start_tokens;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
+
+		$this->condition_start_tokens  = PHP_CodeSniffer_Tokens::$booleanOperators;
+		$this->condition_start_tokens += PHP_CodeSniffer_Tokens::$assignmentTokens;
+		$this->condition_start_tokens[ T_IF ] = T_IF;
+		$this->condition_start_tokens[ T_ELSEIF ] = T_ELSEIF;
+		$this->condition_start_tokens[ T_RETURN ] = T_RETURN;
+
 		return array(
 			T_IS_EQUAL,
 			T_IS_NOT_EQUAL,
@@ -43,18 +59,12 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$beginners   = PHP_CodeSniffer_Tokens::$booleanOperators;
-		$beginners[] = T_IF;
-		$beginners[] = T_ELSEIF;
-		$beginners[] = T_RETURN;
-		$beginners = array_merge( $beginners, PHP_CodeSniffer_Tokens::$assignmentTokens );
-
-		$beginning = $this->phpcsFile->findPrevious( $beginners, $stackPtr, null, false, null, true );
+		$start = $this->phpcsFile->findPrevious( $this->condition_start_tokens, $stackPtr, null, false, null, true );
 
 		$needs_yoda = false;
 
 		// Note: going backwards!
-		for ( $i = $stackPtr; $i > $beginning; $i-- ) {
+		for ( $i = $stackPtr; $i > $start; $i-- ) {
 
 			// Ignore whitespace.
 			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
