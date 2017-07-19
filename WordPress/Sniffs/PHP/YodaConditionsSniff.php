@@ -20,11 +20,30 @@
 class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 
 	/**
+	 * The tokens that indicate the start of a condition.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	protected $condition_start_tokens;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
+
+		$starters                       = PHP_CodeSniffer_Tokens::$booleanOperators;
+		$starters                      += PHP_CodeSniffer_Tokens::$assignmentTokens;
+		$starters[ T_CASE ]             = T_CASE;
+		$starters[ T_RETURN ]           = T_RETURN;
+		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
+		$starters[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
+
+		$this->condition_start_tokens = $starters;
+
 		return array(
 			T_IS_EQUAL,
 			T_IS_NOT_EQUAL,
@@ -43,16 +62,12 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$beginners   = PHP_CodeSniffer_Tokens::$booleanOperators;
-		$beginners[] = T_IF;
-		$beginners[] = T_ELSEIF;
-
-		$beginning = $this->phpcsFile->findPrevious( $beginners, $stackPtr, null, false, null, true );
+		$start = $this->phpcsFile->findPrevious( $this->condition_start_tokens, $stackPtr, null, false, null, true );
 
 		$needs_yoda = false;
 
 		// Note: going backwards!
-		for ( $i = $stackPtr; $i > $beginning; $i-- ) {
+		for ( $i = $stackPtr; $i > $start; $i-- ) {
 
 			// Ignore whitespace.
 			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
@@ -68,7 +83,7 @@ class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_CLOSE_PARENTHESIS, T_OPEN_PARENTHESIS, T_RETURN ), true ) ) {
+			if ( T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 				return;
 			}
 		}
