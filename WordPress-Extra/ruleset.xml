@@ -64,6 +64,7 @@
 	</rule>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedClasses"/>
+	<rule ref="WordPress.WP.DeprecatedParameters"/>
 	<rule ref="WordPress.WP.AlternativeFunctions"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
