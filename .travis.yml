@@ -2,6 +2,9 @@ sudo: false
 
 dist: trusty
 
+cache:
+  apt: true
+     
 language:
     - php
 
@@ -24,6 +27,10 @@ matrix:
     # Run PHPCS against WPCS. I just picked to run it against 5.5.
     - php: 5.5
       env: PHPCS_BRANCH=2.9 SNIFF=1
+      addons:
+        apt:
+          packages:
+            - libxml2-utils
     # Run against PHPCS 3.0. I just picked to run it against 5.6.
     - php: 5.6
       env: PHPCS_BRANCH=master
