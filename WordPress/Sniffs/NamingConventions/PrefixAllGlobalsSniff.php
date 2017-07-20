@@ -207,7 +207,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 
 					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
-					if ( function_exists( $item_name ) ) {
+					if ( function_exists( '\\' . $item_name ) ) {
 						// Backfill for PHP native function.
 						return;
 					}
@@ -234,14 +234,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
-							if ( class_exists( $item_name ) ) {
+							if ( class_exists( '\\' . $item_name ) ) {
 								// Backfill for PHP native class.
 								return;
 							}
 							break;
 
 						case 'T_INTERFACE':
-							if ( interface_exists( $item_name ) ) {
+							if ( interface_exists( '\\' . $item_name ) ) {
 								// Backfill for PHP native interface.
 								return;
 							}
@@ -251,7 +251,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							break;
 
 						case 'T_TRAIT':
-							if ( function_exists( 'trait_exists' ) && trait_exists( $item_name ) ) {
+							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name ) ) {
 								// Backfill for PHP native trait.
 								return;
 							}
@@ -280,7 +280,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 
 					$item_name = $this->tokens[ $constant_name_ptr ]['content'];
-					if ( defined( $item_name ) ) {
+					if ( defined( '\\' . $item_name ) ) {
 						// Backfill for PHP native constant.
 						return;
 					}
@@ -620,7 +620,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( 'define' === $matched_content ) {
-			if ( defined( $raw_content ) ) {
+			if ( defined( '\\' . $raw_content ) ) {
 				// Backfill for PHP native constant.
 				return;
 			}
