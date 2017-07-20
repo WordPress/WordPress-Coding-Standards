@@ -91,6 +91,10 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 					125 => 1,
 					128 => 1,
 					129 => 1,
+					132 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 2, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+					138 => 1,
+					143 => 1,
+					148 => 1,
 				);
 
 			case 'I18nUnitTest.1.inc':

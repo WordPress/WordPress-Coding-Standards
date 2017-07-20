@@ -20,11 +20,11 @@ class WordPress_Sniffs_PHP_DiscouragedPHPFunctionsSniff extends WordPress_Abstra
 	 * Groups of functions to discourage.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array

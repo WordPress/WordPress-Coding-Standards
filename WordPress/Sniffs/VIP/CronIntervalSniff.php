@@ -63,7 +63,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 
 		// If within add_filter.
 		$functionPtr = $this->phpcsFile->findPrevious( T_STRING, key( $token['nested_parenthesis'] ) );
-		if ( 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
+		if ( false === $functionPtr || 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
 			return;
 		}
 
@@ -167,7 +167,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 			return;
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Add warning about unclear cron schedule change.

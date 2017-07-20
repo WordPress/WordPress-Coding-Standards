@@ -137,7 +137,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Ab
 					$underscores++;
 				}
 			}
-		} // End for().
+		}
 
 		$data = array(
 			implode( '', $expected ),
@@ -153,7 +153,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Ab
 			$this->phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
 		}
 
-	} // End process().
+	} // End process_parameters().
 
 	/**
 	 * Prepare the punctuation regular expression.

@@ -35,6 +35,10 @@ class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest {
 			84 => 1,
 			88 => 1,
 			90 => 1,
+			105 => 1,
+			114 => 1,
+			119 => 1,
+			125 => 1,
 		);
 
 	}

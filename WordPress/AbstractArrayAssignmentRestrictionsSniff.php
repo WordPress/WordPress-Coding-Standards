@@ -68,13 +68,12 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 	 * This method should be overridden in extending classes.
 	 *
 	 * Example: groups => array(
-	 * 	'wpdb' => array(
-	 * 		'type' => 'error' | 'warning',
-	 * 		'message' => 'Dont use this one please!',
-	 * 		'variables' => array( '$val', '$var' ),
-	 * 		'object_vars' => array( '$foo->bar', .. ),
-	 * 		'array_members' => array( '$foo['bar']', .. ),
-	 * 	)
+	 *  'groupname' => array(
+	 *      'type'     => 'error' | 'warning',
+	 *      'message'  => 'Dont use this one please!',
+	 *      'keys'     => array( 'key1', 'another_key' ),
+	 *      'callback' => array( 'class', 'method' ), // Optional.
+	 *  )
 	 * )
 	 *
 	 * @return array
@@ -106,7 +105,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET ), true ) ) {
+		if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 			$equal = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			if ( T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!
@@ -124,7 +123,7 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-				$operator = $this->phpcsFile->findNext( array( T_EQUAL ), ( $stackPtr + 1 ) );
+				$operator = $this->phpcsFile->findNext( T_EQUAL, ( $stackPtr + 1 ) );
 			}
 
 			$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
@@ -185,9 +184,9 @@ abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPr
 					);
 				}
 			}
-		} // End foreach().
+		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Callback to process each confirmed key, to check value.

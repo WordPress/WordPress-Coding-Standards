@@ -1,55 +1,66 @@
 <?php
 
-$posts = get_posts( 'cat=3' );
-// Bad, no operator spacing.
-for ( $i=0; $i<sizeof( $posts ); $i++ ) {
-	// ...
-}
-
-// Good.
-for ( $i = 0; $i < sizeof( $posts ); $i++ ) {
-	// ...
-}
-// Good.
-if ( ! $var ) {
-	// ...
-}
-// Bad.
-if ( !$var ) {
-	// ...
-}
-
-while ( have_posts() ) {
-	$ok = (
-		! is_author()
-		||
-		is_front_page()
-	);
-}
-
-// All OK.
+// Boolean not operator: All OK.
 if ( 'bb' !== 'bb' ) {
 	if (
-		empty($_GET['refid']) &&
-		empty($_GET['nolinks']) &&
-		! is_page_template('page_strategy-center.php') &&
-		! is_page_template('page_confirmation.php') &&
-		! is_page_template('page_debartolo.php') &&
-		! is_singular('offer')
+		empty( $_GET['refid'] ) &&
+		empty( $_GET['nolinks'] ) &&
+		! is_page_template( 'page_strategy-center.php' ) &&
+		! is_page_template( 'page_confirmation.php' ) &&
+		! is_page_template( 'page_debartolo.php' ) &&
+		! is_singular( 'offer' )
 	) {
 		hello();
 	}
 }
 
-// Bad.
-for ( $i =  0; $i < sizeof( $posts ); $i++ ) {
-	// ...
-}
-// Bad.
-if (  ! $var ) {
+// Good.
+if ( ! $var ) {
 	// ...
 }
 
-// Ok: Test skipping of default values in function declarations.
-function my_test( $a=true, $b = 123, $c=  'string' ) {}
-$a = function ( $a=true, $b = 123, $c=  'string' ) {};
+// Bad.
+if (!$var ) {
+	// ...
+}
+
+// Bad.
+if (  !   $var ) {
+	// ...
+}
+
+// Logical operators: Ok.
+if ( $a === $b && $b === $c ) {}
+if ( $a === $b || $b === $c ) {}
+if ( $a === $b and $b === $c ) {}
+if ( $a === $b or $b === $c ) {}
+if ( $a === $b xor $b === $c ) {}
+
+// Logical operators: Too little space.
+if ( $a === $b&&$b === $c ) {}
+if ( $a === $b||$b === $c ) {}
+if ( $a === {$b}and$b === $c ) {}
+if ( $a === {$b}or$b === $c ) {}
+if ( $a === {$b}xor$b === $c ) {}
+
+// Logical operators: Too much space.
+if ( $a === $b     &&     $b === $c ) {}
+if ( $a === $b     ||     $b === $c ) {}
+if ( $a === $b     and     $b === $c ) {}
+if ( $a === $b     or     $b === $c ) {}
+if ( $a === $b     xor     $b === $c ) {}
+
+// Logical operators: Multi-line, OK.
+if ( $a === $b
+	&& $b === $c
+) {}
+if (
+	$a === $b
+	||
+	$b === $c
+) {}
+if ( $a === $b
+	and $b === $c ) {}
+
+if ( $a === $b or
+	$b === $c ) {}

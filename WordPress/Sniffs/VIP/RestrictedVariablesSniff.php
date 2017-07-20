@@ -22,13 +22,13 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVa
 	 * Groups of variables to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'wpdb' => array(
-	 * 		'type' => 'error' | 'warning',
-	 * 		'message' => 'Dont use this one please!',
-	 * 		'variables' => array( '$val', '$var' ),
-	 * 		'object_vars' => array( '$foo->bar', .. ),
-	 * 		'array_members' => array( '$foo['bar']', .. ),
-	 * 	)
+	 *  'wpdb' => array(
+	 *      'type'          => 'error' | 'warning',
+	 *      'message'       => 'Dont use this one please!',
+	 *      'variables'     => array( '$val', '$var' ),
+	 *      'object_vars'   => array( '$foo->bar', .. ),
+	 *      'array_members' => array( '$foo['bar']', .. ),
+	 *  )
 	 * )
 	 *
 	 * @return array
@@ -51,7 +51,7 @@ class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVa
 				'message'       => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
 				'variables'     => array(
 					'$_COOKIE',
-					),
+				),
 				'array_members' => array(
 					'$_SERVER[\'HTTP_USER_AGENT\']',
 					'$_SERVER[\'REMOTE_ADDR\']',

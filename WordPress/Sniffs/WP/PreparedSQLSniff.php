@@ -55,6 +55,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 		T_CLOSE_SQUARE_BRACKET     => true,
 		T_COMMA                    => true,
 		T_LNUMBER                  => true,
+		T_START_HEREDOC            => true,
+		T_END_HEREDOC              => true,
+		T_START_NOWDOC             => true,
+		T_NOWDOC                   => true,
+		T_END_NOWDOC               => true,
 	);
 
 	/**
@@ -123,11 +128,13 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				continue;
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code'] ) {
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code']
+				|| T_HEREDOC === $this->tokens[ $this->i ]['code']
+			) {
 
 				$bad_variables = array_filter(
 					$this->get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
-					create_function( '$symbol', 'return ! in_array( $symbol, array( "wpdb" ), true );' ) // Replace this with closure once 5.3 is minimum requirement.
+					create_function( '$symbol', 'return ( $symbol !== "wpdb" );' ) // Replace this with closure once 5.3 is minimum requirement.
 				);
 
 				foreach ( $bad_variables as $bad_variable ) {
@@ -181,11 +188,11 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 				'NotPrepared',
 				array( $this->tokens[ $this->i ]['content'] )
 			);
-		} // End for().
+		}
 
 		return $this->end;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Checks whether this is a call to a $wpdb method that we want to sniff.
@@ -205,7 +212,7 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 	protected function is_wpdb_method_call( $stackPtr ) {
 
 		// Check that this is a method call.
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
+		$is_object_call = $this->phpcsFile->findNext( T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return false;
 		}

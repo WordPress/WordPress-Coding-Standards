@@ -7,7 +7,7 @@
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
 	<rule ref="Generic.Functions.CallTimePassByReference"/>
-	<rule ref="Generic.CodeAnalysis.EmptyStatement" />
+	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
 	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
 	<rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
 	<rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
@@ -17,9 +17,10 @@
 	<rule ref="Generic.Classes.DuplicateClassName"/>
 	<rule ref="Generic.Strings.UnnecessaryStringConcat">
 		<properties>
-			<property name="allowMultiline" value="true" />
+			<property name="allowMultiline" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
@@ -30,7 +31,7 @@
 
 	<!-- And even more generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
-	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops" />
+	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
 	<!-- This sniff is not refined enough for general use -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
@@ -42,20 +43,28 @@
 
 	<rule ref="WordPress-Core"/>
 
+	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
+	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
+		<!-- Restore default severity of 5 which WordPress-Core sets to 0. -->
+		<severity>5</severity>
+	</rule>
+
 	<rule ref="WordPress.XSS.EscapeOutput"/>
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
-	<rule ref="WordPress.CSRF.NonceVerification" />
+	<rule ref="WordPress.CSRF.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- WP core still supports PHP 5.2+  -->
 		<properties>
-			<property name="exclude" value="create_function" />
+			<property name="exclude" value="create_function"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
+	<rule ref="WordPress.WP.DeprecatedClasses"/>
+	<rule ref="WordPress.WP.DeprecatedParameters"/>
 	<rule ref="WordPress.WP.AlternativeFunctions"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
@@ -75,12 +84,12 @@
 
 	<!-- Encourage the use of strict ( === and !== ) comparisons.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->
-	<rule ref="WordPress.PHP.StrictComparisons" />
+	<rule ref="WordPress.PHP.StrictComparisons"/>
 
 	<!-- Check that in_array() and array_search() use strict comparisons.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/399
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
-	<rule ref="WordPress.PHP.StrictInArray" />
+	<rule ref="WordPress.PHP.StrictInArray"/>
 
 	<!-- Discourage use of the backtick operator (execution of shell commands).
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/646 -->
@@ -88,7 +97,7 @@
 
 	<!-- Check for PHP Parse errors.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/522 -->
-	<rule ref="Generic.PHP.Syntax" />
+	<rule ref="Generic.PHP.Syntax"/>
 
 	<!-- Make the translators comment check which is included in core stricter. -->
 	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
@@ -97,5 +106,12 @@
 	<rule ref="WordPress.WP.I18n.TranslatorsCommentWrongStyle">
 		<type>error</type>
 	</rule>
+
+	<!-- Verify that everything in the global namespace is prefixed. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals"/>
+
+	<!-- Check that object instantiations always have braces & are not assigned by reference.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
+	<rule ref="WordPress.Classes.ClassInstantiation"/>
 
 </ruleset>

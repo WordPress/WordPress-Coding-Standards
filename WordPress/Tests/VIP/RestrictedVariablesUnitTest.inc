@@ -17,3 +17,13 @@ if ( isset( $_SERVER['REMOTE_ADDR'] ) ) { // Warning.
 $x = $_COOKIE['bar']; // Warning.
 
 $y = $_SERVER['REQUEST_URI']; // Ok.
+
+// Error.
+$query = <<<EOD
+SELECT * FROM $wpdb->usermeta
+EOD;
+
+// Warning
+$phrase = <<<EOD
+Your user-agent is {$_SERVER['HTTP_USER_AGENT']}
+EOD;

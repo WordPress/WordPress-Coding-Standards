@@ -31,11 +31,11 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Use anonymous functions instead please!',
-	 * 		'functions' => array( 'file_get_contents', 'create_function' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
@@ -165,17 +165,6 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 					'get_posts',
 					'wp_get_recent_posts',
 					'get_children',
-				),
-			),
-
-			'wp_get_post_terms' => array(
-				'type'      => 'error',
-				'message'   => '%s() is highly discouraged due to not being cached; please use get_the_terms() along with wp_list_pluck() to extract the IDs.',
-				'functions' => array(
-					'wp_get_post_terms',
-					'wp_get_post_categories',
-					'wp_get_post_tags',
-					'wp_get_object_terms',
 				),
 			),
 

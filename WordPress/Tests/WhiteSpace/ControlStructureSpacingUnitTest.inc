@@ -211,3 +211,60 @@ if (
 ) { // Ok.
 	echo 'bye';
 }
+
+// Bug #976 - the case of the disappearing comment.
+if ( isset( $submenu_file ) ) {
+	if ( $submenu_file == $sub_item[2] ) {
+		$class[] = 'current';
+	}
+// If plugin_page is set the parent must either match the current page or not physically exist.
+// This allows plugin pages with the same hook to exist under different parents.
+} else {
+	$class[] = 'current';
+}
+
+// Test finding & fixing blank line after control structure.
+if ( $one ) {
+}
+elseif ( $two ) {
+}
+// else if something
+else if ( $three ) {
+} // else do something
+else {
+}
+
+do {
+}
+// Comment
+while ( $a === $b );
+
+if ( $foo ) {
+	try {
+		// Something
+	} catch ( Exception $e ) {
+		// Something
+	}
+
+
+}
+
+if ( $foo ) {
+	try {
+		// Something
+	} catch ( Exception $e ) {
+		// Something
+	}//end try/catch <- Bad: "blank line after".
+
+
+}
+
+if ( $foo ) {
+	try { // Bad.
+		// Something
+	} catch ( Exception $e ) {
+		// Something
+	} // End try/catch <- Bad: "blank line after".
+
+
+}

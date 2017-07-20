@@ -205,3 +205,23 @@ to_screen( esc_form_field( $var1), esc_attr( $var2 ) ); // Ok.
 echo esc_form_field( $var ); // Bad.
 echo post_info( $post_id, 'field' ); // Bad.
 echo cpt_info( $post_type, 'query' ); // Bad.
+
+echo (unset) $var; // Ok.
+
+// Nowdocs are OK.
+echo <<<'EOD'
+Some Raw String
+EOD;
+
+echo 1.234; // Ok.
+
+echo ( 1.234 + 10 + 2.5 ); // Ok.
+echo 10 % 2; // Ok.
+echo 8 * 1.2; // Ok.
+
+?>
+<?= $var ?><!-- Bad. -->
+<?= esc_html( $var ); ?><!-- Ok. -->
+<?= $var['foo']; ?><!-- Bad. -->
+<?= $var->foo ?><!-- Bad. -->
+<?php

@@ -24,19 +24,19 @@
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping -->
 	<!-- https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/ -->
 	<rule ref="WordPress.XSS.EscapeOutput"/>
-	<rule ref="WordPress.CSRF.NonceVerification" />
+	<rule ref="WordPress.CSRF.NonceVerification"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-instead-of -->
-	<rule ref="WordPress.PHP.StrictComparisons" />
+	<rule ref="WordPress.PHP.StrictComparisons"/>
 
 	<!-- https://vip.wordpress.com/documentation/best-practices/database-queries/ -->
-	<rule ref="WordPress.WP.PreparedSQL" />
+	<rule ref="WordPress.WP.PreparedSQL"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
-	    <properties>
-	        <property name="maxPercentage" value="45" />
-	    </properties>
+		<properties>
+			<property name="maxPercentage" value="45"/>
+		</properties>
 	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
@@ -53,7 +53,7 @@
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/633#issuecomment-266634811 -->
 		<properties>
-			<property name="exclude" value="obfuscation" />
+			<property name="exclude" value="obfuscation"/>
 		</properties>
 	</rule>
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
@@ -62,7 +62,7 @@
 	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
-	<rule ref="WordPress.PHP.DevelopmentFunctions" />
+	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
 	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log">
 		<type>error</type>
 	</rule>
@@ -72,13 +72,13 @@
 	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
-	<rule ref="WordPress.PHP.StrictInArray" />
+	<rule ref="WordPress.PHP.StrictInArray"/>
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_parse_url-instead-of-parse_url -->
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_json_encode-over-json_encode -->
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes -->
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls -->
-	<rule ref="WordPress.WP.AlternativeFunctions" />
+	<rule ref="WordPress.WP.AlternativeFunctions"/>
 	<!-- VIP recommends other functions -->
 	<rule ref="WordPress.WP.AlternativeFunctions.curl">
 		<message>Using cURL functions is highly discouraged within VIP context. Check (Fetching Remote Data) on VIP Documentation.</message>

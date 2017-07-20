@@ -128,5 +128,28 @@ __( "%04d for %'.9d item", 'my-slug' ); // Bad - Placeholder with other specifie
 __( '%1$d for %d item', 'my-slug' ); // Bad.
 __( '%1$d for %d and %d item', 'my-slug' ); // Bad.
 
+// Nowdoc syntax.
+__( <<<'EOD'
+%1$d for %d item
+EOD
+, 'my-slug' ); // Bad.
+
+// Multi-line heredoc syntax.
+_nx( <<<'EOD'
+I have
+%d cat and %d
+dog.
+EOD
+, <<<'EOD'
+I have
+%d cats and %d
+dogs.
+EOD
+, $number, <<<'EOD'
+Not
+really.
+EOD
+, 'my-slug' ); // OK.
+
 
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true

@@ -135,12 +135,9 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 	 */
 	public function register() {
 		// Set up all string targets.
-		$targets                  = PHP_CodeSniffer_Tokens::$stringTokens;
-		$targets[ T_INLINE_HTML ] = T_INLINE_HTML;
-		$targets[ T_HEREDOC ]     = T_HEREDOC;
-		$targets[ T_NOWDOC ]      = T_NOWDOC;
+		$this->string_tokens = PHP_CodeSniffer_Tokens::$textStringTokens;
 
-		$this->string_tokens = $targets;
+		$targets = $this->string_tokens;
 
 		// Add CSS style target.
 		$targets[] = T_STYLE;
@@ -193,7 +190,7 @@ class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFuncti
 			return parent::process_token( $stackPtr );
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Process the parameters of a matched function.

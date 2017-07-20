@@ -1,0 +1,176 @@
+<?php
+
+// Bad: This is a comment with WORDPRESS spelled incorrectly.
+
+/* Bad: This is a comment with wordpress spelled incorrectly. */
+
+/*
+ * Bad: This is a comment with Wordpress spelled incorrectly.
+ */
+
+/**
+ * Function comment
+ *
+ * @param string $wordpress OK: Here the incorrect spelling is OK to comply with the variable name rules.
+ */
+function something( $wordpress ) {} // OK.
+
+/**
+ * Function comment
+ *
+ * @param string $my_wordpress_test OK: Here the incorrect spelling is OK to comply with the variable name rules.
+ */
+function something( $my_wordpress_test ) {} // OK.
+
+/**
+ * Bad: In this comment wordPresss should be fixed.
+ *
+ * @param string $test Bad: In this comment word press should be fixed.
+ */
+function something( $test ) {} // OK.
+
+function wordpress_function() {} // OK - comply with the function name rules.
+
+class Wordpress_Something {} // Bad.
+class Something_Word_press_Something {} // Bad.
+class Something_wordpressss {} // Bad.
+class WordPress_Something {} // OK.
+class Something_WordPress {} // OK.
+
+echo 'This is an explanation about wordpress.'; // Bad.
+echo "This is an {$explanation} about wordpress."; // Bad.
+
+// Bad.
+echo <<<EOD
+This is an {$explanation} about wordpress.
+EOD;
+
+echo 'http://wordpress.org/something'; // OK - part of a URL.
+?>
+
+<div class="copyright"><?php printf( wp_kses_post( __( 'Powered by <a href="%s">WordPress</a>', 'theme-slug' ) ), 'https://wordpress.org/' ); ?></div><!-- OK. -->
+
+<p>Here we have an inline HTML tag with wordpress spelled incorrectly.</p><!-- Bad. -->
+<p>Here we have an inline HTML tag with WordPress spelled correctly.</p><!-- OK. -->
+
+<p>Here we have an inline HTML tag with a URL, of course this should be coded differently, but even when it isn't, it should be ignored, so here goes: http://wordpress.org/ spelled incorrectly.</p><!-- OK. -->
+
+<p>Here we have an inline HTML tag with wordpressers spelled incorrectly.</p><!-- OK, part of another word. -->
+
+<p>Here we have an inline HTML tag with word press spelled incorrectly.</p><!-- Bad. -->
+<p>Here we have an inline HTML tag with word-press spelled incorrectly.</p><!-- Bad. -->
+<p>Here we have an inline HTML tag with word - presssss spelled incorrectly.</p><!-- Bad. -->
+
+<p class="fa-wordpress">In this case it's a CSS class name and we should leave well alone.</p><!-- OK. -->
+<p class="wordpress-class">CSS class, but also wordPres spelled incorrectly in the text.</p><!-- Bad. -->
+<p class="wordpress-class">Same again, this time with same spelling in both the class as well as in the text wordpress.</p><!-- Bad. -->
+
+<p>And lets have another test with wordpress spelled incorrectly more than once. Wordpress, wordPress, word pres.</p><!-- Bad. -->
+
+<?php
+/*
+ * Some additional examples found in WP core.
+ */
+$first_comment_email = ! empty( $first_comment_email ) ? $first_comment_email : 'wapuu@wordpress.example'; // OK.
+
+$wordpress_rules = $xpath->query('/configuration/system.webServer/rewrite/rules/rule[starts-with(@name,\'wordpress\')] | /configuration/system.webServer/rewrite/rules/rule[starts-with(@name,\'WordPress\')]'); // OK.
+
+// If we don't have an email from the input headers default to wordpress@$sitename <= OK.
+$from_email = 'wordpress@' . $sitename; // OK.
+
+if ( $counts['wordpress'] ) { // OK.
+	/* translators: 1: Number of updates available to WordPress */
+	$titles['wordpress'] = sprintf( __( '%d WordPress Update'), $counts['wordpress'] ); // OK.
+}
+
+?>
+<td><input name="dbname" id="dbname" type="text" size="25" value="wordpress" /></td><!-- OK. -->
+
+<ol id="authors"><form action="?import=wordpress&amp;step=2&amp;id=" method="post"><input type="hidden" name="_wpnonce" value="855ae98911" /><!-- OK. -->
+
+<?php
+/*
+ * More examples found in themes which should be accounted for.
+ * Based on a run of this sniff against 180 recently updated themes (7500+ files).
+ */
+
+/**
+ * @wordpress-plugin <= OK.
+ * Plugin Name: TGM Plugin Activation
+ *
+ * @package Wordpress <= Bad.
+ *
+ * @link OK: http://justintadlock.com/archives/2011/07/01/captions-in-wordpress
+ */
+ 
+if ( file_exists( ABSPATH . 'wp-content/plugins/wordpress-importer/wordpress-importer.php' ) ) { // OK.
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+	return is_plugin_active( 'wordpress-importer/wordpress-importer.php' ); // OK.
+}
+
+$check = array(
+	'wordpress-importer'       => array( 'installed' => false, 'active' => false ), // OK.
+	'widget-importer-exporter' => array( 'installed' => false, 'active' => false )
+);
+
+$default_editor_settings = [
+	'textarea_name' => $textarea_name,
+	'media_buttons' => false,
+	'tinymce' => [ 'plugins' => 'wordpress' ] // OK.
+];
+
+	$wp_customize->add_control(
+		new Arouse_Custom_Content(
+			$wp_customize,
+			'arouse_documentation_link',
+			array(
+				'section' 		=> 'arouse_theme_info',
+				'label' 		=> __( 'Arouse Documentation', 'arouse' ),
+				'content' 		=> __( '<a class="button" href="http://themezhut.com/arouse-wordpress-theme-documentation/" target="_blank">Read the documentation.</a>', 'arouse' ), // OK.
+			)
+		) 
+	);	
+
+?>
+
+	<a href="https://wordpress.org/support/theme/{{ data.theme_slug }}/reviews/#new-post" class="button button-primary activello-wordpress"><span class="dashicons dashicons-wordpress"></span>Review this theme on w.org</a><!-- OK. -->
+
+		<p><?php _e( 'This page will help you get up and running quickly with <strong>Adamos</strong>. Please use the <a href="https://wordpress.org/support/theme/adamos">Wordpress Support Forums</a> if you have experience issues with this theme.', 'adamos' ); ?></p><!-- Bad. -->
+
+<a target="_blank" href="<?php echo esc_url( 'https://www.themeinprogress.com/alhena-free-responsive-corporate-wordpress-theme/?ref=2&campaign=alhena-notice' ); ?>" class="button"><?php _e( 'Upgrade to Alhena Premium', 'alhena-lite' ); ?></a><!-- OK. -->
+
+<?php
+	comment_form( array(
+		'fields' => apply_filters( 'comment_form_default_fields', $fields ),
+		/* translators: %s: wordpress login url */ // Bad, but false negative as within an array.
+		'must_log_in' => '<p class="must-log-in">' .  sprintf( __( 'You must be <a href="%s">logged in</a> to post a comment.' , 'annina' ), wp_login_url( apply_filters( 'the_permalink', get_permalink( ) ) ) ) . '</p>',
+	));
+
+$wl_theme_options['service_3_icons']="fa fa-wordpress"; // OK.
+
+if ( get_theme_mod('header_icon', 'fa-wordpress') ) echo '<i class="fa '  .esc_attr(get_theme_mod('header_icon' , 'fa-wordpress')) . '"></i>'; // OK.
+
+/**
+ * Bootstrap styled Caption shortcode.
+ * Hat tip: http://justintadlock.com/archives/2011/07/01/captions-in-wordpress <= OK.
+ */
+
+$render = '<div class="redux-field-locked"><div class="redux-locked-inner' . (empty($message) ? ' empty' : '') . '"><a target="_blank" href="' . $t4p_url . 'evolve-multipurpose-wordpress-theme/" class="el el-lock">&nbsp;</a>' . $message . '</div></div>' . $render; // OK.
+
+$installed = self::check_plugin_is_installed( 'wordpress-importer' ); // OK.
+
+
+/*
+ * Test whitelisting
+ */
+echo 'This is an explanation about wordpress.'; // WPCS: spelling ok.
+
+/*
+ * Test fixer with an ignored and a fixable misspelling in the same line.
+ */
+?>
+<p class="wordpress" href="http://x.org/?something=wordpress">The first two should be ignored for the purpose of replacing, this wordpress however should be fixed and this wordpress too.</p><!-- Bad. -->
+
+<?php // POT filename should be ignored. ?>
+wordpress.pot

@@ -70,6 +70,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		return array(
 			T_VARIABLE,
 			T_DOUBLE_QUOTED_STRING,
+			T_HEREDOC,
 		);
 	}
 
@@ -85,7 +86,9 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 		$superglobals = $this->input_superglobals;
 
 		// Handling string interpolation.
-		if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code']
+			|| T_HEREDOC === $this->tokens[ $stackPtr ]['code']
+		) {
 			$interpolated_variables = array_map(
 				create_function( '$symbol', 'return "$" . $symbol;' ), // Replace with closure when 5.3 is minimum requirement for PHPCS.
 				$this->get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
@@ -142,7 +145,7 @@ class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff 
 			$this->phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.

@@ -31,3 +31,53 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
 
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . esc_sql( $foo ) . "';" ); // Ok.
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . absint( $foo ) . ";" ); // Ok.
+
+// Test multi-line strings.
+$all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
+	'SELECT `post_id`, `meta_value`
+	FROM `%s`
+	WHERE `meta_key` = "sort_order"
+		AND `post_id` IN (%s)',
+	$wpdb->postmeta,
+	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+), $post_ids ) ); // Ok.
+
+$wpdb->query( "
+	SELECT *
+	FROM $wpdb->posts
+	WHERE post_title LIKE '" . esc_sql( $foo ) . "';"
+); // Ok.
+
+$wpdb->query( $wpdb->prepare( "
+	SELECT *
+	FROM $wpdb->posts
+	WHERE post_title = 'The \\$_GET[foo]// var is evil again.'
+		AND ID = %s",
+	array( 123 )
+) ); // Bad.
+
+
+// Test heredoc & nowdoc for query.
+$wpdb->query( <<<EOT
+	SELECT *
+	FROM {$wpdb->posts}
+	WHERE ID = {$foo};
+EOT
+); // Bad.
+
+$wpdb->query( <<<"HD"
+	SELECT *
+	FROM {$wpdb->posts}
+	WHERE post_title LIKE '{$var}';
+HD
+); // Bad.
+
+$all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf( <<<'ND'
+	SELECT `post_id`, `meta_value`
+	FROM `%s`
+	WHERE `meta_key` = "sort_order"
+		AND `post_id` IN (%s)
+ND
+	, $wpdb->postmeta,
+	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+), $post_ids ) ); // OK.

@@ -17,7 +17,7 @@
 abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * Regex pattern with placeholder for the function names.
+	 * Regex pattern with placeholder for the class names.
 	 *
 	 * @var string
 	 */
@@ -36,11 +36,11 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 * This method should be overridden in extending classes.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Avoid direct calls to the database.',
-	 * 		'classes'   => array( 'PDO', '\Namespace\Classname' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'    => 'error' | 'warning',
+	 *      'message' => 'Avoid direct calls to the database.',
+	 *      'classes' => array( 'PDO', '\Namespace\Classname' ),
+	 *  )
 	 * )
 	 *
 	 * You can use * wildcards to target a group of (namespaced) classes.
@@ -76,6 +76,10 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * {@internal Unlike in the `WordPress_AbstractFunctionRestrictionsSniff`,
+	 *            we can't do a preliminary check on classes as at this point
+	 *            we don't know the class name yet.}}
+	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
@@ -85,7 +89,16 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		// Reset the temporary storage before processing the token.
 		unset( $this->classname );
 
-		return parent::process_token( $stackPtr );
+		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
+		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
+			// All groups have been excluded.
+			// Don't remove the listener as the exclude property can be changed inline.
+			return;
+		}
+
+		if ( true === $this->is_targetted_token( $stackPtr ) ) {
+			return $this->check_for_matches( $stackPtr );
+		}
 	}
 
 	/**
@@ -118,7 +131,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		}
 
 		if ( T_DOUBLE_COLON === $token['code'] ) {
-			$nameEnd   = $this->phpcsFile->findPrevious( array( T_STRING ), ( $stackPtr - 1 ) );
+			$nameEnd   = $this->phpcsFile->findPrevious( T_STRING, ( $stackPtr - 1 ) );
 			$nameStart = ( $this->phpcsFile->findPrevious( array( T_STRING, T_NS_SEPARATOR, T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
 			$length    = ( $nameEnd - ( $nameStart - 1) );
 			$classname = $this->phpcsFile->getTokensAsString( $nameStart, $length );
@@ -189,11 +202,7 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 	 */
 	protected function prepare_name_for_regex( $classname ) {
 		$classname = trim( $classname, '\\' ); // Make sure all classnames have a \ prefix, but only one.
-		$classname = str_replace( array( '.*', '*' ) , '#', $classname ); // Replace wildcards with placeholder.
-		$classname = preg_quote( $classname, '`' );
-		$classname = str_replace( '#', '.*', $classname ); // Replace placeholder with regex wildcard.
-
-		return $classname;
+		return parent::prepare_name_for_regex( $classname );
 	}
 
 	/**
@@ -230,49 +239,6 @@ abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_Abstra
 		}
 
 		return $classname;
-	}
-
-	/**
-	 * Determine the namespace name based on whether this is a scoped namespace or a file namespace.
-	 *
-	 * @param int $search_from The token position to search up from.
-	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applied.
-	 */
-	protected function determine_namespace( $search_from ) {
-		$namespace = '';
-
-		if ( ! empty( $this->tokens[ $search_from ]['conditions'] ) ) {
-			// Scoped namespace {}.
-			foreach ( $this->tokens[ $search_from ]['conditions'] as $pointer => $type ) {
-				if ( T_NAMESPACE === $type && $this->tokens[ $pointer ]['scope_closer'] > $search_from ) {
-					$namespace = $this->get_namespace_name( $pointer );
-				}
-				break; // We only need to check the highest level condition.
-			}
-		} else {
-			// Let's see if we can find a file namespace instead.
-			$first = $this->phpcsFile->findNext( array( T_NAMESPACE ), 0, $search_from );
-
-			if ( false !== $first && empty( $this->tokens[ $first ]['scope_condition'] ) ) {
-				$namespace = $this->get_namespace_name( $first );
-			}
-		}
-
-		return $namespace;
-	}
-
-	/**
-	 * Get the namespace name based on the position of the namespace scope opener.
-	 *
-	 * @param int $namespace_token The token position to search from.
-	 * @return string Namespace name.
-	 */
-	protected function get_namespace_name( $namespace_token ) {
-		$nameEnd   = ( $this->phpcsFile->findNext( array( T_OPEN_CURLY_BRACKET, T_WHITESPACE, T_SEMICOLON ), ( $namespace_token + 2 ) ) - 1 );
-		$length    = ( $nameEnd - ( $namespace_token + 1 ) );
-		$namespace = $this->phpcsFile->getTokensAsString( ( $namespace_token + 2 ), $length );
-
-		return $namespace;
 	}
 
 } // End class.

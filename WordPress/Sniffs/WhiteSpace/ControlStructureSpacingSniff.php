@@ -117,9 +117,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterStructureOpen' );
 
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
-				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 
@@ -146,9 +144,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceBetweenStructureColon' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			} elseif ( 'forbidden' === $this->space_before_colon ) {
@@ -158,13 +154,11 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, ( $scopeOpener - 1 ), 'SpaceBetweenStructureColon' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->replaceToken( ( $scopeOpener - 1 ), '' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
-		} // End if().
+		}
 
 		$parenthesisOpener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
@@ -207,9 +201,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					);
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->replaceToken( ( $function_name_ptr + 1 ), '' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			}
@@ -232,7 +224,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$scopeOpener = $usePtr;
 				}
 			}
-		} // End if().
+		}
 
 		if (
 			T_COLON !== $this->tokens[ $parenthesisOpener ]['code']
@@ -250,9 +242,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'SpaceBeforeClosureOpenParenthesis' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
 			} elseif (
@@ -268,12 +258,10 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
-		} // End if().
+		}
 
 		if (
 			T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code']
@@ -289,9 +277,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			);
 
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), ' ' );
-				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 
@@ -302,9 +288,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterOpenParenthesis' );
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->addContent( $parenthesisOpener, ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			} elseif ( ( ' ' !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['content']
 				&& "\n" !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['content']
@@ -321,9 +305,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				);
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $parenthesisOpener + 1 ), ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
@@ -340,9 +322,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->addContentBefore( $parenthesisCloser, ' ' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				} elseif ( ' ' !== $this->tokens[ ( $parenthesisCloser - 1 ) ]['content'] ) {
 					$prevNonEmpty = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $parenthesisCloser - 1 ), null, true );
@@ -356,9 +336,7 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 						);
 
 						if ( true === $fix ) {
-							$this->phpcsFile->fixer->beginChangeset();
 							$this->phpcsFile->fixer->replaceToken( ( $parenthesisCloser - 1 ), ' ' );
-							$this->phpcsFile->fixer->endChangeset();
 						}
 					}
 				}
@@ -371,12 +349,10 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 					$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceAfterCloseParenthesis' );
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
 						$this->phpcsFile->fixer->addContentBefore( $scopeOpener, ' ' );
-						$this->phpcsFile->fixer->endChangeset();
 					}
 				}
-			} // End if().
+			}
 
 			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
 				&& ( isset( $scopeOpener )
@@ -412,12 +388,10 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				);
 
 				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $parenthesisCloser + 1 ), ' ' );
-					$this->phpcsFile->fixer->endChangeset();
 				}
-			} // End if().
-		} // End if().
+			}
+		}
 
 		if ( false !== $this->blank_line_check && isset( $scopeOpener ) ) {
 			$firstContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
@@ -485,20 +459,40 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 								$this->phpcsFile->fixer->endChangeset();
 							}
 							break;
-						} // End if().
-					} // End for().
-				} // End if().
-			} // End if().
+						}
+					}
+				}
+			}
 			unset( $ignore );
-		} // End if().
+		}
 
 		if ( ! isset( $scopeCloser ) || true !== $this->blank_line_after_check ) {
 			return;
 		}
 
-		$trailingContent = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
+		// {@internal This is just for the blank line check. Only whitespace should be considered,
+		// not "other" empty tokens.}}
+		$trailingContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeCloser + 1 ), null, true );
 		if ( false === $trailingContent ) {
 			return;
+		}
+
+		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code'] ) {
+			// Special exception for code where the comment about
+			// an ELSE or ELSEIF is written between the control structures.
+			$nextCode = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
+
+			if ( T_ELSE === $this->tokens[ $nextCode ]['code'] || T_ELSEIF === $this->tokens[ $nextCode ]['code'] ) {
+				$trailingContent = $nextCode;
+			}
+
+			// Move past end comments.
+			if ( $this->tokens[ $trailingContent ]['line'] === $this->tokens[ $scopeCloser ]['line'] ) {
+				if ( preg_match( '`^//[ ]?end`i', $this->tokens[ $trailingContent ]['content'], $matches ) > 0 ) {
+					$scopeCloser     = $trailingContent;
+					$trailingContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $trailingContent + 1 ), null, true );
+				}
+			}
 		}
 
 		if ( T_ELSE === $this->tokens[ $trailingContent ]['code'] && T_IF === $this->tokens[ $stackPtr ]['code'] ) {
@@ -506,15 +500,9 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			return;
 		}
 
-		if ( T_BREAK === $this->tokens[ $trailingContent ]['code'] ) {
-			// If this BREAK is closing a CASE, we don't need the
-			// blank line after this control structure.
-			if ( isset( $this->tokens[ $trailingContent ]['scope_condition'] ) ) {
-				$condition = $this->tokens[ $trailingContent ]['scope_condition'];
-				if ( T_CASE === $this->tokens[ $condition ]['code'] || T_DEFAULT === $this->tokens[ $condition ]['code'] ) {
-					return;
-				}
-			}
+		if ( T_WHILE === $this->tokens[ $trailingContent ]['code'] && T_DO === $this->tokens[ $stackPtr ]['code'] ) {
+			// DO with WHILE.
+			return;
 		}
 
 		if ( T_CLOSE_TAG === $this->tokens[ $trailingContent ]['code'] ) {
@@ -522,15 +510,15 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 			return;
 		}
 
-		if ( T_CLOSE_CURLY_BRACKET === $this->tokens[ $trailingContent ]['code'] ) {
+		if ( isset( $this->tokens[ $trailingContent ]['scope_condition'] )
+			&& T_CLOSE_CURLY_BRACKET === $this->tokens[ $trailingContent ]['code']
+		) {
 			// Another control structure's closing brace.
-			if ( isset( $this->tokens[ $trailingContent ]['scope_condition'] ) ) {
-				$owner = $this->tokens[ $trailingContent ]['scope_condition'];
-				if ( in_array( $this->tokens[ $owner ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
-					// The next content is the closing brace of a function, class, interface or trait
-					// so normal function/class rules apply and we can ignore it.
-					return;
-				}
+			$owner = $this->tokens[ $trailingContent ]['scope_condition'];
+			if ( in_array( $this->tokens[ $owner ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+				// The next content is the closing brace of a function, class, interface or trait
+				// so normal function/class rules apply and we can ignore it.
+				return;
 			}
 
 			if ( ( $this->tokens[ $scopeCloser ]['line'] + 1 ) !== $this->tokens[ $trailingContent ]['line'] ) {
@@ -541,17 +529,21 @@ class WordPress_Sniffs_WhiteSpace_ControlStructureSpacingSniff extends WordPress
 				if ( true === $fix ) {
 					$this->phpcsFile->fixer->beginChangeset();
 
-					for ( $i = ( $scopeCloser + 1 ); $i < $trailingContent; $i++ ) {
+					$i = ( $scopeCloser + 1 );
+					while ( $this->tokens[ $i ]['line'] !== $this->tokens[ $trailingContent ]['line'] ) {
 						$this->phpcsFile->fixer->replaceToken( $i, '' );
+						$i++;
 					}
 
 					// TODO: Instead a separate error should be triggered when content comes right after closing brace.
-					$this->phpcsFile->fixer->addNewlineBefore( $trailingContent );
+					if ( T_COMMENT !== $this->tokens[ $scopeCloser ]['code'] ) {
+						$this->phpcsFile->fixer->addNewlineBefore( $trailingContent );
+					}
 					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
-		} // End if().
+		}
 
-	} // End process().
+	} // End process_token().
 
 } // End class.

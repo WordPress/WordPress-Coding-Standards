@@ -44,7 +44,7 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 			5 => 1,
 			7 => 2,
 			20 => 1,
-		 );
+		);
 
 	}
 

@@ -38,6 +38,7 @@ class WordPress_Tests_VIP_SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 			16 => 1,
 			19 => 2,
 			30 => 1,
+			32 => 1, // Warning about deprecated whitelist comment.
 		);
 
 	}

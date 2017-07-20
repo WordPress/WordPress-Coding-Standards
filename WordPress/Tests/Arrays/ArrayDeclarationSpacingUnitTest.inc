@@ -19,6 +19,11 @@ $bad = array(
 	[ 'value4', 10 => 'value5' ]
 ); // Bad.
 
-// Test for fixing associative arrays with multiple values & whitespace in front.
-// This needs to be the last test as the scope indent sniff will otherwise screw things up.
+// Test for fixing associative arrays with multiple values & line indented with whitespace.
 		$bad = array( 'key1' => 'value1', 'key2' => 'value2', $key3 => 'value3', 'value4', 10 => 'value5' ); // Bad.
+
+// Test for fixing associative arrays with comments between values.
+$bad = array( 'key1' => 'value1', /* comment */ 'key2' => 'value2' ); // Bad.
+
+// Test for (not) fixing non-associative array with a nested associative array which *will* be fixed.
+$bad = array( 'value1', 'value2', [ 'sub1' => 1, 'sub2' => 2 ], 'value4' ); // Bad.

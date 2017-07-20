@@ -15,9 +15,11 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   2013-06-11
- * @since   0.4.0 This class now extends WordPress_Sniff.
- * @since   0.5.0 The various function list properties which used to be contained in this class
- *                have been moved to the WordPress_Sniff parent class.
+ * @since   0.4.0  This class now extends WordPress_Sniff.
+ * @since   0.5.0  The various function list properties which used to be contained in this class
+ *                 have been moved to the WordPress_Sniff parent class.
+ * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
+ *                 echo tags `<?=`.
  */
 class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
@@ -93,10 +95,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	/**
 	 * List of names of the tokens representing PHP magic constants.
 	 *
+	 * @since 0.10.0
+	 *
 	 * @var array
 	 */
 	private $magic_constant_tokens = array(
 		'T_CLASS_C'  => true, // __CLASS__
+		'T_DIR'      => true, // __DIR__
 		'T_FILE'     => true, // __FILE__
 		'T_FUNC_C'   => true, // __FUNCTION__
 		'T_LINE'     => true, // __LINE__
@@ -106,18 +111,71 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	);
 
 	/**
+	 * List of names of the cast tokens which can be considered as a safe escaping method.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $safe_cast_tokens = array(
+		'T_INT_CAST'    => true, // (int)
+		'T_DOUBLE_CAST' => true, // (float)
+		'T_BOOL_CAST'   => true, // (bool)
+		'T_UNSET_CAST'  => true, // (unset)
+	);
+
+	/**
+	 * List of tokens which can be considered as a safe when directly part of the output.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $safe_components = array(
+		'T_CONSTANT_ENCAPSED_STRING' => true,
+		'T_LNUMBER'                  => true,
+		'T_MINUS'                    => true,
+		'T_PLUS'                     => true,
+		'T_MULTIPLY'                 => true,
+		'T_DIVIDE'                   => true,
+		'T_MODULUS'                  => true,
+		'T_TRUE'                     => true,
+		'T_FALSE'                    => true,
+		'T_NULL'                     => true,
+		'T_DNUMBER'                  => true,
+		'T_START_NOWDOC'             => true,
+		'T_NOWDOC'                   => true,
+		'T_END_NOWDOC'               => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
-		return array(
+
+		$tokens = array(
 			T_ECHO,
 			T_PRINT,
 			T_EXIT,
 			T_STRING,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 
+		/*
+		 * Check whether short open echo tags are disabled and if so, register the
+		 * T_INLINE_HTML token which is how short open tags are being handled in that case.
+		 *
+		 * In PHP < 5.4, support for short open echo tags depended on whether the
+		 * `short_open_tag` ini directive was set to `true`.
+		 * For PHP >= 5.4, the `short_open_tag` no longer affects the short open
+		 * echo tags and these are now always enabled.
+		 */
+		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			$tokens[] = T_INLINE_HTML;
+		}
+		return $tokens;
 	}
 
 	/**
@@ -152,6 +210,24 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
 			}
+		} elseif ( T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+			// Skip if no PHP short_open_tag is found in the string.
+			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
+				return;
+			}
+
+			// Report on what is very likely a PHP short open echo tag outputting a variable.
+			if ( preg_match( '`\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:(?:->\S+|\[[^\]]+\]))*)[\s]*;?[\s]*\?\>`', $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
+				$this->phpcsFile->addError(
+					'Expected next thing to be an escaping function, not %s.',
+					$stackPtr,
+					'OutputNotEscaped',
+					array( $matches[1] )
+				);
+				return;
+			}
+
+			return;
 		}
 
 		// Checking for the ignore comment, ex: //xss ok.
@@ -160,7 +236,12 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		}
 
 		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
-			$error = $this->phpcsFile->addError( "Expected next thing to be an escaping function (like %s), not '%s'", $stackPtr, 'UnsafePrintingFunction', array( $this->unsafePrintingFunctions[ $function ], $function ) );
+			$error = $this->phpcsFile->addError(
+				"Expected next thing to be an escaping function (like %s), not '%s'",
+				$stackPtr,
+				'UnsafePrintingFunction',
+				array( $this->unsafePrintingFunctions[ $function ], $function )
+			);
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {
@@ -200,7 +281,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces and comments.
-			if ( in_array( $this->tokens[ $i ]['code'], PHP_CodeSniffer_Tokens::$emptyTokens, true ) ) {
+			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
@@ -252,13 +333,13 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			}
 
 			// Wake up on concatenation characters, another part to check.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_STRING_CONCAT ), true ) ) {
+			if ( T_STRING_CONCAT === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up after a ternary else (:).
-			if ( $ternary && in_array( $this->tokens[ $i ]['code'], array( T_INLINE_ELSE ), true ) ) {
+			if ( $ternary && T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
@@ -276,14 +357,14 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
 			// Also T_LNUMBER, e.g.: echo 45; exit -1; and booleans.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_MINUS, T_TRUE, T_FALSE, T_NULL ), true ) ) {
+			if ( isset( $this->safe_components[ $this->tokens[ $i ]['type'] ] ) ) {
 				continue;
 			}
 
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_INT_CAST, T_DOUBLE_CAST, T_BOOL_CAST ), true ) ) {
+			if ( isset( $this->safe_cast_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
@@ -293,7 +374,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
-				$function_opener        = $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS ), ( $i + 1 ), null, false, null, true );
+				$function_opener        = $this->phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
 				$is_formatting_function = isset( $this->formattingFunctions[ $functionName ] );
 
 				if ( false !== $function_opener ) {
@@ -345,7 +426,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 			} else {
 				$content = $this->tokens[ $i ]['content'];
 				$ptr     = $i;
-			} // End if().
+			}
 
 			$this->phpcsFile->addError(
 				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
@@ -353,11 +434,11 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 				'OutputNotEscaped',
 				$content
 			);
-		} // End for().
+		}
 
 		return $end_of_statement;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.

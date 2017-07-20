@@ -7,8 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff', true ) ) {
+	throw new PHP_CodeSniffer_Exception( 'Class Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff not found' );
+}
+
 /**
- * Verify operator spacing, based upon Squiz code.
+ * Verify operator spacing, uses the Squiz sniff, but additionally also sniffs for the `!` (boolean not) operator.
  *
  * "Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators."
  *
@@ -17,22 +21,28 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
- * @since   0.3.0 This sniff now has the ability to fix the issues it flags.
+ * @since   0.3.0  This sniff now has the ability to fix the issues it flags.
+ * @since   0.12.0 This sniff used to be a copy of a very old and outdated version of the
+ *                 upstream sniff.
+ *                 Now, the sniff defers completely to the upstream sniff, adding just the
+ *                 T_BOOLEAN_NOT and the logical operators (`&&` and the like) - via the
+ *                 registration method and changing the value of the customizable
+ *                 $ignoreNewlines property.
  *
- * Last synced with base class December 2008 at commit f01746fd1c89e98174b16c76efd325825eb58bf1.
+ * Last synced with base class June 2017 at commit 41127aa4764536f38f504fb3f7b8831f05919c89.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php
  */
-class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff {
+class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff extends Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff {
 
 	/**
-	 * A list of tokenizers this sniff supports.
+	 * Allow newlines instead of spaces.
 	 *
-	 * @var array
+	 * N.B.: The upstream sniff defaults to `false`.
+	 *
+	 * @var boolean
 	 */
-	public $supportedTokenizers = array(
-		'PHP',
-		'JS',
-	);
+	public $ignoreNewlines = true;
+
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -40,164 +50,12 @@ class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffe
 	 * @return array
 	 */
 	public function register() {
-		$comparison = PHP_CodeSniffer_Tokens::$comparisonTokens;
-		$operators	= PHP_CodeSniffer_Tokens::$operators;
-		$assignment = PHP_CodeSniffer_Tokens::$assignmentTokens;
+		$tokens                  = parent::register();
+		$tokens[ T_BOOLEAN_NOT ] = T_BOOLEAN_NOT;
+		$logical_operators       = PHP_CodeSniffer_Tokens::$booleanOperators;
 
-		$tokens   = array_unique( array_merge( $comparison, $operators, $assignment ) );
-		$tokens[] = T_BOOLEAN_NOT;
-
-		return $tokens;
-
+		// Using array union to auto-dedup.
+		return $tokens + $logical_operators;
 	}
-
-	/**
-	 * Processes this sniff, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The current file being checked.
-	 * @param int                  $stackPtr  The position of the current token in the
-	 *                                        stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-
-		if ( T_EQUAL === $tokens[ $stackPtr ]['code'] ) {
-			// Skip for '=&' case.
-			if ( isset( $tokens[ ( $stackPtr + 1 ) ] ) && T_BITWISE_AND === $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
-				return;
-			}
-
-			// Skip default values in function declarations.
-			if ( isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-				$bracket = end( $tokens[ $stackPtr ]['nested_parenthesis'] );
-				if ( isset( $tokens[ $bracket ]['parenthesis_owner'] ) ) {
-					$function = $tokens[ $bracket ]['parenthesis_owner'];
-					if ( T_FUNCTION === $tokens[ $function ]['code']
-						|| T_CLOSURE === $tokens[ $function ]['code']
-					) {
-						return;
-					}
-				}
-			}
-		}
-
-		if ( T_BITWISE_AND === $tokens[ $stackPtr ]['code'] ) {
-			/*
-			// If it's not a reference, then we expect one space either side of the
-			// bitwise operator.
-			if ( false === $phpcsFile->isReference( $stackPtr ) ) {
-				// @todo Implement or remove ?
-			}
-			*/
-			return;
-
-		} else {
-			if ( T_MINUS === $tokens[ $stackPtr ]['code'] ) {
-				// Check minus spacing, but make sure we aren't just assigning
-				// a minus value or returning one.
-				$prev = $phpcsFile->findPrevious( T_WHITESPACE, ( $stackPtr - 1 ), null, true );
-				if ( T_RETURN === $tokens[ $prev ]['code'] ) {
-					// Just returning a negative value; eg. return -1.
-					return;
-				}
-
-				if ( in_array( $tokens[ $prev ]['code'], PHP_CodeSniffer_Tokens::$operators, true ) ) {
-					// Just trying to operate on a negative value; eg. ($var * -1).
-					return;
-				}
-
-				if ( in_array( $tokens[ $prev ]['code'], PHP_CodeSniffer_Tokens::$comparisonTokens, true ) ) {
-					// Just trying to compare a negative value; eg. ($var === -1).
-					return;
-				}
-
-				// A list of tokens that indicate that the token is not
-				// part of an arithmetic operation.
-				$invalidTokens = array(
-					T_COMMA,
-					T_OPEN_PARENTHESIS,
-					T_OPEN_SQUARE_BRACKET,
-				);
-
-				if ( in_array( $tokens[ $prev ]['code'], $invalidTokens, true ) ) {
-					// Just trying to use a negative value; eg. myFunction($var, -2).
-					return;
-				}
-
-				$number = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
-				if ( T_LNUMBER === $tokens[ $number ]['code'] ) {
-					$semi = $phpcsFile->findNext( T_WHITESPACE, ( $number + 1 ), null, true );
-					if ( T_SEMICOLON === $tokens[ $semi ]['code'] ) {
-						if ( false !== $prev && in_array( $tokens[ $prev ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
-							// This is a negative assignment.
-							return;
-						}
-					}
-				}
-			} // End if().
-
-			$operator = $tokens[ $stackPtr ]['content'];
-
-			if ( T_WHITESPACE !== $tokens[ ( $stackPtr - 1 ) ]['code'] ) {
-				$error = 'Expected 1 space before "%s"; 0 found';
-				$data  = array( $operator );
-				$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBefore', $data );
-				if ( true === $fix ) {
-					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContentBefore( $stackPtr, ' ' );
-					$phpcsFile->fixer->endChangeset();
-				}
-			} elseif ( 1 !== strlen( $tokens[ ( $stackPtr - 1 ) ]['content'] ) && 1 !== $tokens[ ( $stackPtr - 1 ) ]['column'] ) {
-				// Don't throw an error for assignments, because other standards allow
-				// multiple spaces there to align multiple assignments.
-				if ( false === in_array( $tokens[ $stackPtr ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens, true ) ) {
-					$found = strlen( $tokens[ ( $stackPtr - 1 ) ]['content'] );
-					$error = 'Expected 1 space before "%s"; %s found';
-					$data  = array(
-						$operator,
-						$found,
-					);
-
-					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacingBefore', $data );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
-						$phpcsFile->fixer->replaceToken( ( $stackPtr - 1 ), ' ' );
-						$phpcsFile->fixer->endChangeset();
-					}
-				}
-			} // End if().
-
-			if ( '-' !== $operator ) {
-				if ( T_WHITESPACE !== $tokens[ ( $stackPtr + 1 ) ]['code'] ) {
-					$error = 'Expected 1 space after "%s"; 0 found';
-					$data  = array( $operator );
-
-					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfter', $data );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
-						$phpcsFile->fixer->addContent( $stackPtr, ' ' );
-						$phpcsFile->fixer->endChangeset();
-					}
-				} elseif ( 1 !== strlen( $tokens[ ( $stackPtr + 1 ) ]['content'] ) ) {
-					$found = strlen( $tokens[ ( $stackPtr + 1 ) ]['content'] );
-					$error = 'Expected 1 space after "%s"; %s found';
-					$data  = array(
-						$operator,
-						$found,
-					);
-
-					$fix = $phpcsFile->addFixableError( $error, $stackPtr, 'SpacingAfter', $data );
-					if ( true === $fix ) {
-						$phpcsFile->fixer->beginChangeset();
-						$phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), ' ' );
-						$phpcsFile->fixer->endChangeset();
-					}
-				} // End if().
-			} // End if().
-		} // End if().
-
-	} // End process().
 
 } // End class.

@@ -113,7 +113,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$is_object_call = $this->phpcsFile->findNext( array( T_OBJECT_OPERATOR ), ( $stackPtr + 1 ), null, false, null, true );
+		$is_object_call = $this->phpcsFile->findNext( T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return; // This is not a call to the wpdb object.
 		}
@@ -127,7 +127,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 			return;
 		}
 
-		$endOfStatement   = $this->phpcsFile->findNext( array( T_SEMICOLON ), ( $stackPtr + 1 ), null, false, null, true );
+		$endOfStatement   = $this->phpcsFile->findNext( T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
 		$endOfLineComment = '';
 		for ( $i = ( $endOfStatement + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
 
@@ -147,7 +147,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 
 		// Check for Database Schema Changes.
 		$_pos = $stackPtr;
-		while ( $_pos = $this->phpcsFile->findNext( array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
+		while ( $_pos = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$textStringTokens, ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
 				$this->phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
@@ -211,7 +211,7 @@ class WordPress_Sniffs_VIP_DirectDatabaseQuerySniff extends WordPress_Sniff {
 
 		return $endOfStatement;
 
-	} // End process().
+	} // End process_token().
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.

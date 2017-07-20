@@ -27,11 +27,11 @@ class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClass
 	 * Groups of classes to restrict.
 	 *
 	 * Example: groups => array(
-	 * 	'lambda' => array(
-	 * 		'type'      => 'error' | 'warning',
-	 * 		'message'   => 'Avoid direct calls to the database.',
-	 * 		'classes'   => array( 'PDO', '\Namespace\Classname' ),
-	 * 	)
+	 *  'lambda' => array(
+	 *      'type'    => 'error' | 'warning',
+	 *      'message' => 'Avoid direct calls to the database.',
+	 *      'classes' => array( 'PDO', '\Namespace\Classname' ),
+	 *  )
 	 * )
 	 *
 	 * @return array
