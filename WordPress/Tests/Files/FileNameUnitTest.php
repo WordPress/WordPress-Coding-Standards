@@ -97,11 +97,6 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		$sep        = DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
 
-		// Adjust the expected results array for PHP 5.2 as PHP 5.2 does not recognize namespaces.
-		if ( PHP_VERSION_ID < 50300 ) {
-			$this->expected_results['test-sample-phpunit6.inc'] = 1;
-		}
-
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
 		}

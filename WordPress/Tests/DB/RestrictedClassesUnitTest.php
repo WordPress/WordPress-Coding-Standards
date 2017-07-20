@@ -53,15 +53,6 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	}
 
 	/**
-	 * Skip this test on PHP 5.2 as otherwise testing the namespace resolving would fail.
-	 *
-	 * @return bool Whether to skip this test.
-	 */
-	protected function shouldSkipTest() {
-		return ( PHP_VERSION_ID < 50300 );
-	}
-
-	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.

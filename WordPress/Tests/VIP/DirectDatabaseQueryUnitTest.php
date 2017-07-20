@@ -41,7 +41,7 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 			190 => 1,
 			250 => 1,
 			257 => 1,
-			274 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			274 => 1,
 		);
 
 	}

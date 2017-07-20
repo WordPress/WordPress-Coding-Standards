@@ -106,7 +106,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					125 => 1,
 					128 => 1,
 					129 => 1,
-					132 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 2, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+					132 => 1,
 					138 => 1,
 					143 => 1,
 					148 => 1,

@@ -29,9 +29,9 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList() {
 		return array(
 			1 => 1,
-			2 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 has a bug tokenizing inline HTML / `<s`.
+			2 => 1,
 			6 => 1,
-			7 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 has a bug tokenizing inline HTML / `<s`.
+			7 => 1,
 			10 => 1,
 			11 => 1,
 			13 => 1,
@@ -40,10 +40,10 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 			17 => 1,
 			20 => 1,
 			21 => 1,
-			25 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize double quoted T_HEREDOC.
-			26 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize double quoted T_HEREDOC.
-			30 => 1, // PHPCS on PHP 5.2 does not recognize T_NOWDOC, but sees this as a literal string anyway.
-			31 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+			25 => 1,
+			26 => 1,
+			30 => 1,
+			31 => 1,
 		);
 
 	}
