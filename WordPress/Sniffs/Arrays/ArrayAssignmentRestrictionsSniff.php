@@ -38,7 +38,7 @@ class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress
 	 * @return array
 	 */
 	public function getGroups() {
-		return parent::$groups;
+		return array();
 	}
 
 	/**

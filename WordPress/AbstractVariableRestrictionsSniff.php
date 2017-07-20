@@ -49,11 +49,25 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 	protected $excluded_groups = array();
 
 	/**
+	 * Cache for the group information.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @var array
+	 */
+	protected $groups_cache = array();
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
 	 */
 	public function register() {
+		// Retrieve the groups only once and don't set up a listener if there are no groups.
+		if ( false === $this->setup_groups() ) {
+			return array();
+		}
+
 		return array(
 			T_VARIABLE,
 			T_OBJECT_OPERATOR,
@@ -85,6 +99,28 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 	abstract public function getGroups();
 
 	/**
+	 * Cache the groups.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return bool True if the groups were setup. False if not.
+	 */
+	protected function setup_groups() {
+		$this->groups_cache = $this->getGroups();
+
+		if ( empty( $this->groups_cache ) && empty( self::$groups ) ) {
+			return false;
+		}
+
+		// Allow for adding extra unit tests.
+		if ( ! empty( self::$groups ) ) {
+			$this->groups_cache = array_merge( $this->groups_cache, self::$groups );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
@@ -94,16 +130,10 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 	 */
 	public function process_token( $stackPtr ) {
 
-		$token  = $this->tokens[ $stackPtr ];
-		$groups = $this->getGroups();
-
-		if ( empty( $groups ) ) {
-			$this->phpcsFile->removeTokenListener( $this, $this->register() );
-			return;
-		}
+		$token = $this->tokens[ $stackPtr ];
 
 		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
-		if ( array_diff_key( $groups, $this->excluded_groups ) === array() ) {
+		if ( array_diff_key( $this->groups_cache, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.
 			return;
@@ -118,7 +148,7 @@ abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sni
 			}
 		}
 
-		foreach ( $groups as $groupName => $group ) {
+		foreach ( $this->groups_cache as $groupName => $group ) {
 
 			if ( isset( $this->excluded_groups[ $groupName ] ) ) {
 				continue;
