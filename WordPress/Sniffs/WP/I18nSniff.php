@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\WP;
 
 use WordPress\Sniff;
+use WordPress\PHPCSHelper;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
@@ -146,7 +147,7 @@ class I18nSniff extends Sniff {
 		$token = $this->tokens[ $stack_ptr ];
 
 		// Allow overruling the text_domain set in a ruleset via the command line.
-		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
+		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
 			$this->text_domain = $cl_text_domain;
 		}

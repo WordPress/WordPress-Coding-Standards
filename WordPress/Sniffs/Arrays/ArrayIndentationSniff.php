@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Arrays;
 
 use WordPress\Sniff;
+use WordPress\PHPCSHelper;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
@@ -89,13 +90,7 @@ class ArrayIndentationSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->tab_width ) ) {
-			$cli_values = $this->phpcsFile->phpcs->cli->getCommandLineValues();
-			if ( ! isset( $cli_values['tabWidth'] ) || 0 === $cli_values['tabWidth'] ) {
-				// We have no idea how wide tabs are, so assume 4 spaces for fixing.
-				$this->tab_width = 4;
-			} else {
-				$this->tab_width = $cli_values['tabWidth'];
-			}
+			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
 		}
 
 		/*

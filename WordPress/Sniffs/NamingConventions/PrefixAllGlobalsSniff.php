@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\NamingConventions;
 
 use WordPress\AbstractFunctionParameterSniff;
+use WordPress\PHPCSHelper;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
@@ -156,7 +157,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Allow overruling the prefixes set in a ruleset via the command line.
-		$cl_prefixes = trim( PHP_CodeSniffer::getConfigData( 'prefixes' ) );
+		$cl_prefixes = trim( PHPCSHelper::get_config_data( 'prefixes' ) );
 		if ( ! empty( $cl_prefixes ) ) {
 			$this->prefixes = $cl_prefixes;
 		}
