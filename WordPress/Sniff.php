@@ -2184,30 +2184,18 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Check if a content string contains a specific html open tag.
 	 *
-	 * {@internal For PHP 5.3+ this is straightforward, just check if $content
-	 * contains the tag.
-	 * PHP 5.2 however, creates a separate token for `<s` when used in inline HTML,
-	 * so in that case we need to check that the next token starts with the rest
-	 * of the tag.
-	 * I.e. PHP 5.2 tokenizes the inline HTML `text <span>text</span> text` as:
-	 * - T_INLINE_HTML 'text'
-	 * - T_INLINE_HTML '<s'
-	 * - T_INLINE_HTML 'pan>text</span> text'
-	 *
-	 * We don't need to worry about checking the rest of the content of the next
-	 * token as sniffs using this function will be sniffing for all text string
-	 * tokens, so the next token will be passed to the sniff in the next iteration
-	 * and checked then.
-	 * Similarly, no need to check content before the '<s' as the bug will break up the
-	 * inline html to several string tokens if it plays up.}}
-	 *
-	 * @link  https://bugs.php.net/bug.php?id=48446
-	 *
 	 * @since 0.11.0
+	 * @since 0.13.0 No longer allows for the PHP 5.2 bug for which the function was
+	 *               originally created.
+	 * @since 0.13.0 The $stackPtr parameter is now optional. Either that or the
+	 *               $content parameter has to be passed.
 	 *
 	 * @param string $tag_name The name of the HTML tag without brackets. So if
 	 *                         searching for '<span...', this would be 'span'.
-	 * @param int    $stackPtr The position of the current token in the token stack.
+	 * @param int    $stackPtr Optional. The position of the current token in the
+	 *                         token stack.
+	 *                         This parameter needs to be passed if no $content is
+	 *                         passed.
 	 * @param string $content  Optionally, the current content string, might be a
 	 *                         substring of the original string.
 	 *                         Defaults to `false` to distinguish between a passed
@@ -2215,28 +2203,13 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
 	 */
-	public function has_html_open_tag( $tag_name, $stackPtr, $content = false ) {
-		if ( false === $content ) {
+	public function has_html_open_tag( $tag_name, $stackPtr = null, $content = false ) {
+		if ( false === $content && isset( $stackPtr ) ) {
 			$content = $this->tokens[ $stackPtr ]['content'];
 		}
 
-		// Check for the open tag in normal string tokens and T_INLINE_HTML for PHP 5.3+.
-		if ( 's' !== $tag_name[0] || PHP_VERSION_ID >= 50300 || T_INLINE_HTML !== $this->tokens[ $stackPtr ]['code'] ) {
-			if ( false !== strpos( $content, '<' . $tag_name ) ) {
-				return true;
-			}
-		} elseif ( '<s' === $content ) {
-			// Ok, we might be coming across the token parser issue. Check the next token.
-			$next_ptr      = ( $stackPtr + 1 );
-			$rest_tag_name = substr( $tag_name, 1 );
-
-			if ( ! empty( $rest_tag_name )
-				&& isset( $this->tokens[ $next_ptr ] )
-				&& T_INLINE_HTML === $this->tokens[ $next_ptr ]['code']
-				&& 0 === strpos( $this->tokens[ $next_ptr ]['content'], $rest_tag_name )
-			) {
-				return true;
-			}
+		if ( ! empty( $content ) && false !== strpos( $content, '<' . $tag_name ) ) {
+			return true;
 		}
 
 		return false;
