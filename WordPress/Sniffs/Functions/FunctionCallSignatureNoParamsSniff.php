@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Functions;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Enforces no whitespace between the parenthesis of a function call without parameters.
@@ -29,7 +30,7 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return PHP_CodeSniffer_Tokens::$functionNameTokens;
+		return Tokens::$functionNameTokens;
 	}
 
 	/**
@@ -42,7 +43,7 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 
 		// Find the next non-empty token.
-		$openParenthesis = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		$openParenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		if ( T_OPEN_PARENTHESIS !== $this->tokens[ $openParenthesis ]['code'] ) {
 			// Not a function call.
@@ -55,7 +56,7 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 		}
 
 		// Find the previous non-empty token.
-		$search   = PHP_CodeSniffer_Tokens::$emptyTokens;
+		$search   = Tokens::$emptyTokens;
 		$search[] = T_BITWISE_AND;
 		$previous = $this->phpcsFile->findPrevious( $search, ( $stackPtr - 1 ), null, true );
 		if ( T_FUNCTION === $this->tokens[ $previous ]['code'] ) {

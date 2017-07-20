@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\WhiteSpace;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Enforces spacing around logical operators and assignments, based upon Squiz code.
@@ -165,7 +166,7 @@ class ControlStructureSpacingSniff extends Sniff {
 			}
 		}
 
-		$parenthesisOpener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		$parenthesisOpener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		// If this is a function declaration.
 		if ( T_FUNCTION === $this->tokens[ $stackPtr ]['code'] ) {
@@ -178,7 +179,7 @@ class ControlStructureSpacingSniff extends Sniff {
 
 				// This function returns by reference (function &function_name() {}).
 				$parenthesisOpener = $this->phpcsFile->findNext(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					( $parenthesisOpener + 1 ),
 					null,
 					true
@@ -188,7 +189,7 @@ class ControlStructureSpacingSniff extends Sniff {
 
 			if ( isset( $function_name_ptr ) ) {
 				$parenthesisOpener = $this->phpcsFile->findNext(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					( $parenthesisOpener + 1 ),
 					null,
 					true
@@ -216,7 +217,7 @@ class ControlStructureSpacingSniff extends Sniff {
 			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_closer'] ) ) {
 
 				$usePtr = $this->phpcsFile->findNext(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					( $this->tokens[ $parenthesisOpener ]['parenthesis_closer'] + 1 ),
 					null,
 					true,
@@ -330,7 +331,7 @@ class ControlStructureSpacingSniff extends Sniff {
 						$this->phpcsFile->fixer->addContentBefore( $parenthesisCloser, ' ' );
 					}
 				} elseif ( ' ' !== $this->tokens[ ( $parenthesisCloser - 1 ) ]['content'] ) {
-					$prevNonEmpty = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $parenthesisCloser - 1 ), null, true );
+					$prevNonEmpty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $parenthesisCloser - 1 ), null, true );
 					if ( $this->tokens[ ( $parenthesisCloser ) ]['line'] === $this->tokens[ ( $prevNonEmpty + 1 ) ]['line'] ) {
 						$error = 'Expected exactly one space before closing parenthesis; "%s" found.';
 						$fix   = $this->phpcsFile->addFixableError(
@@ -435,7 +436,7 @@ class ControlStructureSpacingSniff extends Sniff {
 			if ( $firstContent !== $scopeCloser ) {
 				$lastContent = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
 
-				$lastNonEmptyContent = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $scopeCloser - 1 ), null, true );
+				$lastNonEmptyContent = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $scopeCloser - 1 ), null, true );
 
 				$checkToken = $lastContent;
 				if ( isset( $this->tokens[ $lastNonEmptyContent ]['scope_condition'] ) ) {
@@ -485,7 +486,7 @@ class ControlStructureSpacingSniff extends Sniff {
 		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code'] ) {
 			// Special exception for code where the comment about
 			// an ELSE or ELSEIF is written between the control structures.
-			$nextCode = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
+			$nextCode = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
 
 			if ( T_ELSE === $this->tokens[ $nextCode ]['code'] || T_ELSEIF === $this->tokens[ $nextCode ]['code'] ) {
 				$trailingContent = $nextCode;

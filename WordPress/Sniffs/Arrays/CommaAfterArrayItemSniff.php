@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Arrays;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Enforces a comma after each array item and the spacing around it.
@@ -114,7 +115,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 			}
 
 			$last_content = $this->phpcsFile->findPrevious(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				$item['end'],
 				$item['start'],
 				true
@@ -155,7 +156,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 			if ( $last_content !== $item['end']
 				// Ignore whitespace at the end of a multi-line item if it is the end of a heredoc/nowdoc.
 				&& ( true === $single_line
-					|| ! isset( PHP_CodeSniffer_Tokens::$heredocTokens[ $this->tokens[ $last_content ]['code'] ] ) )
+					|| ! isset( Tokens::$heredocTokens[ $this->tokens[ $last_content ]['code'] ] ) )
 			) {
 				$newlines = 0;
 				$spaces   = 0;

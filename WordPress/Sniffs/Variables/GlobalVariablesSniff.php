@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Variables;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Warns about overwriting WordPress native global variables.
@@ -48,7 +49,7 @@ class GlobalVariablesSniff extends Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
-			$bracketPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 			if ( false === $bracketPtr || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				return;
@@ -145,7 +146,7 @@ class GlobalVariablesSniff extends Sniff {
 					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
 				) {
 					// Don't throw false positives for static class properties.
-					$previous = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
+					$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
 					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
 						continue;
 					}

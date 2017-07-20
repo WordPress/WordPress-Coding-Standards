@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\WP;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.
@@ -30,7 +31,7 @@ class EnqueuedResourcesSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return PHP_CodeSniffer_Tokens::$textStringTokens;
+		return Tokens::$textStringTokens;
 	}
 
 	/**

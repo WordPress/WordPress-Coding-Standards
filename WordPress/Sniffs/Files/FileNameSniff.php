@@ -118,7 +118,7 @@ class FileNameSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		if ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
+		if ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
 			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
 		}
 
@@ -195,8 +195,8 @@ class FileNameSniff extends Sniff {
 
 					if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
 						&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
-						&& ( ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
-						|| ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
+						&& ( ( ! defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
+						|| ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
 						&& false === $has_class
 					) {
 						$this->phpcsFile->addError(

@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Classes;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Verifies object instantiation statements.
@@ -58,7 +59,7 @@ class ClassInstantiationSniff extends Sniff {
 		 *
 		 * Currently does not account for classnames passed as a variable variable.
 		 */
-		$this->classname_tokens                           = PHP_CodeSniffer_Tokens::$emptyTokens;
+		$this->classname_tokens                           = Tokens::$emptyTokens;
 		$this->classname_tokens[ T_NS_SEPARATOR ]         = T_NS_SEPARATOR;
 		$this->classname_tokens[ T_STRING ]               = T_STRING;
 		$this->classname_tokens[ T_SELF ]                 = T_SELF;
@@ -100,7 +101,7 @@ class ClassInstantiationSniff extends Sniff {
 		 */
 		if ( 'PHP' === $this->phpcsFile->tokenizerType ) {
 			$prev_non_empty = $this->phpcsFile->findPrevious(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				($stackPtr - 1),
 				null,
 				true
@@ -139,7 +140,7 @@ class ClassInstantiationSniff extends Sniff {
 		// Walk back to the last part of the class name.
 		$has_comment = false;
 		for ( $classname_ptr = ( $next_non_empty_after_class_name - 1 ); $classname_ptr >= $stackPtr; $classname_ptr-- ) {
-			if ( ! isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $classname_ptr ]['code'] ] ) ) {
+			if ( ! isset( Tokens::$emptyTokens[ $this->tokens[ $classname_ptr ]['code'] ] ) ) {
 				// Prevent a false positive on variable variables, disregard them for now.
 				if ( $stackPtr === $classname_ptr ) {
 					return;

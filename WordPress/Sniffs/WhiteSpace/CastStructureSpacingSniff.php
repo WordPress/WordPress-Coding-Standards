@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\WhiteSpace;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Ensure cast statements don't contain whitespace, but *are* surrounded by whitespace, based upon Squiz code.
@@ -32,7 +33,7 @@ class CastStructureSpacingSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return PHP_CodeSniffer_Tokens::$castTokens;
+		return Tokens::$castTokens;
 	}
 
 	/**

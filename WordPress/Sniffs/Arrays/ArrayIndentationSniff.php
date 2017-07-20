@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Arrays;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Enforces WordPress array indentation for multi-line arrays.
@@ -69,7 +70,7 @@ class ArrayIndentationSniff extends Sniff {
 		 *
 		 * Existing heredoc, nowdoc and inline HTML indentation should be respected at all times.
 		 */
-		$this->ignore_tokens = PHP_CodeSniffer_Tokens::$heredocTokens;
+		$this->ignore_tokens = Tokens::$heredocTokens;
 		unset( $this->ignore_tokens[ T_START_HEREDOC ], $this->ignore_tokens[ T_START_NOWDOC ] );
 		$this->ignore_tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
 

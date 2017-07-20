@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\NamingConventions;
 
 use PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff as PHPCS_PEAR_ValidFunctionNameSniff;
+use PHP_CodeSniffer_File as File;
 
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
@@ -55,13 +56,13 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 	/**
 	 * Processes the tokens outside the scope.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-	 * @param int                  $stackPtr  The position where this token was
-	 *                                        found.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+	 * @param int                         $stackPtr  The position where this token was
+	 *                                               found.
 	 *
 	 * @return void
 	 */
-	protected function processTokenOutsideScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	protected function processTokenOutsideScope( File $phpcsFile, $stackPtr ) {
 		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
 
 		if ( ! isset( $functionName ) ) {
@@ -101,14 +102,14 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 	/**
 	 * Processes the tokens within the scope.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being processed.
-	 * @param int                  $stackPtr  The position where this token was
-	 *                                        found.
-	 * @param int                  $currScope The position of the current scope.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
+	 * @param int                         $stackPtr  The position where this token was
+	 *                                               found.
+	 * @param int                         $currScope The position of the current scope.
 	 *
 	 * @return void
 	 */
-	protected function processTokenWithinScope( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope ) {
+	protected function processTokenWithinScope( File $phpcsFile, $stackPtr, $currScope ) {
 		$methodName = $phpcsFile->getDeclarationName( $stackPtr );
 
 		if ( ! isset( $methodName ) ) {

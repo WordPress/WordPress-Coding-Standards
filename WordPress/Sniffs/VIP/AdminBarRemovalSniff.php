@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\VIP;
 
 use WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Discourages removal of the admin bar.
@@ -140,7 +141,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function register() {
 		// Set up all string targets.
-		$this->string_tokens = PHP_CodeSniffer_Tokens::$textStringTokens;
+		$this->string_tokens = Tokens::$textStringTokens;
 
 		$targets = $this->string_tokens;
 
@@ -361,7 +362,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$opener = $this->phpcsFile->findPrevious( T_OPEN_CURLY_BRACKET, $stackPtr );
 		if ( false !== $opener ) {
 			for ( $i = ( $opener - 1 ); $i >= 0; $i-- ) {
-				if ( isset( PHP_CodeSniffer_Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
+				if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
 					|| T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
 				) {
 					break;

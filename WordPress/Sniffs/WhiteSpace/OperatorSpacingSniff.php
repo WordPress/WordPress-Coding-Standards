@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\WhiteSpace;
 
 use Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Verify operator spacing, uses the Squiz sniff, but additionally also sniffs for the `!` (boolean not) operator.
@@ -53,7 +54,7 @@ class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
 	public function register() {
 		$tokens                  = parent::register();
 		$tokens[ T_BOOLEAN_NOT ] = T_BOOLEAN_NOT;
-		$logical_operators       = PHP_CodeSniffer_Tokens::$booleanOperators;
+		$logical_operators       = Tokens::$booleanOperators;
 
 		// Using array union to auto-dedup.
 		return $tokens + $logical_operators;

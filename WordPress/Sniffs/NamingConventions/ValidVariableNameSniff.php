@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer_Standards_AbstractVariableSniff as PHPCS_AbstractVariableSniff;
+use PHP_CodeSniffer_File as File;
 use WordPress\Sniff;
 
 /**
@@ -122,13 +123,13 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the current token in the
-	 *                                        stack passed in $tokens.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @param int                         $stack_ptr  The position of the current token in the
+	 *                                                stack passed in $tokens.
 	 *
 	 * @return void
 	 */
-	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+	protected function processVariable( File $phpcs_file, $stack_ptr ) {
 
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -208,13 +209,13 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	/**
 	 * Processes class member variables.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the current token in the
-	 *                                        stack passed in $tokens.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @param int                         $stack_ptr  The position of the current token in the
+	 *                                                stack passed in $tokens.
 	 *
 	 * @return void
 	 */
-	protected function processMemberVar( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+	protected function processMemberVar( File $phpcs_file, $stack_ptr ) {
 
 		$tokens = $phpcs_file->getTokens();
 
@@ -242,13 +243,13 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	/**
 	 * Processes the variable found within a double quoted string.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the double quoted
-	 *                                         string.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @param int                         $stack_ptr  The position of the double quoted
+	 *                                                string.
 	 *
 	 * @return void
 	 */
-	protected function processVariableInString( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+	protected function processVariableInString( File $phpcs_file, $stack_ptr ) {
 
 		$tokens = $phpcs_file->getTokens();
 
@@ -294,11 +295,11 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
 	 *
 	 * @return void
 	 */
-	protected function mergeWhiteList( $phpcs_file ) {
+	protected function mergeWhiteList( File $phpcs_file ) {
 		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties']
 			|| $this->customVariablesWhitelist !== $this->addedCustomProperties['variables']
 		) {

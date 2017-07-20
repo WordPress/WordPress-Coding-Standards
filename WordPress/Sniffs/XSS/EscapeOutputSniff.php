@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\XSS;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Verifies that all outputted strings are escaped.
@@ -198,7 +199,7 @@ class EscapeOutputSniff extends Sniff {
 		$function = $this->tokens[ $stackPtr ]['content'];
 
 		// Find the opening parenthesis (if present; T_ECHO might not have it).
-		$open_paren = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		// If function, not T_ECHO nor T_PRINT.
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
@@ -260,7 +261,7 @@ class EscapeOutputSniff extends Sniff {
 		if ( ! isset( $end_of_statement ) ) {
 
 			$end_of_statement = $this->phpcsFile->findNext( array( T_SEMICOLON, T_CLOSE_TAG ), $stackPtr );
-			$last_token       = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
+			$last_token       = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
 
 			// Check for the ternary operator. We only need to do this here if this
 			// echo is lacking parenthesis. Otherwise it will be handled below.
@@ -286,7 +287,7 @@ class EscapeOutputSniff extends Sniff {
 		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
 
 			// Ignore whitespaces and comments.
-			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
@@ -388,7 +389,7 @@ class EscapeOutputSniff extends Sniff {
 
 						// Get the first parameter (name of function being used on the array).
 						$mapped_function = $this->phpcsFile->findNext(
-							PHP_CodeSniffer_Tokens::$emptyTokens,
+							Tokens::$emptyTokens,
 							( $function_opener + 1 ),
 							$this->tokens[ $function_opener ]['parenthesis_closer'],
 							true

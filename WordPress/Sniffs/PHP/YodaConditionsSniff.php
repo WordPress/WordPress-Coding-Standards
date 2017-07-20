@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\PHP;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Enforces Yoda conditional statements.
@@ -40,8 +41,8 @@ class YodaConditionsSniff extends Sniff {
 	 */
 	public function register() {
 
-		$starters                       = PHP_CodeSniffer_Tokens::$booleanOperators;
-		$starters                      += PHP_CodeSniffer_Tokens::$assignmentTokens;
+		$starters                       = Tokens::$booleanOperators;
+		$starters                      += Tokens::$assignmentTokens;
 		$starters[ T_CASE ]             = T_CASE;
 		$starters[ T_RETURN ]           = T_RETURN;
 		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
@@ -75,7 +76,7 @@ class YodaConditionsSniff extends Sniff {
 		for ( $i = $stackPtr; $i > $start; $i-- ) {
 
 			// Ignore whitespace.
-			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
@@ -98,15 +99,15 @@ class YodaConditionsSniff extends Sniff {
 		}
 
 		// Check if this is a var to var comparison, e.g.: if ( $var1 == $var2 ).
-		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-		if ( isset( PHP_CodeSniffer_Tokens::$castTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
-			$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
+		if ( isset( Tokens::$castTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
+			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
 		}
 
 		if ( in_array( $this->tokens[ $next_non_empty ]['code'], array( T_SELF, T_PARENT, T_STATIC ), true ) ) {
 			$next_non_empty = $this->phpcsFile->findNext(
-				array_merge( PHP_CodeSniffer_Tokens::$emptyTokens, array( T_DOUBLE_COLON ) )
+				array_merge( Tokens::$emptyTokens, array( T_DOUBLE_COLON ) )
 				, ( $next_non_empty + 1 )
 				, null
 				, true

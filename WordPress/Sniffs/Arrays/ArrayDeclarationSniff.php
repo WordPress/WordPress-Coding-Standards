@@ -9,6 +9,8 @@
 
 namespace WordPress\Sniffs\Arrays;
 
+use PHP_CodeSniffer_File as File;
+
 /**
  * Enforces WordPress array format, based upon Squiz code.
  *
@@ -49,11 +51,11 @@ class ArrayDeclarationSniff {
 	 *
 	 * @deprecated 0.13.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile A PHP_CodeSniffer file.
-	 * @param int                  $stackPtr  The position of the token.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile A PHP_CodeSniffer file.
+	 * @param int                         $stackPtr  The position of the token.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {}
+	public function process( File $phpcsFile, $stackPtr ) {}
 
 } // End class.

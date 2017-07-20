@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\CodeAnalysis;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Checks against empty statements.
@@ -57,7 +58,7 @@ class EmptyStatementSniff extends Sniff {
 			 */
 			case 'T_SEMICOLON':
 				$prevNonEmpty = $this->phpcsFile->findPrevious(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					( $stackPtr - 1 ),
 					null,
 					true

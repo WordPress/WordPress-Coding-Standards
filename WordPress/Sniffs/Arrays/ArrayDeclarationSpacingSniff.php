@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\Arrays;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Enforces WordPress array spacing format.
@@ -219,7 +220,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 							 * interpreted as alignment whitespace.
 							 */
 							$first_non_empty = $this->phpcsFile->findNext(
-								PHP_CodeSniffer_Tokens::$emptyTokens,
+								Tokens::$emptyTokens,
 								$item['start'],
 								( $item['end'] + 1 ),
 								true

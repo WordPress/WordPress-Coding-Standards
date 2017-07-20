@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\NamingConventions;
 
 use WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
@@ -272,7 +273,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 						return;
 					}
 
-					$constant_name_ptr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+					$constant_name_ptr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 					if ( false === $constant_name_ptr ) {
 						// Live coding.
 						return;
@@ -329,7 +330,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		// Is this a variable variable ?
 		// Not concerned with nested ones as those will be recognized on their own token.
-		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 		if ( false === $next_non_empty || ! isset( $indicators[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
 			return;
 		}
@@ -341,14 +342,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$next_non_empty = $this->tokens[ $next_non_empty ]['bracket_closer'];
 		}
 
-		$maybe_assignment = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
+		$maybe_assignment = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
 
 		while ( false !== $maybe_assignment
 			&& T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
 			&& isset( $this->tokens[ $maybe_assignment ]['bracket_closer'] )
 		) {
 			$maybe_assignment = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				( $this->tokens[ $maybe_assignment ]['bracket_closer'] + 1 ),
 				null,
 				true,
@@ -361,7 +362,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( ! isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $maybe_assignment ]['code'] ] ) ) {
+		if ( ! isset( Tokens::$assignmentTokens[ $this->tokens[ $maybe_assignment ]['code'] ] ) ) {
 			// Not an assignment.
 			return;
 		}
@@ -435,13 +436,13 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( 'GLOBALS' === $variable_name ) {
-			$array_open = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+			$array_open = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 			if ( false === $array_open || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $array_open ]['code'] ) {
 				// Live coding or something very silly.
 				return;
 			}
 
-			$array_key = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $array_open + 1 ), null, true, null, true );
+			$array_key = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $array_open + 1 ), null, true, null, true );
 			if ( false === $array_key ) {
 				// No key found, nothing to do.
 				return;
@@ -451,7 +452,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$variable_name = $this->strip_quotes( $this->tokens[ $array_key ]['content'] );
 
 			// Check whether a prefix is needed.
-			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
 				&& $this->variable_prefixed_or_whitelisted( $variable_name ) === true
 			) {
 				return;
@@ -470,7 +471,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					// If the first part was dynamic, throw a warning.
 					$is_error = false;
 				}
-			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] ) ) {
+			} elseif ( ! isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] ) ) {
 				// Dynamic array key, throw a warning.
 				$is_error = false;
 			}
@@ -580,7 +581,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		} else {
 			// This may be a dynamic hook/constant name.
 			$first_non_empty = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				$parameters[1]['start'],
 				( $parameters[1]['end'] + 1 ),
 				true
@@ -593,7 +594,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$first_non_empty_content = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
 
 			// Try again with just the first token if it's a text string.
-			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
 				&& $this->is_prefixed( $first_non_empty_content ) === true
 			) {
 				return;
@@ -612,7 +613,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					// Start of hook/constant name is dynamic, throw a warning.
 					$is_error = false;
 				}
-			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] ) ) {
+			} elseif ( ! isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] ) ) {
 				// Dynamic hook/constant name, throw a warning.
 				$is_error = false;
 			}
