@@ -25,7 +25,7 @@ $bad = array(
 // Test for fixing associative arrays with comments between values.
 $bad = array( 'key1' => 'value1', /* comment */ 'key2' => 'value2' ); // Bad.
 
-// Test for (not) fixing non-associative array with a nested associative array which *will* be fixed.
+// Test for fixing non-associative array with a nested associative array which *will* be fixed.
 $bad = array( 'value1', 'value2', [ 'sub1' => 1, 'sub2' => 2 ], 'value4' ); // Bad.
 
 /*
@@ -60,3 +60,39 @@ $value = array ( );
 $value = array(   );
 $x = array(
 	 );
+
+/*
+ * Tests for multi-line arrays - closing brace on new line + array items each on new line.
+ */
+// OK.
+$value = array(
+	1,
+	2, /* Comment. */
+	3,
+);
+
+$value = array(
+	1 => $one,
+	2 => $two, // Comment.
+	3 => $three, // Comment.
+);
+
+// Bad.
+$value = array(1,
+	2 ,     3 ,
+);
+
+$value = array(1 => $one,
+	2 => $two , /* Comment. */ 3 => $three , );
+
+$value = array(
+	 '1'=> TRUE, FALSE,     '3' => 'aaa',);
+
+$x = array('name' => 'test',
+	 );
+
+$foo = array(1
+, 2);
+
+$fields = array(
+	'value' => 'type');

@@ -8,7 +8,8 @@ $query_vars = array( 'food' ); // Bad, no spaces after opening and before closin
 $test = array( 1, 2 );
 
 $bad = array(
-'key' => 'value' ); // Bad, each value of an associative array should start on a new line.
+'key' => 'value'
+); // Bad, each value of an associative array should start on a new line.
 
 // Test for fixing nested associative arrays.
 $bad = array(
@@ -16,11 +17,15 @@ array(
 'key1' => 'value1',
 'key2' => [
 'sub1' => 1,
-'sub2' => 2] ),
+'sub2' => 2
+]
+),
 $key3 => 'value3',
 [
 'value4',
-10 => 'value5', ] ); // Bad.
+10 => 'value5',
+]
+); // Bad.
 
 // Test for fixing mixed single & multi-line nested associative arrays.
 $bad = array(
@@ -28,11 +33,14 @@ $bad = array(
 'key1' => 'value1',
 array(
 'sub1' => 1,
-'sub2' => 2,)),
+'sub2' => 2,
+)
+),
 	$key3 => 'value3',
 	[
 'value4',
-10 => 'value5' ]
+10 => 'value5'
+]
 ); // Bad.
 
 // Test for fixing associative arrays with multiple values & line indented with whitespace.
@@ -41,17 +49,25 @@ array(
 'key2' => 'value2',
 $key3 => 'value3',
 'value4',
-10 => 'value5' ); // Bad.
+10 => 'value5'
+); // Bad.
 
 // Test for fixing associative arrays with comments between values.
 $bad = array(
 'key1' => 'value1', /* comment */
-'key2' => 'value2' ); // Bad.
+'key2' => 'value2'
+); // Bad.
 
-// Test for (not) fixing non-associative array with a nested associative array which *will* be fixed.
-$bad = array( 'value1', 'value2', [
+// Test for fixing non-associative array with a nested associative array which *will* be fixed.
+$bad = array(
+'value1',
+'value2',
+[
 'sub1' => 1,
-'sub2' => 2 ], 'value4' ); // Bad.
+'sub2' => 2
+],
+'value4'
+); // Bad.
 
 /*
  * Test spacing between array keyword and open parenthesis.
@@ -83,3 +99,52 @@ $x = array(
 $value = array();
 $value = array();
 $x = array();
+
+/*
+ * Tests for multi-line arrays - closing brace on new line + array items each on new line.
+ */
+// OK.
+$value = array(
+	1,
+	2, /* Comment. */
+	3,
+);
+
+$value = array(
+	1 => $one,
+	2 => $two, // Comment.
+	3 => $three, // Comment.
+);
+
+// Bad.
+$value = array(
+1,
+	2 ,
+3 ,
+);
+
+$value = array(
+1 => $one,
+	2 => $two ,
+/* Comment. */ 3 => $three ,
+);
+
+$value = array(
+	 '1'=> TRUE,
+FALSE,
+'3' => 'aaa',
+);
+
+$x = array(
+'name' => 'test',
+	 );
+
+$foo = array(
+1
+,
+2
+);
+
+$fields = array(
+	'value' => 'type'
+);
