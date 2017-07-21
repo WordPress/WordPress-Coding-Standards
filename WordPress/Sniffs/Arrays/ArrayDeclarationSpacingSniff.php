@@ -13,6 +13,8 @@
  * WordPress specific checks which are not covered by the `WordPress.Arrays.ArrayDeclaration`/
  * `Squiz.Arrays.ArrayDeclaration` sniff.
  *
+ * - Check for no space between array keyword and array opener.
+ * - Check for no space between the parentheses of an empty array.
  * - Checks for one space after the array opener / before the array closer in single-line arrays.
  * - Checks that associative arrays are multi-line.
  *
@@ -79,10 +81,63 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 		$closer = $array_open_close['closer'];
 		unset( $array_open_close );
 
-		// This array is empty, so the below checks aren't necessary.
-		if ( ( $opener + 1 ) === $closer ) {
+		/*
+		 * Long arrays only: Check for space between the array keyword and the open parenthesis.
+		 */
+		if ( T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
+
+			if ( ( $stackPtr + 1 ) !== $opener ) {
+				$error      = 'There must be no space between the "array" keyword and the opening parenthesis';
+				$error_code = 'SpaceAfterKeyword';
+
+				$nextNonWhitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), ( $opener + 1 ), true );
+				if ( $nextNonWhitespace !== $opener ) {
+					// Don't auto-fix: Something other than whitespace found between keyword and open parenthesis.
+					$this->phpcsFile->addError( $error, $stackPtr, $error_code );
+				} else {
+
+					$fix = $this->phpcsFile->addFixableError( $error, $stackPtr, $error_code );
+
+					if ( true === $fix ) {
+						$this->phpcsFile->fixer->beginChangeset();
+						for ( $i = ( $stackPtr + 1 ); $i < $opener; $i++ ) {
+							$this->phpcsFile->fixer->replaceToken( $i, '' );
+						}
+						$this->phpcsFile->fixer->endChangeset();
+						unset( $i );
+					}
+				}
+				unset( $error, $error_code, $nextNonWhitespace, $fix );
+			}
+		}
+
+		/*
+		 * Check for empty arrays.
+		 */
+		$nextNonWhitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $opener + 1 ), ( $closer + 1 ), true );
+		if ( $nextNonWhitespace === $closer ) {
+
+			if ( ( $opener + 1 ) !== $closer ) {
+				$fix = $this->phpcsFile->addFixableError(
+					'Empty array declaration must have no space between the parentheses',
+					$stackPtr,
+					'SpaceInEmptyArray'
+				);
+
+				if ( true === $fix ) {
+					$this->phpcsFile->fixer->beginChangeset();
+					for ( $i = ( $opener + 1 ); $i < $closer; $i++ ) {
+						$this->phpcsFile->fixer->replaceToken( $i, '' );
+					}
+					$this->phpcsFile->fixer->endChangeset();
+					unset( $i );
+				}
+			}
+
+			// This array is empty, so the below checks aren't necessary.
 			return;
 		}
+		unset( $nextNonWhitespace );
 
 		// We're only interested in single-line arrays.
 		if ( $this->tokens[ $opener ]['line'] !== $this->tokens[ $closer ]['line'] ) {

@@ -27,3 +27,36 @@ $bad = array( 'key1' => 'value1', /* comment */ 'key2' => 'value2' ); // Bad.
 
 // Test for (not) fixing non-associative array with a nested associative array which *will* be fixed.
 $bad = array( 'value1', 'value2', [ 'sub1' => 1, 'sub2' => 2 ], 'value4' ); // Bad.
+
+/*
+ * Test spacing between array keyword and open parenthesis.
+ */
+$a = array(); // OK.
+$b = array  (); // Bad.
+$train = array
+(
+	true,
+	'aaa'
+); // Bad - space between keyword and opener.
+
+$a = array
+// Bad.
+( 'a', 'b' );
+
+$a = array /* Bad. */ ( 'a', 'b' );
+
+/*
+ * Tests for empty array with space between parentheses.
+ */
+// OK.
+$a = array();
+$value = array( /* comment */ );
+$x = array(
+		// comment
+	 );
+
+// Bad.
+$value = array ( );
+$value = array(   );
+$x = array(
+	 );
