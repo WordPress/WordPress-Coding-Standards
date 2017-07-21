@@ -38,6 +38,14 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 	}
 
 	/**
+	 * Reset the $groups property.
+	 */
+	protected function tearDown() {
+		WordPress_AbstractFunctionRestrictionsSniff::$unittest_groups = array();
+		parent::tearDown();
+	}
+
+	/**
 	 * Skip this test on PHP 5.2 as otherwise testing the namespace resolving would fail.
 	 *
 	 * @return bool Whether to skip this test.

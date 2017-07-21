@@ -24,6 +24,14 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 	}
 
 	/**
+	 * Reset the $groups property.
+	 */
+	protected function tearDown() {
+		PHP_CodeSniffer::setConfigData( 'text_domain', null, true );
+		parent::tearDown();
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
