@@ -7,10 +7,13 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Classes;
+
+use WordPress\Sniff;
+
 /**
- * WordPress_Sniffs_Classes_ClassInstantiationSniff.
- *
  * Verifies object instantiation statements.
+ *
  * - Demand the use of parenthesis.
  * - Demand no space between the class name and the parenthesis.
  * - Forbid assigning new by reference.
@@ -21,8 +24,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_Classes_ClassInstantiationSniff extends WordPress_Sniff {
+class ClassInstantiationSniff extends Sniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.

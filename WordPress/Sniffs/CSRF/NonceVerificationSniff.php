@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\CSRF;
+
+use WordPress\Sniff;
+
 /**
  * Checks that nonce verification accompanies form processing.
  *
@@ -15,8 +19,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.5.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
+class NonceVerificationSniff extends Sniff {
 
 	/**
 	 * Superglobals to notify about when not accompanied by an nonce check.

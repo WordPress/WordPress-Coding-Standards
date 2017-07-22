@@ -7,6 +7,8 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Arrays;
+
 /**
  * Enforces WordPress array format, based upon Squiz code.
  *
@@ -19,6 +21,8 @@
  * @since      0.11.0 The additional single-line array checks have been moved to their own
  *                    sniff WordPress.Arrays.ArrayDeclarationSpacing.
  *                    This class now only contains a slimmed down version of the upstream sniff.
+ * @since      0.13.0 Class name changed: this class is now namespaced.
+ *
  * @deprecated 0.13.0 This sniff has now been deprecated. Most checks which were previously
  *                    contained herein had recently been excluded in favour of dedicated
  *                    sniffs with higher precision. The last remaining checks which were not
@@ -27,7 +31,7 @@
  *                    This class is left here to prevent breaking custom rulesets which refer
  *                    to this sniff.
  */
-class WordPress_Sniffs_Arrays_ArrayDeclarationSniff {
+class ArrayDeclarationSniff {
 
 	/**
 	 * Don't use.

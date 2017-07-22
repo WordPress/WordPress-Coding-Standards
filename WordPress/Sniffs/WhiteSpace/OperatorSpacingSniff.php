@@ -28,6 +28,7 @@ if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff', true ) ) {
  *                 T_BOOLEAN_NOT and the logical operators (`&&` and the like) - via the
  *                 registration method and changing the value of the customizable
  *                 $ignoreNewlines property.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * Last synced with base class June 2017 at commit 41127aa4764536f38f504fb3f7b8831f05919c89.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php

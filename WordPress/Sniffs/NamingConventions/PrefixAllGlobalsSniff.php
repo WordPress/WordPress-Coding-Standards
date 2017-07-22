@@ -7,16 +7,21 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\NamingConventions;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    WordPress_Sniff::$custom_test_class_whitelist
+ * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
-class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress_AbstractFunctionParameterSniff {
+class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Error message template.

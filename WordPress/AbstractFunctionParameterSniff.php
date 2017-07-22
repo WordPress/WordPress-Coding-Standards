@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Advises about parameters used in function calls.
  *
@@ -14,7 +18,7 @@
  *
  * @since   0.11.0
  */
-abstract class WordPress_AbstractFunctionParameterSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * The group name for this group of functions.

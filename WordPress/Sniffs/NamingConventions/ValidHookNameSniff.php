@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\NamingConventions;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
  *
@@ -21,8 +25,9 @@
  *
  * @since   0.10.0
  * @since   0.11.0 Extends the WordPress_AbstractFunctionParameterSniff class.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_AbstractFunctionParameterSniff {
+class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Additional word separators.

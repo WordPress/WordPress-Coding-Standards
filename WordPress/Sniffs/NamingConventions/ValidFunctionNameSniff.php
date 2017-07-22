@@ -19,6 +19,7 @@ if ( ! class_exists( 'PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff', tru
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.1.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * Last synced with parent class July 2016 up to commit 4fea2e651109e41066a81e22e004d851fb1287f6.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php

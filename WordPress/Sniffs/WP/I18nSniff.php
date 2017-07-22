@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+
 /**
  * Makes sure WP internationalization functions are used properly.
  *
@@ -20,8 +24,9 @@
  *                 - Now has the ability to handle text-domain set via the command-line
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
+class I18nSniff extends Sniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552

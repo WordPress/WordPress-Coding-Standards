@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Files;
+
+use WordPress\Sniff;
+
 /**
  * Ensures filenames do not contain underscores.
  *
@@ -22,10 +26,11 @@
  *                 - This sniff will now allow for underscores in file names for certain theme
  *                   specific exceptions if the `$is_theme` property is set to `true`.
  * @since   0.12.0 - Now extends the `WordPress_Sniff` class.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    WordPress_Sniff::$custom_test_class_whitelist
+ * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
-class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
+class FileNameSniff extends Sniff {
 
 	/**
 	 * Regex for the theme specific exceptions.

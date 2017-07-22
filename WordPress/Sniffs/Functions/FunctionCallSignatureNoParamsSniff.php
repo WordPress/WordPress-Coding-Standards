@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Functions;
+
+use WordPress\Sniff;
+
 /**
  * Enforces no whitespace between the parenthesis of a function call without parameters.
  *
@@ -15,8 +19,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_Functions_FunctionCallSignatureNoParamsSniff extends WordPress_Sniff {
+class FunctionCallSignatureNoParamsSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

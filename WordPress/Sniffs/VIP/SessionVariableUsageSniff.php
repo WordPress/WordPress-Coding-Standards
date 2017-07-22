@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\Sniff;
+
 /**
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
@@ -19,8 +23,9 @@
  * @since   0.10.0 The sniff no longer needlessly extends the Generic_Sniffs_PHP_ForbiddenFunctionsSniff
  *                 which it didn't use.
  * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_SessionVariableUsageSniff extends WordPress_Sniff {
+class SessionVariableUsageSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

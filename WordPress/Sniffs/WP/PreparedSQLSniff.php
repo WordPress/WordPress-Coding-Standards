@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+
 /**
  * Sniff for prepared SQL.
  *
@@ -17,8 +21,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.8.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
+class PreparedSQLSniff extends Sniff {
 
 	/**
 	 * The lists of $wpdb methods.

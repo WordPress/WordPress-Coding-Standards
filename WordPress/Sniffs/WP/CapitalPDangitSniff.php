@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+
 /**
  * Capital P Dangit!
  *
@@ -15,8 +19,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
+class CapitalPDangitSniff extends Sniff {
 
 	/**
 	 * Regex to match a large number or spelling variations of WordPress in text strings.

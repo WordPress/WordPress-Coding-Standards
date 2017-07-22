@@ -7,6 +7,8 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
@@ -26,7 +28,7 @@
  *            In the rare few cases where the array values *do* have meaning, this
  *            is documented in the property documentation.}}
  */
-abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
+abstract class Sniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * List of the functions which verify nonces.

@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\PHP;
+
+use WordPress\Sniff;
+
 /**
  * Enforces Yoda conditional statements.
  *
@@ -16,8 +20,9 @@
  *
  * @since   0.3.0
  * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_PHP_YodaConditionsSniff extends WordPress_Sniff {
+class YodaConditionsSniff extends Sniff {
 
 	/**
 	 * The tokens that indicate the start of a condition.

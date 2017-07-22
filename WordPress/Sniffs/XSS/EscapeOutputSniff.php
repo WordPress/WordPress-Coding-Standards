@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\XSS;
+
+use WordPress\Sniff;
+
 /**
  * Verifies that all outputted strings are escaped.
  *
@@ -20,8 +24,9 @@
  *                 have been moved to the WordPress_Sniff parent class.
  * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
  *                 echo tags `<?=`.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
+class EscapeOutputSniff extends Sniff {
 
 	/**
 	 * Custom list of functions which escape values for output.
@@ -46,7 +51,7 @@ class WordPress_Sniffs_XSS_EscapeOutputSniff extends WordPress_Sniff {
 	 *
 	 * @since      0.3.0
 	 * @deprecated 0.5.0 Use $customEscapingFunctions instead.
-	 * @see        WordPress_Sniffs_XSS_EscapeOutputSniff::$customEscapingFunctions
+	 * @see        \WordPress\Sniffs\XSS\EscapeOutputSniff::$customEscapingFunctions
 	 *
 	 * @var string|string[]
 	 */

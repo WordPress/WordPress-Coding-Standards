@@ -10,6 +10,7 @@
 if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) ) {
 	throw new PHP_CodeSniffer_Exception( 'Class PHP_CodeSniffer_Standards_AbstractVariableSniff not found' );
 }
+use WordPress\Sniff;
 
 /**
  * Checks the naming of variables and member variables.
@@ -19,6 +20,7 @@ if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) )
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.9.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * Last synced with base class July 2014 at commit ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
@@ -301,10 +303,10 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 			|| $this->customVariablesWhitelist !== $this->addedCustomProperties['variables']
 		) {
 			// Fix property potentially passed as comma-delimited string.
-			$customProperties = WordPress_Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
+			$customProperties = Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
 
 			if ( ! empty( $this->customVariablesWhitelist ) ) {
-				$customProperties = WordPress_Sniff::merge_custom_array(
+				$customProperties = Sniff::merge_custom_array(
 					$this->customVariablesWhitelist,
 					$customProperties,
 					false
@@ -317,7 +319,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 				);
 			}
 
-			$this->whitelisted_mixed_case_member_var_names = WordPress_Sniff::merge_custom_array(
+			$this->whitelisted_mixed_case_member_var_names = Sniff::merge_custom_array(
 				$customProperties,
 				$this->whitelisted_mixed_case_member_var_names
 			);

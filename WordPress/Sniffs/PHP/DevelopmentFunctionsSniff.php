@@ -7,14 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\PHP;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Restrict the use of various development functions.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.11.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_PHP_DevelopmentFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.

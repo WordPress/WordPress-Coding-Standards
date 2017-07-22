@@ -7,19 +7,24 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\PHP;
+
+use WordPress\Sniff;
+
 /**
  * Enforces Strict Comparison checks, based upon Squiz code.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.4.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * Last synced with base class ?[unknown date]? at commit ?[unknown commit]?.
  * It is currently unclear whether this sniff is actually based on Squiz code on whether the above
  * reference to it is a copy/paste oversight.
  * @link    Possibly: https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/Operators/ComparisonOperatorUsageSniff.php
  */
-class WordPress_Sniffs_PHP_StrictComparisonsSniff extends WordPress_Sniff {
+class StrictComparisonsSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

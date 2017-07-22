@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Arrays;
+
+use WordPress\Sniff;
+
 /**
  * Enforces WordPress array indentation for multi-line arrays.
  *
@@ -15,11 +19,12 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * {@internal This sniff should eventually be pulled upstream as part of a solution
  * for https://github.com/squizlabs/PHP_CodeSniffer/issues/582 }}
  */
-class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
+class ArrayIndentationSniff extends Sniff {
 
 	/**
 	 * Should tabs be used for indenting?

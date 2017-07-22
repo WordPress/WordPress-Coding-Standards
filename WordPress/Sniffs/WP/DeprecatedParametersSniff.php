@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Check for usage of deprecated parameters in WP functions and suggest alternative based on the parameter passed.
  *
@@ -19,8 +23,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_DeprecatedParametersSniff extends WordPress_AbstractFunctionParameterSniff {
+class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

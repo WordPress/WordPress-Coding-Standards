@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Arrays;
+
+use WordPress\Sniff;
+
 /**
  * Enforces a comma after each array item and the spacing around it.
  *
@@ -22,8 +26,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_Arrays_CommaAfterArrayItemSniff extends WordPress_Sniff {
+class CommaAfterArrayItemSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

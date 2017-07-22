@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Discourages removal of the admin bar.
  *
@@ -18,8 +22,9 @@
  * @since   0.11.0 - Extends the WordPress_AbstractFunctionParameterSniff class.
  *                 - Added the $remove_only property.
  *                 - Now also sniffs for manipulation of the admin bar visibility through CSS.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_AdminBarRemovalSniff extends WordPress_AbstractFunctionParameterSniff {
+class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.

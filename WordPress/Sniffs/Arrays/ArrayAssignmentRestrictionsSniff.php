@@ -7,21 +7,27 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Arrays;
+
+use WordPress\AbstractArrayAssignmentRestrictionsSniff;
+
 /**
  * Restricts array assignment of certain keys.
  *
  * @package    WPCS\WordPressCodingStandards
  *
  * @since      0.3.0
+ * @since      0.13.0 Class name changed: this class is now namespaced.
+ *
  * @deprecated 0.10.0 The functionality which used to be contained in this class has been moved to
  *                    the WordPress_AbstractArrayAssignmentRestrictionsSniff class.
  *                    This class is left here to prevent backward-compatibility breaks for
  *                    custom sniffs extending the old class and references to this
  *                    sniff from custom phpcs.xml files.
  *                    This file is also still used to unit test the abstract class.
- * @see        WordPress_AbstractArrayAssignmentRestrictionsSniff
+ * @see        \WordPress\AbstractArrayAssignmentRestrictionsSniff
  */
-class WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
+class ArrayAssignmentRestrictionsSniff extends AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.
