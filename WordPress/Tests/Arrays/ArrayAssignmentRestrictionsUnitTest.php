@@ -34,6 +34,14 @@ class WordPress_Tests_Arrays_ArrayAssignmentRestrictionsUnitTest extends Abstrac
 	}
 
 	/**
+	 * Reset the $groups property.
+	 */
+	protected function tearDown() {
+		WordPress_AbstractArrayAssignmentRestrictionsSniff::$groups = array();
+		parent::tearDown();
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @return array <int line number> => <int number of errors>

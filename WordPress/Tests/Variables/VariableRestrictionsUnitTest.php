@@ -58,6 +58,14 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 	}
 
 	/**
+	 * Reset the $groups property.
+	 */
+	protected function tearDown() {
+		WordPress_AbstractVariableRestrictionsSniff::$groups = array();
+		parent::tearDown();
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @return array <int line number> => <int number of errors>
