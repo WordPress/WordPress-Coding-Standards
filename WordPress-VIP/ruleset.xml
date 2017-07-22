@@ -2,6 +2,8 @@
 <ruleset name="WordPress VIP">
 	<description>WordPress VIP Coding Standards</description>
 
+	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+
 	<rule ref="WordPress-Core"/>
 
 	<!-- Covers:
