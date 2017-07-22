@@ -2,11 +2,6 @@
 <ruleset name="WordPress Coding Standards">
 	<description>The Coding standard for the WordPress Coding Standards itself.</description>
 
-	<!-- Exclude one sniff which is nothing but a slimmed down copy of an upstream sniff.
-	     Leaving the code standard of this sniff alone, will facilitate easier syncing
-		 with the upstream sniff now and in the future. -->
-	<exclude-pattern>/WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php</exclude-pattern>
-
 	<rule ref="WordPress-Extra">
 		<exclude name="WordPress.Files.FileName" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName" />
