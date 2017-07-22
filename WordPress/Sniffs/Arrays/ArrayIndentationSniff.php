@@ -141,7 +141,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 				 * Otherwise, only report the error, don't try and fix it (yet).
 				 *
 				 * It will get corrected in a future loop of the fixer once the closer
-				 * has been moved to its own line by the `ArrayDeclaration` sniff.
+				 * has been moved to its own line by the `ArrayDeclarationSpacing` sniff.
 				 */
 				$this->phpcsFile->addError(
 					$error,
@@ -184,7 +184,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 			}
 
 			// Bow out from reporting and fixing mixed multi-line/single-line arrays.
-			// That is handled by the ArrayDeclarationSniff.
+			// That is handled by the ArrayDeclarationSpacingSniff.
 			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
 				|| ( 1 !== $this->tokens[ $first_content ]['column']
 					&& T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )

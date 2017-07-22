@@ -10,9 +10,6 @@
 /**
  * Enforces WordPress array spacing format.
  *
- * WordPress specific checks which are not covered by the `WordPress.Arrays.ArrayDeclaration`/
- * `Squiz.Arrays.ArrayDeclaration` sniff.
- *
  * - Check for no space between array keyword and array opener.
  * - Check for no space between the parentheses of an empty array.
  * - Checks for one space after the array opener / before the array closer in single-line arrays.
@@ -30,6 +27,9 @@
  *                 - Added sniffing & fixing for associative arrays.
  * @since   0.12.0 Decoupled this sniff from the upstream sniff completely.
  *                 This sniff now extends the `WordPress_Sniff` instead.
+ * @since   0.13.0 Added the last remaining checks from the `ArrayDeclaration` sniff
+ *                 which were not covered elsewhere. The `ArrayDeclaration` sniff has
+ *                 now been deprecated.
  */
 class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sniff {
 
