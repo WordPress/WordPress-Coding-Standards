@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff not found' );
-}
+namespace WordPress\Sniffs\WhiteSpace;
+
+use Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
 
 /**
  * Verify operator spacing, uses the Squiz sniff, but additionally also sniffs for the `!` (boolean not) operator.
@@ -33,7 +33,7 @@ if ( ! class_exists( 'Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff', true ) ) {
  * Last synced with base class June 2017 at commit 41127aa4764536f38f504fb3f7b8831f05919c89.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php
  */
-class WordPress_Sniffs_WhiteSpace_OperatorSpacingSniff extends Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff {
+class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
 
 	/**
 	 * Allow newlines instead of spaces.
