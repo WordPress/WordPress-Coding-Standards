@@ -1,65 +1,68 @@
 <?php
+/*
+ * Test sniff with short arrays.
+ */
 
-$good = array( 'value1', 'value2' ); // Ok.
+$good = [ 'value1', 'value2' ]; // Ok.
 
-$query_vars = array( 'food' ); // Bad, no spaces after opening and before closing parenthesis.
+$query_vars = [ 'food' ]; // Bad, no spaces after opening and before closing parenthesis.
 
 // Test for fixing of extra whitespace.
-$test = array( 1, 2 );
+$test = [ 1, 2 ];
 
-$bad = array(
+$bad = [
 'key' => 'value'
-); // Bad, each value of an associative array should start on a new line.
+]; // Bad, each value of an associative array should start on a new line.
 
 // Test for fixing nested associative arrays.
-$bad = array(
-array(
+$bad = [
+[
 'key1' => 'value1',
 'key2' => [
 'sub1' => 1,
 'sub2' => 2
 ]
-),
+],
 $key3 => 'value3',
 [
 'value4',
 10 => 'value5',
 ]
-); // Bad.
+]; // Bad.
 
 // Test for fixing mixed single & multi-line nested associative arrays.
-$bad = array(
-	array(
+$bad = [
+	[
 'key1' => 'value1',
-array(
+[
 'sub1' => 1,
 'sub2' => 2,
-)
-),
+]
+],
 	$key3 => 'value3',
 	[
 'value4',
 10 => 'value5'
 ]
-); // Bad.
+]; // Bad.
 
 // Test for fixing associative arrays with multiple values & line indented with whitespace.
-		$bad = array(
+		$bad = [
 'key1' => 'value1',
 'key2' => 'value2',
 $key3 => 'value3',
 'value4',
 10 => 'value5'
-); // Bad.
+]; // Bad.
 
 // Test for fixing associative arrays with comments between values.
-$bad = array(
+$bad = [
 'key1' => 'value1', /* comment */
 'key2' => 'value2'
-); // Bad.
+]; // Bad.
 
 // Test for fixing non-associative array with a nested associative array which *will* be fixed.
-$bad = array(
+$bad = [
 'value1',
 'value2',
 [
@@ -67,84 +70,68 @@ $bad = array(
 'sub2' => 2
 ],
 'value4'
-); // Bad.
-
-/*
- * Test spacing between array keyword and open parenthesis.
- */
-$a = array(); // OK.
-$b = array(); // Bad.
-$train = array(
-	true,
-	'aaa'
-); // Bad - space between keyword and opener.
-
-$a = array
-// Bad.
-( 'a', 'b' );
-
-$a = array /* Bad. */ ( 'a', 'b' );
+]; // Bad.
 
 /*
  * Tests for empty array with space between parentheses.
  */
 // OK.
-$a = array();
-$value = array( /* comment */ );
-$x = array(
+$a = [];
+$value = [ /* comment */ ];
+$x = [
 		// comment
-	 );
+	 ];
 
 // Bad.
-$value = array();
-$value = array();
-$x = array();
+$value = [];
+$value = [];
+$x = [];
 
 /*
  * Tests for multi-line arrays - closing brace on new line + array items each on new line.
  */
 // OK.
-$value = array(
+$value = [
 	1,
 	2, /* Comment. */
 	3,
-);
+];
 
-$value = array(
+$value = [
 	1 => $one,
 	2 => $two, // Comment.
 	3 => $three, // Comment.
-);
+];
 
 // Bad.
-$value = array(
+$value = [
 1,
 	2 ,
 3 ,
-);
+];
 
-$value = array(
+$value = [
 1 => $one,
 	2 => $two ,
 /* Comment. */ 3 => $three ,
-);
+];
 
-$value = array(
+$value = [
 	 '1'=> TRUE,
 FALSE,
 '3' => 'aaa',
-);
+];
 
-$x = array(
+$x = [
 'name' => 'test',
-	 );
+	 ];
 
-$foo = array(
+$foo = [
 1
 ,
 2
-);
+];
 
-$fields = array(
+$fields = [
 	'value' => 'type'
-);
+];
