@@ -39,7 +39,7 @@ class WordPress_Sniffs_Variables_VariableRestrictionsSniff extends WordPress_Abs
 	 * @return array
 	 */
 	public function getGroups() {
-		return parent::$groups;
+		return array();
 	}
 
 } // End class.
