@@ -19,8 +19,8 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.3.0
  * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
  *                 Moved the file and renamed the class from
- *                 `WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff` to
- *                 `WordPress_AbstractArrayAssignmentRestrictionsSniff`.
+ *                 `\WordPressCS\WordPress\Sniffs\Arrays\ArrayAssignmentRestrictionsSniff` to
+ *                 `\WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff`.
  */
 abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 

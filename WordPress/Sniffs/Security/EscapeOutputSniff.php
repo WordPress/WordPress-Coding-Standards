@@ -20,9 +20,9 @@ use PHP_CodeSniffer\Util\Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   2013-06-11
- * @since   0.4.0  This class now extends WordPress_Sniff.
+ * @since   0.4.0  This class now extends the WordPressCS native `Sniff` class.
  * @since   0.5.0  The various function list properties which used to be contained in this class
- *                 have been moved to the WordPress_Sniff parent class.
+ *                 have been moved to the WordPressCS native `Sniff` parent class.
  * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
  *                 echo tags `<?=`.
  * @since   0.13.0 Class name changed: this class is now namespaced.

@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.1.0
  * @since   2013-06-11 This sniff no longer supports JS.
  * @since   0.3.0      This sniff now has the ability to fix most errors it flags.
- * @since   0.7.0      This class now extends WordPress_Sniff.
+ * @since   0.7.0      This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0     Class name changed: this class is now namespaced.
  *
  * Last synced with base class 2017-01-15 at commit b024ad84656c37ef5733c6998ebc1e60957b2277.

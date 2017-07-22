@@ -500,7 +500,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.3.0
 	 * @since 0.11.0 Changed visibility from public to protected.
 	 * @since 0.12.0 Renamed from `$globals` to `$wp_globals` to be more descriptive.
-	 * @since 0.12.0 Moved from WordPress_Sniffs_Variables_GlobalVariablesSniff to WordPress_Sniff
+	 * @since 0.12.0 Moved here from the WordPress.Variables.GlobalVariables sniff.
 	 *
 	 * @var array
 	 */
@@ -955,7 +955,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *     before merging/returning to allow for resetting to the base array.
 	 *
 	 * {@internal Function is static as it doesn't use any of the properties or others
-	 * methods anyway and this way the `WordPress_Sniffs_NamingConventions_ValidVariableNameSniff`
+	 * methods anyway and this way the `WordPress.NamingConventions.ValidVariableName` sniff
 	 * which extends an upstream sniff can also use it.}}
 	 *
 	 * @since 0.11.0
@@ -2196,7 +2196,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Determine the namespace name an arbitrary token lives in.
 	 *
 	 * @since 0.10.0
-	 * @since 0.12.0 Moved from the WordPress_AbstractClassRestrictionsSniff to this sniff.
+	 * @since 0.12.0 Moved from the `AbstractClassRestrictionsSniff` to this class.
 	 *
 	 * @param int $stackPtr The token position for which to determine the namespace.
 	 *
@@ -2262,7 +2262,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * i.e. MyProject\Sub\Level which will be returned together as one string.
 	 *
 	 * @since 0.12.0 A lesser variant of this method previously existed in the
-	 *               WordPress_AbstractClassRestrictionsSniff.
+	 *               `AbstractClassRestrictionsSniff` class.
 	 *
 	 * @param int|bool $stackPtr The position of a T_NAMESPACE token.
 	 *

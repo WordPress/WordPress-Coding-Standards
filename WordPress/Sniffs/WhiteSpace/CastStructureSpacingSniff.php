@@ -22,7 +22,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.3.0
  * @since   0.11.0 This sniff now has the ability to fix the issues it flags.
  * @since   0.11.0 The error level for all errors thrown by this sniff has been raised from warning to error.
- * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class CastStructureSpacingSniff extends Sniff {

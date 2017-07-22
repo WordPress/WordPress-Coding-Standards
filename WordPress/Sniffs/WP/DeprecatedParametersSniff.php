@@ -28,7 +28,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
