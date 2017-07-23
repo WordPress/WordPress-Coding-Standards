@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Classes;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the ClassInstantiation sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_Classes_ClassInstantiationUnitTest extends AbstractSniffUnitTest {
+class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Get a list of all test files to check.

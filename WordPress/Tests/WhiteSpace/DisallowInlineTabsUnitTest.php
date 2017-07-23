@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WhiteSpace;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the DisallowInlineTabs sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WhiteSpace_DisallowInlineTabsUnitTest extends AbstractSniffUnitTest {
+class DisallowInlineTabsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Get a list of CLI values to set before the file is tested.

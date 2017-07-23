@@ -7,15 +7,20 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the I18n sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.10.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
+class I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Fill in the $text_domain property to test domain check functionality.

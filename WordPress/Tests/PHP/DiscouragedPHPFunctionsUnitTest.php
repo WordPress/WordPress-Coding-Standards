@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\PHP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the PHP_DiscouragedPHPFunctions sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.11.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_PHP_DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
+class DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
