@@ -8,21 +8,20 @@
  */
 
 /**
- * Suppress Filters need to be 'true' when getting posts using get_posts.
+ * Support_filters must be false when using get_posts(), wp_get_recent_posts(), get_children().
  *
  * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.3.0
+ * @since   0.14.0
  */
 class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFunctionParameterSniff {
 
 	/**
-	 * Groups of variables to restrict.
-	 * This should be overridden in extending classes.
+	 * Functions this sniff is looking for.
 	 *
-	 * @since 0.3.0
+	 * @since 0.14.0
 	 *
 	 * @var array
 	 */
@@ -35,7 +34,7 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 	/**
 	 * Process the parameters of a matched function.
 	 *
-	 * @since 0.3.0
+	 * @since 0.14.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 * @param array $group_name The name of the group which was matched.
