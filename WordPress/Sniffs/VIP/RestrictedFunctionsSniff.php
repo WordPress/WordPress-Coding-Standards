@@ -162,18 +162,6 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @todo Introduce a sniff specific to get_posts() that checks for suppress_filters=>false being supplied.
-			/*'get_posts' => array(
-				'type'      => 'warning',
-				'message'   => '%s() is discouraged in favor of creating a new WP_Query() so that Advanced Post Cache will cache the query, unless you explicitly supply suppress_filters => false.',
-				'functions' => array(
-					'get_posts',
-					'wp_get_recent_posts',
-					'get_children',
-				),
-			),
-			*/
-
 			'term_exists' => array(
 				'type'      => 'error',
 				'message'   => '%s() is highly discouraged due to not being cached; please use wpcom_vip_term_exists() instead.',
