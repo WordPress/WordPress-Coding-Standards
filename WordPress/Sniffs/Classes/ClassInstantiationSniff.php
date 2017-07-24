@@ -7,10 +7,14 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Classes;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
- * WordPress_Sniffs_Classes_ClassInstantiationSniff.
- *
  * Verifies object instantiation statements.
+ *
  * - Demand the use of parenthesis.
  * - Demand no space between the class name and the parenthesis.
  * - Forbid assigning new by reference.
@@ -21,8 +25,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_Classes_ClassInstantiationSniff extends WordPress_Sniff {
+class ClassInstantiationSniff extends Sniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.
@@ -54,7 +59,7 @@ class WordPress_Sniffs_Classes_ClassInstantiationSniff extends WordPress_Sniff {
 		 *
 		 * Currently does not account for classnames passed as a variable variable.
 		 */
-		$this->classname_tokens                           = PHP_CodeSniffer_Tokens::$emptyTokens;
+		$this->classname_tokens                           = Tokens::$emptyTokens;
 		$this->classname_tokens[ T_NS_SEPARATOR ]         = T_NS_SEPARATOR;
 		$this->classname_tokens[ T_STRING ]               = T_STRING;
 		$this->classname_tokens[ T_SELF ]                 = T_SELF;
@@ -96,7 +101,7 @@ class WordPress_Sniffs_Classes_ClassInstantiationSniff extends WordPress_Sniff {
 		 */
 		if ( 'PHP' === $this->phpcsFile->tokenizerType ) {
 			$prev_non_empty = $this->phpcsFile->findPrevious(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				($stackPtr - 1),
 				null,
 				true
@@ -135,7 +140,7 @@ class WordPress_Sniffs_Classes_ClassInstantiationSniff extends WordPress_Sniff {
 		// Walk back to the last part of the class name.
 		$has_comment = false;
 		for ( $classname_ptr = ( $next_non_empty_after_class_name - 1 ); $classname_ptr >= $stackPtr; $classname_ptr-- ) {
-			if ( ! isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this->tokens[ $classname_ptr ]['code'] ] ) ) {
+			if ( ! isset( Tokens::$emptyTokens[ $this->tokens[ $classname_ptr ]['code'] ] ) ) {
 				// Prevent a false positive on variable variables, disregard them for now.
 				if ( $stackPtr === $classname_ptr ) {
 					return;

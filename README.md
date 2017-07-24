@@ -42,8 +42,8 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.2 or higher and the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
-The WordPress Coding Standards are currently [not compatible with the upcoming PHPCS 3 release](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/718).
+The WordPress Coding Standards require PHP 5.3 or higher and [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
+As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
 
 ### Composer
 
@@ -58,7 +58,7 @@ Running this command will:
 3. Register WordPress standards in PHP_CodeSniffer configuration.
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
 
-For the convenience of using `phpcs` as a global command, you may want to add the `wpcs/vendor/bin` path to a PATH environment in your operating system.
+For the convenience of using `phpcs` as a global command, you may want to add the path to the `wpcs/vendor/scripts` (PHPCS 2.x) and/or `wpcs/vendor/bin` (PHPCS 3.x) directories to a `PATH` environment variable for your operating system.
 
 #### Installing WPCS as a dependency
 
@@ -96,10 +96,13 @@ cd ~/projects
 git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
 git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 cd phpcs
+#PHPCS 2.x
 ./scripts/phpcs --config-set installed_paths ../wpcs
+#PHPCS 3.x
+./bin/phpcs --config-set installed_paths ../wpcs
 ```
 
-And then add the `~/projects/phpcs/scripts` directory to your `PATH` environment variable via your `.bashrc`.
+And then add the `~/projects/phpcs/scripts` (PHPCS 2.x) or `~/projects/phpcs/bin` (PHPCS 3.x) directory to your `PATH` environment variable via your `.bashrc`.
 
 You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
@@ -241,7 +244,7 @@ before_install:
   # Install WordPress Coding Standards.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR; fi
   # Set install path for WordPress Coding Standards.
-  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs --config-set installed_paths $SNIFFS_DIR; fi
+  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths $SNIFFS_DIR; fi
   # After CodeSniffer install you should refresh your path.
   - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
 
@@ -251,7 +254,7 @@ script:
   # for example: `--standard=wpcs.xml`.
   # You can use any of the normal PHPCS command line arguments in the command:
   # https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage
-  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p . --standard=WordPress; fi
+  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p . --standard=WordPress; fi
 ```
 
 

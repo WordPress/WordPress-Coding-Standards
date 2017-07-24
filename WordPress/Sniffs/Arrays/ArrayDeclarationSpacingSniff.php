@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Arrays;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Enforces WordPress array spacing format.
  *
@@ -30,8 +35,9 @@
  * @since   0.13.0 Added the last remaining checks from the `ArrayDeclaration` sniff
  *                 which were not covered elsewhere. The `ArrayDeclaration` sniff has
  *                 now been deprecated.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sniff {
+class ArrayDeclarationSpacingSniff extends Sniff {
 
 	/**
 	 * Token this sniff targets.
@@ -214,7 +220,7 @@ class WordPress_Sniffs_Arrays_ArrayDeclarationSpacingSniff extends WordPress_Sni
 							 * interpreted as alignment whitespace.
 							 */
 							$first_non_empty = $this->phpcsFile->findNext(
-								PHP_CodeSniffer_Tokens::$emptyTokens,
+								Tokens::$emptyTokens,
 								$item['start'],
 								( $item['end'] + 1 ),
 								true

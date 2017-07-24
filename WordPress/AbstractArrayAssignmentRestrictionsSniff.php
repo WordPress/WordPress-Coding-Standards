@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use WordPress\Sniff;
+
 /**
  * Restricts array assignment of certain keys.
  *
@@ -18,7 +22,7 @@
  *                 `WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff` to
  *                 `WordPress_AbstractArrayAssignmentRestrictionsSniff`.
  */
-abstract class WordPress_AbstractArrayAssignmentRestrictionsSniff extends WordPress_Sniff {
+abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 	/**
 	 * Exclude groups.

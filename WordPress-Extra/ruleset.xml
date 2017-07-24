@@ -2,6 +2,8 @@
 <ruleset name="WordPress Extra">
 	<description>Best practices beyond core WordPress Coding Standards</description>
 
+	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+
 	<!-- Generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>

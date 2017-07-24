@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.
  *
@@ -16,8 +21,9 @@
  *
  * @since   0.3.0
  * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_EnqueuedResourcesSniff extends WordPress_Sniff {
+class EnqueuedResourcesSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -25,7 +31,7 @@ class WordPress_Sniffs_WP_EnqueuedResourcesSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return PHP_CodeSniffer_Tokens::$textStringTokens;
+		return Tokens::$textStringTokens;
 	}
 
 	/**

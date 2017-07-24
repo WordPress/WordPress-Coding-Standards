@@ -2,6 +2,8 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
+	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+
 	<!-- Treat all files as UTF-8. -->
 	<config name="encoding" value="utf-8"/>
 

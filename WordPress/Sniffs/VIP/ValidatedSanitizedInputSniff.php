@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\Sniff;
+
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
@@ -15,10 +19,11 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.4.0 This class now extends WordPress_Sniff.
- * @since   0.5.0 Method getArrayIndexKey() has been moved to WordPress_Sniff.
+ * @since   0.4.0  This class now extends WordPress_Sniff.
+ * @since   0.5.0  Method getArrayIndexKey() has been moved to WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_ValidatedSanitizedInputSniff extends WordPress_Sniff {
+class ValidatedSanitizedInputSniff extends Sniff {
 
 	/**
 	 * Check for validation functions for a variable within its own parenthesis only.

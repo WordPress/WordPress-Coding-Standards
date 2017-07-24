@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Arrays;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the Arrays.CommaAfterArrayItem sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_Arrays_CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
+class CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

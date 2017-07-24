@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use WordPress\Sniff;
+
 /**
  * Restricts usage of some variables.
  *
@@ -19,7 +23,7 @@
  *                 `WordPress_AbstractVariableRestrictionsSniff`.
  * @since   0.11.0 Extends the WordPress_Sniff class.
  */
-abstract class WordPress_AbstractVariableRestrictionsSniff extends WordPress_Sniff {
+abstract class AbstractVariableRestrictionsSniff extends Sniff {
 
 	/**
 	 * Exclude groups.

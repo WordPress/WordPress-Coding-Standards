@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\CodeAnalysis;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Checks against empty statements.
  *
@@ -22,8 +27,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_CodeAnalysis_EmptyStatementSniff extends WordPress_Sniff {
+class EmptyStatementSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -52,7 +58,7 @@ class WordPress_Sniffs_CodeAnalysis_EmptyStatementSniff extends WordPress_Sniff 
 			 */
 			case 'T_SEMICOLON':
 				$prevNonEmpty = $this->phpcsFile->findPrevious(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					( $stackPtr - 1 ),
 					null,
 					true

@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\VIP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the VIP_RestrictedVariables sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_VIP_RestrictedVariablesUnitTest extends AbstractSniffUnitTest {
+class RestrictedVariablesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

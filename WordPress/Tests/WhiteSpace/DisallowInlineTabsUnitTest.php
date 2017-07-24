@@ -7,23 +7,52 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WhiteSpace;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the DisallowInlineTabs sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WhiteSpace_DisallowInlineTabsUnitTest extends AbstractSniffUnitTest {
+class DisallowInlineTabsUnitTest extends AbstractSniffUnitTest {
+
+	/**
+	 * The tab width to use during testing.
+	 *
+	 * @var int
+	 */
+	private $tab_width = 4;
 
 	/**
 	 * Get a list of CLI values to set before the file is tested.
+	 *
+	 * Used by PHPCS 2.x.
 	 *
 	 * @param string $testFile The name of the file being tested.
 	 *
 	 * @return array
 	 */
 	public function getCliValues( $testFile ) {
-		return array( '--tab-width=4' );
+		return array( '--tab-width=' . $this->tab_width );
+	}
+
+	/**
+	 * Set CLI values before the file is tested.
+	 *
+	 * Used by PHPCS 3.x.
+	 *
+	 * @param string                  $testFile The name of the file being tested.
+	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.
+	 *
+	 * @return void
+	 */
+	public function setCliValues( $testFile, $config ) {
+		$config->tabWidth = $this->tab_width;
 	}
 
 	/**

@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\CSRF;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the NonceVerification sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.5.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_CSRF_NonceVerificationUnitTest extends AbstractSniffUnitTest {
+class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
