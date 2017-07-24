@@ -24,11 +24,15 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
 If the sniff you are writing is susceptible to this, please consider adding the ability to [whitelist lines of code](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
 
-To this end, the `WordPress_Sniff::has_whitelist_comment()` method was introduced.
+To this end, the `WordPress\Sniff::has_whitelist_comment()` method was introduced.
 
 Example usage:
 ```php
-class WordPress_Sniffs_CSRF_NonceVerificationSniff extends WordPress_Sniff {
+namespace WordPress\Sniffs\CSRF;
+
+use WordPress\Sniff;
+
+class NonceVerificationSniff extends Sniff {
 
 	public function process_token( $stackPtr ) {
 
@@ -48,92 +52,140 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 
 # Unit Testing
 
-TL;DR
+## Pre-requisites
+* WordPress-Coding-Standards
+* PHP CodeSniffer 2.9.x or 3.x
+* PHPUnit 4.x or 5.x
 
-If you have installed `phpcs` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), then you can navigate to the directory where the `phpcs` repo is checked out and do:
+The WordPress Coding Standards use the PHP CodeSniffer native unit test suite for unit testing the sniffs.
 
-```sh
-composer install
-vendor/bin/phpunit --filter WordPress tests/AllTests.php
+Presuming you have installed PHP CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
+
+If you already have PHPUnit installed on your system: Congrats, you're all set.
+
+If not, you can navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies.
+Alternatively, you can [install PHPUnit](https://phpunit.de/manual/5.7/en/installation.html) as a PHAR file.
+
+## Before running the unit tests
+
+N.B.: _If you used Composer to install the WordPress Coding Standards, you can skip this step._
+
+For the unit tests to work, you need to make sure PHPUnit can find your `PHP_CodeSniffer` install.
+
+The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Make sure to adjust the path to reflect your local setup.
+```xml
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+	backupGlobals="true">
+	<php>
+		<env name="PHPCS_DIR" value="/path/to/PHP_CodeSniffer/"/>
+	</php>
+</phpunit>
 ```
 
+## Running the unit tests
+
+The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x. This has some implications for running the unit tests.
+
+* Navigate to the directory in which you installed WPCS.
+* To run the unit tests with PHPCS 3.x:
+    ```sh
+    phpunit --bootstrap="./Test/phpcs3-bootstrap.php" --filter WordPress /path/to/PHP_CodeSniffer/tests/AllTests.php
+    ```
+* To run the unit tests with PHPCS 2.x:
+    ```sh
+    phpunit --bootstrap="./Test/phpcs2-bootstrap.php" --filter WordPress ./Test/AllTests.php
+    ```
+
 Expected output:
+```
+PHPUnit 4.8.19 by Sebastian Bergmann and contributors.
+
+Runtime:        PHP 7.1.3 with Xdebug 2.5.1
+Configuration:  /WordPressCS/phpunit.xml
+
+......................................................
+
+Tests generated 558 unique error codes; 48 were fixable (8.6%)
+
+Time: 12.25 seconds, Memory: 24.00Mb
+
+OK (54 tests, 0 assertions)
+```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
 
-You can ignore any skipped tests as these are for `PHP_CodeSniffer` external tools.
-
-The reason why we need to checkout from `PHP_CodeSniffer` git repo to run the tests is because
-PEAR installation is intended for ready-to-use not for development. At some point `WordPress-Coding-Standards`
-might be submitted to `PHP_CodeSniffer` repo and using their existing convention for unit tests
-will eventually help them to test the code before merging in.
-
 ## Unit Testing conventions
 
-If you see inside the `WordPress/Tests`, the structure mimics the `WordPress/Sniffs`. For example,
-the `WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php` sniff has unit test class defined in
-`WordPress/Tests/Arrays/ArrayDeclarationUnitTest.php` that check `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`
-file. See the file naming convention? Lets take a look what inside `ArrayDeclarationUnitTest.php`:
+If you look inside the `WordPress/Tests` subdirectory, you'll see the structure mimics the `WordPress/Sniffs` subdirectory structure. For example, the `WordPress/Sniffs/PHP/POSIXFunctionsSniff.php` sniff has its unit test class defined in `WordPress/Tests/PHP/POSIXFunctionsUnitTest.php` which checks the `WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc` test case file. See the file naming convention?
+
+Lets take a look at what's inside `POSIXFunctionsUnitTest.php`:
 
 ```php
 ...
-class WordPress_Tests_Arrays_ArrayDeclarationUnitTest extends AbstractSniffUnitTest
-{
-    public function getErrorList()
-    {
-        return array(
-                3 => 1,
-                7 => 1,
-                9 => 1,
-                16 => 1,
-                31 => 2,
-               );
+namespace WordPress\Tests\PHP;
 
-    }//end getErrorList()
-}
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
+class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
+
+	/**
+	 * Returns the lines where errors should occur.
+	 *
+	 * @return array <int line number> => <int number of errors>
+	 */
+	public function getErrorList() {
+		return array(
+			13 => 1,
+			16 => 1,
+			18 => 1,
+			20 => 1,
+			22 => 1,
+			24 => 1,
+			26 => 1,
+		);
+
+	}
 ...
 ```
 
-Also note the class name convention. The method `getErrorList` MUST return an array of line numbers
-indicating errors (when running `phpcs`) found in `WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc`.
+Also note the class name convention. The method `getErrorList()` MUST return an array of line numbers indicating errors (when running `phpcs`) found in `WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc`.
 If you run:
 
 ```sh
 $ cd /path-to-cloned/phpcs
-$ ./scripts/phpcs --standard=Wordpress -s CodeSniffer/Standards/WordPress/Tests/Arrays/ArrayDeclarationUnitTest.inc
+$ ./bin/phpcs --standard=Wordpress -s /path/to/WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc --sniffs=WordPress.PHP.POSIXFunctions
 ...
 --------------------------------------------------------------------------------
-FOUND 8 ERROR(S) AND 2 WARNING(S) AFFECTING 6 LINE(S)
+FOUND 7 ERRORS AFFECTING 7 LINES
 --------------------------------------------------------------------------------
-  3 | ERROR   | Array keyword should be lower case; expected "array" but found
-    |         | "Array" (WordPress.Arrays.ArrayDeclaration)
-  7 | ERROR   | There must be no space between the Array keyword and the
-    |         | opening parenthesis (WordPress.Arrays.ArrayDeclaration)
-  9 | ERROR   | Empty array declaration must have no space between the
-    |         | parentheses (WordPress.Arrays.ArrayDeclaration)
- 12 | WARNING | No space after opening parenthesis of array is bad style
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 12 | WARNING | No space before closing parenthesis of array is bad style
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 16 | ERROR   | Each line in an array declaration must end in a comma
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 31 | ERROR   | Expected 1 space between "'type'" and double arrow; 0 found
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 31 | ERROR   | Expected 1 space between double arrow and "'post'"; 0 found
-    |         | (WordPress.Arrays.ArrayDeclaration)
- 31 | ERROR   | Expected 1 space before "=>"; 0 found
-    |         | (WordPress.WhiteSpace.OperatorSpacing)
- 31 | ERROR   | Expected 1 space after "=>"; 0 found
-    |         | (WordPress.WhiteSpace.OperatorSpacing)
+ 13 | ERROR | ereg() has been deprecated since PHP 5.3 and removed in PHP 7.0,
+    |       | please use preg_match() instead.
+    |       | (WordPress.PHP.POSIXFunctions.ereg_ereg)
+ 16 | ERROR | eregi() has been deprecated since PHP 5.3 and removed in PHP 7.0,
+    |       | please use preg_match() instead.
+    |       | (WordPress.PHP.POSIXFunctions.ereg_eregi)
+ 18 | ERROR | ereg_replace() has been deprecated since PHP 5.3 and removed in PHP
+    |       | 7.0, please use preg_replace() instead.
+    |       | (WordPress.PHP.POSIXFunctions.ereg_replace_ereg_replace)
+ 20 | ERROR | eregi_replace() has been deprecated since PHP 5.3 and removed in PHP
+    |       | 7.0, please use preg_replace() instead.
+    |       | (WordPress.PHP.POSIXFunctions.ereg_replace_eregi_replace)
+ 22 | ERROR | split() has been deprecated since PHP 5.3 and removed in PHP 7.0,
+    |       | please use explode(), str_split() or preg_split() instead.
+    |       | (WordPress.PHP.POSIXFunctions.split_split)
+ 24 | ERROR | spliti() has been deprecated since PHP 5.3 and removed in PHP 7.0,
+    |       | please use explode(), str_split() or preg_split() instead.
+    |       | (WordPress.PHP.POSIXFunctions.split_spliti)
+ 26 | ERROR | sql_regcase() has been deprecated since PHP 5.3 and removed in PHP
+    |       | 7.0, please use preg_match() instead.
+    |       | (WordPress.PHP.POSIXFunctions.ereg_sql_regcase)
 --------------------------------------------------------------------------------
 ....
 ```
+You'll see the line number and number of ERRORs we need to return in the `getErrorList()` method.
 
-You'll see the line number and number of ERRORs we need to return in `getErrorList` method.
-In line #31 there are two ERRORs belong to `WordPress.WhiteSpace.OperatorSpacing` sniff and
-it MUST not included in `ArrayDeclarationUnitTest` (that's why we only return 2 errros for line #31).
-Also there's `getWarningList` method in unit test class that returns an array of line numbers
-indicating WARNINGs.
+The `--sniffs=...` directive limits the output to the sniff you are testing.
 
 ## Sniff Code Standards
 
