@@ -25,14 +25,14 @@
  */
 if ( ! defined( 'WPCS_PHPCS_ALIASES_SET' ) ) {
 	// PHPCS base classes/interface.
-	if ( ! interface_exists( '\PHP_CodeSniffer_File' ) ) {
+	if ( ! interface_exists( '\PHP_CodeSniffer_Sniff' ) ) {
+		class_alias( 'PHP_CodeSniffer\Sniffs\Sniff', '\PHP_CodeSniffer_Sniff' );
+	}
+	if ( ! class_exists( '\PHP_CodeSniffer_File' ) ) {
 		class_alias( 'PHP_CodeSniffer\Files\File', '\PHP_CodeSniffer_File' );
 	}
 	if ( ! class_exists( '\PHP_CodeSniffer_Tokens' ) ) {
 		class_alias( 'PHP_CodeSniffer\Util\Tokens', '\PHP_CodeSniffer_Tokens' );
-	}
-	if ( ! class_exists( '\PHP_CodeSniffer_Sniff' ) ) {
-		class_alias( 'PHP_CodeSniffer\Sniffs\Sniff', '\PHP_CodeSniffer_Sniff' );
 	}
 
 	// PHPCS classes which are being extended by WPCS sniffs.
