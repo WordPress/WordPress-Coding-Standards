@@ -8,7 +8,7 @@
  */
 
 /**
- * Support_filters must be false when using get_posts(), wp_get_recent_posts(), get_children().
+ * Checks for suppress_filters=>false being supplied in get_posts(), wp_get_recent_posts() and get_children().
  *
  * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/
  *
