@@ -35,3 +35,4 @@ array_keys( $testing, 'my_key' ); // Warning.
 array_keys( array( '1', 1, true ), 'my_key' ); // Warning.
 array_keys( $testing, 'my_key', false ); // Warning.
 array_keys( array( '1', 1, true ), 'my_key', false ); // Warning.
+in_array( 1, array( '1', 1 ), TRUE ); // Ok.
