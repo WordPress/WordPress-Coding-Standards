@@ -1,14 +1,25 @@
-# Upstream Issues
+Hi, thank you for your interest in contributing to the WordPress Coding Standards! We look forward to working with you.
 
-Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will be caused by a bug in PHPCS and not in WPCS itself. Before reporting a bug, you should check what sniff an error is coming from. Running `phpcs` with the `-s` flag, which will show the names of the sniffs with each error. If the error message in question doesn't come from a sniff whose name starts with `WordPress`, the issue is probably a bug in PHPCS itself, and should be [reported there](https://github.com/squizlabs/PHP_CodeSniffer/issues).
+# Reporting Bugs
 
-# Branches
+Before reporting a bug, you should check what sniff an error is coming from.
+Running `phpcs` with the `-s` flag will show the name of the sniff with each error.
+
+Bug reports containing a minimal code sample which can be used to reproduce the issue are highly appreciated as those are most easily actionable.
+
+## Upstream Issues
+
+Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will be caused by a bug in PHPCS and not in WPCS itself. If the error message in question doesn't come from a sniff whose name starts with `WordPress`, the issue is probably a bug in PHPCS itself, and should be [reported there](https://github.com/squizlabs/PHP_CodeSniffer/issues).
+
+# Contributing patches and new features
+
+## Branches
 
 Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
 
 To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
-Once a commit is made to `develop`, a PR should be opened from `develop` into `master` and named "Next release". This PR will then serve provide a second round of Travis CI checks (especially for any hotfixes pushed directly to the `develop` branch), and provide collaborators with a forum to discuss the upcoming stable release.
+Once a commit is made to `develop`, a PR should be opened from `develop` into `master` and named "Next release". This PR will provide collaborators with a forum to discuss the upcoming stable release.
 
 # Considerations when writing sniffs
 
