@@ -244,8 +244,8 @@ matrix:
       env: SNIFF=1
 
 before_install:
-  - if [[ "$SNIFF" == "1" ]]; export PHPCS_DIR=/tmp/phpcs; fi
-  - if [[ "$SNIFF" == "1" ]]; export SNIFFS_DIR=/tmp/sniffs; fi
+  - if [[ "$SNIFF" == "1" ]]; then export PHPCS_DIR=/tmp/phpcs; fi
+  - if [[ "$SNIFF" == "1" ]]; then export SNIFFS_DIR=/tmp/sniffs; fi
   # Install PHP CodeSniffer.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
   # Install WordPress Coding Standards.
