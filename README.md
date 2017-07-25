@@ -155,25 +155,32 @@ Run the `phpcs` command line tool on a given file or directory, for example:
 Will result in following output:
 
 	--------------------------------------------------------------------------------
-	FOUND 8 ERRORS AND 2 WARNINGS AFFECTING 7 LINES
+	FOUND 10 ERRORS AND 5 WARNINGS AFFECTING 8 LINES
 	--------------------------------------------------------------------------------
-	  1 | ERROR   | [x] End of line character is invalid; expected "\n" but found "\r\n"
-	 36 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
-	 41 | WARNING | [ ] Silencing errors is discouraged
-	 41 | WARNING | [ ] Silencing errors is discouraged
-	 48 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
-	    |         |     question marks
-	 48 | ERROR   | [x] There must be no blank line following an inline comment
-	 76 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
-	    |         |     question marks
-	 92 | ERROR   | [x] String "Create a Configuration File" does not require double
-	    |         |     quotes; use single quotes instead
-	 94 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex for
-	    |         |     'Data Validation'), not '$die'
-	 94 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex for
-	    |         |     'Data Validation'), not '__'
+	 24 | WARNING | [ ] error_reporting() can lead to full path disclosure.
+	 24 | WARNING | [ ] error_reporting() found. Changing configuration at runtime
+	    |         |     is rarely necessary.
+	 34 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
+	 39 | WARNING | [ ] Silencing errors is discouraged
+	 39 | WARNING | [ ] Silencing errors is discouraged
+	 46 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
+	    |         |     or question marks
+	 46 | ERROR   | [x] There must be no blank line following an inline comment
+	 63 | WARNING | [ ] Detected access of super global var $_SERVER, probably
+	    |         |     needs manual inspection.
+	 63 | ERROR   | [ ] Detected usage of a non-validated input variable: $_SERVER
+	 63 | ERROR   | [ ] Missing wp_unslash() before sanitization.
+	 63 | ERROR   | [ ] Detected usage of a non-sanitized input variable: $_SERVER
+	 74 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
+	    |         |     or question marks
+	 90 | ERROR   | [x] String "Create a Configuration File" does not require
+	    |         |     double quotes; use single quotes instead
+	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
+	    |         |     for 'Data Validation'), not '$die'
+	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
+	    |         |     for 'Data Validation'), not '__'
 	--------------------------------------------------------------------------------
-	PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+	PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
 	--------------------------------------------------------------------------------
 
 ### PhpStorm
