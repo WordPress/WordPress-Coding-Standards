@@ -2,9 +2,15 @@
 <ruleset name="WordPress Coding Standards">
 	<description>The Coding standard for the WordPress Coding Standards itself.</description>
 
+	<arg value="sp"/>
+	<arg name="extensions" value="php"/>
+
 	<!-- Exclude the code in the PHPCS 2.x test files copied in from PHPCS. -->
 	<exclude-pattern>/Test/AllTests.php</exclude-pattern>
 	<exclude-pattern>/Test/Standards/*.php</exclude-pattern>
+
+	<!-- Exclude Composer vendor directory. -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<rule ref="WordPress-Extra">
 		<exclude name="WordPress.Files.FileName" />
