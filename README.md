@@ -72,11 +72,11 @@ It is strongly suggested to `require` one of these plugins in your project to ha
 
 ### Standalone
 
-1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, PEAR, or Git checkout).
+1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, Phar file, PEAR, or Git checkout).
 
    Do ensure that PHP_CodeSniffer's version matches our requirements(#requirements), if, for example, you're using VVV(https://github.com/Varying-Vagrant-Vagrants/VVV).
 
-2. Clone WordPress standards repository:
+2. Clone the WordPress standards repository:
 
         git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 
@@ -110,25 +110,25 @@ You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
 ### Standards subsets
 
-The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress VIP coding requirements.
+The project encompasses a super-set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress VIP coding requirements.
 
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
-* `WordPress` — complete set with all of the sniffs in the project
-  - `WordPress-Core` — main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
-  - `WordPress-Docs` — additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
-  - `WordPress-Extra` — extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
+* `WordPress` - complete set with all of the sniffs in the project
+  - `WordPress-Core` - main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
+  - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
+  - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
-  - `WordPress-VIP` — extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+  - `WordPress-VIP` - extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
     - includes `WordPress-Core`
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project — you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
-The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `ruleset.xml` file.
+The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `phpcs.xml` file.
 
 You can find a complete list of all the properties you can change in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties).
 
@@ -185,7 +185,7 @@ Will result in following output:
 
 ### PhpStorm
 
-Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)” in PhpStorm documentation.
+Please see "[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)" in the PhpStorm documentation.
 
 ### Sublime Text
 
@@ -220,7 +220,7 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 
 ### Visual Studio
 
-Please see “[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)”, a tutorial by Tom McFarlin.
+Please see "[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)", a tutorial by Tom McFarlin.
 
 
 ## Running your code through WPCS automatically using CI tools
@@ -272,7 +272,7 @@ You can find information on how to deal with some of the more frequent issues in
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing).
+See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing) the standard.
 
 ## License
 
