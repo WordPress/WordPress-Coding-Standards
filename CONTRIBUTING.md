@@ -198,7 +198,6 @@ You'll see the line number and number of ERRORs we need to return in the `getErr
 
 The `--sniffs=...` directive limits the output to the sniff you are testing.
 
-## Sniff Code Standards
+## Code Standards for this project
 
-The sniffs for WPCS should be written such that they pass the `WordPress-Core` code standards.
-
+The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/bin/phpcs.xml`.

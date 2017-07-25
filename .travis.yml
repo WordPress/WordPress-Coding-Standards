@@ -25,9 +25,9 @@ env:
 matrix:
   fast_finish: true
   include:
-    # Run PHPCS against WPCS. I just picked to run it against 5.5.
-    - php: 5.5
-      env: PHPCS_BRANCH=2.9 SNIFF=1
+    # Run PHPCS against WPCS. I just picked to run it against 7.0.
+    - php: 7.0
+      env: PHPCS_BRANCH=master SNIFF=1
       addons:
         apt:
           packages:
@@ -85,7 +85,7 @@ script:
     # -n flag: Do not print warnings. (shortcut for --warning-severity=0)
     # --standard: Use WordPress as the standard.
     # --extensions: Only sniff PHP files.
-    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -n . --standard=./bin/phpcs.xml --extensions=php; fi
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_BIN . --standard=./bin/phpcs.xml --runtime-set ignore_warnings_on_exit 1; fi
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
     - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
