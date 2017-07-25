@@ -34,50 +34,50 @@ $b = new class( 10 ) extends SomeClass implements SomeInterface {};
 /*
  * Bad.
  */
-$a = new MyClass();
-$a = new $varHoldingClassName();
-$a = new self::$transport[$cap_string]();
-$renderer = new $this->inline_diff_renderer();
-$b = ( new MyClass() )->my_function();
-$b = ( new MyClass() )::$property;
+$a = new MyClass;
+$a = new $varHoldingClassName;
+$a = new self::$transport[$cap_string];
+$renderer = new $this->inline_diff_renderer;
+$b = ( new MyClass )->my_function();
+$b = ( new MyClass )::$property;
 
 class ClassA {
 	public static function get_instance() {
-		return new self();
+		return new self;
 	}
 
 	public static function get_other_instance() {
-		return new static();
+		return new static;
 	}
 }
 
 class ClassB extends ClassA {
 	public function get_parent_instance() {
-		return new parent();
+		return new parent;
 	}
 }
 
 // PHP 7: Anonymous classes.
-$util->setLogger( new class() {} );
-$b = new class() extends SomeClass implements SomeInterface {};
+$util->setLogger( new class {} );
+$b = new class extends SomeClass implements SomeInterface {};
 
 
 // Test some non-typical spacing.
 $renderer = new $this->
-					inline_diff_renderer();
+					inline_diff_renderer  ();
 $renderer = new $this-> // There can be a comment here.
-					inline_diff_renderer();
+					inline_diff_renderer  ();
 $renderer = new $this->
 					inline_diff_renderer /* or here */ ();
-$a = new self :: $transport [ $cap_string ]();
+$a = new self :: $transport [ $cap_string ] ();
 
 $renderer = new $this->
-					inline_diff_renderer();
+					inline_diff_renderer;
 $renderer = new $this-> // There can be a comment here.
-					inline_diff_renderer();
+					inline_diff_renderer;
 $renderer = new $this->
-					inline_diff_renderer() /* or here */ ;
-$a = new self :: $transport [ $cap_string ]();
+					inline_diff_renderer /* or here */ ;
+$a = new self :: $transport [ $cap_string ];
 
 
 // Assigning new by reference.
@@ -88,3 +88,11 @@ $b = & new Foobar();
 // Currently not accounted for by the sniff, i.e. false negatives.
 $a = new $$varHoldingClassName;
 $a = new ${$varHoldingClassName};
+
+// Namespaced classes: OK.
+$a = new \MyClass();
+$a = new \MyNamespace\MyClass();
+
+// Namespaced classes: Bad.
+$a = new \MyClass;
+$a = new \MyNamespace\MyClass;

@@ -43,9 +43,9 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 					21  => 1,
 					26  => 1,
 					32  => 1,
-					56  => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-					57  => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-					58  => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+					56  => 1,
+					57  => 1,
+					58  => 1,
 					68  => 1,
 					69  => 1,
 					70  => 1,
@@ -60,7 +60,7 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 
 			case 'AdminBarRemovalUnitTest.css':
 				return array(
-					15  => 1,
+					15 => 1,
 					16 => 1,
 					17 => 1,
 					22 => 1,

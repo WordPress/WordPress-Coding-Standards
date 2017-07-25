@@ -174,3 +174,9 @@ echo 'This is an explanation about wordpress.'; // WPCS: spelling ok.
 
 <?php // POT filename should be ignored. ?>
 wordpress.pot
+
+<?php
+// Bad.
+$text = <<<'EOD'
+This is an explanation about WordPress.
+EOD;

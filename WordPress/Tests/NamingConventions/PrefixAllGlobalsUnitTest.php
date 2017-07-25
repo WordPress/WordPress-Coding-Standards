@@ -52,12 +52,6 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					40  => 1,
 					90  => 1,
 					91  => 1,
-					// Scoped.
-					149 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					151 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					153 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					154 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					155 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
 					// Backfills.
 					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
 					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
@@ -66,20 +60,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 				);
 
 			case 'PrefixAllGlobalsUnitTest.1.inc':
-				// Namespaced - all OK.
-				if ( PHP_VERSION_ID >= 50300 ) {
-					return array();
-				}
-
-				// PHPCS on PHP 5.2 does not recognize namespaces.
-				return array(
-					9  => 1,
-					11 => 1,
-					13 => 1,
-					14 => 1,
-					15 => 1,
-				);
-
+				// Namespaced - all OK, fall through to the default case.
 			default:
 				return array();
 

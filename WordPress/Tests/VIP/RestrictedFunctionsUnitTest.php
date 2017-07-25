@@ -30,7 +30,6 @@ class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 		return array(
 			3  => 1,
 			17 => 1,
-			30 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1,
 			32 => 1,
 			34 => 1,
 			36 => 1,

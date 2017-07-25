@@ -22,23 +22,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Get a list of all test files to check.
-	 *
-	 * @param string $testFileBase The base path that the unit tests files will have.
-	 *
-	 * @return string[]
-	 */
-	protected function getTestFiles( $testFileBase ) {
-		$testFiles = parent::getTestFiles( $testFileBase );
-
-		if ( PHP_VERSION_ID < 50300 ) {
-			$testFiles = array_diff( $testFiles, array( $testFileBase . '2.inc' ) );
-		}
-
-		return $testFiles;
-	}
-
-	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
@@ -47,7 +30,7 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList( $testFile = '' ) {
 
 		switch ( $testFile ) {
-			case 'ClassInstantiationUnitTest.1.inc':
+			case 'ClassInstantiationUnitTest.inc':
 				return array(
 					37 => 1,
 					38 => 1,
@@ -70,12 +53,8 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 					80 => 1,
 					84 => 1,
 					85 => 1,
-				);
-
-			case 'ClassInstantiationUnitTest.2.inc':
-				return array(
-					16 => 1,
-					17 => 1,
+					97 => 1,
+					98 => 1,
 				);
 
 			case 'ClassInstantiationUnitTest.js':
