@@ -181,7 +181,7 @@ EOD
 
 // Should report the second line and fix the second line + the comma on the last line.
 get_current_screen()->add_help_tab( array(
-    'id'		=>
+    'id'        =>
 <<<EOD
 Here comes some text.
 And some more text.
@@ -334,5 +334,62 @@ $my_array = [
              */
             apply_filters( '...', true ),
 ];
+
+/*
+ * Test multi-line strings as the value for an array item.
+ */
+$test => array(
+    'notes1'         => '<p>
+            Whether to use <code>isset()</code> or <code>array_key_exists()</code> depends on what you want to know:
+        </p>',
+
+    'notes1'         =>
+'<p>
+    Whether to use <code>isset()</code> or <code>array_key_exists()</code> depends on what you want to know:
+</p>' . // The sniff should check & fix the next line as it is a new token.
+'<p>
+    This said, we can concluded that to avoid warnings and undesired results you will always have to use an <code>is_array()</code> first.<br />
+    Also note that <code>isset()</code> is faster than <code>array_key_exists()</code>, but as said above, will return false if no value has been assigned.
+</p>',
+
+    'notes1'         => // Same, but now using double quotes.
+"<p>
+    Whether to use <code>isset()</code> or <code>array_key_exists()</code> depends on what you want to know:
+</p>" . // The sniff should check & fix the next line as it is a new token.
+"<p>
+    This said, we can concluded that to avoid warnings and undesired results you will always have to use an <code>is_array()</code> first.<br />
+    Also note that <code>isset()</code> is faster than <code>array_key_exists()</code>, but as said above, will return false if no value has been assigned.
+</p>",
+
+    // Now using double quotes with a variable to force T_DOUBLE_QUOTED_STRING token.
+    'notes1'         => array(
+        "<p>
+            Whether to use $abc or $def depends on what you want to know:
+        </p>" . // The sniff should check & fix the next line as it is a new token.
+    "<p>
+        This said, we can concluded that to avoid warnings and undesired results you will always have to use an <code>is_array()</code> first.<br />
+        Also note that $abc is faster than $def, but as said above, will return false if no value has been assigned.
+    </p>",
+    ),
+
+    'notes2'         => array(
+        '<p><strong>Important</strong>: Integers between -128 and 255 are interpreted as the ASCII value pointing to a character (negative values have 256 added in order to allow characters in the Extended ASCII range).<br />
+        In any other case, integers are interpreted as a string containing the decimal digits of the integer.</p>',
+    ),
+
+    'tooltip' => '
+if( ! is_array( $x ) ) {
+    filter_var( $x, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+}
+else {
+    filter_var_array( $x, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ); // = Simplified... see note
+}
+    ',
+    'notes3'         => array(
+        '<p>Please note: On some PHP versions <code>filter_var( $x, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE )</code> where <code>$x = false</code> will incorrectly return <code>null</code>.<br />
+        Also: with the same parameters filter_var() will return <code>false</code> instead of <code>null</code> for most objects.</p>',
+        '<p>The code snippet is simplified for brevity. Please refer to the source of this file on <a href="http://github.com/jrfnl/PHP-cheat-sheet-extended" target="_blank">GitHub</a> for full details on how to use filter_var_array().</p>',
+    ),
+);
 
 // @codingStandardsChangeSetting WordPress.Arrays.ArrayIndentation tabIndent true
