@@ -112,4 +112,30 @@ class PHPCSHelper {
 		return $tab_width;
 	}
 
+	/**
+	 * Check whether the `--ignore-annotations` option has been used.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile Optional. The current file being processed.
+	 *
+	 * @return bool True if annotations should be ignored, false otherwise.
+	 */
+	public static function ignore_annotations( File $phpcsFile = null ) {
+		if ( class_exists( '\PHP_CodeSniffer\Config' ) ) {
+			// PHPCS 3.x.
+			if ( isset( $phpcsFile, $phpcsFile->config->annotations ) ) {
+				return ! $phpcsFile->config->annotations;
+			} else {
+				$annotations = \PHP_CodeSniffer\Config::getConfigData( 'annotations' );
+				if ( isset( $annotations ) ) {
+					return ! $annotations;
+				}
+			}
+		}
+
+		// PHPCS 2.x does not support `--ignore-annotations`.
+		return false;
+	}
+
 }
