@@ -72,6 +72,8 @@ The WordPress Coding Standards use the PHP CodeSniffer native unit test suite fo
 
 Presuming you have installed PHP CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
 
+N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
+
 If you already have PHPUnit installed on your system: Congrats, you're all set.
 
 If not, you can navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies.
