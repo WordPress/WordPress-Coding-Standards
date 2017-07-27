@@ -1,23 +1,11 @@
-<!--- Provide a general summary of the issue in the Title above -->
+<!--
+If you're submitting a bug report, it is helpful if you include the following information:
 
-## Current Behavior
-<!--- If reporting a bug, describe the behavior you're experiencing -->
-<!--- If suggesting a change/improvement, explain the difference from current behavior -->
+- A minimal snippet of example code that demonstrates the issue.
+- The error code for the sniff that is being triggered (you can see the sniff error codes by running `phpcs` with the `-s` flag).
+- The versions of PHPCS, WPCS and PHP you are using.
 
-## Expected Behavior
-<!--- If you're reporting a bug, describe what should happen -->
-<!--- If you're suggesting a change/improvement, tell us how it should work -->
+If you are submitting a feature describe what that feature would be and why it should be useful.
 
-## Steps to Reproduce (for bugs)
-<!--- Include the code that triggered the bug -->
-
-## Possible Solution
-<!--- Not obligatory, but suggest a fix/reason for the bug, -->
-<!--- or ideas how to implement the addition or change -->
-
-## Your Environment
-<!--- Include as many relevant details about the environment you experienced the bug in -->
-- Version of the WPCS used:
-- Version of the PHP_CodeSniffer used:
-- Operating System:
-- Environment name and version (e.g. MAMP, Vagrant, PHP 5.4):
+Thanks!
+-->
