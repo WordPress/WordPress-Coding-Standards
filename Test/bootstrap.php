@@ -29,7 +29,7 @@ For running the unit tests with PHPCS 2.x:
 phpunit --bootstrap="./Test/phpcs2-bootstrap.php" --filter WordPress ./Test/AllTests.php
 
 Please read the contributors guidelines for more information:
-https://is.gd/WPCScontributing
+https://is.gd/contributing2WPCS
 ';
 
 	die( 1 );

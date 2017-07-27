@@ -35,7 +35,7 @@ Otherwise, make sure you set a `PHPCS_DIR` environment variable in your phpunit.
 pointing to the PHPCS directory.
 
 Please read the contributors guidelines for more information:
-https://is.gd/WPCScontributing
+https://is.gd/contributing2WPCS
 ';
 
 	die( 1 );

@@ -272,7 +272,7 @@ You can find information on how to deal with some of the more frequent issues in
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing) the standard.
+See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit testing](.github/CONTRIBUTING.md#unit-testing) the standard.
 
 ## License
 
