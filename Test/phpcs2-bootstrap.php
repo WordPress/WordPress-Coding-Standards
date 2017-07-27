@@ -21,7 +21,7 @@ $phpcsDir = getenv( 'PHPCS_DIR' );
 
 if ( false === $phpcsDir && is_dir( dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer' ) ) {
 	$phpcsDir  = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
-} else if ( false !== $phpcsDir ) {
+} elseif ( false !== $phpcsDir ) {
 	$phpcsDir = realpath( $phpcsDir );
 }
 
