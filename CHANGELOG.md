@@ -17,6 +17,7 @@ _Nothing yet._
 ### Changed
 - The minimum required PHP version is now 5.3 when used in combination with PHPCS 2.x and PHP 5.4 when used in combination with PHPCS 3.x.
 - The way the unit tests can be run is now slightly different for PHPCS 2.x versus 3.x. For more details, please refer to the updated information in the [Contributing Guidelines](CONTRIBUTING.md).
+- Release archives will no longer contain the unit tests and other typical development files. You can still get these by using Composer with `--prefer-source` or by checking out a git clone of the repository.
 - Various textual improvements to the Readme.
 - Various textual improvements to the Contributing Guidelines.
 - Minor internal changes.
