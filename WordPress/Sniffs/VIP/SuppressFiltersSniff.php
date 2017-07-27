@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Checks for suppress_filters=>false being supplied in get_posts(), wp_get_recent_posts() and get_children().
  *
@@ -16,7 +21,7 @@
  *
  * @since   0.14.0
  */
-class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFunctionParameterSniff {
+class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Functions this sniff is looking for.
@@ -36,10 +41,10 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 	 *
 	 * @since 0.14.0
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
-	 * @param array $group_name The name of the group which was matched.
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
-	 * @param array $parameters Array with information about the parameters.
+	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
@@ -54,14 +59,10 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 		$arrayValue = '';
 
 		// Retrieve the value parameter's details.
-		$argumentData = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $parameters[1]['start'], ( $parameters[1]['end'] + 1 ), true );
+		$argumentData = $this->phpcsFile->findNext( Tokens::$emptyTokens, $parameters[1]['start'], ( $parameters[1]['end'] + 1 ), true );
 
-		/**
-		 * When the list of argument were passed through variable.
-		 *
-		 * eg.  $args = array( 'foo' => 'bar' );
-		 *      $args['foo'] => 'bar';
-		 */
+		// When the list of argument were passed through variable.
+		// eg.  $args = array( 'foo' => 'bar' ), $args['foo'] => 'bar'.
 		if ( T_VARIABLE === $this->tokens[ $argumentData ]['code'] ) {
 
 			// Get the function in which the code placed.
@@ -81,60 +82,44 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 
 					if ( $this->tokens[ $i ]['content'] === $this->tokens[ $argumentData ]['content'] ) {
 
-						// Move to the next pointer where '=>' or ']' is placed;
-						$varData = $this->phpcsFile->findNext( array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW, T_ARRAY, T_OPEN_SHORT_ARRAY ),  $i  );
+						// Move to the next pointer where '=>' or ']' is placed.
+						$varData = $this->phpcsFile->findNext( array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW, T_ARRAY, T_OPEN_SHORT_ARRAY ),  $i );
 
-						if ( in_array(  $this->tokens[ $varData ]['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
+						if ( in_array( $this->tokens[ $varData ]['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ),true ) ) {
 
 							$operator = $varData; // T_DOUBLE_ARROW.
 
-							if ( T_CLOSE_SQUARE_BRACKET ===  $this->tokens[ $varData ]['code'] ) {
-
+							if ( T_CLOSE_SQUARE_BRACKET === $this->tokens[ $varData ]['code'] ) {
 								$operator = $this->phpcsFile->findNext( T_EQUAL, ( $varData ) );
 							}
 
-							$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator -1 ), null, true );
+							$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ),null,true );
 
 							if ( ! is_numeric( $this->tokens[ $keyIdx  ]['content'] ) ) {
-
 								$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
 								$valStart       = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
 								$valEnd         = $this->phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 								$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
 								$val            = $this->strip_quotes( $val );
 								$arrayValue = $val;
-
 							}
-
-						} else if ( in_array(  $this->tokens[ $varData ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
-
+						} elseif ( in_array( $this->tokens[ $varData ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
 							// Store array data into variable so that we can proceed later.
 							$paramItems = $this->get_function_call_parameters( $varData );
-
 						}
-
 					}
 				}
 			}
+		} elseif ( T_ARRAY === $this->tokens[ $argumentData ]['code'] || T_OPEN_SHORT_ARRAY === $this->tokens[ $argumentData ]['code'] ) {
 
-		} else if ( T_ARRAY === $this->tokens[ $argumentData ]['code'] || T_OPEN_SHORT_ARRAY === $this->tokens[ $argumentData ]['code'] ) {
-
-			/**
-			 * It covers multiple array variable directly passed to function.
-			 *
-			 * eg. get_posts( array( 'foo' => 'bar', 'baz' => 'quux' ) )
-			 */
+			// It covers multiple array variable directly passed to function.
+			// eg. get_posts( array( 'foo' => 'bar', 'baz' => 'quux' ) ).
 			$paramItems = $this->get_function_call_parameters( $argumentData );
 
+		} elseif ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $argumentData ]['code'] || T_DOUBLE_QUOTED_STRING === $this->tokens[ $argumentData ]['code'] ) {
 
-		} else if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $argumentData ]['code'] || T_DOUBLE_QUOTED_STRING === $this->tokens[ $argumentData ]['code'] ) {
-
-			/**
-			 * It handles when key value comes in '&query=arg' format.
-			 *
-			 * eg. get_posts( 'foo=bar&baz=quux' );
-			 */
-
+			// It handles when key value comes in '&query=arg' format.
+			// eg. get_posts( 'foo=bar&baz=quux' ).
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', $this->strip_quotes( $this->tokens[ $argumentData ]['content'] ), $arrKey ) <= 0 ) {
 				return;
 			}
@@ -146,9 +131,7 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 					$isUsed     = true;
 					$arrayValue = $arrKey[2][ $i ];
 				}
-
 			}
-
 		}
 
 		// Process multi dimensional array.
@@ -166,24 +149,17 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 						// '=>' detected.
 						if ( T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
 
-							$acceptType = array( T_DOUBLE_QUOTED_STRING ,T_CONSTANT_ENCAPSED_STRING, T_BOOL_CAST, T_INT_CAST );
+							$acceptType = array( T_DOUBLE_QUOTED_STRING, T_CONSTANT_ENCAPSED_STRING, T_BOOL_CAST, T_INT_CAST );
+							$keyValue = $this->phpcsFile->findNext( $acceptType, $ptr + 1 );
 
-							$keyValue = $this->phpcsFile->findNext( $acceptType, $ptr+1 );
-
-							if ( in_array( $this->tokens[$keyValue]['code'], $acceptType,true ) ) {
-
+							if ( in_array( $this->tokens[ $keyValue ]['code'], $acceptType,true ) ) {
 								$isUsed = true;
-								$arrayValue = $this->strip_quotes( $this->tokens[$keyValue]['content'] );
+								$arrayValue = $this->strip_quotes( $this->tokens[ $keyValue ]['content'] );
 							}
-
 						}
-
 					}
-
 				}
-
 			}
-
 		}
 
 		// If so, expected value was not passed.
@@ -202,9 +178,6 @@ class WordPress_Sniffs_VIP_SuppressFiltersSniff extends WordPress_AbstractFuncti
 				);
 			}
 		}
-
-		return;
-
 	}
 
 } // End class.

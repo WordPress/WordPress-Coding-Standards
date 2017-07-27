@@ -7,13 +7,17 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\VIP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the SuppressFilters sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.14.0
  */
-class WordPress_Tests_VIP_SuppressFiltersTest extends AbstractSniffUnitTest {
+class SuppressFiltersUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
