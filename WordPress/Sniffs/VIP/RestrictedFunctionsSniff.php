@@ -58,13 +58,11 @@ class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFu
 				),
 			),
 
-			'get_term_link' => array(
+			'wpcom_vip_get_term_link' => array(
 				'type'      => 'error',
-				'message'   => '%s() is prohibited, please use wpcom_vip_get_term_link() instead.',
+				'message'   => '%s() is deprecated, please use get_term_link(), get_tag_link(), or get_category_link() instead.',
 				'functions' => array(
-					'get_term_link',
-					'get_tag_link',
-					'get_category_link',
+					'wpcom_vip_get_term_link',
 				),
 			),
 

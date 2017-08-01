@@ -33,8 +33,6 @@ class WordPress_Tests_VIP_RestrictedFunctionsUnitTest extends AbstractSniffUnitT
 			42 => 1,
 			44 => 1,
 			46 => 1,
-			49 => 1,
-			50 => 1,
 			52 => 1,
 			58 => 1,
 			59 => 1,
