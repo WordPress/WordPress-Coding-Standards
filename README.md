@@ -65,7 +65,7 @@ For the convenience of using `phpcs` as a global command, you may want to add th
 When installing the WordPress Coding Standards as a dependency in a larger project, the above mentioned step 3 will not be executed automatically.
 
 There are two actively maintained Composer plugins which can handle the registration of standards with PHP_CodeSniffer for you:
-* [composer-phpcodesniffer-standards-plugin](https://github.com/higidi/composer-phpcodesniffer-standards-plugin)
+* [composer-phpcodesniffer-standards-plugin](https://github.com/higidi/composer-phpcodesniffer-standards-plugin):"^0.4.1"
 * [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer)
 
 It is strongly suggested to `require` one of these plugins in your project to handle the registration of external standards with PHPCS for you.
