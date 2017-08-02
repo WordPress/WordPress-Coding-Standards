@@ -643,10 +643,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Check if a function/class/constant/variable name is prefixed with one of the expected prefixes.
 	 *
 	 * @since 0.12.0
+	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
 	 *
 	 * @param string $name Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix + an underscore.
+	 * @return bool True when the name is the prefix or starts with the prefix + a separator.
 	 *              False otherwise.
 	 */
 	private function is_prefixed( $name ) {
@@ -660,7 +661,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$prefix_found = stripos( $name, $prefix . '_' );
 
 				if ( 0 === $prefix_found ) {
-					// Ok, prefix found as start of hook/constant name.
+					// Ok, prefix found at start of hook/constant name.
+					return true;
+				}
+
+				if ( preg_match( '`^' . preg_quote( $prefix, '`' ) . '\W`i', $name ) === 1 ) {
+					// Ok, prefix with other non-word character found at start of hook/constant name.
 					return true;
 				}
 			}
