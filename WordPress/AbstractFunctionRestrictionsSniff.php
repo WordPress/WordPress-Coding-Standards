@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Restricts usage of some functions.
  *
@@ -19,7 +24,7 @@
  *                 `WordPress_AbstractFunctionRestrictionsSniff`.
  * @since   0.11.0 Extends the WordPress_Sniff class.
  */
-abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sniff {
+abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
 	/**
 	 * Exclude groups.
@@ -206,7 +211,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 
 		// Exclude function definitions, class methods, and namespaced calls.
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
-			$prev = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 			if ( false !== $prev ) {
 				// Skip sniffing if calling a same-named method, or on function definitions.
@@ -222,7 +227,7 @@ abstract class WordPress_AbstractFunctionRestrictionsSniff extends WordPress_Sni
 
 				// Skip namespaced functions, ie: \foo\bar() not \bar().
 				if ( T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
-					$pprev = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $prev - 1 ), null, true );
+					$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
 					if ( false !== $pprev && T_STRING === $this->tokens[ $pprev ]['code'] ) {
 						return false;
 					}

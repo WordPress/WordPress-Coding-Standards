@@ -42,8 +42,8 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.2 or higher and the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
-The WordPress Coding Standards are currently [not compatible with the upcoming PHPCS 3 release](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/718).
+The WordPress Coding Standards require PHP 5.3 or higher and [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
+As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
 
 ### Composer
 
@@ -58,7 +58,7 @@ Running this command will:
 3. Register WordPress standards in PHP_CodeSniffer configuration.
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
 
-For the convenience of using `phpcs` as a global command, you may want to add the `wpcs/vendor/bin` path to a PATH environment in your operating system.
+For the convenience of using `phpcs` as a global command, you may want to add the path to the `wpcs/vendor/scripts` (PHPCS 2.x) and/or `wpcs/vendor/bin` (PHPCS 3.x) directories to a `PATH` environment variable for your operating system.
 
 #### Installing WPCS as a dependency
 
@@ -66,17 +66,17 @@ When installing the WordPress Coding Standards as a dependency in a larger proje
 
 There are two actively maintained Composer plugins which can handle the registration of standards with PHP_CodeSniffer for you:
 * [composer-phpcodesniffer-standards-plugin](https://github.com/higidi/composer-phpcodesniffer-standards-plugin)
-* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer)
+* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer):"^0.4.1"
 
 It is strongly suggested to `require` one of these plugins in your project to handle the registration of external standards with PHPCS for you.
 
 ### Standalone
 
-1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, PEAR, or Git checkout).
+1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, Phar file, PEAR, or Git checkout).
 
    Do ensure that PHP_CodeSniffer's version matches our requirements(#requirements), if, for example, you're using VVV(https://github.com/Varying-Vagrant-Vagrants/VVV).
 
-2. Clone WordPress standards repository:
+2. Clone the WordPress standards repository:
 
         git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 
@@ -96,10 +96,13 @@ cd ~/projects
 git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
 git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 cd phpcs
+#PHPCS 2.x
 ./scripts/phpcs --config-set installed_paths ../wpcs
+#PHPCS 3.x
+./bin/phpcs --config-set installed_paths ../wpcs
 ```
 
-And then add the `~/projects/phpcs/scripts` directory to your `PATH` environment variable via your `.bashrc`.
+And then add the `~/projects/phpcs/scripts` (PHPCS 2.x) or `~/projects/phpcs/bin` (PHPCS 3.x) directory to your `PATH` environment variable via your `.bashrc`.
 
 You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
@@ -107,25 +110,25 @@ You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
 ### Standards subsets
 
-The project encompasses a super–set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress VIP coding requirements.
+The project encompasses a super-set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress VIP coding requirements.
 
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
-* `WordPress` — complete set with all of the sniffs in the project
-  - `WordPress-Core` — main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
-  - `WordPress-Docs` — additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
-  - `WordPress-Extra` — extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
+* `WordPress` - complete set with all of the sniffs in the project
+  - `WordPress-Core` - main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
+  - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
+  - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
-  - `WordPress-VIP` — extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+  - `WordPress-VIP` - extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
     - includes `WordPress-Core`
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project — you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in PHP_CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
-The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `ruleset.xml` file.
+The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `phpcs.xml` file.
 
 You can find a complete list of all the properties you can change in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties).
 
@@ -152,30 +155,37 @@ Run the `phpcs` command line tool on a given file or directory, for example:
 Will result in following output:
 
 	--------------------------------------------------------------------------------
-	FOUND 8 ERRORS AND 2 WARNINGS AFFECTING 7 LINES
+	FOUND 10 ERRORS AND 5 WARNINGS AFFECTING 8 LINES
 	--------------------------------------------------------------------------------
-	  1 | ERROR   | [x] End of line character is invalid; expected "\n" but found "\r\n"
-	 36 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
-	 41 | WARNING | [ ] Silencing errors is discouraged
-	 41 | WARNING | [ ] Silencing errors is discouraged
-	 48 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
-	    |         |     question marks
-	 48 | ERROR   | [x] There must be no blank line following an inline comment
-	 76 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
-	    |         |     question marks
-	 92 | ERROR   | [x] String "Create a Configuration File" does not require double
-	    |         |     quotes; use single quotes instead
-	 94 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex for
-	    |         |     'Data Validation'), not '$die'
-	 94 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex for
-	    |         |     'Data Validation'), not '__'
+	 24 | WARNING | [ ] error_reporting() can lead to full path disclosure.
+	 24 | WARNING | [ ] error_reporting() found. Changing configuration at runtime
+	    |         |     is rarely necessary.
+	 34 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
+	 39 | WARNING | [ ] Silencing errors is discouraged
+	 39 | WARNING | [ ] Silencing errors is discouraged
+	 46 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
+	    |         |     or question marks
+	 46 | ERROR   | [x] There must be no blank line following an inline comment
+	 63 | WARNING | [ ] Detected access of super global var $_SERVER, probably
+	    |         |     needs manual inspection.
+	 63 | ERROR   | [ ] Detected usage of a non-validated input variable: $_SERVER
+	 63 | ERROR   | [ ] Missing wp_unslash() before sanitization.
+	 63 | ERROR   | [ ] Detected usage of a non-sanitized input variable: $_SERVER
+	 74 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
+	    |         |     or question marks
+	 90 | ERROR   | [x] String "Create a Configuration File" does not require
+	    |         |     double quotes; use single quotes instead
+	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
+	    |         |     for 'Data Validation'), not '$die'
+	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
+	    |         |     for 'Data Validation'), not '__'
 	--------------------------------------------------------------------------------
-	PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+	PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
 	--------------------------------------------------------------------------------
 
 ### PhpStorm
 
-Please see “[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)” in PhpStorm documentation.
+Please see "[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)" in the PhpStorm documentation.
 
 ### Sublime Text
 
@@ -210,7 +220,7 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 
 ### Visual Studio
 
-Please see “[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)”, a tutorial by Tom McFarlin.
+Please see "[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)", a tutorial by Tom McFarlin.
 
 
 ## Running your code through WPCS automatically using CI tools
@@ -234,14 +244,14 @@ matrix:
       env: SNIFF=1
 
 before_install:
-  - if [[ "$SNIFF" == "1" ]]; export PHPCS_DIR=/tmp/phpcs; fi
-  - if [[ "$SNIFF" == "1" ]]; export SNIFFS_DIR=/tmp/sniffs; fi
+  - if [[ "$SNIFF" == "1" ]]; then export PHPCS_DIR=/tmp/phpcs; fi
+  - if [[ "$SNIFF" == "1" ]]; then export SNIFFS_DIR=/tmp/sniffs; fi
   # Install PHP CodeSniffer.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
   # Install WordPress Coding Standards.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR; fi
   # Set install path for WordPress Coding Standards.
-  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs --config-set installed_paths $SNIFFS_DIR; fi
+  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths $SNIFFS_DIR; fi
   # After CodeSniffer install you should refresh your path.
   - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
 
@@ -251,7 +261,7 @@ script:
   # for example: `--standard=wpcs.xml`.
   # You can use any of the normal PHPCS command line arguments in the command:
   # https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage
-  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p . --standard=WordPress; fi
+  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p . --standard=WordPress; fi
 ```
 
 
@@ -262,7 +272,7 @@ You can find information on how to deal with some of the more frequent issues in
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing).
+See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit testing](.github/CONTRIBUTING.md#unit-testing) the standard.
 
 ## License
 

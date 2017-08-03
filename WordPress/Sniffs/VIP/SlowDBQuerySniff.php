@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractArrayAssignmentRestrictionsSniff;
+
 /**
  * Flag potentially slow queries.
  *
@@ -18,8 +22,9 @@
  * @since   0.12.0 Introduced new and more intuitively named 'slow query' whitelist
  *                 comment, replacing the 'tax_query' whitelist comment which is now
  *                 deprecated.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_SlowDBQuerySniff extends WordPress_AbstractArrayAssignmentRestrictionsSniff {
+class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.

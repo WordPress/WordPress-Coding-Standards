@@ -7,13 +7,20 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Variables;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\AbstractVariableRestrictionsSniff;
+
 /**
  * Unit test class for the VariableRestrictions sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
+class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Fill in the $groups property to test the abstract class.
@@ -21,7 +28,7 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 	protected function setUp() {
 		parent::setUp();
 
-		WordPress_AbstractVariableRestrictionsSniff::$groups = array(
+		AbstractVariableRestrictionsSniff::$groups = array(
 			'test' => array(
 				'type'          => 'error',
 				'message'       => 'Detected usage of %s',
@@ -55,6 +62,14 @@ class WordPress_Tests_Variables_VariableRestrictionsUnitTest extends AbstractSni
 				),
 			),
 		);
+	}
+
+	/**
+	 * Reset the $groups property.
+	 */
+	protected function tearDown() {
+		AbstractVariableRestrictionsSniff::$groups = array();
+		parent::tearDown();
 	}
 
 	/**

@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+
 /**
  * Sniff for prepared SQL.
  *
@@ -17,8 +21,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.8.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
+class PreparedSQLSniff extends Sniff {
 
 	/**
 	 * The lists of $wpdb methods.
@@ -134,7 +139,9 @@ class WordPress_Sniffs_WP_PreparedSQLSniff extends WordPress_Sniff {
 
 				$bad_variables = array_filter(
 					$this->get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
-					create_function( '$symbol', 'return ( $symbol !== "wpdb" );' ) // Replace this with closure once 5.3 is minimum requirement.
+					function ( $symbol ) {
+						return ( 'wpdb' !== $symbol );
+					}
 				);
 
 				foreach ( $bad_variables as $bad_variable ) {

@@ -11,10 +11,11 @@
 		}
 	],
 	"require"    : {
-		"squizlabs/php_codesniffer": "^2.9.0"
+		"php" : ">=5.3",
+		"squizlabs/php_codesniffer": "^2.9.0 || ^3.0.2"
 	},
 	"suggest" : {
-		"dealerdirect/phpcodesniffer-composer-installer": "*"
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.1"
 	},
 	"minimum-stability" : "RC",
 	"support"    : {

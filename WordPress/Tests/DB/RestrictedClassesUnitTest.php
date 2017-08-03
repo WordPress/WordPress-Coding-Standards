@@ -7,13 +7,20 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\DB;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Unit test class for the DB_RestrictedClasses sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.10.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest {
+class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Add a number of extra restricted classes to unit test the abstract
@@ -25,7 +32,7 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 	protected function setUp() {
 		parent::setUp();
 
-		WordPress_AbstractFunctionRestrictionsSniff::$unittest_groups = array(
+		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
 			'test' => array(
 				'type'      => 'error',
 				'message'   => 'Detected usage of %s.',
@@ -38,12 +45,11 @@ class WordPress_Tests_DB_RestrictedClassesUnitTest extends AbstractSniffUnitTest
 	}
 
 	/**
-	 * Skip this test on PHP 5.2 as otherwise testing the namespace resolving would fail.
-	 *
-	 * @return bool Whether to skip this test.
+	 * Reset the $groups property.
 	 */
-	protected function shouldSkipTest() {
-		return ( PHP_VERSION_ID < 50300 );
+	protected function tearDown() {
+		AbstractFunctionRestrictionsSniff::$unittest_groups = array();
+		parent::tearDown();
 	}
 
 	/**

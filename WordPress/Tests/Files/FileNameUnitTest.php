@@ -7,14 +7,20 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Files;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the FileName sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   2013-06-11
  * @since   0.11.0     Actually added tests ;-)
+ * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
+class FileNameUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Error files with the expected nr of errors.
@@ -90,11 +96,6 @@ class WordPress_Tests_Files_FileNameUnitTest extends AbstractSniffUnitTest {
 	protected function getTestFiles( $testFileBase ) {
 		$sep        = DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
-
-		// Adjust the expected results array for PHP 5.2 as PHP 5.2 does not recognize namespaces.
-		if ( PHP_VERSION_ID < 50300 ) {
-			$this->expected_results['test-sample-phpunit6.inc'] = 1;
-		}
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;

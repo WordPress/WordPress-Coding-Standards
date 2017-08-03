@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\PHP;
+
+use PHP_CodeSniffer_File as File;
+
 /**
  * Discourages the use of various native PHP functions and suggests alternatives.
  *
@@ -15,6 +19,8 @@
  * @since      0.1.0
  * @since      0.10.0 The checks for the POSIX functions have been replaced by the stand-alone
  *                    sniff WordPress_Sniffs_PHP_POSIXFunctionsSniff.
+ * @since      0.13.0 Class name changed: this class is now namespaced.
+ *
  * @deprecated 0.11.0 The checks for the PHP development functions have been replaced by the
  *                    stand-alone sniff WordPress_Sniffs_PHP_DevelopmentFunctionsSniff.
  *                    The checks for the WP deprecated functions have been replaced by the
@@ -29,7 +35,7 @@
  *                    function. To check for `register_globals` ini directive use
  *                    PHPCompatibility_Sniffs_PHP_DeprecatedIniDirectivesSniff from wimg/PHPCompatibility.
  */
-class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff {
+class DiscouragedFunctionsSniff {
 
 	/**
 	 * Don't use.
@@ -47,11 +53,11 @@ class WordPress_Sniffs_PHP_DiscouragedFunctionsSniff {
 	 *
 	 * @deprecated 0.11.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile A PHP_CodeSniffer file.
-	 * @param int                  $stackPtr  The position of the token.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile A PHP_CodeSniffer file.
+	 * @param int                         $stackPtr  The position of the token.
 	 *
 	 * @return void
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {}
+	public function process( File $phpcsFile, $stackPtr ) {}
 
 }

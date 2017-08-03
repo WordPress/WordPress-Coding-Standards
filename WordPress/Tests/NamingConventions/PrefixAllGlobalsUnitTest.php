@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\NamingConventions;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the PrefixAllGlobals sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_NamingConventions_PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
+class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -46,34 +52,15 @@ class WordPress_Tests_NamingConventions_PrefixAllGlobalsUnitTest extends Abstrac
 					40  => 1,
 					90  => 1,
 					91  => 1,
-					// Scoped.
-					149 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					151 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					153 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					154 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
-					155 => ( PHP_VERSION_ID >= 50300 ) ? 0 : 1, // PHPCS on PHP 5.2 does not recognize namespaces.
 					// Backfills.
-					225 => ( function_exists( 'mb_strpos' ) ) ? 0 : 1,
-					230 => ( function_exists( 'array_column' ) ) ? 0 : 1,
-					234 => ( defined( 'E_DEPRECATED' ) ) ? 0 : 1,
-					238 => ( class_exists( 'IntlTimeZone' ) ) ? 0 : 1,
+					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
+					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
+					234 => ( defined( '\E_DEPRECATED' ) ) ? 0 : 1,
+					238 => ( class_exists( '\IntlTimeZone' ) ) ? 0 : 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.1.inc':
-				// Namespaced - all OK.
-				if ( PHP_VERSION_ID >= 50300 ) {
-					return array();
-				}
-
-				// PHPCS on PHP 5.2 does not recognize namespaces.
-				return array(
-					9  => 1,
-					11 => 1,
-					13 => 1,
-					14 => 1,
-					15 => 1,
-				);
-
+				// Namespaced - all OK, fall through to the default case.
 			default:
 				return array();
 

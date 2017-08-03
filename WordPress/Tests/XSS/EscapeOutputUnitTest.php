@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\XSS;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the EscapeOutput sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   2013-06-11
+ * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
+class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -63,7 +69,6 @@ class WordPress_Tests_XSS_EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			205 => 1,
 			206 => 1,
 			207 => 1,
-			212 => ( PHP_VERSION_ID < 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
 			223 => 1,
 			225 => 1,
 			226 => 1,

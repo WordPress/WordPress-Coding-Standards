@@ -7,6 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+use WordPress\PHPCSHelper;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Makes sure WP internationalization functions are used properly.
  *
@@ -20,8 +26,9 @@
  *                 - Now has the ability to handle text-domain set via the command-line
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
+class I18nSniff extends Sniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
@@ -140,7 +147,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$token = $this->tokens[ $stack_ptr ];
 
 		// Allow overruling the text_domain set in a ruleset via the command line.
-		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
+		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
 			$this->text_domain = $cl_text_domain;
 		}
@@ -173,7 +180,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		for ( $i = ( $func_open_paren_token + 1 ); $i < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
 			$this_token                = $this->tokens[ $i ];
 			$this_token['token_index'] = $i;
-			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
+			if ( isset( Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
 				continue;
 			}
 			if ( T_COMMA === $this_token['code'] ) {
@@ -183,7 +190,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
-			if ( isset( PHP_CodeSniffer_Tokens::$textStringTokens[ $this_token['code'] ] ) ) {
+			if ( isset( Tokens::$textStringTokens[ $this_token['code'] ] ) ) {
 				for ( $j = ( $i + 1 ); $j < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
 					if ( $this_token['code'] === $this->tokens[ $j ]['code'] ) {
 						$this_token['content'] .= $this->tokens[ $j ]['content'];
@@ -521,7 +528,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					continue;
 				}
 
-				$previous_comment = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$commentTokens, ( $stack_ptr - 1 ) );
+				$previous_comment = $this->phpcsFile->findPrevious( Tokens::$commentTokens, ( $stack_ptr - 1 ) );
 
 				if ( false !== $previous_comment ) {
 					/*

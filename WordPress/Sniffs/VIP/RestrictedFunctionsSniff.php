@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Restricts usage of some functions in VIP context.
  *
@@ -24,8 +28,9 @@
  *                 The check for `parse_url()` and `curl_*` have been moved to the stand-alone sniff
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
  *                 The check for `eval()` now defers to the upstream Squiz.PHP.Eval sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_RestrictedFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.

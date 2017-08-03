@@ -7,6 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Arrays;
+
+use WordPress\Sniff;
+use WordPress\PHPCSHelper;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Enforces WordPress array indentation for multi-line arrays.
  *
@@ -15,11 +21,12 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * {@internal This sniff should eventually be pulled upstream as part of a solution
  * for https://github.com/squizlabs/PHP_CodeSniffer/issues/582 }}
  */
-class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
+class ArrayIndentationSniff extends Sniff {
 
 	/**
 	 * Should tabs be used for indenting?
@@ -64,7 +71,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 		 *
 		 * Existing heredoc, nowdoc and inline HTML indentation should be respected at all times.
 		 */
-		$this->ignore_tokens = PHP_CodeSniffer_Tokens::$heredocTokens;
+		$this->ignore_tokens = Tokens::$heredocTokens;
 		unset( $this->ignore_tokens[ T_START_HEREDOC ], $this->ignore_tokens[ T_START_NOWDOC ] );
 		$this->ignore_tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
 
@@ -83,13 +90,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->tab_width ) ) {
-			$cli_values = $this->phpcsFile->phpcs->cli->getCommandLineValues();
-			if ( ! isset( $cli_values['tabWidth'] ) || 0 === $cli_values['tabWidth'] ) {
-				// We have no idea how wide tabs are, so assume 4 spaces for fixing.
-				$this->tab_width = 4;
-			} else {
-				$this->tab_width = $cli_values['tabWidth'];
-			}
+			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
 		}
 
 		/*
@@ -141,7 +142,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 				 * Otherwise, only report the error, don't try and fix it (yet).
 				 *
 				 * It will get corrected in a future loop of the fixer once the closer
-				 * has been moved to its own line by the `ArrayDeclaration` sniff.
+				 * has been moved to its own line by the `ArrayDeclarationSpacing` sniff.
 				 */
 				$this->phpcsFile->addError(
 					$error,
@@ -184,7 +185,7 @@ class WordPress_Sniffs_Arrays_ArrayIndentationSniff extends WordPress_Sniff {
 			}
 
 			// Bow out from reporting and fixing mixed multi-line/single-line arrays.
-			// That is handled by the ArrayDeclarationSniff.
+			// That is handled by the ArrayDeclarationSpacingSniff.
 			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
 				|| ( 1 !== $this->tokens[ $first_content ]['column']
 					&& T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )

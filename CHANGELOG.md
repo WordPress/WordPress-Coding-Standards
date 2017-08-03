@@ -8,6 +8,28 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 _Nothing yet._
 
+## [0.13.0] - 2017-08-03
+
+### Added
+- Support for PHP CodeSniffer 3.0.2+. The minimum required PHPCS version (2.9.0) stays the same.
+- Support for the PHPCS 3 `--ignore-annotations` command line option. If you pass this option, both PHPCS native `@ignore ...` annotations as well as the WPCS specific [whitelist flags](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) will be ignored.
+
+### Changed
+- The minimum required PHP version is now 5.3 when used in combination with PHPCS 2.x and PHP 5.4 when used in combination with PHPCS 3.x.
+- The way the unit tests can be run is now slightly different for PHPCS 2.x versus 3.x. For more details, please refer to the updated information in the [Contributing Guidelines](CONTRIBUTING.md).
+- Release archives will no longer contain the unit tests and other typical development files. You can still get these by using Composer with `--prefer-source` or by checking out a git clone of the repository.
+- Various textual improvements to the Readme.
+- Various textual improvements to the Contributing Guidelines.
+- Minor internal changes.
+
+### Removed
+- The `WordPress.Arrays.ArrayDeclaration` sniff has been deprecated. The last remaining checks this sniff contained have been moved to the `WordPress.Arrays.ArrayDeclarationSpacing` sniff.
+- Work-arounds which were in place to support PHP 5.2.
+
+### Fixed
+- A minor bug where the auto-fixer could accidentally remove a comment near an array opener.
+
+
 ## [0.12.0] - 2017-07-21
 
 ### Added
@@ -436,6 +458,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[0.13.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.9.0...0.10.0

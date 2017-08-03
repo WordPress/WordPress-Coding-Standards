@@ -7,6 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
+use PHP_CodeSniffer_File as File;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
@@ -26,7 +32,7 @@
  *            In the rare few cases where the array values *do* have meaning, this
  *            is documented in the property documentation.}}
  */
-abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
+abstract class Sniff implements PHPCS_Sniff {
 
 	/**
 	 * List of the functions which verify nonces.
@@ -796,7 +802,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.4.0
 	 *
-	 * @var PHP_CodeSniffer_File
+	 * @var \PHP_CodeSniffer\Files\File
 	 */
 	protected $phpcsFile;
 
@@ -814,14 +820,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack passed in $tokens.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process( File $phpcsFile, $stackPtr ) {
 		$this->init( $phpcsFile );
 		return $this->process_token( $stackPtr );
 	}
@@ -846,9 +852,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.4.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file currently being processed.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file currently being processed.
 	 */
-	protected function init( PHP_CodeSniffer_File $phpcsFile ) {
+	protected function init( File $phpcsFile ) {
 		$this->phpcsFile = $phpcsFile;
 		$this->tokens    = $phpcsFile->getTokens();
 	}
@@ -1060,6 +1066,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 */
 	protected function has_whitelist_comment( $comment, $stackPtr ) {
 
+		// Respect the PHPCS 3.x --ignore-annotations setting.
+		if ( true === PHPCSHelper::ignore_annotations( $this->phpcsFile ) ) {
+			return false;
+		}
+
 		$lastPtr     = $this->get_last_ptr_on_line( $stackPtr );
 		$end_of_line = $lastPtr;
 
@@ -1198,7 +1209,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		$next_non_empty = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens
+			Tokens::$emptyTokens
 			, ( $stackPtr + 1 )
 			, null
 			, true
@@ -1212,7 +1223,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If the next token is an assignment, that's all we need to know.
-		if ( isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
+		if ( isset( Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -1392,7 +1403,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// Get the last non-empty token.
 		$prev = $this->phpcsFile->findPrevious(
-			PHP_CodeSniffer_Tokens::$emptyTokens
+			Tokens::$emptyTokens
 			, ( $stackPtr - 1 )
 			, null
 			, true
@@ -1479,7 +1490,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 				 * to resolve the function name, do so.
 				 */
 				$first_non_empty = $this->phpcsFile->findNext(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					$callback['start'],
 					( $callback['end'] + 1 ),
 					true
@@ -1536,7 +1547,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// Find the next non-empty token.
 		$open_bracket = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens,
+			Tokens::$emptyTokens,
 			( $stackPtr + 1 ),
 			null,
 			true
@@ -1702,19 +1713,19 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Find the previous non-empty token. We check before the var first because
 		// yoda conditions are usually expected.
 		$previous_token = $this->phpcsFile->findPrevious(
-			PHP_CodeSniffer_Tokens::$emptyTokens,
+			Tokens::$emptyTokens,
 			( $stackPtr - 1 ),
 			null,
 			true
 		);
 
-		if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
+		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
 			return true;
 		}
 
 		// Maybe the comparison operator is after this.
 		$next_token = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens,
+			Tokens::$emptyTokens,
 			( $stackPtr + 1 ),
 			null,
 			true
@@ -1724,14 +1735,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		while ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
 
 			$next_token = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				( $this->tokens[ $next_token ]['bracket_closer'] + 1 ),
 				null,
 				true
 			);
 		}
 
-		if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -1827,7 +1838,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 
-		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 
 		// Deal with short array syntax.
 		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
@@ -1854,7 +1865,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		$close_parenthesis   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
-		$next_next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
+		$next_next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
 
 		if ( $next_next_non_empty === $close_parenthesis ) {
 			// No parameters.
@@ -1930,7 +1941,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 			$nestedParenthesisCount = 0;
 		} else {
-			$opener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+			$opener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 			$closer = $this->tokens[ $opener ]['parenthesis_closer'];
 
 			$nestedParenthesisCount = 1;
@@ -1980,7 +1991,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			 * Prevents code like the following from setting a third parameter:
 			 * functionCall( $param1, $param2, );
 			 */
-			$has_next_param = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
+			$has_next_param = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
 			if ( false === $has_next_param ) {
 				break;
 			}
@@ -2152,7 +2163,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 
-		$nextToken = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 		if ( T_OPEN_CURLY_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
 			// Declaration for global namespace when using multiple namespaces in a file.
 			// I.e.: `namespace {}`.
@@ -2178,30 +2189,18 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * Check if a content string contains a specific html open tag.
 	 *
-	 * {@internal For PHP 5.3+ this is straightforward, just check if $content
-	 * contains the tag.
-	 * PHP 5.2 however, creates a separate token for `<s` when used in inline HTML,
-	 * so in that case we need to check that the next token starts with the rest
-	 * of the tag.
-	 * I.e. PHP 5.2 tokenizes the inline HTML `text <span>text</span> text` as:
-	 * - T_INLINE_HTML 'text'
-	 * - T_INLINE_HTML '<s'
-	 * - T_INLINE_HTML 'pan>text</span> text'
-	 *
-	 * We don't need to worry about checking the rest of the content of the next
-	 * token as sniffs using this function will be sniffing for all text string
-	 * tokens, so the next token will be passed to the sniff in the next iteration
-	 * and checked then.
-	 * Similarly, no need to check content before the '<s' as the bug will break up the
-	 * inline html to several string tokens if it plays up.}}
-	 *
-	 * @link  https://bugs.php.net/bug.php?id=48446
-	 *
 	 * @since 0.11.0
+	 * @since 0.13.0 No longer allows for the PHP 5.2 bug for which the function was
+	 *               originally created.
+	 * @since 0.13.0 The $stackPtr parameter is now optional. Either that or the
+	 *               $content parameter has to be passed.
 	 *
 	 * @param string $tag_name The name of the HTML tag without brackets. So if
 	 *                         searching for '<span...', this would be 'span'.
-	 * @param int    $stackPtr The position of the current token in the token stack.
+	 * @param int    $stackPtr Optional. The position of the current token in the
+	 *                         token stack.
+	 *                         This parameter needs to be passed if no $content is
+	 *                         passed.
 	 * @param string $content  Optionally, the current content string, might be a
 	 *                         substring of the original string.
 	 *                         Defaults to `false` to distinguish between a passed
@@ -2209,28 +2208,13 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
 	 */
-	public function has_html_open_tag( $tag_name, $stackPtr, $content = false ) {
-		if ( false === $content ) {
+	public function has_html_open_tag( $tag_name, $stackPtr = null, $content = false ) {
+		if ( false === $content && isset( $stackPtr ) ) {
 			$content = $this->tokens[ $stackPtr ]['content'];
 		}
 
-		// Check for the open tag in normal string tokens and T_INLINE_HTML for PHP 5.3+.
-		if ( 's' !== $tag_name[0] || PHP_VERSION_ID >= 50300 || T_INLINE_HTML !== $this->tokens[ $stackPtr ]['code'] ) {
-			if ( false !== strpos( $content, '<' . $tag_name ) ) {
-				return true;
-			}
-		} elseif ( '<s' === $content ) {
-			// Ok, we might be coming across the token parser issue. Check the next token.
-			$next_ptr      = ( $stackPtr + 1 );
-			$rest_tag_name = substr( $tag_name, 1 );
-
-			if ( ! empty( $rest_tag_name )
-				&& isset( $this->tokens[ $next_ptr ] )
-				&& T_INLINE_HTML === $this->tokens[ $next_ptr ]['code']
-				&& 0 === strpos( $this->tokens[ $next_ptr ]['content'], $rest_tag_name )
-			) {
-				return true;
-			}
+		if ( ! empty( $content ) && false !== strpos( $content, '<' . $tag_name ) ) {
+			return true;
 		}
 
 		return false;

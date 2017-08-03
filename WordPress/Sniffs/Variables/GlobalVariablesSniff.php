@@ -7,9 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Variables;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
- * WordPress_Sniffs_Variables_GlobalVariablesSniff.
- *
  * Warns about overwriting WordPress native global variables.
  *
  * @package WPCS\WordPressCodingStandards
@@ -17,10 +20,11 @@
  * @since   0.3.0
  * @since   0.4.0  This class now extends WordPress_Sniff.
  * @since   0.12.0 The $wp_globals property has been moved to the WordPress_Sniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    WordPress_Sniff::$custom_test_class_whitelist
+ * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
-class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
+class GlobalVariablesSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -45,7 +49,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
-			$bracketPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 			if ( false === $bracketPtr || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				return;
@@ -142,7 +146,7 @@ class WordPress_Sniffs_Variables_GlobalVariablesSniff extends WordPress_Sniff {
 					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
 				) {
 					// Don't throw false positives for static class properties.
-					$previous = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
+					$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
 					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
 						continue;
 					}

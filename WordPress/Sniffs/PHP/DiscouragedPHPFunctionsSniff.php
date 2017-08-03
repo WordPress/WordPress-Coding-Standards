@@ -7,14 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\PHP;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Discourages the use of various native PHP functions and suggests alternatives.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.11.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_PHP_DiscouragedPHPFunctionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to discourage.

@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WhiteSpace;
+
+use WordPress\Sniff;
+use WordPress\PHPCSHelper;
+
 /**
  * Enforces using spaces for mid-line alignment.
  *
@@ -15,8 +20,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WhiteSpace_DisallowInlineTabsSniff extends WordPress_Sniff {
+class DisallowInlineTabsSniff extends Sniff {
 
 	/**
 	 * The --tab-width CLI value that is being used.
@@ -45,13 +51,7 @@ class WordPress_Sniffs_WhiteSpace_DisallowInlineTabsSniff extends WordPress_Snif
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->tab_width ) ) {
-			$cli_values = $this->phpcsFile->phpcs->cli->getCommandLineValues();
-			if ( ! isset( $cli_values['tabWidth'] ) || 0 === $cli_values['tabWidth'] ) {
-				// We have no idea how wide tabs are, so assume 4 spaces for fixing.
-				$this->tab_width = 4;
-			} else {
-				$this->tab_width = $cli_values['tabWidth'];
-			}
+			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
 		}
 
 		$check_tokens = array(

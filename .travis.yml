@@ -4,7 +4,7 @@ dist: trusty
 
 cache:
   apt: true
-     
+
 language:
     - php
 
@@ -14,55 +14,45 @@ php:
     - 5.6
     - 7.0
     - 7.1
+    - nightly
 
 env:
-  # Branch for patches against 2.x. `master` is now 3.x which WPCS is not (yet) compatible with.
-  - PHPCS_BRANCH=2.9 LINT=1
-  # Tagged release
+  # `master` is now 3.x.
+  - PHPCS_BRANCH=master LINT=1
+  # Lowest tagged release in the 2.x series with which WPCS is compatible.
   - PHPCS_BRANCH=2.9.0
 
 matrix:
   fast_finish: true
   include:
-    # Run PHPCS against WPCS. I just picked to run it against 5.5.
-    - php: 5.5
-      env: PHPCS_BRANCH=2.9 SNIFF=1
+    # Run PHPCS against WPCS. I just picked to run it against 7.0.
+    - php: 7.0
+      env: PHPCS_BRANCH=master SNIFF=1
       addons:
         apt:
           packages:
             - libxml2-utils
-    # Run against PHPCS 3.0. I just picked to run it against 5.6.
-    - php: 5.6
-      env: PHPCS_BRANCH=master
+
     # Run against HHVM and PHP nightly.
     - php: hhvm
       sudo: required
-      dist: trusty 
+      dist: trusty
       group: edge
+      env: PHPCS_BRANCH=master LINT=1
+
+    # Test PHP 5.3 only against PHPCS 2.x as PHPCS 3.x has a minimum requirement of PHP 5.4.
+    - php: 5.3
       env: PHPCS_BRANCH=2.9 LINT=1
-    - php: nightly
-      env: PHPCS_BRANCH=2.9 LINT=1
+      dist: precise
     # Test PHP 5.3 with short_open_tags set to On (is Off by default)
     - php: 5.3
-      env: PHPCS_BRANCH=2.9 SHORT_OPEN_TAGS=true
+      env: PHPCS_BRANCH=2.9.0 SHORT_OPEN_TAGS=true
       dist: precise
-    - php: 5.3
-      env: PHPCS_BRANCH=2.9
-      dist: precise
-    - php: 5.3
-      env: PHPCS_BRANCH=2.9.0
-      dist: precise
-    - php: 5.2
-      env: PHPCS_BRANCH=2.9
-      dist: precise
-    - php: 5.2
-      env: PHPCS_BRANCH=2.9.0
-      dist: precise
+
   allow_failures:
     # Allow failures for unstable builds.
     - php: nightly
     - php: hhvm
-    - env: PHPCS_BRANCH=master
 
 before_install:
     - export XMLLINT_INDENT="	"
@@ -82,8 +72,10 @@ script:
     # Lint the PHP files against parse errors.
     - if [[ "$LINT" == "1" ]]; then if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then phpunit --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar --filter WordPress /tmp/phpcs/tests/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then phpunit --filter WordPress $(pwd)/Test/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then phpunit --filter WordPress $PHPCS_DIR/tests/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar --filter WordPress $(pwd)/Test/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar  --filter WordPress $PHPCS_DIR/tests/AllTests.php; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
@@ -93,7 +85,7 @@ script:
     # -n flag: Do not print warnings. (shortcut for --warning-severity=0)
     # --standard: Use WordPress as the standard.
     # --extensions: Only sniff PHP files.
-    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -n . --standard=./bin/phpcs.xml --extensions=php; fi
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_BIN . --standard=./bin/phpcs.xml --runtime-set ignore_warnings_on_exit 1; fi
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
     - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi

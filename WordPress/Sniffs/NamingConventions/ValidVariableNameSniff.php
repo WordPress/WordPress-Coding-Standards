@@ -7,9 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) ) {
-	throw new PHP_CodeSniffer_Exception( 'Class PHP_CodeSniffer_Standards_AbstractVariableSniff not found' );
-}
+namespace WordPress\Sniffs\NamingConventions;
+
+use PHP_CodeSniffer_Standards_AbstractVariableSniff as PHPCS_AbstractVariableSniff;
+use PHP_CodeSniffer_File as File;
+use WordPress\Sniff;
 
 /**
  * Checks the naming of variables and member variables.
@@ -19,11 +21,12 @@ if ( ! class_exists( 'PHP_CodeSniffer_Standards_AbstractVariableSniff', true ) )
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.9.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * Last synced with base class July 2014 at commit ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  */
-class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff {
+class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 	/**
 	 * PHP Reserved Vars.
@@ -120,13 +123,13 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the current token in the
-	 *                                        stack passed in $tokens.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @param int                         $stack_ptr  The position of the current token in the
+	 *                                                stack passed in $tokens.
 	 *
 	 * @return void
 	 */
-	protected function processVariable( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+	protected function processVariable( File $phpcs_file, $stack_ptr ) {
 
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
@@ -206,13 +209,13 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * Processes class member variables.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the current token in the
-	 *                                        stack passed in $tokens.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @param int                         $stack_ptr  The position of the current token in the
+	 *                                                stack passed in $tokens.
 	 *
 	 * @return void
 	 */
-	protected function processMemberVar( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+	protected function processMemberVar( File $phpcs_file, $stack_ptr ) {
 
 		$tokens = $phpcs_file->getTokens();
 
@@ -240,13 +243,13 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	/**
 	 * Processes the variable found within a double quoted string.
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
-	 * @param int                  $stack_ptr  The position of the double quoted
-	 *                                         string.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @param int                         $stack_ptr  The position of the double quoted
+	 *                                                string.
 	 *
 	 * @return void
 	 */
-	protected function processVariableInString( PHP_CodeSniffer_File $phpcs_file, $stack_ptr ) {
+	protected function processVariableInString( File $phpcs_file, $stack_ptr ) {
 
 		$tokens = $phpcs_file->getTokens();
 
@@ -292,19 +295,19 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcs_file The file being scanned.
+	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
 	 *
 	 * @return void
 	 */
-	protected function mergeWhiteList( $phpcs_file ) {
+	protected function mergeWhiteList( File $phpcs_file ) {
 		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties']
 			|| $this->customVariablesWhitelist !== $this->addedCustomProperties['variables']
 		) {
 			// Fix property potentially passed as comma-delimited string.
-			$customProperties = WordPress_Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
+			$customProperties = Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
 
 			if ( ! empty( $this->customVariablesWhitelist ) ) {
-				$customProperties = WordPress_Sniff::merge_custom_array(
+				$customProperties = Sniff::merge_custom_array(
 					$this->customVariablesWhitelist,
 					$customProperties,
 					false
@@ -317,7 +320,7 @@ class WordPress_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_Code
 				);
 			}
 
-			$this->whitelisted_mixed_case_member_var_names = WordPress_Sniff::merge_custom_array(
+			$this->whitelisted_mixed_case_member_var_names = Sniff::merge_custom_array(
 				$customProperties,
 				$this->whitelisted_mixed_case_member_var_names
 			);

@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractVariableRestrictionsSniff;
+
 /**
  * Restricts usage of some variables in VIP context.
  *
@@ -15,8 +19,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_RestrictedVariablesSniff extends WordPress_AbstractVariableRestrictionsSniff {
+class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 
 	/**
 	 * Groups of variables to restrict.

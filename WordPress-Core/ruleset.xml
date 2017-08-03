@@ -2,6 +2,8 @@
 <ruleset name="WordPress Core">
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
+	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+
 	<!-- Treat all files as UTF-8. -->
 	<config name="encoding" value="utf-8"/>
 
@@ -46,20 +48,12 @@
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 
 	<!-- Generic array layout check. -->
-	<rule ref="WordPress.Arrays.ArrayDeclaration">
-		<exclude name="WordPress.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>
-		<exclude name="WordPress.Arrays.ArrayDeclaration.CommaAfterLast"/>
-		<exclude name="WordPress.Arrays.ArrayDeclaration.NoSpaceAfterComma"/>
-		<exclude name="WordPress.Arrays.ArrayDeclaration.SpaceAfterComma"/>
-		<exclude name="WordPress.Arrays.ArrayDeclaration.SpaceBeforeComma"/>
-	</rule>
-
-	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
-	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
-
 	<!-- Covers rule: For associative arrays, values should start on a new line.
 		 Also covers various single-line array whitespace issues. -->
 	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
+
+	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
+	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
 
 	<!-- Covers rule: For switch structures case should indent one tab from the
 	     switch statement and break one tab from the case statement. -->

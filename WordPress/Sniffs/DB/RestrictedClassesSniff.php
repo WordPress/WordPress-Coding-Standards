@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\DB;
+
+use WordPress\AbstractClassRestrictionsSniff;
+
 /**
  * Verifies that no database related PHP classes are used.
  *
@@ -20,8 +24,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_DB_RestrictedClassesSniff extends WordPress_AbstractClassRestrictionsSniff {
+class RestrictedClassesSniff extends AbstractClassRestrictionsSniff {
 
 	/**
 	 * Groups of classes to restrict.
