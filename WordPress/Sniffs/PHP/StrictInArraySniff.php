@@ -80,7 +80,7 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 		}
 
 		// We're only interested in the third parameter.
-		if ( false === isset( $parameters[3] ) || 'true' !== $parameters[3]['raw'] ) {
+		if ( false === isset( $parameters[3] ) || 'true' !== strtolower( $parameters[3]['raw'] ) ) {
 			$this->phpcsFile->addWarning(
 				'Not using strict comparison for %s; supply true for third argument.',
 				( isset( $parameters[3]['start'] ) ? $parameters[3]['start'] : $parameters[1]['start'] ),
