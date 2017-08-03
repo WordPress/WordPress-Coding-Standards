@@ -626,6 +626,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
+			if ( strpos( $raw_content, '\\' ) !== false ) {
+				// Namespaced or unreachable constant.
+				return;
+			}
+
 			$data       = array( 'Global constants defined' );
 			$error_code = 'NonPrefixedConstantFound';
 		} else {
