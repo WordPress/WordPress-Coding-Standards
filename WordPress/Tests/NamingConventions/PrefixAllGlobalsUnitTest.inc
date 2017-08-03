@@ -299,3 +299,10 @@ class Acronym_Dynamic_Hooks {
 		do_action( $this->parent_property ); // Warning.
 	}
 }
+
+// Dashes and other non-word characters are ok as a hook name separator after the prefix.
+// The rule that these should be underscores is handled by another sniff.
+do_action( 'acronym-action' ); // OK.
+apply_filters( 'acronym/filter', $var ); // OK.
+do_action( "acronym-action-{$acronym_filter_var}" ); // OK.
+apply_filters( 'acronym/filter-' . $acronym_filter_var ); // OK.
