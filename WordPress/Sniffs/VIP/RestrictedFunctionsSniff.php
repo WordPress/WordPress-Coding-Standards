@@ -63,13 +63,11 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			'get_term_link' => array(
+			'wpcom_vip_get_term_link' => array(
 				'type'      => 'error',
-				'message'   => '%s() is prohibited, please use wpcom_vip_get_term_link() instead.',
+				'message'   => '%s() is deprecated, please use get_term_link(), get_tag_link(), or get_category_link() instead.',
 				'functions' => array(
-					'get_term_link',
-					'get_tag_link',
-					'get_category_link',
+					'wpcom_vip_get_term_link',
 				),
 			),
 
@@ -89,20 +87,19 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			'get_term_by' => array(
+			'wpcom_vip_get_term_by' => array(
 				'type'      => 'error',
-				'message'   => '%s() is prohibited, please use wpcom_vip_get_term_by() instead.',
+				'message'   => '%s() is deprecated, please use get_term_by() or get_cat_ID() instead.',
 				'functions' => array(
-					'get_term_by',
-					'get_cat_ID',
+					'wpcom_vip_get_term_by',
 				),
 			),
 
-			'get_category_by_slug' => array(
+			'wpcom_vip_get_category_by_slug' => array(
 				'type'      => 'error',
-				'message'   => '%s() is prohibited, please use wpcom_vip_get_category_by_slug() instead.',
+				'message'   => '%s() is deprecated, please use get_category_by_slug() instead.',
 				'functions' => array(
-					'get_category_by_slug',
+					'wpcom_vip_get_category_by_slug',
 				),
 			),
 
