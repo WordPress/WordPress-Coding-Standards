@@ -212,11 +212,14 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 - Install PHP Sniffer and WordPress Coding Standards per above.
 - Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager.
 - Run `which phpcs` to get your `phpcs` executable path.
-- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
+- Open the linter-phpcs package settings; enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
+- Below these settings find the Tab Width setting and change it to `4`.
 
 ![Atom Linter WordPress Coding Standards configuration](https://cloud.githubusercontent.com/assets/224636/12740504/ce4e97b8-c941-11e5-8d83-c77a2470d58e.png)
 
 ![Atom Linter in action using WordPress Coding Standards](https://cloud.githubusercontent.com/assets/224636/12740542/131c5894-c942-11e5-9e31-5e020c993224.png)
+
+- Note that certain items within PHPCS config file can cause linting to fail, see [linter-phpcs #95](https://github.com/AtomLinter/linter-phpcs/issues/95#issuecomment-316133107) for more details.
 
 ### Visual Studio
 
