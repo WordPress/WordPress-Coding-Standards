@@ -1,0 +1,80 @@
+<?php
+
+function fooa(): array {} // Good.
+function foob(): array {} // Bad.
+function fooc(): array {} // Bad.
+function food(): array {}
+function fooe(): array {} // Bad.
+function foof(): array {} // Bad.
+function foog(): array {}
+
+// Don't touch case statements here.
+$v = 1;
+switch ($v) {
+	case 1:
+		$x = $f1(-1 * $v);
+		break;
+	case (2) :
+		$x = $f2(-1 * $v, $v);
+		break;
+	default:
+		$x = $f1($v) + $f2(-1 * $v, $v);
+		break;
+}
+
+class ReturnType
+{
+	public function method(): array // Bad.
+	{
+		return [];
+	}
+
+	private function priv(
+		$a,
+		$b
+	): int { // Bad.
+		return $a * $b;
+	}
+}
+
+$c = new class() {
+	public function method(): float {
+		return mt_rand();
+	}
+};
+
+abstract class AbsCla
+{
+	abstract public function x(): bool; // Bad.
+}
+
+interface MyInterface
+{ // All below are bad.
+	public function a(): void;
+	public function b(): int;
+	public function c(): ?int;
+	public function d(): float;
+	public function e(): ?float;
+	public function f(): double;
+	public function g(): ?double;
+	public function h(): array;
+	public function i(): ?array;
+	public function j(): string;
+	public function k(): ?string;
+	public function l(): parent;
+	public function m(): ?parent;
+	public function n(): callable;
+	public function o(): ?callable;
+	public function p(): bool;
+	public function q(): ?bool;
+	public function r(): self;
+	public function s(): ?self;
+	public function t(): iterable;
+	public function u(): ?iterable;
+
+	public function v($a): \DateTime;
+	public function w(): ?\DateTime;
+
+	public function y($a, $b, $c): \My\TestClass;
+	public function z(): ?\ReturnType\MyType;
+}
