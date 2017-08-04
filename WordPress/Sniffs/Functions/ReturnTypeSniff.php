@@ -30,17 +30,17 @@ class ReturnTypeSniff extends Sniff {
 	 * @var string[]
 	 */
 	private $simple_return_types = array(
-		'void',
-		'int',
-		'float',
-		'double',
-		'string',
-		'array',
-		'iterable',
-		'callable',
-		'parent',
-		'self',
-		'bool',
+		'array'    => true,
+		'bool'     => true,
+		'callable' => true,
+		'double'   => true,
+		'float'    => true,
+		'int'      => true,
+		'iterable' => true,
+		'parent'   => true,
+		'self'     => true,
+		'string'   => true,
+		'void'     => true,
 	);
 
 	/**
@@ -121,20 +121,20 @@ class ReturnTypeSniff extends Sniff {
 			return;
 		}
 
-		$returnType = trim( $this->phpcsFile->getTokensAsString( $first, $last - $first + 1 ) );
+		$return_type = trim( $this->phpcsFile->getTokensAsString( $first, $last - $first + 1 ) );
 
 		if ( $first === $last
-			&& ! in_array( $returnType, $this->simple_return_types, true )
-			&& in_array( strtolower( $returnType ), $this->simple_return_types, true )
+			&& ! in_array( $return_type, $this->simple_return_types, true )
+			&& ! isset( $this->simple_return_types[ $return_type ] )
 		) {
 			$error = 'Simple return type must be lowercase. Found "%s", expected "%s"';
 			$data  = array(
-				$returnType,
-				strtolower( $returnType ),
+				$return_type,
+				strtolower( $return_type ),
 			);
 			$fix   = $this->phpcsFile->addFixableError( $error, $first, 'LowerCaseSimpleType', $data );
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( $stackPtr, strtolower( $returnType ) );
+				$this->phpcsFile->fixer->replaceToken( $stackPtr, strtolower( $return_type ) );
 			}
 		}
 	}
