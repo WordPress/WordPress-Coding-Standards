@@ -24,7 +24,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.13.0     Class name changed: this class is now namespaced.
  *
  * Last synced with base class 2017-01-15 at commit b024ad84656c37ef5733c6998ebc1e60957b2277.
- * Note: This class has diverged quite far from the original. All the same, checking occassionally
+ * Note: This class has diverged quite far from the original. All the same, checking occasionally
  * to see if there are upstream fixes made from which this sniff can benefit, is warranted.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
@@ -47,7 +47,7 @@ class ControlStructureSpacingSniff extends Sniff {
 	/**
 	 * Require for space before T_COLON when using the alternative syntax for control structures.
 	 *
-	 * @var string one of 'required', 'forbidden', optional'
+	 * @var string one of 'required', 'forbidden', 'optional'
 	 */
 	public $space_before_colon = 'required';
 
