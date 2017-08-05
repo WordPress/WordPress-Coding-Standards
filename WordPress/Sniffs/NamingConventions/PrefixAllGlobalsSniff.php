@@ -270,7 +270,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 				case 'T_CONST':
 					// Constants in a class do not need to be prefixed.
-					if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ) ) === true ) {
+					if ( true === $this->is_class_constant( $stackPtr ) ) {
 						return;
 					}
 
@@ -488,11 +488,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Properties in a class do not need to be prefixed.
-			$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
-			$ptr        = array_pop( $conditions );
-			if ( isset( $this->tokens[ $ptr ] )
-				&& in_array( $this->tokens[ $ptr ]['code'], array( T_CLASS, T_ANON_CLASS, T_TRAIT ), true )
-			) {
+			if ( true === $this->is_class_property( $stackPtr ) ) {
 				return;
 			}
 
