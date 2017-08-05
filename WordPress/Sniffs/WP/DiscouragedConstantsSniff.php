@@ -68,7 +68,6 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		T_IMPLEMENTS      => true,
 		T_NEW             => true,
 		T_FUNCTION        => true,
-		T_CONST           => true,
 		T_DOUBLE_COLON    => true,
 		T_OBJECT_OPERATOR => true,
 		T_INSTANCEOF      => true,
@@ -131,6 +130,14 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			&& T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
 		) {
 			// Namespaced constant of the same name.
+			return;
+		}
+
+		if ( false !== $prev
+			&& T_CONST === $this->tokens[ $prev ]['code']
+			&& true === $this->is_class_constant( $prev )
+		) {
+			// Class constant of the same name.
 			return;
 		}
 

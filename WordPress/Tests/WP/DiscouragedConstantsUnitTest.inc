@@ -5,7 +5,7 @@
  *
  * The below are all ok.
  */
-// Ok, not a constant.
+// Ok, not a (global) constant.
 namespace STYLESHEETPATH {}
 namespace MY\OTHER\STYLESHEETPATH\NAMESPACE {}
 use STYLESHEETPATH;
@@ -18,7 +18,6 @@ class ABC extends STYLESHEETPATH {}
 class DEF implements STYLESHEETPATH {}
 interface STYLESHEETPATH {}
 trait STYLESHEETPATH {}
-const STYLESHEETPATH = 'something';
 $a = new STYLESHEETPATH;
 $a = new STYLESHEETPATH();
 function STYLESHEETPATH() {}
@@ -32,7 +31,6 @@ goto STYLESHEETPATH;
 STYLESHEETPATH:
 // Something.
 
-// Ok, not a global constant.
 echo \mynamespace\STYLESHEETPATH;
 echo My_Class::STYLESHEETPATH;
 echo $this->STYLESHEETPATH;
@@ -71,3 +69,4 @@ switch(	STYLESHEETPATH ) {
 }
 
 define( 'STYLESHEETPATH', 'something' );
+const STYLESHEETPATH = 'something';

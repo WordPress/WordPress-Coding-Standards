@@ -2220,4 +2220,62 @@ abstract class Sniff implements PHPCS_Sniff {
 		return false;
 	}
 
+	/**
+	 * Check whether a T_CONST token is a class constant declaration.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int $stackPtr  The position in the stack of the T_CONST token to verify.
+	 *
+	 * @return bool
+	 */
+	public function is_class_constant( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ] ) || T_CONST !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		// Note: traits can not declare constants.
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_INTERFACE'  => true,
+		);
+
+		return $this->valid_direct_scope( $stackPtr, $valid_scopes );
+	}
+
+	/**
+	 * Check whether the direct wrapping scope of a token is within a limited set of
+	 * acceptable tokens.
+	 *
+	 * Used to check, for instance, if a T_CONST is a class constant.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int   $stackPtr     The position in the stack of the token to verify.
+	 * @param array $valid_scopes Array of token types.
+	 *                            Keys should be the token types in string format
+	 *                            to allow for newer token types.
+	 *                            Value is irrelevant.
+	 *
+	 * @return bool
+	 */
+	protected function valid_direct_scope( $stackPtr, array $valid_scopes ) {
+		if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+			return false;
+		}
+
+		/*
+		 * Check only the direct wrapping scope of the token.
+		 */
+		$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
+		$ptr        = array_pop( $conditions );
+
+		if ( ! isset( $this->tokens[ $ptr ] ) ) {
+			return false;
+		}
+
+		return isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] );
+	}
+
 }

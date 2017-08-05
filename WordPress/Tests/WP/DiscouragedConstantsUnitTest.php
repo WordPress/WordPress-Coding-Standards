@@ -35,6 +35,8 @@ class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
+			50 => 1,
+			51 => 1,
 			52 => 1,
 			53 => 1,
 			54 => 1,
@@ -45,13 +47,12 @@ class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
 			59 => 1,
 			60 => 1,
 			61 => 1,
-			62 => 1,
 			63 => 1,
-			65 => 1,
+			64 => 1,
 			66 => 1,
-			68 => 1,
-			69 => 1,
-			73 => 1,
+			67 => 1,
+			71 => 1,
+			72 => 1,
 		);
 	}
 
