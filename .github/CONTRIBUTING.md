@@ -100,6 +100,10 @@ The easiest way to do this is to add a `phpunit.xml` file to the root of your WP
 
 The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x. This has some implications for running the unit tests.
 
+* Make sure you have registered the directory in which you installed WPCS with PHPCS using;
+    ```sh
+    phpcs --config-set installed_path path/to/WPCS
+    ```
 * Navigate to the directory in which you installed WPCS.
 * To run the unit tests with PHPCS 3.x:
     ```sh

@@ -51,29 +51,3 @@ https://is.gd/contributing2WPCS
 // Load our class aliases.
 include_once dirname( __DIR__ ) . $ds . 'WordPress' . $ds . 'PHPCSAliases.php';
 unset( $ds, $phpcsDir );
-
-/*
- * Register our own autoloader for the WPCS abstract classes & the helper class.
- *
- * This can be removed once the minimum required version of WPCS for the
- * PHPCS 3.x branch has gone up to 3.1.0 (unreleased as of yet).
- *
- * @link https://github.com/squizlabs/PHP_CodeSniffer/issues/1564
- */
-spl_autoload_register( function ( $class ) {
-	// Only try & load our own classes.
-	if ( stripos( $class, 'WordPress' ) !== 0 ) {
-		return;
-	}
-
-	// PHPCS handles the Test and Sniff classes without problem.
-	if ( stripos( $class, '\Tests\\' ) !== false || stripos( $class, '\Sniffs\\' ) !== false ) {
-		return;
-	}
-
-	$file = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . strtr( $class, '\\', DIRECTORY_SEPARATOR ) . '.php';
-
-	if ( file_exists( $file ) ) {
-		include_once $file;
-	}
-} );
