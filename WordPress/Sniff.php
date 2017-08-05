@@ -1777,7 +1777,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// USE keywords for traits.
-		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_TRAIT ) ) ) {
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_TRAIT'      => true,
+		);
+		if ( true === $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
 			return 'trait';
 		}
 
@@ -2242,6 +2247,35 @@ abstract class Sniff implements PHPCS_Sniff {
 		);
 
 		return $this->valid_direct_scope( $stackPtr, $valid_scopes );
+	}
+
+	/**
+	 * Check whether a T_VARIABLE token is a class property declaration.
+	 *
+	 * @param int $stackPtr  The position in the stack of the T_VARIABLE token to verify.
+	 *
+	 * @return bool
+	 */
+	public function is_class_property( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ] ) || T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		// Note: interfaces can not declare properties.
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_TRAIT'      => true,
+		);
+
+		if ( $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+			// Make sure it's not a method parameter.
+			if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
