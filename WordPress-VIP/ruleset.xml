@@ -88,4 +88,8 @@
 	<rule ref="WordPress.WP.AlternativeFunctions.file_get_contents">
 		<message>%s() is highly discouraged, please use vip_safe_wp_remote_get() instead.</message>
 	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-theme-constants -->
+	<rule ref="WordPress.WP.DiscouragedConstants"/>
+
 </ruleset>
