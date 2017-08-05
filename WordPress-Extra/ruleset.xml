@@ -68,6 +68,7 @@
 	<rule ref="WordPress.WP.DeprecatedClasses"/>
 	<rule ref="WordPress.WP.DeprecatedParameters"/>
 	<rule ref="WordPress.WP.AlternativeFunctions"/>
+	<rule ref="WordPress.WP.DiscouragedConstants"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
 	<rule ref="Squiz.PHP.Eval"/>
