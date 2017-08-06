@@ -58,14 +58,19 @@ class ReturnTypeSniff extends Sniff {
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
-	 * @return null Return before end if Return type declaration contains an invalid token.
+	 * @return void Return before end if return type declaration contains an invalid token.
 	 */
 	public function process_token( $stackPtr ) {
-		$colon = (int) $this->phpcsFile->findPrevious( T_COLON, $stackPtr - 1 );
+		$colon = $this->phpcsFile->findPrevious( T_COLON, $stackPtr - 1, null, false, null, true );
+
+		if ( false === $colon ) {
+			// Shouldn't happen, but just in case.
+			return;
+		}
 
 		// Space before colon disallowed.
-		if ( T_CLOSE_PARENTHESIS !== $this->tokens[ $colon - 1 ]['code'] ) {
-			$error = 'There must be no space before colon before a return type.';
+		if ( isset( $this->tokens[ $colon - 1 ] ) && T_CLOSE_PARENTHESIS !== $this->tokens[ $colon - 1 ]['code'] ) {
+			$error = 'There must be no space between the closing parenthesis and the colon when declaring a return type for a function.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $colon - 1, 'SpaceBeforeColon' );
 
 			if ( true === $fix ) {
@@ -74,67 +79,48 @@ class ReturnTypeSniff extends Sniff {
 				do {
 					$this->phpcsFile->fixer->replaceToken( $token, '' );
 					-- $token;
-				} while ( T_CLOSE_PARENTHESIS !== $this->tokens[ $token ]['code'] );
+				} while ( isset( $this->tokens[ $token ] ) && T_CLOSE_PARENTHESIS !== $this->tokens[ $token ]['code'] );
 				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 
 		// Only one space after colon.
 		if ( T_WHITESPACE !== $this->tokens[ $colon + 1 ]['code'] ) {
-			$error = 'There must be a space after colon and before return type declaration.';
+			$error = 'There must be one space between the colon and the return type. None found.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $colon, 'NoSpaceAfterColon' );
 			if ( true === $fix ) {
 				$this->phpcsFile->fixer->addContent( $colon, ' ' );
 			}
 		} elseif ( ' ' !== $this->tokens[ $colon + 1 ]['content'] ) {
-			$error = 'There must be exactly one space after colon and before return type declaration.';
-			$fix   = $this->phpcsFile->addFixableError( $error, $colon + 1, 'TooManySpacesAfterColon' );
+			$error = 'There must be exactly one space between the colon and the return type. Found: %s';
+			$data = array( 'more than one' ); /* @var @todo Count actual whitespaces */
+			$fix   = $this->phpcsFile->addFixableError( $error, $colon + 1, 'TooManySpacesAfterColon', $data );
 			if ( true === $fix ) {
 				$this->phpcsFile->fixer->replaceToken( $colon + 1, ' ' );
 			}
 		}
 
-		$nullable = (int) $this->phpcsFile->findNext( T_NULLABLE, $colon + 1, $stackPtr );
-		if ( $nullable ) {
-			// Check if there is space after nullable operator.
-			if ( T_WHITESPACE === $this->tokens[ $nullable + 1 ]['code'] ) {
-				$error = 'Space is not not allowed after nullable operator.';
-				$fix   = $this->phpcsFile->addFixableError( $error, $nullable + 1, 'SpaceAfterNullable' );
-				if ( $fix ) {
-					$this->phpcsFile->fixer->replaceToken( $nullable + 1, '' );
-				}
-			}
-		}
-
-		$first   = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $nullable ?: $colon ) + 1, null, true );
-		$end     = $this->phpcsFile->findNext( array( T_SEMICOLON, T_OPEN_CURLY_BRACKET ), $stackPtr + 1 );
-		$last    = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, $end - 1, null, true );
-		$invalid = (int) $this->phpcsFile->findNext( array( T_STRING, T_NS_SEPARATOR, T_RETURN_TYPE ), $first, $last + 1, true );
-		if ( $invalid ) {
-			$error = 'Return type declaration contains invalid token %s';
-			$data  = array( $this->tokens[ $invalid ]['type'] );
-			$fix   = $this->phpcsFile->addFixableError( $error, $invalid, 'InvalidToken', $data );
+		$nullable = $this->phpcsFile->findNext( T_NULLABLE, $colon + 1, $stackPtr );
+		// Check if there is space after nullable operator.
+		if ( false !== $nullable && T_WHITESPACE === $this->tokens[ $nullable + 1 ]['code'] ) {
+			$error = 'Space is not allowed after nullable operator.';
+			$fix   = $this->phpcsFile->addFixableError( $error, $nullable + 1, 'SpaceAfterNullable' );
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( $invalid, '' );
+				$this->phpcsFile->fixer->replaceToken( $nullable + 1, '' );
 			}
-
-			return;
 		}
 
-		$return_type = trim( $this->phpcsFile->getTokensAsString( $first, $last - $first + 1 ) );
-
-		if ( $first === $last
-			&& ! in_array( $return_type, $this->simple_return_types, true )
-			&& ! isset( $this->simple_return_types[ $return_type ] )
-		) {
+		$contentLC = strtolower( $this->tokens[ $stackPtr ]['content'] );
+		// Check if simple return type is in lowercase.
+		if ( isset( $this->simple_return_types[ $contentLC ] ) && $contentLC !== $this->tokens[ $stackPtr ]['content'] ) {
 			$error = 'Simple return type must be lowercase. Found "%s", expected "%s"';
 			$data  = array(
-				$return_type,
-				strtolower( $return_type ),
+				$this->tokens[ $stackPtr ]['content'],
+				$contentLC,
 			);
-			$fix   = $this->phpcsFile->addFixableError( $error, $first, 'LowerCaseSimpleType', $data );
+			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'LowerCaseSimpleType', $data );
 			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( $stackPtr, strtolower( $return_type ) );
+				$this->phpcsFile->fixer->replaceToken( $stackPtr, $contentLC );
 			}
 		}
 	}

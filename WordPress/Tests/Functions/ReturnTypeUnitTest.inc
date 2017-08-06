@@ -80,5 +80,4 @@ interface MyInterface
 	public function w():?\DateTime;
 
 	public function y($a, $b, $c) : \My\TestClass;
-	public function z():? \ReturnType \MyType;
 }
