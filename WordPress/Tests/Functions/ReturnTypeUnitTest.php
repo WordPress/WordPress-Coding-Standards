@@ -56,11 +56,9 @@ class ReturnTypeUnitTest extends AbstractSniffUnitTest {
 			73 => 1,
 			74 => 2,
 			75 => 1,
-			76 => 2,
-			77 => 1,
-			79 => 2,
+			77 => 2,
+			78 => 1,
 			80 => 1,
-			82 => 1,
 		);
 	}
 

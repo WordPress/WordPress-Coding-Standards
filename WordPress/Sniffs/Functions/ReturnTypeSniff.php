@@ -9,11 +9,19 @@
 
 namespace WordPress\Sniffs\Functions;
 
-use PHP_CodeSniffer_Tokens as Tokens;
 use WordPress\Sniff;
 
 /**
  * Enforces formatting of return types.
+ *
+ * Expected format is no space before the colon, exactly one space afterwards before the return type.
+ * No space between any nullable operator and return type. Simple return types should be in lowercase.
+ *
+ * Example:
+ * ```
+ * function foo(): ?array {
+ * }
+ * ```
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -33,10 +41,10 @@ class ReturnTypeSniff extends Sniff {
 		'array'    => true,
 		'bool'     => true,
 		'callable' => true,
-		'double'   => true,
 		'float'    => true,
 		'int'      => true,
 		'iterable' => true,
+		'object'   => true,
 		'parent'   => true,
 		'self'     => true,
 		'string'   => true,
@@ -91,12 +99,18 @@ class ReturnTypeSniff extends Sniff {
 			if ( true === $fix ) {
 				$this->phpcsFile->fixer->addContent( $colon, ' ' );
 			}
-		} elseif ( ' ' !== $this->tokens[ $colon + 1 ]['content'] ) {
-			$error = 'There must be exactly one space between the colon and the return type. Found: %s';
-			$data = array( 'more than one' ); /* @var @todo Count actual whitespaces */
-			$fix   = $this->phpcsFile->addFixableError( $error, $colon + 1, 'TooManySpacesAfterColon', $data );
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( $colon + 1, ' ' );
+		} else {
+			$spaceAfterColon = strlen( $this->tokens[ $colon + 1 ]['content'] );
+			if ( false !== strpos( $this->tokens[ $colon + 1 ]['content'], $this->phpcsFile->eolChar ) ) {
+				$spaceAfterColon = 'newline';
+			}
+			if ( 1 !== $spaceAfterColon ) {
+				$error = 'There must be exactly one space between the colon and the return type. Found: %s';
+				$data = array( $spaceAfterColon );
+				$fix   = $this->phpcsFile->addFixableError( $error, $colon + 1, 'TooManySpacesAfterColon', $data );
+				if ( true === $fix ) {
+					$this->phpcsFile->fixer->replaceToken( $colon + 1, ' ' );
+				}
 			}
 		}
 

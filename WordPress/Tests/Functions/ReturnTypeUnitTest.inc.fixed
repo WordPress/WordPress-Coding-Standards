@@ -55,8 +55,6 @@ interface MyInterface
 	public function c(): ?int;
 	public function d(): float;
 	public function e(): ?float;
-	public function f(): double;
-	public function g(): ?double;
 	public function h(): array;
 	public function i(): ?array;
 	public function j(): string;
