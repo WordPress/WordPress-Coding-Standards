@@ -78,17 +78,25 @@ class ReturnTypeSniff extends Sniff {
 
 		// Space before colon disallowed.
 		if ( isset( $this->tokens[ $colon - 1 ] ) && T_CLOSE_PARENTHESIS !== $this->tokens[ $colon - 1 ]['code'] ) {
-			$error = 'There must be no space between the closing parenthesis and the colon when declaring a return type for a function.';
-			$fix   = $this->phpcsFile->addFixableError( $error, $colon - 1, 'SpaceBeforeColon' );
+			$error = 'There must be nothing between the closing parenthesis and the colon when declaring a return type for a function.';
+			$error_code = 'SpaceBeforeColon';
 
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->beginChangeset();
-				$token = $colon - 1;
-				do {
-					$this->phpcsFile->fixer->replaceToken( $token, '' );
-					-- $token;
-				} while ( isset( $this->tokens[ $token ] ) && T_CLOSE_PARENTHESIS !== $this->tokens[ $token ]['code'] );
-				$this->phpcsFile->fixer->endChangeset();
+			$previousNonWhitespace = $this->phpcsFile->findPrevious( T_WHITESPACE, $colon - 1, null, true, null, true );
+			if ( false !== $previousNonWhitespace && T_CLOSE_PARENTHESIS !== $this->tokens[ $previousNonWhitespace ]['code'] ) {
+				// Don't auto-fix: Something other than whitespace found between closing parenthesis and colon.
+				$this->phpcsFile->addError( $error, $colon - 1, $error_code );
+			} else {
+				$fix = $this->phpcsFile->addFixableError( $error, $colon - 1, $error_code );
+
+				if ( true === $fix ) {
+					$this->phpcsFile->fixer->beginChangeset();
+					$token = $colon - 1;
+					do {
+						$this->phpcsFile->fixer->replaceToken( $token, '' );
+						-- $token;
+					} while ( isset( $this->tokens[ $token ] ) && T_CLOSE_PARENTHESIS !== $this->tokens[ $token ]['code'] );
+					$this->phpcsFile->fixer->endChangeset();
+				}
 			}
 		}
 
@@ -100,16 +108,32 @@ class ReturnTypeSniff extends Sniff {
 				$this->phpcsFile->fixer->addContent( $colon, ' ' );
 			}
 		} else {
-			$spaceAfterColon = strlen( $this->tokens[ $colon + 1 ]['content'] );
-			if ( false !== strpos( $this->tokens[ $colon + 1 ]['content'], $this->phpcsFile->eolChar ) ) {
-				$spaceAfterColon = 'newline';
-			}
-			if ( 1 !== $spaceAfterColon ) {
-				$error = 'There must be exactly one space between the colon and the return type. Found: %s';
-				$data = array( $spaceAfterColon );
-				$fix   = $this->phpcsFile->addFixableError( $error, $colon + 1, 'TooManySpacesAfterColon', $data );
-				if ( true === $fix ) {
-					$this->phpcsFile->fixer->replaceToken( $colon + 1, ' ' );
+			$error = 'There must be exactly one space between the colon and the return type. Found: %s';
+			$error_code = 'TooManySpacesAfterColon';
+
+			$nextNonWhiteSpace = $this->phpcsFile->findNext( array( T_WHITESPACE, T_NS_SEPARATOR ), $colon + 1, null, true, null, true );
+
+			if ( $stackPtr !== $nextNonWhiteSpace ) {
+				// Don't auto-fix: Something other than whitespace or namespace separator found between closing parenthesis and colon.
+				$this->phpcsFile->addError( $error, $colon + 1, $error_code );
+			} else {
+				$spacesAfterColon = strlen( $this->tokens[ $colon + 1 ]['content'] );
+				if ( false !== strpos( $this->tokens[ $colon + 1 ]['content'], $this->phpcsFile->eolChar ) ) {
+					$spacesAfterColon = 'newline';
+				}
+				if ( ' ' !== $this->tokens[ $colon + 1 ]['content'] ) {
+					$data  = array( $spacesAfterColon );
+					$fix   = $this->phpcsFile->addFixableError( $error, $colon + 1, $error_code, $data );
+					if ( true === $fix ) {
+						$this->phpcsFile->fixer->beginChangeset();
+						$token = $colon + 1;
+						do {
+							$this->phpcsFile->fixer->replaceToken( $token, '' );
+							$token ++;
+						} while ( isset( $this->tokens[ $token ] ) && $token < $nextNonWhiteSpace - 1 );
+						$this->phpcsFile->fixer->replaceToken( $colon + 1, ' ' );
+						$this->phpcsFile->fixer->endChangeset();
+					}
 				}
 			}
 		}

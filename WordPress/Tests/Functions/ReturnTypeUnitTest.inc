@@ -1,14 +1,21 @@
 <?php
 
 function fooa(): array {} // Good.
-function foob() : array {} // Bad.
-function fooc()     : array {} // Bad.
-function food() // Bad.
+function foob() : array {} // Bad, space before colon.
+function fooc()     : array {} // Bad, multiple spaces before colon.
+function food():array {} // Bad, no space after colon.
+function fooe():    array {} // Bad, more than 1 space after colon.
+
+function foof() // Bad, but don't fix.
 : array {}
-function fooe():array {} // Bad.
-function foof():    array {} // Bad.
-function foog():
+function foog(): // Bad, but don't fix.
 array {}
+function fooh() /* Return declaration. */ : array { // Bad, but don't fix.
+	return array();
+}
+function fooi(): /* Return declaration. */ array { // Bad, but don't fix.
+	return array();
+}
 
 // Don't touch case statements here.
 $v = 1;
@@ -42,7 +49,7 @@ class ReturnType
 
 $c = new class() {
 	public function method() :
-	float {
+	float { // Bad on line above.
 		return mt_rand();
 	}
 };
