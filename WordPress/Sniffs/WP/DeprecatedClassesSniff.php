@@ -14,34 +14,23 @@ use WordPress\AbstractClassRestrictionsSniff;
 /**
  * Restricts the use of deprecated WordPress classes and suggests alternatives.
  *
+ * This sniff will throw an error when usage of a deprecated class is detected
+ * if the class was deprecated before the minimum supported WP version;
+ * a warning otherwise.
+ * By default, it is set to presume that a project will support the current
+ * WP version and up to three releases before.
+ *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Now has the ability to handle minimum supported WP version
+ *                 being provided via the command-line or as as <config> value
+ *                 in a custom ruleset.
+ *
+ * @uses    \WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
-
-	/**
-	 * Minimum WordPress version.
-	 *
-	 * This sniff will throw an error when usage of a deprecated class is
-	 * detected if the class was deprecated before the minimum supported
-	 * WP version; a warning otherwise.
-	 * By default, it is set to presume that a project will support the current
-	 * WP version and up to three releases before.
-	 * This variable allows changing the minimum supported WP version used by
-	 * this sniff by setting a property in a custom phpcs.xml ruleset.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.WP.DeprecatedClasses">
-	 *  <properties>
-	 *   <property name="minimum_supported_version" value="4.3"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @var string WordPress versions.
-	 */
-	public $minimum_supported_version = '4.5';
 
 	/**
 	 * List of deprecated classes with alternative when available.
@@ -92,6 +81,9 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 * @return void
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+
+		$this->get_wp_version_from_cl();
+
 		$class_name = ltrim( strtolower( $matched_content ), '\\' );
 
 		$message = 'The %s class has been deprecated since WordPress version %s.';

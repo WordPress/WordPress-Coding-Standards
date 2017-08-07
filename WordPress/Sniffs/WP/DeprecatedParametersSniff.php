@@ -24,6 +24,11 @@ use WordPress\AbstractFunctionParameterSniff;
  *
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Now has the ability to handle minimum supported WP version
+ *                 being provided via the command-line or as as <config> value
+ *                 in a custom ruleset.
+ *
+ * @uses    \WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
@@ -35,25 +40,6 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 	 * @var string
 	 */
 	protected $group_name = 'wp_deprecated_parameters';
-
-	/**
-	 * Minimum WordPress version.
-	 *
-	 * This variable allows changing the minimum supported WP version used by
-	 * this sniff by setting a property in a custom ruleset XML file.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.WP.DeprecatedParameters">
-	 *  <properties>
-	 *   <property name="minimum_supported_version" value="4.5"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @since 0.12.0
-	 *
-	 * @var string WordPress version.
-	 */
-	public $minimum_supported_version = 4.5;
 
 	/**
 	 * Array of function, argument, and default value for deprecated argument.
@@ -293,6 +279,9 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
+
+		$this->get_wp_version_from_cl();
+
 		$paramCount = count( $parameters );
 		foreach ( $this->target_functions[ $matched_content ] as $position => $parameter_args ) {
 
