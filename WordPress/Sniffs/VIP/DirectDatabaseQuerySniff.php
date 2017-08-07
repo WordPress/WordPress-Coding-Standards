@@ -152,8 +152,12 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		// Check for Database Schema Changes.
-		$_pos = $stackPtr;
-		while ( $_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
+		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
+			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
+			if ( false === $_pos ) {
+				break;
+			}
+
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
 				$this->phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}

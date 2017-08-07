@@ -24,6 +24,10 @@
 	</rule>
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
+	<!-- Duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 -->
+	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition"/>
+
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.NonExecutableCode"/>
