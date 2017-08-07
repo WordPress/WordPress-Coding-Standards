@@ -169,7 +169,7 @@ class AssignmentInConditionSniff extends Sniff {
 
 			if ( true === $hasVariable ) {
 				$this->phpcsFile->addWarning(
-					'Variable assignment found within a condition. Did you mean to do a comparison ?',
+					'Variable assignment found within a condition. Did you mean to do a comparison?',
 					$hasAssignment,
 					'Found'
 				);
@@ -181,4 +181,4 @@ class AssignmentInConditionSniff extends Sniff {
 
 	}
 
-} // End class.
+}
