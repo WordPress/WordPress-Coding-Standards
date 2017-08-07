@@ -12,6 +12,7 @@ namespace WordPress;
 use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer_File as File;
 use PHP_CodeSniffer_Tokens as Tokens;
+use WordPress\PHPCSHelper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -33,6 +34,64 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *            is documented in the property documentation.}}
  */
 abstract class Sniff implements PHPCS_Sniff {
+
+	/**
+	 * Minimum supported WordPress version.
+	 *
+	 * Currently used by the `WordPress.WP.DeprecatedClasses`,
+	 * `WordPress.WP.DeprecatedFunctions` and the `WordPress.WP.DeprecatedParameter` sniff.
+	 *
+	 * These sniffs will throw an error when usage of a deprecated class/function/parameter
+	 * is detected if the class/function/parameter was deprecated before the minimum
+	 * supported WP version; a warning otherwise.
+	 * By default, it is set to presume that a project will support the current
+	 * WP version and up to three releases before.
+	 *
+	 * This property allows changing the minimum supported WP version used by
+	 * these sniffs by setting a property in a custom phpcs.xml ruleset.
+	 * This property will need to be set for each sniff which uses it.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.WP.DeprecatedClasses">
+	 *  <properties>
+	 *   <property name="minimum_supported_version" value="4.3"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * Alternatively, the value can be passed in one go for all sniff using it via
+	 * the command line or by setting a `<config>` value in a custom phpcs.xml ruleset.
+	 * Note: the `_wp_` in the command line property name!
+	 *
+	 * CL: `phpcs --runtime-set minimum_supported_wp_version 4.5`
+	 * Ruleset: `<config name="minimum_supported_wp_version" value="4.5"/>`
+	 *
+	 * @since 0.14.0 Previously the individual sniffs each contained this property.
+	 *
+	 * @var string WordPress version.
+	 */
+	public $minimum_supported_version = '4.5';
+
+	/**
+	 * Custom list of classes which test classes can extend.
+	 *
+	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property will need to be set for each sniff which uses the
+	 * `is_test_class()` method.
+	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
+	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.[Subset].[Sniffname]">
+	 *  <properties>
+	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string|string[]
+	 */
+	public $custom_test_class_whitelist = array();
 
 	/**
 	 * List of the functions which verify nonces.
@@ -776,28 +835,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * Custom list of classes which test classes can extend.
-	 *
-	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
-	 * This property will need to be set for each sniff which uses the
-	 * `is_test_class()` method.
-	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
-	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.[Subset].[Sniffname]">
-	 *  <properties>
-	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var string|string[]
-	 */
-	public $custom_test_class_whitelist = array();
-
-	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
@@ -1040,6 +1077,25 @@ abstract class Sniff implements PHPCS_Sniff {
 		$lastPtr = ( $nextPtr - 1 );
 
 		return $lastPtr;
+	}
+
+	/**
+	 * Overrule the minimum supported WordPress version with a command-line/config value.
+	 *
+	 * Handle setting the minimum supported WP version in one go for all sniffs which
+	 * expect it via the command line or via a `<config>` variable in a ruleset.
+	 * The config variable overrules the default `$minimum_supported_version` and/or a
+	 * `$minimum_supported_version` set for individual sniffs through the ruleset.
+	 *
+	 * @since 0.14.0
+	 */
+	protected function get_wp_version_from_cl() {
+		$cl_supported_version = trim( PHPCSHelper::get_config_data( 'minimum_supported_wp_version' ) );
+		if ( ! empty( $cl_supported_version )
+			&& filter_var( $cl_supported_version, FILTER_VALIDATE_FLOAT ) !== false
+		) {
+			$this->minimum_supported_version = $cl_supported_version;
+		}
 	}
 
 	/**
