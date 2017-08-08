@@ -17,7 +17,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * This is a typical code smell and more often than not a comparison was intended.
  *
- * Note: this sniff does not detect variable assignments in the conditional part of ternaries!
+ * Note: this sniff does not detect variable assignments in ternaries without parentheses!
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -64,6 +64,7 @@ class AssignmentInConditionSniff extends Sniff {
 		$starters                       = Tokens::$booleanOperators;
 		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
 		$starters[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
+		$starters[ T_INLINE_ELSE ]      = T_INLINE_ELSE;
 
 		$this->condition_start_tokens = $starters;
 
@@ -74,6 +75,7 @@ class AssignmentInConditionSniff extends Sniff {
 			T_SWITCH,
 			T_CASE,
 			T_WHILE,
+			T_INLINE_THEN,
 		);
 
 	}//end register()
@@ -119,6 +121,29 @@ class AssignmentInConditionSniff extends Sniff {
 			$opener = $stackPtr;
 			$closer = $token['scope_opener'];
 
+		} elseif ( T_INLINE_THEN === $token['code'] ) {
+			// Check if the condition for the ternary is bracketed.
+			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+			if ( false === $prev ) {
+				// Shouldn't happen, but in that case we don't have anything to examine anyway.
+				return;
+			}
+
+			if ( T_CLOSE_PARENTHESIS === $this->tokens[ $prev ]['code'] ) {
+				if ( ! isset( $this->tokens[ $prev ]['parenthesis_opener'] ) ) {
+					return;
+				}
+
+				$opener = $this->tokens[ $prev ]['parenthesis_opener'];
+				$closer = $prev;
+			} elseif ( isset( $token['nested_parenthesis'] ) ) {
+				end( $token['nested_parenthesis'] );
+				$opener = key( $token['nested_parenthesis'] );
+				$closer = $stackPtr;
+			} else {
+				// No parenthesis found, can't determine where the conditional part of the ternary starts.
+				return;
+			}
 		} else {
 			if ( isset( $token['parenthesis_opener'], $token['parenthesis_closer'] ) === false ) {
 				return;

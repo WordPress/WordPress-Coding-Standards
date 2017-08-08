@@ -92,3 +92,25 @@ while ( $sample = false ) {}
 
 if ($a = 123) :
 endif;
+
+/*
+ * Ternaries should also be checked, but can only be reliably done when in parenthesis.
+ */
+
+// OK.
+$mode = ( $a == 'something' ) ? 'on' : 'off';
+$mode = ( $a == 'on' ? 'true' : $a == 'off' ? 't' : 'f' );
+
+// Bad.
+$mode = ( $a = 'on' ) ? 'on' : 'off';
+$mode = ( $a = 'on' ) ?: 'off';
+$mode = ( $a = 'on' ) ? 'true' : ( $a = 'off' ) ? 't' : 'f'; // Bad x 2.
+$mode = ( $a = 'on' ? 'on' : 'off' );
+$mode = ( $a = 'on' ?: 'off' );
+$mode = ( $a = 'on' ? 'true' : ( $a = 'off' ? 't' : 'f' ) ); // Bad x 2.
+$mode = ( $a = 'on' ? 'true' : $a = 'off' ? 't' : 'f' ); // Bad x 3. The first ? triggers 1, the second (correctly) 2.
+
+// Currently not checked.
+$mode = $a = 'on' ? 'on' : 'off';
+$mode = $a = 'on' ?: 'off';
+$mode = $a = 'on' ? 'true' : $a = 'off' ? 't' : 'f';
