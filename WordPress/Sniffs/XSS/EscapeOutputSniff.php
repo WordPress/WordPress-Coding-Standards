@@ -291,6 +291,11 @@ class EscapeOutputSniff extends Sniff {
 				continue;
 			}
 
+			// Ignore namespace separators.
+			if ( T_NS_SEPARATOR === $this->tokens[ $i ]['code'] ) {
+				continue;
+			}
+
 			if ( T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 
 				if ( ! isset( $this->tokens[ $i ]['parenthesis_closer'] ) ) {

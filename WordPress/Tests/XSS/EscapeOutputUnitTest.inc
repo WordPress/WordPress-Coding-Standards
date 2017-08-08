@@ -225,3 +225,15 @@ echo 8 * 1.2; // Ok.
 <?= $var['foo']; ?><!-- Bad. -->
 <?= $var->foo ?><!-- Bad. -->
 <?php
+
+// Issue #933. OK.
+function do_footer_nav() {
+	echo \wp_kses_post(
+		\genesis_get_nav_menu(
+			[
+				'menu_class'     => 'menu genesis-nav-menu menu-footer',
+				'theme_location' => 'footer',
+			]
+		)
+	);
+}
