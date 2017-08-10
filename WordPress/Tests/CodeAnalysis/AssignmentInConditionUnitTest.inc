@@ -24,24 +24,6 @@ do {
 } while ( $sample == false );
 
 while ( $sample === false ) {}
-while (list($field_name, $file_names) = each($formfiles)) {}
-
- // Silly, but not an assignment.
-if (123 = $a) {}
-if (strtolower($b) = $b) {}
-if (array( 1 => 'a', 2 => 'b' ) = $b) {}
-
-if (SOME_CONSTANT = 123) {
-} else if(self::SOME_CONSTANT -= 10) {}
-
-if ( $a() = 123 ) {
-} else if ( $b->something() = 123 ) {
-} elseif ( $c::something() = 123 ) {}
-
-switch ( true ) {
-	case 'something' = $sample:
-		break;
-}
 
 // Assignments in condition.
 if ($a = 123) {
@@ -92,3 +74,44 @@ while ( $sample = false ) {}
 
 if ($a = 123) :
 endif;
+
+// Non-variable assignment found.
+if (123 = $a) {}
+if (strtolower($b) = $b) {}
+if (array( 1 => 'a', 2 => 'b' ) = $b) {}
+
+if (SOME_CONSTANT = 123) {
+} else if(self::SOME_CONSTANT -= 10) {}
+
+if ( $a() = 123 ) {
+} else if ( $b->something() = 123 ) {
+} elseif ( $c::something() = 123 ) {}
+
+switch ( true ) {
+	case 'something' = $sample:
+		break;
+}
+
+while (list($field_name, $file_names) = each($formfiles)) {}
+
+/*
+ * Ternaries should also be checked, but can only be reliably done when in parenthesis.
+ */
+
+// OK.
+$mode = ( $a == 'something' ) ? 'on' : 'off';
+$mode = ( $a == 'on' ? 'true' : $a == 'off' ? 't' : 'f' );
+
+// Bad.
+$mode = ( $a = 'on' ) ? 'on' : 'off';
+$mode = ( $a = 'on' ) ?: 'off';
+$mode = ( $a = 'on' ) ? 'true' : ( $a = 'off' ) ? 't' : 'f'; // Bad x 2.
+$mode = ( $a = 'on' ? 'on' : 'off' );
+$mode = ( $a = 'on' ?: 'off' );
+$mode = ( $a = 'on' ? 'true' : ( $a = 'off' ? 't' : 'f' ) ); // Bad x 2.
+$mode = ( $a = 'on' ? 'true' : $a = 'off' ? 't' : 'f' ); // Bad x 3. The first ? triggers 1, the second (correctly) 2.
+
+// Currently not checked.
+$mode = $a = 'on' ? 'on' : 'off';
+$mode = $a = 'on' ?: 'off';
+$mode = $a = 'on' ? 'true' : $a = 'off' ? 't' : 'f';
