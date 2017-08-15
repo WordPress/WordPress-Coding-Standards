@@ -49,6 +49,16 @@
 
 	<rule ref="WordPress-Core"/>
 
+	<!-- Verify modifier keywords for declared methods and properties in classes.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1101 -->
+	<rule ref="Squiz.Scope.MethodScope"/>
+	<rule ref="Squiz.Scope.MemberVarScope"/>
+	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
+	<rule ref="PSR2.Methods.MethodDeclaration"/>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<type>warning</type>
+	</rule>
+
 	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
 	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
 		<!-- Restore default severity of 5 which WordPress-Core sets to 0. -->
