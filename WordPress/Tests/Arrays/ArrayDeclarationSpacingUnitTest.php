@@ -59,6 +59,9 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					97  => 1,
 					98  => 2,
 					101 => 1,
+					106 => 2,
+					107 => 2,
+					109 => 1,
 				);
 
 			// Short arrays.
@@ -85,6 +88,9 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					80  => 1,
 					81  => 2,
 					84  => 1,
+					89  => 2,
+					90  => 2,
+					92  => 1,
 				);
 
 			default:

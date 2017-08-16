@@ -36,8 +36,20 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                 which were not covered elsewhere. The `ArrayDeclaration` sniff has
  *                 now been deprecated.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Single item associative arrays can now be excepted from the
+ *                 "must be multi-line" rule using the
+ *                 `allow_single_item_single_line_associative_arrays` property.
  */
 class ArrayDeclarationSpacingSniff extends Sniff {
+
+	/**
+	 * Whether or not to allow single item associative arrays to be single line.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var bool Defaults to false.
+	 */
+	public $allow_single_item_single_line_associative_arrays = false;
 
 	/**
 	 * Token this sniff targets.
@@ -176,7 +188,11 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 			$array_items = $this->get_function_call_parameters( $stackPtr );
 
-			if ( ! empty( $array_items ) ) {
+			if ( ( false === $this->allow_single_item_single_line_associative_arrays
+					&& ! empty( $array_items ) )
+				|| ( true === $this->allow_single_item_single_line_associative_arrays
+					&& count( $array_items ) > 1 )
+			) {
 				/*
 				 * Make sure the double arrow is for *this* array, not for a nested one.
 				 */

@@ -135,3 +135,16 @@ $foo = [
 $fields = [
 	'value' => 'type'
 ];
+
+// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true
+
+$bad = [ 'key' => 'value' ]; // OK.
+$bad = [ 'key' => 'value' ]; // Bad, spacing around parenthesis.
+$bad = [ 'key' => 'value' ]; // Bad, spacing around parenthesis.
+
+$bad = [
+'key1' => 'value1',
+'key2' => 'value2'
+]; // Bad, more than one item should still be fixed.
+
+// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
