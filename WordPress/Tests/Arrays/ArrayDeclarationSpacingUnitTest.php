@@ -36,7 +36,6 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 				return array(
 					8   => 2,
 					11  => 2,
-					13  => 1,
 					16  => 4,
 					20  => 2,
 					22  => 1,
@@ -59,6 +58,10 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					97  => 1,
 					98  => 2,
 					101 => 1,
+					103 => 2,
+					104 => 2,
+					108 => 1,
+					109 => 1,
 				);
 
 			// Short arrays.
@@ -66,7 +69,6 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 				return array(
 					8   => 2,
 					11  => 2,
-					13  => 1,
 					16  => 4,
 					20  => 2,
 					22  => 1,
@@ -85,6 +87,10 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					80  => 1,
 					81  => 2,
 					84  => 1,
+					86  => 2,
+					87  => 2,
+					91  => 1,
+					92  => 1,
 				);
 
 			default:
