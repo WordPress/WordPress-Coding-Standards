@@ -96,3 +96,11 @@ $a = new \MyNamespace\MyClass();
 // Namespaced classes: Bad.
 $a = new \MyClass();
 $a = new \MyNamespace\MyClass();
+
+// Non-variable keys: OK.
+$a = new $array['key']();
+$a = new $array[0]();
+
+// Non-variable keys: Bad.
+$a = new $array['key']();
+$a = new $array[0]();
