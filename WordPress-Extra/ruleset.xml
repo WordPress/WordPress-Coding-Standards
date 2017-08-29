@@ -47,6 +47,22 @@
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
 
+	<!-- Encourage having only one class/interface/trait per file. -->
+	<!-- Once the minimum WPCS PHPCS requirement has gone up to PHPCS 3.1.0, these three sniffs can be
+	     replaced by the more comprehensive Generic.Files.OneObjectStructurePerFile sniff. -->
+	<rule ref="Generic.Files.OneClassPerFile">
+		<type>warning</type>
+		<message>Best practice suggestion: Declare only one class in a file.</message>
+	</rule>
+	<rule ref="Generic.Files.OneInterfacePerFile">
+		<type>warning</type>
+		<message>Best practice suggestion: Declare only one interface in a file.</message>
+	</rule>
+	<rule ref="Generic.Files.OneTraitPerFile">
+		<type>warning</type>
+		<message>Best practice suggestion: Declare only one trait in a file.</message>
+	</rule>
+
 	<rule ref="WordPress-Core"/>
 
 	<!-- Verify modifier keywords for declared methods and properties in classes.
