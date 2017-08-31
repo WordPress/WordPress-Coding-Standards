@@ -378,6 +378,13 @@
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
+	<!-- Object operators should not have whitespace around them unless they are multi-line. -->
+	<rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
+		<properties>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
+
 	<!-- References to self in a class should be lower-case and not have extraneous spaces,
 		 per implicit conventions in the core codebase; the NotUsed code refers to using the
 		 fully-qualified class name instead of self, for which there are instances in core. -->
