@@ -2095,6 +2095,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
 	 *
+	 * @since 0.12.0
+	 *
 	 * @param int $stackPtr The stack pointer to the array token.
 	 *
 	 * @return array|bool Array with two keys `opener`, `closer` or false if
@@ -2307,6 +2309,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 	/**
 	 * Check whether a T_VARIABLE token is a class property declaration.
+	 *
+	 * @since 0.14.0
 	 *
 	 * @param int $stackPtr  The position in the stack of the T_VARIABLE token to verify.
 	 *
