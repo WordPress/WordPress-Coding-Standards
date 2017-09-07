@@ -112,8 +112,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
 
 				/*
-				   Here be dragons - a double quoted string can contain extrapolated variables
-				   which don't have to comply with these rules.
+				 * Here be dragons - a double quoted string can contain extrapolated variables
+				 * which don't have to comply with these rules.
 				 */
 				if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
 					$transform       = $this->transform_complex_string( $string, $regex );

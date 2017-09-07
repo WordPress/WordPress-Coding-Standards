@@ -149,9 +149,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		$inst = array();
 
 		/*
-		   Covers:
-		   $foo = array( 'bar' => 'taz' );
-		   $foo['bar'] = $taz;
+		 * Covers:
+		 * $foo = array( 'bar' => 'taz' );
+		 * $foo['bar'] = $taz;
 		 */
 		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.

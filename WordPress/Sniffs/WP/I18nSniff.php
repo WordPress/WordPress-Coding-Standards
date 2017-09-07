@@ -169,7 +169,7 @@ class I18nSniff extends Sniff {
 
 		$func_open_paren_token = $this->phpcsFile->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
-			 return;
+			return;
 		}
 
 		$arguments_tokens = array();

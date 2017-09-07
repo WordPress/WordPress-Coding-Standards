@@ -1660,8 +1660,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		if ( $in_condition_only ) {
 			/*
-			   This is a stricter check, requiring the variable to be used only
-			   within the validation condition.
+			 * This is a stricter check, requiring the variable to be used only
+			 * within the validation condition.
 			 */
 
 			// If there are no conditions, there's no validation.
@@ -1684,8 +1684,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		} else {
 			/*
-			   We are are more loose, requiring only that the variable be validated
-			   in the same function/file scope as it is used.
+			 * We are are more loose, requiring only that the variable be validated
+			 * in the same function/file scope as it is used.
 			 */
 
 			$scope_start = 0;
