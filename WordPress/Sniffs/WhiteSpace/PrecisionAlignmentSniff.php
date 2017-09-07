@@ -141,7 +141,7 @@ class PrecisionAlignmentSniff extends Sniff {
 					$comment    = ltrim( $this->tokens[ $i ]['content'] );
 					$whitespace = str_replace( $comment, '', $this->tokens[ $i ]['content'] );
 					$length     = strlen( $whitespace );
-					if ( '*' === $comment[0] ) {
+					if ( isset( $comment[0] ) && '*' === $comment[0] ) {
 						$length--;
 					}
 
