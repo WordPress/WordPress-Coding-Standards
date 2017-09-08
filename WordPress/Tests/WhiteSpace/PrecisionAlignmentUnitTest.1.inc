@@ -40,3 +40,8 @@
 	</p>
 
 <?php
+
+// Testing empty line within a comment.
+/*
+
+*/
