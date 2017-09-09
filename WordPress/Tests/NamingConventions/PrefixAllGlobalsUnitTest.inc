@@ -120,14 +120,14 @@ apply_filters( 'acronym', $var );
 /*
  * OK - not in the global namespace.
  */
-function acronym_do_something( $param = 'default' ) {
+function acronym_do_something_else( $param = 'default' ) {
 	$var = 'abc';
 	${$something} = 'value';
 }
 
 function ( $param ) {
 	$var = 'abc';
-}
+};
 
 class Acronym_Example {
 	const SOME_CONSTANT = 'value';
@@ -143,7 +143,7 @@ $acronym_class = new class {
 	public $var = 'abc';
 
 	function do_something( $param = 'default' ) {}
-}
+};
 
 namespace Acronym {
 	function do_something( $param = 'default' ) {}

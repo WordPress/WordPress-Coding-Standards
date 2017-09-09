@@ -43,12 +43,12 @@ class Foo implements ArrayAccess {
 class Its_A_Kind_Of_Magic {
 	function __construct() {} // Ok.
 	function __destruct() {} // Ok.
-	function __call() {} // Ok.
-	function __callStatic() {} // Ok.
-	function __get() {} // Ok.
-	function __set() {} // Ok.
-	function __isset() {} // Ok.
-	function __unset() {} // Ok.
+	function __call( $a, $b ) {} // Ok.
+	static function __callStatic( $a, $b ) {} // Ok.
+	function __get( $a ) {} // Ok.
+	function __set( $a, $b ) {} // Ok.
+	function __isset( $a ) {} // Ok.
+	function __unset( $a ) {} // Ok.
 	function __sleep() {} // Ok.
 	function __wakeup() {} // Ok.
 	function __toString() {} // Ok.

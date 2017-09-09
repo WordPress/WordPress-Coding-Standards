@@ -133,7 +133,7 @@ $b = function () {
 // @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customSanitizingFunctions sanitize_pc,sanitize_twitter
 // @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customUnslashingSanitizingFunctions do_something
 
-function foo_5() {
+function foo_6() {
 
 	sanitize_twitter( $_POST['foo'] ); // OK.
 	sanitize_pc( $_POST['bar'] ); // OK.
@@ -143,7 +143,7 @@ function foo_5() {
 // @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customSanitizingFunctions sanitize_pc
 // @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customUnslashingSanitizingFunctions false
 
-function foo_5() {
+function foo_7() {
 
 	do_something( $_POST['foo'] ); // Bad.
 	sanitize_pc( $_POST['bar'] ); // OK.
@@ -154,7 +154,7 @@ function foo_5() {
 // @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customNonceVerificationFunctions false
 // @codingStandardsChangeSetting WordPress.CSRF.NonceVerification customSanitizingFunctions false
 
-function foo_5() {
+function foo_8() {
 
 	do_something( $_POST['foo'] ); // Bad.
 	sanitize_pc( $_POST['bar'] ); // Bad.

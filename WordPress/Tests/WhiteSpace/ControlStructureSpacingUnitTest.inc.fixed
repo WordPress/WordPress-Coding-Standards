@@ -44,14 +44,14 @@ if ( false ) :
 else :
 endif;
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
-function ( $arg ) {} // Bad.
-function ( $arg ) {
+$a = function ( $arg ) {}; // Bad.
+$a = function ( $arg ) {
 	// Ok.
-}
+};
 
-function () {
+$a = function () {
 	// Ok.
-}
+};
 
 function something( $arg ) {} // Bad.
 function foo( $arg ) {
@@ -66,16 +66,16 @@ function another() {} // Bad, space before open parenthesis prohibited.
 function and_another() {} // Bad, space before function name prohibited.
 function bar() {} // Bad.
 function baz() {} // Bad.
-function test() {} // Bad.
+function testA() {} // Bad.
 
 function &return_by_ref() {} // Ok.
 
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 0
 
-function() {} // Ok.
-function( $arg ) {} // Ok.
-function( $arg ) {} // Bad.
-function() {} // Bad.
+$a = function() {}; // Ok.
+$a = function( $arg ) {}; // Ok.
+$a = function( $arg ) {}; // Bad.
+$a = function() {}; // Bad.
 
 $closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
 $closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Bad.
@@ -98,8 +98,8 @@ use Foo\Admin;
 
 // @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren -1
 
-function( $arg ) {} // Ok.
-function ( $arg ) {} // Ok.
+$a = function( $arg ) {}; // Ok.
+$a = function ( $arg ) {}; // Ok.
 
 $closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
 $closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
@@ -162,7 +162,7 @@ if ( $foo ) {
     /**
      * Comment
      */
-    class bar() {
+    class bar {
 
     }//end class
 
@@ -172,7 +172,7 @@ if ( $foo ) {
 
 // Check for too many spaces as long as the next non-blank token is on the same line.
 function test( $blah ) {} // Bad.
-function(   $bar ) {}  // Bad.
+$a = function(   $bar ) {}; // Bad.
 
 if ( 'abc' === $test ) { // Bad.
 	echo 'hi';
@@ -188,7 +188,7 @@ while ( $blah ) { // Bad.
 	echo 'bye bye';
 }
 
-for ( $i = 0; $i < 1; $++ ) { // Bad.
+for ( $i = 0; $i < 1; $i++ ) { // Bad.
 	echo 'hi';
 }
 

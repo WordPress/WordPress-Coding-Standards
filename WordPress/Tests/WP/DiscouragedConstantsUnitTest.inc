@@ -7,7 +7,7 @@
  */
 // Ok, not a (global) constant.
 namespace STYLESHEETPATH {}
-namespace MY\OTHER\STYLESHEETPATH\NAMESPACE {}
+namespace MY\OTHER\STYLESHEETPATH\NS {}
 use STYLESHEETPATH;
 use Something, STYLESHEETPATH, SomethingElse;
 class STYLESHEETPATH {
