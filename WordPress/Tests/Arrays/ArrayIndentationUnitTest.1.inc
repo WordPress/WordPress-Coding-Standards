@@ -338,7 +338,7 @@ $my_array = [
 /*
  * Test multi-line strings as the value for an array item.
  */
-$test => array(
+$test = array(
 	'notes1'         => '<p>
 			Whether to use <code>isset()</code> or <code>array_key_exists()</code> depends on what you want to know:
 		</p>',
