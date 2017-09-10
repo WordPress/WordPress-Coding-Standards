@@ -149,7 +149,12 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$targets[] = T_STYLE;
 
 		// Set the target selectors regex only once.
-		$selectors = array_map( 'preg_quote', $this->target_css_selectors, array_fill( 0, count( $this->target_css_selectors ), '`' ) );
+		$selectors = array_map(
+			'preg_quote',
+			$this->target_css_selectors,
+			array_fill( 0, count( $this->target_css_selectors ), '`' )
+		);
+		// Parse the selectors array into the regex string.
 		$this->target_css_selectors_regex = sprintf( $this->target_css_selectors_regex, implode( '|', $selectors ) );
 
 		// Add function call targets.
@@ -368,7 +373,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 					break;
 				}
 			}
-			$start = ( $i + 1 );
+			$start    = ( $i + 1 );
 			$selector = trim( $this->phpcsFile->getTokensAsString( $start, ( $opener - $start ) ) );
 			unset( $i );
 

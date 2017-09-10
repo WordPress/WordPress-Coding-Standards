@@ -314,9 +314,9 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			$message = 'The parameter "%s" at position #%s of %s() has been deprecated since WordPress version %s.';
+			$message  = 'The parameter "%s" at position #%s of %s() has been deprecated since WordPress version %s.';
 			$is_error = version_compare( $parameter_args['version'], $this->minimum_supported_version, '<' );
-			$code = $this->string_to_errorcode( ucfirst( $matched_content ) . 'Param' . $position . 'Found' );
+			$code     = $this->string_to_errorcode( ucfirst( $matched_content ) . 'Param' . $position . 'Found' );
 
 			$data = array(
 				$parameters[ $position ]['raw'],

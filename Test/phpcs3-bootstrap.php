@@ -26,7 +26,7 @@ $phpcsDir = getenv( 'PHPCS_DIR' );
 
 // This may be a Composer install.
 if ( false === $phpcsDir && is_dir( dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer' ) ) {
-	$phpcsDir  = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
+	$phpcsDir = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
 } elseif ( false !== $phpcsDir ) {
 	$phpcsDir = realpath( $phpcsDir );
 }
