@@ -28,10 +28,15 @@
 		see the names of the sniffs reporting errors.
 		Once we know the sniff names, we can opt to exclude sniffs which don't
 		suit our project like so.
+
+		The below two examples just show how you can exclude rules.
+		They are not intended as advice about which sniffs to exclude.
 		-->
 
+		<!--
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
 		<exclude name="WordPress.XSS.EscapeOutput"/>
+		-->
 	</rule>
 
 	<!-- Let's also check that everything is properly documented. -->
