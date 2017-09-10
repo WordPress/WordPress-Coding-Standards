@@ -301,16 +301,22 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 		if ( false === $this->exact && ! empty( $double_arrow_cols ) ) {
 			/*
-			 * If the alignment does not have to be exact, see if the
-			 * majority of the arrows is already at an acceptable position.
+			 * If the alignment does not have to be exact, see if a majority
+			 * group of the arrows is already at an acceptable position.
 			 */
 			arsort( $double_arrow_cols, SORT_NUMERIC );
 			reset( $double_arrow_cols );
 			$count = current( $double_arrow_cols );
+
 			if ( $count > 1 || ( 1 === $count && count( $items ) === 1 ) ) {
-				$col = key( $double_arrow_cols );
-				if ( $col > $expected_col && $col <= $this->maxColumn ) {
-					$expected_col = $col;
+				// Allow for several groups of arrows having the same $count.
+				$filtered_double_arrow_cols = array_keys( $double_arrow_cols, $count, true );
+
+				foreach ( $filtered_double_arrow_cols as $col ) {
+					if ( $col > $expected_col && $col <= $this->maxColumn ) {
+						$expected_col = $col;
+						break;
+					}
 				}
 			}
 		}
