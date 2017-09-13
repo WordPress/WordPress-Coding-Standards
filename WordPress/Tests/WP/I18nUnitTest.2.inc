@@ -2,7 +2,7 @@
 /*
  * Test sniffing for translator comments.
  */
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
 
 /* Basic test ****************************************************************/
 __( 'No placeholders here.', 'my-slug' ); // Ok, no placeholders, so no translators comment needed.
