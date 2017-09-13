@@ -47,7 +47,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList( $testFile = '' ) {
 
 		switch ( $testFile ) {
-			case 'I18nUnitTest.inc':
+			case 'I18nUnitTest.1.inc':
 				return array(
 					3 => 1,
 					6 => 1,
@@ -132,7 +132,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList( $testFile = '' ) {
 		switch ( $testFile ) {
-			case 'I18nUnitTest.inc':
+			case 'I18nUnitTest.1.inc':
 				return array(
 					69 => 1,
 					70 => 1,
