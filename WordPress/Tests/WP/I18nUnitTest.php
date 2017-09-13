@@ -44,7 +44,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList( $testFile = 'I18nUnitTest.inc' ) {
+	public function getErrorList( $testFile = '' ) {
 
 		switch ( $testFile ) {
 			case 'I18nUnitTest.inc':
@@ -112,7 +112,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					148 => 1,
 				);
 
-			case 'I18nUnitTest.1.inc':
+			case 'I18nUnitTest.2.inc':
 				return array(
 					104 => 2,
 				);
@@ -130,7 +130,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = 'I18nUnitTest.inc' ) {
+	public function getWarningList( $testFile = '' ) {
 		switch ( $testFile ) {
 			case 'I18nUnitTest.inc':
 				return array(
@@ -142,7 +142,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					103 => 1,
 				);
 
-			case 'I18nUnitTest.1.inc':
+			case 'I18nUnitTest.2.inc':
 				return array(
 					8 => 1,
 					43 => 1,
