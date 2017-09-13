@@ -23,22 +23,6 @@ use WordPress\PHPCSHelper;
 class I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Fill in the $text_domain property to test domain check functionality.
-	 */
-	protected function setUp() {
-		parent::setUp();
-		PHPCSHelper::set_config_data( 'text_domain', 'my-slug,default', true );
-	}
-
-	/**
-	 * Reset the $groups property.
-	 */
-	protected function tearDown() {
-		PHPCSHelper::set_config_data( 'text_domain', null, true );
-		parent::tearDown();
-	}
-
-	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
@@ -144,7 +128,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			case 'I18nUnitTest.2.inc':
 				return array(
-					8 => 1,
+					9 => 1,
 					43 => 1,
 					49 => 1,
 					52 => 1,

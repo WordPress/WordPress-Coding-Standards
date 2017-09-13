@@ -2,11 +2,11 @@
 /*
  * Test sniffing for translator comments.
  */
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
 
 /* Basic test ****************************************************************/
 __( 'No placeholders here.', 'my-slug' ); // Ok, no placeholders, so no translators comment needed.
 __( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // Bad - no translators comment.
-
 
 /* Testing different comment styles ******************************************/
 
@@ -102,3 +102,5 @@ __( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
 
 // Issue #830.
 _e(); // Bad.
+
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null

@@ -1,5 +1,6 @@
 <?php
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
 __( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables.
 
 __( "hell\$varo", 'my-slug' ); // OK, Variable is not interpolated.
@@ -151,5 +152,5 @@ really.
 EOD
 , 'my-slug' ); // OK.
 
-
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
