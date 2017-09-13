@@ -23,6 +23,41 @@ use WordPress\PHPCSHelper;
 class I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
+	 * Get a list of CLI values to set before the file is tested.
+	 *
+	 * Used by PHPCS 2.x.
+	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
+	 * @return array
+	 */
+	public function getCliValues( $testFile ) {
+		// Test overruling the text domain from the command line for one test file.
+		if ( 'I18nUnitTest.3.inc' === $testFile ) {
+			PHPCSHelper::set_config_data( 'text_domain', 'something', true );
+		}
+
+		return array();
+	}
+
+	/**
+	 * Set CLI values before the file is tested.
+	 *
+	 * Used by PHPCS 3.x.
+	 *
+	 * @param string                  $testFile The name of the file being tested.
+	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.
+	 *
+	 * @return void
+	 */
+	public function setCliValues( $testFile, $config ) {
+		// Test overruling the text domain from the command line for one test file.
+		if ( 'I18nUnitTest.3.inc' === $testFile ) {
+			$config->setConfigData( 'text_domain', 'something', true );
+		}
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
@@ -102,6 +137,20 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 			case 'I18nUnitTest.2.inc':
 				return array(
 					104 => 2,
+				);
+
+			case 'I18nUnitTest.3.inc':
+				return array(
+					10 => 1,
+					11 => 1,
+					13 => 1,
+					14 => 1,
+					15 => 1,
+					16 => 1,
+					17 => 1,
+					18 => 1,
+					20 => 1,
+					21 => 1,
 				);
 
 			default:
