@@ -1,104 +1,155 @@
 <?php
-/*
- * Test sniffing for translator comments.
- */
 
-/* Basic test ****************************************************************/
-__( 'No placeholders here.', 'my-slug' ); // Ok, no placeholders, so no translators comment needed.
-__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // Bad - no translators comment.
+// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
 
+__( 'string' ); // OK - no text domain known, so not checked.
+__( 'string', 'something' ); // OK - no text domain known, so not checked.
 
-/* Testing different comment styles ******************************************/
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
 
-/* translators: %d: number of cats. */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - single line /* */ style.
+__( 'string' ); // Bad - no text domain passed.
+__( 'string', 'something' ); // Bad - text domain mismatch.
+__( 'string', "my-slug-too" ); // Bad - text domain mismatch.
 
-		/* translators: %d: number of cats. */
-		_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - single line /* */ style, indented code.
+__( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables.
+__( "hell\$varo", 'my-slug' ); // OK, Variable is not interpolated.
+__( "hell\\$varo", 'my-slug' ); // Bad, is interpolated.
+__( "hell\\\$varo", 'my-slug' ); // OK, variable is escaped.
 
-// translators: %d: number of cats.
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - single line // style.
+__( $var, 'my-slug' ); // Bad, shouldn't use variables.
 
-/* translators:
-   - number of monkeys,
-   - location. */
-esc_html__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK - multi-line /* */ style.
+__( 'string', SOMETHING ); // Bad, shouldn't use CONSTANTS.
 
-/*
- * translators: %d: number of cats.
- */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - multi-line /* */ style.
+__( 'string' . $var, 'my-slug' ); // Bad, shouldn't use variable for string.
+__( $var . 'string', 'my-slug' ); // Bad, shouldn't use variable for string.
 
-/*
- * translators: %d: number of cats.
- * This is a multiline comment,
- * But it also has * at the start
- of some lines ;-)
-*/
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - inconsistent multi-line /* */ style.
+__( SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string.
+__( 'string' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string.
+__( SOMETHING . 'string', 'my-slug' ); // Bad, shouldn't use variable for string.
 
-/**
- * translators: %d: number of cats.
- */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // Bad - docblock style.
+__( 'string', $domain ); // Bad, shouldn't use variable for domain.
+__( 'string', 'my' . $domain ); // Bad, shouldn't use variable for domain.
+__( 'string', $domain . 'my-slug' ); // Bad, shouldn't use variable for domain.
 
+__( 'string', 'my-slug' ); // Good.
+_x( 'string', 'context', 'my-slug' ); // Good.
 
-/* Testing comment content ****************************************************/
+_x( 'string', $var, 'my-slug' ); // Bad, shouldn't use variable for context.
+_x( 'string', 'context' . $var, 'my-slug' ); // Bad, shouldn't use variable for context.
+_x( 'string', $var . 'context', 'my-slug' ); // Bad, shouldn't use variable for context.
 
-/* %d: number of cats. */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // Bad - doesn't start with 'translators: '.
+_x( 'string', SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context.
+_x( 'string', SOMETHING . 'context', 'my-slug' ); // Bad, shouldn't use constant for context.
+_x( 'string', 'context' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context.
 
-/* this is for translators: %d: number of cats. */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // Bad - doesn't *start* with 'translators:'
+_n( 'I have %d cat.', 'I have %d cats.', $number ); // Bad, no text domain.
+_n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug' ); // OK.
+_n( 'I have %d cat.', 'I have %d cats.', $number, "illegal $string" ); // Bad.
+_n( 'I have %d cat.', 'I have %d cats.', $number, SOMETHING ); // Bad.
 
-/* Translators: %d: number of cats. */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - Capitalized translators.
+_n_noop( 'I have %d cat.', 'I have %d cats.' ); // Bad, no text domain.
+_n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug' ); // OK.
+_n_noop( 'I have %d cat.', 'I have %d cats.', "illegal $string" ); // Bad.
+_n_noop( 'I have %d cat.', 'I have %d cats.',  SOMETHING ); // Bad.
 
-/* TRANSLATORS: %d: number of cats. */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - All caps translators.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.' ); // Bad, no text domain.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, $context ); // Bad.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // OK.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, $context, 'my-slug' ); // Bad.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.', "illegal $string" ); // Bad.
+_nx( 'I have %d cat.', 'I have %d cats.', $number, 'Not really.', SOMETHING ); // Bad.
 
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.' ); // Bad, no text domain.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', $context ); // Bad, no text domain, variable context.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // OK.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', $context, 'my-slug' ); // Bad.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', "illegal $string" ); // Bad.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', SOMETHING ); // Bad.
 
-/* Testing comment placement ***************************************************/
+translate( 'foo', 'my-slug' ); // Bad, low-level API function.
+translate_with_gettext_context( 'foo', 'bar', 'my-slug' ); // Bad, low-level API function.
 
-/* translators: %d: number of cats. */
+_( 'foo', 'my-slug' ); // Bad.
 
+__( 'foo', 'my-slug', 'too-many-args' ); // Bad.
+_x( 'string', 'context', 'my-slug', 'too-many-args' ); // Bad.
+_n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug', 'too-many-args' ); // Bad.
+_n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug', 'too-many-args' ); // Bad.
+_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
 
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK - only whitespace between.
+// Make sure that multi-line string literals are accepted.
+_nx( 'I have
+%d cat.', 'I have
+%d cats.', $number, 'Not
+really.', 'my-slug' ); // OK.
 
-/* Some other comment. */
-/* translators: %d: number of cats. */
-_n_noop( 'I have %d cat.', "I have %d cats.", 'my-slug' ); // OK.
+// Ensure lack of spaces doesn't cause i18n error.
+_n_noop('I have %d cat.', 'I have %d cats.', 'my-slug'); // OK.
 
-// translators: 1: number; 2: string.
-// Some other comment.
-esc_attr_e( 'Text to translate to %1$d languages. Another %2$s placeholder', 'my-slug' ); // Bad - translators comment has to be the first comment before the function call.
+// Dollar sign in literal string is not interpolated, so OK.
+_n_noop( 'I have %d cat.', 'I have %d cats literal-string-so-$variable-not-interpolated.', 'my-slug' ); // OK.
 
-printf(
-	/* translators: number of monkeys, location. */
-	__( 'There are %1$d monkeys in the %2$s', 'my-slug' ),
-	(int) $number,
-	esc_html( $string )
-); // Ok.
+// Multiple placeholders should have orderable placeholders.
+__( 'There are %d monkeys in the %s', 'my-slug' ); // Multiple arguments should be numbered.
+__( 'There are %1$d monkeys in the %2$s', 'my-slug' ); // OK.
+_n( 'There is %d monkey in the %s', 'There are %d monkeys in the %s', $number, 'my-slug' ); // Multiple arguments should be numbered.
+_n( 'There is %1$d monkey in the %2$s', 'In the %2$s there are %1$d monkeys', $number, 'my-slug' ); // OK.
 
-/* translators: number of monkeys, location. */
-printf(
-	__( 'There are %1$d monkeys in the %2$s', 'my-slug' ),
-	(int) $number,
-	esc_html( $string )
-); // Bad - comment not directly before line containing the gettext call.
+// The singular form should use placeholders if the plural does.
+// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals
+_n( 'I have a cat.', 'I have %d cats.', $number, 'my-slug' ); // Bad, singular should have placeholder.
+_n_noop( 'I have a cat.', 'I have %d cats.', 'my-slug' ); // Bad, singular should have placeholder.
+_nx( 'I have a cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
+_nx_noop( 'I have a cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // Bad, singular should have placeholder.
 
-/* translators: number of monkeys, location. */
-printf( __( 'There are %1$d monkeys in the %2$s', 'my-slug' ), intval( $number ), esc_html( $string ) ); // Ok - comment is directly before line containing the gettext call.
+__( '%s', 'my-slug' ); // Bad, don't waste translator's time.
+__( '%1$s%2$s', 'my-slug' ); // Bad, don't waste translator's time.
+_n( 'I have %d cat.', '%d', $number, 'my-slug' ); // Bad, move the logic out of the translation.
+__( '\'%s\'', 'my-slug' ); // OK (ish. this is a technical test, not a great string).
 
-/* translators: number of monkeys, location. */
-printf( __(
-	'There are %1$d monkeys in the %2$s', 'my-slug' ),
-	intval( $number ),
-	esc_html( $string )
-); // Ok - comment is directly before line containing the gettext call.
+// Issue #681.
+__( 'String with a literal %%', 'my-slug'); // Ok, replacement would be a single %.
+__( 'String with a literal %% and a %s placeholder', 'my-slug'); // Ok.
+__( 'A replacement variable can not start with "%%cf_" or "%%ct_" as these are reserved for the WPSEO standard variable variables for custom fields and custom taxonomies. Try making your variable name unique.', 'my-slug' ); // Ok.
 
-// Issue 776 - regex issue.
-__( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
+// The domain 'default' was also added to the text domains.
+__( 'String default text domain.', 'default' ); // Ok.
+__( "String default text domain.", "default" ); // Ok.
 
-// Issue #830.
-_e(); // Bad.
+// Issue #698 - fix for auto-fixing placeholder ordering.
+__( '%s - %s - %s - %s', 'my-slug' ); // Bad - Multiple of the same placeholders.
+__( '%d - %d - %d - %d', 'my-slug' ); // Bad - Multiple of the same placeholders.
+__( '%% - %b - %c - %d - %e - %E - %f - %F - %g - %G - %o - %s - %u - %x - %X', 'my-slug' ); // Bad - All simple variations.
+__( "%d for %d 'item'", 'my-slug' ); // Bad - Multiple of the same placeholders in a double quoted string.
+__( '%04d for %02d item', 'my-slug' ); // Bad - Placeholder with other specifier, but no position.
+__( "%04d for %'.9d item", 'my-slug' ); // Bad - Placeholder with other specifier, but no position, double quoted string.
+
+// Related to issue #698 - mixed ordered and non-ordered placeholders.
+__( '%1$d for %d item', 'my-slug' ); // Bad.
+__( '%1$d for %d and %d item', 'my-slug' ); // Bad.
+
+// Nowdoc syntax.
+__( <<<'EOD'
+%1$d for %d item
+EOD
+, 'my-slug' ); // Bad.
+
+// Multi-line heredoc syntax.
+_nx( <<<'EOD'
+I have
+%d cat and %d
+dog.
+EOD
+, <<<'EOD'
+I have
+%d cats and %d
+dogs.
+EOD
+, $number, <<<'EOD'
+Not
+really.
+EOD
+, 'my-slug' ); // OK.
+
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
+// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true

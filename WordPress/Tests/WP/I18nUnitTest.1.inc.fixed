@@ -1,7 +1,17 @@
 <?php
-// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
-__( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables.
 
+// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
+
+__( 'string' ); // OK - no text domain known, so not checked.
+__( 'string', 'something' ); // OK - no text domain known, so not checked.
+
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
+
+__( 'string' ); // Bad - no text domain passed.
+__( 'string', 'something' ); // Bad - text domain mismatch.
+__( 'string', "my-slug-too" ); // Bad - text domain mismatch.
+
+__( "hell$varo", 'my-slug' ); // Bad, shouldn't use a string with variables.
 __( "hell\$varo", 'my-slug' ); // OK, Variable is not interpolated.
 __( "hell\\$varo", 'my-slug' ); // Bad, is interpolated.
 __( "hell\\\$varo", 'my-slug' ); // OK, variable is escaped.
@@ -11,35 +21,25 @@ __( $var, 'my-slug' ); // Bad, shouldn't use variables.
 __( 'string', SOMETHING ); // Bad, shouldn't use CONSTANTS.
 
 __( 'string' . $var, 'my-slug' ); // Bad, shouldn't use variable for string.
-
 __( $var . 'string', 'my-slug' ); // Bad, shouldn't use variable for string.
 
 __( SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string.
-
 __( 'string' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for string.
-
 __( SOMETHING . 'string', 'my-slug' ); // Bad, shouldn't use variable for string.
 
 __( 'string', $domain ); // Bad, shouldn't use variable for domain.
-
 __( 'string', 'my' . $domain ); // Bad, shouldn't use variable for domain.
-
 __( 'string', $domain . 'my-slug' ); // Bad, shouldn't use variable for domain.
 
 __( 'string', 'my-slug' ); // Good.
-
 _x( 'string', 'context', 'my-slug' ); // Good.
 
 _x( 'string', $var, 'my-slug' ); // Bad, shouldn't use variable for context.
-
 _x( 'string', 'context' . $var, 'my-slug' ); // Bad, shouldn't use variable for context.
-
 _x( 'string', $var . 'context', 'my-slug' ); // Bad, shouldn't use variable for context.
 
 _x( 'string', SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context.
-
 _x( 'string', SOMETHING . 'context', 'my-slug' ); // Bad, shouldn't use constant for context.
-
 _x( 'string', 'context' . SOMETHING, 'my-slug' ); // Bad, shouldn't use constant for context.
 
 _n( 'I have %d cat.', 'I have %d cats.', $number ); // Bad, no text domain.
@@ -151,5 +151,5 @@ really.
 EOD
 , 'my-slug' ); // OK.
 
-
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
