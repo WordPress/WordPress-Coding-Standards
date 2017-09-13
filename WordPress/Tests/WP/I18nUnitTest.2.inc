@@ -103,4 +103,4 @@ __( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
 // Issue #830.
 _e(); // Bad.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false

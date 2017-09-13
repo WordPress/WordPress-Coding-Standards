@@ -156,5 +156,5 @@ __( 'String default text domain.', 'my-slug' ); // Bad because text_domain is on
 __( 'String default text domain.', 'default' ); // Ok because domain is being explicit.
 __( 'String default text domain.' ); // Ok because default domain is 'default' and it matches one of the supplied configured text domains.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
