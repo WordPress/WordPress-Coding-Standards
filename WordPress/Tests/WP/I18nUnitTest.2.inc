@@ -2,7 +2,7 @@
 /*
  * Test sniffing for translator comments.
  */
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
 
 /* Basic test ****************************************************************/
 __( 'No placeholders here.', 'my-slug' ); // Ok, no placeholders, so no translators comment needed.
@@ -103,4 +103,4 @@ __( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
 // Issue #830.
 _e(); // Bad.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false

@@ -5,7 +5,7 @@
 __( 'string' ); // OK - no text domain known, so not checked.
 __( 'string', 'something' ); // OK - no text domain known, so not checked.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
 
 __( 'string' ); // Bad - no text domain passed.
 __( 'string', 'something' ); // Bad - text domain mismatch.
@@ -112,7 +112,7 @@ __( 'String with a literal %%', 'my-slug'); // Ok, replacement would be a single
 __( 'String with a literal %% and a %s placeholder', 'my-slug'); // Ok.
 __( 'A replacement variable can not start with "%%cf_" or "%%ct_" as these are reserved for the WPSEO standard variable variables for custom fields and custom taxonomies. Try making your variable name unique.', 'my-slug' ); // Ok.
 
-// The domain 'default' was also added to the text domains.
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
 __( 'String default text domain.', 'default' ); // Ok.
 __( "String default text domain.", "default" ); // Ok.
 
@@ -151,5 +151,10 @@ really.
 EOD
 , 'my-slug' ); // OK.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain null
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain default
+__( 'String default text domain.', 'my-slug' ); // Bad because text_domain is only 'default'.
+__( 'String default text domain.', 'default' ); // Ok because domain is being explicit.
+__( 'String default text domain.' ); // Ok because default domain is 'default' and it matches one of the supplied configured text domains.
+
+// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true

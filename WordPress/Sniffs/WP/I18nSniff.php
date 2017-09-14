@@ -345,7 +345,7 @@ class I18nSniff extends Sniff {
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
-			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
+			if ( 'domain' !== $arg_name || ( ! empty( $this->text_domain ) && ! in_array( 'default', $this->text_domain, true ) ) ) {
 				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
 			return false;
