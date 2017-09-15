@@ -39,6 +39,22 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
+	<!-- And yet more best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1143 -->
+	<rule ref="PEAR.Files.IncludingFile">
+		<exclude name="PEAR.Files.IncludingFile.UseInclude"/>
+		<exclude name="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequire">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
+		<type>warning</type>
+	</rule>
+
 	<!-- This sniff is not refined enough for general use -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
 	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
