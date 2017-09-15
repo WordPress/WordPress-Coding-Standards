@@ -57,5 +57,5 @@ https://is.gd/contributing2WPCS
 }
 
 // Load our class aliases.
-include_once dirname( __DIR__ ) . $ds . 'WordPress' . $ds . 'PHPCSAliases.php';
+require_once dirname( __DIR__ ) . $ds . 'WordPress' . $ds . 'PHPCSAliases.php';
 unset( $ds, $phpcsDir );

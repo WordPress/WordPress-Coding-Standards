@@ -44,9 +44,9 @@ https://is.gd/contributing2WPCS
 }
 
 // Load the PHPCS test classes and the WPCS versions where necessary.
-include_once PHPCS_DIR . $ds . 'tests' . $ds . 'AllTests.php';
-include_once __DIR__ . $ds . 'Standards' . $ds . 'AllSniffs.php';
-include_once __DIR__ . $ds . 'Standards' . $ds . 'AbstractSniffUnitTest.php';
+require_once PHPCS_DIR . $ds . 'tests' . $ds . 'AllTests.php';
+require_once __DIR__ . $ds . 'Standards' . $ds . 'AllSniffs.php';
+require_once __DIR__ . $ds . 'Standards' . $ds . 'AbstractSniffUnitTest.php';
 
 class_alias( 'WordPressCS\Test\AbstractSniffUnitTest', 'PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest' );
 
