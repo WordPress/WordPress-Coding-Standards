@@ -50,15 +50,18 @@
 	<!-- Encourage having only one class/interface/trait per file. -->
 	<!-- Once the minimum WPCS PHPCS requirement has gone up to PHPCS 3.1.0, these three sniffs can be
 	     replaced by the more comprehensive Generic.Files.OneObjectStructurePerFile sniff. -->
-	<rule ref="Generic.Files.OneClassPerFile">
+	<rule ref="Generic.Files.OneClassPerFile"/>
+	<rule ref="Generic.Files.OneClassPerFile.MultipleFound">
 		<type>warning</type>
 		<message>Best practice suggestion: Declare only one class in a file.</message>
 	</rule>
-	<rule ref="Generic.Files.OneInterfacePerFile">
+	<rule ref="Generic.Files.OneInterfacePerFile"/>
+	<rule ref="Generic.Files.OneInterfacePerFile.MultipleFound">
 		<type>warning</type>
 		<message>Best practice suggestion: Declare only one interface in a file.</message>
 	</rule>
-	<rule ref="Generic.Files.OneTraitPerFile">
+	<rule ref="Generic.Files.OneTraitPerFile"/>
+	<rule ref="Generic.Files.OneTraitPerFile.MultipleFound">
 		<type>warning</type>
 		<message>Best practice suggestion: Declare only one trait in a file.</message>
 	</rule>
