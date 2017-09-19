@@ -29,8 +29,9 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 *
 	 * Posts per page limit to check against.
 	 *
-	 * @var int
 	 * @since 0.14.0
+	 *
+	 * @var int
 	 */
 	public $posts_per_page = 100;
 
