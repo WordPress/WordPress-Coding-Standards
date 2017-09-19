@@ -20,8 +20,20 @@ use WordPress\AbstractArrayAssignmentRestrictionsSniff;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Added the posts_per_page property.
  */
 class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
+
+	/**
+	 * Posts per page property
+	 *
+	 * Posts per page limit to check against.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var int
+	 */
+	public $posts_per_page = 100;
 
 	/**
 	 * Groups of variables to restrict.
@@ -53,18 +65,20 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 *                       with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		$key = strtolower( $key );
+		$key                  = strtolower( $key );
+		$this->posts_per_page = (int) $this->posts_per_page;
+
 		if (
 			( 'nopaging' === $key && ( 'true' === $val || 1 === $val ) )
 			||
-			( in_array( $key, array( 'numberposts', 'posts_per_page' ), true ) && '-1' == $val )
+			( in_array( $key, array( 'numberposts', 'posts_per_page' ), true ) && '-1' === $val )
 			) {
 
 			return 'Disabling pagination is prohibited in VIP context, do not set `%s` to `%s` ever.';
 
 		} elseif ( in_array( $key, array( 'posts_per_page', 'numberposts' ), true ) ) {
 
-			if ( $val > 100 ) {
+			if ( $val > $this->posts_per_page ) {
 				return 'Detected high pagination limit, `%s` is set to `%s`';
 			}
 		}
