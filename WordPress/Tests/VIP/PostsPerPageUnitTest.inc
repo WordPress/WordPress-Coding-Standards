@@ -2,9 +2,9 @@
 // @codingStandardsChangeSetting WordPress.VIP.PostsPerPage posts_per_page 200
 $args = array(
 	'nopaging'       => true, // Bad.
-  'posts_per_page' => 999, // Bad.
-  'posts_per_page' => 100, // Ok.
-  'posts_per_page' => 200, // Ok.
+	'posts_per_page' => 999, // Bad.
+	'posts_per_page' => 100, // Ok.
+	'posts_per_page' => 200, // Ok.
 	'posts_per_page' => 201, // Bad.
 	'posts_per_page' => -1, // Bad.
 	'posts_per_page' => 1, // Ok.
