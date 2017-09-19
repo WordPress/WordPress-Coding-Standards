@@ -20,6 +20,7 @@ use WordPress\AbstractArrayAssignmentRestrictionsSniff;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Added the posts_per_page property.
  */
 class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 
@@ -29,6 +30,7 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 * Posts per page limit to check against.
 	 *
 	 * @var int
+	 * @since 0.14.0
 	 */
 	public $posts_per_page = 100;
 
@@ -62,7 +64,7 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 *                       with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		$key = strtolower( $key );
+		$key                  = strtolower( $key );
 		$this->posts_per_page = (int) $this->posts_per_page;
 
 		if (
