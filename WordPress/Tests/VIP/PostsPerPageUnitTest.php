@@ -30,10 +30,11 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 		return array(
 			4  => 1,
 			5  => 1,
-			6  => 1,
-			11  => 2,
-			13 => 1,
+			8  => 1,
+			9  => 1,
+			14 => 2,
 			16 => 1,
+			19 => 1,
 		);
 
 	}
