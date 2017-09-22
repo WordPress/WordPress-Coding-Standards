@@ -2214,20 +2214,26 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Determine the namespace name an arbitrary token lives in.
+	 * Determine the namespace an arbitrary token lives in. Returns either the name or the token pointer.
 	 *
 	 * @since 0.10.0
 	 * @since 0.12.0 Moved from the WordPress_AbstractClassRestrictionsSniff to this sniff.
+	 * @since 0.14.0 Added the `$get_token` parameter.
 	 *
-	 * @param int $stackPtr The token position for which to determine the namespace.
+	 * @param int  $stackPtr  The token position for which to determine the namespace.
+	 * @param bool $get_token Whether to return the namespace name or the token position.
+	 *                        Defaults to false, i.e. return the namespace name.
 	 *
-	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applies.
+	 * @return string|int|false If $get_token = false: Namespace name or empty string if
+	 *                          it couldn't be determined or no namespace applies.
+	 *                          If $get_token = true: The integer token position of the namespace
+	 *                          token or false if no namespace applies.
 	 */
-	public function determine_namespace( $stackPtr ) {
+	public function determine_namespace( $stackPtr, $get_token = false ) {
 
 		// Check for the existence of the token.
 		if ( ! isset( $this->tokens[ $stackPtr ] ) ) {
-			return '';
+			return ( $get_token ? false : '' );
 		}
 
 		// Check for scoped namespace {}.
@@ -2235,13 +2241,13 @@ abstract class Sniff implements PHPCS_Sniff {
 			$namespacePtr = $this->phpcsFile->getCondition( $stackPtr, T_NAMESPACE );
 			if ( false !== $namespacePtr ) {
 				$namespace = $this->get_declared_namespace_name( $namespacePtr );
-				if ( false !== $namespace ) {
+				if ( false !== $namespace && false === $get_token ) {
 					return $namespace;
 				}
 
 				// We are in a scoped namespace, but couldn't determine the name.
 				// Searching for a global namespace is futile.
-				return '';
+				return ( $get_token ? $namespacePtr : '' );
 			}
 		}
 
@@ -2270,10 +2276,10 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// If we still haven't got a namespace, return an empty string.
 		if ( false === $namespace ) {
-			return '';
+			return ( $get_token ? false : '' );
 		}
 
-		return $namespace;
+		return ( $get_token ? $previousNSToken : $namespace );
 	}
 
 	/**

@@ -1,0 +1,57 @@
+<?php
+/*
+ * Deal with multiple namespaces - scoped and non-scoped in one file.
+ */
+
+namespace A\B\C {
+
+    use Vendor\Package\{ClassA as A, ClassB, ClassC as C};
+    use Vendor\Package\Name\ClassD as D;
+    use Vendor\Package\AnotherNamespace\ClassE as E;
+
+    use function Vendor\Package\{functionA, functionB, functionC};
+    use function Another\Vendor\functionName as D;
+
+    use const Vendor\Package\{CONSTANT_A, CONSTANT_B, CONSTANT_C};
+    use const Another\Vendor\CONSTANT_D;
+
+
+}
+
+namespace D\E\F;
+
+use D\Vendor\Package\{ClassA as A, ClassB, ClassC as C};
+use D\Vendor\Package\Name\ClassD as D;
+use D\Vendor\Package\AnotherNamespace\ClassE as E;
+
+use function D\Vendor\Package\{functionA, functionB, functionC};
+use function D\Another\Vendor\functionName as D;
+
+use const D\Vendor\Package\{CONSTANT_A, CONSTANT_B, CONSTANT_C};
+use const D\Another\Vendor\CONSTANT_D;
+
+namespace G\H\I;
+
+use G\Vendor\Package\{ClassA as A, ClassB, ClassC as C};
+use G\Vendor\Package\Name\ClassD as D;
+use G\Vendor\Package\AnotherNamespace\ClassE as E;
+
+use function G\Vendor\Package\{functionA, functionB, functionC};
+use function G\Another\Vendor\functionName as D;
+
+use const G\Vendor\Package\{CONSTANT_A, CONSTANT_B, CONSTANT_C};
+use const G\Another\Vendor\CONSTANT_D;
+
+namespace {
+
+    use GlobalNS\Vendor\Package\{ClassA as A, ClassB, ClassC as C};
+    use GlobalNS\Vendor\Package\Name\ClassD as D;
+    use GlobalNS\Vendor\Package\AnotherNamespace\ClassE as E;
+
+    use function GlobalNS\Vendor\Package\{functionA, functionB, functionC};
+    use function GlobalNS\Another\Vendor\functionName as D;
+
+    use const GlobalNS\Vendor\Package\{CONSTANT_A, CONSTANT_B, CONSTANT_C};
+    use const GlobalNS\Another\Vendor\CONSTANT_D;
+
+}

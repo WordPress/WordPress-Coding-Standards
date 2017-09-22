@@ -178,4 +178,7 @@
 	<!-- Check for single blank line after namespace declaration. -->
 	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
 
+	<!-- Check use statement order follows PSR12. -->
+	<rule ref="WordPress.Formatting.NamespaceUseStatementOrder"/>
+
 </ruleset>
