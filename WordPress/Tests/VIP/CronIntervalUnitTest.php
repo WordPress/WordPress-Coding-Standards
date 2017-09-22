@@ -28,13 +28,16 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			12 => 1,
-			17 => 1,
-			37 => 1,
-			43 => 1,
-			53 => 1,
-			56 => 1, // False positive.
-			67 => 1,
+			12  => 1,
+			17  => 1,
+			37  => 1,
+			43  => 1,
+			53  => 1,
+			56  => 1, // False positive.
+			67  => 1,
+			85  => 1,
+			108 => 1,
+			115 => 1,
 		);
 
 	}
