@@ -88,7 +88,7 @@ For the unit tests to work, you need to make sure PHPUnit can find your `PHP_Cod
 The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Make sure to adjust the path to reflect your local setup.
 ```xml
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
 	beStrictAboutTestsThatDoNotTestAnything="false"
 	backupGlobals="true">
 	<php>
