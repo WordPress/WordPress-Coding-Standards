@@ -176,8 +176,6 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
 	<rule ref="WordPress.Classes.ClassInstantiation"/>
 
-	<!-- Check that the parameters passed to $wpdb->prepare are correct. -->
-	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
 	<!--
 	#############################################################################
