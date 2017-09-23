@@ -185,5 +185,8 @@
 
 	<!-- Check for single blank line after namespace declaration. -->
 	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
+	
+	<!-- Check for correct use of USE declarations. -->
+	<rule ref="PSR2.Namespaces.UseDeclaration"/>
 
 </ruleset>
