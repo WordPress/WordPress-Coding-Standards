@@ -404,6 +404,9 @@
 	<!-- All files should end with a new line. -->
 	<rule ref="Generic.Files.EndFileNewline"/>
 
+	<!-- No whitespace should come before semicolons. -->
+	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
+
 	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
