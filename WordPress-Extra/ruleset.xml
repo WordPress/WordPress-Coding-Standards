@@ -176,6 +176,7 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
 	<rule ref="WordPress.Classes.ClassInstantiation"/>
 
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.

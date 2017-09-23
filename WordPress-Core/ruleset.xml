@@ -222,8 +222,8 @@
 		 SQL slash escaping when passed.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
 
-	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"!
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/641 -->
+	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"! -->
+	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
 	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
 		 preferably by using $wpdb->prepare() -->

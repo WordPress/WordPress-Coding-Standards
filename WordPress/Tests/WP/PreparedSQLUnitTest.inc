@@ -81,3 +81,8 @@ ND
 	, $wpdb->postmeta,
 	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // OK.
+
+wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+
+// Don't throw an error during live coding.
+wpdb::prepare( "SELECT * FROM $wpdb->posts

@@ -7,55 +7,51 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPress\Tests\DB;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the PreparedSQL sniff.
+ * Unit test class for the PreparedSQLPlaceholders sniff.
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.8.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0
  */
-class PreparedSQLUnitTest extends AbstractSniffUnitTest {
+class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
-	 *
-	 * @since 0.8.0
 	 *
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			4 => 1,
-			5 => 1,
-			7 => 1,
-			8 => 1,
-			16 => 1,
-			17 => 1,
+			12 => 3,
+			13 => 2,
+			14 => 2,
+			15 => 2,
 			18 => 1,
+			19 => 1,
 			20 => 1,
-			21 => 1,
-			54 => 1,
-			64 => 1,
-			71 => 1,
-			85 => 1,
+			22 => 2,
+			28 => 1,
+			29 => 1,
+			30 => 1,
+			31 => 1,
+			32 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @since 0.8.0
-	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			9 => 1,
+		);
 
 	}
 
