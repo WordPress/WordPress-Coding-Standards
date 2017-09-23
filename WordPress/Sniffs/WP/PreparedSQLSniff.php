@@ -99,6 +99,7 @@ class PreparedSQLSniff extends Sniff {
 	public function register() {
 		return array(
 			T_VARIABLE,
+			T_STRING,
 		);
 	}
 
@@ -114,12 +115,7 @@ class PreparedSQLSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		// Check for $wpdb variable.
-		if ( '$wpdb' !== $this->tokens[ $stackPtr ]['content'] ) {
-			return;
-		}
-
-		if ( ! $this->is_wpdb_method_call( $stackPtr ) ) {
+		if ( ! $this->is_wpdb_method_call( $stackPtr, $this->methods ) ) {
 			return;
 		}
 
@@ -160,7 +156,7 @@ class PreparedSQLSniff extends Sniff {
 
 			if ( T_VARIABLE === $this->tokens[ $this->i ]['code'] ) {
 				if ( '$wpdb' === $this->tokens[ $this->i ]['content'] ) {
-					$this->is_wpdb_method_call( $this->i );
+					$this->is_wpdb_method_call( $this->i, $this->methods );
 					continue;
 				}
 			}
