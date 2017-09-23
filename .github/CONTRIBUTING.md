@@ -66,7 +66,7 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 ## Pre-requisites
 * WordPress-Coding-Standards
 * PHP CodeSniffer 2.9.x or 3.x
-* PHPUnit 4.x or 5.x
+* PHPUnit 4.x, 5.x or 6.x
 
 The WordPress Coding Standards use the PHP CodeSniffer native unit test suite for unit testing the sniffs.
 
@@ -89,6 +89,7 @@ The easiest way to do this is to add a `phpunit.xml` file to the root of your WP
 ```xml
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+	beStrictAboutTestsThatDoNotTestAnything="false"
 	backupGlobals="true">
 	<php>
 		<env name="PHPCS_DIR" value="/path/to/PHP_CodeSniffer/"/>
@@ -121,13 +122,13 @@ PHPUnit 4.8.19 by Sebastian Bergmann and contributors.
 Runtime:        PHP 7.1.3 with Xdebug 2.5.1
 Configuration:  /WordPressCS/phpunit.xml
 
-......................................................
+..........................................................
 
-Tests generated 558 unique error codes; 48 were fixable (8.6%)
+Tests generated 556 unique error codes; 48 were fixable (8.63%)
 
-Time: 12.25 seconds, Memory: 24.00Mb
+Time: 24.08 seconds, Memory: 41.75Mb
 
-OK (54 tests, 0 assertions)
+OK (58 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
