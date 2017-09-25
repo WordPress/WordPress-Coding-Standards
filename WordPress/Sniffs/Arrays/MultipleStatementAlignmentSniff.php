@@ -17,6 +17,7 @@ use WordPress\Sniff;
  * - Align the double arrow operator to the same column for each item in a multi-item array.
  * - Allows for setting a maxColumn property to aid in managing line-length.
  * - Allows for new line(s) before a double arrow (configurable).
+ * - Allows for handling multi-line array items differently if so desired (configurable).
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
  *
@@ -73,6 +74,70 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 * @var int
 	 */
 	public $maxColumn = 1000;
+
+	/**
+	 * Whether or not to align the arrow operator for multi-line array items.
+	 *
+	 * Whether or not an item is regarded as multi-line is based on the **value**
+	 * of the item, not the key.
+	 *
+	 * Valid values are:
+	 * - 'always':   Default. Align all arrays items regardless of single/multi-line.
+	 * - 'never':    Never align array items which span multiple lines.
+	 *               This will enforce one space between the array index and the
+	 *               double arrow operator for multi-line array items, independently
+	 *               of the alignment of the rest of the array items.
+	 *               Multi-line items where the arrow is already aligned with the
+	 *               "expected" alignment, however, will be left alone.
+	 * - operator :  Only align the operator for multi-line arrays items if the
+	 *   + number    percentage of multi-line items passes the comparison.
+	 *               - As it is a percentage, the number has to be between 0 and 100.
+	 *               - Supported operators: <, <=, >, >=, ==, =, !=, <>
+	 *               - The percentage is calculated against all array items
+	 *                 (with and without assignment operator).
+	 *               - The (new) expected alignment will be calculated based only
+	 *                 on the items being aligned.
+	 *               - Multi-line items where the arrow is already aligned with the
+	 *                 (new) "expected" alignment, however, will be left alone.
+	 *               Examples:
+	 *               * Setting this to `!=100` or `<100` means that alignment will
+	 *                 be enforced, unless *all* array items are multi-line.
+	 *                 This is probably the most commonly desired situation.
+	 *               * Setting this to `=100` means that alignment will only
+	 *                 be enforced, if *all* array items are multi-line.
+	 *               * Setting this to `<50` means that the majority of array items
+	 *                 need to be single line before alignment is enforced for
+	 *                 multi-line items in the array.
+	 *               * Setting this to `=0` is useless as in that case there are
+	 *                 no multi-line items in the array anyway.
+	 *
+	 * This setting will respect the `ignoreNewline` and `maxColumnn` settings.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string|int
+	 */
+	public $alignMultilineItems = 'always';
+
+	/**
+	 * Storage for parsed $alignMultilineItems operator part.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string
+	 */
+	private $operator;
+
+	/**
+	 * Storage for parsed $alignMultilineItems numeric part.
+	 *
+	 * Stored as a string as the comparison will be done string based.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string
+	 */
+	private $number;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -200,6 +265,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	protected function process_multi_line_array( $stackPtr, $items, $opener, $closer ) {
 
 		$this->maxColumn = (int) $this->maxColumn;
+		$this->validate_align_multiline_items();
 
 		/*
 		 * Determine what the spacing before the arrow should be.
@@ -215,6 +281,8 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		 */
 		$index_end_cols    = array(); // Keep track of the end column position of index keys.
 		$double_arrow_cols = array(); // Keep track of arrow column position and count.
+		$multi_line_count  = 0;
+		$total_items       = count( $items );
 
 		foreach ( $items as $key => $item ) {
 			if ( strpos( $item['raw'], '=>' ) === false ) {
@@ -276,6 +344,13 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			$items[ $key ]['last_index_token'] = $last_index_token;
 			$items[ $key ]['last_index_col']   = $index_end_position;
 
+			if ( $this->tokens[ $last_index_token ]['line'] === $this->tokens[ $item['end'] ]['line'] ) {
+				$items[ $key ]['single_line'] = true;
+			} else {
+				$items[ $key ]['single_line'] = false;
+				$multi_line_count++;
+			}
+
 			if ( ( $index_end_position + 2 ) <= $this->maxColumn ) {
 				$index_end_cols[] = $index_end_position;
 			}
@@ -294,10 +369,55 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		}
 
 		/*
+		 * Determine whether the operators for multi-line items should be aligned.
+		 */
+		if ( 'always' === $this->alignMultilineItems ) {
+			$alignMultilineItems = true;
+		} elseif ( 'never' === $this->alignMultilineItems ) {
+			$alignMultilineItems = false;
+		} else {
+			$percentage = (string) round( ( $multi_line_count / $total_items ) * 100, 0 );
+
+			// Bit hacky, but this is the only comparison function in PHP which allows to
+			// pass the comparison operator. And hey, it works ;-).
+			$alignMultilineItems = version_compare( $percentage, $this->number, $this->operator );
+		}
+
+		/*
+		 * If necessary, rebuild the $index_end_cols and $double_arrow_cols arrays
+		 * excluding multi-line items.
+		 */
+		if ( false === $alignMultilineItems ) {
+			$select_index_end_cols = array();
+			$double_arrow_cols     = array();
+
+			foreach ( $items as $item ) {
+				if ( false === $item['single_line'] ) {
+					continue;
+				}
+
+				if ( ( $item['last_index_col'] + 2 ) <= $this->maxColumn ) {
+					$select_index_end_cols[] = $item['last_index_col'];
+				}
+
+				if ( ! isset( $double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ] ) ) {
+					$double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ] = 1;
+				} else {
+					$double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ]++;
+				}
+			}
+		}
+
+		/*
 		 * Determine the expected position of the double arrows.
 		 */
-		$max_index_width = max( $index_end_cols );
-		$expected_col    = ( $max_index_width + 2 );
+		if ( ! empty( $select_index_end_cols ) ) {
+			$max_index_width = max( $select_index_end_cols );
+		} else {
+			$max_index_width = max( $index_end_cols );
+		}
+
+		$expected_col = ( $max_index_width + 2 );
 
 		if ( false === $this->exact && ! empty( $double_arrow_cols ) ) {
 			/*
@@ -320,7 +440,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				}
 			}
 		}
-		unset( $max_index_width, $count, $col );
+		unset( $max_index_width, $count, $filtered_double_arrow_cols, $col );
 
 		/*
 		 * Verify and correct the spacing around the double arrows.
@@ -344,20 +464,28 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			}
 
 			/*
-			 * Deal with index sizes larger than maxColumn.
+			 * Deal with index sizes larger than maxColumn and with multi-line
+			 * array items which should not be aligned.
 			 */
-			if ( ( $item['last_index_col'] + 2 ) > $this->maxColumn ) {
+			if ( ( $item['last_index_col'] + 2 ) > $this->maxColumn
+				|| ( false === $alignMultilineItems && false === $item['single_line'] )
+			) {
 
 				if ( ( $item['last_index_col'] + 2 ) === $this->tokens[ $item['operatorPtr'] ]['column']
 					&& $this->tokens[ $item['operatorPtr'] ]['line'] === $this->tokens[ $item['last_index_token'] ]['line']
 				) {
-					// MaxColumn exception, already correctly aligned.
+					// MaxColumn/Multi-line item exception, already correctly aligned.
 					continue;
 				}
 
-				$error_code = 'LongIndexSpaceBeforeDoubleArrow';
+				$prefix = 'LongIndex';
+				if ( false === $alignMultilineItems && false === $item['single_line'] ) {
+					$prefix = 'MultilineItem';
+				}
+
+				$error_code = $prefix . 'SpaceBeforeDoubleArrow';
 				if ( 0 === $before ) {
-					$error_code = 'LongIndexNoSpaceBeforeDoubleArrow';
+					$error_code = $prefix . 'NoSpaceBeforeDoubleArrow';
 				}
 
 				$fix = $this->phpcsFile->addFixableWarning(
@@ -435,5 +563,47 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			}
 		}
 	} // End process_multi_line_array().
+
+	/**
+	 * Validate that a valid value has been received for the alignMultilineItems property.
+	 *
+	 * This message may be thrown more than once if the property is being changed inline in a file.
+	 *
+	 * @since 0.14.0
+	 */
+	protected function validate_align_multiline_items() {
+		$alignMultilineItems = $this->alignMultilineItems;
+
+		if ( 'always' === $alignMultilineItems || 'never' === $alignMultilineItems ) {
+			return;
+		} else {
+			// Correct for a potentially added % sign.
+			$alignMultilineItems = rtrim( $alignMultilineItems, '%' );
+
+			if ( preg_match( '`^([=<>!]{1,2})(100|[0-9]{1,2})$`', $alignMultilineItems, $matches ) > 0 ) {
+				$operator = $matches[1];
+				$number   = (int) $matches[2];
+
+				if ( in_array( $operator, array( '<', '<=', '>', '>=', '==', '=', '!=', '<>' ), true ) === true
+					&& ( $number >= 0 && $number <= 100 )
+				) {
+					$this->alignMultilineItems = $alignMultilineItems;
+					$this->number              = (string) $number;
+					$this->operator            = $operator;
+					return;
+				}
+			}
+		}
+
+		$this->phpcsFile->addError(
+			'Invalid property value passed: "%s". The value for the "alignMultilineItems" property for the "WordPress.Arrays.MultipleStatementAlignment" sniff should be either "always", "never" or an comparison operator + a number between 0 and 100.',
+			0,
+			'InvalidPropertyPassed',
+			array( $this->alignMultilineItems )
+		);
+
+		// Reset to the default if an invalid value was received.
+		$this->alignMultilineItems = 'always';
+	}
 
 } // End class.

@@ -97,7 +97,10 @@ $array = array(
 );
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
 
-// Test dealing with new lines.
+
+/*
+ * Test dealing with new lines.
+ */
 $array = array(
 	'a'
 		=> 'b',
@@ -269,7 +272,9 @@ $array = array(
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline true
 
 
-// Test mixed complex arrays.
+/*
+ * Test mixed complex array.
+ */
 $array = array(
 	'a'   => 'b', // Bad.
 	12345 => 'd', // Bad.
@@ -292,3 +297,278 @@ $array = array(
 	'l' => array( 'a' => 'something' ), // Bad.
 		$ab . 'l' => array( 'a' => 'something' ), // Bad.
 );
+
+
+/*
+ * Test multi-line array item handling. Default = always.
+ */
+$deprecated_functions = array(
+	'the_category_head'           => array(
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'the_category_ID'             => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+$deprecated_functions = array(
+	'the_category_head' => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'the_category_ID'   => function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'=> 'multi-line
+					string', // Bad - no space.
+	'the_category_ID'
+	   => function_call( // Ok, ignore newline is being respected.
+		$a,
+		$b
+	),
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems never
+
+// OK - alignments to the expected column.
+$deprecated_functions = array(
+	'the_category_head'           => array(
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'the_category_ID'             => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+// OK - alignments to index + 1.
+$deprecated_functions = array(
+	'the_category_head' => array(
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'the_category_ID' => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+// OK - mixed alignments to index + 1 and expected column.
+$deprecated_functions = array(
+	'the_category_head'           => array(
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'the_category_ID' => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+
+$deprecated_functions = array(
+	'the_category_head'  => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'the_category_ID'=> function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'    => 'multi-line
+					string', // Bad.
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems sometimes
+// Test invalid property value error.
+$array = array(
+	'a' => 'b',
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems =103
+// Test invalid property value error.
+$array = array(
+	'a' => 'b',
+);
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems !50
+// Test invalid property value error.
+$array = array(
+	'a' => 'b',
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems <25
+
+// OK - alignments to the expected column.
+$deprecated_functions = array(
+	'single1'    => 'something',
+	'single12'   => 'something_else',
+	'single123'  => 'something_else_again',
+	'single1234' => 'another_something',
+	'multi1'     => array(
+		'alt' => 'current_user_can()',
+	),
+);
+
+// Bad - 20% multi-line, alignment should be enforced.
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else', // Bad.
+	'single123' => 'something_else_again', // Bad.
+	'single1234' => 'another_something',
+	'multi1'   => array( // Bad.
+		'alt' => 'current_user_can()',
+	),
+);
+
+// Bad - more than 25% multi-line, alignment should be enforced for single line, key + 1/expected for multi-line.
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else', // Bad.
+	'single123' => 'something_else_again',
+	'multi1'           => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12'   => function_call( // OK - expected.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else',
+	'multi1'   => array( // OK - expected.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12' => function_call( // OK - key + 1 .
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'    => 'multi-line
+					string', // Bad.
+);
+$deprecated_functions = array(
+	'multi1' => array(
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12'    => function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'=> 'multi-line
+					string', // Bad - no space.
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems <=50%
+// Test with value 50 and test validation for incorrectly passed % sign.
+
+$deprecated_functions = array(
+	'single1'                     => 'something',
+	'single12'                    => 'something_else',
+	'single123'                   => 'something_else_again',
+	'multi1'                      => array(
+		'alt' => 'get_the_category()',
+	),
+	'multi12'                     => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+
+// Bad - 50% multi-line, alignment should be enforced.
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else', // Bad.
+	'single123' => 'something_else_again', // Bad.
+	'multi1' => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12' => function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'=> 'multi-line
+					string',  // Bad - no space.
+);
+
+// Bad - more than 50% multi-line, alignment should be enforced for single line, key + 1/expected for multi-line.
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else',
+	'multi1'                      => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12'                     => function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+
+$deprecated_functions = array(
+	'multi1'   => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12' => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'=> 'multi-line
+					string', // Bad - no space.
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems !=100
+
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else', // Bad.
+	'single1234' => 'another_something', // Bad.
+	'multi12'             => function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+$deprecated_functions = array(
+	'single1' => 'something', // Bad.
+	'single12' => 'something_else',
+	'multi1'           => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12'             => function_call( // Bad.
+		$a,
+		$b
+	),
+);
+$deprecated_functions = array(
+	'multi1' => array(
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12' => function_call(
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments' => 'multi-line
+					string',
+);
+
+$deprecated_functions = array(
+	'multi1'          => array( // Bad.
+		'alt' => 'get_the_category_by_ID()',
+	),
+	'multi12'       => function_call( // Bad.
+		$a,
+		$b
+	),
+	'user_can_edit_post_comments'=> 'multi-line
+					string', // Bad.
+);
+
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems always
