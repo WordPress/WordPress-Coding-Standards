@@ -119,7 +119,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 					foreach ( $matches[0] as $match ) {
 						if ( '%' === $match ) {
 							$this->phpcsFile->addError(
-								'Found unescaped literal "%" character.',
+								'Found unescaped literal "%%" character.',
 								$i,
 								'UnescapedLiteral',
 								array( $match )
