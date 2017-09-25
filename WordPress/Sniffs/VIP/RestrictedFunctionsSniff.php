@@ -216,7 +216,7 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect
 			'wp_redirect' => array(
-				'type'     => 'warning',
+				'type'      => 'warning',
 				'message'   => '%s() found. Using wp_safe_redirect(), along with the allowed_redirect_hosts filter, can help avoid any chances of malicious redirects within code. It is also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
 				'functions' => array(
 					'wp_redirect',
