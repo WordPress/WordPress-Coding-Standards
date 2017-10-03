@@ -56,3 +56,13 @@ $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login 
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, "admin", $variable ); // Bad.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1 ) ); // Bad.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", [1, "admin", $variable] ); // Bad.
+
+$replacements = [1, "admin", $variable];
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", $replacements ); // Bad.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", $replacements ); // WPCS: PreparedSQLPlaceholders replacement count OK.
+
+// Valid test case as found in WP core /wp-admin/includes/export.php
+$esses = array_fill( 0, count($post_types), '%s' );
+$where = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types ); // Warning.
+// Testing that whitelist comment work for this mismatch too.
+$where = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types ); // WPCS: PreparedSQLPlaceholders replacement count OK.

@@ -23,6 +23,10 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *   placeholders found or individual parameters for each placeholder should
  *   be passed.
  *
+ * A "PreparedSQLPlaceholders replacement count" whitelist comment is supported
+ * specifically to silence the `ReplacementsWrongNumber` and `UnfinishedPrepare`
+ * error codes. The other error codes are not affected by it.
+ *
  * @link https://developer.wordpress.org/reference/classes/wpdb/prepare/
  * @link https://core.trac.wordpress.org/changeset/41496
  * @link https://core.trac.wordpress.org/changeset/41471
@@ -196,6 +200,11 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
+		$count_diff_whitelisted = $this->has_whitelist_comment(
+			'PreparedSQLPlaceholders replacement count',
+			$stackPtr
+		);
+
 		if ( 0 === $total_placeholders ) {
 			if ( 1 === $total_parameters ) {
 				if ( false === $variable_found ) {
@@ -206,7 +215,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 						'UnnecessaryPrepare'
 					);
 				}
-			} else {
+			} elseif ( false === $count_diff_whitelisted ) {
 				$this->phpcsFile->addWarning(
 					'Replacement variables found, but no valid placeholders found in the query.',
 					$i,
@@ -224,6 +233,10 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				'MissingReplacements',
 				array( $total_placeholders )
 			);
+			return;
+		}
+
+		if ( true === $count_diff_whitelisted ) {
 			return;
 		}
 
