@@ -132,7 +132,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				unset( $stripped_content, $interpolated_vars, $vars_without_wpdb );
 			}
 
-			$placeholders = preg_match_all( '`(?<!%)%[dFfs]`', $content, $matches );
+			$placeholders = preg_match_all( '`(?<![^%]%)%[dFfs]`', $content, $matches );
 			if ( $placeholders > 0 ) {
 				$total_placeholders += $placeholders;
 			}
@@ -206,6 +206,12 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 						'UnnecessaryPrepare'
 					);
 				}
+			} else {
+				$this->phpcsFile->addWarning(
+					'Replacement variables found, but no valid placeholders found in the query.',
+					$i,
+					'UnfinishedPrepare'
+				);
 			}
 
 			return;

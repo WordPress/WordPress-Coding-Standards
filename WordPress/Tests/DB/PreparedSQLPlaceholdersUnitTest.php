@@ -27,22 +27,22 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			23  => 3,
-			25  => 2,
-			26  => 2,
-			27  => 2,
-			28  => 2,
-			29  => 2,
-			34  => 1,
-			35  => 1,
-			36  => 1,
+			28  => 3,
+			30  => 2,
+			31  => 2,
+			32  => 2,
+			33  => 2,
+			34  => 2,
+			39  => 1,
 			40  => 1,
 			41  => 1,
-			49  => 1,
-			50  => 1,
-			51  => 1,
-			52  => 1,
-			53  => 1,
+			45  => 1,
+			46  => 1,
+			54  => 1,
+			55  => 1,
+			56  => 1,
+			57  => 1,
+			58  => 1,
 		);
 	}
 
@@ -56,6 +56,12 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			12  => 1,
 			16  => 1,
 			17  => 1,
+			23  => 1,
+			30  => 1,
+			31  => 1,
+			32  => 1,
+			33  => 1,
+			34  => 1,
 		);
 
 	}

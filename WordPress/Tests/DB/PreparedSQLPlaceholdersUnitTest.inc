@@ -18,15 +18,20 @@ $sql = $wpdb->prepare( "SELECT * FROM `{$wpdb->users}`" );  // Warning.
 $sql = $wpdb->prepare( "SELECT * FROM `{$wpdb->users}` WHERE id = $id" ); // OK - this will be handled by the PreparedSQL sniff.
 
 /*
+ * No placeholders found, but replacement variable(s) are being passed.
+ */
+$sql = $wpdb->prepare( 'SELECT * FROM `table`', $something ); // Warning.
+
+/*
  * Test passing invalid replacement placeholder.
  */
 $sql = $wpdb->prepare( '%d %1$d %%% %', 1 ); // Bad x 3.
 $sql = $wpdb->prepare( '%%%s', 1 ); // OK.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // Bad x 2.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %01.2f AND user_login = %10.10s", 1, "admin" ); // Bad x 2.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %'.09d AND user_login = %1\$04d", 1, "admin" ); // Bad x 2.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = \"%1\$d\" AND user_login = '%2\$s'", 1, "admin" ); // Bad x 2.
-$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users . ' WHERE id = \'%1\$d\' AND user_login = "%2\$s"', 1, "admin" ); // Bad x 2.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %01.2f AND user_login = %10.10s", 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %'.09d AND user_login = %1\$04d", 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = \"%1\$d\" AND user_login = '%2\$s'", 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users . ' WHERE id = \'%1\$d\' AND user_login = "%2\$s"', 1, "admin" ); // Bad x 2 + 1 warning.
 
 /*
  * Test passing quoted replacement placeholder.
