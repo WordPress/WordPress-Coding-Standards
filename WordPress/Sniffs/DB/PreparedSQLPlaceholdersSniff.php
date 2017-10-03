@@ -87,16 +87,19 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
-		$query              = $parameters[1];
-		$total_placeholders = 0;
-		$total_parameters   = count( $parameters );
+		$query                    = $parameters[1];
+		$text_string_tokens_found = false;
+		$total_placeholders       = 0;
+		$total_parameters         = count( $parameters );
 
 		for ( $i = $query['start']; $i <= $query['end']; $i++ ) {
 			if ( ! isset( Tokens::$textStringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
-			$content     = $this->tokens[ $i ]['content'];
+			$text_string_tokens_found = true;
+			$content                  = $this->tokens[ $i ]['content'];
+
 			$quote_style = false;
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				$content = $this->strip_quotes( $content );
@@ -163,6 +166,11 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				}
 				unset( $match, $matches );
 			}
+		}
+
+		if ( false === $text_string_tokens_found ) {
+			// Query string passed in as a variable or function call, nothing to examine.
+			return;
 		}
 
 		if ( 0 === $total_placeholders ) {
