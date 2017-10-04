@@ -5,25 +5,25 @@ $varname  = 'hello';
 $_varName = 'hello'; // Bad.
 
 class MyClass {
-	$varName  = 'hello'; // Bad.
-	$var_name = 'hello';
-	$varname  = 'hello';
-	$_varName = 'hello'; // Bad.
+	var $varName  = 'hello'; // Bad.
+	var $var_name = 'hello';
+	var $varname  = 'hello';
+	var $_varName = 'hello'; // Bad.
 
-	public $varName  = 'hello'; // Bad.
-	public $var_name = 'hello';
-	public $varname  = 'hello';
-	public $_varName = 'hello'; // Bad.
+	public $varNamf  = 'hello'; // Bad.
+	public $var_namf = 'hello';
+	public $varnamf  = 'hello';
+	public $_varNamf = 'hello'; // Bad.
 
-	protected $varName  = 'hello'; // Bad.
-	protected $var_name = 'hello';
-	protected $varname  = 'hello';
-	protected $_varName = 'hello'; // Bad.
+	protected $varNamg  = 'hello'; // Bad.
+	protected $var_namg = 'hello';
+	protected $varnamg  = 'hello';
+	protected $_varNamg = 'hello'; // Bad.
 
-	private $_varName  = 'hello'; // Bad.
-	private $_var_name = 'hello';
-	private $_varname  = 'hello';
-	private $varName   = 'hello'; // Bad.
+	private $_varNamh  = 'hello'; // Bad.
+	private $_var_namh = 'hello';
+	private $_varnamh  = 'hello';
+	private $varNamh   = 'hello'; // Bad.
 }
 
 echo $varName; // Bad.

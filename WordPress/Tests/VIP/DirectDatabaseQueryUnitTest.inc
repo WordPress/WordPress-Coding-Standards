@@ -122,7 +122,7 @@ $b = function () {
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions my_cacheget
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions my_cacheset,my_other_cacheset
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheDeleteFunctions my_cachedel
-function cache_custom() {
+function cache_customA() {
 	global $wpdb;
 
 	$quux = my_cacheget( 'quux' );
@@ -132,7 +132,7 @@ function cache_custom() {
 	}
 }
 
-function cache_custom() {
+function cache_customB() {
 	global $wpdb;
 
 	$quux = my_cacheget( 'quux' );
@@ -142,7 +142,7 @@ function cache_custom() {
 	}
 }
 
-function cache_custom() {
+function cache_customC() {
 	global $wpdb;
 
 	$wpdb->query( 'SELECT X FROM Y' ); // DB call ok; OK.
@@ -152,7 +152,7 @@ function cache_custom() {
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions my_cacheset
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheDeleteFunctions false
 
-function cache_custom() {
+function cache_customD() {
 	global $wpdb;
 
 	$quux = my_cacheget( 'quux' );
@@ -162,7 +162,7 @@ function cache_custom() {
 	}
 }
 
-function cache_custom() {
+function cache_customE() {
 	global $wpdb;
 
 	$quux = my_cacheget( 'quux' );
@@ -172,7 +172,7 @@ function cache_custom() {
 	}
 }
 
-function cache_custom() {
+function cache_customF() {
 	global $wpdb;
 
 	$wpdb->query( 'SELECT X FROM Y' ); // DB call ok; Bad.
@@ -182,7 +182,7 @@ function cache_custom() {
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions false
 // @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheSetFunctions false
 
-function cache_custom() {
+function cache_customG() {
 	global $wpdb;
 
 	$quux = my_cacheget( 'quux' );
@@ -244,7 +244,7 @@ function custom_modify_term_relationship() {
 }
 
 // Test Nowdocs and Heredocs
-function foo() {
+function foofoo() {
 	global $wpdb;
 
 	$listofthings = $wpdb->get_col( <<<'EOD'
@@ -264,7 +264,7 @@ EOD
 	return $listofthings;
 }
 
-function baz() {
+function bazbaz() {
 	global $wpdb;
 
 	$baz = wp_cache_get( 'baz' );
@@ -278,7 +278,7 @@ EOD
 	}
 }
 
-function cache_add_instead_of_set() {
+function cache_add_instead_of_setter() {
 	global $wpdb;
 
 	$baz = wp_cache_get( 'baz' );

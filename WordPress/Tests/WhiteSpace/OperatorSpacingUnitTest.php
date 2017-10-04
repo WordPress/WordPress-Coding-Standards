@@ -7,13 +7,21 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WhiteSpace;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the OperatorSpacing sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   2013-06-11
+ * @since   0.12.0     Now only tests the WPCS specific addition of T_BOOLEAN_NOT.
+ *                     The rest of the sniff is unit tested upstream.
+ * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUnitTest {
+class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -22,12 +30,18 @@ class WordPress_Tests_WhiteSpace_OperatorSpacingUnitTest extends AbstractSniffUn
 	 */
 	public function getErrorList() {
 		return array(
-			5  => 4,
-			18 => 1,
-			45 => 1,
-			49 => 1,
-			60 => 2,
-			61 => 2,
+			23 => 2,
+			28 => 2,
+			40 => 2,
+			41 => 2,
+			42 => 2,
+			43 => 2,
+			44 => 2,
+			47 => 2,
+			48 => 2,
+			49 => 2,
+			50 => 2,
+			51 => 2,
 		);
 
 	}

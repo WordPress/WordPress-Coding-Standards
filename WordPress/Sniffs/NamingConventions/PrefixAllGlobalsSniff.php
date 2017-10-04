@@ -7,16 +7,23 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\NamingConventions;
+
+use WordPress\AbstractFunctionParameterSniff;
+use WordPress\PHPCSHelper;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    WordPress_Sniff::$custom_test_class_whitelist
+ * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
-class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress_AbstractFunctionParameterSniff {
+class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Error message template.
@@ -150,7 +157,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		}
 
 		// Allow overruling the prefixes set in a ruleset via the command line.
-		$cl_prefixes = trim( PHP_CodeSniffer::getConfigData( 'prefixes' ) );
+		$cl_prefixes = trim( PHPCSHelper::get_config_data( 'prefixes' ) );
 		if ( ! empty( $cl_prefixes ) ) {
 			$this->prefixes = $cl_prefixes;
 		}
@@ -201,7 +208,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					}
 
 					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
-					if ( function_exists( $item_name ) ) {
+					if ( function_exists( '\\' . $item_name ) ) {
 						// Backfill for PHP native function.
 						return;
 					}
@@ -228,14 +235,14 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
-							if ( class_exists( $item_name ) ) {
+							if ( class_exists( '\\' . $item_name ) ) {
 								// Backfill for PHP native class.
 								return;
 							}
 							break;
 
 						case 'T_INTERFACE':
-							if ( interface_exists( $item_name ) ) {
+							if ( interface_exists( '\\' . $item_name ) ) {
 								// Backfill for PHP native interface.
 								return;
 							}
@@ -245,7 +252,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 							break;
 
 						case 'T_TRAIT':
-							if ( function_exists( 'trait_exists' ) && trait_exists( $item_name ) ) {
+							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name ) ) {
 								// Backfill for PHP native trait.
 								return;
 							}
@@ -263,18 +270,18 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 				case 'T_CONST':
 					// Constants in a class do not need to be prefixed.
-					if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ) ) === true ) {
+					if ( true === $this->is_class_constant( $stackPtr ) ) {
 						return;
 					}
 
-					$constant_name_ptr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+					$constant_name_ptr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 					if ( false === $constant_name_ptr ) {
 						// Live coding.
 						return;
 					}
 
 					$item_name = $this->tokens[ $constant_name_ptr ]['content'];
-					if ( defined( $item_name ) ) {
+					if ( defined( '\\' . $item_name ) ) {
 						// Backfill for PHP native constant.
 						return;
 					}
@@ -287,7 +294,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					// Left empty on purpose.
 					break;
 
-			} // End switch().
+			}
 
 			if ( empty( $item_name ) || $this->is_prefixed( $item_name ) === true ) {
 				return;
@@ -302,7 +309,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					$item_name,
 				)
 			);
-		} // End if().
+		}
 
 	} // End process_token().
 
@@ -324,7 +331,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 		// Is this a variable variable ?
 		// Not concerned with nested ones as those will be recognized on their own token.
-		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 		if ( false === $next_non_empty || ! isset( $indicators[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
 			return;
 		}
@@ -336,14 +343,14 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			$next_non_empty = $this->tokens[ $next_non_empty ]['bracket_closer'];
 		}
 
-		$maybe_assignment = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
+		$maybe_assignment = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
 
 		while ( false !== $maybe_assignment
 			&& T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
 			&& isset( $this->tokens[ $maybe_assignment ]['bracket_closer'] )
 		) {
 			$maybe_assignment = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				( $this->tokens[ $maybe_assignment ]['bracket_closer'] + 1 ),
 				null,
 				true,
@@ -356,7 +363,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			return;
 		}
 
-		if ( ! isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $maybe_assignment ]['code'] ] ) ) {
+		if ( ! isset( Tokens::$assignmentTokens[ $this->tokens[ $maybe_assignment ]['code'] ] ) ) {
 			// Not an assignment.
 			return;
 		}
@@ -430,13 +437,13 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		}
 
 		if ( 'GLOBALS' === $variable_name ) {
-			$array_open = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+			$array_open = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 			if ( false === $array_open || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $array_open ]['code'] ) {
 				// Live coding or something very silly.
 				return;
 			}
 
-			$array_key = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $array_open + 1 ), null, true, null, true );
+			$array_key = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $array_open + 1 ), null, true, null, true );
 			if ( false === $array_key ) {
 				// No key found, nothing to do.
 				return;
@@ -446,7 +453,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			$variable_name = $this->strip_quotes( $this->tokens[ $array_key ]['content'] );
 
 			// Check whether a prefix is needed.
-			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
 				&& $this->variable_prefixed_or_whitelisted( $variable_name ) === true
 			) {
 				return;
@@ -465,7 +472,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					// If the first part was dynamic, throw a warning.
 					$is_error = false;
 				}
-			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] ) ) {
+			} elseif ( ! isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] ) ) {
 				// Dynamic array key, throw a warning.
 				$is_error = false;
 			}
@@ -481,11 +488,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			}
 
 			// Properties in a class do not need to be prefixed.
-			$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
-			$ptr        = array_pop( $conditions );
-			if ( isset( $this->tokens[ $ptr ] )
-				&& in_array( $this->tokens[ $ptr ]['code'], array( T_CLASS, T_ANON_CLASS, T_TRAIT ), true )
-			) {
+			if ( true === $this->is_class_property( $stackPtr ) ) {
 				return;
 			}
 
@@ -526,8 +529,8 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 
 				unset( $condition, $has_global, $end_of_statement, $ptr, $imported );
 
-			} // End if().
-		} // End if().
+			}
+		}
 
 		// Still here ? In that case, the variable name should be prefixed.
 		$this->addMessage(
@@ -575,7 +578,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 		} else {
 			// This may be a dynamic hook/constant name.
 			$first_non_empty = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				$parameters[1]['start'],
 				( $parameters[1]['end'] + 1 ),
 				true
@@ -588,7 +591,7 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 			$first_non_empty_content = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
 
 			// Try again with just the first token if it's a text string.
-			if ( isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
 				&& $this->is_prefixed( $first_non_empty_content ) === true
 			) {
 				return;
@@ -607,15 +610,20 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 					// Start of hook/constant name is dynamic, throw a warning.
 					$is_error = false;
 				}
-			} elseif ( ! isset( PHP_CodeSniffer_Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] ) ) {
+			} elseif ( ! isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] ) ) {
 				// Dynamic hook/constant name, throw a warning.
 				$is_error = false;
 			}
-		} // End if().
+		}
 
 		if ( 'define' === $matched_content ) {
-			if ( defined( $raw_content ) ) {
+			if ( defined( '\\' . $raw_content ) ) {
 				// Backfill for PHP native constant.
+				return;
+			}
+
+			if ( strpos( $raw_content, '\\' ) !== false ) {
+				// Namespaced or unreachable constant.
 				return;
 			}
 
@@ -636,10 +644,11 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 	 * Check if a function/class/constant/variable name is prefixed with one of the expected prefixes.
 	 *
 	 * @since 0.12.0
+	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
 	 *
 	 * @param string $name Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix + an underscore.
+	 * @return bool True when the name is the prefix or starts with the prefix + a separator.
 	 *              False otherwise.
 	 */
 	private function is_prefixed( $name ) {
@@ -653,7 +662,12 @@ class WordPress_Sniffs_NamingConventions_PrefixAllGlobalsSniff extends WordPress
 				$prefix_found = stripos( $name, $prefix . '_' );
 
 				if ( 0 === $prefix_found ) {
-					// Ok, prefix found as start of hook/constant name.
+					// Ok, prefix found at start of hook/constant name.
+					return true;
+				}
+
+				if ( preg_match( '`^' . preg_quote( $prefix, '`' ) . '\W`i', $name ) === 1 ) {
+					// Ok, prefix with other non-word character found at start of hook/constant name.
 					return true;
 				}
 			}

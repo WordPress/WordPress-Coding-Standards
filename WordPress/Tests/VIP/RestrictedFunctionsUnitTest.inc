@@ -31,34 +31,34 @@ $y = Bar::add_role(); // Ok.
 
 \add_role(); // Error.
 
-get_term_link( $term ); // Error.
+wpcom_vip_get_term_link( $term ); // Error.
 
 get_page_by_path( $path ); // Error.
 
 get_page_by_title( $page_title ); // Error.
 
-get_term_by( $field, $value, $taxonomy ); // Error.
+wpcom_vip_get_term_by( $field, $value, $taxonomy ); // Error.
 
-get_category_by_slug( $slug ); // Error.
+wpcom_vip_get_category_by_slug( $slug ); // Error.
 
 url_to_postid( $url ); // Error.
 
 attachment_url_to_postid( $url ); // Error.
 wpcom_vip_attachment_url_to_postid( $url ); // Ok.
 
-get_tag_link(); // Error.
-get_category_link(); // Error.
-get_cat_ID(); // Error.
+get_tag_link(); // Ok.
+get_category_link(); // Ok.
+get_cat_ID(); // Ok.
 url_to_post_id(); // Error.
 
 get_posts(); // Warning.
 wp_get_recent_posts(); // Warning.
 
 get_children(); // Warning.
-wp_get_post_terms(); // Error.
-wp_get_post_categories(); // Error.
-wp_get_post_tags(); // Error.
-wp_get_object_terms(); // Error.
+
+
+
+
 term_exists(); // Error.
 count_user_posts(); // Error.
 wp_old_slug_redirect(); // Error.

@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\PHP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the YodaConditions sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest {
+class YodaConditionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -35,6 +41,10 @@ class WordPress_Tests_PHP_YodaConditionsUnitTest extends AbstractSniffUnitTest {
 			84 => 1,
 			88 => 1,
 			90 => 1,
+			105 => 1,
+			114 => 1,
+			119 => 1,
+			125 => 1,
 		);
 
 	}

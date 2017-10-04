@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress">
+<ruleset name="WordPress" namespace="WordPress">
 	<description>WordPress Coding Standards</description>
+
+	<autoload>./PHPCSAliases.php</autoload>
 
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>

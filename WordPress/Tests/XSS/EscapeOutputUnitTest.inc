@@ -218,3 +218,22 @@ echo 1.234; // Ok.
 echo ( 1.234 + 10 + 2.5 ); // Ok.
 echo 10 % 2; // Ok.
 echo 8 * 1.2; // Ok.
+
+?>
+<?= $var ?><!-- Bad. -->
+<?= esc_html( $var ); ?><!-- Ok. -->
+<?= $var['foo']; ?><!-- Bad. -->
+<?= $var->foo ?><!-- Bad. -->
+<?php
+
+// Issue #933. OK.
+function do_footer_nav() {
+	echo \wp_kses_post(
+		\genesis_get_nav_menu(
+			[
+				'menu_class'     => 'menu genesis-nav-menu menu-footer',
+				'theme_location' => 'footer',
+			]
+		)
+	);
+}

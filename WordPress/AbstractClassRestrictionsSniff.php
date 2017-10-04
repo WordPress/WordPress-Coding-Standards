@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Restricts usage of some classes.
  *
@@ -14,7 +18,7 @@
  *
  * @since   0.10.0
  */
-abstract class WordPress_AbstractClassRestrictionsSniff extends WordPress_AbstractFunctionRestrictionsSniff {
+abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Regex pattern with placeholder for the class names.

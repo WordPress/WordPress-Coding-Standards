@@ -2,32 +2,41 @@
 <ruleset name="Example Project">
 	<description>A custom set of rules to check for a WPized WordPress project</description>
 
-	<!-- Exclude select folders and files from being checked. -->
+	<!-- Exclude WP Core folders and files from being checked. -->
 	<exclude-pattern>/docroot/wp-admin/*</exclude-pattern>
 	<exclude-pattern>/docroot/wp-includes/*</exclude-pattern>
 	<exclude-pattern>/docroot/wp-*.php</exclude-pattern>
 	<exclude-pattern>/docroot/index.php</exclude-pattern>
 	<exclude-pattern>/docroot/xmlrpc.php</exclude-pattern>
 	<exclude-pattern>/docroot/wp-content/plugins/*</exclude-pattern>
-	<exclude-pattern>*.twig</exclude-pattern>
 
-	<!-- Exclude Composer Vendor directory. -->
+	<!-- Exclude the Composer Vendor directory. -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
 
-	<!--
-	We may also want to to include all the rules in a standard.
-	-->
+	<!-- Exclude the Node Modules directory. -->
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<!-- Exclude minified Javascript files. -->
+	<exclude-pattern>*.min.js</exclude-pattern>
+
+	<!-- Include the WordPress-Extra standard. -->
 	<rule ref="WordPress-Extra">
 		<!--
 		We may want a middle ground though. The best way to do this is add the
 		entire ruleset, then rule by rule, remove ones that don't suit a project.
-		We can do this by running `phpcs` with the '-s' flag, to see the names of
-		the different Sniffs, as their rules are broken. From here, we can opt to
-		exclude problematic sniffs like so.
+		We can do this by running `phpcs` with the '-s' flag, which allows us to
+		see the names of the sniffs reporting errors.
+		Once we know the sniff names, we can opt to exclude sniffs which don't
+		suit our project like so.
+
+		The below two examples just show how you can exclude rules.
+		They are not intended as advice about which sniffs to exclude.
 		-->
 
+		<!--
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
 		<exclude name="WordPress.XSS.EscapeOutput"/>
+		-->
 	</rule>
 
 	<!-- Let's also check that everything is properly documented. -->
@@ -58,6 +67,8 @@
 	the wiki:
 	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties
 	-->
+	<config name="minimum_supported_wp_version" value="4.5"/>
+
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array" value="my-textdomain,library-textdomain"/>
@@ -67,18 +78,6 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array" value="my_prefix"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.WP.DeprecatedFunctions">
-		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.WP.DeprecatedParameters">
-		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
 		</properties>
 	</rule>
 

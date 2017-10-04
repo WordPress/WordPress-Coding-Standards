@@ -2,10 +2,15 @@
 <ruleset name="WordPress Coding Standards">
 	<description>The Coding standard for the WordPress Coding Standards itself.</description>
 
-	<!-- Exclude one sniff which is nothing but a slimmed down copy of an upstream sniff.
-	     Leaving the code standard of this sniff alone, will facilitate easier syncing
-		 with the upstream sniff now and in the future. -->
-	<exclude-pattern>/WordPress/Sniffs/Arrays/ArrayDeclarationSniff.php</exclude-pattern>
+	<arg value="sp"/>
+	<arg name="extensions" value="php"/>
+
+	<!-- Exclude the code in the PHPCS 2.x test files copied in from PHPCS. -->
+	<exclude-pattern>/Test/AllTests.php</exclude-pattern>
+	<exclude-pattern>/Test/Standards/*.php</exclude-pattern>
+
+	<!-- Exclude Composer vendor directory. -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<rule ref="WordPress-Extra">
 		<exclude name="WordPress.Files.FileName" />
@@ -13,5 +18,8 @@
 	</rule>
 
 	<rule ref="WordPress-Docs" />
+
+	<!-- Enforce PSR1 compatible namespaces. -->
+	<rule ref="PSR1.Classes.ClassDeclaration"/>
 
 </ruleset>

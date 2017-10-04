@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\VIP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the AdminBarRemoval sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_VIP_AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
+class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -37,9 +43,9 @@ class WordPress_Tests_VIP_AdminBarRemovalUnitTest extends AbstractSniffUnitTest 
 					21  => 1,
 					26  => 1,
 					32  => 1,
-					56  => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-					57  => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
-					58  => ( PHP_VERSION_ID >= 50300 ) ? 1 : 0, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+					56  => 1,
+					57  => 1,
+					58  => 1,
 					68  => 1,
 					69  => 1,
 					70  => 1,
@@ -54,7 +60,7 @@ class WordPress_Tests_VIP_AdminBarRemovalUnitTest extends AbstractSniffUnitTest 
 
 			case 'AdminBarRemovalUnitTest.css':
 				return array(
-					15  => 1,
+					15 => 1,
 					16 => 1,
 					17 => 1,
 					22 => 1,

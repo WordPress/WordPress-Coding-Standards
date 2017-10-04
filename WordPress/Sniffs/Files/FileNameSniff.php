@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\Files;
+
+use WordPress\Sniff;
+
 /**
  * Ensures filenames do not contain underscores.
  *
@@ -22,10 +26,11 @@
  *                 - This sniff will now allow for underscores in file names for certain theme
  *                   specific exceptions if the `$is_theme` property is set to `true`.
  * @since   0.12.0 - Now extends the `WordPress_Sniff` class.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    WordPress_Sniff::$custom_test_class_whitelist
+ * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
-class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
+class FileNameSniff extends Sniff {
 
 	/**
 	 * Regex for the theme specific exceptions.
@@ -38,6 +43,8 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#custom-post-types
 	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#embeds
 	 * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#attachment
+	 * @link https://developer.wordpress.org/themes/template-files-section/partial-and-miscellaneous-template-files/#content-slug-php
+	 * @link https://wphierarchy.com/
 	 * @link https://en.wikipedia.org/wiki/Media_type#Naming
 	 *
 	 * @since 0.11.0
@@ -47,7 +54,8 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	const THEME_EXCEPTIONS_REGEX = '`
 		^                    # Anchor to the beginning of the string.
 		(?:
-			(?:archive|embed|single|taxonomy) # Template prefixes which can have exceptions
+							 # Template prefixes which can have exceptions.
+			(?:archive|category|content|embed|page|single|tag|taxonomy)
 			-[^\.]+          # These need to be followed by a dash and some chars.
 		|
 			(?:application|audio|example|image|message|model|multipart|text|video) #Top-level mime-types
@@ -110,7 +118,7 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 	 * @return array
 	 */
 	public function register() {
-		if ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
+		if ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
 			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
 		}
 
@@ -187,8 +195,8 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 
 					if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
 						&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
-						&& ( ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
-						|| ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
+						&& ( ( ! defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
+						|| ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
 						&& false === $has_class
 					) {
 						$this->phpcsFile->addError(
@@ -203,7 +211,7 @@ class WordPress_Sniffs_Files_FileNameSniff extends WordPress_Sniff {
 					}
 				}
 			}
-		} // End if().
+		}
 
 		// Only run this sniff once per file, no need to run it again.
 		return ( $this->phpcsFile->numTokens + 1 );

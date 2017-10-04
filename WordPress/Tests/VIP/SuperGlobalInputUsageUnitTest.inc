@@ -18,3 +18,6 @@ $_REQUEST['wp_customize'] = 'on'; // Ok.
 
 // Issue: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/542
 if ( isset( $_GET['updated'] ) ) { // input var okay ?>
+   // Do something.
+<?php
+}

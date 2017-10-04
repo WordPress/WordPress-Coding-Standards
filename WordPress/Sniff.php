@@ -7,6 +7,13 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress;
+
+use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
+use PHP_CodeSniffer_File as File;
+use PHP_CodeSniffer_Tokens as Tokens;
+use WordPress\PHPCSHelper;
+
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
@@ -26,7 +33,65 @@
  *            In the rare few cases where the array values *do* have meaning, this
  *            is documented in the property documentation.}}
  */
-abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
+abstract class Sniff implements PHPCS_Sniff {
+
+	/**
+	 * Minimum supported WordPress version.
+	 *
+	 * Currently used by the `WordPress.WP.DeprecatedClasses`,
+	 * `WordPress.WP.DeprecatedFunctions` and the `WordPress.WP.DeprecatedParameter` sniff.
+	 *
+	 * These sniffs will throw an error when usage of a deprecated class/function/parameter
+	 * is detected if the class/function/parameter was deprecated before the minimum
+	 * supported WP version; a warning otherwise.
+	 * By default, it is set to presume that a project will support the current
+	 * WP version and up to three releases before.
+	 *
+	 * This property allows changing the minimum supported WP version used by
+	 * these sniffs by setting a property in a custom phpcs.xml ruleset.
+	 * This property will need to be set for each sniff which uses it.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.WP.DeprecatedClasses">
+	 *  <properties>
+	 *   <property name="minimum_supported_version" value="4.3"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * Alternatively, the value can be passed in one go for all sniff using it via
+	 * the command line or by setting a `<config>` value in a custom phpcs.xml ruleset.
+	 * Note: the `_wp_` in the command line property name!
+	 *
+	 * CL: `phpcs --runtime-set minimum_supported_wp_version 4.5`
+	 * Ruleset: `<config name="minimum_supported_wp_version" value="4.5"/>`
+	 *
+	 * @since 0.14.0 Previously the individual sniffs each contained this property.
+	 *
+	 * @var string WordPress version.
+	 */
+	public $minimum_supported_version = '4.5';
+
+	/**
+	 * Custom list of classes which test classes can extend.
+	 *
+	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property will need to be set for each sniff which uses the
+	 * `is_test_class()` method.
+	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
+	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.[Subset].[Sniffname]">
+	 *  <properties>
+	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string|string[]
+	 */
+	public $custom_test_class_whitelist = array();
 
 	/**
 	 * List of the functions which verify nonces.
@@ -770,33 +835,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	);
 
 	/**
-	 * Custom list of classes which test classes can extend.
-	 *
-	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
-	 * This property will need to be set for each sniff which uses the
-	 * `is_test_class()` method.
-	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
-	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.[Subset].[Sniffname]">
-	 *  <properties>
-	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var string|string[]
-	 */
-	public $custom_test_class_whitelist = array();
-
-	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
 	 *
-	 * @var PHP_CodeSniffer_File
+	 * @var \PHP_CodeSniffer\Files\File
 	 */
 	protected $phpcsFile;
 
@@ -814,14 +857,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack passed in $tokens.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+	public function process( File $phpcsFile, $stackPtr ) {
 		$this->init( $phpcsFile );
 		return $this->process_token( $stackPtr );
 	}
@@ -846,9 +889,9 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @since 0.4.0
 	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file currently being processed.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file currently being processed.
 	 */
-	protected function init( PHP_CodeSniffer_File $phpcsFile ) {
+	protected function init( File $phpcsFile ) {
 		$this->phpcsFile = $phpcsFile;
 		$this->tokens    = $phpcsFile->getTokens();
 	}
@@ -1037,6 +1080,25 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	}
 
 	/**
+	 * Overrule the minimum supported WordPress version with a command-line/config value.
+	 *
+	 * Handle setting the minimum supported WP version in one go for all sniffs which
+	 * expect it via the command line or via a `<config>` variable in a ruleset.
+	 * The config variable overrules the default `$minimum_supported_version` and/or a
+	 * `$minimum_supported_version` set for individual sniffs through the ruleset.
+	 *
+	 * @since 0.14.0
+	 */
+	protected function get_wp_version_from_cl() {
+		$cl_supported_version = trim( PHPCSHelper::get_config_data( 'minimum_supported_wp_version' ) );
+		if ( ! empty( $cl_supported_version )
+			&& filter_var( $cl_supported_version, FILTER_VALIDATE_FLOAT ) !== false
+		) {
+			$this->minimum_supported_version = $cl_supported_version;
+		}
+	}
+
+	/**
 	 * Find whitelisting comment.
 	 *
 	 * Comment must be at the end of the line, and use // format.
@@ -1059,6 +1121,11 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 * @return boolean True if whitelisting comment was found, false otherwise.
 	 */
 	protected function has_whitelist_comment( $comment, $stackPtr ) {
+
+		// Respect the PHPCS 3.x --ignore-annotations setting.
+		if ( true === PHPCSHelper::ignore_annotations( $this->phpcsFile ) ) {
+			return false;
+		}
 
 		$lastPtr     = $this->get_last_ptr_on_line( $stackPtr );
 		$end_of_line = $lastPtr;
@@ -1198,7 +1265,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		$next_non_empty = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens
+			Tokens::$emptyTokens
 			, ( $stackPtr + 1 )
 			, null
 			, true
@@ -1212,7 +1279,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// If the next token is an assignment, that's all we need to know.
-		if ( isset( PHP_CodeSniffer_Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
+		if ( isset( Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -1392,7 +1459,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// Get the last non-empty token.
 		$prev = $this->phpcsFile->findPrevious(
-			PHP_CodeSniffer_Tokens::$emptyTokens
+			Tokens::$emptyTokens
 			, ( $stackPtr - 1 )
 			, null
 			, true
@@ -1479,7 +1546,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 				 * to resolve the function name, do so.
 				 */
 				$first_non_empty = $this->phpcsFile->findNext(
-					PHP_CodeSniffer_Tokens::$emptyTokens,
+					Tokens::$emptyTokens,
 					$callback['start'],
 					( $callback['end'] + 1 ),
 					true
@@ -1536,7 +1603,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		// Find the next non-empty token.
 		$open_bracket = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens,
+			Tokens::$emptyTokens,
 			( $stackPtr + 1 ),
 			null,
 			true
@@ -1593,8 +1660,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		if ( $in_condition_only ) {
 			/*
-			   This is a stricter check, requiring the variable to be used only
-			   within the validation condition.
+			 * This is a stricter check, requiring the variable to be used only
+			 * within the validation condition.
 			 */
 
 			// If there are no conditions, there's no validation.
@@ -1617,8 +1684,8 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 		} else {
 			/*
-			   We are are more loose, requiring only that the variable be validated
-			   in the same function/file scope as it is used.
+			 * We are are more loose, requiring only that the variable be validated
+			 * in the same function/file scope as it is used.
 			 */
 
 			$scope_start = 0;
@@ -1641,7 +1708,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 			$scope_end = $stackPtr;
 
-		} // End if().
+		}
 
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
@@ -1702,19 +1769,19 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		// Find the previous non-empty token. We check before the var first because
 		// yoda conditions are usually expected.
 		$previous_token = $this->phpcsFile->findPrevious(
-			PHP_CodeSniffer_Tokens::$emptyTokens,
+			Tokens::$emptyTokens,
 			( $stackPtr - 1 ),
 			null,
 			true
 		);
 
-		if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
+		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
 			return true;
 		}
 
 		// Maybe the comparison operator is after this.
 		$next_token = $this->phpcsFile->findNext(
-			PHP_CodeSniffer_Tokens::$emptyTokens,
+			Tokens::$emptyTokens,
 			( $stackPtr + 1 ),
 			null,
 			true
@@ -1724,14 +1791,14 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		while ( T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
 
 			$next_token = $this->phpcsFile->findNext(
-				PHP_CodeSniffer_Tokens::$emptyTokens,
+				Tokens::$emptyTokens,
 				( $this->tokens[ $next_token ]['bracket_closer'] + 1 ),
 				null,
 				true
 			);
 		}
 
-		if ( isset( PHP_CodeSniffer_Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -1766,7 +1833,12 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		// USE keywords for traits.
-		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_TRAIT ) ) ) {
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_TRAIT'      => true,
+		);
+		if ( true === $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
 			return 'trait';
 		}
 
@@ -1827,7 +1899,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 
-		$next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 
 		// Deal with short array syntax.
 		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
@@ -1854,7 +1926,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		$close_parenthesis   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
-		$next_next_non_empty = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
+		$next_next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
 
 		if ( $next_next_non_empty === $close_parenthesis ) {
 			// No parameters.
@@ -1930,7 +2002,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 
 			$nestedParenthesisCount = 0;
 		} else {
-			$opener = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+			$opener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 			$closer = $this->tokens[ $opener ]['parenthesis_closer'];
 
 			$nestedParenthesisCount = 1;
@@ -1980,7 +2052,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			 * Prevents code like the following from setting a third parameter:
 			 * functionCall( $param1, $param2, );
 			 */
-			$has_next_param = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
+			$has_next_param = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
 			if ( false === $has_next_param ) {
 				break;
 			}
@@ -1988,7 +2060,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			// Prepare for the next parameter.
 			$param_start = ( $next_comma + 1 );
 			$cnt++;
-		} // End while().
+		}
 
 		return $parameters;
 	}
@@ -2018,6 +2090,47 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 		}
 
 		return $parameters[ $param_offset ];
+	}
+
+	/**
+	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $stackPtr The stack pointer to the array token.
+	 *
+	 * @return array|bool Array with two keys `opener`, `closer` or false if
+	 *                    either or these could not be determined.
+	 */
+	protected function find_array_open_close( $stackPtr ) {
+		/*
+		 * Determine the array opener & closer.
+		 */
+		if ( T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
+			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
+				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
+
+				if ( isset( $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
+					$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+				}
+			}
+		} else {
+			// Short array syntax.
+			$opener = $stackPtr;
+
+			if ( isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+			}
+		}
+
+		if ( isset( $opener, $closer ) ) {
+			return array(
+				'opener' => $opener,
+				'closer' => $closer,
+			);
+		}
+
+		return false;
 	}
 
 	/**
@@ -2113,7 +2226,7 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 			return false;
 		}
 
-		$nextToken = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 		if ( T_OPEN_CURLY_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
 			// Declaration for global namespace when using multiple namespaces in a file.
 			// I.e.: `namespace {}`.
@@ -2139,30 +2252,18 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	/**
 	 * Check if a content string contains a specific html open tag.
 	 *
-	 * {@internal For PHP 5.3+ this is straightforward, just check if $content
-	 * contains the tag.
-	 * PHP 5.2 however, creates a separate token for `<s` when used in inline HTML,
-	 * so in that case we need to check that the next token starts with the rest
-	 * of the tag.
-	 * I.e. PHP 5.2 tokenizes the inline HTML `text <span>text</span> text` as:
-	 * - T_INLINE_HTML 'text'
-	 * - T_INLINE_HTML '<s'
-	 * - T_INLINE_HTML 'pan>text</span> text'
-	 *
-	 * We don't need to worry about checking the rest of the content of the next
-	 * token as sniffs using this function will be sniffing for all text string
-	 * tokens, so the next token will be passed to the sniff in the next iteration
-	 * and checked then.
-	 * Similarly, no need to check content before the '<s' as the bug will break up the
-	 * inline html to several string tokens if it plays up.}}
-	 *
-	 * @link  https://bugs.php.net/bug.php?id=48446
-	 *
 	 * @since 0.11.0
+	 * @since 0.13.0 No longer allows for the PHP 5.2 bug for which the function was
+	 *               originally created.
+	 * @since 0.13.0 The $stackPtr parameter is now optional. Either that or the
+	 *               $content parameter has to be passed.
 	 *
 	 * @param string $tag_name The name of the HTML tag without brackets. So if
 	 *                         searching for '<span...', this would be 'span'.
-	 * @param int    $stackPtr The position of the current token in the token stack.
+	 * @param int    $stackPtr Optional. The position of the current token in the
+	 *                         token stack.
+	 *                         This parameter needs to be passed if no $content is
+	 *                         passed.
 	 * @param string $content  Optionally, the current content string, might be a
 	 *                         substring of the original string.
 	 *                         Defaults to `false` to distinguish between a passed
@@ -2170,31 +2271,192 @@ abstract class WordPress_Sniff implements PHP_CodeSniffer_Sniff {
 	 *
 	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
 	 */
-	public function has_html_open_tag( $tag_name, $stackPtr, $content = false ) {
-		if ( false === $content ) {
+	public function has_html_open_tag( $tag_name, $stackPtr = null, $content = false ) {
+		if ( false === $content && isset( $stackPtr ) ) {
 			$content = $this->tokens[ $stackPtr ]['content'];
 		}
 
-		// Check for the open tag in normal string tokens and T_INLINE_HTML for PHP 5.3+.
-		if ( 's' !== $tag_name[0] || PHP_VERSION_ID >= 50300 || T_INLINE_HTML !== $this->tokens[ $stackPtr ]['code'] ) {
-			if ( false !== strpos( $content, '<' . $tag_name ) ) {
-				return true;
-			}
-		} elseif ( '<s' === $content ) {
-			// Ok, we might be coming across the token parser issue. Check the next token.
-			$next_ptr      = ( $stackPtr + 1 );
-			$rest_tag_name = substr( $tag_name, 1 );
+		if ( ! empty( $content ) && false !== strpos( $content, '<' . $tag_name ) ) {
+			return true;
+		}
 
-			if ( ! empty( $rest_tag_name )
-				&& isset( $this->tokens[ $next_ptr ] )
-				&& T_INLINE_HTML === $this->tokens[ $next_ptr ]['code']
-				&& 0 === strpos( $this->tokens[ $next_ptr ]['content'], $rest_tag_name )
-			) {
+		return false;
+	}
+
+	/**
+	 * Check whether a T_CONST token is a class constant declaration.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int $stackPtr  The position in the stack of the T_CONST token to verify.
+	 *
+	 * @return bool
+	 */
+	public function is_class_constant( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ] ) || T_CONST !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		// Note: traits can not declare constants.
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_INTERFACE'  => true,
+		);
+
+		return $this->valid_direct_scope( $stackPtr, $valid_scopes );
+	}
+
+	/**
+	 * Check whether a T_VARIABLE token is a class property declaration.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int $stackPtr  The position in the stack of the T_VARIABLE token to verify.
+	 *
+	 * @return bool
+	 */
+	public function is_class_property( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ] ) || T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		// Note: interfaces can not declare properties.
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_TRAIT'      => true,
+		);
+
+		if ( $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+			// Make sure it's not a method parameter.
+			if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				return true;
 			}
 		}
 
 		return false;
 	}
+
+	/**
+	 * Check whether the direct wrapping scope of a token is within a limited set of
+	 * acceptable tokens.
+	 *
+	 * Used to check, for instance, if a T_CONST is a class constant.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int   $stackPtr     The position in the stack of the token to verify.
+	 * @param array $valid_scopes Array of token types.
+	 *                            Keys should be the token types in string format
+	 *                            to allow for newer token types.
+	 *                            Value is irrelevant.
+	 *
+	 * @return bool
+	 */
+	protected function valid_direct_scope( $stackPtr, array $valid_scopes ) {
+		if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+			return false;
+		}
+
+		/*
+		 * Check only the direct wrapping scope of the token.
+		 */
+		$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
+		$ptr        = array_pop( $conditions );
+
+		if ( ! isset( $this->tokens[ $ptr ] ) ) {
+			return false;
+		}
+
+		return isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] );
+	}
+
+	/**
+	 * Checks whether this is a call to a $wpdb method that we want to sniff.
+	 *
+	 * If available in the child class, the $methodPtr, $i and $end properties are
+	 * automatically set to correspond to the start and end of the method call.
+	 * The $i property is also set if this is not a method call but rather the
+	 * use of a $wpdb property.
+	 *
+	 * @since 0.8.0
+	 * @since 0.9.0  The return value is now always boolean. The $end and $i member
+	 *               vars are automatically updated.
+	 * @since 0.14.0 Moved this method from the `PreparedSQL` sniff to the base WP sniff.
+	 *
+	 * {@internal This method should probably be refactored.}}
+	 *
+	 * @param int   $stackPtr        The index of the $wpdb variable.
+	 * @param array $target_methods  Array of methods. Key(s) should be method name.
+	 *
+	 * @return bool Whether this is a $wpdb method call.
+	 */
+	protected function is_wpdb_method_call( $stackPtr, $target_methods ) {
+
+		// Check for wpdb.
+		if ( ( T_VARIABLE === $this->tokens[ $stackPtr ]['code'] && '$wpdb' !== $this->tokens[ $stackPtr ]['content'] )
+			|| ( T_STRING === $this->tokens[ $stackPtr ]['code'] && 'wpdb' !== $this->tokens[ $stackPtr ]['content'] )
+		) {
+			return false;
+		}
+
+		// Check that this is a method call.
+		$is_object_call = $this->phpcsFile->findNext(
+			array( T_OBJECT_OPERATOR, T_DOUBLE_COLON ),
+			( $stackPtr + 1 ),
+			null,
+			false,
+			null,
+			true
+		);
+		if ( false === $is_object_call ) {
+			return false;
+		}
+
+		$methodPtr = $this->phpcsFile->findNext( T_WHITESPACE, ( $is_object_call + 1 ), null, true, null, true );
+		if ( false === $methodPtr ) {
+			return false;
+		}
+
+		if ( T_STRING === $this->tokens[ $methodPtr ]['code'] && property_exists( $this, 'methodPtr' ) ) {
+			$this->methodPtr = $methodPtr;
+		}
+
+		// Find the opening parenthesis.
+		$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, ( $methodPtr + 1 ), null, true, null, true );
+
+		if ( false === $opening_paren ) {
+			return false;
+		}
+
+		if ( property_exists( $this, 'i' ) ) {
+			$this->i = $opening_paren;
+		}
+
+		if ( T_OPEN_PARENTHESIS !== $this->tokens[ $opening_paren ]['code']
+			|| ! isset( $this->tokens[ $opening_paren ]['parenthesis_closer'] )
+		) {
+			return false;
+		}
+
+		// Check that this is one of the methods that we are interested in.
+		if ( ! isset( $target_methods[ $this->tokens[ $methodPtr ]['content'] ] ) ) {
+			return false;
+		}
+
+		// Find the end of the first parameter.
+		$end = $this->phpcsFile->findEndOfStatement( $opening_paren + 1 );
+
+		if ( T_COMMA !== $this->tokens[ $end ]['code'] ) {
+			++$end;
+		}
+
+		if ( property_exists( $this, 'end' ) ) {
+			$this->end = $end;
+		}
+
+		return true;
+	} // End is_wpdb_method_call().
 
 }

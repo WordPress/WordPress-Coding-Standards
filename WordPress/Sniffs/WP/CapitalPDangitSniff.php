@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Capital P Dangit!
  *
@@ -15,8 +20,9 @@
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
+class CapitalPDangitSniff extends Sniff {
 
 	/**
 	 * Regex to match a large number or spelling variations of WordPress in text strings.
@@ -36,7 +42,7 @@ class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
 	 *
 	 * @var string
 	 */
-	const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif))#i';
+	const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif|pot))#i';
 
 	/**
 	 * Regex to match a large number or spelling variations of WordPress in class names.
@@ -186,9 +192,9 @@ class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
 
 		// Ignore any text strings which are array keys `$var['key']` as this is a false positive in 80% of all cases.
 		if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			$prevToken = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+			$prevToken = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
 			if ( false !== $prevToken && T_OPEN_SQUARE_BRACKET === $this->tokens[ $prevToken ]['code'] ) {
-				$nextToken = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+				$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 				if ( false !== $nextToken && T_CLOSE_SQUARE_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
 					return;
 				}
@@ -253,7 +259,7 @@ class WordPress_Sniffs_WP_CapitalPDangitSniff extends WordPress_Sniff {
 
 				$this->phpcsFile->fixer->replaceToken( $stackPtr, $replacement );
 			}
-		} // End if().
+		}
 
 	} // End process_token().
 

@@ -7,6 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\WP;
+
+use WordPress\Sniff;
+use WordPress\PHPCSHelper;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Makes sure WP internationalization functions are used properly.
  *
@@ -20,8 +26,9 @@
  *                 - Now has the ability to handle text-domain set via the command-line
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
+class I18nSniff extends Sniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
@@ -140,7 +147,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		$token = $this->tokens[ $stack_ptr ];
 
 		// Allow overruling the text_domain set in a ruleset via the command line.
-		$cl_text_domain = trim( PHP_CodeSniffer::getConfigData( 'text_domain' ) );
+		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
 			$this->text_domain = $cl_text_domain;
 		}
@@ -162,7 +169,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		$func_open_paren_token = $this->phpcsFile->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
-			 return;
+			return;
 		}
 
 		$arguments_tokens = array();
@@ -173,7 +180,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 		for ( $i = ( $func_open_paren_token + 1 ); $i < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $i++ ) {
 			$this_token                = $this->tokens[ $i ];
 			$this_token['token_index'] = $i;
-			if ( isset( PHP_CodeSniffer_Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
+			if ( isset( Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
 				continue;
 			}
 			if ( T_COMMA === $this_token['code'] ) {
@@ -183,7 +190,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			}
 
 			// Merge consecutive single or double quoted strings (when they span multiple lines).
-			if ( isset( PHP_CodeSniffer_Tokens::$textStringTokens[ $this_token['code'] ] ) ) {
+			if ( isset( Tokens::$textStringTokens[ $this_token['code'] ] ) ) {
 				for ( $j = ( $i + 1 ); $j < $this->tokens[ $func_open_paren_token ]['parenthesis_closer']; $j++ ) {
 					if ( $this_token['code'] === $this->tokens[ $j ]['code'] ) {
 						$this_token['content'] .= $this->tokens[ $j ]['content'];
@@ -203,7 +210,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				}
 				$i = $this_token['parenthesis_closer'];
 			}
-		} // End for().
+		}
 
 		if ( ! empty( $argument_tokens ) ) {
 			$arguments_tokens[] = $argument_tokens;
@@ -295,7 +302,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} // End if().
+		}
 
 		if ( ! empty( $arguments_tokens ) ) {
 			$this->phpcsFile->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
@@ -338,7 +345,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
-			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
+			if ( 'domain' !== $arg_name || ( ! empty( $this->text_domain ) && ! in_array( 'default', $this->text_domain, true ) ) ) {
 				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
 			return false;
@@ -477,11 +484,9 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 			if ( true === $fix ) {
 				$fixed_str = preg_replace( $replace_regexes, $replacements, $content, 1 );
 
-				$this->phpcsFile->fixer->beginChangeset();
 				$this->phpcsFile->fixer->replaceToken( $stack_ptr, $fixed_str );
-				$this->phpcsFile->fixer->endChangeset();
 			}
-		} // End if().
+		}
 
 		/*
 		 * NoEmptyStrings.
@@ -523,7 +528,7 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					continue;
 				}
 
-				$previous_comment = $this->phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$commentTokens, ( $stack_ptr - 1 ) );
+				$previous_comment = $this->phpcsFile->findPrevious( Tokens::$commentTokens, ( $stack_ptr - 1 ) );
 
 				if ( false !== $previous_comment ) {
 					/*
@@ -580,8 +585,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 								return;
 							}
 						}
-					} // End if().
-				} // End if().
+					}
+				}
 
 				// Found placeholders but no translators comment.
 				$this->phpcsFile->addWarning(
@@ -590,8 +595,8 @@ class WordPress_Sniffs_WP_I18nSniff extends WordPress_Sniff {
 					'MissingTranslatorsComment'
 				);
 				return;
-			} // End foreach().
-		} // End foreach().
+			}
+		}
 
 	} // End check_for_translator_comment().
 

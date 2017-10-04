@@ -7,24 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WhiteSpace;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the ControlStructureSpacing sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   2013-06-11
+ * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
-
-	/**
-	 * Skip this test on PHP 5.2.
-	 *
-	 * @since 0.9.0
-	 *
-	 * @return bool Whether to skip this test.
-	 */
-	protected function shouldSkipTest() {
-		return ( PHP_VERSION_ID < 50300 );
-	}
+class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -67,6 +62,9 @@ class WordPress_Tests_WhiteSpace_ControlStructureSpacingUnitTest extends Abstrac
 			192 => 1,
 			196 => 2,
 			200 => 2,
+			247 => 1,
+			257 => 1,
+			267 => 1,
 		);
 
 		/*

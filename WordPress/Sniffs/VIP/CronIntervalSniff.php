@@ -7,6 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
+
 /**
  * Flag cron schedules less than 15 minutes.
  *
@@ -17,8 +22,9 @@
  * @since   0.3.0
  * @since   0.11.0 - Extends the WordPress_Sniff class.
  *                 - Now deals correctly with WP time constants.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
+class CronIntervalSniff extends Sniff {
 
 	/**
 	 * Known WP Time constant names and their value.
@@ -73,7 +79,7 @@ class WordPress_Sniffs_VIP_CronIntervalSniff extends WordPress_Sniff {
 		}
 
 		// Detect callback function name.
-		$callbackArrayPtr = $this->phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
+		$callbackArrayPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, $callback['start'], ( $callback['end'] + 1 ), true );
 
 		// If callback is array, get second element.
 		if ( false !== $callbackArrayPtr

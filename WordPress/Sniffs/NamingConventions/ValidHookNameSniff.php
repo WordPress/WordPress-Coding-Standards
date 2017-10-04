@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\NamingConventions;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
  *
@@ -21,8 +25,9 @@
  *
  * @since   0.10.0
  * @since   0.11.0 Extends the WordPress_AbstractFunctionParameterSniff class.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_AbstractFunctionParameterSniff {
+class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Additional word separators.
@@ -107,8 +112,8 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Ab
 				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
 
 				/*
-				   Here be dragons - a double quoted string can contain extrapolated variables
-				   which don't have to comply with these rules.
+				 * Here be dragons - a double quoted string can contain extrapolated variables
+				 * which don't have to comply with these rules.
 				 */
 				if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
 					$transform       = $this->transform_complex_string( $string, $regex );
@@ -137,7 +142,7 @@ class WordPress_Sniffs_NamingConventions_ValidHookNameSniff extends WordPress_Ab
 					$underscores++;
 				}
 			}
-		} // End for().
+		}
 
 		$data = array(
 			implode( '', $expected ),

@@ -7,20 +7,54 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\WP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\PHPCSHelper;
+
 /**
  * Unit test class for the I18n sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.10.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
+class I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Fill in the $text_domain property to test domain check functionality.
+	 * Get a list of CLI values to set before the file is tested.
+	 *
+	 * Used by PHPCS 2.x.
+	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
+	 * @return array
 	 */
-	protected function setUp() {
-		parent::setUp();
-		PHP_CodeSniffer::setConfigData( 'text_domain', 'my-slug,default', true );
+	public function getCliValues( $testFile ) {
+		// Test overruling the text domain from the command line for one test file.
+		if ( 'I18nUnitTest.3.inc' === $testFile ) {
+			PHPCSHelper::set_config_data( 'text_domain', 'something', true );
+		}
+
+		return array();
+	}
+
+	/**
+	 * Set CLI values before the file is tested.
+	 *
+	 * Used by PHPCS 3.x.
+	 *
+	 * @param string                  $testFile The name of the file being tested.
+	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.
+	 *
+	 * @return void
+	 */
+	public function setCliValues( $testFile, $config ) {
+		// Test overruling the text domain from the command line for one test file.
+		if ( 'I18nUnitTest.3.inc' === $testFile ) {
+			$config->setConfigData( 'text_domain', 'something', true );
+		}
 	}
 
 	/**
@@ -29,28 +63,31 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList( $testFile = 'I18nUnitTest.inc' ) {
+	public function getErrorList( $testFile = '' ) {
 
 		switch ( $testFile ) {
-			case 'I18nUnitTest.inc':
+			case 'I18nUnitTest.1.inc':
 				return array(
-					3 => 1,
-					6 => 1,
-					9 => 1,
+					10 => 1,
 					11 => 1,
-					13 => 1,
-					15 => 1,
-					17 => 1,
+					12 => 1,
+					14 => 1,
+					16 => 1,
 					19 => 1,
 					21 => 1,
 					23 => 1,
-					25 => 1,
+					24 => 1,
+					26 => 1,
 					27 => 1,
-					33 => 1,
-					35 => 1,
+					28 => 1,
+					30 => 1,
+					31 => 1,
+					32 => 1,
 					37 => 1,
+					38 => 1,
 					39 => 1,
 					41 => 1,
+					42 => 1,
 					43 => 1,
 					45 => 1,
 					47 => 1,
@@ -91,15 +128,30 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 					125 => 1,
 					128 => 1,
 					129 => 1,
-					132 => ( PHP_VERSION_ID >= 50300 ) ? 1 : 2, // PHPCS on PHP 5.2 does not recognize T_NOWDOC.
+					132 => 1,
 					138 => 1,
 					143 => 1,
 					148 => 1,
+					155 => 1,
 				);
 
-			case 'I18nUnitTest.1.inc':
+			case 'I18nUnitTest.2.inc':
 				return array(
 					104 => 2,
+				);
+
+			case 'I18nUnitTest.3.inc':
+				return array(
+					10 => 1,
+					11 => 1,
+					13 => 1,
+					14 => 1,
+					15 => 1,
+					16 => 1,
+					17 => 1,
+					18 => 1,
+					20 => 1,
+					21 => 1,
 				);
 
 			default:
@@ -115,9 +167,9 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = 'I18nUnitTest.inc' ) {
+	public function getWarningList( $testFile = '' ) {
 		switch ( $testFile ) {
-			case 'I18nUnitTest.inc':
+			case 'I18nUnitTest.1.inc':
 				return array(
 					69 => 1,
 					70 => 1,
@@ -127,9 +179,9 @@ class WordPress_Tests_WP_I18nUnitTest extends AbstractSniffUnitTest {
 					103 => 1,
 				);
 
-			case 'I18nUnitTest.1.inc':
+			case 'I18nUnitTest.2.inc':
 				return array(
-					8 => 1,
+					9 => 1,
 					43 => 1,
 					49 => 1,
 					52 => 1,

@@ -7,13 +7,19 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\VIP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
 /**
  * Unit test class for the PostsPerPage sniff.
  *
  * @package WPCS\WordPressCodingStandards
+ *
  * @since   0.3.0
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Tests_VIP_PostsPerPageUnitTest extends AbstractSniffUnitTest {
+class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -28,6 +34,10 @@ class WordPress_Tests_VIP_PostsPerPageUnitTest extends AbstractSniffUnitTest {
 			11  => 2,
 			13 => 1,
 			16 => 1,
+			22 => 1,
+			23 => 1,
+			24 => 1,
+			29 => 1,
 		);
 
 	}

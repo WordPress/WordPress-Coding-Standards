@@ -7,6 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Sniffs\VIP;
+
+use WordPress\AbstractFunctionParameterSniff;
+
 /**
  * Warn about __FILE__ for page registration.
  *
@@ -16,8 +20,9 @@
  *
  * @since   0.3.0
  * @since   0.11.0 Refactored to extend the new WordPress_AbstractFunctionParameterSniff.
+ * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class WordPress_Sniffs_VIP_PluginMenuSlugSniff extends WordPress_AbstractFunctionParameterSniff {
+class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
