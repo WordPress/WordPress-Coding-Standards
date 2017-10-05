@@ -45,3 +45,12 @@
 /*
 
 */
+
+// Testing that incorrectly aligned docblocks and multi-line inline comments do not trigger errors.
+	/**
+	* Provision some options
+	*/
+
+	/*
+	* Provision some options
+	*/
