@@ -123,14 +123,15 @@ class PrecisionAlignmentSniff extends Sniff {
 
 				case 'T_DOC_COMMENT_WHITESPACE':
 					$length = $this->tokens[ $i ]['length'];
-					if ( T_DOC_COMMENT_STAR === $this->tokens[ ( $i + 1 ) ]['code']
-						|| T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ ( $i + 1 ) ]['code']
+					$spaces = ( $length % $this->tab_width );
+
+					if ( ( T_DOC_COMMENT_STAR === $this->tokens[ ( $i + 1 ) ]['code']
+						|| T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ ( $i + 1 ) ]['code'] )
+						&& 0 !== $spaces
 					) {
 						// One alignment space expected before the *.
-						$length--;
+						--$spaces;
 					}
-
-					$spaces = ( $length % $this->tab_width );
 					break;
 
 				case 'T_COMMENT':
@@ -141,11 +142,11 @@ class PrecisionAlignmentSniff extends Sniff {
 					$comment    = ltrim( $this->tokens[ $i ]['content'] );
 					$whitespace = str_replace( $comment, '', $this->tokens[ $i ]['content'] );
 					$length     = strlen( $whitespace );
-					if ( isset( $comment[0] ) && '*' === $comment[0] ) {
-						$length--;
-					}
+					$spaces     = ( $length % $this->tab_width );
 
-					$spaces = ( $length % $this->tab_width );
+					if ( isset( $comment[0] ) && '*' === $comment[0] && 0 !== $spaces ) {
+						--$spaces;
+					}
 					break;
 
 				case 'T_INLINE_HTML':
