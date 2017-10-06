@@ -10,10 +10,9 @@
 	<rule ref="WordPress-VIP"/>
 
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
-		<!-- From "Extra": The create_function group is excluded as WP core still supports PHP 5.2 and 5.2 does not support anonymous functions. -->
 		<!-- From "VIP": The obfuscation group is excluded as there are plenty of legitimate uses for the base64 functions. -->
 		<properties>
-			<property name="exclude" value="create_function,obfuscation"/>
+			<property name="exclude" value="obfuscation"/>
 		</properties>
 	</rule>
 </ruleset>
