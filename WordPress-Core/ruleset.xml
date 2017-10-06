@@ -348,6 +348,10 @@
 		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
+	<!-- Rule: create_function() function, which internally performs an eval(),
+	     is deprecated in PHP 7.2. Both of these must not be used. -->
+	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
+
 
 	<!--
 	#############################################################################

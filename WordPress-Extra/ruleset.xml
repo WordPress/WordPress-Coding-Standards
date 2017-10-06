@@ -107,12 +107,7 @@
 	<rule ref="WordPress.CSRF.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
-	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
-		<!-- WP core still supports PHP 5.2+  -->
-		<properties>
-			<property name="exclude" value="create_function"/>
-		</properties>
-	</rule>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedClasses"/>
 	<rule ref="WordPress.WP.DeprecatedParameters"/>
