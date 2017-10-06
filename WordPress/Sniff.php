@@ -647,6 +647,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'is_IIS'                           => true,
 		'is_iis7'                          => true,
 		'is_macIE'                         => true,
+		'is_NS4'                           => true,
 		'is_opera'                         => true,
 		'is_safari'                        => true,
 		'is_winIE'                         => true,

@@ -59,13 +59,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @var array
 	 */
 	protected $wordpress_mixed_case_vars = array(
-		'EZSQL_ERROR' => true,
-		'is_IE'       => true,
-		'is_IIS'      => true,
-		'is_macIE'    => true,
-		'is_NS4'      => true,
-		'is_winIE'    => true,
-		'PHP_SELF'    => true,
+		'EZSQL_ERROR'       => true,
+		'GETID3_ERRORARRAY' => true,
+		'is_IE'             => true,
+		'is_IIS'            => true,
+		'is_macIE'          => true,
+		'is_NS4'            => true,
+		'is_winIE'          => true,
+		'PHP_SELF'          => true,
+		'post_ID'           => true,
+		'user_ID'           => true,
 	);
 
 	/**
