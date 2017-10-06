@@ -179,6 +179,19 @@ class ArrayIndentationSniff extends Sniff {
 				true
 			);
 
+			// Deal with trailing comments.
+			if ( false !== $first_content
+				&& T_COMMENT === $this->tokens[ $first_content ]['code']
+				&& $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
+			) {
+				$first_content = $this->phpcsFile->findNext(
+					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+					( $first_content + 1 ),
+					$end_of_this_item,
+					true
+				);
+			}
+
 			if ( false === $first_content ) {
 				$end_of_previous_item = $end_of_this_item;
 				continue;
