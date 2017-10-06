@@ -162,6 +162,8 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 			347 => 1,
 			356 => 1,
 			369 => 1,
+			398 => 1,
+			399 => 1,
 		);
 	}
 
