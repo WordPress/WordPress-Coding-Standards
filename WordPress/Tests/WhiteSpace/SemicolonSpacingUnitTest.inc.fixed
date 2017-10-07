@@ -1,0 +1,12 @@
+<?php
+
+/*
+ * Test that the sniff does *not* throw incorrect errors for whitespace before semi-colons in
+ * "empty" parts of a `for` control structure.
+ */
+for ($i = 1; ; $i++) {}
+for ( ; $ptr >= 0; $ptr-- ) {}
+for ( ; ; ) {}
+
+// But it should when the whitespace is between a condition and a semi-colon.
+for ( $i = 1; ; $i++ ) {}

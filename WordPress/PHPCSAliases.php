@@ -45,6 +45,9 @@ if ( ! defined( 'WPCS_PHPCS_ALIASES_SET' ) ) {
 	if ( ! class_exists( '\Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff' ) ) {
 		class_alias( 'PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\OperatorSpacingSniff', '\Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff' );
 	}
+	if ( ! class_exists( '\Squiz_Sniffs_WhiteSpace_SemicolonSpacingSniff' ) ) {
+		class_alias( 'PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\SemicolonSpacingSniff', '\Squiz_Sniffs_WhiteSpace_SemicolonSpacingSniff' );
+	}
 
 	define( 'WPCS_PHPCS_ALIASES_SET', true );
 
