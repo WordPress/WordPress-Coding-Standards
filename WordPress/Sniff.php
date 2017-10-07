@@ -1038,8 +1038,11 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Allow for a comma delimited list.
 		if ( is_string( $custom ) ) {
-			$custom = array_filter( array_map( 'trim', explode( ',', $custom ) ) );
+			$custom = explode( ',', $custom );
 		}
+
+		// Always trim whitespace from the values.
+		$custom = array_filter( array_map( 'trim', $custom ) );
 
 		if ( true === $flip ) {
 			$custom = array_fill_keys( $custom, false );
