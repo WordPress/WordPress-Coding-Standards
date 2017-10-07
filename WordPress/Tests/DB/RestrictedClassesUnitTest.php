@@ -34,8 +34,8 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
 			'test' => array(
-				'type'      => 'error',
-				'message'   => 'Detected usage of %s.',
+				'type'    => 'error',
+				'message' => 'Detected usage of %s.',
 				'classes' => array(
 					'\My\DBlayer',
 					'AdoDb\Test*',

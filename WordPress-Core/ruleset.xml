@@ -68,6 +68,13 @@
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
 	<rule ref="WordPress.WhiteSpace.DisallowInlineTabs"/>
 
+	<!-- Implied through the examples: align the double arrows. -->
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="maxColumn" value="60"/>
+		</properties>
+	</rule>
+
 	<!--
 	#############################################################################
 	Handbook: PHP - Brace Style.

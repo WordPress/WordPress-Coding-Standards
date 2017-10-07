@@ -279,7 +279,7 @@ class I18nSniff extends Sniff {
 			);
 			$argument_assertions[] = array(
 				'arg_name' => 'plural',
-				'tokens' => array_shift( $arguments_tokens ),
+				'tokens'   => array_shift( $arguments_tokens ),
 			);
 			$argument_assertions[] = array(
 				'arg_name' => 'domain',

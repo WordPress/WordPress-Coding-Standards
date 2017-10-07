@@ -28,7 +28,7 @@ class TimezoneChangeUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3  => 1,
+			3 => 1,
 		);
 
 	}
