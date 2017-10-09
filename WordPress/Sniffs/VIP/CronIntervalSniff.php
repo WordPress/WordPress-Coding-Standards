@@ -23,11 +23,25 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.11.0 - Extends the WordPress_Sniff class.
  *                 - Now deals correctly with WP time constants.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 The minimum cron interval tested against is now configurable.
  */
 class CronIntervalSniff extends Sniff {
 
 	/**
+	 * Minimum allowed cron interval in seconds.
+	 *
+	 * Defaults to 900 (= 15 minutes), which is the requirement for the VIP platform.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var int
+	 */
+	public $min_interval = 900;
+
+	/**
 	 * Known WP Time constant names and their value.
+	 *
+	 * @since 0.11.0
 	 *
 	 * @var array
 	 */
@@ -168,8 +182,19 @@ class CronIntervalSniff extends Sniff {
 			}
 		}
 
-		if ( isset( $interval ) && $interval < 900 ) {
-			$this->phpcsFile->addError( 'Scheduling crons at %s sec ( less than 15 min ) is prohibited.', $stackPtr, 'CronSchedulesInterval', array( $interval ) );
+		$this->min_interval = (int) $this->min_interval;
+
+		if ( isset( $interval ) && $interval < $this->min_interval ) {
+			$minutes = round( ( $this->min_interval / 60 ), 1 );
+			$this->phpcsFile->addError(
+				'Scheduling crons at %s sec ( less than %s minutes ) is prohibited.',
+				$stackPtr,
+				'CronSchedulesInterval',
+				array(
+					$interval,
+					$minutes,
+				)
+			);
 			return;
 		}
 
