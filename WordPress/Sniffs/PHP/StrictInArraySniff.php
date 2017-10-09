@@ -81,10 +81,20 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 
 		// We're only interested in the third parameter.
 		if ( false === isset( $parameters[3] ) || 'true' !== strtolower( $parameters[3]['raw'] ) ) {
+			$errorcode = 'MissingTrueStrict';
+
+			/*
+			 * Use a different error code when `false` is found to allow for excluding
+			 * the warning as this will be a conscious choice made by the dev.
+			 */
+			if ( isset( $parameters[3] ) && 'false' === strtolower( $parameters[3]['raw'] ) ) {
+				$errorcode = 'FoundNonStrictFalse';
+			}
+
 			$this->phpcsFile->addWarning(
 				'Not using strict comparison for %s; supply true for third argument.',
 				( isset( $parameters[3]['start'] ) ? $parameters[3]['start'] : $parameters[1]['start'] ),
-				'MissingTrueStrict',
+				$errorcode,
 				array( $matched_content )
 			);
 			return;
