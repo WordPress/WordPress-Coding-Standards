@@ -61,7 +61,7 @@ class CronIntervalSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-		$token  = $this->tokens[ $stackPtr ];
+		$token = $this->tokens[ $stackPtr ];
 
 		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
 			return;

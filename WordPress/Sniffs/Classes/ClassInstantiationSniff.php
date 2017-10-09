@@ -59,13 +59,14 @@ class ClassInstantiationSniff extends Sniff {
 		 *
 		 * Currently does not account for classnames passed as a variable variable.
 		 */
-		$this->classname_tokens                               = Tokens::$emptyTokens;
-		$this->classname_tokens[ T_NS_SEPARATOR ]             = T_NS_SEPARATOR;
-		$this->classname_tokens[ T_STRING ]                   = T_STRING;
-		$this->classname_tokens[ T_SELF ]                     = T_SELF;
-		$this->classname_tokens[ T_STATIC ]                   = T_STATIC;
-		$this->classname_tokens[ T_PARENT ]                   = T_PARENT;
-		$this->classname_tokens[ T_ANON_CLASS ]               = T_ANON_CLASS;
+		$this->classname_tokens                   = Tokens::$emptyTokens;
+		$this->classname_tokens[ T_NS_SEPARATOR ] = T_NS_SEPARATOR;
+		$this->classname_tokens[ T_STRING ]       = T_STRING;
+		$this->classname_tokens[ T_SELF ]         = T_SELF;
+		$this->classname_tokens[ T_STATIC ]       = T_STATIC;
+		$this->classname_tokens[ T_PARENT ]       = T_PARENT;
+		$this->classname_tokens[ T_ANON_CLASS ]   = T_ANON_CLASS;
+
 		// Classname in a variable.
 		$this->classname_tokens[ T_VARIABLE ]                 = T_VARIABLE;
 		$this->classname_tokens[ T_DOUBLE_COLON ]             = T_DOUBLE_COLON;

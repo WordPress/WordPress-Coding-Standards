@@ -240,6 +240,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheGetFunctions,
 				$this->cacheGetFunctions
 			);
+
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
@@ -248,6 +249,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheSetFunctions,
 				$this->cacheSetFunctions
 			);
+
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
@@ -256,6 +258,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);
+
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}
 	}

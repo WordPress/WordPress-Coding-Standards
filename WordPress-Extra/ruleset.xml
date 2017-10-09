@@ -55,10 +55,6 @@
 		<type>warning</type>
 	</rule>
 
-	<!-- This sniff is not refined enough for general use -->
-	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
-	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
-
 	<!-- Hook callbacks may not use all params -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->

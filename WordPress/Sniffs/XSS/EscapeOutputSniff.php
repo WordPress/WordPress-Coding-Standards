@@ -403,7 +403,7 @@ class EscapeOutputSniff extends Sniff {
 						// If we're able to resolve the function name, do so.
 						if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
 							$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
-							$ptr = $mapped_function;
+							$ptr          = $mapped_function;
 						}
 					}
 
@@ -482,6 +482,7 @@ class EscapeOutputSniff extends Sniff {
 				$customEscapeFunctions,
 				$this->escapingFunctions
 			);
+
 			$this->addedCustomFunctions['escape']   = $this->customEscapingFunctions;
 			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
 		}
@@ -491,6 +492,7 @@ class EscapeOutputSniff extends Sniff {
 				$this->customAutoEscapedFunctions,
 				$this->autoEscapedFunctions
 			);
+
 			$this->addedCustomFunctions['autoescape'] = $this->customAutoEscapedFunctions;
 		}
 
@@ -500,6 +502,7 @@ class EscapeOutputSniff extends Sniff {
 				$this->customPrintingFunctions,
 				$this->printingFunctions
 			);
+
 			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
 		}
 	}

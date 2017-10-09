@@ -570,7 +570,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$is_error     = true;
+		$is_error    = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
@@ -600,8 +600,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
 				// If the first part of the parameter is a double quoted string, try again with only
 				// the part before the first variable (if any).
-				$exploded                = explode( '$', $first_non_empty_content );
-				$first                   = rtrim( $exploded[0], '{' );
+				$exploded = explode( '$', $first_non_empty_content );
+				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
 					if ( $this->is_prefixed( $first ) === true ) {
 						return;

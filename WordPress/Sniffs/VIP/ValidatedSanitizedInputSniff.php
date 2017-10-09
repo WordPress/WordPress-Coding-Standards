@@ -167,6 +167,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 				$this->customSanitizingFunctions,
 				$this->sanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
 		}
 
@@ -175,6 +176,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 				$this->customUnslashingSanitizingFunctions,
 				$this->unslashingSanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}

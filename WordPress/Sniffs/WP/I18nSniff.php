@@ -468,9 +468,9 @@ class I18nSniff extends Sniff {
 				// Prepare the strings for use a regex.
 				$replace_regexes[ $i ] = '`\Q' . $unordered_matches[ $i ] . '\E`';
 				// Note: the initial \\ is a literal \, the four \ in the replacement translate to also to a literal \.
-				$replacements[ $i ]    = str_replace( '\\', '\\\\', $suggestions[ $i ] );
+				$replacements[ $i ] = str_replace( '\\', '\\\\', $suggestions[ $i ] );
 				// Note: the $ needs escaping to prevent numeric sequences after the $ being interpreted as match replacements.
-				$replacements[ $i ]    = str_replace( '$', '\\$', $replacements[ $i ] );
+				$replacements[ $i ] = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
 			$fix = $this->addFixableMessage(

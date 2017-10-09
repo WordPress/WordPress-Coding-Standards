@@ -97,7 +97,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$regex  = $this->prepare_regex();
+		$regex = $this->prepare_regex();
 
 		$case_errors = 0;
 		$underscores = 0;
