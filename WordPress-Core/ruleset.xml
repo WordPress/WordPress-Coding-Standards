@@ -404,6 +404,12 @@
 	<!-- All files should end with a new line. -->
 	<rule ref="Generic.Files.EndFileNewline"/>
 
+	<!-- No whitespace should come before semicolons. -->
+	<!-- Extends upstream sniff. Should defer to upstream version once minimum PHPCS requirement
+		 has gone up to version containing bugfix.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1691 -->
+	<rule ref="WordPress.WhiteSpace.SemicolonSpacing"/>
+
 	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
