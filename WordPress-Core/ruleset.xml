@@ -213,6 +213,8 @@
 	<!-- Related to issue #970 / https://github.com/squizlabs/PHP_CodeSniffer/issues/1512 -->
 	<rule ref="WordPress.Functions.FunctionCallSignatureNoParams"/>
 
+	<rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+
 	<!-- Rule: Perform logical comparisons, like so: if ( ! $foo ) { -->
 
 	<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
