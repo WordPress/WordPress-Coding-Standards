@@ -574,7 +574,7 @@ class I18nSniff extends Sniff {
 						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
 							// If it's docblock comment (wrong style) make sure that it's a translators comment.
 							$db_start      = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
-							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ),  $previous_comment );
+							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ), $previous_comment );
 
 							if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
 								$this->phpcsFile->addWarning(

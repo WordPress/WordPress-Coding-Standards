@@ -1269,12 +1269,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		$next_non_empty = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens
-			, ( $stackPtr + 1 )
-			, null
-			, true
-			, null
-			, true
+			Tokens::$emptyTokens,
+			( $stackPtr + 1 ),
+			null,
+			true,
+			null,
+			true
 		);
 
 		// No token found.
@@ -1463,10 +1463,10 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Get the last non-empty token.
 		$prev = $this->phpcsFile->findPrevious(
-			Tokens::$emptyTokens
-			, ( $stackPtr - 1 )
-			, null
-			, true
+			Tokens::$emptyTokens,
+			( $stackPtr - 1 ),
+			null,
+			true
 		);
 
 		// Check if it is a safe cast.
@@ -1619,8 +1619,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		$key = $this->phpcsFile->getTokensAsString(
-			( $open_bracket + 1 )
-			, ( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
+			( $open_bracket + 1 ),
+			( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
 		);
 
 		return trim( $key );
