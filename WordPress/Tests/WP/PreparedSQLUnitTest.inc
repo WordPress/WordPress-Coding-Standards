@@ -84,5 +84,11 @@ ND
 
 wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
 
+$wpdb->query( // Some arbitrary comment.
+	"SELECT *
+		FROM $wpdb->posts
+		WHERE post_title LIKE '" . $escaped_var . "';"
+); // Bad x 1.
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts
