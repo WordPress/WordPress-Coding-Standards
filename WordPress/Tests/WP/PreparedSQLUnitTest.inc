@@ -90,5 +90,17 @@ $wpdb->query( // Some arbitrary comment.
 		WHERE post_title LIKE '" . $escaped_var . "';"
 ); // Bad x 1.
 
+$wpdb->query(
+	"SELECT *
+		FROM $wpdb->posts
+		WHERE post_title LIKE '" . $escaped_var . "';"
+); // WPCS: unprepared SQL OK.
+
+$wpdb->query( // WPCS: unprepared SQL OK.
+	"SELECT *
+		FROM $wpdb->posts
+		WHERE post_title LIKE '" . $escaped_var . "';"
+);
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts
