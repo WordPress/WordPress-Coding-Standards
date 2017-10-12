@@ -217,7 +217,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		 */
 		$next_arrow = $this->phpcsFile->findNext(
 			T_DOUBLE_ARROW,
-			($opener + 1),
+			( $opener + 1 ),
 			$closer
 		);
 
@@ -241,7 +241,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			// Find the position of the next double arrow.
 			$next_arrow = $this->phpcsFile->findNext(
 				T_DOUBLE_ARROW,
-				($next_arrow + 1),
+				( $next_arrow + 1 ),
 				$closer
 			);
 		}
