@@ -77,6 +77,12 @@ script:
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then phpunit --filter WordPress $PHPCS_DIR/tests/AllTests.php; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar --filter WordPress $(pwd)/Test/AllTests.php; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar  --filter WordPress $PHPCS_DIR/tests/AllTests.php; fi
+    # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
+    # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
+    # For the first run, the exit code will be 1 (= all fixable errors fixed).
+    # `travis_retry` should then kick in to run the fixer again which should now return 0 (= no fixable errors found).
+    # All error codes for the PHPCBF: https://github.com/squizlabs/PHP_CodeSniffer/issues/1270#issuecomment-272768413
+    - if [[ "$SNIFF" == "1" ]]; then travis_retry $PHPCS_DIR/bin/phpcbf -p ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
