@@ -237,3 +237,14 @@ function do_footer_nav() {
 		)
 	);
 }
+
+?><?php echo $html_fragment // XSS pass. ?><?php
+
+echo // WPCS: XSS ok.
+	esc_html( $something ),
+	$something_else,
+	esc_html( $something_more );
+
+echo esc_html( $something ),
+	$something_else,
+	esc_html( $something_more ); // WPCS: XSS ok.

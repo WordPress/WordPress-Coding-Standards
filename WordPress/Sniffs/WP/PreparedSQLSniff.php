@@ -10,6 +10,7 @@
 namespace WordPress\Sniffs\WP;
 
 use WordPress\Sniff;
+use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
  * Sniff for prepared SQL.
@@ -53,7 +54,6 @@ class PreparedSQLSniff extends Sniff {
 		T_OBJECT_OPERATOR          => true,
 		T_OPEN_PARENTHESIS         => true,
 		T_CLOSE_PARENTHESIS        => true,
-		T_WHITESPACE               => true,
 		T_STRING_CONCAT            => true,
 		T_CONSTANT_ENCAPSED_STRING => true,
 		T_OPEN_SQUARE_BRACKET      => true,
@@ -97,6 +97,9 @@ class PreparedSQLSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
+
+		$this->ignored_tokens = $this->ignored_tokens + Tokens::$emptyTokens;
+
 		return array(
 			T_VARIABLE,
 			T_STRING,

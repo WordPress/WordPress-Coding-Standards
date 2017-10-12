@@ -1105,18 +1105,20 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Find whitelisting comment.
 	 *
-	 * Comment must be at the end of the line, and use // format.
+	 * Comment must be at the end of the line or at the end of the statement
+	 * and must use // format.
 	 * It can be prefixed or suffixed with anything e.g. "foobar" will match:
 	 * ... // foobar okay
 	 * ... // WPCS: foobar whitelist.
 	 *
 	 * There is an exception, and that is when PHP is being interspersed with HTML.
-	 * In that case, the comment should come at the end of the statement (right
+	 * In that case, the comment should always come at the end of the statement (right
 	 * before the closing tag, ?>). For example:
 	 *
 	 * <input type="text" id="<?php echo $id; // XSS OK ?>" />
 	 *
 	 * @since 0.4.0
+	 * @since 0.14.0 Whitelist comments at the end of the statement are now also accepted.
 	 *
 	 * @param string  $comment  Comment to find.
 	 * @param integer $stackPtr The position of the current token in the stack passed
@@ -1131,35 +1133,42 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		$lastPtr     = $this->get_last_ptr_on_line( $stackPtr );
-		$end_of_line = $lastPtr;
+		$regex = '#\b' . preg_quote( $comment, '#' ) . '\b#i';
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
 		// we need to here.
 		$end_of_statement = $this->phpcsFile->findNext( array( T_CLOSE_TAG, T_SEMICOLON ), $stackPtr );
 
-		// Check at the end of the statement if it comes before - or is - the end of the line.
-		if ( $end_of_statement <= $end_of_line ) {
-
-			// If the statement was ended by a semicolon, we find the next non-
-			// whitespace token. If the semicolon was left out and it was terminated
-			// by an ending tag, we need to look backwards.
+		if ( false !== $end_of_statement ) {
+			// If the statement was ended by a semicolon, check if there is a whitelist comment directly after it.
 			if ( T_SEMICOLON === $this->tokens[ $end_of_statement ]['code'] ) {
 				$lastPtr = $this->phpcsFile->findNext( T_WHITESPACE, ( $end_of_statement + 1 ), null, true );
-			} else {
+			} elseif ( T_CLOSE_TAG === $this->tokens[ $end_of_statement ]['code'] ) {
+				// If the semicolon was left out and it was terminated by an ending tag, we need to look backwards.
 				$lastPtr = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
+			}
+
+			if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
+				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
+			) {
+				return true;
 			}
 		}
 
-		$last = $this->tokens[ $lastPtr ];
+		// No whitelist comment found so far. Check at the end of the stackPtr line.
+		// Note: a T_COMMENT includes the new line character, so may be the last token on the line!
+		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
+		$lastPtr     = $this->phpcsFile->findPrevious( T_WHITESPACE, $end_of_line, null, true );
 
-		// Ignore if not a comment or not on the same line.
-		if ( T_COMMENT !== $last['code'] || $last['line'] !== $this->tokens[ $end_of_line ]['line'] ) {
-			return false;
+		if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
+			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
+		) {
+			return true;
 		}
 
-		// Now let's see if the comment contains the whitelist remark we're looking for.
-		return ( preg_match( '#\b' . preg_quote( $comment, '#' ) . '\b#i', $last['content'] ) === 1 );
+		return false;
 	}
 
 	/**
