@@ -225,6 +225,21 @@
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 
+	<!-- Rule: In a switch block, there must be no space before the colon for a case statement. -->
+	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
+
+	<!-- Rule: Similarly, there should be no space before the colon on return type declarations. -->
+
+	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside of them. -->
+	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1701 -->
+	<rule ref="WordPress.WhiteSpace.ArbitraryParenthesesSpacing">
+		<properties>
+			<property name="spacingInside" value="1"/>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
+
 
 	<!--
 	#############################################################################

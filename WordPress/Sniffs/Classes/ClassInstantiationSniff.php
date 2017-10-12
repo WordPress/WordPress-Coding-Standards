@@ -105,7 +105,7 @@ class ClassInstantiationSniff extends Sniff {
 		if ( 'PHP' === $this->phpcsFile->tokenizerType ) {
 			$prev_non_empty = $this->phpcsFile->findPrevious(
 				Tokens::$emptyTokens,
-				($stackPtr - 1),
+				( $stackPtr - 1 ),
 				null,
 				true
 			);
@@ -128,7 +128,7 @@ class ClassInstantiationSniff extends Sniff {
 		 */
 		$next_non_empty_after_class_name = $this->phpcsFile->findNext(
 			$this->classname_tokens,
-			($stackPtr + 1),
+			( $stackPtr + 1 ),
 			null,
 			true,
 			null,
