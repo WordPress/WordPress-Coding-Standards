@@ -211,11 +211,11 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 
 - Install PHP Sniffer and WordPress Coding Standards per above.
 
-- Install the [linter-phpcs](https://atom.io/packages/linter-phpcs) package using the Atom package manager or the command-line `$ apm install linter-phpcs`.
+- Install the [linter-phpcs](https://atom.io/packages/linter-phpcs) package using the Atom package manager or the command-line `apm install linter-phpcs`.
 
   ![Atom Linter PHPCS package settings](https://user-images.githubusercontent.com/169055/31582848-49f942a2-b197-11e7-83fc-c31fbc72d4f1.png)
 
-- Configure the path to the `phpcs` executable if not available globally.
+- Configure the path to the `phpcs` executable if not available globally. Use `which phpcs` to determine the path to the executable.
 
 - Configure the coding standard if not defined in the project `phpcs.xml`, `phpcs.xml.dist`, `phpcs.ruleset.xml` or `ruleset.xml`.
 
