@@ -189,23 +189,26 @@ Please see "[PHP Code Sniffer with WordPress Coding Standards Integration](https
 
 ### Sublime Text
 
-##### sublime-phpcs package
-Install the [sublime-phpcs package](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
+#### Linter Plugin `sublime-phpcs`
 
-##### SublimeLinter-phpcs
-sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/) can do that.
+Install the [sublime-phpcs plugin](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
 
-- Install PHP Sniffer and WordPress Coding Standards per above.
-- Use [Package Control](https://packagecontrol.io/) to search for and install [SublimeLinter](http://www.sublimelinter.com) then [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/).
-- From the command palette, select `Preferences: SublimeLinter Settings - User` and change `user.linters.phpcs.standard` to the phpcs standard of your choice (e.g. `WordPress`, `WordPress-VIP`, etc.).
+#### Linter Plugin `SublimeLinter-phpcs`
 
-![SublimeLinter-phpcs user settings](https://cloud.githubusercontent.com/assets/224636/12946250/068776ba-cfc1-11e5-816b-109e4e32d21b.png)
+The [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/) plugin provides automatic linting.
 
-- You may need to restart Sublime for these settings to take effect. Error messages appear in the bottom of the editor.
+- Install the [SublimeLinter 3](http://www.sublimelinter.com) dependency and then [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/) using the [Package Control](https://packagecontrol.io).
 
-![SublimeLinter-phpcs linting](https://cloud.githubusercontent.com/assets/224636/12946326/75986c3a-cfc1-11e5-8537-1243554bbab6.png)
+- [Configure the plugin](https://github.com/SublimeLinter/SublimeLinter-phpcs/#settings) to use project-level coding standard defined in `phpcs.xml` or set it in the User settings:
 
-![SublimeLinter-phpcs error](https://cloud.githubusercontent.com/assets/224636/12946335/8bee5a30-cfc1-11e5-8b5f-b10e8e4a4909.png)
+  ![SublimeLinter-phpcs user settings](https://cloud.githubusercontent.com/assets/224636/12946250/068776ba-cfc1-11e5-816b-109e4e32d21b.png)
+
+You may need to restart Sublime Text for these settings to take effect. Error messages appear in the bottom of the editor.
+
+  ![SublimeLinter-phpcs linting](https://cloud.githubusercontent.com/assets/224636/12946326/75986c3a-cfc1-11e5-8537-1243554bbab6.png)
+
+  ![SublimeLinter-phpcs error](https://cloud.githubusercontent.com/assets/224636/12946335/8bee5a30-cfc1-11e5-8b5f-b10e8e4a4909.png)
+
 
 ### Atom
 
