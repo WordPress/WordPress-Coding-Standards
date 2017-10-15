@@ -219,7 +219,7 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 
 - Configure the coding standard if not defined in the project `phpcs.xml`, `phpcs.xml.dist`, `phpcs.ruleset.xml` or `ruleset.xml`.
 
-- Install the [autocomplete-wpcs-flags](https://atom.io/packages/autocomplete-wpcs-flags) package for the [WPCS error whitelist flag](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) autocomplete.
+- Install the [autocomplete-wpcs-flags](https://atom.io/packages/autocomplete-wpcs-flags) package for the autocomplete of the [WPCS error whitelist flags](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
 
 
 
