@@ -216,6 +216,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'get_search_form'           => true,
 		'get_search_query'          => true,
 		'get_sidebar'               => true,
+		'get_submit_button'         => true,
 		'get_template_part'         => true,
 		'get_the_author_link'       => true,
 		'get_the_author'            => true,
