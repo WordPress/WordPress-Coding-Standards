@@ -44,6 +44,11 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			57  => 1,
 			58  => 1,
 			61  => 1,
+			126 => 1,
+			139 => 1,
+			141 => 1,
+			149 => 1,
+			151 => 1,
 		);
 	}
 
