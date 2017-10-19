@@ -102,5 +102,9 @@ $wpdb->query( // WPCS: unprepared SQL OK.
 		WHERE post_title LIKE '" . $escaped_var . "';"
 );
 
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . (int) $foo . ";" ); // Ok.
+
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . (float) $foo . ";" ); // Ok.
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts

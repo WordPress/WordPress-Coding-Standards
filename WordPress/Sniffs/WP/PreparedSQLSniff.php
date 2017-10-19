@@ -65,6 +65,9 @@ class PreparedSQLSniff extends Sniff {
 		T_START_NOWDOC             => true,
 		T_NOWDOC                   => true,
 		T_END_NOWDOC               => true,
+		T_INT_CAST                 => true,
+		T_DOUBLE_CAST              => true,
+		T_BOOL_CAST                => true,
 	);
 
 	/**
@@ -160,6 +163,10 @@ class PreparedSQLSniff extends Sniff {
 			if ( T_VARIABLE === $this->tokens[ $this->i ]['code'] ) {
 				if ( '$wpdb' === $this->tokens[ $this->i ]['content'] ) {
 					$this->is_wpdb_method_call( $this->i, $this->methods );
+					continue;
+				}
+
+				if ( $this->is_safe_casted( $this->i ) ) {
 					continue;
 				}
 			}
