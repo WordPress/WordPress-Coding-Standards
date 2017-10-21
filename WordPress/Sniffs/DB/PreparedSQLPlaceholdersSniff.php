@@ -107,6 +107,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 		$query                    = $parameters[1];
 		$text_string_tokens_found = false;
 		$variable_found           = false;
+		$sql_wildcard_found       = false;
 		$total_placeholders       = 0;
 		$total_parameters         = count( $parameters );
 		$valid_in_clauses         = array(
@@ -218,6 +219,74 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				$total_placeholders += $placeholders;
 			}
 
+			/*
+			 * Analyse the query for incorrect LIKE queries.
+			 *
+			 * - `LIKE %s` is the only correct one.
+			 * - `LIKE '%s'` or `LIKE "%s"` will not be reported here, but in the quote check.
+			 * - Any other `LIKE` statement should be reported, either for using `LIKE` without
+			 *   SQL wildcards or for not passing the SQL wildcards via the replacement.
+			 */
+			$regex = '`\s+LIKE\s*(?:' . $regex_quote . '(?!%s(?:\1|$))(?P<content>.*?)(?:\1|$)|(?:concat\((?![^\)]*%s[^\)]*\))(?P<concat>[^\)]*))\))`i';
+			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
+				$walk = array();
+				if ( ! empty( $matches['content'] ) ) {
+					$matches['content'] = array_filter( $matches['content'] );
+					if ( ! empty( $matches['content'] ) ) {
+						$walk[] = 'content';
+					}
+				}
+				if ( ! empty( $matches['concat'] ) ) {
+					$matches['concat'] = array_filter( $matches['concat'] );
+					if ( ! empty( $matches['concat'] ) ) {
+						$walk[] = 'concat';
+					}
+				}
+
+				if ( ! empty( $walk ) ) {
+					foreach ( $walk as $match_key ) {
+						foreach ( $matches[ $match_key ] as $index => $match ) {
+							$data = array( $matches[0][ $index ] );
+
+							// Both a `%` as well as a `_` are wildcards in SQL.
+							if ( strpos( $match, '%' ) === false && strpos( $match, '_' ) === false ) {
+								$this->phpcsFile->addWarning(
+									'Unless you are using SQL wildcards, using LIKE is inefficient. Use a straight compare instead. Found: %s.',
+									$i,
+									'LikeWithoutWildcards',
+									$data
+								);
+							} else {
+								$sql_wildcard_found = true;
+
+								if ( strpos( $match, '%s' ) === false ) {
+									$this->phpcsFile->addError(
+										'SQL wildcards for a LIKE query should be passed in through a replacement variable. Found: %s.',
+										$i,
+										'LikeWildcardsInQuery',
+										$data
+									);
+								} else {
+									$this->phpcsFile->addError(
+										'SQL wildcards for a LIKE query should be passed in through a replacement variable and the variable part of the replacement should be escaped using "esc_like()". Found: %s.',
+										$i,
+										'LikeWildcardsInQueryWithPlaceholder',
+										$data
+									);
+								}
+							}
+
+							/*
+							 * Don't throw `UnescapedLiteral`, `UnsupportedPlaceholder` or `QuotedPlaceholder`
+							 * for this part of the SQL query.
+							 */
+							$content = preg_replace( '`' . preg_quote( $match ) . '`', '', $content, 1 );
+						}
+					}
+				}
+				unset( $matches, $index, $match, $data );
+			}
+
 			if ( strpos( $content, '%' ) === false ) {
 				continue;
 			}
@@ -288,8 +357,13 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		if ( 0 === $total_placeholders ) {
 			if ( 1 === $total_parameters ) {
-				if ( false === $variable_found ) {
-					// Only throw this warning if the PreparedSQL sniff won't throw one about variables being found.
+				if ( false === $variable_found && false === $sql_wildcard_found ) {
+					/*
+					 * Only throw this warning if the PreparedSQL sniff won't throw one about
+					 * variables being found.
+					 * Also don't throw it if we just advised to use a replacement variable to pass a
+					 * string containing an SQL wildcard.
+					 */
 					$this->phpcsFile->addWarning(
 						'It is not necessary to prepare a query which doesn\'t use variable replacement.',
 						$i,

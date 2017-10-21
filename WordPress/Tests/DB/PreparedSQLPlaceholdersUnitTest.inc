@@ -152,3 +152,58 @@ $where = $wpdb->prepare(
 		. '\')',
 	array_merge( $post_types, $post_statusses )
 ); // Bad x 2 - quotes between the () for the IN.
+
+/*
+ * Test distinguising wildcard _ and %'s in LIKE statements.
+ */
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE %s", $like ); // OK.
+$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_content LIKE \'a string\'' ); // Warning x 2. Like without wildcard, no need for prepare.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE 'a string'" ); // Warning x 2. Like without wildcard, no need for prepare.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE '%a string' AND post_status = %s", $status ); // Bad.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE 'a string%' AND post_status = %s", $status ); // Bad.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE '%a string%' AND post_status = %s", $status ); // Bad.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE 'a_string' AND post_status = %s", $status ); // Bad.
+
+// Some VALID test cases as found in plugins published on WP.org.
+$comment_id = $wpdb->get_var($wpdb->prepare('SELECT comment_ID FROM ' . $wpdb->comments . ' WHERE comment_post_ID = %d AND comment_agent LIKE %s', intval($post->ID), 'Disqus/1.0:' . $comment_id)); // OK.
+
+$sql = $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", self::CACHE_KEY_PREFIX . '%' ); // OK.
+
+$wpdb->query($wpdb->prepare('UPDATE '.$wpdb->prefix.'posts SET post_content = REPLACE(post_content, %s, %s) WHERE post_type = "page" AND post_content LIKE %s', $meta_before, $meta_after, '%'.$wpdb->esc_like($meta_before).'%')); // OK.
+
+$query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}options WHERE `option_name` LIKE %s OR `option_name` LIKE %s", "%{$transient_name}%", "%{$transient_timeout_name}%"); // OK.
+
+// Some INVALID test cases as found in plugins published on WP.org.
+$wpdb->prepare( "UPDATE $wpdb->posts SET post_status = 'pending' WHERE (post_type LIKE 'product_variation' or post_type LIKE 'product') AND NOT ID IN (". implode(",", $imported_ids ) .")"); // Error x 1 for `product_variation`; warning x 1 for wrong use of LIKE with `product`; the PreparedSQL sniff will also kick in and throw an error about `$imported_ids`.
+
+$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) ); // Bad.
+
+$result = $wpdb->get_col($wpdb->prepare("SELECT guid FROM $wpdb->posts WHERE guid LIKE '%%%s' and post_parent=%d;", $atts['model'], $post->ID )); // Bad.
+
+$comments = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_agent NOT LIKE 'Disqus/%%'", $post->ID) ); // Bad.
+
+$sql = $wpdb->prepare( "SELECT count(*) FROM $this->fontsTable WHERE name LIKE '%%%s%%' OR status LIKE '%%%s%%' OR metadata LIKE '%%%s%%'", $search, $search, $search ); // Bad x 3, the PreparedSQL sniff will also kick in and throw an error about `$this`.
+
+$additional_where = $wpdb->prepare(' AND (network like "%%%s%%" OR ProgramTitle like "%%%s%%" OR TransactionStatus like "%%%s%%" ) ', $search, $search, $search); // Bad x 3.
+
+$robots_query    = $wpdb->prepare( "SELECT name FROM $robots_table WHERE %s LIKE concat('%%',name,'%%')", $http_user_agent ); // Bad, the PreparedSQL sniff will also kick in.
+
+$sql = $wpdb->prepare('SELECT * FROM ' . $wpdb->avatar_privacy . ' WHERE email LIKE "%s"', $email); // Bad (quotes).
+
+$res = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->posts . ' SET post_name="feed" WHERE post_name LIKE "feed-%" AND LENGTH(post_name)=6 AND post_type=%s', BAWAS_POST_TYPE ) ); // Bad.
+
+$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->users AS us INNER JOIN $wpdb->usermeta AS mt ON ( us.ID = mt.user_id ) WHERE ( mt.meta_key = 'bbp_last_login' AND mt.meta_value < %s ) AND user_id IN ( SELECT user_id FROM $wpdb->usermeta AS mt WHERE (mt.meta_key = '{$wpdb->prefix}capabilities' AND mt.meta_value LIKE '%%bbp_user%%' ))", $beforegmdate ); // Bad.
+
+$paged_events = $wpdb->get_results( $wpdb->prepare( "SELECT id as event_id FROM {$bp->events->table_name} WHERE ( name LIKE '{$filter}%%' OR description LIKE '{$filter}%%' ) AND id IN ({$gids}) " . $oldevents . " {$pag_sql}" ) ); // Bad x 2, the PreparedSQL sniff will also kick in and throw six errors.
+
+$query = $wpdb->prepare( "SELECT language_code FROM {$wpdb->prefix}icl_translations WHERE element_type LIKE '%%post_%%' AND element_id = %d", $post_ID ); // Bad.
+
+$postID = $wpdb->get_var($wpdb->prepare("SELECT `postID` FROM `".EPDataBase::$table_name."` WHERE `path` like '".$filePath."';")); // OK, the PreparedSQL sniff will kick in and throw four errors.
+
+$wpdb->query($wpdb->prepare("show tables like '$this->table_name'")) > 0; // OK, the PreparedSQL sniff will kick in.
+
+$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->wp_options WHERE option_name LIKE '%widget_gigya%'" ) ); // Bad.
+
+$where .= $wpdb->prepare( " AND `name` LIKE '%%%%" . '%s' . "%%%%' ", $args['name'] ); // Bad x 2.
+
+$wpdb->query($wpdb->prepare("delete from wp_postmeta where post_id = $target_postId AND meta_key like 'google_snippets'")); // Bad, the PreparedSQL sniff will also kick in and throw an error about `$target_postId`.
