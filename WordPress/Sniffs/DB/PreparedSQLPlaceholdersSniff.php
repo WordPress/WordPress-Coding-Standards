@@ -121,7 +121,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			/*
 			 * Analyse the query for unsupported placeholders.
 			 */
-			if ( preg_match_all( '`(?<!%)%(?![dfFs]|%[^%])(?:[^ \'"]*|$)`', $content, $matches ) > 0 ) {
+			if ( preg_match_all( '`(?<!%)%(?![dfFs]|%[^%]|%%[dfFs])(?:[^ \'"]*|$)`', $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
 					foreach ( $matches[0] as $match ) {
 						if ( '%' === $match ) {
