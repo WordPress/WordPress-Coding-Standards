@@ -111,6 +111,10 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				$total_placeholders += $placeholders;
 			}
 
+			if ( strpos( $content, '%' ) === false ) {
+				continue;
+			}
+
 			/*
 			 * Analyse the query for unsupported placeholders.
 			 */
