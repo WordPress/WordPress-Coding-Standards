@@ -22,10 +22,11 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * - Either an array of replacements should be passed matching the number of
  *   placeholders found or individual parameters for each placeholder should
  *   be passed.
+ * - Wildcards for LIKE compare values should be passed in via a replacement parameter.
  *
  * The sniff allows for a specific pattern with a variable number of placeholders
  * created using code along the lines of:
- * `sprintf( 'query .... IN (%s) ...', implode( ',', array_fill( 0, count( $something), '%s' ) ) )`.
+ * `sprintf( 'query .... IN (%s) ...', implode( ',', array_fill( 0, count( $something ), '%s' ) ) )`.
  *
  * A "PreparedSQLPlaceholders replacement count" whitelist comment is supported
  * specifically to silence the `ReplacementsWrongNumber` and `UnfinishedPrepare`
@@ -261,14 +262,14 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 								if ( strpos( $match, '%s' ) === false ) {
 									$this->phpcsFile->addError(
-										'SQL wildcards for a LIKE query should be passed in through a replacement variable. Found: %s.',
+										'SQL wildcards for a LIKE query should be passed in through a replacement parameter. Found: %s.',
 										$i,
 										'LikeWildcardsInQuery',
 										$data
 									);
 								} else {
 									$this->phpcsFile->addError(
-										'SQL wildcards for a LIKE query should be passed in through a replacement variable and the variable part of the replacement should be escaped using "esc_like()". Found: %s.',
+										'SQL wildcards for a LIKE query should be passed in through a replacement parameter and the variable part of the replacement should be escaped using "esc_like()". Found: %s.',
 										$i,
 										'LikeWildcardsInQueryWithPlaceholder',
 										$data
@@ -475,7 +476,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * to deal correctly with `IN` queries.
 	 *
 	 * The pattern we are searching for is:
-	 * `sprintf( 'query ....', implode( ',', array_fill( 0, count( $something), '%s' ) ) )`
+	 * `sprintf( 'query ....', implode( ',', array_fill( 0, count( $something ), '%s' ) ) )`
 	 *
 	 * @since 0.14.0
 	 *
@@ -516,7 +517,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * to dynamically create placeholders.
 	 *
 	 * The pattern we are searching for is:
-	 * `implode( ',', array_fill( 0, count( $something), '%s' ) )`
+	 * `implode( ',', array_fill( 0, count( $something ), '%s' ) )`
 	 *
 	 * This pattern presumes unquoted placeholders!
 	 *
