@@ -89,11 +89,17 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		$query                    = $parameters[1];
 		$text_string_tokens_found = false;
+		$variable_found           = false;
 		$total_placeholders       = 0;
 		$total_parameters         = count( $parameters );
 
 		for ( $i = $query['start']; $i <= $query['end']; $i++ ) {
 			if ( ! isset( Tokens::$textStringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+				if ( T_VARIABLE === $this->tokens[ $i ]['code'] ) {
+					if ( '$wpdb' !== $this->tokens[ $i ]['content'] ) {
+						$variable_found = true;
+					}
+				}
 				continue;
 			}
 
@@ -107,6 +113,23 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				if ( $this->tokens[ $i ]['content'] !== $content ) {
 					$quote_style = $this->tokens[ $i ]['content'][0];
 				}
+			}
+
+			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code']
+				|| T_HEREDOC === $this->tokens[ $i ]['code']
+			) {
+				// Only interested in actual query text, so strip out variables.
+				$stripped_content = $this->strip_interpolated_variables( $content );
+				if ( $stripped_content !== $content ) {
+					$interpolated_vars = $this->get_interpolated_variables( $content );
+					$vars_without_wpdb = array_diff( $interpolated_vars, array( 'wpdb' ) );
+					$content           = $stripped_content;
+
+					if ( ! empty( $vars_without_wpdb ) ) {
+						$variable_found = true;
+					}
+				}
+				unset( $stripped_content, $interpolated_vars, $vars_without_wpdb );
 			}
 
 			$placeholders = preg_match_all( '`(?<!%)%[dFfs]`', $content, $matches );
@@ -175,11 +198,14 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		if ( 0 === $total_placeholders ) {
 			if ( 1 === $total_parameters ) {
-				$this->phpcsFile->addWarning(
-					'It is not necessary to prepare a query which doesn\'t use variable replacement.',
-					$i,
-					'UnnecessaryPrepare'
-				);
+				if ( false === $variable_found ) {
+					// Only throw this warning if the PreparedSQL sniff won't throw one about variables being found.
+					$this->phpcsFile->addWarning(
+						'It is not necessary to prepare a query which doesn\'t use variable replacement.',
+						$i,
+						'UnnecessaryPrepare'
+					);
+				}
 			}
 
 			return;

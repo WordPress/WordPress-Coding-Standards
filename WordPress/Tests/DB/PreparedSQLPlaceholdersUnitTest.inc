@@ -10,6 +10,12 @@ $sql = $wpdb->prepare( 'SELECT DATE_FORMAT(`field`, "%%c") FROM `table` WHERE `c
  * No placeholders, no need to use prepare().
  */
 $sql = $wpdb->prepare( 'SELECT * FROM `table`' ); // Warning.
+$sql = $wpdb->prepare( 'SELECT * FROM `table` WHERE id = ' . $id ); // OK - this will be handled by the PreparedSQL sniff.
+$sql = $wpdb->prepare( "SELECT * FROM `table` WHERE id = $id" ); // OK - this will be handled by the PreparedSQL sniff.
+$sql = $wpdb->prepare( "SELECT * FROM `table` WHERE id = {$id['some%sing']}" ); // OK - this will be handled by the PreparedSQL sniff.
+$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users ); // Warning.
+$sql = $wpdb->prepare( "SELECT * FROM `{$wpdb->users}`" );  // Warning.
+$sql = $wpdb->prepare( "SELECT * FROM `{$wpdb->users}` WHERE id = $id" ); // OK - this will be handled by the PreparedSQL sniff.
 
 /*
  * Test passing invalid replacement placeholder.
