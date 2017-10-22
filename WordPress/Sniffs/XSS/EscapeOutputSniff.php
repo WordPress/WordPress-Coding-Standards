@@ -243,7 +243,7 @@ class EscapeOutputSniff extends Sniff {
 
 		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
 			$error = $this->phpcsFile->addError(
-				"Expected next thing to be an escaping function (like %s), not '%s'",
+				"Expected output to be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
 				'UnsafePrintingFunction',
 				array( $this->unsafePrintingFunctions[ $function ], $function )
