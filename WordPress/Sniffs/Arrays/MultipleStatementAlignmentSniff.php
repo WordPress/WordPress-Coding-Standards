@@ -38,7 +38,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 *
 	 * @var bool
 	 */
-	public $ignoreNewline = true;
+	public $ignoreNewlines = true;
 
 	/**
 	 * Whether the alignment should be exact.
@@ -111,7 +111,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 *               * Setting this to `=0` is useless as in that case there are
 	 *                 no multi-line items in the array anyway.
 	 *
-	 * This setting will respect the `ignoreNewline` and `maxColumnn` settings.
+	 * This setting will respect the `ignoreNewlines` and `maxColumnn` settings.
 	 *
 	 * @since 0.14.0
 	 *
@@ -331,7 +331,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				continue;
 			}
 
-			if ( true === $this->ignoreNewline
+			if ( true === $this->ignoreNewlines
 				&& $this->tokens[ $last_index_token ]['line'] !== $this->tokens[ $double_arrow ]['line']
 			) {
 				// Ignore this item as it has a new line between the item key and the double arrow.
