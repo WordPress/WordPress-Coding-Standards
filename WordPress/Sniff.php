@@ -36,6 +36,15 @@ use WordPress\PHPCSHelper;
 abstract class Sniff implements PHPCS_Sniff {
 
 	/**
+	 * Regex to get complex variables from T_DOUBLE_QUOTED_STRING or T_HEREDOC.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string
+	 */
+	const REGEX_COMPLEX_VARS = '`(?:(\{)?(?<!\\\\)\$)?(\{)?(?<!\\\\)\$(\{)?(?P<varname>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:->\$?(?P>varname)|\[[^\]]+\]|::\$?(?P>varname)|\([^\)]*\))*(?(3)\}|)(?(2)\}|)(?(1)\}|)`';
+
+	/**
 	 * Minimum supported WordPress version.
 	 *
 	 * Currently used by the `WordPress.WP.DeprecatedClasses`,
@@ -1880,6 +1889,25 @@ abstract class Sniff implements PHPCS_Sniff {
 			}
 		}
 		return $variables;
+	}
+
+	/**
+	 * Strip variables from an arbitrary double quoted/heredoc string.
+	 *
+	 * Intended for use with the content of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param string $string The raw string.
+	 *
+	 * @return string String without variables in it.
+	 */
+	public function strip_interpolated_variables( $string ) {
+		if ( strpos( $string, '$' ) === false ) {
+			return $string;
+		}
+
+		return preg_replace( self::REGEX_COMPLEX_VARS, '', $string );
 	}
 
 	/**
