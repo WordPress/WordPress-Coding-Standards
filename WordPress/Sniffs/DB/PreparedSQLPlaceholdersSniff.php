@@ -135,7 +135,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				// Detect a specific pattern for variable replacements in combination with `IN`.
 				if ( T_STRING === $this->tokens[ $i ]['code'] ) {
 
-					if ( 'sprintf' === $this->tokens[ $i ]['content'] ) {
+					if ( 'sprintf' === strtolower( $this->tokens[ $i ]['content'] ) ) {
 						$sprintf_parameters = $this->get_function_call_parameters( $i );
 
 						if ( ! empty( $sprintf_parameters ) ) {
@@ -148,7 +148,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 						}
 						unset( $sprintf_parameters, $last_param );
 
-					} elseif ( 'implode' === $this->tokens[ $i ]['content'] ) {
+					} elseif ( 'implode' === strtolower( $this->tokens[ $i ]['content'] ) ) {
 						$prev = $this->phpcsFile->findPrevious(
 							Tokens::$textStringTokens,
 							( $i - 1 ),
@@ -490,7 +490,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 		unset( $sprintf_params[1] );
 
 		foreach ( $sprintf_params as $sprintf_param ) {
-			if ( strpos( $sprintf_param['raw'], 'implode' ) === false ) {
+			if ( strpos( strtolower( $sprintf_param['raw'] ), 'implode' ) === false ) {
 				continue;
 			}
 
@@ -501,7 +501,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				true
 			);
 			if ( T_STRING === $this->tokens[ $implode ]['code']
-				&& 'implode' === $this->tokens[ $implode ]['content']
+				&& 'implode' === strtolower( $this->tokens[ $implode ]['content'] )
 			) {
 				if ( $this->analyse_implode( $implode ) === true ) {
 					++$found;
@@ -538,7 +538,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		if ( strpos( $implode_params[2]['raw'], 'array_fill' ) === false ) {
+		if ( strpos( strtolower( $implode_params[2]['raw'] ), 'array_fill' ) === false ) {
 			return false;
 		}
 
@@ -550,7 +550,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 		);
 
 		if ( T_STRING !== $this->tokens[ $array_fill ]['code']
-			|| 'array_fill' !== $this->tokens[ $array_fill ]['content']
+			|| 'array_fill' !== strtolower( $this->tokens[ $array_fill ]['content'] )
 		) {
 			return false;
 		}

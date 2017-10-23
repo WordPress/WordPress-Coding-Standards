@@ -84,7 +84,7 @@ $where = $wpdb->prepare(
 		"{$wpdb->posts}.post_type IN (%s)
 		AND {$wpdb->posts}.post_status IN (%s)",
 		implode( ',', array_fill( 0, count($post_types), '%s' ) ),
-		implode( ',', array_fill( 0, count($post_statusses), '%s' ) )
+		IMPLODE( ',', Array_Fill( 0, count($post_statusses), '%s' ) )
 	),
 	array_merge( $post_types, $post_statusses )
 ); // OK.
