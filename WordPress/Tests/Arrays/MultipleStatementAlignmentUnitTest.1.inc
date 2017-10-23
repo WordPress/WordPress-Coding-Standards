@@ -107,17 +107,17 @@ $array = array(
 	'ccc'
 		=> 'd',
 );
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline false
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
 $array = array(
 	'a'
 		=> 'b', // Bad.
 	'ccc'
 		=> 'd', // Bad.
 );
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline true
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
 
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact false
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline false
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
 // Test combined ignore new lines false + exact false.
 $array = array(
 	'a'     => 'b',
@@ -148,7 +148,7 @@ $array = array(
 		      => 'h', // Bad.
 );
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline true
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
 
 
 /*
@@ -225,7 +225,7 @@ $array = array(
 
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact false
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 12
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline false
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
 // Test combined maxColumn value set + exact false + ignore new lines false.
 $array = array(
 	'a'    => 'b',
@@ -269,7 +269,7 @@ $array = array(
 );
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
 // @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewline true
+// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
 
 
 /*
