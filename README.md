@@ -74,7 +74,7 @@ It is strongly suggested to `require` one of these plugins in your project to ha
 
 1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, Phar file, PEAR, or Git checkout).
 
-   Do ensure that PHP_CodeSniffer's version matches our [requirements](#requirements), if, for example, you're using VVV(https://github.com/Varying-Vagrant-Vagrants/VVV).
+   Do ensure that PHP_CodeSniffer's version matches our [requirements](#requirements), if, for example, you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV).
 
 2. Clone the WordPress standards repository:
 
