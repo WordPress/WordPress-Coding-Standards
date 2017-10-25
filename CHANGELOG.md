@@ -30,7 +30,7 @@ _Nothing yet._
 - The `is_class_constant()`, `is_class_property` and `valid_direct_scope()` utility methods to the `WordPress\Sniff` class.
 
 ### Changed
-- When passing an array property via a custom ruleset to PHP Codesniffer, spaces around the key/value are taken as intentional and parsed as part of the array key/value. In practice, this leads to confusion and WPCS does not expect any values which could be preceded/followed by a space, so for the WordPress Coding Standard native array properties, like `customAutoEscapedFunction`, `text_domain`, `prefixes`, WPCS will now trim whitespace from the keys/values received before use.
+- When passing an array property via a custom ruleset to PHP_CodeSniffer, spaces around the key/value are taken as intentional and parsed as part of the array key/value. In practice, this leads to confusion and WPCS does not expect any values which could be preceded/followed by a space, so for the WordPress Coding Standard native array properties, like `customAutoEscapedFunction`, `text_domain`, `prefixes`, WPCS will now trim whitespace from the keys/values received before use.
 - The WPCS native whitelist comments used to only work when they were put on the _end of the line_ of the code they applied to. As of now, they will also be recognized when they are be put at the _end of the statement_ they apply to.
 - The `WordPress.Arrays.ArrayDeclarationSpacing` sniff used to enforce all associative arrays to be multi-line. The handbook has been updated to only require this for multi-item associative arrays and the sniff has been updated accordingly.
     [The original behaviour can still be enforced](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#arrays-forcing-single-item-associative-arrays-to-be-multi-line) by setting the new `allow_single_item_single_line_associative_arrays` property to `false` in a custom ruleset.
@@ -53,7 +53,7 @@ _Nothing yet._
 - Improved the Atom setup instructions in the Readme.
 - Updated the unit testing information in Contributing.
 - Updated the [custom ruleset example](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/phpcs.xml.dist.sample) for the changes contained in this release and to make it more explicit what is recommended versus example code.
-- The minimum recommended version for the suggested `DealerDirect/phpcodesniffer-composer-installer` Composer plugin has gone up to `0.4.3`.
+- The minimum recommended version for the suggested `DealerDirect/phpcodesniffer-composer-installer` Composer plugin has gone up to `0.4.3`. This patch version fixes support for PHP 5.3.
 
 ### Fixed
 - The `WordPress.Arrays.ArrayIndentation` sniff did not correctly handle array items with multi-line strings as a value.
@@ -77,7 +77,7 @@ _Nothing yet._
 ## [0.13.0] - 2017-08-03
 
 ### Added
-- Support for PHP CodeSniffer 3.0.2+. The minimum required PHPCS version (2.9.0) stays the same.
+- Support for PHP_CodeSniffer 3.0.2+. The minimum required PHPCS version (2.9.0) stays the same.
 - Support for the PHPCS 3 `--ignore-annotations` command line option. If you pass this option, both PHPCS native `@ignore ...` annotations as well as the WPCS specific [whitelist flags](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) will be ignored.
 
 ### Changed

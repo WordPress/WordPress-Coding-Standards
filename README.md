@@ -42,7 +42,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.3 or higher and [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
+The WordPress Coding Standards require PHP 5.3 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
 As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
 
 ### Composer
@@ -124,7 +124,7 @@ You can use the following as standard names when invoking `phpcs` to select snif
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
@@ -249,7 +249,7 @@ matrix:
 before_install:
   - if [[ "$SNIFF" == "1" ]]; then export PHPCS_DIR=/tmp/phpcs; fi
   - if [[ "$SNIFF" == "1" ]]; then export SNIFFS_DIR=/tmp/sniffs; fi
-  # Install PHP CodeSniffer.
+  # Install PHP_CodeSniffer.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
   # Install WordPress Coding Standards.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR; fi
