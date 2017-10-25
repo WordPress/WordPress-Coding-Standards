@@ -225,9 +225,9 @@ class EscapeOutputSniff extends Sniff {
 			// Report on what is very likely a PHP short open echo tag outputting a variable.
 			if ( preg_match( '`\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:(?:->\S+|\[[^\]]+\]))*)[\s]*;?[\s]*\?\>`', $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
 				$this->phpcsFile->addError(
-					'Expected next thing to be an escaping function, not %s.',
+					"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 					$stackPtr,
-					'OutputNotEscaped',
+					'OutputNotEscapedShortEcho',
 					array( $matches[1] )
 				);
 				return;
@@ -243,7 +243,7 @@ class EscapeOutputSniff extends Sniff {
 
 		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
 			$error = $this->phpcsFile->addError(
-				"Expected next thing to be an escaping function (like %s), not '%s'",
+				"All output should be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
 				'UnsafePrintingFunction',
 				array( $this->unsafePrintingFunctions[ $function ], $function )
@@ -440,7 +440,7 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			$this->phpcsFile->addError(
-				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
+				"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 				$ptr,
 				'OutputNotEscaped',
 				$content
