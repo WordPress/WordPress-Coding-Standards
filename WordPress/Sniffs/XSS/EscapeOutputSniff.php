@@ -77,7 +77,7 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	protected $unsafePrintingFunctions = array(
 		'_e'  => 'esc_html_e() or esc_attr_e()',
-		'_ex' => 'esc_html_ex() or esc_attr_ex()',
+		'_ex' => 'echo esc_html_x() or echo esc_attr_x()',
 	);
 
 	/**
