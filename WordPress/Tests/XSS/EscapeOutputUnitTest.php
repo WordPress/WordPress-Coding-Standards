@@ -72,6 +72,8 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			223 => 1,
 			225 => 1,
 			226 => 1,
+			252 => 1,
+			253 => 1,
 		);
 
 	} // end getErrorList()
