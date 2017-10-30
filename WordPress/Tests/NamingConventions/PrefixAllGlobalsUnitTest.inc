@@ -318,3 +318,7 @@ namespace Testing {
 	define( 'MY' . __NAMESPACE__, __FILE__ ); // Error, not actually namespaced.
 	define( 'MY\\' . __NAMESPACE__, __FILE__ ); // OK, even though strangely setup, the constant is in a namespace.
 }
+
+// OK: whitelisted core hooks.
+apply_filters( 'widget_title', $title );
+do_action( 'add_meta_boxes' );
