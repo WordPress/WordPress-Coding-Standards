@@ -402,7 +402,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				'unslashed' => array( 'user_pass' ),
 			),
 		),
-//		'wp_insert_category' => array( 3 => array( 'name', 'description' ) ),
 	);
 
 	/**
