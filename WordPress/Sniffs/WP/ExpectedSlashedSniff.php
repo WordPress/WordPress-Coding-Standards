@@ -483,13 +483,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 			$argPtr = $parameters[ $arg_index ]['start'];
 
-			if ( ! $argPtr ) {
-				break;
-			}
-
 			$arg_start = $phpcsFile->findNext(
 				Tokens::$emptyTokens,
-				$argPtr + 1,
+				$argPtr,
 				null,
 				true,
 				null,

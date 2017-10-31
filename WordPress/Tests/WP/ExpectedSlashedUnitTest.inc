@@ -94,3 +94,6 @@ get_term_by( $by, $term ); // Bad.
 
 // Slashed superglobals.
 wpmu_validate_blog_signup( $_POST['blogname'], $_POST['blog_title'], $user ); // OK.
+
+// Without whitespace.
+get_bookmarks(array("category" => $cat->term_id)); // OK.
