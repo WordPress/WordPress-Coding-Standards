@@ -414,35 +414,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		// Check if we are inside a function.
-		$function_ptr = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
-
-		if ( $function_ptr ) {
-
-			$function_declaration_name = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
-				$function_ptr + 1,
-				null,
-				true,
-				null,
-				true
-			);
-
-			$function_declaration_name = $this->tokens[ $function_declaration_name ]['content'];
-
-			// If we are inside a function that expects slashed arguments we don't
-			// really need to flag any internal function calls, because if any of
-			// them expects slashed data but isn't receiving it, that is likely the
-			// reason that the wrapping function is in this list.
-			if (
-				isset( self::$expectedSlashedFunctionArgs[ $function_declaration_name ] )
-//				|| isset( self::$partlySlashedFunctionArgs[ $function_declaration_name ] )
-//				|| isset( self::$mixedSlashedFunctionArgs[ $function_declaration_name ] )
-			) {
-				return;
-			}
-		}
-
 		$function_name = $matched_content;
 
 		if (
@@ -528,7 +499,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						&& ! isset( self::$autoSlashingFunctions[ $tokens[ $arg_start ]['content'] ] )
 					) {
 
-						$phpcsFile->addError(
+						$this->addError(
 							'%s() expects the value of %s to be slashed with wp_slash().',
 							$argPtr,
 							'ExpectedPartlySlashed',
@@ -551,13 +522,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 			// This likely indicates a syntax error.
 			if ( ! isset( $tokens[ $array_opener ]['parenthesis_closer'] ) ) {
-
-				$phpcsFile->addError(
-					'Mising closing parenthesis for array.',
-					$argPtr,
-					'MissingArrayClosingParen'
-				);
-
 				break;
 			}
 
@@ -614,7 +578,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 				if ( ! $is_slashed && in_array( $key_name, $slashed_keys, true ) ) {
 
-					$phpcsFile->addError(
+					$this->addError(
 						'%s() expects the value of %s to be slashed with wp_slash().',
 						$value_ptr,
 						'ExpectedKeySlashed',
@@ -623,7 +587,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 				} elseif ( $is_slashed && in_array( $key_name, $unslashed_keys, true ) ) {
 
-					$phpcsFile->addError(
+					$this->addError(
 						'%s() expects the value of %s to be unslashed.',
 						$value_ptr,
 						'ExpectedKeyUnslashed',
@@ -766,7 +730,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 					}
 				}
 
-				$phpcsFile->addError(
+				$this->addError(
 					'%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
 					$i,
 					'MissingSlashing',
@@ -776,5 +740,68 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		}
 
 	} // End process_expected_slashed_args()
+
+	/**
+	 * Records an error against a specific token in the file being sniffed.
+	 *
+	 * @since ${PROJECT_VERSION}
+	 *
+	 * @param string  $error    The error message.
+	 * @param int     $stackPtr The stack position where the error occurred.
+	 * @param string  $code     A violation code unique to the sniff message.
+	 * @param array   $data     Replacements for the error message.
+	 */
+	protected function addError( $error, $stackPtr, $code, $data ) {
+
+		if ( $this->is_inside_slashed_function_definition( $stackPtr ) ) {
+			$this->phpcsFile->addWarning( $error, $stackPtr, $code, $data );
+		} else {
+			$this->phpcsFile->addError( $error, $stackPtr, $code, $data );
+		}
+	}
+
+	/**
+	 * Determines whether or not a token is inside of a slashed function declaration.
+	 *
+	 * @since ${PROJECT_VERSION}
+	 *
+	 * @param int $stackPtr The position of the token in the stack.
+	 *
+	 * @return bool Whether the token is inside the definition of a slashed function.
+	 */
+	protected function is_inside_slashed_function_definition( $stackPtr ) {
+
+		// Check if we are inside a function.
+		$function_ptr = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+
+		if ( ! $function_ptr ) {
+			return false;
+		}
+
+		$function_name = $this->phpcsFile->findNext(
+			Tokens::$emptyTokens,
+			$function_ptr + 1,
+			null,
+			true,
+			null,
+			true
+		);
+
+		$function_name = $this->tokens[ $function_name ]['content'];
+
+		// If we are inside a function that expects slashed arguments we don't
+		// really need to flag any internal function calls, because if any of
+		// them expects slashed data but isn't receiving it, that is likely the
+		// reason that the wrapping function is in this list.
+		if (
+			isset( self::$expectedSlashedFunctionArgs[ $function_name ] )
+			|| isset( self::$partlySlashedFunctionArgs[ $function_name ] )
+			|| isset( self::$mixedSlashedFunctionArgs[ $function_name ] )
+		) {
+			return true;
+		}
+
+		return false;
+	}
 
 } // End class.

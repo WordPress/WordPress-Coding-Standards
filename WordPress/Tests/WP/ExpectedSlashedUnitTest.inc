@@ -63,11 +63,11 @@ wp_list_pages( array( 'meta_value' => $value, 'link_before' => wp_slash( $before
 // Function declarations and function calls within the declaration of an ignored
 // function should both be ignored.
 function add_comment_meta( $comment_id, $meta_key, $meta_value, $unique = false ) { // OK
-	return add_metadata( 'comment', $comment_id, $meta_key, $meta_value, $unique ); // OK
+	return add_metadata( 'comment', $comment_id, $meta_key, $meta_value, $unique ); // Warning x 2
 }
 
 function get_bookmarks( $r ) { // OK
-	return get_term_by( 'name', $r['category_name'], 'link_category' ); // OK
+	return get_term_by( 'name', $r['category_name'], 'link_category' ); // Warning
 }
 
 delete_metadata( 'user', 0, 'session_tokens', false, true ); // OK
