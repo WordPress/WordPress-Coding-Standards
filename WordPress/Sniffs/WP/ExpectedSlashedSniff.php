@@ -181,40 +181,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'WP_Customize_Setting::sanitize' => array( 1 => 'value' ),
 	);
 
-	// TODO
-	public $filters = array(
-		// Result passed through wp_unslash().
-		'pre_comment_author_name' => array( 1 => 'author_cookie' ),
-		// Result passed through wp_unslash().
-		'pre_comment_author_email' => array( 1 => 'author_email_cookie' ),
-		// Result passed through wp_unslash().
-		'pre_comment_author_url' => array( 1 => 'author_url_cookie' ),
-		// Called in wp_filter_comment().
-		'pre_comment_content' => array( 1 => 'comment_content' ),
-		// Called in wp_filter_comment().
-		'pre_comment_user_agent' => array( 1 => 'comment_agent' ),
-		// Called in wp_insert_user().
-		'pre_user_description' => array( 1 => 'description' ),
-		// Called in wp_insert_user().
-		'pre_user_display_name' => array( 1 => 'display_name' ),
-		// Called in wp_insert_user().
-		'pre_user_first_name' => array( 1 => 'first_name' ),
-		// Called in wp_insert_user().
-		'pre_user_last_name' => array( 1 => 'last_name' ),
-		// Called in wp_insert_user().
-		'pre_user_email' => array( 1 => 'raw_user_email' ),
-		// Called in wp_insert_user().
-		'pre_user_nickname' => array( 1 => 'nickname' ),
-		// Called in wp_insert_user().
-		'pre_user_url' => array( 1 => 'raw_user_url' ),
-		// Result passed through wp_unslash().
-		'add_ping' => array( 1 => 'new' ),
-		// Result passed to wp_list_pages().
-		'widget_pages_args' => array( 1 => 'args' ),
-		// Result passed to wp_list_bookmarks().
-		'widget_links_args' => array( 1 => 'widget_links_args' ),
-	);
-
 	/**
 	 * A list of functions and their args that are expected to be partly slashed.
 	 *
@@ -437,6 +403,48 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			),
 		),
 //		'wp_insert_category' => array( 3 => array( 'name', 'description' ) ),
+	);
+
+	/**
+	 * The list of filters and their args that are expected to be slashed.
+	 *
+	 * @todo Sniff for these.
+	 *
+	 * @since ${PROJECT_VERSION}
+	 *
+	 * @var array
+	 */
+	public $expectedSlashedFilterArgs = array(
+		// Result passed through wp_unslash().
+		'add_ping' => array( 1 => 'new' ),
+		// Result passed through wp_unslash().
+		'pre_comment_author_email' => array( 1 => 'author_email_cookie' ),
+		// Result passed through wp_unslash().
+		'pre_comment_author_name' => array( 1 => 'author_cookie' ),
+		// Result passed through wp_unslash().
+		'pre_comment_author_url' => array( 1 => 'author_url_cookie' ),
+		// Called in wp_filter_comment().
+		'pre_comment_content' => array( 1 => 'comment_content' ),
+		// Called in wp_filter_comment().
+		'pre_comment_user_agent' => array( 1 => 'comment_agent' ),
+		// Called in wp_insert_user().
+		'pre_user_description' => array( 1 => 'description' ),
+		// Called in wp_insert_user().
+		'pre_user_display_name' => array( 1 => 'display_name' ),
+		// Called in wp_insert_user().
+		'pre_user_email' => array( 1 => 'raw_user_email' ),
+		// Called in wp_insert_user().
+		'pre_user_first_name' => array( 1 => 'first_name' ),
+		// Called in wp_insert_user().
+		'pre_user_last_name' => array( 1 => 'last_name' ),
+		// Called in wp_insert_user().
+		'pre_user_nickname' => array( 1 => 'nickname' ),
+		// Called in wp_insert_user().
+		'pre_user_url' => array( 1 => 'raw_user_url' ),
+		// Result passed to wp_list_bookmarks().
+		'widget_links_args' => array( 1 => 'widget_links_args' ),
+		// Result passed to wp_list_pages().
+		'widget_pages_args' => array( 1 => 'args' ),
 	);
 
 	/**
