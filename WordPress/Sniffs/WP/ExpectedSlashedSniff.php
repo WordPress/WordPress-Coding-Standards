@@ -135,22 +135,19 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_create_post_autosave' => array( 1 => 'post_data' ),
 		// Uses wp_get_nav_menu_object().
 		'wp_delete_nav_menu' => array( 1 => 'menu' ),
+		// Just passed data through it, but is used by wp_new_comment(),
+		// wp_update_comment(), etc.
+		'wp_filter_comment' => array( 1 => 'commentarr' ),
 		// Uses wp_get_nav_menu_object().
 		'wp_get_nav_menu_items' => array( 1 => 'menu' ),
 		// Uses get_term_by( 'name' ) if $menu is not a term ID or slug.
 		'wp_get_nav_menu_object' => array( 1 => 'menu' ),
-		// Uses wp_insert_post().
-		'wp_insert_attachment' => array( 1 => 'args' ),
 		// Uses wp_unslash().
 		'wp_insert_comment' => array( 1 => 'commentdata' ),
 		// Uses wp_unslash().
 		'wp_insert_link' => array( 1 => 'linkdata' ),
 		// Uses wp_unslash().
-		'wp_insert_post' => array( 1 => 'postarr' ),
-		// Uses wp_unslash().
 		'wp_insert_term' => array( 1 => 'term' ),
-		// Uses wp_unslash(), update_user_meta().
-		'wp_insert_user' => array( 1 => 'userdata' ),
 		// Uses wp_insert_comment() and wp_allow_comment().
 		'wp_new_comment' => array( 1 => 'commentdata' ),
 		// Uses term_exists(). The docs for wp_remove_object_terms() says that it
@@ -162,17 +159,16 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// slugs or IDs, but it is also possible to pass in the term names, and in
 		// that case they must be slashed.
 		'wp_set_object_terms' => array( 2 => 'terms' ),
+		// Uses wp_set_post_terms().
+		'wp_set_post_categories' => array( 2 => 'post_categories' ),
+		// Uses wp_set_post_terms().
+		'wp_set_post_tags' => array( 2 => 'tags' ),
 		// Uses wp_set_object_terms().
 		'wp_set_post_terms' => array( 2 => 'terms' ),
 		// Uses update_post_meta().
 		'wp_update_attachment_metadata' => array( 2 => 'data' ),
 		// Uses wp_unslash().
 		'wp_update_comment' => array( 1 => 'commentarr' ),
-		// Uses wp_insert_post(). If the $postarr is actually a post object and not
-		// an array, then it should be unslashed instead.
-		'wp_update_post' => array( 1 => 'postarr' ),
-		// Uses wp_insert_user().
-		'wp_update_user' => array( 1 => 'userdata' ),
 		// Uses install_blog().
 		'wpmu_create_blog' => array( 3 => 'title' ),
 		// Uses wp_unslash().
@@ -193,6 +189,24 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'pre_comment_author_email' => array( 1 => 'author_email_cookie' ),
 		// Result passed through wp_unslash().
 		'pre_comment_author_url' => array( 1 => 'author_url_cookie' ),
+		// Called in wp_filter_comment().
+		'pre_comment_content' => array( 1 => 'comment_content' ),
+		// Called in wp_filter_comment().
+		'pre_comment_user_agent' => array( 1 => 'comment_agent' ),
+		// Called in wp_insert_user().
+		'pre_user_description' => array( 1 => 'description' ),
+		// Called in wp_insert_user().
+		'pre_user_display_name' => array( 1 => 'display_name' ),
+		// Called in wp_insert_user().
+		'pre_user_first_name' => array( 1 => 'first_name' ),
+		// Called in wp_insert_user().
+		'pre_user_last_name' => array( 1 => 'last_name' ),
+		// Called in wp_insert_user().
+		'pre_user_email' => array( 1 => 'raw_user_email' ),
+		// Called in wp_insert_user().
+		'pre_user_nickname' => array( 1 => 'nickname' ),
+		// Called in wp_insert_user().
+		'pre_user_url' => array( 1 => 'raw_user_url' ),
 		// Result passed through wp_unslash().
 		'add_ping' => array( 1 => 'new' ),
 		// Result passed to wp_list_pages().
@@ -240,7 +254,14 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Uses wp_unslash() on some of these. All of the other args are either
 		// integers, slugs, or dates.
 		'wp_allow_comment' => array(
-			1 => array( 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_author_IP', 'comment_content', 'comment_agent' ),
+			1 => array(
+				'comment_author',
+				'comment_author_email',
+				'comment_author_url',
+				'comment_author_IP',
+				'comment_content',
+				'comment_agent',
+			),
 		),
 		// Uses get_posts().
 		'wp_get_nav_menu_items' => array( 2 => array( 's', 'title' ) ),
@@ -248,6 +269,40 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_get_post_revisions' => array( 2 => array( 's', 'title' ) ),
 		// Uses get_posts().
 		'wp_get_recent_posts' => array( 1 => array( 's', 'title' ) ),
+		// Uses wp_insert_post().
+		'wp_insert_attachment' => array(
+			1 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
+		// Uses wp_unslash().
+		'wp_insert_post' => array(
+			1 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
 		// Uses wp_unslash() on this. All of the other args are integers or slugs.
 		// The 'name' arg is also expected slashed, but this is always overridden by
 		// $term.
@@ -260,6 +315,24 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Uses get_term_by( 'name' ) with 'menu-name' and also passes the data to
 		// wp_insert_term() if the menu doesn't exist, or else wp_update_term().
 		'wp_update_nav_menu_object' => array( 2 => array( 'description', 'menu-name' ) ),
+		// Uses wp_insert_post(). If the $postarr is actually a post object and not
+		// an array, then it should be unslashed instead.
+		'wp_update_post' => array(
+			1 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
 		// Uses wp_unslash() on these. All of the other args are integers or slugs.
 		'wp_update_term' => array( 3 => array( 'description', 'name' ) ),
 		// Uses WP_Query::__construct().
@@ -332,6 +405,37 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				'unslashed' => array( 'date_format', 'link_after', 'link_before', 'title_li' ),
 			),
 		),
+		// Uses wp_unslash(), but hashes the password first. Also uses
+		// update_user_meta().
+		'wp_insert_user' => array(
+			1 => array(
+				'slashed' => array(
+					'description',
+					'display_name',
+					'first_name',
+					'last_name',
+					'nickname',
+					'user_email',
+					'user_url',
+				),
+				'unslashed' => array( 'user_pass' ),
+			),
+		),
+		// Uses wp_insert_user().
+		'wp_update_user' => array(
+			1 => array(
+				'slashed' => array(
+					'description',
+					'display_name',
+					'first_name',
+					'last_name',
+					'nickname',
+					'user_email',
+					'user_url',
+				),
+				'unslashed' => array( 'user_pass' ),
+			),
+		),
 //		'wp_insert_category' => array( 3 => array( 'name', 'description' ) ),
 	);
 
@@ -354,13 +458,14 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 * @var array
 	 */
 	public static $autoSlashingFunctions = array(
-		'esc_url_raw' => true,
-		'esc_url' => true,
-		'get_current_user_id' => true,
-		'sanitize_key' => true,
-		'sanitize_title' => true,
+		'esc_url_raw'                => true,
+		'esc_url'                    => true,
+		'get_current_user_id'        => true,
+		'sanitize_key'               => true,
+		'sanitize_title'             => true,
 		'sanitize_title_with_dashes' => true,
-		'time' => true,
+		'time'                       => true,
+		'wp_filter_comment'          => true,
 	);
 
 	/**
