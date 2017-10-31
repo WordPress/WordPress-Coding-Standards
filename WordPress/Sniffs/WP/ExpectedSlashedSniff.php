@@ -185,6 +185,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'WP_Customize_Setting::sanitize' => array( 1 => 'value' ),
 	);
 
+	// TODO
 	public $filters = array(
 		// Result passed through wp_unslash().
 		'pre_comment_author_name' => array( 1 => 'author_cookie' ),
@@ -756,6 +757,11 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						isset( self::$slashingFunctions[ $content ] )
 						|| isset( self::$autoSlashingFunctions[ $content ] )
 					) {
+						continue;
+					}
+
+				} elseif ( T_VARIABLE === $tokens[ $i ]['code'] ) {
+					if ( in_array( $content, $this->input_superglobals, true ) ) {
 						continue;
 					}
 				}
