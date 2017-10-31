@@ -195,6 +195,10 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'pre_comment_author_url' => array( 1 => 'author_url_cookie' ),
 		// Result passed through wp_unslash().
 		'add_ping' => array( 1 => 'new' ),
+		// Result passed to wp_list_pages().
+		'widget_pages_args' => array( 1 => 'args' ),
+		// Result passed to wp_list_bookmarks().
+		'widget_links_args' => array( 1 => 'widget_links_args' ),
 	);
 
 	/**
