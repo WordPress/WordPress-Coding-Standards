@@ -1,0 +1,60 @@
+<?php
+/**
+ * Unit test class for WordPress Coding Standard.
+ *
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
+
+namespace WordPress\Tests\WP;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+
+/**
+ * Unit test class for the EnqueuedResources sniff.
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since
+ */
+class ExpectedSlashedUnitTest extends AbstractSniffUnitTest {
+
+	/**
+	 * @since
+	 */
+	public function getErrorList() {
+		return array(
+			6 => 1,
+			9 => 1,
+			16 => 1,
+			17 => 1,
+			19 => 1,
+			22 => 1,
+			31 => 2,
+			32 => 1,
+			36 => 1,
+			41 => 1,
+			44 => 1,
+			45 => 1,
+			57 => 1,
+			60 => 1,
+			61 => 2,
+			92 => 1,
+			93 => 1,
+		);
+	}
+
+	/**
+	 * @since
+	 */
+	public function getWarningList() {
+		return array(
+			55 => 1,
+			56 => 1,
+			59 => 1,
+			70 => 1,
+		);
+	}
+
+} // End class.
