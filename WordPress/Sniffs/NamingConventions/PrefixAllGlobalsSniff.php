@@ -92,6 +92,18 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
+	 * A list of core hooks that are allowed to be called by plugins and themes.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var array
+	 */
+	protected $whitelisted_core_hooks = array(
+		'widget_title'   => true,
+		'add_meta_boxes' => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.12.0
@@ -572,6 +584,13 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		$is_error    = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
+
+		if (
+			'define' !== $matched_content
+			&& isset( $this->whitelisted_core_hooks[ $raw_content ] )
+		) {
+			return;
+		}
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
 			return;
