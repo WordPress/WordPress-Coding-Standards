@@ -723,7 +723,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 			$byPtr = $phpcsFile->findNext(
 				Tokens::$emptyTokens,
-				$parameters[1]['start'] + 1,
+				$parameters[1]['start'],
 				null,
 				true,
 				null,

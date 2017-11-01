@@ -120,3 +120,6 @@ wp_list_pages( array( 'meta_value' => wp_slash( $value ) . $value . ' "' ) ); //
 // More slashed superglobals.
 wp_update_term( $term_id, 'tag', array( 'name' => $_POST['something'] ) ); // OK.
 wp_list_pages( array( 'meta_value' => $_POST['something'] ) ); // OK.
+
+// Without spaces.
+get_term_by('slug', 'post-format-' . $value, 'post_format' );
