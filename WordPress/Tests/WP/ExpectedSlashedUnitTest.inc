@@ -97,3 +97,26 @@ wpmu_validate_blog_signup( $_POST['blogname'], $_POST['blog_title'], $user ); //
 
 // Without whitespace.
 get_bookmarks(array("category" => $cat->term_id)); // OK.
+
+// String passed.
+add_post_meta( $post_id, 'key', 'value' ); // OK.
+add_post_meta( $post_id, 'key', 'I said, "Wow!"' ); // Warning.
+add_post_meta( $post_id, 'key', 'That\'s nice.' ); // Warning.
+add_post_meta( $post_id, 'key', 'Slashes (\\).' ); // Warning.
+
+wp_update_term( $term_id, 'tag', array( 'name' => 'value' ) ); // OK.
+wp_update_term( $term_id, 'tag', array( 'name' => 'I said, "Wow!"' ) ); // Warning.
+
+wp_list_pages( array( 'meta_value' => 'value' ) ); // OK.
+wp_list_pages( array( 'meta_value' => 'I said, "Wow!"' ) ); // Warning.
+
+// Mixed.
+add_post_meta( $post_id, 'key', wp_slash( $value ) . $value . ' "' ); // 1 Error, 1 Warning.
+
+wp_update_term( $term_id, 'tag', array( 'name' => wp_slash( $value ) . $value . ' "' ) ); // 1 Error, 1 Warning.
+
+wp_list_pages( array( 'meta_value' => wp_slash( $value ) . $value . ' "' ) ); // 1 Error, 1 Warning.
+
+// More slashed superglobals.
+wp_update_term( $term_id, 'tag', array( 'name' => $_POST['something'] ) ); // OK.
+wp_list_pages( array( 'meta_value' => $_POST['something'] ) ); // OK.

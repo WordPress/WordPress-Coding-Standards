@@ -44,7 +44,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 * @var int[]
 	 */
 	protected $slashed_tokens = array(
-		T_CONSTANT_ENCAPSED_STRING => true, // TODO
 		T_LNUMBER                  => true,
 		T_MINUS                    => true,
 		T_TRUE                     => true,
@@ -646,25 +645,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 					$tokens[ $array_opener ]['parenthesis_closer']
 				)
 			) {
-				$is_slashed = false;
-				$start      = $next_double_arrow + 1;
 
-				$value_ptr = $phpcsFile->findNext(
-					Tokens::$emptyTokens,
-					$next_double_arrow + 1,
-					null,
-					true,
-					null,
-					true
-				);
-
-				// These tokens are implicitly slashed, so we don't need to slash them.
-				if (
-					isset( $this->slashed_tokens[ $tokens[ $value_ptr ]['code'] ] )
-					|| isset( $this->slashed_casts[ $tokens[ $value_ptr ]['code'] ] )
-				) {
-					continue;
-				}
+				$start = $next_double_arrow + 1;
 
 				$key_ptr = $phpcsFile->findPrevious(
 					Tokens::$emptyTokens,
@@ -676,36 +658,46 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				);
 
 				if ( T_CONSTANT_ENCAPSED_STRING !== $tokens[ $key_ptr ]['code'] ) {
+					// TODO warning?
 					continue;
 				}
 
 				$key_name = trim( $tokens[ $key_ptr ]['content'], '\'"' );
 
-				if (
-					isset( self::$slashingFunctions[ $tokens[ $value_ptr ]['content'] ] )
-					|| isset( self::$autoSlashingFunctions[ $tokens[ $value_ptr ]['content'] ] )
-				) {
-					$is_slashed = true;
-				}
+				$errors = array();
 
-				if ( ! $is_slashed && in_array( $key_name, $slashed_keys, true ) ) {
+				if ( in_array( $key_name, $slashed_keys, true ) ) {
 
-					$this->addError(
-						'%s() expects the value of %s to be slashed with wp_slash().',
-						$value_ptr,
-						'ExpectedKeySlashed',
-						array( $function_name, $key_name )
+					$errors['unslashed'] = array(
+						'message' => '%s() expects the value of %s to be slashed with wp_slash().',
+						'code' => 'ExpectedKeySlashed',
+						'data' => array( $function_name, $key_name ),
 					);
 
-				} elseif ( $is_slashed && in_array( $key_name, $unslashed_keys, true ) ) {
+					$errors['slashable_string'] = array(
+						'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
+						'code' => 'KeyStringMayNeedSlashing',
+						'data' => array( $function_name, $key_name )
+					);
 
-					$this->addError(
-						'%s() expects the value of %s to be unslashed.',
-						$value_ptr,
-						'ExpectedKeyUnslashed',
-						array( $function_name, $key_name )
+				} elseif ( in_array( $key_name, $unslashed_keys, true ) ) {
+
+					$errors['slashed'] = array(
+						'message' => '%s() expects the value of %s to be unslashed.',
+						'code' => 'ExpectedKeyUnslashed',
+						'data' => array( $function_name, $key_name ),
 					);
 				}
+
+				if ( empty( $errors ) ) {
+					continue;
+				}
+
+				$this->slashing_check_loop(
+					$start,
+					$phpcsFile->findEndOfStatement( $start ),
+					$errors
+				);
 			}
 		}
 
@@ -722,7 +714,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	protected function process_expected_slashed_args( $parameters, $function_name ) {
 
 		$phpcsFile = $this->phpcsFile;
-		$tokens = $this->tokens;
+		$tokens    = $this->tokens;
 
 		// Special handling for get_term_by( 'name' ).
 		if ( 'get_term_by' === $function_name && isset( $parameters[1] ) ) {
@@ -753,105 +745,195 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				break;
 			}
 
-			$argPtr = $parameters[ $arg_index ]['start'];
-
-			$in_cast = false;
-			$watch   = true;
-
-			for ( $i = $argPtr; $i <= $parameters[ $arg_index ]['end']; $i++ ) {
-
-				if ( T_COMMA === $tokens[ $i ]['code'] ) {
-					$watch = true;
-					continue;
-				}
-
-				// If we're not watching right now, do nothing.
-				if ( ! $watch ) {
-
-					// Wake up on concatenation characters, another part to check.
-					if ( T_STRING_CONCAT === $tokens[ $i ]['code'] ) {
-						$watch = true;
-					}
-
-					continue;
-				}
-
-				// Ignore whitespaces and comments.
-				if ( in_array( $tokens[ $i ]['code'], Tokens::$emptyTokens ) ) {
-					continue;
-				}
-
-				// Skip to the end of a function call if it has been casted to a safe value.
-				if ( $in_cast && T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] ) {
-					$i = $tokens[ $i ]['parenthesis_closer'];
-					$in_cast = false;
-					continue;
-				}
-
-				// Handle arrays for those functions that accept them.
-				if ( T_ARRAY === $tokens[ $i ]['code'] ) {
-					$i ++; // Skip the opening parenthesis.
-					continue;
-				}
-
-				if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS, T_STRING_CONCAT ) ) ) {
-					continue;
-				}
-
-				// Allow tokens that are implicitly slashed.
-				if ( isset( $this->slashed_tokens[ $tokens[ $i ]['code'] ] ) ) {
-					continue;
-				}
-
-				// If we were watching before, stop now. That way we'll error once
-				// for a set of unslashed tokens, instead of for each of the tokens.
-				$watch = false;
-
-				// Allow int/float/bool casted variables.
-				if ( isset( $this->slashed_casts[ $tokens[ $i ]['code'] ] ) ) {
-					$in_cast = true;
-					continue;
-				}
-
-				$content = $tokens[ $i ]['content'];
-
-				// If this is a function call.
-				if ( T_STRING === $tokens[ $i ]['code'] ) {
-
-					// We can fast-forward to the end of this function call, we don't
-					// need to check each token because we're going to check whether
-					// the result of the function is slashed (below).
-					$paren_opener = $phpcsFile->findNext( Tokens::$emptyTokens, $i + 1, null, true );
-
-					if ( isset( $tokens[ $paren_opener ]['parenthesis_closer'] ) ) {
-						$i = $tokens[ $paren_opener ]['parenthesis_closer'];
-					}
-
-					// If the function is a slashing function we continue to the next
-					// token instead of giving an error.
-					if (
-						isset( self::$slashingFunctions[ $content ] )
-						|| isset( self::$autoSlashingFunctions[ $content ] )
-					) {
-						continue;
-					}
-
-				} elseif ( T_VARIABLE === $tokens[ $i ]['code'] ) {
-					if ( in_array( $content, $this->input_superglobals, true ) ) {
-						continue;
-					}
-				}
-
-				$this->addError(
-					'%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
-					$i,
-					'MissingSlashing',
-					array( $function_name, $name, $content )
-				);
-			}
+			$this->slashing_check_loop(
+				$parameters[ $arg_index ]['start'],
+				$parameters[ $arg_index ]['end'],
+				array(
+					'unslashed' => array(
+						'message' => '%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
+						'code' => 'MissingSlashing',
+						'data' => array( $function_name, $name )
+					),
+					'slashable_string' => array(
+						'message' => '%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
+						'code' => 'StringMayNeedSlashing',
+						'data' => array( $function_name, $name )
+					)
+				)
+			);
 		}
 
 	} // End process_expected_slashed_args()
+
+	/**
+	 * Loops over a series of tokens running a slashing check.
+	 *
+	 * @since ${PROJECT_VERSION}
+	 *
+	 * @param int $start The starting token position.
+	 * @param int $end   The ending token position.
+	 * @param array $errors {
+	 *        The errors to give.
+	 *
+	 *         @type array $slashed {
+	 *               The error to give when slashed data is found.
+	 *
+	 *               @type string $message The error message.
+	 *               @type string $code    The error code.
+	 *               @type array  $data    The error data. The found content will be added.
+	 *         }
+	 *         @type array $unslashed {
+	 *               The error to give when unslashed data is found.
+	 *
+	 *               @type string $message The error message.
+	 *               @type string $code    The error code.
+	 *               @type array  $data    The error data. The found content will be added.
+	 *         }
+	 *         @type array $slashable_string {
+	 *               The warning to give when a slashable string is found.
+	 *
+	 *               @type string $message The error message.
+	 *               @type string $code    The error code.
+	 *               @type array  $data    The error data. The found content will be added.
+	 *         }
+	 * }
+	 */
+	protected function slashing_check_loop( $start, $end, $errors ) {
+
+		$tokens = $this->tokens;
+
+		$in_cast = false;
+		$watch   = true;
+
+		for ( $i = $start; $i <= $end; $i++ ) {
+
+			if ( T_COMMA === $tokens[ $i ]['code'] ) {
+				$watch = true;
+				continue;
+			}
+
+			// If we're not watching right now, do nothing.
+			if ( ! $watch ) {
+
+				// Wake up on concatenation characters, another part to check.
+				if ( T_STRING_CONCAT === $tokens[ $i ]['code'] ) {
+					$watch = true;
+				}
+
+				continue;
+			}
+
+			// Ignore whitespaces and comments.
+			if ( in_array( $tokens[ $i ]['code'], Tokens::$emptyTokens ) ) {
+				continue;
+			}
+
+			// Skip to the end of a function call if it has been casted to a safe value.
+			if ( $in_cast && T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] ) {
+				$i = $tokens[ $i ]['parenthesis_closer'];
+				$in_cast = false;
+				continue;
+			}
+
+			// Handle arrays for those functions that accept them.
+			if ( T_ARRAY === $tokens[ $i ]['code'] ) {
+				$i++; // Skip the opening parenthesis.
+				continue;
+			}
+
+			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS, T_STRING_CONCAT ) ) ) {
+				continue;
+			}
+
+			// Allow tokens that are implicitly slashed.
+			if ( isset( $this->slashed_tokens[ $tokens[ $i ]['code'] ] ) ) {
+				continue;
+			}
+
+			$content = $tokens[ $i ]['content'];
+
+			if ( T_CONSTANT_ENCAPSED_STRING === $tokens[ $i ]['code'] ) {
+
+				if ( preg_match( '~^["\'].*["\'\\\\].*["\']$~', $content ) ) {
+					if ( isset( $errors['slashable_string'] ) ) {
+						$this->phpcsFile->addWarning(
+							$errors['slashable_string']['message'],
+							$i,
+							$errors['slashable_string']['code'],
+							array_merge( $errors['slashable_string']['data'], array( $content ) )
+						);
+					}
+				}
+
+				continue;
+			}
+
+			// If we were watching before, stop now. That way we'll error once
+			// for a set of unslashed tokens, instead of for each of the tokens.
+			$watch = false;
+
+			// Allow int/float/bool casted variables.
+			if ( isset( $this->slashed_casts[ $tokens[ $i ]['code'] ] ) ) {
+				$in_cast = true;
+				continue;
+			}
+
+			// If this is a function call.
+			if ( T_STRING === $tokens[ $i ]['code'] ) {
+
+				// We can fast-forward to the end of this function call, we don't
+				// need to check each token because we're going to check whether
+				// the result of the function is slashed (below).
+				$paren_opener = $this->phpcsFile->findNext( Tokens::$emptyTokens, $i + 1, null, true );
+
+				if ( isset( $tokens[ $paren_opener ]['parenthesis_closer'] ) ) {
+					$i = $tokens[ $paren_opener ]['parenthesis_closer'];
+				}
+
+				// If the function is a slashing function we continue to the next
+				// token instead of giving an error.
+				if (
+					isset( self::$slashingFunctions[ $content ] )
+					|| isset( self::$autoSlashingFunctions[ $content ] )
+				) {
+					if ( isset( $errors['slashed'] ) ) {
+						$this->addError(
+							$errors['slashed']['message'],
+							$i,
+							$errors['slashed']['code'],
+							array_merge( $errors['slashed']['data'], array( $content ) )
+						);
+					}
+
+					continue;
+				}
+
+			} elseif ( T_VARIABLE === $tokens[ $i ]['code'] ) {
+				if ( in_array( $content, $this->input_superglobals, true ) ) {
+
+					if ( isset( $errors['slashed'] ) ) {
+						$this->addError(
+							$errors['slashed']['message'],
+							$i,
+							$errors['slashed']['code'],
+							array_merge( $errors['slashed']['data'], array( $content ) )
+						);
+					}
+
+					continue;
+				}
+			}
+
+			if ( isset( $errors['unslashed'] ) ) {
+				$this->addError(
+					$errors['unslashed']['message'],
+					$i,
+					$errors['unslashed']['code'],
+					array_merge( $errors['unslashed']['data'], array( $content ) )
+				);
+			}
+		}
+	}
 
 	/**
 	 * Records an error against a specific token in the file being sniffed.
