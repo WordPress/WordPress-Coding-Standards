@@ -71,6 +71,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'add_term_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
 		// Uses add_metadata().
 		'add_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		// Uses term_exists().
+		'category_exists' => array( 1 => 'cat_name' ),
 		// These are directly interpolated into a database query. Failure to slash
 		// will result in SQL injection!!
 		'check_comment' => array( 1 => 'author', 2 => 'email' ),
@@ -94,6 +96,10 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'edit_post' => array( 1 => 'post_data' ),
 		// Uses get_term_by( 'name' ).
 		'get_cat_ID' => array( 1 => 'category_name' ),
+		// Uses get_term_by( 'name' ).
+		'get_linkobjectsbyname' => array( 1 => 'cat_name' ),
+		// Uses get_term_by( 'name' ).
+		'get_linksbyname' => array( 1 => 'cat_name' ),
 		// Uses get_search_feed_link().
 		'get_search_comments_feed_link' => array( 1 => array( 'search_query' ) ),
 		// Uses get_search_link().
@@ -106,6 +112,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'install_blog' => array( 2 => 'blog_title' ),
 		// Uses wp_get_nav_menu_object().
 		'is_nav_menu' => array( 1 => 'menu' ),
+		// Uses term_exists().
+		'is_term' => array( 1 => 'term' ),
 		// Uses wp_unslash().
 		'post_exists' => array( 1 => 'title', 2 => 'content', 3 => 'date' ),
 		// Uses update_post_meta() when the $file isn't empty.
@@ -122,6 +130,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'update_term_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
 		// Uses update_metadata().
 		'update_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		// Uses term_exists().
+		'tag_exists' => array( 1 => 'tag_name' ),
 		// Uses wp_unslash() when a string is passed; also accepts term ID.
 		'term_exists' => array( 1 => 'term' ),
 		// Uses update_user_meta().
@@ -134,6 +144,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_create_nav_menu' => array( 1 => 'menu_name' ),
 		// Uses wp_unslash().
 		'wp_create_post_autosave' => array( 1 => 'post_data' ),
+		// Uses wp_insert_term() and term_exists().
+		'wp_create_term' => array( 1 => 'term_name' ),
 		// Uses wp_get_nav_menu_object().
 		'wp_delete_nav_menu' => array( 1 => 'menu' ),
 		// Just passed data through it, but is used by wp_new_comment(),
@@ -162,6 +174,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_set_object_terms' => array( 2 => 'terms' ),
 		// Uses wp_set_post_terms().
 		'wp_set_post_categories' => array( 2 => 'post_categories' ),
+		// Uses wp_set_post_categories().
+		'wp_set_post_cats' => array( 2 => 'post_categories' ),
 		// Uses wp_set_post_terms().
 		'wp_set_post_tags' => array( 2 => 'tags' ),
 		// Uses wp_set_object_terms().
@@ -180,6 +194,12 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'WP_Press_This::side_load_images' => array( 2 => 'content' ),
 		// Uses wp_unslash().
 		'WP_Customize_Setting::sanitize' => array( 1 => 'value' ),
+		// Uses wp_insert_post() and wp_update_post().
+		'wp_xmlrpc_server::_insert_post' => array( 2 => 'content_struct' ),
+		// Uses wp_unslash() and add_term_meta().
+		'wp_xmlrpc_server::set_term_custom_fields' => array( 2 => 'fields' ),
+		// Uses wp_unslash() and add_post_meta().
+		'wp_xmlrpc_server::set_custom_fields' => array( 2 => 'fields' ),
 	);
 
 	/**
@@ -253,6 +273,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				'meta_input',
 			),
 		),
+		// Uses wp_insert_term() and wp_update_term().
+		'wp_insert_category' => array( 1 => array( 'category_description', 'cat_name' ) ),
 		// Uses wp_unslash().
 		'wp_insert_post' => array(
 			1 => array(
@@ -274,6 +296,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// The 'name' arg is also expected slashed, but this is always overridden by
 		// $term.
 		'wp_insert_term' => array( 3 => array( 'description' ) ),
+		// Uses wp_get_nav_menu_object() on this.
+		'wp_nav_menu' => array( 1 => array( 'menu' ) ),
 		// Uses wp_insert_post() or wp_update_post(). All other values are slugs or
 		// integers.
 		'wp_update_nav_menu_item' => array(
@@ -445,6 +469,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'widget_links_args' => array( 1 => 'widget_links_args' ),
 		// Result passed to wp_list_pages().
 		'widget_pages_args' => array( 1 => 'args' ),
+		// Result passed to wp_update_post() or wp_insert_post().
+		'xmlrpc_wp_insert_post_data' => array( 1 => 'post_data', 2 => 'content_struct' ),
 	);
 
 	/**
