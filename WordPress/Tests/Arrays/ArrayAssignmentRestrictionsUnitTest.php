@@ -55,9 +55,9 @@ class ArrayAssignmentRestrictionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			5 => 1,
-			7 => 2,
+			3  => 1,
+			5  => 1,
+			7  => 2,
 			20 => 1,
 		);
 

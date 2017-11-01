@@ -42,7 +42,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.3 or higher and [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
+The WordPress Coding Standards require PHP 5.3 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
 As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
 
 ### Composer
@@ -66,7 +66,7 @@ When installing the WordPress Coding Standards as a dependency in a larger proje
 
 There are two actively maintained Composer plugins which can handle the registration of standards with PHP_CodeSniffer for you:
 * [composer-phpcodesniffer-standards-plugin](https://github.com/higidi/composer-phpcodesniffer-standards-plugin)
-* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer):"^0.4.1"
+* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer):"^0.4.3"
 
 It is strongly suggested to `require` one of these plugins in your project to handle the registration of external standards with PHPCS for you.
 
@@ -74,7 +74,7 @@ It is strongly suggested to `require` one of these plugins in your project to ha
 
 1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, Phar file, PEAR, or Git checkout).
 
-   Do ensure that PHP_CodeSniffer's version matches our requirements(#requirements), if, for example, you're using VVV(https://github.com/Varying-Vagrant-Vagrants/VVV).
+   Do ensure that PHP_CodeSniffer's version matches our [requirements](#requirements), if, for example, you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV).
 
 2. Clone the WordPress standards repository:
 
@@ -124,7 +124,7 @@ You can use the following as standard names when invoking `phpcs` to select snif
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
@@ -212,11 +212,14 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 - Install PHP Sniffer and WordPress Coding Standards per above.
 - Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager.
 - Run `which phpcs` to get your `phpcs` executable path.
-- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
+- Open the linter-phpcs package settings; enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
+- Below these settings find the Tab Width setting and change it to `4`.
 
 ![Atom Linter WordPress Coding Standards configuration](https://cloud.githubusercontent.com/assets/224636/12740504/ce4e97b8-c941-11e5-8d83-c77a2470d58e.png)
 
 ![Atom Linter in action using WordPress Coding Standards](https://cloud.githubusercontent.com/assets/224636/12740542/131c5894-c942-11e5-9e31-5e020c993224.png)
+
+- Note that certain items within PHPCS config file can cause linting to fail, see [linter-phpcs #95](https://github.com/AtomLinter/linter-phpcs/issues/95#issuecomment-316133107) for more details.
 
 ### Visual Studio
 
@@ -246,7 +249,7 @@ matrix:
 before_install:
   - if [[ "$SNIFF" == "1" ]]; then export PHPCS_DIR=/tmp/phpcs; fi
   - if [[ "$SNIFF" == "1" ]]; then export SNIFFS_DIR=/tmp/sniffs; fi
-  # Install PHP CodeSniffer.
+  # Install PHP_CodeSniffer.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
   # Install WordPress Coding Standards.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR; fi

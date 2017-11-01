@@ -36,8 +36,20 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                 which were not covered elsewhere. The `ArrayDeclaration` sniff has
  *                 now been deprecated.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Single item associative arrays are now by default exempt from the
+ *                 "must be multi-line" rule. This behaviour can be changed using the
+ *                 `allow_single_item_single_line_associative_arrays` property.
  */
 class ArrayDeclarationSpacingSniff extends Sniff {
+
+	/**
+	 * Whether or not to allow single item associative arrays to be single line.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var bool Defaults to true.
+	 */
+	public $allow_single_item_single_line_associative_arrays = true;
 
 	/**
 	 * Token this sniff targets.
@@ -176,7 +188,11 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 			$array_items = $this->get_function_call_parameters( $stackPtr );
 
-			if ( ! empty( $array_items ) ) {
+			if ( ( false === $this->allow_single_item_single_line_associative_arrays
+					&& ! empty( $array_items ) )
+				|| ( true === $this->allow_single_item_single_line_associative_arrays
+					&& count( $array_items ) > 1 )
+			) {
 				/*
 				 * Make sure the double arrow is for *this* array, not for a nested one.
 				 */
@@ -203,10 +219,15 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 				if ( true === $array_has_keys ) {
 
+					$phrase = 'an';
+					if ( true === $this->allow_single_item_single_line_associative_arrays ) {
+						$phrase = 'a multi-item';
+					}
 					$fix = $this->phpcsFile->addFixableError(
-						'When an array uses associative keys, each value should start on a new line.',
+						'When %s array uses associative keys, each value should start on a new line.',
 						$closer,
-						'AssociativeKeyFound'
+						'AssociativeArrayFound',
+						array( $phrase )
 					);
 
 					if ( true === $fix ) {

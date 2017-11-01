@@ -81,3 +81,30 @@ ND
 	, $wpdb->postmeta,
 	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // OK.
+
+wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+
+$wpdb->query( // Some arbitrary comment.
+	"SELECT *
+		FROM $wpdb->posts
+		WHERE post_title LIKE '" . $escaped_var . "';"
+); // Bad x 1.
+
+$wpdb->query(
+	"SELECT *
+		FROM $wpdb->posts
+		WHERE post_title LIKE '" . $escaped_var . "';"
+); // WPCS: unprepared SQL OK.
+
+$wpdb->query( // WPCS: unprepared SQL OK.
+	"SELECT *
+		FROM $wpdb->posts
+		WHERE post_title LIKE '" . $escaped_var . "';"
+);
+
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . (int) $foo . ";" ); // Ok.
+
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . (float) $foo . ";" ); // Ok.
+
+// Don't throw an error during live coding.
+wpdb::prepare( "SELECT * FROM $wpdb->posts

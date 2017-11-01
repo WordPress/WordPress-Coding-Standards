@@ -126,6 +126,24 @@ class I18nSniff extends Sniff {
 	public $check_translator_comments = true;
 
 	/**
+	 * Whether or not the `default` text domain is one of the allowed text domains.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var bool
+	 */
+	private $text_domain_contains_default = false;
+
+	/**
+	 * Whether or not the `default` text domain is the only allowed text domain.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var bool
+	 */
+	private $text_domain_is_default = false;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -146,6 +164,10 @@ class I18nSniff extends Sniff {
 	public function process_token( $stack_ptr ) {
 		$token = $this->tokens[ $stack_ptr ];
 
+		// Reset defaults.
+		$this->text_domain_contains_default = false;
+		$this->text_domain_is_default       = false;
+
 		// Allow overruling the text_domain set in a ruleset via the command line.
 		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
@@ -153,6 +175,15 @@ class I18nSniff extends Sniff {
 		}
 
 		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
+
+		if ( ! empty( $this->text_domain ) ) {
+			if ( in_array( 'default', $this->text_domain, true ) ) {
+				$this->text_domain_contains_default = true;
+				if ( count( $this->text_domain ) === 1 ) {
+					$this->text_domain_is_default = true;
+				}
+			}
+		}
 
 		if ( '_' === $token['content'] ) {
 			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
@@ -169,7 +200,7 @@ class I18nSniff extends Sniff {
 
 		$func_open_paren_token = $this->phpcsFile->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
-			 return;
+			return;
 		}
 
 		$arguments_tokens = array();
@@ -279,7 +310,7 @@ class I18nSniff extends Sniff {
 			);
 			$argument_assertions[] = array(
 				'arg_name' => 'plural',
-				'tokens' => array_shift( $arguments_tokens ),
+				'tokens'   => array_shift( $arguments_tokens ),
 			);
 			$argument_assertions[] = array(
 				'arg_name' => 'domain',
@@ -341,15 +372,34 @@ class I18nSniff extends Sniff {
 		$tokens    = $context['tokens'];
 		$arg_name  = $context['arg_name'];
 		$is_error  = empty( $context['warning'] );
-		$content   = $tokens[0]['content'];
+		$content   = isset( $tokens[0] ) ? $tokens[0]['content'] : '';
 
 		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
-			if ( 'domain' !== $arg_name || ! empty( $this->text_domain ) ) {
+			if ( 'domain' !== $arg_name ) {
+				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
+				return false;
+			}
+
+			// Ok, we're examining a text domain, now deal correctly with the 'default' text domain.
+			if ( true === $this->text_domain_is_default ) {
+				return true;
+			}
+
+			if ( true === $this->text_domain_contains_default ) {
+				$this->phpcsFile->addWarning(
+					'Missing $%s arg. If this text string is supposed to use a WP Core translation, use the "default" text domain.',
+					$stack_ptr,
+					$code . 'Default',
+					array( $arg_name )
+				);
+			} elseif ( ! empty( $this->text_domain ) ) {
 				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
+
 			return false;
 		}
+
 		if ( count( $tokens ) > 1 ) {
 			$contents = '';
 			foreach ( $tokens as $token ) {
@@ -364,13 +414,6 @@ class I18nSniff extends Sniff {
 			$this->check_text( $context );
 		}
 
-		if ( T_CONSTANT_ENCAPSED_STRING === $tokens[0]['code'] ) {
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
-				return false;
-			}
-			return true;
-		}
 		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || T_HEREDOC === $tokens[0]['code'] ) {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
@@ -380,10 +423,54 @@ class I18nSniff extends Sniff {
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
 			}
-			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) && ! in_array( $this->strip_quotes( $content ), $this->text_domain, true ) ) {
-				$this->addMessage( 'Mismatch text domain. Expected \'%s\' but got %s.', $stack_ptr, $is_error, 'TextDomainMismatch', array( implode( "' or '", $this->text_domain ), $content ) );
-				return false;
+		}
+
+		if ( isset( Tokens::$textStringTokens[ $tokens[0]['code'] ] ) ) {
+			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) ) {
+				$stripped_content = $this->strip_quotes( $content );
+
+				if ( ! in_array( $stripped_content, $this->text_domain, true ) ) {
+					$this->addMessage(
+						'Mismatched text domain. Expected \'%s\' but got %s.',
+						$stack_ptr,
+						$is_error,
+						'TextDomainMismatch',
+						array( implode( "' or '", $this->text_domain ), $content )
+					);
+					return false;
+				}
+
+				if ( true === $this->text_domain_is_default && 'default' === $stripped_content ) {
+					$fixable    = false;
+					$error      = 'No need to supply the text domain when the only accepted text-domain is "default".';
+					$error_code = 'SuperfluousDefaultTextDomain';
+
+					if ( $tokens[0]['token_index'] === $stack_ptr ) {
+						$prev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $stack_ptr - 1 ), null, true );
+						if ( false !== $prev && T_COMMA === $this->tokens[ $prev ]['code'] ) {
+							$fixable = true;
+						}
+					}
+
+					if ( false === $fixable ) {
+						$this->phpcsFile->addWarning( $error, $stack_ptr, $error_code );
+						return false;
+					}
+
+					$fix = $this->phpcsFile->addFixableWarning( $error, $stack_ptr, $error_code );
+					if ( true === $fix ) {
+						// Remove preceeding comma, whitespace and the text domain token.
+						$this->phpcsFile->fixer->beginChangeset();
+						for ( $i = $prev; $i <= $stack_ptr; $i++ ) {
+							$this->phpcsFile->fixer->replaceToken( $i, '' );
+						}
+						$this->phpcsFile->fixer->endChangeset();
+					}
+
+					return false;
+				}
 			}
+
 			return true;
 		}
 
@@ -468,9 +555,9 @@ class I18nSniff extends Sniff {
 				// Prepare the strings for use a regex.
 				$replace_regexes[ $i ] = '`\Q' . $unordered_matches[ $i ] . '\E`';
 				// Note: the initial \\ is a literal \, the four \ in the replacement translate to also to a literal \.
-				$replacements[ $i ]    = str_replace( '\\', '\\\\', $suggestions[ $i ] );
+				$replacements[ $i ] = str_replace( '\\', '\\\\', $suggestions[ $i ] );
 				// Note: the $ needs escaping to prevent numeric sequences after the $ being interpreted as match replacements.
-				$replacements[ $i ]    = str_replace( '$', '\\$', $replacements[ $i ] );
+				$replacements[ $i ] = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
 			$fix = $this->addFixableMessage(
@@ -574,7 +661,7 @@ class I18nSniff extends Sniff {
 						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
 							// If it's docblock comment (wrong style) make sure that it's a translators comment.
 							$db_start      = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
-							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ),  $previous_comment );
+							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ), $previous_comment );
 
 							if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
 								$this->phpcsFile->addWarning(

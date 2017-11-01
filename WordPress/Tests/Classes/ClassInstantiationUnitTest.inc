@@ -41,7 +41,7 @@ $renderer = new $this->inline_diff_renderer;
 $b = ( new MyClass )->my_function();
 $b = ( new MyClass )::$property;
 
-class ClassA {
+class ClassAA {
 	public static function get_instance() {
 		return new self;
 	}
@@ -51,7 +51,7 @@ class ClassA {
 	}
 }
 
-class ClassB extends ClassA {
+class ClassBB extends ClassA {
 	public function get_parent_instance() {
 		return new parent;
 	}
@@ -96,3 +96,11 @@ $a = new \MyNamespace\MyClass();
 // Namespaced classes: Bad.
 $a = new \MyClass;
 $a = new \MyNamespace\MyClass;
+
+// Non-variable keys: OK.
+$a = new $array['key']();
+$a = new $array[0]();
+
+// Non-variable keys: Bad.
+$a = new $array['key'];
+$a = new $array[0];

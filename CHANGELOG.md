@@ -8,6 +8,67 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 _Nothing yet._
 
+## [0.14.0] - 2017-11-01
+
+### Added
+- `WordPress.Arrays.MultipleStatementAlignment` sniff to the `WordPress-Core` ruleset which will align the array assignment operator for multi-item, multi-line associative arrays.
+    This new sniff offers four custom properties to customize its behaviour: [`ignoreNewlines`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-allow-for-new-lines), [`exact`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-allow-non-exact-alignment), [`maxColumn`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-maximum-column) and [`alignMultilineItems`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-dealing-with-multi-line-items).
+- `WordPress.DB.PreparedSQLPlaceholders` sniff to the `WordPress-Core` ruleset which will analyse the placeholders passed to `$wpdb->prepare()` for their validity, check whether queries using `IN ()` and `LIKE` statements are created correctly and will check whether a correct number of replacements are passed.
+    This sniff should help detect queries which are impacted by the security fixes to `$wpdb->prepare()` which shipped with WP 4.8.2 and 4.8.3.
+    The sniff also adds a new ["PreparedSQLPlaceholders replacement count" whitelist comment](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors#preparedsql-placeholders-vs-replacements) for pertinent replacement count vs placeholder mismatches. Please consider carefully whether something could be a bug when you are tempted to use the whitelist comment and if so, [report it](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/new).
+- `WordPress.PHP.DiscourageGoto` sniff to the `WordPress-Core` ruleset.
+- `WordPress.PHP.RestrictedFunctions` sniff to the `WordPress-Core` ruleset which initially forbids the use of `create_function()`.
+    This was previous only discouraged under certain circumstances.
+- `WordPress.WhiteSpace.ArbitraryParenthesesSpacing` sniff to the `WordPress-Core` ruleset which checks the spacing on the inside of arbitrary parentheses.
+- `WordPress.WhiteSpace.PrecisionAlignment` sniff to the `WordPress-Core` ruleset which will throw a warning when precision alignment is detected in PHP, JS and CSS files.
+- `WordPress.WhiteSpace.SemicolonSpacing` sniff to the `WordPress-Core` ruleset which will throw a (fixable) error when whitespace is found before a semi-colon, except for when the semi-colon denotes an empty `for()` condition.
+- `WordPress.CodeAnalysis.AssignmentInCondition` sniff to the `WordPress-Extra` ruleset.
+- `WordPress.WP.DiscouragedConstants` sniff to the `WordPress-Extra` and `WordPress-VIP` rulesets to detect usage of deprecated WordPress constants, such as `STYLESHEETPATH` and `HEADER_IMAGE`.
+- Ability to pass the `minimum_supported_version` to use for the `DeprecatedFunctions`, `DeprecatedClasses` and `DeprecatedParameters` sniff in one go. You can pass a `minimum_supported_wp_version` runtime variable for this [from the command line or pass it using a `config` directive in a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#setting-minimum-supported-wp-version-for-all-sniffs-in-one-go-wpcs-0140).
+- `Generic.Formatting.MultipleStatementAlignment` - customized to have a `maxPadding` of `40` -, `Generic.Functions.FunctionCallArgumentSpacing` and `Squiz.WhiteSpace.ObjectOperatorSpacing` to the `WordPress-Core` ruleset.
+- `Squiz.Scope.MethodScope`, `Squiz.Scope.MemberVarScope`, `Squiz.WhiteSpace.ScopeKeywordSpacing`, `PSR2.Methods.MethodDeclaration`, `Generic.Files.OneClassPerFile`, `Generic.Files.OneInterfacePerFile`, `Generic.Files.OneTraitPerFile`, `PEAR.Files.IncludingFile`, `Squiz.WhiteSpace.LanguageConstructSpacing`, `PSR2.Namespaces.NamespaceDeclaration` to the `WordPress-Extra` ruleset.
+- The `is_class_constant()`, `is_class_property` and `valid_direct_scope()` utility methods to the `WordPress\Sniff` class.
+
+### Changed
+- When passing an array property via a custom ruleset to PHP_CodeSniffer, spaces around the key/value are taken as intentional and parsed as part of the array key/value. In practice, this leads to confusion and WPCS does not expect any values which could be preceded/followed by a space, so for the WordPress Coding Standard native array properties, like `customAutoEscapedFunction`, `text_domain`, `prefixes`, WPCS will now trim whitespace from the keys/values received before use.
+- The WPCS native whitelist comments used to only work when they were put on the _end of the line_ of the code they applied to. As of now, they will also be recognized when they are be put at the _end of the statement_ they apply to.
+- The `WordPress.Arrays.ArrayDeclarationSpacing` sniff used to enforce all associative arrays to be multi-line. The handbook has been updated to only require this for multi-item associative arrays and the sniff has been updated accordingly.
+    [The original behaviour can still be enforced](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#arrays-forcing-single-item-associative-arrays-to-be-multi-line) by setting the new `allow_single_item_single_line_associative_arrays` property to `false` in a custom ruleset.
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff will now allow for a limited list of WP core hooks which are intended to be called by plugins and themes.
+- The `WordPress.PHP.DiscouragedFunctions` sniff used to include `create_function`. This check has been moved to the new `WordPress.PHP.RestrictedFunctions` sniff.
+- The `WordPress.PHP.StrictInArray` sniff now has a separate error code `FoundNonStrictFalse` for when the `$strict` parameter has been set to `false`. This allows for excluding the warnings for that particular situation, which will normally be intentional, via a custom ruleset.
+- The `WordPress.VIP.CronInterval` sniff now allows for customizing the minimum allowed cron interval by [setting a property in a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#vip-croninterval-minimum-interval).
+- The `WordPress.VIP.RestrictedFunctions` sniff used to prohibit the use of certain WP native functions, recommending the use of `wpcom_vip_get_term_link()`, `wpcom_vip_get_term_by()` and `wpcom_vip_get_category_by_slug()` instead, as the WP native functions were not being cached. As the results of the relevant WP native functions are cached as of WP 4.8, the advice has now been reversed i.e. use the WP native functions instead of `wpcom...` functions.
+- The `WordPress.VIP.PostsPerPage` sniff now allows for customizing the `post_per_page` limit for which the sniff will trigger by [setting a property in a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#vip-postsperpage-post-limit).
+- The `WordPress.WP.I18n` sniff will now allow and actively encourage omitting the text-domain in I18n function calls if the text-domain passed via the `text_domain` property is `default`, i.e. the domain used by Core.
+    When `default` is one of several text-domains passed via the `text_domain` property, the error thrown when the domain is missing has been downgraded to a `warning`.
+- The `WordPress.XSS.EscapeOutput` sniff now has a separate error code `OutputNotEscapedShortEcho` and the error message texts have been updated.
+- Moved `Squiz.PHP.Eval` from the `WordPress-Extra` and `WordPress-VIP` to the `WordPress-Core` ruleset.
+- Removed two sniffs from the `WordPress-VIP` ruleset which were already included via the `WordPress-Core` ruleset.
+- The unit test suite is now compatible with PHPCS 3.1.0+ and PHPUnit 6.x.
+- Some tidying up of the unit test case files.
+- All sniffs are now also being tested against PHP 7.2 for consistent sniff results.
+- An attempt is made to detect potential fixer conflicts early via a special build test.
+- Various minor documentation fixes.
+- Improved the Atom setup instructions in the Readme.
+- Updated the unit testing information in Contributing.
+- Updated the [custom ruleset example](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/phpcs.xml.dist.sample) for the changes contained in this release and to make it more explicit what is recommended versus example code.
+- The minimum recommended version for the suggested `DealerDirect/phpcodesniffer-composer-installer` Composer plugin has gone up to `0.4.3`. This patch version fixes support for PHP 5.3.
+
+### Fixed
+- The `WordPress.Arrays.ArrayIndentation` sniff did not correctly handle array items with multi-line strings as a value.
+- The `WordPress.Arrays.ArrayIndentation` sniff did not correctly handle array items directly after an array item with a trailing comment.
+- The `WordPress.Classes.ClassInstantiation` sniff will now correctly handle detection when using `new $array['key']` or `new $array[0]`.
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff did not allow for arbitrary word separators in hook names.
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff did not correctly recognize namespaced constants as prefixed.
+- The `WordPress.PHP.StrictInArray` sniff would erronously trigger if the `true` for `$strict` was passed in uppercase.
+- The `WordPress.PHP.YodaConditions` sniff could get confused over complex ternaries containing assignments. This has been remedied.
+- The `WordPress.WP.PreparedSQL` sniff would erronously throw errors about comments found within a DB function call.
+- The `WordPress.WP.PreparedSQL` sniff would erronously throw errors about `(int)`, `(float)` and `(bool)` casts and would also flag the subsequent variable which had been safe casted.
+- The `WordPress.XSS.EscapeOutput` sniff would erronously trigger when using a fully qualified function call - including the global namespace `\` indicator - to one of the escaping functions.
+- The lists of WP global variables and WP mixed case variables have been synchronized, which fixes some false positives.
+
+
 ## [0.13.1] - 2017-08-07
 
 ### Fixed
@@ -16,7 +77,7 @@ _Nothing yet._
 ## [0.13.0] - 2017-08-03
 
 ### Added
-- Support for PHP CodeSniffer 3.0.2+. The minimum required PHPCS version (2.9.0) stays the same.
+- Support for PHP_CodeSniffer 3.0.2+. The minimum required PHPCS version (2.9.0) stays the same.
 - Support for the PHPCS 3 `--ignore-annotations` command line option. If you pass this option, both PHPCS native `@ignore ...` annotations as well as the WPCS specific [whitelist flags](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) will be ignored.
 
 ### Changed
@@ -126,9 +187,9 @@ For more detailed information on the most significant changes, please refer to P
 You are also encouraged to check the file history of any WPCS classes you extend.
 
 ### Added
-- `WordPress.WP.DeprecatedFunctions` sniff to the `WordPress-Extra` ruleset to check for usage of deprecated WP version and show errors/warnings depending on a `minimum_supported_version` which [can be passed to the sniff from a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-and-function-parameters). The default value for the `minimum_supported_version` property is three versions before the current WP version.
+- `WordPress.WP.DeprecatedFunctions` sniff to the `WordPress-Extra` ruleset to check for usage of deprecated WP version and show errors/warnings depending on a `minimum_supported_version` which [can be passed to the sniff from a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters). The default value for the `minimum_supported_version` property is three versions before the current WP version.
 - `WordPress.WP.I18n`: ability to check for missing _translators comments_ when a I18n function call contains translatable text strings containing placeholders. This check will also verify that the _translators comment_ is correctly placed in the code and uses the correct comment type for optimal compatibility with the various tools available to create `.pot` files.
-- `WordPress.WP.I18n`: ability to pass the `text_domain` to check for [from the command line](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#setting-text_domain-from-the-command-line).
+- `WordPress.WP.I18n`: ability to pass the `text_domain` to check for [from the command line](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#setting-text_domain-from-the-command-line-wpcs-0110).
 - `WordPress.Arrays.ArrayDeclarationSpacing`: check + fixer for single line associative arrays. The [handbook](https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation) states that these should always be multi-line.
 - `WordPress.Files.FileName`: verification that files containing a class reflect this in the file name as per the core guidelines. This particular check can be disabled in a custom ruleset by setting the new [`strict_class_file_names` property](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#disregard-class-file-name-rules).
 - `WordPress.Files.FileName`: verification that files in `/wp-includes/` containing template tags - annotated with `@subpackage Template` in the file header - use the `-template` suffix.
@@ -170,7 +231,7 @@ You are also encouraged to check the file history of any WPCS classes you extend
 - `WordPress.NamingConventions.ValidVariableName`: The `customVariablesWhitelist` property which could be passed from the ruleset has been renamed to [`customPropertiesWhitelist`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#mixed-case-property-name-exceptions) as it is only usable to whitelist class properties.
 - `WordPress.WP.I18n`: now allows for an array of text domain names to be passed to the `text_domain` property from a custom ruleset.
 - `WordPress.WhiteSpace.CastStructureSpacing`: the error level for the checks in this sniff has been raised from `warning` to `error`.
-- `WordPress.Variables.GlobalVariables`: will no longer throw errors if the global variable override is done from within a test method. Whether something is considered a "test method" is based on whether the method is in a class which extends a predefined set of known unit test classes. This list can be enhanced by setting the [`custom_test_class_whitelist` property](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#global-variable-overloads-in-unit-tests) in your ruleset.
+- `WordPress.Variables.GlobalVariables`: will no longer throw errors if the global variable override is done from within a test method. Whether something is considered a "test method" is based on whether the method is in a class which extends a predefined set of known unit test classes. This list can be enhanced by setting the [`custom_test_class_whitelist` property](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#custom-unit-test-classes) in your ruleset.
 - The `WordPress.Arrays.ArrayDeclaration` sniff has been split into two sniffs: `WordPress.Arrays.ArrayDeclaration` and `WordPress.Arrays.ArrayDeclarationSpacing` for better compatibility with PHPCS upstream.
 - The `WordPress.Arrays.ArrayDeclaration` sniff has been synced with the PHPCS upstream version to get the benefit of some bug fixes and improvements which had been made upstream since the sniff was originally copied over.
 - The `WordPress.VIP.FileSystemWritesDisallow`, `WordPress.VIP.TimezoneChange` and `WordPress.VIP.SessionFunctionsUsage` sniffs now extend the `WordPress_AbstractFunctionRestrictionsSniff`.
@@ -463,6 +524,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[0.14.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.13.1...0.14.0
 [0.13.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.11.0...0.12.0

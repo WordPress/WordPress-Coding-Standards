@@ -24,7 +24,7 @@ function custom_column_display( $column, $post_id )
 {
     global $post;
     switch ( $column ) {
-        case 'some_number' : 
+        case 'some_number' :
             echo (int) $test;
             echo (int) get_post_meta( $post_id, SOME_NUMBER, true );
         break;
@@ -224,4 +224,36 @@ echo 8 * 1.2; // Ok.
 <?= esc_html( $var ); ?><!-- Ok. -->
 <?= $var['foo']; ?><!-- Bad. -->
 <?= $var->foo ?><!-- Bad. -->
+<?php
+
+// Issue #933. OK.
+function do_footer_nav() {
+	echo \wp_kses_post(
+		\genesis_get_nav_menu(
+			[
+				'menu_class'     => 'menu genesis-nav-menu menu-footer',
+				'theme_location' => 'footer',
+			]
+		)
+	);
+}
+
+?><?php echo $html_fragment // XSS pass. ?><?php
+
+echo // WPCS: XSS ok.
+	esc_html( $something ),
+	$something_else,
+	esc_html( $something_more );
+
+echo esc_html( $something ),
+	$something_else,
+	esc_html( $something_more ); // WPCS: XSS ok.
+
+_ex( 'Something', 'context' ); // Bad.
+_ex( $some_nasty_var, 'context' ); // Bad.
+echo esc_html_x( 'Something', 'context' ); // Ok.
+echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
+
+?>
+	<input type="hidden" name="some-action" value="<?php echo esc_attr_x( 'none', 'context' ); ?>" /><!-- OK. -->
 <?php

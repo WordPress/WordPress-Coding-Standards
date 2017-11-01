@@ -177,6 +177,7 @@ class NonceVerificationSniff extends Sniff {
 				$this->customNonceVerificationFunctions,
 				$this->nonceVerificationFunctions
 			);
+
 			$this->addedCustomFunctions['nonce'] = $this->customNonceVerificationFunctions;
 		}
 
@@ -185,6 +186,7 @@ class NonceVerificationSniff extends Sniff {
 				$this->customSanitizingFunctions,
 				$this->sanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
 		}
 
@@ -193,6 +195,7 @@ class NonceVerificationSniff extends Sniff {
 				$this->customUnslashingSanitizingFunctions,
 				$this->unslashingSanitizingFunctions
 			);
+
 			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}

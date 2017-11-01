@@ -13,11 +13,11 @@ add_filter( 'cron_schedules', 'my_add_weekly'); // Error: 6 min.
 
 
 class Foo {
-	function __construct() {
+	public function __construct() {
 		add_filter( 'cron_schedules', array( $this, 'my_add_quickly' ) ); // Error: 10 min.
 	}
 
-	function my_add_quickly( $schedules ) {
+	public function my_add_quickly( $schedules ) {
 		$schedules['every_10_mins'] = array(
 			'interval' => 10 * 60,
 			'display' => __( 'Once every 10 minutes' )
@@ -80,3 +80,51 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	];
 	return $schedules;
 } ); // Warning: time undetermined.
+
+// @codingStandardsChangeSetting WordPress.VIP.CronInterval min_interval 600
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_2_mins'] = array(
+		'interval' => 2 * 60,
+		'display' => __( 'Once every 2 minutes' )
+	);
+	return $schedules;
+} ); // Error: 2 min.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_10_mins'] = array(
+		'interval' => 10 * 60,
+		'display' => __( 'Once every 10 minutes' )
+	);
+	return $schedules;
+} ); // OK: 10 min.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_hour'] = [
+		'interval' => HOUR_IN_SECONDS,
+		'display' => __( 'Once every hour' )
+	];
+	return $schedules;
+} ); // OK: > 10 min.
+
+// @codingStandardsChangeSetting WordPress.VIP.CronInterval min_interval 1800
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_2_mins'] = array(
+		'interval' => 2 * 60,
+		'display' => __( 'Once every 2 minutes' )
+	);
+	return $schedules;
+} ); // Error: 2 min.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_15_mins'] = array(
+		'interval' => 15 * 60,
+		'display' => __( 'Once every 15 minutes' )
+	);
+	return $schedules;
+} ); // Error: 15 min.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_hour'] = [
+		'interval' => HOUR_IN_SECONDS,
+		'display' => __( 'Once every hour' )
+	];
+	return $schedules;
+} ); // Ok: > 30 min.
+
+// @codingStandardsChangeSetting WordPress.VIP.CronInterval min_interval 900

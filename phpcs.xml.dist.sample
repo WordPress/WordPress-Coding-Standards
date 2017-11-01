@@ -28,10 +28,15 @@
 		see the names of the sniffs reporting errors.
 		Once we know the sniff names, we can opt to exclude sniffs which don't
 		suit our project like so.
+
+		The below two examples just show how you can exclude rules.
+		They are not intended as advice about which sniffs to exclude.
 		-->
 
+		<!--
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
 		<exclude name="WordPress.XSS.EscapeOutput"/>
+		-->
 	</rule>
 
 	<!-- Let's also check that everything is properly documented. -->
@@ -62,6 +67,8 @@
 	the wiki:
 	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties
 	-->
+	<config name="minimum_supported_wp_version" value="4.5"/>
+
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array" value="my-textdomain,library-textdomain"/>
@@ -71,24 +78,6 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array" value="my_prefix"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.WP.DeprecatedClasses">
-		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.WP.DeprecatedFunctions">
-		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.WP.DeprecatedParameters">
-		<properties>
-			<property name="minimum_supported_version" value="4.5"/>
 		</properties>
 	</rule>
 

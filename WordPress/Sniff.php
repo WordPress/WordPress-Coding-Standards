@@ -12,6 +12,7 @@ namespace WordPress;
 use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer_File as File;
 use PHP_CodeSniffer_Tokens as Tokens;
+use WordPress\PHPCSHelper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -33,6 +34,73 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *            is documented in the property documentation.}}
  */
 abstract class Sniff implements PHPCS_Sniff {
+
+	/**
+	 * Regex to get complex variables from T_DOUBLE_QUOTED_STRING or T_HEREDOC.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string
+	 */
+	const REGEX_COMPLEX_VARS = '`(?:(\{)?(?<!\\\\)\$)?(\{)?(?<!\\\\)\$(\{)?(?P<varname>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:->\$?(?P>varname)|\[[^\]]+\]|::\$?(?P>varname)|\([^\)]*\))*(?(3)\}|)(?(2)\}|)(?(1)\}|)`';
+
+	/**
+	 * Minimum supported WordPress version.
+	 *
+	 * Currently used by the `WordPress.WP.DeprecatedClasses`,
+	 * `WordPress.WP.DeprecatedFunctions` and the `WordPress.WP.DeprecatedParameter` sniff.
+	 *
+	 * These sniffs will throw an error when usage of a deprecated class/function/parameter
+	 * is detected if the class/function/parameter was deprecated before the minimum
+	 * supported WP version; a warning otherwise.
+	 * By default, it is set to presume that a project will support the current
+	 * WP version and up to three releases before.
+	 *
+	 * This property allows changing the minimum supported WP version used by
+	 * these sniffs by setting a property in a custom phpcs.xml ruleset.
+	 * This property will need to be set for each sniff which uses it.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.WP.DeprecatedClasses">
+	 *  <properties>
+	 *   <property name="minimum_supported_version" value="4.3"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * Alternatively, the value can be passed in one go for all sniff using it via
+	 * the command line or by setting a `<config>` value in a custom phpcs.xml ruleset.
+	 * Note: the `_wp_` in the command line property name!
+	 *
+	 * CL: `phpcs --runtime-set minimum_supported_wp_version 4.5`
+	 * Ruleset: `<config name="minimum_supported_wp_version" value="4.5"/>`
+	 *
+	 * @since 0.14.0 Previously the individual sniffs each contained this property.
+	 *
+	 * @var string WordPress version.
+	 */
+	public $minimum_supported_version = '4.5';
+
+	/**
+	 * Custom list of classes which test classes can extend.
+	 *
+	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property will need to be set for each sniff which uses the
+	 * `is_test_class()` method.
+	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
+	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
+	 *
+	 * Example usage:
+	 * <rule ref="WordPress.[Subset].[Sniffname]">
+	 *  <properties>
+	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *  </properties>
+	 * </rule>
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string|string[]
+	 */
+	public $custom_test_class_whitelist = array();
 
 	/**
 	 * List of the functions which verify nonces.
@@ -441,18 +509,18 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var array
 	 */
 	protected $cacheDeleteFunctions = array(
-		'wp_cache_delete' => true,
-		'clean_attachment_cache' => true,
-		'clean_blog_cache' => true,
-		'clean_bookmark_cache' => true,
-		'clean_category_cache' => true,
-		'clean_comment_cache' => true,
-		'clean_network_cache' => true,
+		'wp_cache_delete'         => true,
+		'clean_attachment_cache'  => true,
+		'clean_blog_cache'        => true,
+		'clean_bookmark_cache'    => true,
+		'clean_category_cache'    => true,
+		'clean_comment_cache'     => true,
+		'clean_network_cache'     => true,
 		'clean_object_term_cache' => true,
-		'clean_page_cache' => true,
-		'clean_post_cache' => true,
-		'clean_term_cache' => true,
-		'clean_user_cache' => true,
+		'clean_page_cache'        => true,
+		'clean_post_cache'        => true,
+		'clean_term_cache'        => true,
+		'clean_user_cache'        => true,
 	);
 
 	/**
@@ -588,6 +656,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'is_IIS'                           => true,
 		'is_iis7'                          => true,
 		'is_macIE'                         => true,
+		'is_NS4'                           => true,
 		'is_opera'                         => true,
 		'is_safari'                        => true,
 		'is_winIE'                         => true,
@@ -770,32 +839,16 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var string[]
 	 */
 	protected $test_class_whitelist = array(
-		'WP_UnitTestCase'            => true,
-		'PHPUnit_Framework_TestCase' => true,
-		'PHPUnit\Framework\TestCase' => true,
+		'WP_UnitTestCase'                            => true,
+		'WP_Ajax_UnitTestCase'                       => true,
+		'WP_Canonical_UnitTestCase'                  => true,
+		'WP_Test_REST_TestCase'                      => true,
+		'WP_Test_REST_Controller_Testcase'           => true,
+		'WP_Test_REST_Post_Type_Controller_Testcase' => true,
+		'WP_XMLRPC_UnitTestCase'                     => true,
+		'PHPUnit_Framework_TestCase'                 => true,
+		'PHPUnit\Framework\TestCase'                 => true,
 	);
-
-	/**
-	 * Custom list of classes which test classes can extend.
-	 *
-	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
-	 * This property will need to be set for each sniff which uses the
-	 * `is_test_class()` method.
-	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
-	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.[Subset].[Sniffname]">
-	 *  <properties>
-	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var string|string[]
-	 */
-	public $custom_test_class_whitelist = array();
 
 	/**
 	 * The current file being sniffed.
@@ -1000,8 +1053,11 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Allow for a comma delimited list.
 		if ( is_string( $custom ) ) {
-			$custom = array_filter( array_map( 'trim', explode( ',', $custom ) ) );
+			$custom = explode( ',', $custom );
 		}
+
+		// Always trim whitespace from the values.
+		$custom = array_filter( array_map( 'trim', $custom ) );
 
 		if ( true === $flip ) {
 			$custom = array_fill_keys( $custom, false );
@@ -1043,20 +1099,41 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
+	 * Overrule the minimum supported WordPress version with a command-line/config value.
+	 *
+	 * Handle setting the minimum supported WP version in one go for all sniffs which
+	 * expect it via the command line or via a `<config>` variable in a ruleset.
+	 * The config variable overrules the default `$minimum_supported_version` and/or a
+	 * `$minimum_supported_version` set for individual sniffs through the ruleset.
+	 *
+	 * @since 0.14.0
+	 */
+	protected function get_wp_version_from_cl() {
+		$cl_supported_version = trim( PHPCSHelper::get_config_data( 'minimum_supported_wp_version' ) );
+		if ( ! empty( $cl_supported_version )
+			&& filter_var( $cl_supported_version, FILTER_VALIDATE_FLOAT ) !== false
+		) {
+			$this->minimum_supported_version = $cl_supported_version;
+		}
+	}
+
+	/**
 	 * Find whitelisting comment.
 	 *
-	 * Comment must be at the end of the line, and use // format.
+	 * Comment must be at the end of the line or at the end of the statement
+	 * and must use // format.
 	 * It can be prefixed or suffixed with anything e.g. "foobar" will match:
 	 * ... // foobar okay
 	 * ... // WPCS: foobar whitelist.
 	 *
 	 * There is an exception, and that is when PHP is being interspersed with HTML.
-	 * In that case, the comment should come at the end of the statement (right
+	 * In that case, the comment should always come at the end of the statement (right
 	 * before the closing tag, ?>). For example:
 	 *
 	 * <input type="text" id="<?php echo $id; // XSS OK ?>" />
 	 *
 	 * @since 0.4.0
+	 * @since 0.14.0 Whitelist comments at the end of the statement are now also accepted.
 	 *
 	 * @param string  $comment  Comment to find.
 	 * @param integer $stackPtr The position of the current token in the stack passed
@@ -1071,35 +1148,42 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		$lastPtr     = $this->get_last_ptr_on_line( $stackPtr );
-		$end_of_line = $lastPtr;
+		$regex = '#\b' . preg_quote( $comment, '#' ) . '\b#i';
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
 		// we need to here.
 		$end_of_statement = $this->phpcsFile->findNext( array( T_CLOSE_TAG, T_SEMICOLON ), $stackPtr );
 
-		// Check at the end of the statement if it comes before - or is - the end of the line.
-		if ( $end_of_statement <= $end_of_line ) {
-
-			// If the statement was ended by a semicolon, we find the next non-
-			// whitespace token. If the semicolon was left out and it was terminated
-			// by an ending tag, we need to look backwards.
+		if ( false !== $end_of_statement ) {
+			// If the statement was ended by a semicolon, check if there is a whitelist comment directly after it.
 			if ( T_SEMICOLON === $this->tokens[ $end_of_statement ]['code'] ) {
 				$lastPtr = $this->phpcsFile->findNext( T_WHITESPACE, ( $end_of_statement + 1 ), null, true );
-			} else {
+			} elseif ( T_CLOSE_TAG === $this->tokens[ $end_of_statement ]['code'] ) {
+				// If the semicolon was left out and it was terminated by an ending tag, we need to look backwards.
 				$lastPtr = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
+			}
+
+			if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
+				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
+			) {
+				return true;
 			}
 		}
 
-		$last = $this->tokens[ $lastPtr ];
+		// No whitelist comment found so far. Check at the end of the stackPtr line.
+		// Note: a T_COMMENT includes the new line character, so may be the last token on the line!
+		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
+		$lastPtr     = $this->phpcsFile->findPrevious( T_WHITESPACE, $end_of_line, null, true );
 
-		// Ignore if not a comment or not on the same line.
-		if ( T_COMMENT !== $last['code'] || $last['line'] !== $this->tokens[ $end_of_line ]['line'] ) {
-			return false;
+		if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
+			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
+		) {
+			return true;
 		}
 
-		// Now let's see if the comment contains the whitelist remark we're looking for.
-		return ( preg_match( '#\b' . preg_quote( $comment, '#' ) . '\b#i', $last['content'] ) === 1 );
+		return false;
 	}
 
 	/**
@@ -1209,12 +1293,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		$next_non_empty = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens
-			, ( $stackPtr + 1 )
-			, null
-			, true
-			, null
-			, true
+			Tokens::$emptyTokens,
+			( $stackPtr + 1 ),
+			null,
+			true,
+			null,
+			true
 		);
 
 		// No token found.
@@ -1403,10 +1487,10 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Get the last non-empty token.
 		$prev = $this->phpcsFile->findPrevious(
-			Tokens::$emptyTokens
-			, ( $stackPtr - 1 )
-			, null
-			, true
+			Tokens::$emptyTokens,
+			( $stackPtr - 1 ),
+			null,
+			true
 		);
 
 		// Check if it is a safe cast.
@@ -1559,8 +1643,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		$key = $this->phpcsFile->getTokensAsString(
-			( $open_bracket + 1 )
-			, ( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
+			( $open_bracket + 1 ),
+			( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
 		);
 
 		return trim( $key );
@@ -1604,8 +1688,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		if ( $in_condition_only ) {
 			/*
-			   This is a stricter check, requiring the variable to be used only
-			   within the validation condition.
+			 * This is a stricter check, requiring the variable to be used only
+			 * within the validation condition.
 			 */
 
 			// If there are no conditions, there's no validation.
@@ -1628,8 +1712,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		} else {
 			/*
-			   We are are more loose, requiring only that the variable be validated
-			   in the same function/file scope as it is used.
+			 * We are are more loose, requiring only that the variable be validated
+			 * in the same function/file scope as it is used.
 			 */
 
 			$scope_start = 0;
@@ -1777,7 +1861,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// USE keywords for traits.
-		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_TRAIT ) ) ) {
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_TRAIT'      => true,
+		);
+		if ( true === $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
 			return 'trait';
 		}
 
@@ -1806,6 +1895,25 @@ abstract class Sniff implements PHPCS_Sniff {
 			}
 		}
 		return $variables;
+	}
+
+	/**
+	 * Strip variables from an arbitrary double quoted/heredoc string.
+	 *
+	 * Intended for use with the content of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param string $string The raw string.
+	 *
+	 * @return string String without variables in it.
+	 */
+	public function strip_interpolated_variables( $string ) {
+		if ( strpos( $string, '$' ) === false ) {
+			return $string;
+		}
+
+		return preg_replace( self::REGEX_COMPLEX_VARS, '', $string );
 	}
 
 	/**
@@ -2034,6 +2142,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
 	 *
+	 * @since 0.12.0
+	 *
 	 * @param int $stackPtr The stack pointer to the array token.
 	 *
 	 * @return array|bool Array with two keys `opener`, `closer` or false if
@@ -2219,5 +2329,181 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		return false;
 	}
+
+	/**
+	 * Check whether a T_CONST token is a class constant declaration.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int $stackPtr  The position in the stack of the T_CONST token to verify.
+	 *
+	 * @return bool
+	 */
+	public function is_class_constant( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ] ) || T_CONST !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		// Note: traits can not declare constants.
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_INTERFACE'  => true,
+		);
+
+		return $this->valid_direct_scope( $stackPtr, $valid_scopes );
+	}
+
+	/**
+	 * Check whether a T_VARIABLE token is a class property declaration.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int $stackPtr  The position in the stack of the T_VARIABLE token to verify.
+	 *
+	 * @return bool
+	 */
+	public function is_class_property( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ] ) || T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		// Note: interfaces can not declare properties.
+		$valid_scopes = array(
+			'T_CLASS'      => true,
+			'T_ANON_CLASS' => true,
+			'T_TRAIT'      => true,
+		);
+
+		if ( $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+			// Make sure it's not a method parameter.
+			if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether the direct wrapping scope of a token is within a limited set of
+	 * acceptable tokens.
+	 *
+	 * Used to check, for instance, if a T_CONST is a class constant.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int   $stackPtr     The position in the stack of the token to verify.
+	 * @param array $valid_scopes Array of token types.
+	 *                            Keys should be the token types in string format
+	 *                            to allow for newer token types.
+	 *                            Value is irrelevant.
+	 *
+	 * @return bool
+	 */
+	protected function valid_direct_scope( $stackPtr, array $valid_scopes ) {
+		if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+			return false;
+		}
+
+		/*
+		 * Check only the direct wrapping scope of the token.
+		 */
+		$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
+		$ptr        = array_pop( $conditions );
+
+		if ( ! isset( $this->tokens[ $ptr ] ) ) {
+			return false;
+		}
+
+		return isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] );
+	}
+
+	/**
+	 * Checks whether this is a call to a $wpdb method that we want to sniff.
+	 *
+	 * If available in the child class, the $methodPtr, $i and $end properties are
+	 * automatically set to correspond to the start and end of the method call.
+	 * The $i property is also set if this is not a method call but rather the
+	 * use of a $wpdb property.
+	 *
+	 * @since 0.8.0
+	 * @since 0.9.0  The return value is now always boolean. The $end and $i member
+	 *               vars are automatically updated.
+	 * @since 0.14.0 Moved this method from the `PreparedSQL` sniff to the base WP sniff.
+	 *
+	 * {@internal This method should probably be refactored.}}
+	 *
+	 * @param int   $stackPtr        The index of the $wpdb variable.
+	 * @param array $target_methods  Array of methods. Key(s) should be method name.
+	 *
+	 * @return bool Whether this is a $wpdb method call.
+	 */
+	protected function is_wpdb_method_call( $stackPtr, $target_methods ) {
+
+		// Check for wpdb.
+		if ( ( T_VARIABLE === $this->tokens[ $stackPtr ]['code'] && '$wpdb' !== $this->tokens[ $stackPtr ]['content'] )
+			|| ( T_STRING === $this->tokens[ $stackPtr ]['code'] && 'wpdb' !== $this->tokens[ $stackPtr ]['content'] )
+		) {
+			return false;
+		}
+
+		// Check that this is a method call.
+		$is_object_call = $this->phpcsFile->findNext(
+			array( T_OBJECT_OPERATOR, T_DOUBLE_COLON ),
+			( $stackPtr + 1 ),
+			null,
+			false,
+			null,
+			true
+		);
+		if ( false === $is_object_call ) {
+			return false;
+		}
+
+		$methodPtr = $this->phpcsFile->findNext( T_WHITESPACE, ( $is_object_call + 1 ), null, true, null, true );
+		if ( false === $methodPtr ) {
+			return false;
+		}
+
+		if ( T_STRING === $this->tokens[ $methodPtr ]['code'] && property_exists( $this, 'methodPtr' ) ) {
+			$this->methodPtr = $methodPtr;
+		}
+
+		// Find the opening parenthesis.
+		$opening_paren = $this->phpcsFile->findNext( T_WHITESPACE, ( $methodPtr + 1 ), null, true, null, true );
+
+		if ( false === $opening_paren ) {
+			return false;
+		}
+
+		if ( property_exists( $this, 'i' ) ) {
+			$this->i = $opening_paren;
+		}
+
+		if ( T_OPEN_PARENTHESIS !== $this->tokens[ $opening_paren ]['code']
+			|| ! isset( $this->tokens[ $opening_paren ]['parenthesis_closer'] )
+		) {
+			return false;
+		}
+
+		// Check that this is one of the methods that we are interested in.
+		if ( ! isset( $target_methods[ $this->tokens[ $methodPtr ]['content'] ] ) ) {
+			return false;
+		}
+
+		// Find the end of the first parameter.
+		$end = $this->phpcsFile->findEndOfStatement( $opening_paren + 1 );
+
+		if ( T_COMMA !== $this->tokens[ $end ]['code'] ) {
+			++$end;
+		}
+
+		if ( property_exists( $this, 'end' ) ) {
+			$this->end = $end;
+		}
+
+		return true;
+	} // End is_wpdb_method_call().
 
 }

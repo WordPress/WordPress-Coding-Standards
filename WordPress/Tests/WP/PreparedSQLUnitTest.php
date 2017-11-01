@@ -30,11 +30,11 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			4 => 1,
-			5 => 1,
-			7 => 1,
-			8 => 1,
+			3  => 1,
+			4  => 1,
+			5  => 1,
+			7  => 1,
+			8  => 1,
 			16 => 1,
 			17 => 1,
 			18 => 1,
@@ -43,6 +43,8 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			54 => 1,
 			64 => 1,
 			71 => 1,
+			85 => 1,
+			90 => 1,
 		);
 	}
 

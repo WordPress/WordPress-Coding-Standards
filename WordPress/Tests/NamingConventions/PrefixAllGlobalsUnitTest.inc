@@ -120,14 +120,14 @@ apply_filters( 'acronym', $var );
 /*
  * OK - not in the global namespace.
  */
-function acronym_do_something( $param = 'default' ) {
+function acronym_do_something_else( $param = 'default' ) {
 	$var = 'abc';
 	${$something} = 'value';
 }
 
 function ( $param ) {
 	$var = 'abc';
-}
+};
 
 class Acronym_Example {
 	const SOME_CONSTANT = 'value';
@@ -143,7 +143,7 @@ $acronym_class = new class {
 	public $var = 'abc';
 
 	function do_something( $param = 'default' ) {}
-}
+};
 
 namespace Acronym {
 	function do_something( $param = 'default' ) {}
@@ -299,3 +299,26 @@ class Acronym_Dynamic_Hooks {
 		do_action( $this->parent_property ); // Warning.
 	}
 }
+
+// Dashes and other non-word characters are ok as a hook name separator after the prefix.
+// The rule that these should be underscores is handled by another sniff.
+do_action( 'acronym-action' ); // OK.
+apply_filters( 'acronym/filter', $var ); // OK.
+do_action( "acronym-action-{$acronym_filter_var}" ); // OK.
+apply_filters( 'acronym/filter-' . $acronym_filter_var ); // OK.
+
+// Issue #1056.
+define( 'SomeNameSpace\PLUGIN_FILE', __FILE__ ); // OK.
+define( '\OtherNameSpace\PLUGIN_FILE', __FILE__ ); // OK.
+// OK: unreachable constants.
+define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
+define( '\PLUGIN_FILE', __FILE__ );
+
+namespace Testing {
+	define( 'MY' . __NAMESPACE__, __FILE__ ); // Error, not actually namespaced.
+	define( 'MY\\' . __NAMESPACE__, __FILE__ ); // OK, even though strangely setup, the constant is in a namespace.
+}
+
+// OK: whitelisted core hooks.
+apply_filters( 'widget_title', $title );
+do_action( 'add_meta_boxes' );

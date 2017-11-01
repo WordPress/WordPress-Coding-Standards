@@ -179,6 +179,19 @@ class ArrayIndentationSniff extends Sniff {
 				true
 			);
 
+			// Deal with trailing comments.
+			if ( false !== $first_content
+				&& T_COMMENT === $this->tokens[ $first_content ]['code']
+				&& $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
+			) {
+				$first_content = $this->phpcsFile->findNext(
+					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+					( $first_content + 1 ),
+					$end_of_this_item,
+					true
+				);
+			}
+
 			if ( false === $first_content ) {
 				$end_of_previous_item = $end_of_this_item;
 				continue;
@@ -224,9 +237,11 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Find first token on second line of the array item.
 			// If the second line is a heredoc/nowdoc, continue on until we find a line with a different token.
+			// Same for the second line of a multi-line text string.
 			for ( $ptr = ( $first_content + 1 ); $ptr <= $item['end']; $ptr++ ) {
 				if ( $this->tokens[ $first_content ]['line'] !== $this->tokens[ $ptr ]['line']
-					&& ! isset( $this->ignore_tokens[ $this->tokens[ $ptr ]['code'] ] )
+					&& 1 === $this->tokens[ $ptr ]['column']
+					&& false === $this->ignore_token( $ptr )
 				) {
 					break;
 				}
@@ -323,8 +338,8 @@ class ArrayIndentationSniff extends Sniff {
 							break;
 						}
 
-						// Ignore lines with heredoc and nowdoc tokens.
-						if ( isset( $this->ignore_tokens[ $this->tokens[ $first_content_on_line ]['code'] ] ) ) {
+						// Ignore lines with heredoc and nowdoc tokens and subsequent lines in multi-line strings.
+						if ( true === $this->ignore_token( $first_content_on_line ) ) {
 							$i = $first_content_on_line;
 							continue;
 						}
@@ -378,6 +393,35 @@ class ArrayIndentationSniff extends Sniff {
 
 	} // End process_token().
 
+
+	/**
+	 * Should the token be ignored ?
+	 *
+	 * This method is only intended to be used with the first token on a line
+	 * for subsequent lines in an multi-line array item.
+	 *
+	 * @param int $ptr Stack pointer to the first token on a line.
+	 *
+	 * @return bool
+	 */
+	protected function ignore_token( $ptr ) {
+		$token_code = $this->tokens[ $ptr ]['code'];
+
+		if ( isset( $this->ignore_tokens[ $token_code ] ) ) {
+			return true;
+		}
+
+		// If it's a subsequent line of a multi-line sting, it will not start with a quote character.
+		if ( ( T_CONSTANT_ENCAPSED_STRING === $token_code
+			|| T_DOUBLE_QUOTED_STRING === $token_code )
+			&& "'" !== $this->tokens[ $ptr ]['content'][0]
+			&& '"' !== $this->tokens[ $ptr ]['content'][0]
+		) {
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Determine the line indentation whitespace.

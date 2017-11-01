@@ -34,14 +34,14 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		// File names generic.
-		'some_file.inc' => 1,
-		'SomeFile.inc'  => 1,
-		'some-File.inc' => 1,
+		'some_file.inc'                              => 1,
+		'SomeFile.inc'                               => 1,
+		'some-File.inc'                              => 1,
 
 		// Class file names.
-		'my-class.inc'              => 1,
-		'class-different-class.inc' => 1,
-		'ClassMyClass.inc'          => 2,
+		'my-class.inc'                               => 1,
+		'class-different-class.inc'                  => 1,
+		'ClassMyClass.inc'                           => 2,
 
 		// Theme specific exceptions in a non-theme context.
 		'single-my_post_type.inc'                    => 1,
@@ -52,38 +52,38 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		// Non-strict class names still have to comply with lowercase hyphenated.
-		'ClassNonStrictClass.inc' => 1,
+		'ClassNonStrictClass.inc'                    => 1,
 
 		/*
 		 * In /FileNameUnitTests/TestFiles.
 		 */
-		'test-sample-phpunit.inc'     => 0,
-		'test-sample-phpunit6.inc'    => 0,
-		'test-sample-wpunit.inc'      => 0,
-		'test-sample-custom-unit.inc' => 0,
+		'test-sample-phpunit.inc'                    => 0,
+		'test-sample-phpunit6.inc'                   => 0,
+		'test-sample-wpunit.inc'                     => 0,
+		'test-sample-custom-unit.inc'                => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
 		 */
 
 		// Files in a theme context.
-		'front_page.inc'       => 1,
-		'FrontPage.inc'        => 1,
-		'author-nice_name.inc' => 1,
+		'front_page.inc'                             => 1,
+		'FrontPage.inc'                              => 1,
+		'author-nice_name.inc'                       => 1,
 
 		/*
 		 * In /FileNameUnitTests/wp-includes.
 		 */
 
 		// Files containing template tags.
-		'general.inc' => 1,
+		'general.inc'                                => 1,
 
 		/*
 		 * In /.
 		 */
 
 		// Fall-back file in case glob() fails.
-		'FileNameUnitTest.inc' => 1,
+		'FileNameUnitTest.inc'                       => 1,
 	);
 
 	/**

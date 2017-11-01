@@ -235,7 +235,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 
 				$next_non_whitespace = $this->phpcsFile->findNext(
 					T_WHITESPACE,
-					($maybe_comma + 1 ),
+					( $maybe_comma + 1 ),
 					$closer,
 					true
 				);

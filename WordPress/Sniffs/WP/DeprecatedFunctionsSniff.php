@@ -14,34 +14,23 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Restricts the use of various deprecated WordPress functions and suggests alternatives.
  *
+ * This sniff will throw an error when usage of deprecated functions is detected
+ * if the function was deprecated before the minimum supported WP version;
+ * a warning otherwise.
+ * By default, it is set to presume that a project will support the current
+ * WP version and up to three releases before.
+ *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.11.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Now has the ability to handle minimum supported WP version
+ *                 being provided via the command-line or as as <config> value
+ *                 in a custom ruleset.
+ *
+ * @uses    \WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
-
-	/**
-	 * Minimum WordPress version.
-	 *
-	 * This sniff will throw an error when usage of deprecated functions is
-	 * detected if the function was deprecated before the minimum supported
-	 * WP version; a warning otherwise.
-	 * By default, it is set to presume that a project will support the current
-	 * WP version and up to three releases before.
-	 * This variable allows changing the minimum supported WP version used by
-	 * this sniff by setting a property in a custom phpcs.xml ruleset.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.WP.DeprecatedFunctions">
-	 *  <properties>
-	 *   <property name="minimum_supported_version" value="4.3"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @var string WordPress versions.
-	 */
-	public $minimum_supported_version = '4.5';
 
 	/**
 	 * List of deprecated functions with alternative when available.
@@ -1318,8 +1307,8 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$keys = array_keys( $this->deprecated_functions );
-		$keys = array_map( 'strtolower', $keys );
+		$keys                       = array_keys( $this->deprecated_functions );
+		$keys                       = array_map( 'strtolower', $keys );
 		$this->deprecated_functions = array_combine( $keys, $this->deprecated_functions );
 
 		return array(
@@ -1341,6 +1330,9 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @return void
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+
+		$this->get_wp_version_from_cl();
+
 		$function_name = strtolower( $matched_content );
 
 		$message = '%s() has been deprecated since WordPress version %s.';

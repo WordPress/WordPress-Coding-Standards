@@ -46,6 +46,7 @@
 
 	<!-- Covers rule: Use real tabs and not spaces. -->
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+	<rule ref="WordPress.WhiteSpace.PrecisionAlignment"/>
 
 	<!-- Generic array layout check. -->
 	<!-- Covers rule: For associative arrays, values should start on a new line.
@@ -66,6 +67,21 @@
 
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
 	<rule ref="WordPress.WhiteSpace.DisallowInlineTabs"/>
+
+	<!-- Implied through the examples: align the assignment operator in a block of assignments. -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment">
+		<properties>
+			<property name="maxPadding" value="40"/>
+		</properties>
+	</rule>
+
+	<!-- Implied through the examples: align the double arrows. -->
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="maxColumn" value="60"/>
+		</properties>
+	</rule>
+
 
 	<!--
 	#############################################################################
@@ -197,6 +213,8 @@
 	<!-- Related to issue #970 / https://github.com/squizlabs/PHP_CodeSniffer/issues/1512 -->
 	<rule ref="WordPress.Functions.FunctionCallSignatureNoParams"/>
 
+	<rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+
 	<!-- Rule: Perform logical comparisons, like so: if ( ! $foo ) { -->
 
 	<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
@@ -206,6 +224,21 @@
 
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+
+	<!-- Rule: In a switch block, there must be no space before the colon for a case statement. -->
+	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
+
+	<!-- Rule: Similarly, there should be no space before the colon on return type declarations. -->
+
+	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside of them. -->
+	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1701 -->
+	<rule ref="WordPress.WhiteSpace.ArbitraryParenthesesSpacing">
+		<properties>
+			<property name="spacingInside" value="1"/>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
 
 
 	<!--
@@ -221,8 +254,8 @@
 		 SQL slash escaping when passed.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
 
-	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"!
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/641 -->
+	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"! -->
+	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
 	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
 		 preferably by using $wpdb->prepare() -->
@@ -331,6 +364,26 @@
 	     to the next block, this must be explicitly commented. -->
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
+	<!-- Rule: The goto statement must never be used. -->
+	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1664 -->
+	<rule ref="WordPress.PHP.DiscourageGoto"/>
+	<rule ref="WordPress.PHP.DiscourageGoto.Found">
+		<type>error</type>
+		<message>The "goto" language construct should not be used.</message>
+	</rule>
+
+	<!-- Rule: The eval() construct is very dangerous, and is impossible to secure. ... these must not be used. -->
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.Eval.Discouraged">
+		<type>error</type>
+		<message>eval() is a security risk so not allowed.</message>
+	</rule>
+
+	<!-- Rule: create_function() function, which internally performs an eval(),
+	     is deprecated in PHP 7.2. Both of these must not be used. -->
+	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
+
 
 	<!--
 	#############################################################################
@@ -368,6 +421,12 @@
 	<!-- All files should end with a new line. -->
 	<rule ref="Generic.Files.EndFileNewline"/>
 
+	<!-- No whitespace should come before semicolons. -->
+	<!-- Extends upstream sniff. Should defer to upstream version once minimum PHPCS requirement
+		 has gone up to version containing bugfix.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1691 -->
+	<rule ref="WordPress.WhiteSpace.SemicolonSpacing"/>
+
 	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- http://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
@@ -377,6 +436,13 @@
 
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
+
+	<!-- Object operators should not have whitespace around them unless they are multi-line. -->
+	<rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
+		<properties>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
 
 	<!-- References to self in a class should be lower-case and not have extraneous spaces,
 		 per implicit conventions in the core codebase; the NotUsed code refers to using the

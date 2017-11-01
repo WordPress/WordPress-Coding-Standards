@@ -24,6 +24,10 @@
 	</rule>
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
+	<!-- Duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 -->
+	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition"/>
+
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.NonExecutableCode"/>
@@ -35,15 +39,61 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
-	<!-- This sniff is not refined enough for general use -->
-	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
-	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
+	<!-- And yet more best practices.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1143 -->
+	<rule ref="PEAR.Files.IncludingFile">
+		<exclude name="PEAR.Files.IncludingFile.UseInclude"/>
+		<exclude name="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequire">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
+		<type>warning</type>
+	</rule>
+
+	<!-- Check correct spacing of language constructs. This also ensures that the
+	     above rule for not using brackets with require is fixed correctly.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1153 -->
+	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Hook callbacks may not use all params -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
 
+	<!-- Encourage having only one class/interface/trait per file. -->
+	<!-- Once the minimum WPCS PHPCS requirement has gone up to PHPCS 3.1.0, these three sniffs can be
+	     replaced by the more comprehensive Generic.Files.OneObjectStructurePerFile sniff. -->
+	<rule ref="Generic.Files.OneClassPerFile"/>
+	<rule ref="Generic.Files.OneClassPerFile.MultipleFound">
+		<type>warning</type>
+		<message>Best practice suggestion: Declare only one class in a file.</message>
+	</rule>
+	<rule ref="Generic.Files.OneInterfacePerFile"/>
+	<rule ref="Generic.Files.OneInterfacePerFile.MultipleFound">
+		<type>warning</type>
+		<message>Best practice suggestion: Declare only one interface in a file.</message>
+	</rule>
+	<rule ref="Generic.Files.OneTraitPerFile"/>
+	<rule ref="Generic.Files.OneTraitPerFile.MultipleFound">
+		<type>warning</type>
+		<message>Best practice suggestion: Declare only one trait in a file.</message>
+	</rule>
+
 	<rule ref="WordPress-Core"/>
+
+	<!-- Verify modifier keywords for declared methods and properties in classes.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1101 -->
+	<rule ref="Squiz.Scope.MethodScope"/>
+	<rule ref="Squiz.Scope.MemberVarScope"/>
+	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
+	<rule ref="PSR2.Methods.MethodDeclaration"/>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<type>warning</type>
+	</rule>
 
 	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
 	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
@@ -58,23 +108,13 @@
 	<rule ref="WordPress.CSRF.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
-	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
-		<!-- WP core still supports PHP 5.2+  -->
-		<properties>
-			<property name="exclude" value="create_function"/>
-		</properties>
-	</rule>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedClasses"/>
 	<rule ref="WordPress.WP.DeprecatedParameters"/>
 	<rule ref="WordPress.WP.AlternativeFunctions"/>
+	<rule ref="WordPress.WP.DiscouragedConstants"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
-
-	<rule ref="Squiz.PHP.Eval"/>
-	<rule ref="Squiz.PHP.Eval.Discouraged">
-		<type>error</type>
-		<message>eval() is a security risk so not allowed.</message>
-	</rule>
 
 	<!-- Scripts & style should be enqueued.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/35 -->
@@ -115,5 +155,15 @@
 	<!-- Check that object instantiations always have braces & are not assigned by reference.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
 	<rule ref="WordPress.Classes.ClassInstantiation"/>
+
+
+	<!--
+	#############################################################################
+	Code style sniffs for more recent PHP features and syntaxes.
+	#############################################################################
+	-->
+
+	<!-- Check for single blank line after namespace declaration. -->
+	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
 
 </ruleset>

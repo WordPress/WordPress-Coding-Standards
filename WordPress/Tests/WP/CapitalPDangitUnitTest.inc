@@ -13,21 +13,21 @@
  *
  * @param string $wordpress OK: Here the incorrect spelling is OK to comply with the variable name rules.
  */
-function something( $wordpress ) {} // OK.
+function somethingA( $wordpress ) {} // OK.
 
 /**
  * Function comment
  *
  * @param string $my_wordpress_test OK: Here the incorrect spelling is OK to comply with the variable name rules.
  */
-function something( $my_wordpress_test ) {} // OK.
+function somethingB( $my_wordpress_test ) {} // OK.
 
 /**
  * Bad: In this comment wordPresss should be fixed.
  *
  * @param string $test Bad: In this comment word press should be fixed.
  */
-function something( $test ) {} // OK.
+function somethingC( $test ) {} // OK.
 
 function wordpress_function() {} // OK - comply with the function name rules.
 

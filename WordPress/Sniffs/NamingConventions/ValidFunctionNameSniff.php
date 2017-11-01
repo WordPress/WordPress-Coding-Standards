@@ -146,9 +146,9 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		if ( 0 === strpos( $methodName, '__' ) ) {
 			$magicPart = strtolower( substr( $methodName, 2 ) );
 			if ( ! isset( $this->magicMethods[ $magicPart ] ) && ! isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
-				 $error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
-				 $errorData = array( $className . '::' . $methodName );
-				 $phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
+				$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+				$errorData = array( $className . '::' . $methodName );
+				$phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
 			}
 
 			return;

@@ -34,7 +34,7 @@ class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 				'message'       => 'Detected usage of %s',
 				'object_vars'   => array(
 					'$foo->bar',
-					'FOO::var',
+					'FOO::vars',
 					'FOO::reg*',
 					'FOO::$static',
 				),
@@ -50,7 +50,7 @@ class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 				'message'       => 'Detected usage of %s',
 				'object_vars'   => array(
 					'$bar->bar',
-					'BAR::var',
+					'BAR::vars',
 					'BAR::reg*',
 					'BAR::$static',
 				),
@@ -79,8 +79,8 @@ class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			5 => 1,
+			3  => 1,
+			5  => 1,
 			11 => 1,
 			15 => 1,
 			17 => 1,

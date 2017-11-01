@@ -13,13 +13,19 @@
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<rule ref="WordPress-Extra">
-		<exclude name="WordPress.Files.FileName" />
-		<exclude name="WordPress.NamingConventions.ValidVariableName" />
+		<exclude name="WordPress.Files.FileName"/>
+		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
 	</rule>
 
-	<rule ref="WordPress-Docs" />
+	<rule ref="WordPress-Docs"/>
 
 	<!-- Enforce PSR1 compatible namespaces. -->
 	<rule ref="PSR1.Classes.ClassDeclaration"/>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="alignMultilineItems" value="!=100"/>
+		</properties>
+	</rule>
 
 </ruleset>

@@ -77,7 +77,7 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	protected $unsafePrintingFunctions = array(
 		'_e'  => 'esc_html_e() or esc_attr_e()',
-		'_ex' => 'esc_html_ex() or esc_attr_ex()',
+		'_ex' => 'echo esc_html_x() or echo esc_attr_x()',
 	);
 
 	/**
@@ -225,9 +225,9 @@ class EscapeOutputSniff extends Sniff {
 			// Report on what is very likely a PHP short open echo tag outputting a variable.
 			if ( preg_match( '`\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:(?:->\S+|\[[^\]]+\]))*)[\s]*;?[\s]*\?\>`', $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
 				$this->phpcsFile->addError(
-					'Expected next thing to be an escaping function, not %s.',
+					"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 					$stackPtr,
-					'OutputNotEscaped',
+					'OutputNotEscapedShortEcho',
 					array( $matches[1] )
 				);
 				return;
@@ -243,7 +243,7 @@ class EscapeOutputSniff extends Sniff {
 
 		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
 			$error = $this->phpcsFile->addError(
-				"Expected next thing to be an escaping function (like %s), not '%s'",
+				"All output should be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
 				'UnsafePrintingFunction',
 				array( $this->unsafePrintingFunctions[ $function ], $function )
@@ -288,6 +288,11 @@ class EscapeOutputSniff extends Sniff {
 
 			// Ignore whitespaces and comments.
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+				continue;
+			}
+
+			// Ignore namespace separators.
+			if ( T_NS_SEPARATOR === $this->tokens[ $i ]['code'] ) {
 				continue;
 			}
 
@@ -398,7 +403,7 @@ class EscapeOutputSniff extends Sniff {
 						// If we're able to resolve the function name, do so.
 						if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
 							$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
-							$ptr = $mapped_function;
+							$ptr          = $mapped_function;
 						}
 					}
 
@@ -435,7 +440,7 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			$this->phpcsFile->addError(
-				"Expected next thing to be an escaping function (see Codex for 'Data Validation'), not '%s'",
+				"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 				$ptr,
 				'OutputNotEscaped',
 				$content
@@ -477,6 +482,7 @@ class EscapeOutputSniff extends Sniff {
 				$customEscapeFunctions,
 				$this->escapingFunctions
 			);
+
 			$this->addedCustomFunctions['escape']   = $this->customEscapingFunctions;
 			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
 		}
@@ -486,6 +492,7 @@ class EscapeOutputSniff extends Sniff {
 				$this->customAutoEscapedFunctions,
 				$this->autoEscapedFunctions
 			);
+
 			$this->addedCustomFunctions['autoescape'] = $this->customAutoEscapedFunctions;
 		}
 
@@ -495,6 +502,7 @@ class EscapeOutputSniff extends Sniff {
 				$this->customPrintingFunctions,
 				$this->printingFunctions
 			);
+
 			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
 		}
 	}

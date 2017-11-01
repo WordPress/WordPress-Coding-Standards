@@ -65,12 +65,12 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP CodeSniffer 2.9.x or 3.x
-* PHPUnit 4.x or 5.x
+* PHP_CodeSniffer 2.9.x or 3.x
+* PHPUnit 4.x, 5.x or 6.x
 
-The WordPress Coding Standards use the PHP CodeSniffer native unit test suite for unit testing the sniffs.
+The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
-Presuming you have installed PHP CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
+Presuming you have installed PHP_CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
 
 N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
 
@@ -88,7 +88,8 @@ For the unit tests to work, you need to make sure PHPUnit can find your `PHP_Cod
 The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Make sure to adjust the path to reflect your local setup.
 ```xml
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
+	beStrictAboutTestsThatDoNotTestAnything="false"
 	backupGlobals="true">
 	<php>
 		<env name="PHPCS_DIR" value="/path/to/PHP_CodeSniffer/"/>
@@ -121,13 +122,13 @@ PHPUnit 4.8.19 by Sebastian Bergmann and contributors.
 Runtime:        PHP 7.1.3 with Xdebug 2.5.1
 Configuration:  /WordPressCS/phpunit.xml
 
-......................................................
+..........................................................
 
-Tests generated 558 unique error codes; 48 were fixable (8.6%)
+Tests generated 556 unique error codes; 48 were fixable (8.63%)
 
-Time: 12.25 seconds, Memory: 24.00Mb
+Time: 24.08 seconds, Memory: 41.75Mb
 
-OK (54 tests, 0 assertions)
+OK (58 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)

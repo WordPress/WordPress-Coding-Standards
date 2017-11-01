@@ -92,6 +92,18 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
+	 * A list of core hooks that are allowed to be called by plugins and themes.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var array
+	 */
+	protected $whitelisted_core_hooks = array(
+		'widget_title'   => true,
+		'add_meta_boxes' => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.12.0
@@ -270,7 +282,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 				case 'T_CONST':
 					// Constants in a class do not need to be prefixed.
-					if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ) ) === true ) {
+					if ( true === $this->is_class_constant( $stackPtr ) ) {
 						return;
 					}
 
@@ -488,11 +500,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Properties in a class do not need to be prefixed.
-			$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
-			$ptr        = array_pop( $conditions );
-			if ( isset( $this->tokens[ $ptr ] )
-				&& in_array( $this->tokens[ $ptr ]['code'], array( T_CLASS, T_ANON_CLASS, T_TRAIT ), true )
-			) {
+			if ( true === $this->is_class_property( $stackPtr ) ) {
 				return;
 			}
 
@@ -574,8 +582,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$is_error     = true;
+		$is_error    = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
+
+		if (
+			'define' !== $matched_content
+			&& isset( $this->whitelisted_core_hooks[ $raw_content ] )
+		) {
+			return;
+		}
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
 			return;
@@ -604,8 +619,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
 				// If the first part of the parameter is a double quoted string, try again with only
 				// the part before the first variable (if any).
-				$exploded                = explode( '$', $first_non_empty_content );
-				$first                   = rtrim( $exploded[0], '{' );
+				$exploded = explode( '$', $first_non_empty_content );
+				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
 					if ( $this->is_prefixed( $first ) === true ) {
 						return;
@@ -626,6 +641,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
+			if ( strpos( $raw_content, '\\' ) !== false ) {
+				// Namespaced or unreachable constant.
+				return;
+			}
+
 			$data       = array( 'Global constants defined' );
 			$error_code = 'NonPrefixedConstantFound';
 		} else {
@@ -643,10 +663,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Check if a function/class/constant/variable name is prefixed with one of the expected prefixes.
 	 *
 	 * @since 0.12.0
+	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
 	 *
 	 * @param string $name Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix + an underscore.
+	 * @return bool True when the name is the prefix or starts with the prefix + a separator.
 	 *              False otherwise.
 	 */
 	private function is_prefixed( $name ) {
@@ -660,7 +681,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$prefix_found = stripos( $name, $prefix . '_' );
 
 				if ( 0 === $prefix_found ) {
-					// Ok, prefix found as start of hook/constant name.
+					// Ok, prefix found at start of hook/constant name.
+					return true;
+				}
+
+				if ( preg_match( '`^' . preg_quote( $prefix, '`' ) . '\W`i', $name ) === 1 ) {
+					// Ok, prefix with other non-word character found at start of hook/constant name.
 					return true;
 				}
 			}

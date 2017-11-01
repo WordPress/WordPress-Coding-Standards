@@ -90,8 +90,8 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'ValidHookNameUnitTest.inc':
 				return array(
-					8 => 1,
-					9 => 1,
+					8  => 1,
+					9  => 1,
 					10 => 1,
 					11 => 1,
 					68 => 1,

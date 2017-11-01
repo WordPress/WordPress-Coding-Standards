@@ -79,14 +79,14 @@ class DirectDatabaseQuerySniff extends Sniff {
 	 */
 	protected $methods = array(
 		'cachable' => array(
-			'delete' => true,
-			'get_var' => true,
-			'get_col' => true,
-			'get_row' => true,
+			'delete'      => true,
+			'get_var'     => true,
+			'get_col'     => true,
+			'get_row'     => true,
 			'get_results' => true,
-			'query' => true,
-			'replace' => true,
-			'update' => true,
+			'query'       => true,
+			'replace'     => true,
+			'update'      => true,
 		),
 		'noncachable' => array(
 			'insert' => true,
@@ -152,8 +152,12 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		// Check for Database Schema Changes.
-		$_pos = $stackPtr;
-		while ( $_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, ( $_pos + 1 ), $endOfStatement, false, null, true ) ) {
+		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
+			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
+			if ( false === $_pos ) {
+				break;
+			}
+
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
 				$this->phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
 			}
@@ -236,6 +240,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheGetFunctions,
 				$this->cacheGetFunctions
 			);
+
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
@@ -244,6 +249,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheSetFunctions,
 				$this->cacheSetFunctions
 			);
+
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
@@ -252,6 +258,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);
+
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}
 	}
