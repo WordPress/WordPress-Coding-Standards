@@ -638,13 +638,14 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				if ( $is_mixed ) {
 
 					$phpcsFile->addWarning(
-						'%s() expects the value of %s to be slashed with wp_slash(), and %s to be unslashed.',
+						'%s() expects the value of %s to be slashed with wp_slash(), and %s to be unslashed; %s found.',
 						$argPtr,
 						'ExpectedMixed',
 						array(
 							$function_name,
 							implode( ', ', $slashed_keys ),
-							implode( ', ', $unslashed_keys )
+							implode( ', ', $unslashed_keys ),
+							$tokens[ $arg_start ]['content']
 						)
 					);
 
@@ -655,7 +656,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						$parameters[ $arg_index ]['end'],
 						array(
 							'unslashed' => array(
-								'message' => '%s() expects the value of %s to be slashed with wp_slash().',
+								'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
 								'code' => 'ExpectedPartlySlashed',
 								'data' => array( $function_name, implode( ', ', $slashed_keys ) ),
 							),
@@ -713,7 +714,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				if ( in_array( $key_name, $slashed_keys, true ) ) {
 
 					$errors['unslashed'] = array(
-						'message' => '%s() expects the value of %s to be slashed with wp_slash().',
+						'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
 						'code' => 'ExpectedKeySlashed',
 						'data' => array( $function_name, $key_name ),
 					);
@@ -727,7 +728,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				} elseif ( in_array( $key_name, $unslashed_keys, true ) ) {
 
 					$errors['slashed'] = array(
-						'message' => '%s() expects the value of %s to be unslashed.',
+						'message' => '%s() expects the value of %s to be unslashed; %s found.',
 						'code' => 'ExpectedKeyUnslashed',
 						'data' => array( $function_name, $key_name ),
 					);
