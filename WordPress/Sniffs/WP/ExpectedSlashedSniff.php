@@ -226,6 +226,23 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	public static $partlySlashedFunctionArgs = array(
 		// Uses query_posts(), 'q' is passed as 's'.
 		'_wp_ajax_menu_quick_search' => array( 1 => array( 'q' ) ),
+		// Uses wp_update_post().
+		'bulk_edit_posts' => array(
+			1 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
 		// Uses get_posts() with the $args if they are an array.
 		'get_children' => array( 1 => array( 's', 'title' ) ),
 		// Uses get_term_by( 'name' ). All of the other args are either integers or
