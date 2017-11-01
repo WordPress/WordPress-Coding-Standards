@@ -633,18 +633,17 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 				} else {
 
-					if (
-						! isset( self::$slashingFunctions[ $tokens[ $arg_start ]['content'] ] )
-						&& ! isset( self::$autoSlashingFunctions[ $tokens[ $arg_start ]['content'] ] )
-					) {
-
-						$this->addError(
-							'%s() expects the value of %s to be slashed with wp_slash().',
-							$argPtr,
-							'ExpectedPartlySlashed',
-							array( $function_name, implode( ', ', $slashed_keys ) )
-						);
-					}
+					$this->slashing_check_loop(
+						$arg_start,
+						$parameters[ $arg_index ]['end'],
+						array(
+							'unslashed' => array(
+								'message' => '%s() expects the value of %s to be slashed with wp_slash().',
+								'code' => 'ExpectedPartlySlashed',
+								'data' => array( $function_name, implode( ', ', $slashed_keys ) ),
+							),
+						)
+					);
 				}
 
 				break;

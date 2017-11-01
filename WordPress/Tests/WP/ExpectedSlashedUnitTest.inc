@@ -123,3 +123,6 @@ wp_list_pages( array( 'meta_value' => $_POST['something'] ) ); // OK.
 
 // Without spaces.
 get_term_by('slug', 'post-format-' . $value, 'post_format' );
+
+// Slashed superglobals.
+wp_insert_post( $_POST );
