@@ -43,6 +43,77 @@ use PHP_CodeSniffer_Tokens as Tokens;
 class PreparedSQLPlaceholdersSniff extends Sniff {
 
 	/**
+	 * These regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 * and adjusted for limitations in `$wpdb->prepare()`.
+	 *
+	 * Near duplicate of the one used in the WP.I18n sniff, but with less types allowed.
+	 *
+	 * Note: The regex delimiters and modifiers are not included to allow this regex to be
+	 * concatenated together with other regex partials.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string
+	 */
+	const PREPARE_PLACEHOLDER_REGEX = '(?:
+		(?<![^%]%)                     # Don\'t match a literal % (%%), including when it could overlap with a placeholder.
+		(?:
+			%                          # Start of placeholder.
+			(?:[0-9]+\\\\?\$)?         # Optional ordering of the placeholders.
+			[+-]?                      # Optional sign specifier.
+			(?:
+				(?:0|\'.)?                 # Optional padding specifier - excluding the space.
+				-?                         # Optional alignment specifier.
+				[0-9]*                     # Optional width specifier.
+				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
+				|                      # Only recognize the space as padding in combination with a width specifier.
+				(?:[ ])?                   # Optional space padding specifier.
+				-?                         # Optional alignment specifier.
+				[0-9]+                     # Width specifier.
+				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
+			)
+			[dfFs]                    # Type specifier.
+		)
+	)';
+
+	/**
+	 * Similar to above, but for the placeholder types *not* supported.
+	 *
+	 * Note: all optional parts are forced to be greedy to allow for the negative look ahead
+	 * at the end to work.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var string
+	 */
+	const UNSUPPORTED_PLACEHOLDER_REGEX = '`(?:
+		(?<!%)                     # Don\'t match a literal % (%%).
+		(
+			%                          # Start of placeholder.
+			(?!                        # Negative look ahead.
+				%[^%]                       # Not a correct literal % (%%).
+				|
+				%%[dfFs]                    # Nor a correct literal % (%%), followed by a simple placeholder.
+			)
+			(?:[0-9]+\\\\??\$)?+        # Optional ordering of the placeholders.
+			[+-]?+                     # Optional sign specifier.
+			(?:
+				(?:0|\'.)?+                 # Optional padding specifier - excluding the space.
+				-?+                         # Optional alignment specifier.
+				[0-9]*+                     # Optional width specifier.
+				(?:\.(?:[ 0]|\'.)?[0-9]+)?+ # Optional precision specifier with optional padding character.
+				|                      # Only recognize the space as padding in combination with a width specifier.
+				(?:[ ])?+                   # Optional space padding specifier.
+				-?+                         # Optional alignment specifier.
+				[0-9]++                     # Width specifier.
+				(?:\.(?:[ 0]|\'.)?[0-9]+)?+ # Optional precision specifier with optional padding character.
+			)
+			(?![dfFs])                 # Negative look ahead: not one of the supported placeholders.
+			(?:[^ \'"]*|$)             # but something else instead.
+		)
+	)`x';
+
+	/**
 	 * List of $wpdb methods we are interested in.
 	 *
 	 * @since 0.14.0
@@ -69,7 +140,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 *
 	 * @var string
 	 */
-	private $regex_quote = '(["\'])';
+	private $regex_quote = '["\']';
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -159,7 +230,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 						$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
 
 						// Only examine the implode if preceded by an ` IN (`.
-						if ( preg_match( '`\s+IN\s*\(\s*' . $regex_quote . '?$`i', $prev_content, $match ) > 0 ) {
+						if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
 
 							if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
 								$this->phpcsFile->addError(
@@ -215,7 +286,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				unset( $stripped_content, $interpolated_vars, $vars_without_wpdb );
 			}
 
-			$placeholders = preg_match_all( '`(?<![^%]%)%[dFfs]`', $content, $matches );
+			$placeholders = preg_match_all( '`' . self::PREPARE_PLACEHOLDER_REGEX . '`x', $content, $matches );
 			if ( $placeholders > 0 ) {
 				$total_placeholders += $placeholders;
 			}
@@ -228,7 +299,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			 * - Any other `LIKE` statement should be reported, either for using `LIKE` without
 			 *   SQL wildcards or for not passing the SQL wildcards via the replacement.
 			 */
-			$regex = '`\s+LIKE\s*(?:' . $regex_quote . '(?!%s(?:\1|$))(?P<content>.*?)(?:\1|$)|(?:concat\((?![^\)]*%s[^\)]*\))(?P<concat>[^\)]*))\))`i';
+			$regex = '`\s+LIKE\s*(?:(' . $regex_quote . ')(?!%s(?:\1|$))(?P<content>.*?)(?:\1|$)|(?:concat\((?![^\)]*%s[^\)]*\))(?P<concat>[^\)]*))\))`i';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
 				$walk = array();
 				if ( ! empty( $matches['content'] ) ) {
@@ -295,7 +366,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			/*
 			 * Analyse the query for unsupported placeholders.
 			 */
-			if ( preg_match_all( '`(?<!%)%(?![dfFs]|%[^%]|%%[dfFs])(?:[^ \'"]*|$)`', $content, $matches ) > 0 ) {
+			if ( preg_match_all( self::UNSUPPORTED_PLACEHOLDER_REGEX, $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
 					foreach ( $matches[0] as $match ) {
 						if ( '%' === $match ) {
@@ -321,16 +392,36 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			/*
 			 * Analyse the query for quoted placeholders.
 			 */
-			$regex = '`' . $regex_quote . '%[dfFs]\1`';
+			$regex = '`(' . $regex_quote . ')%[dfFs]\1`';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
 					foreach ( $matches[0] as $match ) {
 						$this->phpcsFile->addError(
-							'Placeholders should be unquoted in the query string in $wpdb->prepare(). Found: %s.',
+							'Simple placeholders should not be quoted in the query string in $wpdb->prepare(). Found: %s.',
 							$i,
-							'QuotedPlaceholder',
+							'QuotedSimplePlaceholder',
 							array( $match )
 						);
+					}
+				}
+				unset( $match, $matches );
+			}
+
+			/*
+			 * Analyse the query for unquoted complex placeholders.
+			 */
+			$regex = '`(?<!' . $regex_quote . ')' . self::PREPARE_PLACEHOLDER_REGEX . '(?!' . $regex_quote . ')`x';
+			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
+				if ( ! empty( $matches[0] ) ) {
+					foreach ( $matches[0] as $match ) {
+						if ( preg_match( '`%[dfFs]`', $match ) !== 1 ) {
+							$this->phpcsFile->addWarning(
+								'Complex placeholders used for values in the query string in $wpdb->prepare() will NOT be quoted automagically. Found: %s.',
+								$i,
+								'UnquotedComplexPlaceholder',
+								array( $match )
+							);
+						}
 					}
 				}
 				unset( $match, $matches );
@@ -431,7 +522,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 		 * Verify that the correct amount of replacements have been passed.
 		 */
 		if ( $total_replacements !== $total_placeholders ) {
-			$this->phpcsFile->addError(
+			$this->phpcsFile->addWarning(
 				'Incorrect number of replacements passed to $wpdb->prepare(). Found %d replacement parameters, expected %d.',
 				$stackPtr,
 				'ReplacementsWrongNumber',
@@ -462,9 +553,9 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			$quote_style = $original_content[0];
 
 			if ( '"' === $quote_style ) {
-				$regex_quote = '(\\\\"|\')';
+				$regex_quote = '\\\\"|\'';
 			} elseif ( "'" === $quote_style ) {
-				$regex_quote = '("|\\\\\')';
+				$regex_quote = '"|\\\\\'';
 			}
 		}
 
