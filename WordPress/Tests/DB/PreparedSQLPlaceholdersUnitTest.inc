@@ -25,28 +25,28 @@ $sql = $wpdb->prepare( 'SELECT * FROM `table`', $something ); // Warning.
 /*
  * Test passing invalid replacement placeholder.
  */
-$sql = $wpdb->prepare( '%d %1$d %%% %', 1 ); // Bad x 3.
+$sql = $wpdb->prepare( '%d %1$e %%% % %A %h', 1 ); // Bad x 5.
 $sql = $wpdb->prepare( '%%%s', 1 ); // OK.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // Bad x 2 + 1 warning.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %01.2f AND user_login = %10.10s", 1, "admin" ); // Bad x 2 + 1 warning.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %'.09d AND user_login = %1\$04d", 1, "admin" ); // Bad x 2 + 1 warning.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = \"%1\$d\" AND user_login = '%2\$s'", 1, "admin" ); // Bad x 2 + 1 warning.
-$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users . ' WHERE id = \'%1\$d\' AND user_login = "%2\$s"', 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // OK. 2 x warning for unquoted complex placeholders.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %01.2f AND user_login = %10.10X", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %'.09F AND user_login = %1\$04x", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = \"%1\$c\" AND user_login = '%2\$e'", 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users . ' WHERE id = \'%1\$b\' AND user_login = "%2\$o"', 1, "admin" ); // Bad x 2 + 1 warning.
 
 /*
- * Test passing quoted replacement placeholder.
+ * Test passing quoted simple replacement placeholder and unquoted complex placeholder.
  */
 $sql = $wpdb->prepare( '"%f"', 1.1 ); // Bad.
 $sql = $wpdb->prepare( 'SELECT * FROM `table` WHERE `field` = \'%s\'', 'string' ); // Bad.
 $sql = $wpdb->prepare( "SELECT * FROM `table` WHERE `id` = \"%d\"", 1 ); // Bad.
 $sql = $wpdb->prepare( <<<EOD
 	SELECT *
-	FROM $wpdb->users
-	WHERE id = '%d'
-		AND user_login = "%s"
+	FROM `%1\$s`
+	WHERE id = %2\$d
+		AND `%3\$s` = "%4\$s"
 EOD
-	, 1, "admin"
-); // Bad x 2.
+	, $wpdb->users, 1, 'user_login', "admin"
+); // Warning x 3, unquoted complex placeholder.
 
 /*
  * Test passing an incorrect amount of replacement parameters.
