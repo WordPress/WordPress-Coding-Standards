@@ -100,6 +100,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'get_linkobjectsbyname' => array( 1 => 'cat_name' ),
 		// Uses get_term_by( 'name' ).
 		'get_linksbyname' => array( 1 => 'cat_name' ),
+		// Uses get_linksbyname().
+		'get_linksbyname_withrating' => array( 1 => 'cat_name' ),
 		// Uses get_search_feed_link().
 		'get_search_comments_feed_link' => array( 1 => array( 'search_query' ) ),
 		// Uses get_search_link().
@@ -140,10 +142,16 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_add_object_terms' => array( 2 => 'terms' ),
 		// Uses wp_set_post_tags().
 		'wp_add_post_tags' => array( 2 => 'tags' ),
+		// Uses category_exists() and wp_create_category().
+		'wp_create_categories' => array( 1 => 'categories' ),
+		// Uses category_exists() and wp_insert_category().
+		'wp_create_category' => array( 1 => 'cat_name' ),
 		// Uses wp_update_nav_menu_object().
 		'wp_create_nav_menu' => array( 1 => 'menu_name' ),
 		// Uses wp_unslash().
 		'wp_create_post_autosave' => array( 1 => 'post_data' ),
+		// Uses wp_create_term().
+		'wp_create_tag' => array( 1 => 'tag_name' ),
 		// Uses wp_insert_term() and term_exists().
 		'wp_create_term' => array( 1 => 'term_name' ),
 		// Uses wp_get_nav_menu_object().
@@ -153,7 +161,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_filter_comment' => array( 1 => 'commentarr' ),
 		// Uses wp_get_nav_menu_object().
 		'wp_get_nav_menu_items' => array( 1 => 'menu' ),
-		// Uses get_term_by( 'name' ) if $menu is not a term ID or slug.
+		// Uses get_term_by( 'name' ) if $menu is not a term object, ID, or slug.
 		'wp_get_nav_menu_object' => array( 1 => 'menu' ),
 		// Uses wp_unslash().
 		'wp_insert_comment' => array( 1 => 'commentdata' ),
@@ -184,6 +192,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_update_attachment_metadata' => array( 2 => 'data' ),
 		// Uses wp_unslash().
 		'wp_update_comment' => array( 1 => 'commentarr' ),
+		// Uses wp_insert_link().
+		'wp_update_link' => array( 1 => 'linkdata' ),
 		// Uses install_blog().
 		'wpmu_create_blog' => array( 3 => 'title' ),
 		// Uses wp_unslash().
@@ -253,6 +263,40 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'get_pages' => array( 1 => array( 'meta_key', 'meta_value' ) ),
 		// Uses WP_Query::query().
 		'get_posts' => array( 1 => array( 's', 'title' ) ),
+		// Uses wp_insert_attachment().
+		'media_handle_sideload' => array(
+			4 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
+		// Uses wp_insert_attachment().
+		'media_handle_upload' => array(
+			4 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
 		// Uses WP_Query::query().
 		'query_posts' => array( 1 => array( 's', 'title' ) ),
 		// Uses wp_unslash() on some of these. All of the other args are either
@@ -315,6 +359,12 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_insert_term' => array( 3 => array( 'description' ) ),
 		// Uses wp_get_nav_menu_object() on this.
 		'wp_nav_menu' => array( 1 => array( 'menu' ) ),
+		// Uses wp_update_nav_menu_item().
+		'wp_save_nav_menu_items' => array(
+			2 => array( 'menu-item-description', 'menu-item-attr-title', 'menu-item-title' )
+		),
+		// Uses wp_insert_category().
+		'wp_update_category' => array( 1 => array( 'category_description', 'cat_name' ) ),
 		// Uses wp_insert_post() or wp_update_post(). All other values are slugs or
 		// integers.
 		'wp_update_nav_menu_item' => array(
@@ -343,6 +393,23 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		),
 		// Uses wp_unslash() on these. All of the other args are integers or slugs.
 		'wp_update_term' => array( 3 => array( 'description', 'name' ) ),
+		// Uses wp_insert_attachment().
+		'Custom_Image_Header::insert_attachment' => array(
+			1 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
 		// Uses WP_Query::__construct().
 		'WP_Customize_Nav_Menus::search_available_items_query' => array( 1 => array( 's' ) ),
 		// Uses WP_Query::query().
@@ -355,6 +422,23 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// WP_Query::parse_search() uses stripslashes() on 's'. All other args are
 		// either integers, booleans, or slug-like strings.
 		'WP_Query::query' => array( 1 => array( 's', 'title' ) ),
+		// Uses wp_insert_attachment().
+		'WP_Site_Icon::insert_attachment' => array(
+			1 => array(
+				'post_content',
+				'post_content_filtered',
+				'post_title',
+				'post_excerpt',
+				'post_password',
+				'to_ping',
+				'pinged',
+				'guid',
+				'post_category',
+				'tags_input',
+				'tax_input',
+				'meta_input',
+			),
+		),
 		// Uses WP_Query::query().
 		'_WP_Editors::wp_link_query' => array( 1 => array( 's' ) ),
 	);
@@ -458,6 +542,12 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	public $expectedSlashedFilterArgs = array(
 		// Result passed through wp_unslash().
 		'add_ping' => array( 1 => 'new' ),
+		// Passed POSTed data.
+		'attachment_fields_to_save' => array( 1 => 'post', 2 => 'attachment' ),
+		// Result passed to wp_insert_attachment().
+		'attachment_thumbnail_args' => array( 1 => 'image_attachment' ),
+		// Result passed to get_posts().
+		'dashboard_recent_drafts_query_args' => array( 1 => 'query_args' ),
 		// Result passed through wp_unslash().
 		'pre_comment_author_email' => array( 1 => 'author_email_cookie' ),
 		// Result passed through wp_unslash().
@@ -482,6 +572,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'pre_user_nickname' => array( 1 => 'nickname' ),
 		// Called in wp_insert_user().
 		'pre_user_url' => array( 1 => 'raw_user_url' ),
+		// Passed POSTed data.
+		'set-screen-option' => array( 1 => 'value', 2 => 'option', 3 => 'value' ),
 		// Result passed to wp_list_bookmarks().
 		'widget_links_args' => array( 1 => 'widget_links_args' ),
 		// Result passed to wp_list_pages().
@@ -509,9 +601,11 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 * @var array
 	 */
 	public static $autoSlashingFunctions = array(
+		'absint'                     => true,
 		'esc_url_raw'                => true,
 		'esc_url'                    => true,
 		'get_current_user_id'        => true,
+		'intval'                     => true,
 		'sanitize_key'               => true,
 		'sanitize_title'             => true,
 		'sanitize_title_with_dashes' => true,
