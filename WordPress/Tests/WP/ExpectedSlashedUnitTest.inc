@@ -126,3 +126,8 @@ get_term_by('slug', 'post-format-' . $value, 'post_format' );
 
 // Slashed superglobals.
 wp_insert_post( $_POST );
+
+// Unknown key.
+wp_update_term( $term_id, 'tag', array( $value => 'value' ) ); // Warning.
+
+wp_list_pages( array( $value => 'value' ) ); // Warning.

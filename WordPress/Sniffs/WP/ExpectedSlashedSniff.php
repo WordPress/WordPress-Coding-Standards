@@ -797,7 +797,28 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				);
 
 				if ( T_CONSTANT_ENCAPSED_STRING !== $tokens[ $key_ptr ]['code'] ) {
-					// TODO warning?
+
+					$data = array(
+						$function_name,
+						implode( ', ', $slashed_keys ),
+						implode( ', ', $unslashed_keys ),
+						$tokens[ $key_ptr ]['content']
+					);
+
+					if ( $is_mixed ) {
+						$message = '%s() expects the value of %s to be slashed with wp_slash(), and %s to be unslashed; unknown key "%s" found.';
+					} else {
+						$message = '%s() expects the value of %s to be slashed with wp_slash(); unknown key "%s" found.';
+						unset( $data[2] );
+					}
+
+					$phpcsFile->addWarning(
+						$message,
+						$argPtr,
+						'MaybeExpectedKeySlashed',
+						$data
+					);
+
 					continue;
 				}
 
