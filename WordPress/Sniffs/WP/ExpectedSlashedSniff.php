@@ -128,6 +128,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'update_user_option' => array( 2 => 'option_name', 3 => 'newvalue' ),
 		// Uses wp_set_object_terms().
 		'wp_add_object_terms' => array( 2 => 'terms' ),
+		// Uses wp_set_post_tags().
+		'wp_add_post_tags' => array( 2 => 'tags' ),
 		// Uses wp_update_nav_menu_object().
 		'wp_create_nav_menu' => array( 1 => 'menu_name' ),
 		// Uses wp_unslash().
