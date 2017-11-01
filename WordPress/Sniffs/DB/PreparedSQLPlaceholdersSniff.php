@@ -16,9 +16,12 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * Check for incorrect use of the $wpdb->prepare method.
  *
  * Check the following issues:
- * - As of WP 4.8.2, the only placeholders supported are: %d, %f (%F) and %s.
+ * - The only placeholders supported are: %d, %f (%F) and %s and their variations.
  * - Literal % signs need to be properly escaped as `%%`.
- * - Placeholders should be left unquoted in the query string.
+ * - Simple placeholders (%d, %f, %F, %s) should be left unquoted in the query string.
+ * - Complex placeholders - numbered and formatted variants - will not be quoted
+ *   automagically by $wpdb->prepare(), so if used for values, should be quoted in
+ *   the query string.
  * - Either an array of replacements should be passed matching the number of
  *   placeholders found or individual parameters for each placeholder should
  *   be passed.
@@ -46,7 +49,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * These regexes copied from http://php.net/manual/en/function.sprintf.php#93552
 	 * and adjusted for limitations in `$wpdb->prepare()`.
 	 *
-	 * Near duplicate of the one used in the WP.I18n sniff, but with less types allowed.
+	 * Near duplicate of the one used in the WP.I18n sniff, but with fewer types allowed.
 	 *
 	 * Note: The regex delimiters and modifiers are not included to allow this regex to be
 	 * concatenated together with other regex partials.
@@ -72,7 +75,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				[0-9]+                     # Width specifier.
 				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
 			)
-			[dfFs]                    # Type specifier.
+			[dfFs]                     # Type specifier.
 		)
 	)';
 
@@ -95,7 +98,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				|
 				%%[dfFs]                    # Nor a correct literal % (%%), followed by a simple placeholder.
 			)
-			(?:[0-9]+\\\\??\$)?+        # Optional ordering of the placeholders.
+			(?:[0-9]+\\\\??\$)?+       # Optional ordering of the placeholders.
 			[+-]?+                     # Optional sign specifier.
 			(?:
 				(?:0|\'.)?+                 # Optional padding specifier - excluding the space.
