@@ -73,11 +73,10 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'add_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
 		// Uses term_exists().
 		'category_exists' => array( 1 => 'cat_name' ),
-		// These are directly interpolated into a database query. Failure to slash
-		// will result in SQL injection!!
+		// Uses wp_unslash().
 		'check_comment' => array( 1 => 'author', 2 => 'email' ),
 		// Uses stripslashes().
-		'comment_exists' => array( 1 => 'comment_author' ),
+		'comment_exists' => array( 1 => 'comment_author', 2 => 'comment_date' ),
 		// Uses delete_metadata().
 		'delete_comment_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
 		// Uses wp_unslash().
@@ -94,6 +93,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'delete_user_option' => array( 2 => 'option_name' ),
 		// Expects POST data.
 		'edit_post' => array( 1 => 'post_data' ),
+		// Uses stripslashes(), but adds slashes back with addslashes() (which is
+		// necessary escaping for the context the output is intended to be used in).
+		'esc_js' => array( 1 => 'text' ),
 		// Uses get_term_by( 'name' ).
 		'get_cat_ID' => array( 1 => 'category_name' ),
 		// Uses get_term_by( 'name' ).
@@ -116,6 +118,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'is_nav_menu' => array( 1 => 'menu' ),
 		// Uses term_exists().
 		'is_term' => array( 1 => 'term' ),
+		// Uses esc_js().
+		'js_escape' => array( 1 => 'text' ),
 		// Uses wp_unslash().
 		'post_exists' => array( 1 => 'title', 2 => 'content', 3 => 'date' ),
 		// Uses update_post_meta() when the $file isn't empty.
@@ -132,6 +136,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'update_term_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
 		// Uses update_metadata().
 		'update_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		// Uses stripslashes().
+		'update_usermeta' => array( 3 => 'meta_value' ),
 		// Uses term_exists().
 		'tag_exists' => array( 1 => 'tag_name' ),
 		// Uses wp_unslash() when a string is passed; also accepts term ID.
@@ -159,6 +165,12 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Just passed data through it, but is used by wp_new_comment(),
 		// wp_update_comment(), etc.
 		'wp_filter_comment' => array( 1 => 'commentarr' ),
+		// Uses stripslashes(), but adds slashes back with addslashes().
+		'wp_filter_kses' => array( 1 => 'data' ),
+		// Uses stripslashes(), but adds slashes back with addslashes().
+		'wp_filter_nohtml_kses' => array( 1 => 'data' ),
+		// Uses stripslashes(), but adds slashes back with addslashes().
+		'wp_filter_post_kses' => array( 1 => 'data' ),
 		// Uses wp_get_nav_menu_object().
 		'wp_get_nav_menu_items' => array( 1 => 'menu' ),
 		// Uses get_term_by( 'name' ) if $menu is not a term object, ID, or slug.
@@ -171,6 +183,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'wp_insert_term' => array( 1 => 'term' ),
 		// Uses wp_insert_comment() and wp_allow_comment().
 		'wp_new_comment' => array( 1 => 'commentdata' ),
+		// Uses stripslashes(), but adds the slashes back with addslashes().
+		'wp_rel_nofollow' => array( 1 => 'text' ),
 		// Uses term_exists(). The docs for wp_remove_object_terms() says that it
 		// takes only term slugs or IDs, but it is also possible to pass in the term
 		// names, and in that case they must be slashed.
@@ -204,6 +218,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		'WP_Press_This::side_load_images' => array( 2 => 'content' ),
 		// Uses wp_unslash().
 		'WP_Customize_Setting::sanitize' => array( 1 => 'value' ),
+		// Uses wp_unslash().
+		'WP_User_Search::__construct' => array( 1 => 'search_term' ),
 		// Uses wp_insert_post() and wp_update_post().
 		'wp_xmlrpc_server::_insert_post' => array( 2 => 'content_struct' ),
 		// Uses wp_unslash() and add_term_meta().
@@ -234,7 +250,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 * @var array[]
 	 */
 	public static $partlySlashedFunctionArgs = array(
-		// Uses query_posts(), 'q' is passed as 's'.
+		// Uses WP_Query::__construct(), 'q' is passed as 's'.
 		'_wp_ajax_menu_quick_search' => array( 1 => array( 'q' ) ),
 		// Uses wp_update_post().
 		'bulk_edit_posts' => array(
@@ -253,16 +269,12 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				'meta_input',
 			),
 		),
-		// Uses get_posts() with the $args if they are an array.
-		'get_children' => array( 1 => array( 's', 'title' ) ),
 		// Uses get_term_by( 'name' ). All of the other args are either integers or
 		// accept slug-like values.
 		'get_bookmarks' => array( 1 => array( 'category_name' ) ),
 		// Uses wp_unslash() on these. All of the other args are either integers or
 		// accept slug-like values.
 		'get_pages' => array( 1 => array( 'meta_key', 'meta_value' ) ),
-		// Uses WP_Query::query().
-		'get_posts' => array( 1 => array( 's', 'title' ) ),
 		// Uses wp_insert_attachment().
 		'media_handle_sideload' => array(
 			4 => array(
@@ -297,8 +309,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				'meta_input',
 			),
 		),
-		// Uses WP_Query::query().
-		'query_posts' => array( 1 => array( 's', 'title' ) ),
 		// Uses wp_unslash() on some of these. All of the other args are either
 		// integers, slugs, or dates.
 		'wp_allow_comment' => array(
@@ -311,12 +321,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				'comment_agent',
 			),
 		),
-		// Uses get_posts().
-		'wp_get_nav_menu_items' => array( 2 => array( 's', 'title' ) ),
-		// Uses get_children().
+		// Uses get_children(), but revisions don't support meta and tax info by
+		// default, so this is partly slashed for now, not mixed.
 		'wp_get_post_revisions' => array( 2 => array( 's', 'title' ) ),
-		// Uses get_posts().
-		'wp_get_recent_posts' => array( 1 => array( 's', 'title' ) ),
 		// Uses wp_insert_post().
 		'wp_insert_attachment' => array(
 			1 => array(
@@ -412,16 +419,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		),
 		// Uses WP_Query::__construct().
 		'WP_Customize_Nav_Menus::search_available_items_query' => array( 1 => array( 's' ) ),
-		// Uses WP_Query::query().
-		'WP_Query::__construct' => array( 1 => array( 's', 'title' ) ),
-		// WP_Query::get_posts() uses stripslashes() on the 'title', and
-		// WP_Query::parse_search() uses stripslashes() on 's'. All other args are
-		// either integers, booleans, or slug-like strings.
-		'WP_Query::parse_query' => array( 1 => array( 's', 'title' ) ),
-		// WP_Query::get_posts() uses stripslashes() on the 'title', and
-		// WP_Query::parse_search() uses stripslashes() on 's'. All other args are
-		// either integers, booleans, or slug-like strings.
-		'WP_Query::query' => array( 1 => array( 's', 'title' ) ),
 		// Uses wp_insert_attachment().
 		'WP_Site_Icon::insert_attachment' => array(
 			1 => array(
@@ -458,7 +455,42 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 * @var array[]
 	 */
 	public static $mixedSlashedFunctionArgs = array(
-		// Uses get_bookmarks(). When 'categorize' is true, passing 'categroy_name'
+		// Uses get_posts() with the $args if they are an array.
+		'get_children' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// Uses WP_Query::query().
+		'get_posts' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// Uses WP_Query::query().
+		'query_posts' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// Uses get_posts().
+		'wp_get_nav_menu_items' => array(
+			2 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// Uses get_posts().
+		'wp_get_recent_posts' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// Uses get_bookmarks(). When 'categorize' is true, passing 'category_name'
 		// doesn't make sense, so this only applies when 'categorize' false. In fact,
 		// when 'categorize' is true, the 'category_name' is passed to get_terms() as
 		// 'name__like', which is expected unslashed. So it is only expected slashed
@@ -526,6 +558,31 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 					'user_url',
 				),
 				'unslashed' => array( 'user_pass' ),
+			),
+		),
+		// Uses WP_Query::query().
+		'WP_Query::__construct' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// WP_Query::get_posts() uses stripslashes() on the 'title', and
+		// WP_Query::parse_search() uses stripslashes() on 's'. All other args are
+		// either integers, booleans, or slug-like strings.
+		'WP_Query::parse_query' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
+			),
+		),
+		// WP_Query::get_posts() uses stripslashes() on the 'title', and
+		// WP_Query::parse_search() uses stripslashes() on 's'. All other args are
+		// either integers, booleans, or slug-like strings.
+		'WP_Query::query' => array(
+			1 => array(
+				'slashed'   => array( 's', 'title' ),
+				'unslashed' => array( 'meta_key', 'meta_query', 'meta_value', 'tax_query' ),
 			),
 		),
 	);
