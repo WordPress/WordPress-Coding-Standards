@@ -1165,7 +1165,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	protected function addError( $error, $stackPtr, $code, $data ) {
 
 		if ( $this->is_inside_slashed_function_definition( $stackPtr ) ) {
-			$this->phpcsFile->addWarning( $error, $stackPtr, $code, $data );
+			$this->phpcsFile->addWarning( $error, $stackPtr, $code . 'Internal', $data );
 		} else {
 			$this->phpcsFile->addError( $error, $stackPtr, $code, $data );
 		}
