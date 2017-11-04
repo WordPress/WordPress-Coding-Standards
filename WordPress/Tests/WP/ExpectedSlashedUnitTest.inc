@@ -100,22 +100,22 @@ get_bookmarks(array("category" => $cat->term_id)); // OK.
 
 // String passed.
 add_post_meta( $post_id, 'key', 'value' ); // OK.
-add_post_meta( $post_id, 'key', 'I said, "Wow!"' ); // Warning.
-add_post_meta( $post_id, 'key', 'That\'s nice.' ); // Warning.
+add_post_meta( $post_id, 'key', 'I said, \"Wow!\"' ); // Warning.
+add_post_meta( $post_id, 'key', 'That\'s nice.' ); // OK.
 add_post_meta( $post_id, 'key', 'Slashes (\\).' ); // Warning.
 
 wp_update_term( $term_id, 'tag', array( 'name' => 'value' ) ); // OK.
-wp_update_term( $term_id, 'tag', array( 'name' => 'I said, "Wow!"' ) ); // Warning.
+wp_update_term( $term_id, 'tag', array( 'name' => 'slash\\s' ) ); // Warning.
 
 wp_list_pages( array( 'meta_value' => 'value' ) ); // OK.
-wp_list_pages( array( 'meta_value' => 'I said, "Wow!"' ) ); // Warning.
+wp_list_pages( array( 'meta_value' => 'slash\\s' ) ); // Warning.
 
 // Mixed.
-add_post_meta( $post_id, 'key', wp_slash( $value ) . $value . ' "' ); // 1 Error, 1 Warning.
+add_post_meta( $post_id, 'key', wp_slash( $value ) . $value . ' \"' ); // 1 Error, 1 Warning.
 
-wp_update_term( $term_id, 'tag', array( 'name' => wp_slash( $value ) . $value . ' "' ) ); // 1 Error, 1 Warning.
+wp_update_term( $term_id, 'tag', array( 'name' => wp_slash( $value ) . $value . ' \"' ) ); // 1 Error, 1 Warning.
 
-wp_list_pages( array( 'meta_value' => wp_slash( $value ) . $value . ' "' ) ); // 1 Error, 1 Warning.
+wp_list_pages( array( 'meta_value' => wp_slash( $value ) . $value . ' \"' ) ); // 1 Error, 1 Warning.
 
 // More slashed superglobals.
 wp_update_term( $term_id, 'tag', array( 'name' => $_POST['something'] ) ); // OK.

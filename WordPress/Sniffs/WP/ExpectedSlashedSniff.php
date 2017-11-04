@@ -891,9 +891,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						'data' => array( $function_name, $key_name ),
 					);
 
-					$errors['slashable_string'] = array(
+					$errors['slashed_string'] = array(
 						'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
-						'code' => 'KeyStringMayNeedSlashing',
+						'code' => 'KeyStringMayNeedDoubleSlashing',
 						'data' => array( $function_name, $key_name )
 					);
 
@@ -971,9 +971,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						'code' => 'MissingSlashing',
 						'data' => array( $function_name, $name )
 					),
-					'slashable_string' => array(
+					'slashed_string' => array(
 						'message' => '%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
-						'code' => 'StringMayNeedSlashing',
+						'code' => 'StringMayNeedDoubleSlashing',
 						'data' => array( $function_name, $name )
 					)
 				)
@@ -1006,8 +1006,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 *               @type string $code    The error code.
 	 *               @type array  $data    The error data. The found content will be added.
 	 *         }
-	 *         @type array $slashable_string {
-	 *               The warning to give when a slashable string is found.
+	 *         @type array $slashed_string {
+	 *               The warning to give when a slashed string is found.
 	 *
 	 *               @type string $message The error message.
 	 *               @type string $code    The error code.
@@ -1071,13 +1071,13 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 			if ( T_CONSTANT_ENCAPSED_STRING === $tokens[ $i ]['code'] ) {
 
-				if ( preg_match( '~^["\'].*["\'\\\\].*["\']$~', $content ) ) {
-					if ( isset( $errors['slashable_string'] ) ) {
+				if ( preg_match( '/^(["\']).*\\\\(?!\1).*\1$/', $content ) ) {
+					if ( isset( $errors['slashed_string'] ) ) {
 						$this->phpcsFile->addWarning(
-							$errors['slashable_string']['message'],
+							$errors['slashed_string']['message'],
 							$i,
-							$errors['slashable_string']['code'],
-							array_merge( $errors['slashable_string']['data'], array( $content ) )
+							$errors['slashed_string']['code'],
+							array_merge( $errors['slashed_string']['data'], array( $content ) )
 						);
 					}
 				}

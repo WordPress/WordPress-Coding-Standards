@@ -59,7 +59,6 @@ class ExpectedSlashedUnitTest extends AbstractSniffUnitTest {
 			66  => 2,
 			70  => 1,
 			103 => 1,
-			104 => 1,
 			105 => 1,
 			108 => 1,
 			111 => 1,
