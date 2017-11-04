@@ -44,11 +44,11 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 * @var int[]
 	 */
 	protected $slashed_tokens = array(
-		T_LNUMBER                  => true,
-		T_MINUS                    => true,
-		T_TRUE                     => true,
-		T_FALSE                    => true,
-		T_NULL                     => true,
+		T_LNUMBER => true,
+		T_MINUS   => true,
+		T_TRUE    => true,
+		T_FALSE   => true,
+		T_NULL    => true,
 	);
 
 	/**
@@ -60,172 +60,353 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 */
 	public static $expectedSlashedFunctionArgs = array(
 		// Uses add_metadata().
-		'add_comment_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'add_comment_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses wp_unslash().
-		'add_metadata' => array( 3 => 'meta_key', 4 => 'meta_value' ),
+		'add_metadata' => array(
+			3 => 'meta_key',
+			4 => 'meta_value',
+		),
 		// Uses wp_unslash().
-		'add_ping' => array( 2 => 'uri' ),
+		'add_ping' => array(
+			2 => 'uri',
+		),
 		// Uses add_metadata().
-		'add_post_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'add_post_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses add_metadata().
-		'add_term_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'add_term_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses add_metadata().
-		'add_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'add_user_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses term_exists().
-		'category_exists' => array( 1 => 'cat_name' ),
+		'category_exists' => array(
+			1 => 'cat_name',
+		),
 		// Uses wp_unslash().
-		'check_comment' => array( 1 => 'author', 2 => 'email' ),
+		'check_comment' => array(
+			1 => 'author',
+			2 => 'email',
+		),
 		// Uses stripslashes().
-		'comment_exists' => array( 1 => 'comment_author', 2 => 'comment_date' ),
+		'comment_exists' => array(
+			1 => 'comment_author',
+			2 => 'comment_date',
+		),
 		// Uses delete_metadata().
-		'delete_comment_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'delete_comment_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses wp_unslash().
-		'delete_metadata' => array( 3 => 'meta_key', 4 => 'meta_value' ),
+		'delete_metadata' => array(
+			3 => 'meta_key',
+			4 => 'meta_value',
+		),
 		// Uses delete_metadata().
-		'delete_post_meta_by_key' => array( 1 => 'post_meta_key' ),
+		'delete_post_meta_by_key' => array(
+			1 => 'post_meta_key',
+		),
 		// Uses delete_metadata().
-		'delete_post_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'delete_post_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses delete_metadata().
-		'delete_term_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'delete_term_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses delete_metadata().
-		'delete_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'delete_user_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses delete_user_meta().
-		'delete_user_option' => array( 2 => 'option_name' ),
+		'delete_user_option' => array(
+			2 => 'option_name',
+		),
 		// Expects POST data.
-		'edit_post' => array( 1 => 'post_data' ),
+		'edit_post' => array(
+			1 => 'post_data',
+		),
 		// Uses stripslashes(), but adds slashes back with addslashes() (which is
 		// necessary escaping for the context the output is intended to be used in).
-		'esc_js' => array( 1 => 'text' ),
+		'esc_js' => array(
+			1 => 'text',
+		),
 		// Uses get_term_by( 'name' ).
-		'get_cat_ID' => array( 1 => 'category_name' ),
+		'get_cat_ID' => array(
+			1 => 'category_name',
+		),
 		// Uses get_term_by( 'name' ).
-		'get_linkobjectsbyname' => array( 1 => 'cat_name' ),
+		'get_linkobjectsbyname' => array(
+			1 => 'cat_name',
+		),
 		// Uses get_term_by( 'name' ).
-		'get_linksbyname' => array( 1 => 'cat_name' ),
+		'get_linksbyname' => array(
+			1 => 'cat_name',
+		),
 		// Uses get_linksbyname().
-		'get_linksbyname_withrating' => array( 1 => 'cat_name' ),
+		'get_linksbyname_withrating' => array(
+			1 => 'cat_name',
+		),
 		// Uses get_search_feed_link().
-		'get_search_comments_feed_link' => array( 1 => array( 'search_query' ) ),
+		'get_search_comments_feed_link' => array(
+			1 => array( 'search_query' ),
+		),
 		// Uses get_search_link().
-		'get_search_feed_link' => array( 1 => 'search_query' ),
+		'get_search_feed_link' => array(
+			1 => 'search_query',
+		),
 		// Uses stripslashes().
-		'get_search_link' => array( 1 => 'query' ),
+		'get_search_link' => array(
+			1 => 'query',
+		),
 		// Uses wp_unslash() when $field is 'name'.
-		'get_term_by' => array( 2 => 'value' ),
+		'get_term_by' => array(
+			2 => 'value',
+		),
 		// Uses wp_unslash().
-		'install_blog' => array( 2 => 'blog_title' ),
+		'install_blog' => array(
+			2 => 'blog_title',
+		),
 		// Uses wp_get_nav_menu_object().
-		'is_nav_menu' => array( 1 => 'menu' ),
+		'is_nav_menu' => array(
+			1 => 'menu',
+		),
 		// Uses term_exists().
-		'is_term' => array( 1 => 'term' ),
+		'is_term' => array(
+			1 => 'term',
+		),
 		// Uses esc_js().
-		'js_escape' => array( 1 => 'text' ),
+		'js_escape' => array(
+			1 => 'text',
+		),
 		// Uses wp_unslash().
-		'post_exists' => array( 1 => 'title', 2 => 'content', 3 => 'date' ),
+		'post_exists' => array(
+			1 => 'title',
+			2 => 'content',
+			3 => 'date',
+		),
 		// Uses update_post_meta() when the $file isn't empty.
-		'update_attached_file' => array( 2 => 'file' ),
+		'update_attached_file' => array(
+			2 => 'file',
+		),
 		// Uses update_metadata().
-		'update_comment_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'update_comment_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses wp_unslash().
-		'update_metadata' => array( 3 => 'meta_key', 4 => 'meta_value' ),
+		'update_metadata' => array(
+			3 => 'meta_key',
+			4 => 'meta_value',
+		),
 		// Uses wp_unslash().
-		'update_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'update_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses update_metadata().
-		'update_post_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'update_post_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses update_metadata().
-		'update_term_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'update_term_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses update_metadata().
-		'update_user_meta' => array( 2 => 'meta_key', 3 => 'meta_value' ),
+		'update_user_meta' => array(
+			2 => 'meta_key',
+			3 => 'meta_value',
+		),
 		// Uses stripslashes().
-		'update_usermeta' => array( 3 => 'meta_value' ),
+		'update_usermeta' => array(
+			3 => 'meta_value',
+		),
 		// Uses term_exists().
-		'tag_exists' => array( 1 => 'tag_name' ),
+		'tag_exists' => array(
+			1 => 'tag_name',
+		),
 		// Uses wp_unslash() when a string is passed; also accepts term ID.
-		'term_exists' => array( 1 => 'term' ),
+		'term_exists' => array(
+			1 => 'term',
+		),
 		// Uses update_user_meta().
-		'update_user_option' => array( 2 => 'option_name', 3 => 'newvalue' ),
+		'update_user_option' => array(
+			2 => 'option_name',
+			3 => 'newvalue',
+		),
 		// Uses wp_set_object_terms().
-		'wp_add_object_terms' => array( 2 => 'terms' ),
+		'wp_add_object_terms' => array(
+			2 => 'terms',
+		),
 		// Uses wp_set_post_tags().
-		'wp_add_post_tags' => array( 2 => 'tags' ),
+		'wp_add_post_tags' => array(
+			2 => 'tags',
+		),
 		// Uses category_exists() and wp_create_category().
-		'wp_create_categories' => array( 1 => 'categories' ),
+		'wp_create_categories' => array(
+			1 => 'categories',
+		),
 		// Uses category_exists() and wp_insert_category().
-		'wp_create_category' => array( 1 => 'cat_name' ),
+		'wp_create_category' => array(
+			1 => 'cat_name',
+		),
 		// Uses wp_update_nav_menu_object().
-		'wp_create_nav_menu' => array( 1 => 'menu_name' ),
+		'wp_create_nav_menu' => array(
+			1 => 'menu_name',
+		),
 		// Uses wp_unslash().
-		'wp_create_post_autosave' => array( 1 => 'post_data' ),
+		'wp_create_post_autosave' => array(
+			1 => 'post_data',
+		),
 		// Uses wp_create_term().
-		'wp_create_tag' => array( 1 => 'tag_name' ),
+		'wp_create_tag' => array(
+			1 => 'tag_name',
+		),
 		// Uses wp_insert_term() and term_exists().
-		'wp_create_term' => array( 1 => 'term_name' ),
+		'wp_create_term' => array(
+			1 => 'term_name',
+		),
 		// Uses wp_get_nav_menu_object().
-		'wp_delete_nav_menu' => array( 1 => 'menu' ),
+		'wp_delete_nav_menu' => array(
+			1 => 'menu',
+		),
 		// Just passed data through it, but is used by wp_new_comment(),
 		// wp_update_comment(), etc.
-		'wp_filter_comment' => array( 1 => 'commentarr' ),
+		'wp_filter_comment' => array(
+			1 => 'commentarr',
+		),
 		// Uses stripslashes(), but adds slashes back with addslashes().
-		'wp_filter_kses' => array( 1 => 'data' ),
+		'wp_filter_kses' => array(
+			1 => 'data',
+		),
 		// Uses stripslashes(), but adds slashes back with addslashes().
-		'wp_filter_nohtml_kses' => array( 1 => 'data' ),
+		'wp_filter_nohtml_kses' => array(
+			1 => 'data',
+		),
 		// Uses stripslashes(), but adds slashes back with addslashes().
-		'wp_filter_post_kses' => array( 1 => 'data' ),
+		'wp_filter_post_kses' => array(
+			1 => 'data',
+		),
 		// Uses wp_get_nav_menu_object().
-		'wp_get_nav_menu_items' => array( 1 => 'menu' ),
+		'wp_get_nav_menu_items' => array(
+			1 => 'menu',
+		),
 		// Uses get_term_by( 'name' ) if $menu is not a term object, ID, or slug.
-		'wp_get_nav_menu_object' => array( 1 => 'menu' ),
+		'wp_get_nav_menu_object' => array(
+			1 => 'menu',
+		),
 		// Uses wp_unslash().
-		'wp_insert_comment' => array( 1 => 'commentdata' ),
+		'wp_insert_comment' => array(
+			1 => 'commentdata',
+		),
 		// Uses wp_unslash().
-		'wp_insert_link' => array( 1 => 'linkdata' ),
+		'wp_insert_link' => array(
+			1 => 'linkdata',
+		),
 		// Uses wp_unslash().
-		'wp_insert_term' => array( 1 => 'term' ),
+		'wp_insert_term' => array(
+			1 => 'term',
+		),
 		// Uses wp_insert_comment() and wp_allow_comment().
-		'wp_new_comment' => array( 1 => 'commentdata' ),
+		'wp_new_comment' => array(
+			1 => 'commentdata',
+		),
 		// Uses stripslashes(), but adds the slashes back with addslashes().
-		'wp_rel_nofollow' => array( 1 => 'text' ),
+		'wp_rel_nofollow' => array(
+			1 => 'text',
+		),
 		// Uses term_exists(). The docs for wp_remove_object_terms() says that it
 		// takes only term slugs or IDs, but it is also possible to pass in the term
 		// names, and in that case they must be slashed.
-		'wp_remove_object_terms' => array( 2 => 'terms' ),
+		'wp_remove_object_terms' => array(
+			2 => 'terms',
+		),
 		// Uses term_exists(), and wp_insert_term() if the term doesn't exist and is
 		// a string. The docs for wp_set_object_terms() says that it takes only term
 		// slugs or IDs, but it is also possible to pass in the term names, and in
 		// that case they must be slashed.
-		'wp_set_object_terms' => array( 2 => 'terms' ),
+		'wp_set_object_terms' => array(
+			2 => 'terms',
+		),
 		// Uses wp_set_post_terms().
-		'wp_set_post_categories' => array( 2 => 'post_categories' ),
+		'wp_set_post_categories' => array(
+			2 => 'post_categories',
+		),
 		// Uses wp_set_post_categories().
-		'wp_set_post_cats' => array( 2 => 'post_categories' ),
+		'wp_set_post_cats' => array(
+			2 => 'post_categories',
+		),
 		// Uses wp_set_post_terms().
-		'wp_set_post_tags' => array( 2 => 'tags' ),
+		'wp_set_post_tags' => array(
+			2 => 'tags',
+		),
 		// Uses wp_set_object_terms().
-		'wp_set_post_terms' => array( 2 => 'terms' ),
+		'wp_set_post_terms' => array(
+			2 => 'terms',
+		),
 		// Uses update_post_meta().
-		'wp_update_attachment_metadata' => array( 2 => 'data' ),
+		'wp_update_attachment_metadata' => array(
+			2 => 'data',
+		),
 		// Uses wp_unslash().
-		'wp_update_comment' => array( 1 => 'commentarr' ),
+		'wp_update_comment' => array(
+			1 => 'commentarr',
+		),
 		// Uses wp_insert_link().
-		'wp_update_link' => array( 1 => 'linkdata' ),
+		'wp_update_link' => array(
+			1 => 'linkdata',
+		),
 		// Uses install_blog().
-		'wpmu_create_blog' => array( 3 => 'title' ),
+		'wpmu_create_blog' => array(
+			3 => 'title',
+		),
 		// Uses wp_unslash().
-		'wpmu_validate_blog_signup' => array( 2 => 'blog_title' ),
+		'wpmu_validate_blog_signup' => array(
+			2 => 'blog_title',
+		),
 		// Uses wp_unslash().
-		'wpmu_welcome_notification' => array( 4 => 'title' ),
+		'wpmu_welcome_notification' => array(
+			4 => 'title',
+		),
 		// Uses wp_unslash().
-		'WP_Press_This::side_load_images' => array( 2 => 'content' ),
+		'WP_Press_This::side_load_images' => array(
+			2 => 'content',
+		),
 		// Uses wp_unslash().
-		'WP_Customize_Setting::sanitize' => array( 1 => 'value' ),
+		'WP_Customize_Setting::sanitize' => array(
+			1 => 'value',
+		),
 		// Uses wp_unslash().
-		'WP_User_Search::__construct' => array( 1 => 'search_term' ),
+		'WP_User_Search::__construct' => array(
+			1 => 'search_term',
+		),
 		// Uses wp_insert_post() and wp_update_post().
-		'wp_xmlrpc_server::_insert_post' => array( 2 => 'content_struct' ),
+		'wp_xmlrpc_server::_insert_post' => array(
+			2 => 'content_struct',
+		),
 		// Uses wp_unslash() and add_term_meta().
-		'wp_xmlrpc_server::set_term_custom_fields' => array( 2 => 'fields' ),
+		'wp_xmlrpc_server::set_term_custom_fields' => array(
+			2 => 'fields',
+		),
 		// Uses wp_unslash() and add_post_meta().
-		'wp_xmlrpc_server::set_custom_fields' => array( 2 => 'fields' ),
+		'wp_xmlrpc_server::set_custom_fields' => array(
+			2 => 'fields',
+		),
 	);
 
 	/**
@@ -251,7 +432,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 */
 	public static $partlySlashedFunctionArgs = array(
 		// Uses WP_Query::__construct(), 'q' is passed as 's'.
-		'_wp_ajax_menu_quick_search' => array( 1 => array( 'q' ) ),
+		'_wp_ajax_menu_quick_search' => array(
+			1 => array( 'q' ),
+		),
 		// Uses wp_update_post().
 		'bulk_edit_posts' => array(
 			1 => array(
@@ -271,10 +454,14 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		),
 		// Uses get_term_by( 'name' ). All of the other args are either integers or
 		// accept slug-like values.
-		'get_bookmarks' => array( 1 => array( 'category_name' ) ),
+		'get_bookmarks' => array(
+			1 => array( 'category_name' ),
+		),
 		// Uses wp_unslash() on these. All of the other args are either integers or
 		// accept slug-like values.
-		'get_pages' => array( 1 => array( 'meta_key', 'meta_value' ) ),
+		'get_pages' => array(
+			1 => array( 'meta_key', 'meta_value' ),
+		),
 		// Uses wp_insert_attachment().
 		'media_handle_sideload' => array(
 			4 => array(
@@ -323,7 +510,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		),
 		// Uses get_children(), but revisions don't support meta and tax info by
 		// default, so this is partly slashed for now, not mixed.
-		'wp_get_post_revisions' => array( 2 => array( 's', 'title' ) ),
+		'wp_get_post_revisions' => array(
+			2 => array( 's', 'title' ),
+		),
 		// Uses wp_insert_post().
 		'wp_insert_attachment' => array(
 			1 => array(
@@ -342,7 +531,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			),
 		),
 		// Uses wp_insert_term() and wp_update_term().
-		'wp_insert_category' => array( 1 => array( 'category_description', 'cat_name' ) ),
+		'wp_insert_category' => array(
+			1 => array( 'category_description', 'cat_name' ),
+		),
 		// Uses wp_unslash().
 		'wp_insert_post' => array(
 			1 => array(
@@ -363,23 +554,31 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Uses wp_unslash() on this. All of the other args are integers or slugs.
 		// The 'name' arg is also expected slashed, but this is always overridden by
 		// $term.
-		'wp_insert_term' => array( 3 => array( 'description' ) ),
+		'wp_insert_term' => array(
+			3 => array( 'description' ),
+		),
 		// Uses wp_get_nav_menu_object() on this.
-		'wp_nav_menu' => array( 1 => array( 'menu' ) ),
+		'wp_nav_menu' => array(
+			1 => array( 'menu' ),
+		),
 		// Uses wp_update_nav_menu_item().
 		'wp_save_nav_menu_items' => array(
-			2 => array( 'menu-item-description', 'menu-item-attr-title', 'menu-item-title' )
+			2 => array( 'menu-item-description', 'menu-item-attr-title', 'menu-item-title' ),
 		),
 		// Uses wp_insert_category().
-		'wp_update_category' => array( 1 => array( 'category_description', 'cat_name' ) ),
+		'wp_update_category' => array(
+			1 => array( 'category_description', 'cat_name' ),
+		),
 		// Uses wp_insert_post() or wp_update_post(). All other values are slugs or
 		// integers.
 		'wp_update_nav_menu_item' => array(
-			3 => array( 'menu-item-description', 'menu-item-attr-title', 'menu-item-title' )
+			3 => array( 'menu-item-description', 'menu-item-attr-title', 'menu-item-title' ),
 		),
 		// Uses get_term_by( 'name' ) with 'menu-name' and also passes the data to
 		// wp_insert_term() if the menu doesn't exist, or else wp_update_term().
-		'wp_update_nav_menu_object' => array( 2 => array( 'description', 'menu-name' ) ),
+		'wp_update_nav_menu_object' => array(
+			2 => array( 'description', 'menu-name' ),
+		),
 		// Uses wp_insert_post(). If the $postarr is actually a post object and not
 		// an array, then it should be unslashed instead.
 		'wp_update_post' => array(
@@ -399,7 +598,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			),
 		),
 		// Uses wp_unslash() on these. All of the other args are integers or slugs.
-		'wp_update_term' => array( 3 => array( 'description', 'name' ) ),
+		'wp_update_term' => array(
+			3 => array( 'description', 'name' ),
+		),
 		// Uses wp_insert_attachment().
 		'Custom_Image_Header::insert_attachment' => array(
 			1 => array(
@@ -418,7 +619,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			),
 		),
 		// Uses WP_Query::__construct().
-		'WP_Customize_Nav_Menus::search_available_items_query' => array( 1 => array( 's' ) ),
+		'WP_Customize_Nav_Menus::search_available_items_query' => array(
+			1 => array( 's' ),
+		),
 		// Uses wp_insert_attachment().
 		'WP_Site_Icon::insert_attachment' => array(
 			1 => array(
@@ -437,7 +640,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			),
 		),
 		// Uses WP_Query::query().
-		'_WP_Editors::wp_link_query' => array( 1 => array( 's' ) ),
+		'_WP_Editors::wp_link_query' => array(
+			1 => array( 's' ),
+		),
 	);
 
 	/**
@@ -497,7 +702,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// when 'categorize' is false.
 		'wp_list_bookmarks' => array(
 			1 => array(
-				'slashed' => array( 'category_name' ),
+				'slashed'   => array( 'category_name' ),
 				'unslashed' => array(
 					'title_li',
 					'title_before',
@@ -511,7 +716,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Uses get_pages().
 		'wp_dropdown_pages' => array(
 			1 => array(
-				'slashed' => array( 'meta_key', 'meta_value' ),
+				'slashed'   => array( 'meta_key', 'meta_value' ),
 				'unslashed' => array(
 					'selected',
 					'name',
@@ -525,7 +730,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Uses get_pages().
 		'wp_list_pages' => array(
 			1 => array(
-				'slashed' => array( 'meta_key', 'meta_value' ),
+				'slashed'   => array( 'meta_key', 'meta_value' ),
 				'unslashed' => array( 'date_format', 'link_after', 'link_before', 'title_li' ),
 			),
 		),
@@ -533,7 +738,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// update_user_meta().
 		'wp_insert_user' => array(
 			1 => array(
-				'slashed' => array(
+				'slashed'   => array(
 					'description',
 					'display_name',
 					'first_name',
@@ -548,7 +753,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 		// Uses wp_insert_user().
 		'wp_update_user' => array(
 			1 => array(
-				'slashed' => array(
+				'slashed'   => array(
 					'description',
 					'display_name',
 					'first_name',
@@ -598,45 +803,89 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 */
 	public $expectedSlashedFilterArgs = array(
 		// Result passed through wp_unslash().
-		'add_ping' => array( 1 => 'new' ),
+		'add_ping' => array(
+			1 => 'new',
+		),
 		// Passed POSTed data.
-		'attachment_fields_to_save' => array( 1 => 'post', 2 => 'attachment' ),
+		'attachment_fields_to_save' => array(
+			1 => 'post',
+			2 => 'attachment',
+		),
 		// Result passed to wp_insert_attachment().
-		'attachment_thumbnail_args' => array( 1 => 'image_attachment' ),
+		'attachment_thumbnail_args' => array(
+			1 => 'image_attachment',
+		),
 		// Result passed to get_posts().
-		'dashboard_recent_drafts_query_args' => array( 1 => 'query_args' ),
+		'dashboard_recent_drafts_query_args' => array(
+			1 => 'query_args',
+		),
 		// Result passed through wp_unslash().
-		'pre_comment_author_email' => array( 1 => 'author_email_cookie' ),
+		'pre_comment_author_email' => array(
+			1 => 'author_email_cookie',
+		),
 		// Result passed through wp_unslash().
-		'pre_comment_author_name' => array( 1 => 'author_cookie' ),
+		'pre_comment_author_name' => array(
+			1 => 'author_cookie',
+		),
 		// Result passed through wp_unslash().
-		'pre_comment_author_url' => array( 1 => 'author_url_cookie' ),
+		'pre_comment_author_url' => array(
+			1 => 'author_url_cookie',
+		),
 		// Called in wp_filter_comment().
-		'pre_comment_content' => array( 1 => 'comment_content' ),
+		'pre_comment_content' => array(
+			1 => 'comment_content',
+		),
 		// Called in wp_filter_comment().
-		'pre_comment_user_agent' => array( 1 => 'comment_agent' ),
+		'pre_comment_user_agent' => array(
+			1 => 'comment_agent',
+		),
 		// Called in wp_insert_user().
-		'pre_user_description' => array( 1 => 'description' ),
+		'pre_user_description' => array(
+			1 => 'description',
+		),
 		// Called in wp_insert_user().
-		'pre_user_display_name' => array( 1 => 'display_name' ),
+		'pre_user_display_name' => array(
+			1 => 'display_name',
+		),
 		// Called in wp_insert_user().
-		'pre_user_email' => array( 1 => 'raw_user_email' ),
+		'pre_user_email' => array(
+			1 => 'raw_user_email',
+		),
 		// Called in wp_insert_user().
-		'pre_user_first_name' => array( 1 => 'first_name' ),
+		'pre_user_first_name' => array(
+			1 => 'first_name',
+		),
 		// Called in wp_insert_user().
-		'pre_user_last_name' => array( 1 => 'last_name' ),
+		'pre_user_last_name' => array(
+			1 => 'last_name',
+		),
 		// Called in wp_insert_user().
-		'pre_user_nickname' => array( 1 => 'nickname' ),
+		'pre_user_nickname' => array(
+			1 => 'nickname',
+		),
 		// Called in wp_insert_user().
-		'pre_user_url' => array( 1 => 'raw_user_url' ),
+		'pre_user_url' => array(
+			1 => 'raw_user_url',
+		),
 		// Passed POSTed data.
-		'set-screen-option' => array( 1 => 'value', 2 => 'option', 3 => 'value' ),
+		'set-screen-option' => array(
+			1 => 'value',
+			2 => 'option',
+			3 => 'value',
+		),
 		// Result passed to wp_list_bookmarks().
-		'widget_links_args' => array( 1 => 'widget_links_args' ),
+		'widget_links_args' => array(
+			1 => 'widget_links_args',
+		),
 		// Result passed to wp_list_pages().
-		'widget_pages_args' => array( 1 => 'args' ),
+		'widget_pages_args' => array(
+			1 => 'args',
+		),
 		// Result passed to wp_update_post() or wp_insert_post().
-		'xmlrpc_wp_insert_post_data' => array( 1 => 'post_data', 2 => 'content_struct' ),
+		'xmlrpc_wp_insert_post_data' => array(
+			1 => 'post_data',
+			2 => 'content_struct',
+		),
 	);
 
 	/**
@@ -679,9 +928,9 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function getGroups() {
 		$this->target_functions = array_merge(
-			self::$expectedSlashedFunctionArgs
-			, self::$partlySlashedFunctionArgs
-			, self::$mixedSlashedFunctionArgs
+			self::$expectedSlashedFunctionArgs,
+			self::$partlySlashedFunctionArgs,
+			self::$mixedSlashedFunctionArgs
 		);
 
 		return parent::getGroups();
@@ -747,13 +996,13 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	protected function process_mixed_function_args( $parameters, $function_name ) {
 
 		$phpcsFile = $this->phpcsFile;
-		$tokens = $this->tokens;
+		$tokens    = $this->tokens;
 
 		if ( isset( self::$mixedSlashedFunctionArgs[ $function_name ] ) ) {
-			$args = self::$mixedSlashedFunctionArgs[ $function_name ];
+			$args     = self::$mixedSlashedFunctionArgs[ $function_name ];
 			$is_mixed = true;
 		} else {
-			$args = self::$partlySlashedFunctionArgs[ $function_name ];
+			$args     = self::$partlySlashedFunctionArgs[ $function_name ];
 			$is_mixed = false;
 		}
 
@@ -775,10 +1024,10 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			);
 
 			if ( $is_mixed ) {
-				$slashed_keys = $keys['slashed'];
+				$slashed_keys   = $keys['slashed'];
 				$unslashed_keys = $keys['unslashed'];
 			} else {
-				$slashed_keys = $keys;
+				$slashed_keys   = $keys;
 				$unslashed_keys = array();
 			}
 
@@ -796,7 +1045,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 							$function_name,
 							implode( ', ', $slashed_keys ),
 							implode( ', ', $unslashed_keys ),
-							$tokens[ $arg_start ]['content']
+							$tokens[ $arg_start ]['content'],
 						)
 					);
 
@@ -808,8 +1057,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						array(
 							'unslashed' => array(
 								'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
-								'code' => 'ExpectedPartlySlashed',
-								'data' => array( $function_name, implode( ', ', $slashed_keys ) ),
+								'code'    => 'ExpectedPartlySlashed',
+								'data'    => array( $function_name, implode( ', ', $slashed_keys ) ),
 							),
 						)
 					);
@@ -859,7 +1108,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 						$function_name,
 						implode( ', ', $slashed_keys ),
 						implode( ', ', $unslashed_keys ),
-						$tokens[ $key_ptr ]['content']
+						$tokens[ $key_ptr ]['content'],
 					);
 
 					if ( $is_mixed ) {
@@ -887,22 +1136,22 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 					$errors['unslashed'] = array(
 						'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
-						'code' => 'ExpectedKeySlashed',
-						'data' => array( $function_name, $key_name ),
+						'code'    => 'ExpectedKeySlashed',
+						'data'    => array( $function_name, $key_name ),
 					);
 
 					$errors['slashed_string'] = array(
 						'message' => '%s() expects the value of %s to be slashed with wp_slash(); %s found.',
-						'code' => 'KeyStringMayNeedDoubleSlashing',
-						'data' => array( $function_name, $key_name )
+						'code'    => 'KeyStringMayNeedDoubleSlashing',
+						'data'    => array( $function_name, $key_name ),
 					);
 
 				} elseif ( in_array( $key_name, $unslashed_keys, true ) ) {
 
 					$errors['slashed'] = array(
 						'message' => '%s() expects the value of %s to be unslashed; %s found.',
-						'code' => 'ExpectedKeyUnslashed',
-						'data' => array( $function_name, $key_name ),
+						'code'    => 'ExpectedKeyUnslashed',
+						'data'    => array( $function_name, $key_name ),
 					);
 				}
 
@@ -968,14 +1217,14 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				array(
 					'unslashed' => array(
 						'message' => '%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
-						'code' => 'MissingSlashing',
-						'data' => array( $function_name, $name )
+						'code'    => 'MissingSlashing',
+						'data'    => array( $function_name, $name ),
 					),
 					'slashed_string' => array(
 						'message' => '%s() expects the value of the $%s arg to be slashed with wp_slash(); %s found.',
-						'code' => 'StringMayNeedDoubleSlashing',
-						'data' => array( $function_name, $name )
-					)
+						'code'    => 'StringMayNeedDoubleSlashing',
+						'data'    => array( $function_name, $name ),
+					),
 				)
 			);
 		}
@@ -987,8 +1236,8 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since ${PROJECT_VERSION}
 	 *
-	 * @param int $start The starting token position.
-	 * @param int $end   The ending token position.
+	 * @param int   $start The starting token position.
+	 * @param int   $end   The ending token position.
 	 * @param array $errors {
 	 *        The errors to give.
 	 *
@@ -1021,6 +1270,11 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 		$in_cast = false;
 		$watch   = true;
+		$ignored = array(
+			T_DOUBLE_ARROW      => true,
+			T_CLOSE_PARENTHESIS => true,
+			T_STRING_CONCAT     => true,
+		);
 
 		for ( $i = $start; $i <= $end; $i++ ) {
 
@@ -1041,13 +1295,13 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Ignore whitespaces and comments.
-			if ( in_array( $tokens[ $i ]['code'], Tokens::$emptyTokens ) ) {
+			if ( isset( Tokens::$emptyTokens[ $tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
 			// Skip to the end of a function call if it has been casted to a safe value.
 			if ( $in_cast && T_OPEN_PARENTHESIS === $tokens[ $i ]['code'] ) {
-				$i = $tokens[ $i ]['parenthesis_closer'];
+				$i       = $tokens[ $i ]['parenthesis_closer'];
 				$in_cast = false;
 				continue;
 			}
@@ -1058,7 +1312,7 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			if ( in_array( $tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS, T_STRING_CONCAT ) ) ) {
+			if ( isset( $ignored[ $tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
@@ -1124,7 +1378,6 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 
 					continue;
 				}
-
 			} elseif ( T_VARIABLE === $tokens[ $i ]['code'] ) {
 				if ( in_array( $content, $this->input_superglobals, true ) ) {
 
@@ -1157,10 +1410,10 @@ class ExpectedSlashedSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since ${PROJECT_VERSION}
 	 *
-	 * @param string  $error    The error message.
-	 * @param int     $stackPtr The stack position where the error occurred.
-	 * @param string  $code     A violation code unique to the sniff message.
-	 * @param array   $data     Replacements for the error message.
+	 * @param string $error    The error message.
+	 * @param int    $stackPtr The stack position where the error occurred.
+	 * @param string $code     A violation code unique to the sniff message.
+	 * @param array  $data     Replacements for the error message.
 	 */
 	protected function addError( $error, $stackPtr, $code, $data ) {
 

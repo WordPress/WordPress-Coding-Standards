@@ -21,7 +21,11 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 class ExpectedSlashedUnitTest extends AbstractSniffUnitTest {
 
 	/**
+	 * Returns the lines where errors should occur.
+	 *
 	 * @since
+	 *
+	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
 		return array(
@@ -49,7 +53,11 @@ class ExpectedSlashedUnitTest extends AbstractSniffUnitTest {
 	}
 
 	/**
+	 * Returns the lines where warnings should occur.
+	 *
 	 * @since
+	 *
+	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
 		return array(
