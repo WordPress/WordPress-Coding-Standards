@@ -9,7 +9,6 @@
 	<!-- Covers:
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#removing-the-admin-bar
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#direct-database-queries
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#filesystem-writes
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-__file__-for-page-registration
@@ -81,5 +80,9 @@
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-theme-constants -->
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration -->
+	<rule ref="WordPress.DB.DirectDatabaseQuery"/>
 
 </ruleset>
