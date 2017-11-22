@@ -141,6 +141,11 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
 	<rule ref="WordPress.PHP.StrictInArray"/>
 
+	<!-- Check Enqueued functions that IF Source ($src) is specified, 
+		 make sure there is a Version ($ver) and In Footer ($in_footer) is true.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146 -->
+	<rule ref="WordPress.PHP.EnqueuedCheck"/>
+
 	<!-- Discourage use of the backtick operator (execution of shell commands).
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/646 -->
 	<rule ref="Generic.PHP.BacktickOperator"/>
