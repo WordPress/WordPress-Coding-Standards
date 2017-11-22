@@ -28,22 +28,7 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
-			6   => 1,
-			8   => 1,
-			32  => 1,
-			34  => 1,
-			50  => 1,
-			78  => 1,
-			79  => 1,
-			80  => 1,
-			170 => 1,
-			178 => 1,
-			190 => 1,
-			250 => 1,
-			257 => 1,
-			274 => 1,
-		);
+		return array();
 
 	}
 
@@ -54,12 +39,23 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			6   => 1,
+			6   => 2,
+			8   => 1,
 			17  => 1,
+			32  => 1,
+			34  => 1,
 			38  => 1,
-			50  => 1,
+			50  => 2,
+			78  => 1,
+			79  => 1,
+			80  => 1,
 			112 => 1,
-			250 => 1,
+			170 => 1,
+			178 => 1,
+			190 => 1,
+			250 => 2,
+			257 => 1,
+			274 => 1,
 		);
 
 	}

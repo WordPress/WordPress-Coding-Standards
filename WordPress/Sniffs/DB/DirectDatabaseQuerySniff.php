@@ -160,7 +160,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 			}
 
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
-				$this->phpcsFile->addError( 'Attempting a database schema change is highly discouraged.', $_pos, 'SchemaChange' );
+				$this->phpcsFile->addWarning( 'Attempting a database schema change is discouraged.', $_pos, 'SchemaChange' );
 			}
 		}
 
@@ -216,8 +216,8 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( ! $cached && ! $whitelisted_cache ) {
-			$message = 'Usage of a direct database call without caching is prohibited. Use wp_cache_get / wp_cache_set or wp_cache_delete.';
-			$this->phpcsFile->addError( $message, $stackPtr, 'NoCaching' );
+			$message = 'Direct database call without caching detected. Consider using wp_cache_get() / wp_cache_set() or wp_cache_delete().';
+			$this->phpcsFile->addWarning( $message, $stackPtr, 'NoCaching' );
 		}
 
 		return $endOfStatement;
