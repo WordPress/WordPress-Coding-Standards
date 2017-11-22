@@ -307,10 +307,6 @@ get_admin_users_for_domain();
 post_permalink();
 wp_get_http();
 flush_widget_cache(); // Issue #731 - method WP_Widget_Recent_Comments::flush_widget_cache()
-
-/*
- * Warning.
- */
 /* ============ WP 4.5 ============ */
 add_object_page();
 add_utility_page();
@@ -319,6 +315,10 @@ get_comments_popup_template();
 get_currentuserinfo();
 is_comments_popup();
 popuplinks();
+
+/*
+ * Warning.
+ */
 /* ============ WP 4.6 ============ */
 post_form_autocomplete_off();
 wp_embed_handler_googlevideo();
