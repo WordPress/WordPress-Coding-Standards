@@ -400,7 +400,7 @@
 	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#dont-extract
 	#############################################################################
 	-->
-	<rule ref="WordPress.Functions.DontExtract"/>
+	<rule ref="WordPress.PHP.DontExtract"/>
 
 
 	<!--
