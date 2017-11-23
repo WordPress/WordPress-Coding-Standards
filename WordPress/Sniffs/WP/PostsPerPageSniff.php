@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\VIP;
+namespace WordPress\Sniffs\WP;
 
 use WordPress\AbstractArrayAssignmentRestrictionsSniff;
 
@@ -32,23 +32,11 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 *
 	 * Posts per page limit to check against.
 	 *
-	 * @since      0.14.0
-	 * @deprecated 0.15.0 Property is used by the WP version of the sniff.
+	 * @since 0.14.0
 	 *
 	 * @var int
 	 */
 	public $posts_per_page = 100;
-
-	/**
-	 * Keep track of whether the deprecated property warning has been thrown.
-	 *
-	 * @since 0.15.0
-	 *
-	 * @var array
-	 */
-	private $thrown = array(
-		'FoundDeprecatedProperty' => false,
-	);
 
 	/**
 	 * Groups of variables to restrict.
@@ -58,10 +46,9 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function getGroups() {
 		return array(
 			'posts_per_page' => array(
-				'type' => 'error',
+				'type' => 'warning',
 				'keys' => array(
 					'posts_per_page',
-					'nopaging',
 					'numberposts',
 				),
 			),
@@ -79,24 +66,11 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 *                       with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		if ( 100 !== (int) $this->posts_per_page
-			&& false === $this->thrown['FoundDeprecatedProperty']
-		) {
-			$this->phpcsFile->addWarning(
-				'The "posts_per_page" property for the "WordPress.VIP.PostsPerPage" sniff is deprecated. The detection of high pagination limits has been moved to the "WordPress.WP.PostsPerPage" sniff. Please update your custom ruleset.',
-				0,
-				'FoundDeprecatedProperty'
-			);
+		$key                  = strtolower( $key );
+		$this->posts_per_page = (int) $this->posts_per_page;
 
-			$this->thrown['FoundDeprecatedProperty'] = true;
-		}
-
-		$key = strtolower( $key );
-
-		if ( ( 'nopaging' === $key && ( 'true' === $val || 1 === $val ) )
-			|| ( in_array( $key, array( 'numberposts', 'posts_per_page' ), true ) && '-1' === $val )
-		) {
-			return 'Disabling pagination is prohibited in VIP context, do not set `%s` to `%s` ever.';
+		if ( $val > $this->posts_per_page ) {
+			return 'Detected high pagination limit, `%s` is set to `%s`';
 		}
 
 		return false;
