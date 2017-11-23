@@ -39,4 +39,26 @@
 		<severity>0</severity>
 	</rule>
 
+	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_tax_query">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_query">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_key">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_value">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedWhitelistFlagFound">
+		<severity>0</severity>
+	</rule>
+
 </ruleset>
