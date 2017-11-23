@@ -139,4 +139,17 @@
 		<severity>0</severity>
 	</rule>
 
+	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<rule ref="WordPress.VIP.CronInterval.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.CronInterval.CronSchedulesInterval">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.CronInterval.ChangeDetected">
+		<severity>0</severity>
+	</rule>
+
 </ruleset>

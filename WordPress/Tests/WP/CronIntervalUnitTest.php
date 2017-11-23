@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\VIP;
+namespace WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,9 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 The sniff has been deprecated. This unit test file now
- *                 only tests that the deprecation warnings are correctly thrown
- *                 and that the sniff falls through to the parent correctly.
+ * @since   0.15.0 This sniff has been moved from the `VIP` category to the `WP` category.
  */
 class CronIntervalUnitTest extends AbstractSniffUnitTest {
 
@@ -30,7 +28,19 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array();
+		return array(
+			12  => 1,
+			17  => 1,
+			37  => 1,
+			43  => 1,
+			53  => 1,
+			56  => 1, // False positive.
+			67  => 1,
+			85  => 1,
+			108 => 1,
+			115 => 1,
+		);
+
 	}
 
 	/**
@@ -40,8 +50,9 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			1 => 2,
-			4 => 1,
+			39 => 1,
+			41 => 1,
+			76 => 1,
 		);
 
 	}

@@ -8,7 +8,6 @@
 
 	<!-- Covers:
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#removing-the-admin-bar
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#filesystem-writes
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#uncached-functions
@@ -102,5 +101,8 @@
 	<rule ref="WordPress.Security.PluginMenuSlug.Using__FILE__">
 		<type>error</type>
 	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events -->
+	<rule ref="WordPress.WP.CronInterval"/>
 
 </ruleset>
