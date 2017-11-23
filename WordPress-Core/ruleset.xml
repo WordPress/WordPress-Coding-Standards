@@ -259,7 +259,7 @@
 
 	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
 		 preferably by using $wpdb->prepare() -->
-	<rule ref="WordPress.WP.PreparedSQL"/>
+	<rule ref="WordPress.DB.PreparedSQL"/>
 
 
 	<!--
