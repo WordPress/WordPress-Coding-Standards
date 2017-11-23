@@ -324,7 +324,7 @@ $deprecated_functions = [
     'user_can_edit_post_comments'=> 'multi-line
                     string', // Bad - no space.
     'the_category_ID'
-       => function_call( // Ok, ignore newline is being respected.
+        => function_call( // Ok, ignore newline is being respected.
         $a,
         $b
     ),
