@@ -25,7 +25,7 @@
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping -->
 	<!-- https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/ -->
 	<rule ref="WordPress.XSS.EscapeOutput"/>
-	<rule ref="WordPress.CSRF.NonceVerification"/>
+	<rule ref="WordPress.Security.NonceVerification"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-instead-of -->
 	<rule ref="WordPress.PHP.StrictComparisons"/>

@@ -105,7 +105,7 @@
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
-	<rule ref="WordPress.CSRF.NonceVerification"/>
+	<rule ref="WordPress.Security.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
