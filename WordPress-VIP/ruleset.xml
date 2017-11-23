@@ -15,7 +15,6 @@
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#session_start-and-other-session-related-functions
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#functions-that-use-joins-taxonomy-relation-queries-cat-tax-queries-subselects-or-api-calls
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#querying-on-meta_value
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side
 	-->
 	<rule ref="WordPress.VIP"/>
 
@@ -108,5 +107,9 @@
 		<type>error</type>
 		<message>Scheduling crons at %s sec ( less than %s minutes ) is prohibited.</message>
 	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side -->
+	<!-- https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/ -->
+	<rule ref="WordPress.WP.TimezoneChange"/>
 
 </ruleset>
