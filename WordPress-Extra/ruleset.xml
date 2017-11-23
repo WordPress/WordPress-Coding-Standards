@@ -101,7 +101,7 @@
 		<severity>5</severity>
 	</rule>
 
-	<rule ref="WordPress.XSS.EscapeOutput"/>
+	<rule ref="WordPress.Security.EscapeOutput"/>
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
