@@ -17,7 +17,6 @@
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#functions-that-use-joins-taxonomy-relation-queries-cat-tax-queries-subselects-or-api-calls
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#querying-on-meta_value
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping
 	-->
 	<rule ref="WordPress.VIP"/>
 
@@ -25,6 +24,9 @@
 	<!-- https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/ -->
 	<rule ref="WordPress.Security.EscapeOutput"/>
 	<rule ref="WordPress.Security.NonceVerification"/>
+
+	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69 -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-instead-of -->
 	<rule ref="WordPress.PHP.StrictComparisons"/>

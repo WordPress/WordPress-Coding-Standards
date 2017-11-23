@@ -120,4 +120,23 @@
 		<severity>0</severity>
 	</rule>
 
+	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.MissingUnslash">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidated">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
+		<severity>0</severity>
+	</rule>
+
 </ruleset>
