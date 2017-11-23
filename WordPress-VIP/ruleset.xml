@@ -104,5 +104,9 @@
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events -->
 	<rule ref="WordPress.WP.CronInterval"/>
+	<rule ref="WordPress.WP.CronInterval.CronSchedulesInterval">
+		<type>error</type>
+		<message>Scheduling crons at %s sec ( less than %s minutes ) is prohibited.</message>
+	</rule>
 
 </ruleset>

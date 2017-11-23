@@ -187,8 +187,8 @@ class CronIntervalSniff extends Sniff {
 
 		if ( isset( $interval ) && $interval < $this->min_interval ) {
 			$minutes = round( ( $this->min_interval / 60 ), 1 );
-			$this->phpcsFile->addError(
-				'Scheduling crons at %s sec ( less than %s minutes ) is prohibited.',
+			$this->phpcsFile->addWarning(
+				'Scheduling crons at %s sec ( less than %s minutes ) is discouraged.',
 				$stackPtr,
 				'CronSchedulesInterval',
 				array(
