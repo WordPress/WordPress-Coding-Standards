@@ -79,7 +79,7 @@ class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 				$file_constant = $this->phpcsFile->findNext( T_FILE, $parameters[ $position ]['start'], ( $parameters[ $position ]['end'] + 1 ) );
 
 				if ( false !== $file_constant ) {
-					$this->phpcsFile->addError( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );
+					$this->phpcsFile->addWarning( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );
 				}
 			}
 		}

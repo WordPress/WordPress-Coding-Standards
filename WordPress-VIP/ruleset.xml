@@ -97,5 +97,8 @@
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#using-__file__-for-page-registration -->
 	<rule ref="WordPress.Security.PluginMenuSlug"/>
+	<rule ref="WordPress.Security.PluginMenuSlug.Using__FILE__">
+		<type>error</type>
+	</rule>
 
 </ruleset>
