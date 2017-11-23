@@ -11,7 +11,6 @@
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#filesystem-writes
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-__file__-for-page-registration
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#uncached-functions
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#flush_rewrite_rules
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#session_start-and-other-session-related-functions
@@ -95,5 +94,8 @@
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload -->
 	<rule ref="WordPress.DB.SlowDBQuery"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#using-__file__-for-page-registration -->
+	<rule ref="WordPress.Security.PluginMenuSlug"/>
 
 </ruleset>
