@@ -66,8 +66,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 		// WP 1.5.0.
 		'start_wp' => array(
-			// Verified correct alternative.
-			'alt'     => 'the Loop',
+			'alt'     => '',
 			'version' => '1.5.0',
 		),
 
@@ -310,16 +309,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'get_comment()',
 			'version' => '2.7.0',
 		),
-		// This is a method i.e. WP_Filesystem_Base::find_base_dir() See #731.
-		'find_base_dir' => array(
-			'alt'     => 'WP_Filesystem::abspath()',
-			'version' => '2.7.0',
-		),
-		// This is a method i.e. WP_Filesystem_Base::get_base_dir() See #731.
-		'get_base_dir' => array(
-			'alt'     => 'WP_Filesystem::abspath()',
-			'version' => '2.7.0',
-		),
 
 		// WP 2.8.0.
 		'__ngettext' => array(
@@ -534,10 +523,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'delete_user_meta()',
 			'version' => '3.0.0',
 		),
-		'funky_javascript_callback' => array(
-			'alt'     => '',
-			'version' => '3.0.0',
-		),
 		'funky_javascript_fix' => array(
 			'alt'     => '',
 			'version' => '3.0.0',
@@ -645,7 +630,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.1.0',
 		),
 		'get_dashboard_blog' => array(
-			'alt'     => '',
+			'alt'     => 'get_site()',
 			'version' => '3.1.0',
 		),
 		'get_editable_authors' => array(
@@ -681,8 +666,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.1.0',
 		),
 		'is_plugin_page' => array(
-			// Verified correct alternative.
-			'alt'     => 'global $plugin_page and/or get_plugin_page_hookname() hooks',
+			'alt'     => '',
 			'version' => '3.1.0',
 		),
 		'update_category_cache' => array(
@@ -769,10 +753,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '$current_screen->render_screen_layout()',
 			'version' => '3.3.0',
 		),
-		'screen_meta' => array(
-			'alt'     => '$current_screen->render_screen_meta()',
-			'version' => '3.3.0',
-		),
 		'screen_options' => array(
 			'alt'     => '$current_screen->render_per_page_options()',
 			'version' => '3.3.0',
@@ -822,11 +802,11 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.3.0',
 		),
 		'wpmu_admin_do_redirect' => array(
-			'alt'     => '',
+			'alt'     => 'wp_redirect()',
 			'version' => '3.3.0',
 		),
 		'wpmu_admin_redirect_add_updated_param' => array(
-			'alt'     => '',
+			'alt'     => 'add_query_arg()',
 			'version' => '3.3.0',
 		),
 
@@ -943,10 +923,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'WP_Image_Editor::rotate()',
 			'version' => '3.5.0',
 		),
-		'_save_post_hook' => array(
-			'alt'     => '',
-			'version' => '3.5.0',
-		),
 		'gd_edit_image_support' => array(
 			'alt'     => 'wp_image_editor_supports()',
 			'version' => '3.5.0',
@@ -976,7 +952,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.5.0',
 		),
 		'wp_cache_reset' => array(
-			'alt'     => '',
+			'alt'     => 'WP_Object_Cache::reset()',
 			'version' => '3.5.0',
 		),
 		'wp_create_thumbnail' => array(
@@ -986,7 +962,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_get_single_post' => array(
 			'alt'     => 'get_post()',
 			'version' => '3.5.0',
-		),
+			),
 		'wp_load_image' => array(
 			'alt'     => 'wp_get_image_editor()',
 			'version' => '3.5.0',
@@ -1041,49 +1017,9 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
-		'wp_dashboard_incoming_links' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_incoming_links_control' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_incoming_links_output' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_plugins' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_primary_control' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_recent_comments_control' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_secondary' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_secondary_control' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
-		'wp_dashboard_secondary_output' => array(
-			'alt'     => '',
-			'version' => '3.8.0',
-		),
 
 		// WP 3.9.0.
 		'_relocate_children' => array(
-			'alt'     => '',
-			'version' => '3.9.0',
-		),
-		'default_topic_count_text' => array(
 			'alt'     => '',
 			'version' => '3.9.0',
 		),
@@ -1118,50 +1054,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '4.0.0',
 		),
 
-		// WP 4.1.0.
-		// This is a method from the WP_Customize_Image_Control class. See #731.
-		'add_tab' => array(
-			'alt'     => '',
-			'version' => '4.1.0',
-		),
-		// This is a method from the WP_Customize_Image_Control class. See #731.
-		'prepare_control' => array(
-			'alt'     => '',
-			'version' => '4.1.0',
-		),
-		// This is a method from the WP_Customize_Image_Control class. See #731.
-		'print_tab_image' => array(
-			'alt'     => '',
-			'version' => '4.1.0',
-		),
-		// This is a method from the WP_Customize_Image_Control class. See #731.
-		'remove_tab' => array(
-			'alt'     => '',
-			'version' => '4.1.0',
-		),
-
-		// WP 4.2.0.
-		// This is a method from the WP_Customize_Widgets class. See #731.
-		'prepreview_added_sidebars_widgets' => array(
-			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
-			'version' => '4.2.0',
-		),
-		// This is a method from the WP_Customize_Widgets class. See #731.
-		'prepreview_added_widget_instance' => array(
-			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
-			'version' => '4.2.0',
-		),
-		// This is a method from the WP_Customize_Widgets class. See #731.
-		'remove_prepreview_filters' => array(
-			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
-			'version' => '4.2.0',
-		),
-		// This is a method from the WP_Customize_Widgets class. See #731.
-		'setup_widget_addition_previews' => array(
-			'alt'     => 'the \'customize_dynamic_setting_args\' filter',
-			'version' => '4.2.0',
-		),
-
 		// WP 4.3.0.
 		'_preview_theme_stylesheet_filter' => array(
 			'alt'     => '',
@@ -1180,10 +1072,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '4.3.0',
 		),
 		'preview_theme_ob_filter_callback' => array(
-			'alt'     => '',
-			'version' => '4.3.0',
-		),
-		'wp_ajax_wp_fullscreen_save_post' => array(
 			'alt'     => '',
 			'version' => '4.3.0',
 		),
@@ -1214,12 +1102,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '4.4.0',
 		),
 		'wp_get_http' => array(
-			'alt'     => 'the WP_Http class',
-			'version' => '4.4.0',
-		),
-		// This is a method i.e. WP_Widget_Recent_Comments::flush_widget_cache() See #731.
-		'flush_widget_cache' => array(
-			'alt'     => '',
+			'alt'     => 'WP_Http',
 			'version' => '4.4.0',
 		),
 
@@ -1297,6 +1180,24 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_dashboard_plugins_output' => array(
 			'alt'     => '',
 			'version' => '4.8.0',
+		),
+
+		// WP 4.9.0.
+		'get_shortcut_link' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
+		'is_user_option_local' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
+		'wp_ajax_press_this_add_category' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
+		'wp_ajax_press_this_save_post' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
 		),
 	);
 
