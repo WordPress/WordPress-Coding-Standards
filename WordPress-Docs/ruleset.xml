@@ -116,4 +116,6 @@
 		<!-- WP allows @todo's in comments -->
 		<exclude name="Generic.Commenting.Todo.TaskFound"/>
 	</rule>
+
+	<rule ref="WordPress.Commenting.NoReturnVoid"/>
 </ruleset>
