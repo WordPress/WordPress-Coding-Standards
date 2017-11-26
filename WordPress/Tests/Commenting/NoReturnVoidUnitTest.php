@@ -27,7 +27,7 @@ class NoReturnVoidUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			5 => 1,
+			5  => 1,
 			14 => 1,
 			23 => 1,
 			32 => 1,

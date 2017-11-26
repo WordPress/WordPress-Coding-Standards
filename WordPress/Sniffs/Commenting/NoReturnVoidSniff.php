@@ -68,7 +68,7 @@ class NoReturnVoidSniff extends Sniff {
 		}
 
 		$returnCommentPtr = ( $returnTag + 2 );
-		$returnComment = $this->tokens[ $returnCommentPtr ];
+		$returnComment    = $this->tokens[ $returnCommentPtr ];
 
 		if ( empty( $returnComment['content'] ) || T_DOC_COMMENT_STRING !== $returnComment['code'] ) {
 			// Invalid return comment. Handled elsewhere.
