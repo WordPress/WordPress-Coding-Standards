@@ -5,7 +5,7 @@
  * @return void
  */
 function no_return_void() {
-	echo "test";
+	echo 'test';
 }
 
 /**
@@ -14,7 +14,7 @@ function no_return_void() {
  * @return void|string
  */
 function no_return_void_string() {
-	echo "test";
+	echo 'test';
 }
 
 /**
@@ -23,7 +23,7 @@ function no_return_void_string() {
  * @return string|void
  */
 function no_return_string_void() {
-	echo "test";
+	echo 'test';
 }
 
 /**
@@ -32,7 +32,7 @@ function no_return_string_void() {
  * @return array|string|void
  */
 function no_return_array_string_void() {
-	echo "test";
+	echo 'test';
 }
 
 /**
@@ -45,5 +45,5 @@ function return_string() {
 		return 'bar';
 	}
 
-	echo "test";
+	echo 'test';
 }
