@@ -332,3 +332,8 @@ wp_get_network();
 wp_kses_js_entities();
 /* ============ WP 4.8 ============ */
 wp_dashboard_plugins_output();
+/* ============ WP 4.9 ============ */
+get_shortcut_link();
+is_user_option_local();
+wp_ajax_press_this_add_category();
+wp_ajax_press_this_save_post();
