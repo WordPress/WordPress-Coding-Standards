@@ -86,8 +86,14 @@ class NoReturnVoidSniff extends Sniff {
 
 		foreach ( $returnTypes as $type ) {
 			if ( 'void' === $type ) {
+				$error = '`@return void` should not be used.';
+
+				$recommendation = ( count( $returnTypes ) > 1 )
+					? 'Remove it from the list of return types instead'
+					: 'Omit the `@return` tag instead';
+
 				$this->phpcsFile->addError(
-					'`@return void` should not be used outside of the default bundled themes',
+					"$error $recommendation",
 					$returnTag,
 					'ReturnVoidFound'
 				);
