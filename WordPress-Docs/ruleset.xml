@@ -117,5 +117,6 @@
 		<exclude name="Generic.Commenting.Todo.TaskFound"/>
 	</rule>
 
+	<!-- WP disallows `@return void` outside of the default bundled themes -->
 	<rule ref="WordPress.Commenting.NoReturnVoid"/>
 </ruleset>
