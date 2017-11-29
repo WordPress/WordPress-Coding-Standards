@@ -63,8 +63,8 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
@@ -87,8 +87,8 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	abstract public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters );
 
@@ -102,8 +102,8 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {
 		return;

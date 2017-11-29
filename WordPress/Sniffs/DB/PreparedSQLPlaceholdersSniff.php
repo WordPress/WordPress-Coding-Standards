@@ -165,8 +165,6 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * @since 0.14.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
-	 *
-	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
 

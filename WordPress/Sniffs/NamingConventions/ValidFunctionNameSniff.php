@@ -59,8 +59,6 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
 	 * @param int                         $stackPtr  The position where this token was
 	 *                                               found.
-	 *
-	 * @return void
 	 */
 	protected function processTokenOutsideScope( File $phpcsFile, $stackPtr ) {
 		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
@@ -106,8 +104,6 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 	 * @param int                         $stackPtr  The position where this token was
 	 *                                               found.
 	 * @param int                         $currScope The position of the current scope.
-	 *
-	 * @return void
 	 */
 	protected function processTokenWithinScope( File $phpcsFile, $stackPtr, $currScope ) {
 		$methodName = $phpcsFile->getDeclarationName( $stackPtr );

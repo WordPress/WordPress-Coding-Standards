@@ -42,8 +42,6 @@ class GlobalVariablesSniff extends Sniff {
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
-	 *
-	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
 		$token = $this->tokens[ $stackPtr ];
@@ -165,8 +163,6 @@ class GlobalVariablesSniff extends Sniff {
 	 * is not done from within a test method.
 	 *
 	 * @param int $stackPtr The position of the token to throw the error for.
-	 *
-	 * @return void
 	 */
 	public function maybe_add_error( $stackPtr ) {
 		if ( ! $this->is_token_in_test_method( $stackPtr ) && ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {

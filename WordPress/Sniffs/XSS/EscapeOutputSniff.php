@@ -189,8 +189,8 @@ class EscapeOutputSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 
@@ -455,8 +455,6 @@ class EscapeOutputSniff extends Sniff {
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
-	 *
-	 * @return void
 	 */
 	protected function mergeFunctionLists() {
 		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape']

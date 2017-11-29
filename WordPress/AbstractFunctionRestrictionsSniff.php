@@ -173,8 +173,8 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 
@@ -248,8 +248,8 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function check_for_matches( $stackPtr ) {
 		$token_content = strtolower( $this->tokens[ $stackPtr ]['content'] );
@@ -287,8 +287,8 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 

@@ -171,8 +171,8 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return int Integer stack pointer to skip forward or void to continue
+	 *             normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 
@@ -212,8 +212,6 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
-	 *
-	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		$error = false;
@@ -258,8 +256,6 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr  The position of the current token in the stack.
 	 * @param string $file_name The file name of the current file being processed.
-	 *
-	 * @return void
 	 */
 	public function process_text_for_style( $stackPtr, $file_name ) {
 		$content = trim( $this->tokens[ $stackPtr ]['content'] );
@@ -352,8 +348,6 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.11.0
 	 *
 	 * @param int $stackPtr  The position of the current token in the stack passed in $tokens.
-	 *
-	 * @return void
 	 */
 	protected function process_css_style( $stackPtr ) {
 		if ( ! isset( $this->target_css_properties[ $this->tokens[ $stackPtr ]['content'] ] ) ) {

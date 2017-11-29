@@ -129,8 +129,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
 	 * @param int                         $stack_ptr  The position of the current token in the
 	 *                                                stack passed in $tokens.
-	 *
-	 * @return void
 	 */
 	protected function processVariable( File $phpcs_file, $stack_ptr ) {
 
@@ -215,8 +213,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
 	 * @param int                         $stack_ptr  The position of the current token in the
 	 *                                                stack passed in $tokens.
-	 *
-	 * @return void
 	 */
 	protected function processMemberVar( File $phpcs_file, $stack_ptr ) {
 
@@ -249,8 +245,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
 	 * @param int                         $stack_ptr  The position of the double quoted
 	 *                                                string.
-	 *
-	 * @return void
 	 */
 	protected function processVariableInString( File $phpcs_file, $stack_ptr ) {
 
@@ -299,8 +293,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @since 0.10.0
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
-	 *
-	 * @return void
 	 */
 	protected function mergeWhiteList( File $phpcs_file ) {
 		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties']
