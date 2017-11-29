@@ -19,7 +19,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   X.Y.Z
+ * @since   0.16.0
  */
 class NoReturnVoidSniff extends Sniff {
 

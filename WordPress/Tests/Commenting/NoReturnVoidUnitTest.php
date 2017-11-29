@@ -16,7 +16,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   X.Y.Z
+ * @since   0.16.0
  */
 class NoReturnVoidUnitTest extends AbstractSniffUnitTest {
 
