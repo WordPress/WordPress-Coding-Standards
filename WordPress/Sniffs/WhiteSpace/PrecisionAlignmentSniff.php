@@ -115,10 +115,13 @@ class PrecisionAlignmentSniff extends Sniff {
 				continue;
 			}
 
-			$spaces = 0;
+			$spaces  = 0;
+			$fixable = false;
 			switch ( $this->tokens[ $i ]['type'] ) {
 				case 'T_WHITESPACE':
-					$spaces = ( $this->tokens[ $i ]['length'] % $this->tab_width );
+					$spaces  = ( $this->tokens[ $i ]['length'] % $this->tab_width );
+					$fixable = true;
+					$fixed   = substr( $this->tokens[ $i ]['content'], 0, - $spaces );
 					break;
 
 				case 'T_DOC_COMMENT_WHITESPACE':
@@ -132,6 +135,8 @@ class PrecisionAlignmentSniff extends Sniff {
 						// One alignment space expected before the *.
 						--$spaces;
 					}
+					$fixable = true;
+					$fixed   = substr( $this->tokens[ $i ]['content'], 0, - $spaces );
 					break;
 
 				case 'T_COMMENT':
@@ -147,6 +152,9 @@ class PrecisionAlignmentSniff extends Sniff {
 					if ( isset( $comment[0] ) && '*' === $comment[0] && 0 !== $spaces ) {
 						--$spaces;
 					}
+
+					$fixable    = true;
+					$fixed      = substr( $whitespace, 0, - $spaces ) . $comment;
 					break;
 
 				case 'T_INLINE_HTML':
@@ -159,17 +167,24 @@ class PrecisionAlignmentSniff extends Sniff {
 						$content    = ltrim( $this->tokens[ $i ]['content'] );
 						$whitespace = str_replace( $content, '', $this->tokens[ $i ]['content'] );
 						$spaces     = ( strlen( $whitespace ) % $this->tab_width );
+						$fixable    = true;
+						$fixed      = substr( $whitespace, 0, - $spaces ) . $content;
 					}
 					break;
 			}
 
 			if ( $spaces > 0 && ! $this->has_whitelist_comment( 'precision alignment', $i ) ) {
-				$this->phpcsFile->addWarning(
+				$callback = $fixable ? array( $this->phpcsFile, 'addFixableWarning' ) : arrary( $this->phpcsFile, 'addWarning' );
+				$fix = call_user_func(
+					$callback,
 					'Found precision alignment of %s spaces.',
 					$i,
 					'Found',
 					array( $spaces )
 				);
+				if ( $fixable && true === $fix ) {
+					$this->phpcsFile->fixer->replaceToken( $i, $fixed );
+				}
 			}
 		}
 
