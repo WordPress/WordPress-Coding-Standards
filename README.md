@@ -20,6 +20,7 @@
     + [Sublime Text](#sublime-text)
     + [Atom](#atom)
     + [Visual Studio](#visual-studio)
+    + [Eclipse with XAMPP](#eclipse-with-xampp)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
     + [Travis CI](#travis-ci)
 * [Fixing errors or whitelisting them](#fixing-errors-or-whitelisting-them)
@@ -224,6 +225,10 @@ sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [Subl
 ### Visual Studio
 
 Please see "[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)", a tutorial by Tom McFarlin.
+
+### Eclipse with XAMPP
+
+Please see "[Setting up WPCS when using Eclipse with XAMPP](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/How-to-use-WPCS-with-Eclipse-and-XAMPP)" for more details.
 
 
 ## Running your code through WPCS automatically using CI tools
