@@ -86,8 +86,8 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int Integer stack pointer to skip forward or void to continue
-	 *             normal file processing.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 		// Reset the temporary storage before processing the token.
@@ -167,8 +167,8 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int Integer stack pointer to skip forward or void to continue
-	 *             normal file processing.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function check_for_matches( $stackPtr ) {
 		$skip_to = array();

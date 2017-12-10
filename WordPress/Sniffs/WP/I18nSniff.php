@@ -158,6 +158,8 @@ class I18nSniff extends Sniff {
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stack_ptr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function process_token( $stack_ptr ) {
 		$token = $this->tokens[ $stack_ptr ];
@@ -483,6 +485,7 @@ class I18nSniff extends Sniff {
 	 * @param int   $stack_ptr      The position of the current token in the stack.
 	 * @param array $single_context Single context (@todo needs better description).
 	 * @param array $plural_context Plural context (@todo needs better description).
+	 * @return void
 	 */
 	protected function compare_single_and_plural_arguments( $stack_ptr, $single_context, $plural_context ) {
 		$single_content = $single_context['tokens'][0]['content'];
@@ -516,6 +519,7 @@ class I18nSniff extends Sniff {
 	 * Check the string itself for problems.
 	 *
 	 * @param array $context Context (@todo needs better description).
+	 * @return void
 	 */
 	protected function check_text( $context ) {
 		$stack_ptr = $context['stack_ptr'];
@@ -589,6 +593,7 @@ class I18nSniff extends Sniff {
 	 *
 	 * @param int   $stack_ptr  The position of the gettext call token in the stack.
 	 * @param array $args       The function arguments.
+	 * @return void
 	 */
 	protected function check_for_translator_comment( $stack_ptr, $args ) {
 		foreach ( $args as $arg ) {

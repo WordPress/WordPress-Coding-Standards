@@ -69,6 +69,8 @@ class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
+	 *
+	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		foreach ( $this->target_functions[ $matched_content ] as $position ) {

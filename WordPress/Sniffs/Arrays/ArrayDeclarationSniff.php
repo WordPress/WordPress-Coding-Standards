@@ -53,6 +53,8 @@ class ArrayDeclarationSniff {
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile A PHP_CodeSniffer file.
 	 * @param int                         $stackPtr  The position of the token.
+	 *
+	 * @return void
 	 */
 	public function process( File $phpcsFile, $stackPtr ) {}
 

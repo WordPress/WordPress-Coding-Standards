@@ -108,6 +108,8 @@ class ControlStructureSpacingSniff extends Sniff {
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
 		$this->spaces_before_closure_open_paren = (int) $this->spaces_before_closure_open_paren;

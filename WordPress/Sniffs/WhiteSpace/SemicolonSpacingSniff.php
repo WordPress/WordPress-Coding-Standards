@@ -29,7 +29,7 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 	 * @param int                         $stackPtr  The position of the current token
 	 *                                               in the stack passed in $tokens.
 	 *
-	 * @return int
+	 * @return void|int
 	 */
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();

@@ -83,6 +83,8 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
 
@@ -156,6 +158,8 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
+	 *
+	 * @return void
 	 */
 	protected function mergeFunctionLists() {
 		if ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] ) {

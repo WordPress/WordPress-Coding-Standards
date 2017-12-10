@@ -160,8 +160,8 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int Integer stack pointer to skip forward or void to continue
-	 *             normal file processing.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 		/*
@@ -207,8 +207,8 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 * @param int   $opener   The position of the array opener.
 	 * @param int   $closer   The position of the array closer.
 	 *
-	 * @return int Integer stack pointer to skip forward or void to continue
-	 *             normal file processing.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	protected function process_single_line_array( $stackPtr, $items, $opener, $closer ) {
 		/*
@@ -259,6 +259,8 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 * @param array $items    Info array containing information on each array item.
 	 * @param int   $opener   The position of the array opener.
 	 * @param int   $closer   The position of the array closer.
+	 *
+	 * @return void
 	 */
 	protected function process_multi_line_array( $stackPtr, $items, $opener, $closer ) {
 

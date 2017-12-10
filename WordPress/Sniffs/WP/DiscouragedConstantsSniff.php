@@ -82,8 +82,8 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int Integer stack pointer to skip forward or void to continue
-	 *             normal file processing.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
@@ -103,6 +103,8 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.14.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function process_arbitrary_tstring( $stackPtr ) {
 		$content = $this->tokens[ $stackPtr ]['content'];
@@ -189,6 +191,8 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * @param array  $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
+	 *
+	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		$function_name = strtolower( $matched_content );

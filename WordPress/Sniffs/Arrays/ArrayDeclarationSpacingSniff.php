@@ -84,6 +84,8 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 	 *               be in the `processSingleLineArray()` method.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
 		/*
@@ -174,6 +176,8 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @param int $stackPtr The position of the current token in the stack.
 	 * @param int $opener   The position of the array opener.
 	 * @param int $closer   The position of the array closer.
+	 *
+	 * @return void
 	 */
 	protected function process_single_line_array( $stackPtr, $opener, $closer ) {
 		/*
@@ -329,6 +333,8 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @param int $stackPtr The position of the current token in the stack.
 	 * @param int $opener   The position of the array opener.
 	 * @param int $closer   The position of the array closer.
+	 *
+	 * @return void
 	 */
 	protected function process_multi_line_array( $stackPtr, $opener, $closer ) {
 		/*

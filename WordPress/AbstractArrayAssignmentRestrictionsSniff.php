@@ -124,6 +124,8 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
 
