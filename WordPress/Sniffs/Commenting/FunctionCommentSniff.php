@@ -94,22 +94,16 @@ class FunctionCommentSniff extends Sniff {
 
 		$returnTypes = array_unique( explode( '|', $commentParts[1] ) );
 
-		foreach ( $returnTypes as $type ) {
-			if ( 'void' === $type ) {
-				$error = '`@return void` should not be used.';
-
-				$recommendation = ( count( $returnTypes ) > 1 )
-					? 'Remove it from the list of return types instead'
-					: 'Omit the `@return` tag instead';
-
-				$this->phpcsFile->addError(
-					"$error $recommendation",
-					$returnTag,
-					'ReturnVoidFound'
-				);
-
-				break;
-			}
+		/*
+		 * Disallow `@return void`.
+		 * See https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/php/#phpdoc-tags.
+		 */
+		if ( array( 'void' ) === $returnTypes ) {
+			$this->phpcsFile->addError(
+				'`@return void` should not be used. Omit the `@return` tag instead',
+				$returnTag,
+				'NoReturnVoid'
+			);
 		}
 	}
 

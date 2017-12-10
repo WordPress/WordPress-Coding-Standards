@@ -29,12 +29,6 @@ class FunctionCommentUnitTest extends AbstractSniffUnitTest {
 		return array(
 			5  => 1,
 			14 => 1,
-			23 => 1,
-			32 => 1,
-			41 => 1,
-			50 => 1,
-			59 => 1,
-			68 => 1,
 		);
 	}
 

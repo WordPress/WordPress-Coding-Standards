@@ -1,85 +1,51 @@
 <?php
 /**
- * Return types should not be void.
+ * Function description.
  *
  * @return void
  */
-function no_return_void() {
-	echo 'test';
+function with_incorrect_return_void() {
+	echo 'string';
 }
 
 /**
- * Return types should not be void.
+ * Function description.
  *
- * @return void Nothing.
+ * @return void With a comment.
  */
-function no_return_void_comment() {
-	echo 'test';
+function with_incorrect_return_void_with_comment() {
+	echo 'string';
 }
 
 /**
- * Return types should not be void.
- *
- * @return void|string
+ * Function description.
  */
-function no_return_void_string() {
-	echo 'test';
+function with_correct_omitted_return() {
+	echo 'string';
 }
 
 /**
- * Return types should not be void.
- *
- * @return void|string Nothing
- */
-function no_return_void_string_comment() {
-	echo 'test';
-}
-
-/**
- * Return types should not be void.
+ * Function description.
  *
  * @return string|void
  */
-function no_return_string_void() {
-	echo 'test';
-}
-
-/**
- * Return types should not be void.
- *
- * @return string|void Maybe nothing.
- */
-function no_return_string_void_comment() {
-	echo 'test';
-}
-
-/**
- * Return types should not be void.
- *
- * @return array|string|void
- */
-function no_return_array_string_void() {
-	echo 'test';
-}
-
-/**
- * Return types should not be void.
- *
- * @return array|string|void Maybe nothing.
- */
-function no_return_array_string_void_comment() {
-	echo 'test';
-}
-
-/**
- * Return types should not be void.
- *
- * @return string
- */
-function return_string() {
+function with_correct_return_void() {
 	if ( foo() ) {
 		return 'bar';
 	}
 
-	echo 'test';
+	echo 'baz';
+}
+
+/**
+ * Function description.
+ *
+ * @return string|void With a comment.
+ */
+function with_correct_return_void_with_comment() {
+	if ( foo() ) {
+		return 'bar';
+	}
+
+	echo 'baz';
 }
