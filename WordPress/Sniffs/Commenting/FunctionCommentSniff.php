@@ -13,15 +13,13 @@ use WordPress\Sniff;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**
- * Disallows the 'void' return type.
- *
- * @link    https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/php/#phpdoc-tags
+ * Validates function documentation.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.16.0
  */
-class NoReturnVoidSniff extends Sniff {
+class FunctionCommentSniff extends Sniff {
 
 	/**
 	 * Registers the tokens that this sniff wants to listen for.
@@ -37,7 +35,7 @@ class NoReturnVoidSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 * @return int|void Integer stack pointer to skip forward or void to continue
-     *                  normal file processing.
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 		$commentEnd = $this->phpcsFile->findPrevious(
@@ -54,6 +52,17 @@ class NoReturnVoidSniff extends Sniff {
 
 		$commentStart = $this->tokens[ $commentEnd ]['comment_opener'];
 
+		$this->process_return( $stackPtr, $commentStart );
+	}
+
+	/**
+	 * Process this function's return comment.
+	 *
+	 * @param int $stackPtr     The position of the current token in the stack.
+	 * @param int $commentStart The position in the stack where the comment started.
+	 * @return void
+	 */
+	protected function process_return( $stackPtr, $commentStart ) {
 		$returnTag = null;
 
 		foreach ( $this->tokens[ $commentStart ]['comment_tags'] as $tag ) {

@@ -118,5 +118,5 @@
 	</rule>
 
 	<!-- WP disallows `@return void` outside of the default bundled themes -->
-	<rule ref="WordPress.Commenting.NoReturnVoid"/>
+	<rule ref="WordPress.Commenting.FunctionComment.NoReturnVoid"/>
 </ruleset>
