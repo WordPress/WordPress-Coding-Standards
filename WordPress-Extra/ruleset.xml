@@ -101,11 +101,11 @@
 		<severity>5</severity>
 	</rule>
 
-	<rule ref="WordPress.XSS.EscapeOutput"/>
+	<rule ref="WordPress.Security.EscapeOutput"/>
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
-	<rule ref="WordPress.CSRF.NonceVerification"/>
+	<rule ref="WordPress.Security.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
@@ -122,7 +122,7 @@
 
 	<!-- Warn against overriding WP global variables.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/26 -->
-	<rule ref="WordPress.Variables.GlobalVariables"/>
+	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
 	<!-- Encourage the use of strict ( === and !== ) comparisons.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->

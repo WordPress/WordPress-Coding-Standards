@@ -18,6 +18,9 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.15.0 The sniff has been deprecated. This unit test file now
+ *                 only tests that the deprecation warnings are correctly thrown
+ *                 and that the sniff falls through to the parent correctly.
  */
 class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 
@@ -28,31 +31,7 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			5   => 3,
-			7   => 1,
-			10  => 1,
-			20  => 1,
-			33  => 3,
-			65  => 1,
-			79  => 1,
-			80  => 1,
-			81  => 1,
-			82  => 1,
-			85  => 1,
-			90  => 1,
-			93  => 1,
-			96  => 1,
-			100 => 2,
-			101 => 1,
-			104 => 2,
-			105 => 1,
-			114 => 2,
-			121 => 1,
-			132 => 1,
-			137 => 1,
-			138 => 1,
-			150 => 2,
-			160 => 2,
+			4 => 3,
 		);
 
 	}
@@ -63,7 +42,9 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			1 => 2,
+		);
 
 	}
 

@@ -86,7 +86,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
 	 * This property will need to be set for each sniff which uses the
 	 * `is_test_class()` method.
-	 * Currently the method is used by the `WordPress.Variables.GlobalVariables`,
+	 * Currently the method is used by the `WordPress.WP.GlobalVariablesOverride`,
 	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
 	 *
 	 * Example usage:

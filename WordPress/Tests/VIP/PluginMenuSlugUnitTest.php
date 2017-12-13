@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.15.0 The sniff has been deprecated. This unit test file now
+ *                 only tests that the deprecation warnings are correctly thrown.
  */
 class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 
@@ -27,12 +29,7 @@ class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
-			3 => 1,
-			5 => 1,
-			9 => 2,
-		);
-
+		return array();
 	}
 
 	/**
@@ -41,7 +38,9 @@ class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			1 => 1,
+		);
 
 	}
 

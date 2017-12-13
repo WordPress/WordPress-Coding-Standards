@@ -20,34 +20,58 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 0.15.0 This sniff has been moved to the `PHP` category.
+ *                    This file remains for now to prevent BC breaks.
  */
-class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
+class DontExtractSniff extends \WordPress\Sniffs\PHP\DontExtractSniff {
 
 	/**
-	 * Groups of functions to restrict.
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * Example: groups => array(
-	 *  'lambda' => array(
-	 *      'type'      => 'error' | 'warning',
-	 *      'message'   => 'Use anonymous functions instead please!',
-	 *      'functions' => array( 'file_get_contents', 'create_function' ),
-	 *  )
-	 * )
+	 * @since 0.15.0
 	 *
-	 * @return array
+	 * @var array
 	 */
-	public function getGroups() {
-		return array(
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
-			'extract' => array(
-				'type'      => 'error',
-				'message'   => '%s() usage is highly discouraged, due to the complexity and unintended issues it might cause.',
-				'functions' => array(
-					'extract',
-				),
-			),
+	/**
+	 * Don't use.
+	 *
+	 * @deprecated 0.15.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void|int
+	 */
+	public function process_token( $stackPtr ) {
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->phpcsFile->addWarning(
+				'The "WordPress.Functions.DontExtract" sniff has been renamed to "WordPress.PHP.DontExtract". Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
 
-		);
-	} // End getGroups().
+			$this->thrown['DeprecatedSniff'] = true;
+		}
+
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->phpcsFile->addWarning(
+				'The "WordPress.Functions.DontExtract" sniff has been renamed to "WordPress.PHP.DontExtract". Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
+		}
+
+		return parent::process_token( $stackPtr );
+	}
 
 } // End class.

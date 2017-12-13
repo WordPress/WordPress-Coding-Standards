@@ -259,7 +259,7 @@
 
 	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
 		 preferably by using $wpdb->prepare() -->
-	<rule ref="WordPress.WP.PreparedSQL"/>
+	<rule ref="WordPress.DB.PreparedSQL"/>
 
 
 	<!--
@@ -400,7 +400,7 @@
 	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#dont-extract
 	#############################################################################
 	-->
-	<rule ref="WordPress.Functions.DontExtract"/>
+	<rule ref="WordPress.PHP.DontExtract"/>
 
 
 	<!--
