@@ -869,6 +869,18 @@ abstract class Sniff implements PHPCS_Sniff {
 	protected $tokens;
 
 	/**
+	 * Internal cache of the results of the `get_function_call_parameters()` method.
+	 *
+	 * The results are stored in a multi-dimensional array by filename and $stackPtr of
+	 * the function call/array token.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @var array
+	 */
+	private $get_function_call_parameters_cache = array();
+
+	/**
 	 * Set sniff properties and hand off to child class for processing of the token.
 	 *
 	 * @since 0.11.0
@@ -2020,6 +2032,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * it will tokenize the values / key/value pairs contained in the array call.
 	 *
 	 * @since 0.11.0
+	 * @since 0.12.0 The results of this function are now cached for improved performance.
 	 *
 	 * @param int $stackPtr The position of the function call token.
 	 *
@@ -2033,7 +2046,15 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *               }
 	 */
 	public function get_function_call_parameters( $stackPtr ) {
+		$current_file = $this->phpcsFile->getFilename();
+
+		// Check if this function call/array has been parsed before and if so, use the cached results.
+		if ( isset( $this->get_function_call_parameters_cache[ $current_file ][ $stackPtr ] ) ) {
+			return $this->get_function_call_parameters_cache[ $current_file ][ $stackPtr ];
+		}
+
 		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
+			$this->get_function_call_parameters_cache[ $current_file ][ $stackPtr ] = array();
 			return array();
 		}
 
@@ -2108,6 +2129,9 @@ abstract class Sniff implements PHPCS_Sniff {
 			$param_start = ( $next_comma + 1 );
 			$cnt++;
 		}
+
+		// Cache the results.
+		$this->get_function_call_parameters_cache[ $current_file ][ $stackPtr ] = $parameters;
 
 		return $parameters;
 	}
