@@ -112,4 +112,13 @@
 	<!-- https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/ -->
 	<rule ref="WordPress.WP.TimezoneChange"/>
 
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#no-limit-queries -->
+	<rule ref="WordPress.WP.PostsPerPage"/>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_posts_per_page">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_numberposts">
+		<type>error</type>
+	</rule>
+
 </ruleset>
