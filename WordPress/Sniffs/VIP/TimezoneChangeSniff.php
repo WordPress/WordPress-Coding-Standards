@@ -53,7 +53,7 @@ class TimezoneChangeSniff extends \WordPress\Sniffs\WP\TimezoneChangeSniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->phpcsFile->addWarning(
-				'The "WordPress.VIP.TimezoneChange" sniff has been renamed to "WordPress.VIP.TimezoneChange". Please update your custom ruleset.',
+				'The "WordPress.VIP.TimezoneChange" sniff has been renamed to "WordPress.WP.TimezoneChange". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
@@ -65,7 +65,7 @@ class TimezoneChangeSniff extends \WordPress\Sniffs\WP\TimezoneChangeSniff {
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->phpcsFile->addWarning(
-				'The "WordPress.VIP.TimezoneChange" sniff has been renamed to "WordPress.VIP.TimezoneChange". Please update your custom ruleset.',
+				'The "WordPress.VIP.TimezoneChange" sniff has been renamed to "WordPress.WP.TimezoneChange". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);

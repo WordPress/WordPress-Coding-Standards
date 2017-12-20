@@ -57,7 +57,7 @@ class EscapeOutputSniff extends \WordPress\Sniffs\Security\EscapeOutputSniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->phpcsFile->addWarning(
-				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.XSS.EscapeOutput". Please update your custom ruleset.',
+				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.Security.EscapeOutput". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
@@ -72,7 +72,7 @@ class EscapeOutputSniff extends \WordPress\Sniffs\Security\EscapeOutputSniff {
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->phpcsFile->addWarning(
-				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.XSS.EscapeOutput". Please update your custom ruleset.',
+				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.Security.EscapeOutput". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
