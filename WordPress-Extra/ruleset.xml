@@ -103,6 +103,9 @@
 
 	<rule ref="WordPress.Security.EscapeOutput"/>
 
+	<!-- Encourage use of wp_safe_redirect() to avoid open redirect vulnerabilities. -->
+	<rule ref="WordPress.Security.SafeRedirect"/>
+
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
 	<rule ref="WordPress.Security.NonceVerification"/>
