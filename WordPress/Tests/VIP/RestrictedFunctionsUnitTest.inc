@@ -73,7 +73,7 @@ get_previous_post_link(); // Error.
 get_next_post_link(); // Error.
 get_intermediate_image_sizes(); // Error.
 
-wp_redirect(); // Warning.
+
 wp_is_mobile(); // Error.
 
 setcookie( 'cookie[three]', 'cookiethree' ); // Warning.

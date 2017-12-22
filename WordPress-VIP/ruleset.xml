@@ -121,4 +121,7 @@
 		<type>error</type>
 	</rule>
 
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect -->
+	<rule ref="WordPress.Security.SafeRedirect"/>
+
 </ruleset>
