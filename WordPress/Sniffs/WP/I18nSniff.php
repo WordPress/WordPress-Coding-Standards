@@ -164,7 +164,11 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			'i18n' => array(
 				'functions' => array_keys( $this->i18n_functions ),
 			),
-
+			'typos' => array(
+				'functions' => array(
+					'_',
+				),
+			),
 		);
 	} // End getGroups().
 
@@ -205,11 +209,6 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		// Prevent exclusion of the i18n group.
 		$this->exclude = '';
 
-		// Note: this will give false positives if a method called `_` is used.
-		if ( '_' === $this->tokens[ $stack_ptr ]['content'] ) {
-			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
-		}
-
 		parent::process_token( $stack_ptr );
 	}
 
@@ -227,16 +226,22 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_matched_token( $stack_ptr, $group_name, $matched_content ) {
 
-		if ( in_array( $matched_content, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
-			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $matched_content ) );
-		}
-
 		$func_open_paren_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token
 			|| T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
 			|| ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] )
 		) {
+			// Live coding, parse error or not a function call.
 			return;
+		}
+
+		if ( 'typos' === $group_name && '_' === $matched_content ) {
+			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
+			return;
+		}
+
+		if ( in_array( $matched_content, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
+			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $matched_content ) );
 		}
 
 		$arguments_tokens = array();
