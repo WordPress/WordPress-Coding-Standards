@@ -9,7 +9,7 @@
 
 namespace WordPress\Sniffs\WP;
 
-use WordPress\Sniff;
+use WordPress\AbstractFunctionRestrictionsSniff;
 use WordPress\PHPCSHelper;
 use PHP_CodeSniffer_Tokens as Tokens;
 
@@ -27,8 +27,11 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   1.0.0  This class now extends the AbstractFunctionRestrictionSniff.
+ *                 The parent `exclude` property is, however, disabled as it
+ *                 would disable the whole sniff.
  */
-class I18nSniff extends Sniff {
+class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
@@ -144,25 +147,43 @@ class I18nSniff extends Sniff {
 	private $text_domain_is_default = false;
 
 	/**
-	 * Returns an array of tokens this test wants to listen for.
+	 * Groups of functions to restrict.
+	 *
+	 * Example: groups => array(
+	 *  'lambda' => array(
+	 *      'type'      => 'error' | 'warning',
+	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'functions' => array( 'file_get_contents', 'create_function' ),
+	 *  )
+	 * )
 	 *
 	 * @return array
 	 */
-	public function register() {
+	public function getGroups() {
 		return array(
-			T_STRING,
+			'i18n' => array(
+				'functions' => array_keys( $this->i18n_functions ),
+			),
+			'typos' => array(
+				'functions' => array(
+					'_',
+				),
+			),
 		);
-	}
+	} // End getGroups().
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @since 1.0.0 Defers to the abstractFunctionRestriction sniff for determining
+	 *              whether something is a function call. The logic after that has
+	 *              been split off to the `process_matched_token()` method.
 	 *
 	 * @param int $stack_ptr The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
 	public function process_token( $stack_ptr ) {
-		$token = $this->tokens[ $stack_ptr ];
 
 		// Reset defaults.
 		$this->text_domain_contains_default = false;
@@ -185,22 +206,42 @@ class I18nSniff extends Sniff {
 			}
 		}
 
-		if ( '_' === $token['content'] ) {
+		// Prevent exclusion of the i18n group.
+		$this->exclude = '';
+
+		parent::process_token( $stack_ptr );
+	}
+
+	/**
+	 * Process a matched token.
+	 *
+	 * @since 1.0.0 Logic split off from the `process_token()` method.
+	 *
+	 * @param int    $stack_ptr       The position of the current token in the stack.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process_matched_token( $stack_ptr, $group_name, $matched_content ) {
+
+		$func_open_paren_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
+		if ( false === $func_open_paren_token
+			|| T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
+			|| ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] )
+		) {
+			// Live coding, parse error or not a function call.
+			return;
+		}
+
+		if ( 'typos' === $group_name && '_' === $matched_content ) {
 			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stack_ptr, 'SingleUnderscoreGetTextFunction' );
-		}
-
-		if ( ! isset( $this->i18n_functions[ $token['content'] ] ) ) {
 			return;
 		}
-		$translation_function = $token['content'];
 
-		if ( in_array( $translation_function, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
-			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $translation_function ) );
-		}
-
-		$func_open_paren_token = $this->phpcsFile->findNext( T_WHITESPACE, ( $stack_ptr + 1 ), null, true );
-		if ( false === $func_open_paren_token || T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code'] ) {
-			return;
+		if ( in_array( $matched_content, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
+			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $matched_content ) );
 		}
 
 		$arguments_tokens = array();
@@ -249,7 +290,7 @@ class I18nSniff extends Sniff {
 		unset( $argument_tokens );
 
 		$argument_assertions = array();
-		if ( 'simple' === $this->i18n_functions[ $translation_function ] ) {
+		if ( 'simple' === $this->i18n_functions[ $matched_content ] ) {
 			$argument_assertions[] = array(
 				'arg_name' => 'text',
 				'tokens'   => array_shift( $arguments_tokens ),
@@ -258,7 +299,7 @@ class I18nSniff extends Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} elseif ( 'context' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'context' === $this->i18n_functions[ $matched_content ] ) {
 			$argument_assertions[] = array(
 				'arg_name' => 'text',
 				'tokens'   => array_shift( $arguments_tokens ),
@@ -271,7 +312,7 @@ class I18nSniff extends Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} elseif ( 'number' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'number' === $this->i18n_functions[ $matched_content ] ) {
 			$argument_assertions[] = array(
 				'arg_name' => 'single',
 				'tokens'   => array_shift( $arguments_tokens ),
@@ -285,7 +326,7 @@ class I18nSniff extends Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} elseif ( 'number_context' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'number_context' === $this->i18n_functions[ $matched_content ] ) {
 			$argument_assertions[] = array(
 				'arg_name' => 'single',
 				'tokens'   => array_shift( $arguments_tokens ),
@@ -303,7 +344,7 @@ class I18nSniff extends Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} elseif ( 'noopnumber' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'noopnumber' === $this->i18n_functions[ $matched_content ] ) {
 			$argument_assertions[] = array(
 				'arg_name' => 'single',
 				'tokens'   => array_shift( $arguments_tokens ),
@@ -316,7 +357,7 @@ class I18nSniff extends Sniff {
 				'arg_name' => 'domain',
 				'tokens'   => array_shift( $arguments_tokens ),
 			);
-		} elseif ( 'noopnumber_context' === $this->i18n_functions[ $translation_function ] ) {
+		} elseif ( 'noopnumber_context' === $this->i18n_functions[ $matched_content ] ) {
 			$argument_assertions[] = array(
 				'arg_name' => 'single',
 				'tokens'   => array_shift( $arguments_tokens ),
@@ -336,7 +377,7 @@ class I18nSniff extends Sniff {
 		}
 
 		if ( ! empty( $arguments_tokens ) ) {
-			$this->phpcsFile->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $translation_function ) );
+			$this->phpcsFile->addError( 'Too many arguments for function "%s".', $func_open_paren_token, 'TooManyFunctionArgs', array( $matched_content ) );
 		}
 
 		foreach ( $argument_assertions as $argument_assertion_context ) {
@@ -349,7 +390,7 @@ class I18nSniff extends Sniff {
 		}
 
 		// For _n*() calls, compare the singular and plural strings.
-		if ( false !== strpos( $this->i18n_functions[ $translation_function ], 'number' ) ) {
+		if ( false !== strpos( $this->i18n_functions[ $matched_content ], 'number' ) ) {
 			$single_context = $argument_assertions[0];
 			$plural_context = $argument_assertions[1];
 
