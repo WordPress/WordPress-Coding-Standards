@@ -41,9 +41,12 @@
 
 	<!-- And yet more best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1143 -->
-	<rule ref="PEAR.Files.IncludingFile">
-		<exclude name="PEAR.Files.IncludingFile.UseInclude"/>
-		<exclude name="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+	<rule ref="PEAR.Files.IncludingFile"/>
+	<rule ref="PEAR.Files.IncludingFile.UseInclude">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseIncludeOnce">
+		<severity>0</severity>
 	</rule>
 	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
 		<type>warning</type>

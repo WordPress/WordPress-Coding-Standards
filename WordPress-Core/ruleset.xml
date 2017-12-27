@@ -58,11 +58,16 @@
 
 	<!-- Covers rule: For switch structures case should indent one tab from the
 	     switch statement and break one tab from the case statement. -->
-	<rule ref="PSR2.ControlStructures.SwitchDeclaration">
-		<!-- Prevent duplicate messages for the same issue. Covered by other sniffs. -->
-		<exclude name="PSR2.ControlStructures.SwitchDeclaration.NotLower"/>
-		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BreakNotNewLine"/>
-		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLine"/>
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
+	<!-- Prevent duplicate messages for the same issue. Covered by other sniffs. -->
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration.NotLower">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration.BreakNotNewLine">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLine">
+		<severity>0</severity>
 	</rule>
 
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
@@ -130,11 +135,18 @@
 	-->
 	<!-- Covers rule: When embedding multi-line PHP snippets within a HTML block, the
 	     PHP open and close tags must be on a line by themselves. -->
-	<rule ref="Squiz.PHP.EmbeddedPhp">
-		<exclude name="Squiz.PHP.EmbeddedPhp.SpacingBefore"/>
-		<exclude name="Squiz.PHP.EmbeddedPhp.Indent"/>
-		<exclude name="Squiz.PHP.EmbeddedPhp.OpenTagIndent"/>
-		<exclude name="Squiz.PHP.EmbeddedPhp.SpacingAfter"/>
+	<rule ref="Squiz.PHP.EmbeddedPhp"/>
+	<rule ref="Squiz.PHP.EmbeddedPhp.SpacingBefore">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.PHP.EmbeddedPhp.Indent">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.PHP.EmbeddedPhp.OpenTagIndent">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.PHP.EmbeddedPhp.SpacingAfter">
+		<severity>0</severity>
 	</rule>
 
 
@@ -194,8 +206,11 @@
 			<property name="requiredSpacesAfterOpen" value="1"/>
 			<property name="requiredSpacesBeforeClose" value="1"/>
 		</properties>
-		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
 	</rule>
+	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose">
+		<severity>0</severity>
+	</rule>
+
 
 	<!-- Covers rule: Call a function, like so: my_function( $param1, func_param( $param2 ) ); -->
 	<rule ref="PEAR.Functions.FunctionCallSignature">
