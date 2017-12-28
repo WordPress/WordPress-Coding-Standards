@@ -137,9 +137,24 @@ class AssignmentInConditionSniff extends Sniff {
 				$opener = $this->tokens[ $prev ]['parenthesis_opener'];
 				$closer = $prev;
 			} elseif ( isset( $token['nested_parenthesis'] ) ) {
-				end( $token['nested_parenthesis'] );
+				$closer = end( $token['nested_parenthesis'] );
 				$opener = key( $token['nested_parenthesis'] );
-				$closer = $stackPtr;
+
+				$next_statement_closer = $this->phpcsFile->findEndOfStatement( $stackPtr, array( T_COLON, T_CLOSE_PARENTHESIS, T_CLOSE_SQUARE_BRACKET ) );
+				if ( false !== $next_statement_closer && $next_statement_closer < $closer ) {
+					// Parentheses are unrelated to the ternary.
+					return;
+				}
+
+				$prev_statement_closer = $this->phpcsFile->findStartOfStatement( $stackPtr, array( T_COLON, T_OPEN_PARENTHESIS, T_OPEN_SQUARE_BRACKET ) );
+				if ( false !== $prev_statement_closer && $opener < $prev_statement_closer ) {
+					// Parentheses are unrelated to the ternary.
+					return;
+				}
+
+				if ( $closer > $stackPtr ) {
+					$closer = $stackPtr;
+				}
 			} else {
 				// No parenthesis found, can't determine where the conditional part of the ternary starts.
 				return;
@@ -196,6 +211,8 @@ class AssignmentInConditionSniff extends Sniff {
 				$errorCode = 'Found';
 				if ( T_WHILE === $token['code'] ) {
 					$errorCode = 'FoundInWhileCondition';
+				} elseif ( T_INLINE_THEN === $token['code'] ) {
+					$errorCode = 'FoundInTernaryCondition';
 				}
 
 				$this->phpcsFile->addWarning(
