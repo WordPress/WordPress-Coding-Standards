@@ -21,3 +21,4 @@ fclose(); // Warning.
 fread(); // Warning.
 fwrite(); // Warning.
 file_put_contents(); // Warning.
+strip_tags( $something ); // Warning.

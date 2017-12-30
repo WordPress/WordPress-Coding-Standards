@@ -84,6 +84,14 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
+			'strip_tags' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Use the more comprehensive wp_strip_all_tags() instead.',
+				'functions' => array(
+					'strip_tags',
+				),
+			),
+
 		);
 	} // End getGroups().
 
