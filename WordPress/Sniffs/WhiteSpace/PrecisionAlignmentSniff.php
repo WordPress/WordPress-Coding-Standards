@@ -74,6 +74,7 @@ class PrecisionAlignmentSniff extends Sniff {
 	public function register() {
 		return array(
 			T_OPEN_TAG,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 	}
 
@@ -99,18 +100,17 @@ class PrecisionAlignmentSniff extends Sniff {
 			T_COMMENT                => true,
 		);
 
-		for ( $i = ( $stackPtr + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
-			if ( ! isset( $this->tokens[ ( $i + 1 ) ] ) ) {
-				break;
-			}
+		for ( $i = 0; $i < $this->phpcsFile->numTokens; $i++ ) {
 
 			if ( 1 !== $this->tokens[ $i ]['column'] ) {
 				continue;
 			} elseif ( isset( $check_tokens[ $this->tokens[ $i ]['code'] ] ) === false
-				|| T_WHITESPACE === $this->tokens[ ( $i + 1 ) ]['code']
+				|| ( isset( $this->tokens[ ( $i + 1 ) ] )
+					&& T_WHITESPACE === $this->tokens[ ( $i + 1 ) ]['code'] )
 				|| $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar
 				|| isset( $this->ignoreAlignmentTokens[ $this->tokens[ $i ]['type'] ] )
-				|| isset( $this->ignoreAlignmentTokens[ $this->tokens[ ( $i + 1 ) ]['type'] ] )
+				|| ( isset( $this->tokens[ ( $i + 1 ) ] )
+					&& isset( $this->ignoreAlignmentTokens[ $this->tokens[ ( $i + 1 ) ]['type'] ] ) )
 			) {
 				continue;
 			}
@@ -125,8 +125,9 @@ class PrecisionAlignmentSniff extends Sniff {
 					$length = $this->tokens[ $i ]['length'];
 					$spaces = ( $length % $this->tab_width );
 
-					if ( ( T_DOC_COMMENT_STAR === $this->tokens[ ( $i + 1 ) ]['code']
-						|| T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ ( $i + 1 ) ]['code'] )
+					if ( isset( $this->tokens[ ( $i + 1 ) ] )
+						&& ( T_DOC_COMMENT_STAR === $this->tokens[ ( $i + 1 ) ]['code']
+							|| T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ ( $i + 1 ) ]['code'] )
 						&& 0 !== $spaces
 					) {
 						// One alignment space expected before the *.
