@@ -122,7 +122,10 @@ class FileNameSniff extends Sniff {
 			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
 		}
 
-		return array( T_OPEN_TAG );
+		return array(
+			T_OPEN_TAG,
+			T_OPEN_TAG_WITH_ECHO,
+		);
 	}
 
 	/**

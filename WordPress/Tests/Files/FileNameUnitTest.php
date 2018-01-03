@@ -37,6 +37,7 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		'some_file.inc'                              => 1,
 		'SomeFile.inc'                               => 1,
 		'some-File.inc'                              => 1,
+		'SomeView.inc'                               => 1,
 
 		// Class file names.
 		'my-class.inc'                               => 1,
@@ -94,6 +95,12 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	 * @return string[]
 	 */
 	protected function getTestFiles( $testFileBase ) {
+
+		// Work around for PHP 5.3/PHPCS 2.x.
+		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			unset( $this->expected_results['SomeView.inc'] );
+		}
+
 		$sep        = DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
 
@@ -125,11 +132,24 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array();
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'SomeView.inc':
+			case 'some-view.inc':
+				$expected = array();
+				if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+					$expected[1] = 1; // Internal.NoCode warning on PHP 5.3 icw short open tags off.
+				}
 
+				return $expected;
+
+			default:
+				return array();
+		}
 	}
 
 } // End class.
