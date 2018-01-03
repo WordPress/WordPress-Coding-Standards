@@ -74,6 +74,7 @@ class PrecisionAlignmentSniff extends Sniff {
 	public function register() {
 		return array(
 			T_OPEN_TAG,
+			T_OPEN_TAG_WITH_ECHO,
 		);
 	}
 
