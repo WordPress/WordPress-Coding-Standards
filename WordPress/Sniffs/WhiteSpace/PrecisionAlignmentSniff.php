@@ -99,7 +99,7 @@ class PrecisionAlignmentSniff extends Sniff {
 			T_COMMENT                => true,
 		);
 
-		for ( $i = ( $stackPtr + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
+		for ( $i = 0; $i < $this->phpcsFile->numTokens; $i++ ) {
 			if ( ! isset( $this->tokens[ ( $i + 1 ) ] ) ) {
 				break;
 			}
