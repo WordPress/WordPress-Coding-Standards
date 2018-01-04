@@ -492,7 +492,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			// Function parameters do not need to be prefixed.
 			if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
-					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] ) && T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] ) {
+					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
+						&& ( T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
+							|| T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
+					) {
 						return;
 					}
 				}
