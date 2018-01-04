@@ -326,3 +326,5 @@ do_action( 'add_meta_boxes' );
 add_shortcode( 'acronym_hello', function( $attrs, $content = null ) { // OK. Variables are function params.
 	// Do something.
 } );
+
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
