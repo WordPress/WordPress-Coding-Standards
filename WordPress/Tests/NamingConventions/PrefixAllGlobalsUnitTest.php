@@ -33,7 +33,6 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 			case 'PrefixAllGlobalsUnitTest.inc':
 				return array(
 					1   => 2, // 2 x error for incorrect prefix passed.
-					10  => 1,
 					18  => 1,
 					21  => 1,
 					22  => 1,

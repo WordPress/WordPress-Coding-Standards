@@ -750,6 +750,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					array( $prefix )
 				);
 				unset( $this->prefixes[ $key ] );
+				continue;
 			}
 
 			// Lowercase the prefix to allow for direct compare.
