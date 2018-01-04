@@ -56,6 +56,11 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					234 => ( defined( '\E_DEPRECATED' ) ) ? 0 : 1,
 					238 => ( class_exists( '\IntlTimeZone' ) ) ? 0 : 1,
 					318 => 1,
+					339 => 1,
+					343 => 1,
+					346 => 1,
+					349 => 1,
+					354 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.1.inc':
