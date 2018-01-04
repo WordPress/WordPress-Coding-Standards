@@ -56,6 +56,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Target prefixes after validation.
 	 *
+	 * All prefixes are lowercased for case-insensitive compare.
+	 *
 	 * @since 0.12.0
 	 *
 	 * @var string[]
@@ -667,31 +669,19 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
+	 * @since 1.0.0  Does not require a word seperator anymore after a prefix.
+	 *               This allows for improved code style independent checking,
+	 *               i.e. allows for camelCase naming and the likes.
 	 *
 	 * @param string $name Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix + a separator.
+	 * @return bool True when the name is the prefix or starts with the prefix.
 	 *              False otherwise.
 	 */
 	private function is_prefixed( $name ) {
-
 		foreach ( $this->validated_prefixes as $prefix ) {
-			if ( strtolower( $name ) === $prefix ) {
-				// Ok, prefix *is* the hook/constant name.
+			if ( stripos( $name, $prefix ) === 0 ) {
 				return true;
-
-			} else {
-				$prefix_found = stripos( $name, $prefix . '_' );
-
-				if ( 0 === $prefix_found ) {
-					// Ok, prefix found at start of hook/constant name.
-					return true;
-				}
-
-				if ( preg_match( '`^' . preg_quote( $prefix, '`' ) . '\W`i', $name ) === 1 ) {
-					// Ok, prefix with other non-word character found at start of hook/constant name.
-					return true;
-				}
 			}
 		}
 
