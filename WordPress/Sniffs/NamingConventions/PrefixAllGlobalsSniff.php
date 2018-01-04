@@ -435,10 +435,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	protected function process_variable_assignment( $stackPtr ) {
-
-		// We're only concerned with variables which are being defined.
-		// `is_assigment()` will not recognize property assignments, which is good in this case.
-		if ( false === $this->is_assignment( $stackPtr ) ) {
+		/*
+		 * We're only concerned with variables which are being defined.
+		 * `is_assigment()` will not recognize property assignments, which is good in this case.
+		 * However it will also not recognize $b in `foreach( $a as $b )` as an assignment, so
+		 * we need a separate check for that.
+		 */
+		if ( false === $this->is_assignment( $stackPtr )
+			&& false === $this->is_foreach_as( $stackPtr )
+		) {
 			return;
 		}
 
@@ -707,6 +712,35 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		return $this->is_prefixed( $name );
+	}
+
+	/**
+	 * Determine if a variable is the `as $var` part of a foreach condition.
+	 *
+	 * @param int $stackPtr Pointer to the variable.
+	 *
+	 * @return bool True if it is. False otherwise.
+	 */
+	private function is_foreach_as( $stackPtr ) {
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false === $prev || T_AS !== $this->tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
+			return false;
+		}
+
+		if ( T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
