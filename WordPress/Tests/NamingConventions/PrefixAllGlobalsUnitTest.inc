@@ -88,7 +88,7 @@ do_action( "tgmpa_plugin_action_{$acronym_filter_var}" );
  * Bad: prefix not correctly used.
  */
 function abtgmpa_do_something() {} // Bad.
-function tgmpacd_do_something() {} // Bad.
+function tgmpacd_do_something() {} // OK.
 
 
 /*
@@ -326,5 +326,12 @@ do_action( 'add_meta_boxes' );
 add_shortcode( 'acronym_hello', function( $attrs, $content = null ) { // OK. Variables are function params.
 	// Do something.
 } );
+
+// Issue #1239 - word separator check is not the concern of this sniff.
+do_action( 'acronymAction' ); // OK.
+apply_filters( 'acronymFilter', $var ); // OK.
+
+function acronymDoSomething( $param = 'default' ) {} // OK.
+class AcronymExample {} // OK.
 
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
