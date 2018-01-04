@@ -22,3 +22,8 @@ fread(); // Warning.
 fwrite(); // Warning.
 file_put_contents(); // Warning.
 strip_tags( $something ); // Warning.
+rand(); // Warning.
+mt_rand(); // Warning.
+srand(); // Warning.
+mt_srand(); // Warning.
+wp_rand(); // OK.

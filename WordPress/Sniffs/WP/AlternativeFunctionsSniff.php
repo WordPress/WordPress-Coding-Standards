@@ -92,6 +92,24 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
+			'rand_seeding' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Rand seeding is not necessary when using the wp_rand() function (as you should).',
+				'functions' => array(
+					'srand',
+					'mt_srand',
+				),
+			),
+
+			'rand' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Use the far less predictable wp_rand() instead.',
+				'functions' => array(
+					'rand',
+					'mt_rand',
+				),
+			),
+
 		);
 	} // End getGroups().
 
