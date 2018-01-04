@@ -211,7 +211,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$item_name  = '';
-			$error_text = 'Unknown syntax used by';
+			$error_text = 'Unknown syntax used';
 			$error_code = 'NonPrefixedSyntaxFound';
 
 			switch ( $this->tokens[ $stackPtr ]['type'] ) {
