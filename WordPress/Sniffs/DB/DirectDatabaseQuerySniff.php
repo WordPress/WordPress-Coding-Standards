@@ -24,7 +24,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.6.0  Removed the add_unique_message() function as it is no longer needed.
  * @since   0.11.0 This class now extends WordPress_Sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `VIP` category to the `DB` category.
+ * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
  */
 class DirectDatabaseQuerySniff extends Sniff {
 

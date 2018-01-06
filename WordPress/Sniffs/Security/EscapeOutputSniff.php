@@ -26,7 +26,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
  *                 echo tags `<?=`.
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `XSS` category to the `Security` category.
+ * @since   1.0.0  This sniff has been moved from the `XSS` category to the `Security` category.
  */
 class EscapeOutputSniff extends Sniff {
 

@@ -22,7 +22,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
  *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `VIP` category to the `WP` category.
+ * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
  */
 class TimezoneChangeSniff extends AbstractFunctionRestrictionsSniff {
 

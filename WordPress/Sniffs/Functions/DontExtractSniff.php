@@ -21,7 +21,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @deprecated 0.15.0 This sniff has been moved to the `PHP` category.
+ * @deprecated 1.0.0  This sniff has been moved to the `PHP` category.
  *                    This file remains for now to prevent BC breaks.
  */
 class DontExtractSniff extends \WordPress\Sniffs\PHP\DontExtractSniff {
@@ -30,7 +30,7 @@ class DontExtractSniff extends \WordPress\Sniffs\PHP\DontExtractSniff {
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * @since 0.15.0
+	 * @since 1.0.0
 	 *
 	 * @var array
 	 */
@@ -42,7 +42,7 @@ class DontExtractSniff extends \WordPress\Sniffs\PHP\DontExtractSniff {
 	/**
 	 * Don't use.
 	 *
-	 * @deprecated 0.15.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *

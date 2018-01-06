@@ -24,7 +24,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.8.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @deprecated 0.15.0 This sniff has been moved to the `DB` category.
+ * @deprecated 1.0.0  This sniff has been moved to the `DB` category.
  *                    This file remains for now to prevent BC breaks.
  */
 class PreparedSQLSniff extends \WordPress\Sniffs\DB\PreparedSQLSniff {
@@ -33,7 +33,7 @@ class PreparedSQLSniff extends \WordPress\Sniffs\DB\PreparedSQLSniff {
 	 * Keep track of whether the warning has been thrown to prevent
 	 * the message being thrown for every token triggering the sniff.
 	 *
-	 * @since 0.15.0
+	 * @since 1.0.0
 	 *
 	 * @var array
 	 */
@@ -44,7 +44,7 @@ class PreparedSQLSniff extends \WordPress\Sniffs\DB\PreparedSQLSniff {
 	/**
 	 * Don't use.
 	 *
-	 * @deprecated 0.15.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
