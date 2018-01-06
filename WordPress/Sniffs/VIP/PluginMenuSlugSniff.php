@@ -22,7 +22,7 @@ use WordPress\AbstractFunctionParameterSniff;
  * @since   0.11.0 Refactored to extend the new WordPress_AbstractFunctionParameterSniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @deprecated 0.15.0 This sniff has been moved to the `Security` category.
+ * @deprecated 1.0.0  This sniff has been moved to the `Security` category.
  *                    This file remains for now to prevent BC breaks.
  */
 class PluginMenuSlugSniff extends \WordPress\Sniffs\Security\PluginMenuSlugSniff {
@@ -31,7 +31,7 @@ class PluginMenuSlugSniff extends \WordPress\Sniffs\Security\PluginMenuSlugSniff
 	 * Keep track of whether the warning has been thrown to prevent
 	 * the message being thrown for every token triggering the sniff.
 	 *
-	 * @since 0.15.0
+	 * @since 1.0.0
 	 *
 	 * @var array
 	 */
@@ -42,7 +42,7 @@ class PluginMenuSlugSniff extends \WordPress\Sniffs\Security\PluginMenuSlugSniff
 	/**
 	 * Don't use.
 	 *
-	 * @deprecated 0.15.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *

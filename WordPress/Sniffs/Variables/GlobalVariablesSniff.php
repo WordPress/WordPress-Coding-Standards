@@ -22,7 +22,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.12.0 The $wp_globals property has been moved to the WordPress_Sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @deprecated 0.15.0 This sniff has been moved to the `WP` category.
+ * @deprecated 1.0.0  This sniff has been moved to the `WP` category.
  *                    This file remains for now to prevent BC breaks.
  *
  * @uses \WordPress\Sniff::$custom_test_class_whitelist
@@ -33,7 +33,7 @@ class GlobalVariablesSniff extends \WordPress\Sniffs\WP\GlobalVariablesOverrideS
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * @since 0.15.0
+	 * @since 1.0.0
 	 *
 	 * @var array
 	 */
@@ -45,7 +45,7 @@ class GlobalVariablesSniff extends \WordPress\Sniffs\WP\GlobalVariablesOverrideS
 	/**
 	 * Don't use.
 	 *
-	 * @deprecated 0.15.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *

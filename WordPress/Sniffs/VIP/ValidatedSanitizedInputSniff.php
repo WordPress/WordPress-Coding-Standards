@@ -23,7 +23,7 @@ use WordPress\Sniff;
  * @since   0.5.0  Method getArrayIndexKey() has been moved to WordPress_Sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @deprecated 0.15.0 This sniff has been moved to the `Security` category.
+ * @deprecated 1.0.0  This sniff has been moved to the `Security` category.
  *                    This file remains for now to prevent BC breaks.
  */
 class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedSanitizedInputSniff {
@@ -32,7 +32,7 @@ class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedS
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * @since 0.15.0
+	 * @since 1.0.0
 	 *
 	 * @var array
 	 */
@@ -44,7 +44,7 @@ class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedS
 	/**
 	 * Don't use.
 	 *
-	 * @deprecated 0.15.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *

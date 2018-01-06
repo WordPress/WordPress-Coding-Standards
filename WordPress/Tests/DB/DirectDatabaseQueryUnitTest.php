@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `VIP` category to the `DB` category.
+ * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
  */
 class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 

@@ -21,7 +21,7 @@ use WordPress\Sniff;
  * @since   0.5.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @deprecated 0.15.0 This sniff has been moved to the `Security` category.
+ * @deprecated 1.0.0  This sniff has been moved to the `Security` category.
  *                    This file remains for now to prevent BC breaks.
  */
 class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificationSniff {
@@ -30,7 +30,7 @@ class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificatio
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * @since 0.15.0
+	 * @since 1.0.0
 	 *
 	 * @var array
 	 */
@@ -42,7 +42,7 @@ class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificatio
 	/**
 	 * Don't use.
 	 *
-	 * @deprecated 0.15.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *

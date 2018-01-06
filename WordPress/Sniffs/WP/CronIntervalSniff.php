@@ -24,7 +24,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                 - Now deals correctly with WP time constants.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   0.14.0 The minimum cron interval tested against is now configurable.
- * @since   0.15.0 This sniff has been moved from the `VIP` category to the `WP` category.
+ * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
  */
 class CronIntervalSniff extends Sniff {
 
