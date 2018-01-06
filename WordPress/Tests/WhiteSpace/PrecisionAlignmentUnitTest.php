@@ -53,6 +53,11 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function setCliValues( $testFile, $config ) {
 		$config->tabWidth = $this->tab_width;
+
+		// Setting "--ignore-annotations" is only possible since PHPCS 3.0.
+		if ( 'PrecisionAlignmentUnitTest.6.inc' === $testFile ) {
+			$config->annotations = false;
+		}
 	}
 
 	/**
@@ -146,6 +151,17 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 				}
 
 				return $warnings;
+
+			case 'PrecisionAlignmentUnitTest.6.inc':
+				/*
+				 * {@internal Always returns 1 warning, as for PHPCS < 3.2.0, the PHPCS annotation
+				 * will be seen as a "normal" comment with precision alignment.
+				 * For PHPCS 3.2.0+, it will be seen as a PHPCS annotation, but annotations are ignored
+				 * for this test file, so the precision alignment will be reported.}}
+				 */
+				return array(
+					4 => 1,
+				);
 
 			case 'PrecisionAlignmentUnitTest.css':
 				return array(
