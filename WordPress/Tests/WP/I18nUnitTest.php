@@ -184,12 +184,13 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			case 'I18nUnitTest.2.inc':
 				return array(
-					9  => 1,
-					43 => 1,
-					49 => 1,
-					52 => 1,
-					74 => 1,
-					85 => 1,
+					9   => 1,
+					43  => 1,
+					49  => 1,
+					52  => 1,
+					74  => 1,
+					85  => 1,
+					108 => 1,
 				);
 
 			default:
