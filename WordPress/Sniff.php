@@ -1185,7 +1185,8 @@ abstract class Sniff implements PHPCS_Sniff {
 				$lastPtr = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 
-			if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+			if ( ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+					|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
@@ -1198,7 +1199,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
 		$lastPtr     = $this->phpcsFile->findPrevious( T_WHITESPACE, $end_of_line, null, true );
 
-		if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+		if ( ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {

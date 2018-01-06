@@ -276,3 +276,12 @@ class Silly {
 	function echo() {}
 	function print() {}
 }
+
+echo  // phpcs:ignore WP.Secur1ty.EscapeOutput -- WPCS: XSS ok. (sniff name mangled on purpose).
+	esc_html( $something ),
+	$something_else,
+	esc_html( $something_more );
+
+echo esc_html( $something ),
+	$something_else,
+	esc_html( $something_more ); // phpcs:ignore WP.Secur1ty.EscapeOutput -- WPCS: XSS ok. (sniff name mangled on purpose).
