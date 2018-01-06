@@ -159,11 +159,10 @@ __( 'String default text domain.', 'default' ); // Warning, text domain can be o
 __( 'String default text domain.', /* Explicitly set for reason. */ 'default' ); // Warning, text domain can be omitted (not auto-fixable).
 __( 'String default text domain.' ); // Ok because default domain is 'default' and it matches one of the supplied configured text domains.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
-// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
-
 // Issue #1266.
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
 $mo->translate( $string ); // OK, not a function, but a method call.
 Something\esc_html_e( $string ); // OK, not the WP function, but namespaced function call.
+
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
+// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
