@@ -168,7 +168,9 @@ class CommaAfterArrayItemSniff extends Sniff {
 						} else {
 							$spaces += $this->tokens[ $i ]['length'];
 						}
-					} elseif ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+					} elseif ( T_COMMENT === $this->tokens[ $i ]['code']
+						|| isset( $this->phpcsCommentTokens[ $this->tokens[ $i ]['type'] ] )
+					) {
 						break;
 					}
 				}
@@ -199,7 +201,9 @@ class CommaAfterArrayItemSniff extends Sniff {
 						if ( T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
 							$this->phpcsFile->fixer->replaceToken( $i, '' );
 
-						} elseif ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+						} elseif ( T_COMMENT === $this->tokens[ $i ]['code']
+							|| isset( $this->phpcsCommentTokens[ $this->tokens[ $i ]['type'] ] )
+						) {
 							// We need to move the comma to before the comment.
 							$this->phpcsFile->fixer->addContent( $last_content, ',' );
 							$this->phpcsFile->fixer->replaceToken( $maybe_comma, '' );
@@ -243,7 +247,8 @@ class CommaAfterArrayItemSniff extends Sniff {
 				if ( false === $next_non_whitespace
 					|| ( false === $single_line
 						&& $this->tokens[ $next_non_whitespace ]['line'] === $this->tokens[ $maybe_comma ]['line']
-						&& T_COMMENT === $this->tokens[ $next_non_whitespace ]['code'] )
+						&& ( T_COMMENT === $this->tokens[ $next_non_whitespace ]['code']
+							|| isset( $this->phpcsCommentTokens[ $this->tokens[ $next_non_whitespace ]['type'] ] ) ) )
 				) {
 					continue;
 				}
