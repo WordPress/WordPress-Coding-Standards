@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress VIP">
-	<description>WordPress VIP Coding Standards</description>
+	<description>WordPress.com VIP Coding Standards</description>
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
@@ -89,7 +89,7 @@
 	</rule>
 	<rule ref="WordPress.DB.DirectDatabaseQuery.NoCaching">
 		<type>error</type>
-		<message>Usage of a direct database call without caching is prohibited on the WP VIP platform. Use wp_cache_get / wp_cache_set or wp_cache_delete.</message>
+		<message>Usage of a direct database call without caching is prohibited on the VIP platform. Use wp_cache_get / wp_cache_set or wp_cache_delete.</message>
 	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload -->
