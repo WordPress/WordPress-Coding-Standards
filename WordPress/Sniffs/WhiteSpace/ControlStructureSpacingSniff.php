@@ -427,6 +427,9 @@ class ControlStructureSpacingSniff extends Sniff {
 					$this->phpcsFile->fixer->beginChangeset();
 
 					for ( $i = ( $scopeOpener + 1 ); $i < $firstContent; $i++ ) {
+						if ( $this->tokens[ $i ]['line'] === $this->tokens[ $firstContent ]['line'] ) {
+							break;
+						}
 						$this->phpcsFile->fixer->replaceToken( $i, '' );
 					}
 
@@ -460,10 +463,22 @@ class ControlStructureSpacingSniff extends Sniff {
 								$this->phpcsFile->fixer->beginChangeset();
 
 								for ( $j = ( $lastContent + 1 ); $j < $scopeCloser; $j++ ) {
+									if ( $this->tokens[ $j ]['line'] === $this->tokens[ $scopeCloser ]['line'] ) {
+										break;
+									}
 									$this->phpcsFile->fixer->replaceToken( $j, '' );
 								}
 
-								$this->phpcsFile->fixer->addNewlineBefore( $scopeCloser );
+								/*
+								 * PHPCS annotations, like normal inline comments, are tokenized including
+								 * the new line at the end, so don't add any extra as it would cause a fixer
+								 * conflict.
+								 */
+								if ( T_COMMENT !== $this->tokens[ $lastContent ]['code']
+									&& ! isset( $this->phpcsCommentTokens[ $this->tokens[ $lastContent ]['type'] ] ) ) {
+									$this->phpcsFile->fixer->addNewlineBefore( $j );
+								}
+
 								$this->phpcsFile->fixer->endChangeset();
 							}
 							break;
@@ -485,7 +500,9 @@ class ControlStructureSpacingSniff extends Sniff {
 			return;
 		}
 
-		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code'] ) {
+		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code']
+			|| isset( $this->phpcsCommentTokens[ $this->tokens[ $trailingContent ]['type'] ] )
+		) {
 			// Special exception for code where the comment about
 			// an ELSE or ELSEIF is written between the control structures.
 			$nextCode = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
@@ -544,7 +561,9 @@ class ControlStructureSpacingSniff extends Sniff {
 					}
 
 					// TODO: Instead a separate error should be triggered when content comes right after closing brace.
-					if ( T_COMMENT !== $this->tokens[ $scopeCloser ]['code'] ) {
+					if ( T_COMMENT !== $this->tokens[ $scopeCloser ]['code']
+						&& isset( $this->phpcsCommentTokens[ $this->tokens[ $scopeCloser ]['type'] ] ) === false
+					) {
 						$this->phpcsFile->fixer->addNewlineBefore( $trailingContent );
 					}
 					$this->phpcsFile->fixer->endChangeset();
