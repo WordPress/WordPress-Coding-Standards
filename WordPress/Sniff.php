@@ -47,8 +47,9 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Minimum supported WordPress version.
 	 *
-	 * Currently used by the `WordPress.WP.DeprecatedClasses`,
-	 * `WordPress.WP.DeprecatedFunctions` and the `WordPress.WP.DeprecatedParameter` sniff.
+	 * Currently used by the `WordPress.WP.AlternativeFunctions`,
+	 * `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`
+	 * and the `WordPress.WP.DeprecatedParameter` sniff.
 	 *
 	 * These sniffs will throw an error when usage of a deprecated class/function/parameter
 	 * is detected if the class/function/parameter was deprecated before the minimum
@@ -75,6 +76,9 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Ruleset: `<config name="minimum_supported_wp_version" value="4.5"/>`
 	 *
 	 * @since 0.14.0 Previously the individual sniffs each contained this property.
+	 *
+	 * @internal When the value of this property is changed, it will also need
+	 *           to be changed in the `WP/AlternativeFunctionsUnitTest.inc` file.
 	 *
 	 * @var string WordPress version.
 	 */
