@@ -18,6 +18,9 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.11.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   1.0.0  Takes the minimum supported WP version into account.
+ *
+ * @uses    \WordPress\Sniff::$minimum_supported_version
  */
 class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -28,6 +31,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 *  'lambda' => array(
 	 *      'type'      => 'error' | 'warning',
 	 *      'message'   => 'Use anonymous functions instead please!',
+	 *      'since'     => '4.9.0', //=> the WP version in which the alternative became available.
 	 *      'functions' => array( 'file_get_contents', 'create_function' ),
 	 *  )
 	 * )
@@ -39,6 +43,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'curl' => array(
 				'type'      => 'warning',
 				'message'   => 'Using cURL functions is highly discouraged. Use wp_remote_get() instead.',
+				'since'     => '2.7.0',
 				'functions' => array(
 					'curl_*',
 				),
@@ -47,6 +52,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'parse_url' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged because of inconsistency in the output across PHP versions; use wp_parse_url() instead.',
+				'since'     => '4.4.0',
 				'functions' => array(
 					'parse_url',
 				),
@@ -55,6 +61,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'json_encode' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged. Use wp_json_encode() instead.',
+				'since'     => '4.1.0',
 				'functions' => array(
 					'json_encode',
 				),
@@ -63,6 +70,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'file_get_contents' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged. Use wp_remote_get() instead.',
+				'since'     => '2.7.0',
 				'functions' => array(
 					'file_get_contents',
 				),
@@ -71,6 +79,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'file_system_read' => array(
 				'type'      => 'warning',
 				'message'   => 'File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: %s()',
+				'since'     => '2.5.0',
 				'functions' => array(
 					'readfile',
 					'fopen',
@@ -87,6 +96,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'strip_tags' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged. Use the more comprehensive wp_strip_all_tags() instead.',
+				'since'     => '2.9.0',
 				'functions' => array(
 					'strip_tags',
 				),
@@ -95,6 +105,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'rand_seeding' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged. Rand seeding is not necessary when using the wp_rand() function (as you should).',
+				'since'     => '2.6.2',
 				'functions' => array(
 					'srand',
 					'mt_srand',
@@ -104,6 +115,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'rand' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged. Use the far less predictable wp_rand() instead.',
+				'since'     => '2.6.2',
 				'functions' => array(
 					'rand',
 					'mt_rand',
@@ -112,5 +124,29 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 		);
 	} // End getGroups().
+
+	/**
+	 * Process a matched token.
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+
+		if ( ! isset( $this->groups[ $group_name ]['since'] ) ) {
+			return parent::process_matched_token( $stackPtr, $group_name, $matched_content );
+		}
+
+		// Verify if the alternative is available in the minimum supported WP version.
+		$this->get_wp_version_from_cl();
+
+		if ( version_compare( $this->groups[ $group_name ]['since'], $this->minimum_supported_version, '<=' ) ) {
+			return parent::process_matched_token( $stackPtr, $group_name, $matched_content );
+		}
+	}
 
 } // End class.
