@@ -58,7 +58,8 @@ matrix:
 before_install:
     # Speed up build time by disabling Xdebug.
     # https://johnblackbourn.com/reducing-travis-ci-build-times-for-wordpress-projects/
-    - if [[ $TRAVIS_PHP_VERSION != "nightly" && $TRAVIS_PHP_VERSION != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi
+    # https://twitter.com/kelunik/status/954242454676475904
+    - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
     - export XMLLINT_INDENT="	"
     - export PHPCS_DIR=/tmp/phpcs
     - export PHPUNIT_DIR=/tmp/phpunit
