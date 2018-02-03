@@ -2510,4 +2510,110 @@ abstract class Sniff implements PHPCS_Sniff {
 		return true;
 	} // End is_wpdb_method_call().
 
+	/**
+	 * Determine whether an arbitrary T_STRING token is the use of a global constant.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $stackPtr The position of the function call token.
+	 *
+	 * @return bool
+	 */
+	public function is_use_of_global_constant( $stackPtr ) {
+		// Check for the existence of the token.
+		if ( ! isset( $this->tokens[ $stackPtr ] ) ) {
+			return false;
+		}
+
+		// Is this one of the tokens this function handles ?
+		if ( T_STRING !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
+		$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false !== $next
+			&& ( T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+				|| T_DOUBLE_COLON === $this->tokens[ $next ]['code'] )
+		) {
+			// Function call or declaration.
+			return false;
+		}
+
+		// Array of tokens which if found preceding the $stackPtr indicate that a T_STRING is not a global constant.
+		$tokens_to_ignore = array(
+			'T_NAMESPACE'       => true,
+			'T_USE'             => true,
+			'T_CLASS'           => true,
+			'T_TRAIT'           => true,
+			'T_INTERFACE'       => true,
+			'T_EXTENDS'         => true,
+			'T_IMPLEMENTS'      => true,
+			'T_NEW'             => true,
+			'T_FUNCTION'        => true,
+			'T_DOUBLE_COLON'    => true,
+			'T_OBJECT_OPERATOR' => true,
+			'T_INSTANCEOF'      => true,
+			'T_INSTEADOF'       => true,
+			'T_GOTO'            => true,
+			'T_AS'              => true,
+			'T_PUBLIC'          => true,
+			'T_PROTECTED'       => true,
+			'T_PRIVATE'         => true,
+		);
+
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false !== $prev
+			&& isset( $tokens_to_ignore[ $this->tokens[ $prev ]['type'] ] )
+		) {
+			// Not the use of a constant.
+			return false;
+		}
+
+		if ( false !== $prev
+			&& T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
+			&& T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
+		) {
+			// Namespaced constant of the same name.
+			return false;
+		}
+
+		if ( false !== $prev
+			&& T_CONST === $this->tokens[ $prev ]['code']
+			&& $this->is_class_constant( $prev )
+		) {
+			// Class constant declaration of the same name.
+			return false;
+		}
+
+		/*
+		 * Deal with a number of variations of use statements.
+		 */
+		for ( $i = $stackPtr; $i > 0; $i-- ) {
+			if ( $this->tokens[ $i ]['line'] !== $this->tokens[ $stackPtr ]['line'] ) {
+				break;
+			}
+		}
+
+		$firstOnLine = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+		if ( false !== $firstOnLine && T_USE === $this->tokens[ $firstOnLine ]['code'] ) {
+			$nextOnLine = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $firstOnLine + 1 ), null, true );
+			if ( false !== $nextOnLine ) {
+				if ( T_STRING === $this->tokens[ $nextOnLine ]['code']
+					&& 'const' === $this->tokens[ $nextOnLine ]['content']
+				) {
+					$hasNsSep = $this->phpcsFile->findNext( T_NS_SEPARATOR, ( $nextOnLine + 1 ), $stackPtr );
+					if ( false !== $hasNsSep ) {
+						// Namespaced const (group) use statement.
+						return false;
+					}
+				} else {
+					// Not a const use statement.
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 }
