@@ -257,3 +257,5 @@ echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
 ?>
 	<input type="hidden" name="some-action" value="<?php echo esc_attr_x( 'none', 'context' ); ?>" /><!-- OK. -->
 <?php
+
+echo PHP_VERSION_ID, PHP_VERSION, PHP_EOL, PHP_EXTRA_VERSION; // OK.
