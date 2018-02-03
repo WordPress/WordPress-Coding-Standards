@@ -118,6 +118,24 @@ class EscapeOutputSniff extends Sniff {
 	);
 
 	/**
+	 * List of names of the native PHP constants which can be considered safe.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $safe_php_constants = array(
+		'PHP_EOL'             => true, // String.
+		'PHP_VERSION'         => true, // Integer.
+		'PHP_MAJOR_VERSION'   => true, // Integer.
+		'PHP_MINOR_VERSION'   => true, // Integer.
+		'PHP_RELEASE_VERSION' => true, // Integer.
+		'PHP_VERSION_ID'      => true, // Integer.
+		'PHP_EXTRA_VERSION'   => true, // String.
+		'PHP_DEBUG'           => true, // Integer.
+	);
+
+	/**
 	 * List of names of the cast tokens which can be considered as a safe escaping method.
 	 *
 	 * @since 0.12.0
@@ -341,6 +359,14 @@ class EscapeOutputSniff extends Sniff {
 
 			// Handle magic constants for debug functions.
 			if ( isset( $this->magic_constant_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
+				continue;
+			}
+
+			// Handle safe PHP native constants.
+			if ( T_STRING === $this->tokens[ $i ]['code']
+				&& isset( $this->safe_php_constants[ $this->tokens[ $i ]['content'] ] )
+				&& $this->is_use_of_global_constant( $i )
+			) {
 				continue;
 			}
 
