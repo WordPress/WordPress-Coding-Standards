@@ -253,7 +253,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 		),
 		'wp_upload_bits' => array(
 			2 => array(
-				'value'   => '',
+				'value'   => null,
 				'version' => '2.0.0',
 			),
 		),
