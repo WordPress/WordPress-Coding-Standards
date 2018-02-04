@@ -1233,6 +1233,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *   or a custom whitelisted unit test class.
 	 *
 	 * @since 0.12.0 Split off from the `is_token_in_test_method()` method.
+	 * @since 1.0.0  Improved recognition of namespaced class names.
 	 *
 	 * @param int $stackPtr The position of the token to be examined.
 	 *                      This should be a class, anonymous class or trait token.
@@ -1253,17 +1254,45 @@ abstract class Sniff implements PHPCS_Sniff {
 			$this->test_class_whitelist
 		);
 
+		/*
+		 * Show some tolerance for user input.
+		 * The custom test class names should be passed as FQN without a prefixing `\`.
+		 */
+		foreach ( $whitelist as $k => $v ) {
+			$whitelist[ $k ] = ltrim( $v, '\\' );
+		}
+
 		// Is the class/trait one of the whitelisted test classes ?
+		$namespace = $this->determine_namespace( $stackPtr );
 		$className = $this->phpcsFile->getDeclarationName( $stackPtr );
-		if ( isset( $whitelist[ $className ] ) ) {
+		if ( '' !== $namespace ) {
+			if ( isset( $whitelist[ $namespace . '\\' . $className ] ) ) {
+				return true;
+			}
+		} elseif ( isset( $whitelist[ $className ] ) ) {
 			return true;
 		}
 
 		// Does the class/trait extend one of the whitelisted test classes ?
 		$extendedClassName = $this->phpcsFile->findExtendedClassName( $stackPtr );
-		if ( isset( $whitelist[ $extendedClassName ] ) ) {
+		if ( '\\' === $extendedClassName[0] ) {
+			if ( isset( $whitelist[ substr( $extendedClassName, 1 ) ] ) ) {
+				return true;
+			}
+		} elseif ( '' !== $namespace ) {
+			if ( isset( $whitelist[ $namespace . '\\' . $extendedClassName ] ) ) {
+				return true;
+			}
+		} elseif ( isset( $whitelist[ $extendedClassName ] ) ) {
 			return true;
 		}
+
+		/*
+		 * Not examining imported classes via `use` statements as with the variety of syntaxes,
+		 * this would get very complicated.
+		 * After all, users can add an `<exclude-pattern>` for a particular sniff to their
+		 * custom ruleset to selectively exclude the test directory.
+		 */
 
 		return false;
 	}

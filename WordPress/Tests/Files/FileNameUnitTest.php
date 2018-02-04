@@ -62,6 +62,18 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		'test-sample-phpunit6.inc'                   => 0,
 		'test-sample-wpunit.inc'                     => 0,
 		'test-sample-custom-unit.inc'                => 0,
+		'test-sample-namespaced-declaration.1.inc'   => 0,
+		'test-sample-namespaced-declaration.2.inc'   => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-declaration.3.inc'   => 1, // Wrong namespace.
+		'test-sample-namespaced-declaration.4.inc'   => 1, // Non-namespaced vs namespaced.
+		'test-sample-global-namespace-extends.1.inc' => 0, // Prefixed user input.
+		'test-sample-global-namespace-extends.2.inc' => 1, // Non-namespaced vs namespaced.
+		'test-sample-extends-with-use.inc'           => 0,
+		'test-sample-namespaced-extends.1.inc'       => 0,
+		'test-sample-namespaced-extends.2.inc'       => 1, // Wrong namespace.
+		'test-sample-namespaced-extends.3.inc'       => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-extends.4.inc'       => 1, // Non-namespaced vs namespaced.
+		'test-sample-namespaced-extends.5.inc'       => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
