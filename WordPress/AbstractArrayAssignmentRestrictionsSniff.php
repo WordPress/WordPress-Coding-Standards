@@ -164,6 +164,15 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart       = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
 				$valEnd         = $this->phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
+
+				// Step back to the actual value.
+				$anyValidValue = array( T_DOUBLE_QUOTED_STRING, T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_TRUE, T_FALSE, T_CONST );
+				$valTrimmedEnd   = $this->phpcsFile->findPrevious( $anyValidValue, $valEnd - 1, $valStart, false, null, false );
+
+				if ( false !== $valTrimmedEnd ) {
+					$valEnd = $valTrimmedEnd + 1;
+				}
+
 				$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
 				$val            = $this->strip_quotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
