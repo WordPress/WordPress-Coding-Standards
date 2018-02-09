@@ -79,13 +79,13 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		// Outside class scope this basically just means __autoload().
 		if ( 0 === strpos( $functionName, '__' ) ) {
 			$magicPart = strtolower( substr( $functionName, 2 ) );
-			if ( ! isset( $this->magicFunctions[ $magicPart ] ) ) {
-				$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
-				$errorData = array( $functionName );
-				$phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
+			if ( isset( $this->magicFunctions[ $magicPart ] ) ) {
+				return;
 			}
 
-			return;
+			$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+			$errorData = array( $functionName );
+			$phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
 		}
 
 		if ( strtolower( $functionName ) !== $functionName ) {
@@ -145,13 +145,13 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		// Is this a magic method ? I.e. is it prefixed with "__" ?
 		if ( 0 === strpos( $methodName, '__' ) ) {
 			$magicPart = strtolower( substr( $methodName, 2 ) );
-			if ( ! isset( $this->magicMethods[ $magicPart ] ) && ! isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
-				$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
-				$errorData = array( $className . '::' . $methodName );
-				$phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
+			if ( isset( $this->magicMethods[ $magicPart ] ) || isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
+				return;
 			}
 
-			return;
+			$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+			$errorData = array( $className . '::' . $methodName );
+			$phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
 		}
 
 		// Check for all lowercase.
