@@ -391,3 +391,11 @@ else {
 		'<p>The code snippet is simplified for brevity. Please refer to the source of this file on <a href="http://github.com/jrfnl/PHP-cheat-sheet-extended" target="_blank">GitHub</a> for full details on how to use filter_var_array().</p>',
 	),
 );
+
+// Issue #1179.
+b(
+	array(
+		1 => false, // wat
+		2 => false,
+	)
+);

@@ -65,12 +65,12 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP CodeSniffer 2.9.x or 3.x
+* PHP_CodeSniffer 2.9.x or 3.x
 * PHPUnit 4.x, 5.x or 6.x
 
-The WordPress Coding Standards use the PHP CodeSniffer native unit test suite for unit testing the sniffs.
+The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
-Presuming you have installed PHP CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
+Presuming you have installed PHP_CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
 
 N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
 

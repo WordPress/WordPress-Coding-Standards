@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress VIP">
-	<description>WordPress VIP Coding Standards</description>
+	<description>WordPress.com VIP Coding Standards</description>
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
@@ -8,44 +8,32 @@
 
 	<!-- Covers:
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#removing-the-admin-bar
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#direct-database-queries
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#filesystem-writes
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-__file__-for-page-registration
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#uncached-functions
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#flush_rewrite_rules
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#session_start-and-other-session-related-functions
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#functions-that-use-joins-taxonomy-relation-queries-cat-tax-queries-subselects-or-api-calls
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#querying-on-meta_value
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping
 	-->
 	<rule ref="WordPress.VIP"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping -->
 	<!-- https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/ -->
-	<rule ref="WordPress.XSS.EscapeOutput"/>
-	<rule ref="WordPress.CSRF.NonceVerification"/>
+	<rule ref="WordPress.Security.EscapeOutput"/>
+	<rule ref="WordPress.Security.NonceVerification"/>
+
+	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69 -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-instead-of -->
 	<rule ref="WordPress.PHP.StrictComparisons"/>
-
-	<!-- https://vip.wordpress.com/documentation/best-practices/database-queries/ -->
-	<rule ref="WordPress.WP.PreparedSQL"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
 		<properties>
 			<property name="maxPercentage" value="45"/>
 		</properties>
-	</rule>
-
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
-	<rule ref="Squiz.PHP.Eval"/>
-	<rule ref="Squiz.PHP.Eval.Discouraged">
-		<type>error</type>
-		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
@@ -91,5 +79,49 @@
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-theme-constants -->
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration -->
+	<rule ref="WordPress.DB.DirectDatabaseQuery"/>
+	<rule ref="WordPress.DB.DirectDatabaseQuery.SchemaChange">
+		<type>error</type>
+		<message>Attempting a database schema change is highly discouraged.</message>
+	</rule>
+	<rule ref="WordPress.DB.DirectDatabaseQuery.NoCaching">
+		<type>error</type>
+		<message>Usage of a direct database call without caching is prohibited on the VIP platform. Use wp_cache_get / wp_cache_set or wp_cache_delete.</message>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload -->
+	<rule ref="WordPress.DB.SlowDBQuery"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#using-__file__-for-page-registration -->
+	<rule ref="WordPress.Security.PluginMenuSlug"/>
+	<rule ref="WordPress.Security.PluginMenuSlug.Using__FILE__">
+		<type>error</type>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events -->
+	<rule ref="WordPress.WP.CronInterval"/>
+	<rule ref="WordPress.WP.CronInterval.CronSchedulesInterval">
+		<type>error</type>
+		<message>Scheduling crons at %s sec ( less than %s minutes ) is prohibited.</message>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side -->
+	<!-- https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/ -->
+	<rule ref="WordPress.WP.TimezoneChange"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#no-limit-queries -->
+	<rule ref="WordPress.WP.PostsPerPage"/>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_posts_per_page">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_numberposts">
+		<type>error</type>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect -->
+	<rule ref="WordPress.Security.SafeRedirect"/>
 
 </ruleset>

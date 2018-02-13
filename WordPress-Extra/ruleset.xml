@@ -41,9 +41,12 @@
 
 	<!-- And yet more best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1143 -->
-	<rule ref="PEAR.Files.IncludingFile">
-		<exclude name="PEAR.Files.IncludingFile.UseInclude"/>
-		<exclude name="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+	<rule ref="PEAR.Files.IncludingFile"/>
+	<rule ref="PEAR.Files.IncludingFile.UseInclude">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseIncludeOnce">
+		<severity>0</severity>
 	</rule>
 	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
 		<type>warning</type>
@@ -55,9 +58,10 @@
 		<type>warning</type>
 	</rule>
 
-	<!-- This sniff is not refined enough for general use -->
-	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29970107 -->
-	<!--<rule ref="Generic.Formatting.MultipleStatementAlignment"/>-->
+	<!-- Check correct spacing of language constructs. This also ensures that the
+	     above rule for not using brackets with require is fixed correctly.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1153 -->
+	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Hook callbacks may not use all params -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
@@ -100,19 +104,18 @@
 		<severity>5</severity>
 	</rule>
 
-	<rule ref="WordPress.XSS.EscapeOutput"/>
+	<rule ref="WordPress.Security.EscapeOutput"/>
+
+	<!-- Encourage use of wp_safe_redirect() to avoid open redirect vulnerabilities.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1264 -->
+	<rule ref="WordPress.Security.SafeRedirect"/>
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
-	<rule ref="WordPress.CSRF.NonceVerification"/>
+	<rule ref="WordPress.Security.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
-	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
-		<!-- WP core still supports PHP 5.2+  -->
-		<properties>
-			<property name="exclude" value="create_function"/>
-		</properties>
-	</rule>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedFunctions"/>
 	<rule ref="WordPress.WP.DeprecatedClasses"/>
 	<rule ref="WordPress.WP.DeprecatedParameters"/>
@@ -120,29 +123,13 @@
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
-	<rule ref="Squiz.PHP.Eval"/>
-	<rule ref="Squiz.PHP.Eval.Discouraged">
-		<type>error</type>
-		<message>eval() is a security risk so not allowed.</message>
-	</rule>
-
-	<!-- Forbid the use of the `goto` language construct.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1149 -->
-	<!-- Duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1664 -->
-	<rule ref="WordPress.PHP.DiscourageGoto"/>
-	<rule ref="WordPress.PHP.DiscourageGoto.Found">
-		<type>error</type>
-		<message>The "goto" language construct should not be used.</message>
-	</rule>
-
 	<!-- Scripts & style should be enqueued.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
 
 	<!-- Warn against overriding WP global variables.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/26 -->
-	<rule ref="WordPress.Variables.GlobalVariables"/>
+	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
 	<!-- Encourage the use of strict ( === and !== ) comparisons.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->
@@ -176,6 +163,11 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
 	<rule ref="WordPress.Classes.ClassInstantiation"/>
 
+	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1157 -->
+	<rule ref="WordPress.Security.PluginMenuSlug"/>
+	<rule ref="WordPress.WP.CronInterval"/>
+	<rule ref="WordPress.WP.PostsPerPage"/>
+	<rule ref="WordPress.WP.TimezoneChange"/>
 
 	<!--
 	#############################################################################

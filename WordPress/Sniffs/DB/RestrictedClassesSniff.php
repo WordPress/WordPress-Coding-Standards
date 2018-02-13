@@ -45,8 +45,8 @@ class RestrictedClassesSniff extends AbstractClassRestrictionsSniff {
 		return array(
 
 			'mysql' => array(
-				'type'      => 'error',
-				'message'   => 'Accessing the database directly should be avoided. Please use the $wpdb object and associated functions instead. Found: %s.',
+				'type'    => 'error',
+				'message' => 'Accessing the database directly should be avoided. Please use the $wpdb object and associated functions instead. Found: %s.',
 				'classes' => array(
 					'mysqli',
 					'PDO',

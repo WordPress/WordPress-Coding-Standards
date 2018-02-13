@@ -56,6 +56,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Target prefixes after validation.
 	 *
+	 * All prefixes are lowercased for case-insensitive compare.
+	 *
 	 * @since 0.12.0
 	 *
 	 * @var string[]
@@ -89,6 +91,18 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'_REQUEST' => true,
 		'_SERVER'  => true,
 		'_SESSION' => true,
+	);
+
+	/**
+	 * A list of core hooks that are allowed to be called by plugins and themes.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var array
+	 */
+	protected $whitelisted_core_hooks = array(
+		'widget_title'   => true,
+		'add_meta_boxes' => true,
 	);
 
 	/**
@@ -197,7 +211,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$item_name  = '';
-			$error_text = 'Unknown syntax used by';
+			$error_text = 'Unknown syntax used';
 			$error_code = 'NonPrefixedSyntaxFound';
 
 			switch ( $this->tokens[ $stackPtr ]['type'] ) {
@@ -235,14 +249,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
-							if ( class_exists( '\\' . $item_name ) ) {
+							if ( class_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native class.
 								return;
 							}
 							break;
 
 						case 'T_INTERFACE':
-							if ( interface_exists( '\\' . $item_name ) ) {
+							if ( interface_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native interface.
 								return;
 							}
@@ -252,7 +266,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							break;
 
 						case 'T_TRAIT':
-							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name ) ) {
+							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native trait.
 								return;
 							}
@@ -421,10 +435,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	protected function process_variable_assignment( $stackPtr ) {
-
-		// We're only concerned with variables which are being defined.
-		// `is_assigment()` will not recognize property assignments, which is good in this case.
-		if ( false === $this->is_assignment( $stackPtr ) ) {
+		/*
+		 * We're only concerned with variables which are being defined.
+		 * `is_assigment()` will not recognize property assignments, which is good in this case.
+		 * However it will also not recognize $b in `foreach( $a as $b )` as an assignment, so
+		 * we need a separate check for that.
+		 */
+		if ( false === $this->is_assignment( $stackPtr )
+			&& false === $this->is_foreach_as( $stackPtr )
+		) {
 			return;
 		}
 
@@ -480,7 +499,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			// Function parameters do not need to be prefixed.
 			if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
-					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] ) && T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] ) {
+					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
+						&& ( T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
+							|| T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
+					) {
 						return;
 					}
 				}
@@ -570,8 +592,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$is_error     = true;
+		$is_error    = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
+
+		if (
+			'define' !== $matched_content
+			&& isset( $this->whitelisted_core_hooks[ $raw_content ] )
+		) {
+			return;
+		}
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
 			return;
@@ -600,8 +629,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
 				// If the first part of the parameter is a double quoted string, try again with only
 				// the part before the first variable (if any).
-				$exploded                = explode( '$', $first_non_empty_content );
-				$first                   = rtrim( $exploded[0], '{' );
+				$exploded = explode( '$', $first_non_empty_content );
+				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
 					if ( $this->is_prefixed( $first ) === true ) {
 						return;
@@ -645,31 +674,19 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
+	 * @since 1.0.0  Does not require a word seperator anymore after a prefix.
+	 *               This allows for improved code style independent checking,
+	 *               i.e. allows for camelCase naming and the likes.
 	 *
 	 * @param string $name Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix + a separator.
+	 * @return bool True when the name is the prefix or starts with the prefix.
 	 *              False otherwise.
 	 */
 	private function is_prefixed( $name ) {
-
 		foreach ( $this->validated_prefixes as $prefix ) {
-			if ( strtolower( $name ) === $prefix ) {
-				// Ok, prefix *is* the hook/constant name.
+			if ( stripos( $name, $prefix ) === 0 ) {
 				return true;
-
-			} else {
-				$prefix_found = stripos( $name, $prefix . '_' );
-
-				if ( 0 === $prefix_found ) {
-					// Ok, prefix found at start of hook/constant name.
-					return true;
-				}
-
-				if ( preg_match( '`^' . preg_quote( $prefix, '`' ) . '\W`i', $name ) === 1 ) {
-					// Ok, prefix with other non-word character found at start of hook/constant name.
-					return true;
-				}
 			}
 		}
 
@@ -695,6 +712,35 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		return $this->is_prefixed( $name );
+	}
+
+	/**
+	 * Determine if a variable is the `as $var` part of a foreach condition.
+	 *
+	 * @param int $stackPtr Pointer to the variable.
+	 *
+	 * @return bool True if it is. False otherwise.
+	 */
+	private function is_foreach_as( $stackPtr ) {
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false === $prev || T_AS !== $this->tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
+			return false;
+		}
+
+		if ( T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -738,6 +784,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					array( $prefix )
 				);
 				unset( $this->prefixes[ $key ] );
+				continue;
 			}
 
 			// Lowercase the prefix to allow for direct compare.

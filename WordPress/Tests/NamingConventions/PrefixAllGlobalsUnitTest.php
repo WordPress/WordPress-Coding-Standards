@@ -33,7 +33,6 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 			case 'PrefixAllGlobalsUnitTest.inc':
 				return array(
 					1   => 2, // 2 x error for incorrect prefix passed.
-					10  => 1,
 					18  => 1,
 					21  => 1,
 					22  => 1,
@@ -51,13 +50,17 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					39  => 1,
 					40  => 1,
 					90  => 1,
-					91  => 1,
 					// Backfills.
 					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
 					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
 					234 => ( defined( '\E_DEPRECATED' ) ) ? 0 : 1,
 					238 => ( class_exists( '\IntlTimeZone' ) ) ? 0 : 1,
-					318  => 1,
+					318 => 1,
+					339 => 1,
+					343 => 1,
+					346 => 1,
+					349 => 1,
+					354 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.1.inc':

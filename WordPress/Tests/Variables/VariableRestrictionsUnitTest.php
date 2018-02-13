@@ -79,8 +79,8 @@ class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			5 => 1,
+			3  => 1,
+			5  => 1,
 			11 => 1,
 			15 => 1,
 			17 => 1,

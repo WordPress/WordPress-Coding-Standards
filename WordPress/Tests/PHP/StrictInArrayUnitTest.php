@@ -39,9 +39,9 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			5 => 1,
-			6 => 1,
-			7 => 1,
+			5  => 1,
+			6  => 1,
+			7  => 1,
 			23 => 1,
 			24 => 1,
 			25 => 1,

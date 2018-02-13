@@ -121,9 +121,9 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 		if ( in_array( $token['code'], array( T_NEW, T_EXTENDS, T_IMPLEMENTS ), true ) ) {
 			if ( T_NEW === $token['code'] ) {
-				$nameEnd   = ( $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS, T_WHITESPACE, T_SEMICOLON, T_OBJECT_OPERATOR ), ( $stackPtr + 2 ) ) - 1 );
+				$nameEnd = ( $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS, T_WHITESPACE, T_SEMICOLON, T_OBJECT_OPERATOR ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
-				$nameEnd   = ( $this->phpcsFile->findNext( array( T_CLOSE_CURLY_BRACKET, T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
+				$nameEnd = ( $this->phpcsFile->findNext( array( T_CLOSE_CURLY_BRACKET, T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
 			}
 
 			$length    = ( $nameEnd - ( $stackPtr + 1 ) );
@@ -137,7 +137,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		if ( T_DOUBLE_COLON === $token['code'] ) {
 			$nameEnd   = $this->phpcsFile->findPrevious( T_STRING, ( $stackPtr - 1 ) );
 			$nameStart = ( $this->phpcsFile->findPrevious( array( T_STRING, T_NS_SEPARATOR, T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
-			$length    = ( $nameEnd - ( $nameStart - 1) );
+			$length    = ( $nameEnd - ( $nameStart - 1 ) );
 			$classname = $this->phpcsFile->getTokensAsString( $nameStart, $length );
 
 			if ( T_NS_SEPARATOR !== $this->tokens[ $nameStart ]['code'] ) {

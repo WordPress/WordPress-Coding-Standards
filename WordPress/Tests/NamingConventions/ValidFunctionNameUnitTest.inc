@@ -76,17 +76,17 @@ class My_Soap extends SoapClient {
 }
 
 class My_Soap {
-	public function __doRequest() {} // Bad.
-	private function __getFunctions() {} // Bad.
-	protected function __getLastRequest() {} // Bad.
-	public function __getLastRequestHeaders() {} // Bad.
-	public function __getLastResponse() {} // Bad.
-	public function __getLastResponseHeaders() {} // Bad.
-	public function __getTypes() {} // Bad.
-	public function __setCookie() {} // Bad.
-	public function __setLocation() {} // Bad.
-	public function __setSoapHeaders() {} // Bad.
-	public function __soapCall() {} // Bad.
+	public function __doRequest() {} // Bad x 2.
+	private function __getFunctions() {} // Bad x 2.
+	protected function __getLastRequest() {} // Bad x 2.
+	public function __getLastRequestHeaders() {} // Bad x 2.
+	public function __getLastResponse() {} // Bad x 2.
+	public function __getLastResponseHeaders() {} // Bad x 2.
+	public function __getTypes() {} // Bad x 2.
+	public function __setCookie() {} // Bad x 2.
+	public function __setLocation() {} // Bad x 2.
+	public function __setSoapHeaders() {} // Bad x 2.
+	public function __soapCall() {} // Bad x 2.
 }
 
 class My_Soap extends somethingElse {
@@ -102,3 +102,5 @@ class My_Soap extends somethingElse {
 	public function __setSoapHeaders() {} // Ok.
 	public function __soapCall() {} // Ok.
 }
+
+function __MyTemplateTags() {} // Bad x 2.

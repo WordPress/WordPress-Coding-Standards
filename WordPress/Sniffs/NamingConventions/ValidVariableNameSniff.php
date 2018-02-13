@@ -59,13 +59,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @var array
 	 */
 	protected $wordpress_mixed_case_vars = array(
-		'EZSQL_ERROR' => true,
-		'is_IE'       => true,
-		'is_IIS'      => true,
-		'is_macIE'    => true,
-		'is_NS4'      => true,
-		'is_winIE'    => true,
-		'PHP_SELF'    => true,
+		'EZSQL_ERROR'       => true,
+		'GETID3_ERRORARRAY' => true,
+		'is_IE'             => true,
+		'is_IIS'            => true,
+		'is_macIE'          => true,
+		'is_NS4'            => true,
+		'is_winIE'          => true,
+		'PHP_SELF'          => true,
+		'post_ID'           => true,
+		'user_ID'           => true,
 	);
 
 	/**
@@ -199,7 +202,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			}
 
 			if ( isset( $error, $error_name ) ) {
-				$data  = array( $original_var_name );
+				$data = array( $original_var_name );
 				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
 			}
 		}
@@ -324,6 +327,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				$customProperties,
 				$this->whitelisted_mixed_case_member_var_names
 			);
+
 			$this->addedCustomProperties['properties'] = $this->customPropertiesWhitelist;
 			$this->addedCustomProperties['variables']  = $this->customVariablesWhitelist;
 		}
