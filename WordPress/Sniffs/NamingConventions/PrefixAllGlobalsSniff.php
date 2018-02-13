@@ -249,14 +249,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
-							if ( class_exists( '\\' . $item_name ) ) {
+							if ( class_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native class.
 								return;
 							}
 							break;
 
 						case 'T_INTERFACE':
-							if ( interface_exists( '\\' . $item_name ) ) {
+							if ( interface_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native interface.
 								return;
 							}
@@ -266,7 +266,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							break;
 
 						case 'T_TRAIT':
-							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name ) ) {
+							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native trait.
 								return;
 							}
