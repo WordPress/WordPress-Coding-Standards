@@ -314,7 +314,7 @@ comments_popup_script();
 get_comments_popup_template();
 get_currentuserinfo();
 is_comments_popup();
-popuplinks();
+use function popuplinks as something_else; // Related to issue #1306.
 
 /*
  * Warning.
