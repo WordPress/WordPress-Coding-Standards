@@ -27,9 +27,7 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
-			17 => 1,
-		);
+		return array();
 	}
 
 	/**
