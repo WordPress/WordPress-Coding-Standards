@@ -10,6 +10,7 @@
 namespace WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the PrecisionAlignment sniff.
@@ -55,6 +56,31 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 	}
 
 	/**
+	 * Get a list of all test files to check.
+	 *
+	 * @param string $testFileBase The base path that the unit tests files will have.
+	 *
+	 * @return string[]
+	 */
+	protected function getTestFiles( $testFileBase ) {
+
+		$testFiles = parent::getTestFiles( $testFileBase );
+
+		/*
+		 * Testing whether the PHPCS annotations are properly respected is only useful on
+		 * PHPCS versions which support the PHPCS annotations.
+		 */
+		if ( version_compare( PHPCSHelper::get_version(), '3.2.0', '<' ) === true ) {
+			$key = array_search( $testFileBase . '5.inc', $testFiles, true );
+			if ( false !== $key ) {
+				unset( $testFiles[ $key ] );
+			}
+		}
+
+		return $testFiles;
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @return array <int line number> => <int number of errors>
@@ -90,6 +116,36 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 					4 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
 					5 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
 				);
+
+			case 'PrecisionAlignmentUnitTest.5.inc':
+				$warnings = array(
+					9  => 1,
+					14 => 1,
+					19 => 1,
+					24 => 0,
+					29 => 0,
+					34 => 1,
+					39 => 1,
+					44 => 1,
+					54 => 0,
+					56 => 0,
+					58 => 0,
+				);
+
+				/*
+				 * The PHPCS 3.2.x versions contained a bug in the selective disable/enable logic
+				 * compared to the intended behaviour as documented, which prevented the particular
+				 * messages being tested on these lines from being thrown. See upstream issue #1986.
+				 */
+				if ( version_compare( PHPCSHelper::get_version(), '3.3.0', '>=' ) === true ) {
+					$warnings[24] = 1;
+					$warnings[29] = 1;
+					$warnings[54] = 1;
+					$warnings[56] = 1;
+					$warnings[58] = 1;
+				}
+
+				return $warnings;
 
 			case 'PrecisionAlignmentUnitTest.css':
 				return array(
