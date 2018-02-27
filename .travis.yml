@@ -100,7 +100,6 @@ script:
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml"); fi
-    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-VIP/ruleset.xml <(xmllint --format "./WordPress-VIP/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample"); fi
     # Validate the composer.json file.
     # @link https://getcomposer.org/doc/03-cli.md#validate
