@@ -144,6 +144,31 @@ class FileNameSniff extends Sniff {
 			return;
 		}
 
+		// Respect phpcs:disable comments as long as they are not accompanied by an enable (PHPCS 3.2+).
+		if ( defined( 'T_PHPCS_DISABLE' ) && defined( 'T_PHPCS_ENABLE' ) ) {
+			$i = -1;
+			while ( $i = $this->phpcsFile->findNext( T_PHPCS_DISABLE, ( $i + 1 ) ) ) {
+				if ( empty( $this->tokens[ $i ]['sniffCodes'] )
+					|| isset( $this->tokens[ $i ]['sniffCodes']['WordPress'] )
+					|| isset( $this->tokens[ $i ]['sniffCodes']['WordPress.Files'] )
+					|| isset( $this->tokens[ $i ]['sniffCodes']['WordPress.Files.FileName'] )
+				) {
+					do {
+						$i = $this->phpcsFile->findNext( T_PHPCS_ENABLE, ( $i + 1 ) );
+					} while ( false !== $i
+						&& ! empty( $this->tokens[ $i ]['sniffCodes'] )
+						&& ! isset( $this->tokens[ $i ]['sniffCodes']['WordPress'] )
+						&& ! isset( $this->tokens[ $i ]['sniffCodes']['WordPress.Files'] )
+						&& ! isset( $this->tokens[ $i ]['sniffCodes']['WordPress.Files.FileName'] ) );
+
+					if ( false === $i ) {
+						// The entire (rest of the) file is disabled.
+						return;
+					}
+				}
+			}
+		}
+
 		$fileName = basename( $file );
 		$expected = strtolower( str_replace( '_', '-', $fileName ) );
 
