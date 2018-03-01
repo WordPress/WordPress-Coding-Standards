@@ -257,3 +257,9 @@ if ( $foo ) {
 		// Something
 	} // End try/catch <- Bad: "blank line after".
 }
+
+// Issue 1202.
+function hi(): array
+{
+    return [];
+}

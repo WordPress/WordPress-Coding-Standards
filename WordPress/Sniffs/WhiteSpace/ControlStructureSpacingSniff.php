@@ -360,7 +360,10 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 			}
 
-			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
+			// Ignore this for function declarations. Handled by the OpeningFunctionBraceKrnighanRitchie sniff.
+			if ( T_FUNCTION !== $this->tokens[ $stackPtr ]['code']
+				&& T_CLOSURE !== $this->tokens[ $stackPtr ]['code']
+				&& isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
 				&& ( isset( $scopeOpener )
 				&& $this->tokens[ $parenthesisCloser ]['line'] !== $this->tokens[ $scopeOpener ]['line'] )
 			) {
