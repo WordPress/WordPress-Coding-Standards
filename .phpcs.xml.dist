@@ -2,6 +2,8 @@
 <ruleset name="WordPress Coding Standards">
 	<description>The Coding standard for the WordPress Coding Standards itself.</description>
 
+	<file>.</file>
+
 	<arg value="sp"/>
 	<arg name="extensions" value="php"/>
 
