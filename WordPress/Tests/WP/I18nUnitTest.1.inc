@@ -164,5 +164,12 @@ __( 'String default text domain.' ); // Ok because default domain is 'default' a
 $mo->translate( $string ); // OK, not a function, but a method call.
 Something\esc_html_e( $string ); // OK, not the WP function, but namespaced function call.
 
+// Issue #719.
+class Foo {
+	public function translate( $key ) {
+		return '';
+	}
+}
+
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
