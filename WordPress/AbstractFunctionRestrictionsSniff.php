@@ -217,6 +217,8 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				// Skip sniffing if calling a same-named method, or on function definitions.
 				$skipped = array(
 					T_FUNCTION        => T_FUNCTION,
+					T_CLASS           => T_CLASS,
+					T_AS              => T_AS, // Use declaration alias.
 					T_DOUBLE_COLON    => T_DOUBLE_COLON,
 					T_OBJECT_OPERATOR => T_OBJECT_OPERATOR,
 				);
