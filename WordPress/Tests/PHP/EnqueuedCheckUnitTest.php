@@ -16,8 +16,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.9.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   1.0.0
  */
 class EnqueuedCheckUnitTest extends AbstractSniffUnitTest {
 

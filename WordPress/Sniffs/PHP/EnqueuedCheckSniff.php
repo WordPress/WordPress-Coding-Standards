@@ -14,58 +14,39 @@ use WordPress\AbstractFunctionParameterSniff;
 /**
  * Based off the StrictInArraySniff.php Sniff, THis checks the Enqueued 4th Parameter to make sure a Version is available.
  * The Enqueued functions are:
- * wp_register_script
- * wp_enqueue_script
- * wp_register_style
- * wp_enqueue_style
+ * wp_register_script()
+ * wp_enqueue_script()
+ * wp_register_style()
+ * wp_enqueue_style()
+ * IF a source ($src) value is passed, then version ($ver) needs to have a value.
+ * Additionally, IF a source ($src) value is passed a check for In footer ($in_footer) 
+ * to alert the user if the value isnt True
  *
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.15.0 This new sniff will check for a version in an Enqueued WP function
+ * @since   1.0.0
  */
 class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
 	 *
-	 * @since 0.11.0
+	 * @since 1.0.0
 	 * @var string
 	 */
 	protected $group_name = 'Enqueued';
 
 	/**
-	 * List of array functions to which a $strict parameter can be passed.
-	 *
-	 * The $strict parameter is the third and last parameter for each of these functions.
-	 *
-	 * The array_keys() function only requires the $strict parameter when the optional
-	 * second parameter $search has been set.
-	 *
-	 * @link http://php.net/in-array
-	 * @link http://php.net/array-search
-	 * @link http://php.net/array-keys
-	 *
-	 * @since 0.10.0
-	 * @since 0.11.0 Renamed from $array_functions to $target_functions.
-	 *
-	 * @var array <string function_name> => <bool always needed ?>
-	 */
-	
-	/**
 	 * List of Enqueued functions that need to be check to make sure
-	 * IF a source ($src) value is passed, then version ($ver) needs to have a value.
-	 * Additionally, IF a source ($src) value is passed a check for In footer ($in_footer) 
-	 * to alert the user if the value isnt True
 	 * 
 	 * @link https://developer.wordpress.org/reference/functions/wp_register_script/
 	 * @link https://developer.wordpress.org/reference/functions/wp_enqueue_script/
 	 * @link https://developer.wordpress.org/reference/functions/wp_register_style/
 	 * @link https://developer.wordpress.org/reference/functions/wp_enqueue_style/
 	 *
-	 * @since 0.10.0
-	 * @since 0.11.0 Renamed from $array_functions to $target_functions.
+	 * @since 1.0.0
 	 *
 	 * @var array <string function_name> => <bool always needed ?>
 	 */
@@ -79,7 +60,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the parameters of a matched function.
 	 *
-	 * @since 0.11.0
+	 * @since 1.0.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.
@@ -112,7 +93,6 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		 * Check to make sure that $in_footer is set to true
 		 * Otherwise it will warn the user to make sure if its correct
 		 */
-		// print_r($parameters);
 		if ( isset( $parameters[5] ) ) {
 			
 			/*
@@ -123,7 +103,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 				case "wp_register_script":
 				case "wp_enqueue_script":
 					if ('true' !== $parameters[5]['raw']) {
-						$this->phpcsFile->addWarning( 'In Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
+						$this->phpcsFile->addWarning( 'If the Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
 						return;
 					}
 			}
