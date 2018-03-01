@@ -18,7 +18,10 @@
 		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
 	</rule>
 
-	<rule ref="WordPress-Docs"/>
+	<rule ref="WordPress-Docs">
+		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1240#issuecomment-348019118 -->
+		<exclude name="WordPress.Commenting.FunctionComment.NoReturnVoid"/>
+	</rule>
 
 	<!-- Enforce PSR1 compatible namespaces. -->
 	<rule ref="PSR1.Classes.ClassDeclaration"/>
