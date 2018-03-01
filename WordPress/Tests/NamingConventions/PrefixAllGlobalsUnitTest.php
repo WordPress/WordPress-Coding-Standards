@@ -67,10 +67,8 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 				// Namespaced - all OK, fall through to the default case.
 			default:
 				return array();
-
-		} // End switch().
-
-	} // end getErrorList()
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -121,9 +119,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
+		}
 	}
 
 } // End class.
