@@ -106,6 +106,58 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
+	 * A list of core constants that are allowed to be defined by plugins and themes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/default-constants.php#L0}
+	 * The constants are listed in the order they are found in the source file
+	 * to make life easier for future updates.
+	 * Only overrulable constants are listed, i.e. those defined within core within
+	 * a `if ( ! defined() ) {}` wrapper.
+	 *
+	 * @var array
+	 */
+	protected $whitelisted_core_constants = array(
+		'WP_MEMORY_LIMIT'      => true,
+		'WP_MAX_MEMORY_LIMIT'  => true,
+		'WP_CONTENT_DIR'       => true,
+		'WP_DEBUG'             => true,
+		'WP_DEBUG_DISPLAY'     => true,
+		'WP_DEBUG_LOG'         => true,
+		'WP_CACHE'             => true,
+		'SCRIPT_DEBUG'         => true,
+		'MEDIA_TRASH'          => true,
+		'SHORTINIT'            => true,
+		'WP_CONTENT_URL'       => true,
+		'WP_PLUGIN_DIR'        => true,
+		'WP_PLUGIN_URL'        => true,
+		'PLUGINDIR'            => true,
+		'WPMU_PLUGIN_DIR'      => true,
+		'WPMU_PLUGIN_URL'      => true,
+		'MUPLUGINDIR'          => true,
+		'COOKIEHASH'           => true,
+		'USER_COOKIE'          => true,
+		'PASS_COOKIE'          => true,
+		'AUTH_COOKIE'          => true,
+		'SECURE_AUTH_COOKIE'   => true,
+		'LOGGED_IN_COOKIE'     => true,
+		'TEST_COOKIE'          => true,
+		'COOKIEPATH'           => true,
+		'SITECOOKIEPATH'       => true,
+		'ADMIN_COOKIE_PATH'    => true,
+		'PLUGINS_COOKIE_PATH'  => true,
+		'COOKIE_DOMAIN'        => true,
+		'FORCE_SSL_ADMIN'      => true,
+		'FORCE_SSL_LOGIN'      => true,
+		'AUTOSAVE_INTERVAL'    => true,
+		'EMPTY_TRASH_DAYS'     => true,
+		'WP_POST_REVISIONS'    => true,
+		'WP_CRON_LOCK_TIMEOUT' => true,
+		'WP_DEFAULT_THEME'     => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.12.0
@@ -297,6 +349,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					$item_name = $this->tokens[ $constant_name_ptr ]['content'];
 					if ( defined( '\\' . $item_name ) ) {
 						// Backfill for PHP native constant.
+						return;
+					}
+
+					if ( isset( $this->whitelisted_core_constants[ $item_name ] ) ) {
+						// Defining a WP Core constant intended for overruling.
 						return;
 					}
 
@@ -595,9 +652,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$is_error    = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
 
-		if (
-			'define' !== $matched_content
-			&& isset( $this->whitelisted_core_hooks[ $raw_content ] )
+		if ( ( 'define' !== $matched_content
+			&& isset( $this->whitelisted_core_hooks[ $raw_content ] ) )
+			|| ( 'define' === $matched_content
+			&& isset( $this->whitelisted_core_constants[ $raw_content ] ) )
 		) {
 			return;
 		}

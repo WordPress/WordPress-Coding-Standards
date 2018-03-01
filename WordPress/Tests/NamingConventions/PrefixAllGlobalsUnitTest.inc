@@ -370,4 +370,8 @@ function acronymFunction() {
 	}
 }
 
+// Issue #1311 - allow for overrulable WP Core constants.
+define( 'FORCE_SSL_ADMIN', true );
+const SCRIPT_DEBUG = $develop_src;
+
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
