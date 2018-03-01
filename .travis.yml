@@ -26,8 +26,8 @@ env:
 matrix:
   fast_finish: true
   include:
-    # Run PHPCS against WPCS. I just picked to run it against 7.0.
-    - php: 7.0
+    # Run PHPCS against WPCS. I just picked to run it against 7.2.
+    - php: 7.2
       env: PHPCS_BRANCH=master SNIFF=1
       addons:
         apt:
