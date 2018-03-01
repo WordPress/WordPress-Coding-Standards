@@ -26,20 +26,13 @@ env:
 matrix:
   fast_finish: true
   include:
-    # Run PHPCS against WPCS. I just picked to run it against 7.0.
-    - php: 7.0
+    # Run PHPCS against WPCS. I just picked to run it against 7.2.
+    - php: 7.2
       env: PHPCS_BRANCH=master SNIFF=1
       addons:
         apt:
           packages:
             - libxml2-utils
-
-    # Run against HHVM.
-    - php: hhvm
-      sudo: required
-      dist: trusty
-      group: edge
-      env: PHPCS_BRANCH=master LINT=1
 
     # Test PHP 5.3 only against PHPCS 2.x as PHPCS 3.x has a minimum requirement of PHP 5.4.
     - php: 5.3
@@ -53,7 +46,6 @@ matrix:
   allow_failures:
     # Allow failures for unstable builds.
     - php: nightly
-    - php: hhvm
 
 before_install:
     # Speed up build time by disabling Xdebug.
@@ -66,9 +58,9 @@ before_install:
     - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == master ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_BIN --config-set installed_paths $(pwd)
-    # Download PHPUnit 5.x for builds on PHP 7, nightly and HHVM as the PHPCS
+    # Download PHPUnit 5.x for builds on PHP 7 and nightly as the PHPCS
     # test suite is currently not compatible with PHPUnit 6.x.
-    # Fixed at a very specific PHPUnit version which is also compatible with HHVM.
+    # Fixed at a very specific PHPUnit version.
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then wget -P $PHPUNIT_DIR https://phar.phpunit.de/phpunit-5.7.17.phar && chmod +x $PHPUNIT_DIR/phpunit-5.7.17.phar; fi
     # Selectively adjust the ini values for the build image to test ini value dependent sniff features.
     - if [[ "$SHORT_OPEN_TAGS" == "true" ]]; then echo "short_open_tag = On" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
@@ -90,7 +82,7 @@ script:
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
-    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_BIN . --standard=./bin/phpcs.xml --runtime-set ignore_warnings_on_exit 1; fi
+    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_BIN --runtime-set ignore_warnings_on_exit 1; fi
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
     - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi

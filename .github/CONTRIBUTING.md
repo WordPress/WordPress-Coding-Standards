@@ -207,4 +207,4 @@ The `--sniffs=...` directive limits the output to the sniff you are testing.
 
 ## Code Standards for this project
 
-The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/bin/phpcs.xml`.
+The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/.phpcs.xml.dist`.
