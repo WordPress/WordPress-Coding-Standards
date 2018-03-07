@@ -12,7 +12,7 @@ namespace WordPress\Tests\PHP;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the FunctionEnqueued sniff.
+ * Unit test class for the EnqueuedCheck sniff.
  *
  * @package WPCS\WordPressCodingStandards
  *
