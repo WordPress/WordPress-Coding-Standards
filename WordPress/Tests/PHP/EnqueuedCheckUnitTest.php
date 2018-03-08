@@ -27,10 +27,10 @@ class EnqueuedCheckUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			5 => 1,
-			9 => 1,
+			5  => 1,
+			9  => 1,
 			12 => 1,
-			15 => 1
+			15 => 1,
 		);
 	}
 
@@ -41,8 +41,8 @@ class EnqueuedCheckUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			4  => 1,
-			8  => 1,
+			4 => 1,
+			8 => 1,
 		);
 	}
 
