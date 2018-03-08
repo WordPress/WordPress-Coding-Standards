@@ -19,7 +19,7 @@ use WordPress\AbstractFunctionParameterSniff;
  * wp_register_style()
  * wp_enqueue_style()
  * IF a source ($src) value is passed, then version ($ver) needs to have a value.
- * Additionally, IF a source ($src) value is passed a check for In footer ($in_footer) 
+ * Additionally, IF a source ($src) value is passed a check for In footer ($in_footer)
  * to alert the user if the value isnt True
  *
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146
@@ -40,7 +40,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * List of Enqueued functions that need to be check to make sure
-	 * 
+	 *
 	 * @link https://developer.wordpress.org/reference/functions/wp_register_script/
 	 * @link https://developer.wordpress.org/reference/functions/wp_enqueue_script/
 	 * @link https://developer.wordpress.org/reference/functions/wp_register_style/
@@ -54,7 +54,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		'wp_register_script' => true,
 		'wp_enqueue_script'  => true,
 		'wp_register_style'  => true,
-		'wp_enqueue_style'   => true
+		'wp_enqueue_style'   => true,
 	);
 
 	/**
@@ -71,9 +71,9 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		//Check to see IF a source ($src) is specified
+		// Check to see IF a source ($src) is specified.
 		if ( ! isset( $parameters[2] ) ) {
-		    return;
+			return;
 		}
 
 		/*
@@ -82,7 +82,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		 * Check to make sure a Version ($ver) is set
 		 * Otherwise it will Show an error to add a Src (url) to the Enqueued function
 		 */
-		if ( false === isset( $parameters[4] ) || !$parameters[4]['raw'] ) {
+		if ( false === isset( $parameters[4] ) || ! $parameters[4]['raw'] ) {
 			$this->phpcsFile->addError( 'No Version found for %s; Please supply a value for the fourth argument', $stackPtr, 'MissingVersion', array( $matched_content ) );
 			return;
 		}
@@ -94,15 +94,14 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		 * Otherwise it will warn the user to make sure if its correct
 		 */
 		if ( isset( $parameters[5] ) ) {
-			
 			/*
 			 * Only wp_register_script and wp_enqueue_script need this check
 			 * As it is not available to wp_register_style and wp_enqueue_style
 			 */
-			switch ($matched_content) {
-				case "wp_register_script":
-				case "wp_enqueue_script":
-					if ('true' !== $parameters[5]['raw']) {
+			switch ( $matched_content ) {
+				case 'wp_register_script':
+				case 'wp_enqueue_script':
+					if ( 'true' !== $parameters[5]['raw'] ) {
 						$this->phpcsFile->addWarning( 'If the Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
 						return;
 					}
