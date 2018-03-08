@@ -1,8 +1,8 @@
 <?php
 
 wp_register_script( 'someScript-js', 'https://domain.com/someScript.js' , array( 'jquery' ), '1.1.1', true ); // Ok.
-wp_register_script( 'someScript-js', 'https://domain.com/someScript.js' , array( 'jquery' ), '1.1.1' ); // Error - missing $in_footer.
 wp_register_script( 'someScript-js', 'https://domain.com/someScript.js' , array( 'jquery' ), '1.1.1', $in_footer ); // Warning - $in_footer is not a boolean
+wp_register_script( 'someScript-js', 'https://domain.com/someScript.js' , array( 'jquery' ), '1.1.1' ); // Error - missing $in_footer.
 
 wp_enqueue_script( 'script-name', 'https://domain.com/someScript.js', false, '1.0.0', true ); // Ok.
 wp_enqueue_script( 'script-name', 'https://domain.com/someScript.js', false, '1.0.0', false ); // Warning.
