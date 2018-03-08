@@ -12,14 +12,14 @@ namespace WordPress\Sniffs\PHP;
 use WordPress\AbstractFunctionParameterSniff;
 
 /**
- * Based off the StrictInArraySniff.php Sniff, THis checks the Enqueued 4th Parameter to make sure a Version is available.
+ * Based off the StrictInArraySniff.php sniff, this checks the enqueued 4th parameter to make sure a version is available.
  * The Enqueued functions are:
  * wp_register_script()
  * wp_enqueue_script()
  * wp_register_style()
  * wp_enqueue_style()
- * IF a source ($src) value is passed, then version ($ver) needs to have a value.
- * Additionally, IF a source ($src) value is passed a check for In footer ($in_footer)
+ * If a source ($src) value is passed, then version ($ver) needs to have a value.
+ * Additionally, If a source ($src) value is passed a check for in footer ($in_footer)
  * to alert the user if the value isnt True
  *
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146
@@ -39,7 +39,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 	protected $group_name = 'Enqueued';
 
 	/**
-	 * List of Enqueued functions that need to be check to make sure
+	 * List of enqueued functions that need to be check to make sure
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/wp_register_script/
 	 * @link https://developer.wordpress.org/reference/functions/wp_enqueue_script/
@@ -71,7 +71,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		// Check to see IF a source ($src) is specified.
+		// Check to see if a source ($src) is specified.
 		if ( ! isset( $parameters[2] ) ) {
 			return;
 		}
@@ -80,7 +80,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		 * Version Check
 		 *
 		 * Check to make sure a Version ($ver) is set
-		 * Otherwise it will Show an error to add a Src (url) to the Enqueued function
+		 * Otherwise it will Show an error to add a src (url) to the enqueued function
 		 */
 		if ( false === isset( $parameters[4] ) || ! $parameters[4]['raw'] ) {
 			$this->phpcsFile->addError( 'No Version found for %s; Please supply a value for the fourth argument', $stackPtr, 'MissingVersion', array( $matched_content ) );
