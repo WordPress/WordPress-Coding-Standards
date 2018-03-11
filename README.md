@@ -16,10 +16,7 @@
     + [Recommended additional rulesets](#recommended-additional-rulesets)
 * [How to use](#how-to-use)
     + [Command line](#command-line)
-    + [PhpStorm](#phpstorm)
-    + [Sublime Text](#sublime-text)
-    + [Atom](#atom)
-    + [Visual Studio](#visual-studio)
+    + [Using PHPCS and WPCS from within your IDE](#using-phpcs-and-wpcs-from-within-your-ide)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
     + [Travis CI](#travis-ci)
 * [Fixing errors or whitelisting them](#fixing-errors-or-whitelisting-them)
@@ -42,7 +39,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.3 or higher and [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
+The WordPress Coding Standards require PHP 5.3 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
 As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
 
 ### Composer
@@ -66,7 +63,7 @@ When installing the WordPress Coding Standards as a dependency in a larger proje
 
 There are two actively maintained Composer plugins which can handle the registration of standards with PHP_CodeSniffer for you:
 * [composer-phpcodesniffer-standards-plugin](https://github.com/higidi/composer-phpcodesniffer-standards-plugin)
-* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer)
+* [phpcodesniffer-composer-installer](https://github.com/DealerDirect/phpcodesniffer-composer-installer):"^0.4.3"
 
 It is strongly suggested to `require` one of these plugins in your project to handle the registration of external standards with PHPCS for you.
 
@@ -74,7 +71,7 @@ It is strongly suggested to `require` one of these plugins in your project to ha
 
 1. Install PHP_CodeSniffer by following its [installation instructions](https://github.com/squizlabs/PHP_CodeSniffer#installation) (via Composer, Phar file, PEAR, or Git checkout).
 
-   Do ensure that PHP_CodeSniffer's version matches our requirements(#requirements), if, for example, you're using VVV(https://github.com/Varying-Vagrant-Vagrants/VVV).
+   Do ensure that PHP_CodeSniffer's version matches our [requirements](#requirements), if, for example, you're using [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV).
 
 2. Clone the WordPress standards repository:
 
@@ -110,7 +107,7 @@ You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
 ### Standards subsets
 
-The project encompasses a super-set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress VIP coding requirements.
+The project encompasses a super-set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress.com VIP coding requirements.
 
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
@@ -119,12 +116,12 @@ You can use the following as standard names when invoking `phpcs` to select snif
   - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
-  - `WordPress-VIP` - extended ruleset for [WordPress VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+  - `WordPress-VIP` - extended ruleset for [WordPress.com VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
     - includes `WordPress-Core`
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
@@ -183,44 +180,13 @@ Will result in following output:
 	PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
 	--------------------------------------------------------------------------------
 
-### PhpStorm
+### Using PHPCS and WPCS from within your IDE
 
-Please see "[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)" in the PhpStorm documentation.
-
-### Sublime Text
-
-##### sublime-phpcs package
-Install the [sublime-phpcs package](https://github.com/benmatselby/sublime-phpcs), then use the "Switch coding standard" command in the Command Palette to switch between coding standards.
-
-##### SublimeLinter-phpcs
-sublime-phpcs is insanely powerful, but if you'd prefer automatic linting, [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/) can do that.
-
-- Install PHP Sniffer and WordPress Coding Standards per above.
-- Use [Package Control](https://packagecontrol.io/) to search for and install [SublimeLinter](http://www.sublimelinter.com) then [SublimeLinter-phpcs](https://github.com/SublimeLinter/SublimeLinter-phpcs/).
-- From the command palette, select `Preferences: SublimeLinter Settings - User` and change `user.linters.phpcs.standard` to the phpcs standard of your choice (e.g. `WordPress`, `WordPress-VIP`, etc.).
-
-![SublimeLinter-phpcs user settings](https://cloud.githubusercontent.com/assets/224636/12946250/068776ba-cfc1-11e5-816b-109e4e32d21b.png)
-
-- You may need to restart Sublime for these settings to take effect. Error messages appear in the bottom of the editor.
-
-![SublimeLinter-phpcs linting](https://cloud.githubusercontent.com/assets/224636/12946326/75986c3a-cfc1-11e5-8537-1243554bbab6.png)
-
-![SublimeLinter-phpcs error](https://cloud.githubusercontent.com/assets/224636/12946335/8bee5a30-cfc1-11e5-8b5f-b10e8e4a4909.png)
-
-### Atom
-
-- Install PHP Sniffer and WordPress Coding Standards per above.
-- Install [linter-phpcs](https://atom.io/packages/linter-phpcs) via Atom's package manager.
-- Run `which phpcs` to get your `phpcs` executable path.
-- Enter your `phpcs` executable path and one of the coding standards specified above (e.g. `WordPress`, `WordPress-VIP`, etc.).
-
-![Atom Linter WordPress Coding Standards configuration](https://cloud.githubusercontent.com/assets/224636/12740504/ce4e97b8-c941-11e5-8d83-c77a2470d58e.png)
-
-![Atom Linter in action using WordPress Coding Standards](https://cloud.githubusercontent.com/assets/224636/12740542/131c5894-c942-11e5-9e31-5e020c993224.png)
-
-### Visual Studio
-
-Please see "[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)", a tutorial by Tom McFarlin.
+* **PhpStorm** : Please see "[PHP Code Sniffer with WordPress Coding Standards Integration](https://confluence.jetbrains.com/display/PhpStorm/WordPress+Development+using+PhpStorm#WordPressDevelopmentusingPhpStorm-PHPCodeSnifferwithWordPressCodingStandardsIntegrationinPhpStorm)" in the PhpStorm documentation.
+* **Sublime Text** : Please see "[Setting up WPCS to work in Sublime Text](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Setting-up-WPCS-to-work-in-Sublime-Text)" in the wiki.
+* **Atom**: Please see "[Setting up WPCS to work in Atom](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Setting-up-WPCS-to-work-in-Atom)" in the wiki.
+* **Visual Studio**: Please see "[Setting up PHP CodeSniffer in Visual Studio Code](https://tommcfarlin.com/php-codesniffer-in-visual-studio-code/)", a tutorial by Tom McFarlin.
+* **Eclipse with XAMPP**: Please see "[Setting up WPCS when using Eclipse with XAMPP](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/How-to-use-WPCS-with-Eclipse-and-XAMPP)" in the wiki.
 
 
 ## Running your code through WPCS automatically using CI tools
@@ -246,7 +212,7 @@ matrix:
 before_install:
   - if [[ "$SNIFF" == "1" ]]; then export PHPCS_DIR=/tmp/phpcs; fi
   - if [[ "$SNIFF" == "1" ]]; then export SNIFFS_DIR=/tmp/sniffs; fi
-  # Install PHP CodeSniffer.
+  # Install PHP_CodeSniffer.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
   # Install WordPress Coding Standards.
   - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR; fi
@@ -272,7 +238,7 @@ You can find information on how to deal with some of the more frequent issues in
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md), including information about [unit testing](CONTRIBUTING.md#unit-testing) the standard.
+See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit testing](.github/CONTRIBUTING.md#unit-testing) the standard.
 
 ## License
 

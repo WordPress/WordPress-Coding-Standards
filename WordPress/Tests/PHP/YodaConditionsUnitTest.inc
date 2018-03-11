@@ -126,3 +126,12 @@ while ( $sample === false ) {} // Bad.
 while ( false != $sample ) {} // OK.
 
 $a = ( $sample ) === 'yes'; // OK.
+
+// Issue #1181
+function is_windows() {
+	return false !== ( $test_is_windows = getenv( 'WP_CLI_TEST_IS_WINDOWS' ) ) ? (bool) $test_is_windows : 0 === stripos( PHP_OS, 'WIN' ); // OK.
+}
+
+if ( $something == ( false !== ( $test_is_windows = getenv( 'WP_CLI_TEST_IS_WINDOWS' ) ) ? (bool) $test_is_windows : 0 === stripos( PHP_OS, 'WIN' ) ) ) {} // Bad.
+
+if ( ( false !== ( $test_is_windows = getenv( 'WP_CLI_TEST_IS_WINDOWS' ) ) ? (bool) $test_is_windows : 0 === stripos( PHP_OS, 'WIN' ) ) === $something ) {} // OK.

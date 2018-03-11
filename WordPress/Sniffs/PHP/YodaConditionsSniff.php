@@ -45,6 +45,8 @@ class YodaConditionsSniff extends Sniff {
 		$starters                      += Tokens::$assignmentTokens;
 		$starters[ T_CASE ]             = T_CASE;
 		$starters[ T_RETURN ]           = T_RETURN;
+		$starters[ T_INLINE_THEN ]      = T_INLINE_THEN;
+		$starters[ T_INLINE_ELSE ]      = T_INLINE_ELSE;
 		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
 		$starters[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
 
@@ -107,10 +109,10 @@ class YodaConditionsSniff extends Sniff {
 
 		if ( in_array( $this->tokens[ $next_non_empty ]['code'], array( T_SELF, T_PARENT, T_STATIC ), true ) ) {
 			$next_non_empty = $this->phpcsFile->findNext(
-				array_merge( Tokens::$emptyTokens, array( T_DOUBLE_COLON ) )
-				, ( $next_non_empty + 1 )
-				, null
-				, true
+				array_merge( Tokens::$emptyTokens, array( T_DOUBLE_COLON ) ),
+				( $next_non_empty + 1 ),
+				null,
+				true
 			);
 		}
 

@@ -2,9 +2,9 @@
 
 
 
-add_action( 'widgets_init', create_function( '', // Warning.
-	'return register_widget( "time_more_on_time_widget" );'
-) );
+
+
+
 
 serialize(); // Warning.
 unserialize(); // Warning.
@@ -38,3 +38,7 @@ $process = proc_open( 'php', $descriptorspec, $pipes, $cwd, $env );
 $output = shell_exec( 'ls -lart' );
 $last_line = system( 'ls', $retval );
 $handle = popen( '/bin/ls', 'r' );
+
+// Issue #898.
+class System {}
+class Serialize {}

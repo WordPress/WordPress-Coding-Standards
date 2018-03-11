@@ -66,7 +66,8 @@ class EmptyStatementSniff extends Sniff {
 
 				if ( false === $prevNonEmpty
 					|| ( T_SEMICOLON !== $this->tokens[ $prevNonEmpty ]['code']
-						&& T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code'] )
+						&& T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code']
+						&& T_OPEN_TAG_WITH_ECHO !== $this->tokens[ $prevNonEmpty ]['code'] )
 				) {
 					return;
 				}
@@ -79,7 +80,9 @@ class EmptyStatementSniff extends Sniff {
 				if ( true === $fix ) {
 					$this->phpcsFile->fixer->beginChangeset();
 
-					if ( T_OPEN_TAG === $this->tokens[ $prevNonEmpty ]['code'] ) {
+					if ( T_OPEN_TAG === $this->tokens[ $prevNonEmpty ]['code']
+						|| T_OPEN_TAG_WITH_ECHO === $this->tokens[ $prevNonEmpty ]['code']
+					) {
 						/*
 						 * Check for superfluous whitespace after the semi-colon which will be
 						 * removed as the `<?php ` open tag token already contains whitespace,
@@ -116,7 +119,10 @@ class EmptyStatementSniff extends Sniff {
 					true
 				);
 
-				if ( false === $prevNonEmpty || T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code'] ) {
+				if ( false === $prevNonEmpty
+					|| ( T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code']
+						&& T_OPEN_TAG_WITH_ECHO !== $this->tokens[ $prevNonEmpty ]['code'] )
+				) {
 					return;
 				}
 

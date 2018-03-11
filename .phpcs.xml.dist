@@ -2,6 +2,8 @@
 <ruleset name="WordPress Coding Standards">
 	<description>The Coding standard for the WordPress Coding Standards itself.</description>
 
+	<file>.</file>
+
 	<arg value="sp"/>
 	<arg name="extensions" value="php"/>
 
@@ -13,13 +15,20 @@
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<rule ref="WordPress-Extra">
-		<exclude name="WordPress.Files.FileName" />
-		<exclude name="WordPress.NamingConventions.ValidVariableName" />
+		<exclude name="WordPress.Files.FileName"/>
+		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
+		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
 	</rule>
 
-	<rule ref="WordPress-Docs" />
+	<rule ref="WordPress-Docs"/>
 
 	<!-- Enforce PSR1 compatible namespaces. -->
 	<rule ref="PSR1.Classes.ClassDeclaration"/>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="alignMultilineItems" value="!=100"/>
+		</properties>
+	</rule>
 
 </ruleset>

@@ -34,14 +34,15 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		// File names generic.
-		'some_file.inc' => 1,
-		'SomeFile.inc'  => 1,
-		'some-File.inc' => 1,
+		'some_file.inc'                              => 1,
+		'SomeFile.inc'                               => 1,
+		'some-File.inc'                              => 1,
+		'SomeView.inc'                               => 1,
 
 		// Class file names.
-		'my-class.inc'              => 1,
-		'class-different-class.inc' => 1,
-		'ClassMyClass.inc'          => 2,
+		'my-class.inc'                               => 1,
+		'class-different-class.inc'                  => 1,
+		'ClassMyClass.inc'                           => 2,
 
 		// Theme specific exceptions in a non-theme context.
 		'single-my_post_type.inc'                    => 1,
@@ -52,38 +53,50 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		// Non-strict class names still have to comply with lowercase hyphenated.
-		'ClassNonStrictClass.inc' => 1,
+		'ClassNonStrictClass.inc'                    => 1,
 
 		/*
 		 * In /FileNameUnitTests/TestFiles.
 		 */
-		'test-sample-phpunit.inc'     => 0,
-		'test-sample-phpunit6.inc'    => 0,
-		'test-sample-wpunit.inc'      => 0,
-		'test-sample-custom-unit.inc' => 0,
+		'test-sample-phpunit.inc'                    => 0,
+		'test-sample-phpunit6.inc'                   => 0,
+		'test-sample-wpunit.inc'                     => 0,
+		'test-sample-custom-unit.inc'                => 0,
+		'test-sample-namespaced-declaration.1.inc'   => 0,
+		'test-sample-namespaced-declaration.2.inc'   => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-declaration.3.inc'   => 1, // Wrong namespace.
+		'test-sample-namespaced-declaration.4.inc'   => 1, // Non-namespaced vs namespaced.
+		'test-sample-global-namespace-extends.1.inc' => 0, // Prefixed user input.
+		'test-sample-global-namespace-extends.2.inc' => 1, // Non-namespaced vs namespaced.
+		'test-sample-extends-with-use.inc'           => 0,
+		'test-sample-namespaced-extends.1.inc'       => 0,
+		'test-sample-namespaced-extends.2.inc'       => 1, // Wrong namespace.
+		'test-sample-namespaced-extends.3.inc'       => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-extends.4.inc'       => 1, // Non-namespaced vs namespaced.
+		'test-sample-namespaced-extends.5.inc'       => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
 		 */
 
 		// Files in a theme context.
-		'front_page.inc'       => 1,
-		'FrontPage.inc'        => 1,
-		'author-nice_name.inc' => 1,
+		'front_page.inc'                             => 1,
+		'FrontPage.inc'                              => 1,
+		'author-nice_name.inc'                       => 1,
 
 		/*
 		 * In /FileNameUnitTests/wp-includes.
 		 */
 
 		// Files containing template tags.
-		'general.inc' => 1,
+		'general.inc'                                => 1,
 
 		/*
 		 * In /.
 		 */
 
 		// Fall-back file in case glob() fails.
-		'FileNameUnitTest.inc' => 1,
+		'FileNameUnitTest.inc'                       => 1,
 	);
 
 	/**
@@ -94,6 +107,12 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	 * @return string[]
 	 */
 	protected function getTestFiles( $testFileBase ) {
+
+		// Work around for PHP 5.3/PHPCS 2.x.
+		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			unset( $this->expected_results['SomeView.inc'] );
+		}
+
 		$sep        = DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
 
@@ -125,11 +144,24 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array();
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'SomeView.inc':
+			case 'some-view.inc':
+				$expected = array();
+				if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+					$expected[1] = 1; // Internal.NoCode warning on PHP 5.3 icw short open tags off.
+				}
 
+				return $expected;
+
+			default:
+				return array();
+		}
 	}
 
 } // End class.

@@ -18,6 +18,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.11.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 `create_function` was moved to the PHP.RestrictedFunctions sniff.
  */
 class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -36,14 +37,6 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function getGroups() {
 		return array(
-			'create_function' => array(
-				'type'      => 'warning',
-				'message'   => '%s() is discouraged, please use anonymous functions instead.',
-				'functions' => array(
-					'create_function',
-				),
-			),
-
 			'serialize' => array(
 				'type'      => 'warning',
 				'message'   => '%s() found. Serialized data has known vulnerability problems with Object Injection. JSON is generally a better approach for serializing data. See https://www.owasp.org/index.php/PHP_Object_Injection',

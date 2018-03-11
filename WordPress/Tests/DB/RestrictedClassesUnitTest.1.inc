@@ -33,7 +33,7 @@ class OurMysqli implements mysqli {}
 class TheirMysqli implements \mysqli {}
 
 $db5 = new PDO();
-$db6 - new PDO->exec();
+$db6 = ( new PDO() )->exec();
 PDO::getAvailableDrivers();
 
 $db7 = new PDOStatement;
@@ -49,18 +49,18 @@ $db9 = new \My\DBlayer;
 $db9 = new \My\DBlayer; // Ok - within excluded group.
 
 echo mysqli::$affected_rows; // Error.
-class YourMysqli extends \mysqli {} // Error.
+class YourMysqliA extends \mysqli {} // Error.
 
 // Exclude all groups:
 // @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude test,mysql
 $db9 = new \My\DBlayer; // Ok - within excluded group.
 
 echo mysqli::$affected_rows; // Ok - within excluded group.
-class YourMysqli extends \mysqli {} // Ok - within excluded group.
+class YourMysqliB extends \mysqli {} // Ok - within excluded group.
 
 // Reset group exclusions.
 // @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude false
 $db9 = new \My\DBlayer; // Error.
 
 echo mysqli::$affected_rows; // Error.
-class YourMysqli extends \mysqli {} // Error.
+class YourMysqliC extends \mysqli {} // Error.

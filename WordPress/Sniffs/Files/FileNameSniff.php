@@ -25,7 +25,7 @@ use WordPress\Sniff;
  *                   template tags end in `-template`. Based on @subpackage file DocBlock tag.
  *                 - This sniff will now allow for underscores in file names for certain theme
  *                   specific exceptions if the `$is_theme` property is set to `true`.
- * @since   0.12.0 - Now extends the `WordPress_Sniff` class.
+ * @since   0.12.0 Now extends the `WordPress_Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * @uses    \WordPress\Sniff::$custom_test_class_whitelist
@@ -122,7 +122,10 @@ class FileNameSniff extends Sniff {
 			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
 		}
 
-		return array( T_OPEN_TAG );
+		return array(
+			T_OPEN_TAG,
+			T_OPEN_TAG_WITH_ECHO,
+		);
 	}
 
 	/**

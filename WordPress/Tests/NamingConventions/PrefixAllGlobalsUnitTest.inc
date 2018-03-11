@@ -88,7 +88,7 @@ do_action( "tgmpa_plugin_action_{$acronym_filter_var}" );
  * Bad: prefix not correctly used.
  */
 function abtgmpa_do_something() {} // Bad.
-function tgmpacd_do_something() {} // Bad.
+function tgmpacd_do_something() {} // OK.
 
 
 /*
@@ -120,14 +120,14 @@ apply_filters( 'acronym', $var );
 /*
  * OK - not in the global namespace.
  */
-function acronym_do_something( $param = 'default' ) {
+function acronym_do_something_else( $param = 'default' ) {
 	$var = 'abc';
 	${$something} = 'value';
 }
 
 function ( $param ) {
 	$var = 'abc';
-}
+};
 
 class Acronym_Example {
 	const SOME_CONSTANT = 'value';
@@ -143,7 +143,7 @@ $acronym_class = new class {
 	public $var = 'abc';
 
 	function do_something( $param = 'default' ) {}
-}
+};
 
 namespace Acronym {
 	function do_something( $param = 'default' ) {}
@@ -299,3 +299,79 @@ class Acronym_Dynamic_Hooks {
 		do_action( $this->parent_property ); // Warning.
 	}
 }
+
+// Dashes and other non-word characters are ok as a hook name separator after the prefix.
+// The rule that these should be underscores is handled by another sniff.
+do_action( 'acronym-action' ); // OK.
+apply_filters( 'acronym/filter', $var ); // OK.
+do_action( "acronym-action-{$acronym_filter_var}" ); // OK.
+apply_filters( 'acronym/filter-' . $acronym_filter_var ); // OK.
+
+// Issue #1056.
+define( 'SomeNameSpace\PLUGIN_FILE', __FILE__ ); // OK.
+define( '\OtherNameSpace\PLUGIN_FILE', __FILE__ ); // OK.
+// OK: unreachable constants.
+define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
+define( '\PLUGIN_FILE', __FILE__ );
+
+namespace Testing {
+	define( 'MY' . __NAMESPACE__, __FILE__ ); // Error, not actually namespaced.
+	define( 'MY\\' . __NAMESPACE__, __FILE__ ); // OK, even though strangely setup, the constant is in a namespace.
+}
+
+// OK: whitelisted core hooks.
+apply_filters( 'widget_title', $title );
+do_action( 'add_meta_boxes' );
+
+add_shortcode( 'acronym_hello', function( $attrs, $content = null ) { // OK. Variables are function params.
+	// Do something.
+} );
+
+// Issue #1239 - word separator check is not the concern of this sniff.
+do_action( 'acronymAction' ); // OK.
+apply_filters( 'acronymFilter', $var ); // OK.
+
+function acronymDoSomething( $param = 'default' ) {} // OK.
+class AcronymExample {} // OK.
+
+// Issue #1236 - detect non-prefixed variables created in control structure conditions.
+if ( ( $acronym_abc = function_call() ) === true ) {} // OK.
+if ( ( $abc = function_call() ) === true ) {} // Bad.
+
+$acronym_something = array();
+foreach ( $acronym_something as $acronym_some ) {} // OK.
+foreach ( $acronym_something as $something ) {} // Bad.
+
+while ( ( $acronymSomething = function_call() ) === true ) {} // OK.
+while ( ( $something = function_call() ) === true ) {} // Bad.
+
+for ( $acronym_i = 0; $acronym_i < 10; $acronym_i++ ) {} // OK.
+for ( $i = 0; $i < 10; $i++ ) {} // Bad.
+
+switch( true ) {
+	case ($acronym_case = 'abc'): // OK.
+		break;
+	case ($case = 'abc'): // Bad.
+		break;
+	case ($case === 'abc'): // OK, not an assignment.
+		break;
+}
+
+// All OK: Variables created within a non-global scope do not need to be prefixed.
+function acronymFunction() {
+	if ( ( $abc = function_call() ) === true ) {}
+	foreach ( $acronym_something as $something ) {}
+	while ( ( $something = function_call() ) === true ) {}
+	for ( $i = 0; $i < 10; $i++ ) {}
+
+	switch( true ) {
+		case ($case = 'abc'):
+			break;
+	}
+}
+
+// Issue #1311 - allow for overrulable WP Core constants.
+define( 'FORCE_SSL_ADMIN', true );
+const SCRIPT_DEBUG = $develop_src;
+
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false

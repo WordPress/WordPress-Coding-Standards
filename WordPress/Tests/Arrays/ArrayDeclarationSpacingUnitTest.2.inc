@@ -10,7 +10,7 @@ $query_vars = ['food']; // Bad, no spaces after opening and before closing paren
 // Test for fixing of extra whitespace.
 $test = [   1, 2     ];
 
-$bad = [ 'key' => 'value' ]; // Bad, each value of an associative array should start on a new line.
+$bad = [ 'key' => 'value' ]; // OK, one item single-line associative arrays are ok.
 
 // Test for fixing nested associative arrays.
 $bad = [ [ 'key1' => 'value1', 'key2' => ['sub1' => 1, 'sub2' => 2] ], $key3 => 'value3', [ 'value4', 10 => 'value5', ] ]; // Bad.
@@ -82,3 +82,13 @@ $foo = [1
 
 $fields = [
 	'value' => 'type'];
+
+$bad = ['key' => 'value']; // Bad, spacing around parenthesis.
+$bad = [     'key' => 'value'     ]; // Bad, spacing around parenthesis.
+
+// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
+
+$bad = [ 'key' => 'value' ]; // Bad.
+$bad = [ 'key1' => 'value1', 'key2' => 'value2' ]; // Bad.
+
+// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true

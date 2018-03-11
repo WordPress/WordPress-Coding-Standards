@@ -56,6 +56,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Target prefixes after validation.
 	 *
+	 * All prefixes are lowercased for case-insensitive compare.
+	 *
 	 * @since 0.12.0
 	 *
 	 * @var string[]
@@ -89,6 +91,70 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'_REQUEST' => true,
 		'_SERVER'  => true,
 		'_SESSION' => true,
+	);
+
+	/**
+	 * A list of core hooks that are allowed to be called by plugins and themes.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @var array
+	 */
+	protected $whitelisted_core_hooks = array(
+		'widget_title'   => true,
+		'add_meta_boxes' => true,
+	);
+
+	/**
+	 * A list of core constants that are allowed to be defined by plugins and themes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/default-constants.php#L0}
+	 * The constants are listed in the order they are found in the source file
+	 * to make life easier for future updates.
+	 * Only overrulable constants are listed, i.e. those defined within core within
+	 * a `if ( ! defined() ) {}` wrapper.
+	 *
+	 * @var array
+	 */
+	protected $whitelisted_core_constants = array(
+		'WP_MEMORY_LIMIT'      => true,
+		'WP_MAX_MEMORY_LIMIT'  => true,
+		'WP_CONTENT_DIR'       => true,
+		'WP_DEBUG'             => true,
+		'WP_DEBUG_DISPLAY'     => true,
+		'WP_DEBUG_LOG'         => true,
+		'WP_CACHE'             => true,
+		'SCRIPT_DEBUG'         => true,
+		'MEDIA_TRASH'          => true,
+		'SHORTINIT'            => true,
+		'WP_CONTENT_URL'       => true,
+		'WP_PLUGIN_DIR'        => true,
+		'WP_PLUGIN_URL'        => true,
+		'PLUGINDIR'            => true,
+		'WPMU_PLUGIN_DIR'      => true,
+		'WPMU_PLUGIN_URL'      => true,
+		'MUPLUGINDIR'          => true,
+		'COOKIEHASH'           => true,
+		'USER_COOKIE'          => true,
+		'PASS_COOKIE'          => true,
+		'AUTH_COOKIE'          => true,
+		'SECURE_AUTH_COOKIE'   => true,
+		'LOGGED_IN_COOKIE'     => true,
+		'TEST_COOKIE'          => true,
+		'COOKIEPATH'           => true,
+		'SITECOOKIEPATH'       => true,
+		'ADMIN_COOKIE_PATH'    => true,
+		'PLUGINS_COOKIE_PATH'  => true,
+		'COOKIE_DOMAIN'        => true,
+		'FORCE_SSL_ADMIN'      => true,
+		'FORCE_SSL_LOGIN'      => true,
+		'AUTOSAVE_INTERVAL'    => true,
+		'EMPTY_TRASH_DAYS'     => true,
+		'WP_POST_REVISIONS'    => true,
+		'WP_CRON_LOCK_TIMEOUT' => true,
+		'WP_DEFAULT_THEME'     => true,
 	);
 
 	/**
@@ -197,7 +263,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$item_name  = '';
-			$error_text = 'Unknown syntax used by';
+			$error_text = 'Unknown syntax used';
 			$error_code = 'NonPrefixedSyntaxFound';
 
 			switch ( $this->tokens[ $stackPtr ]['type'] ) {
@@ -235,14 +301,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 					switch ( $this->tokens[ $stackPtr ]['type'] ) {
 						case 'T_CLASS':
-							if ( class_exists( '\\' . $item_name ) ) {
+							if ( class_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native class.
 								return;
 							}
 							break;
 
 						case 'T_INTERFACE':
-							if ( interface_exists( '\\' . $item_name ) ) {
+							if ( interface_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native interface.
 								return;
 							}
@@ -252,7 +318,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							break;
 
 						case 'T_TRAIT':
-							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name ) ) {
+							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native trait.
 								return;
 							}
@@ -270,7 +336,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 				case 'T_CONST':
 					// Constants in a class do not need to be prefixed.
-					if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ) ) === true ) {
+					if ( true === $this->is_class_constant( $stackPtr ) ) {
 						return;
 					}
 
@@ -283,6 +349,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					$item_name = $this->tokens[ $constant_name_ptr ]['content'];
 					if ( defined( '\\' . $item_name ) ) {
 						// Backfill for PHP native constant.
+						return;
+					}
+
+					if ( isset( $this->whitelisted_core_constants[ $item_name ] ) ) {
+						// Defining a WP Core constant intended for overruling.
 						return;
 					}
 
@@ -421,10 +492,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	protected function process_variable_assignment( $stackPtr ) {
-
-		// We're only concerned with variables which are being defined.
-		// `is_assigment()` will not recognize property assignments, which is good in this case.
-		if ( false === $this->is_assignment( $stackPtr ) ) {
+		/*
+		 * We're only concerned with variables which are being defined.
+		 * `is_assigment()` will not recognize property assignments, which is good in this case.
+		 * However it will also not recognize $b in `foreach( $a as $b )` as an assignment, so
+		 * we need a separate check for that.
+		 */
+		if ( false === $this->is_assignment( $stackPtr )
+			&& false === $this->is_foreach_as( $stackPtr )
+		) {
 			return;
 		}
 
@@ -480,7 +556,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			// Function parameters do not need to be prefixed.
 			if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
-					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] ) && T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] ) {
+					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
+						&& ( T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
+							|| T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
+					) {
 						return;
 					}
 				}
@@ -488,11 +567,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Properties in a class do not need to be prefixed.
-			$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
-			$ptr        = array_pop( $conditions );
-			if ( isset( $this->tokens[ $ptr ] )
-				&& in_array( $this->tokens[ $ptr ]['code'], array( T_CLASS, T_ANON_CLASS, T_TRAIT ), true )
-			) {
+			if ( true === $this->is_class_property( $stackPtr ) ) {
 				return;
 			}
 
@@ -574,8 +649,16 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$is_error     = true;
+		$is_error    = true;
 		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
+
+		if ( ( 'define' !== $matched_content
+			&& isset( $this->whitelisted_core_hooks[ $raw_content ] ) )
+			|| ( 'define' === $matched_content
+			&& isset( $this->whitelisted_core_constants[ $raw_content ] ) )
+		) {
+			return;
+		}
 
 		if ( $this->is_prefixed( $raw_content ) === true ) {
 			return;
@@ -604,8 +687,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
 				// If the first part of the parameter is a double quoted string, try again with only
 				// the part before the first variable (if any).
-				$exploded                = explode( '$', $first_non_empty_content );
-				$first                   = rtrim( $exploded[0], '{' );
+				$exploded = explode( '$', $first_non_empty_content );
+				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
 					if ( $this->is_prefixed( $first ) === true ) {
 						return;
@@ -626,6 +709,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
+			if ( strpos( $raw_content, '\\' ) !== false ) {
+				// Namespaced or unreachable constant.
+				return;
+			}
+
 			$data       = array( 'Global constants defined' );
 			$error_code = 'NonPrefixedConstantFound';
 		} else {
@@ -643,26 +731,20 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Check if a function/class/constant/variable name is prefixed with one of the expected prefixes.
 	 *
 	 * @since 0.12.0
+	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
+	 * @since 1.0.0  Does not require a word seperator anymore after a prefix.
+	 *               This allows for improved code style independent checking,
+	 *               i.e. allows for camelCase naming and the likes.
 	 *
 	 * @param string $name Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix + an underscore.
+	 * @return bool True when the name is the prefix or starts with the prefix.
 	 *              False otherwise.
 	 */
 	private function is_prefixed( $name ) {
-
 		foreach ( $this->validated_prefixes as $prefix ) {
-			if ( strtolower( $name ) === $prefix ) {
-				// Ok, prefix *is* the hook/constant name.
+			if ( stripos( $name, $prefix ) === 0 ) {
 				return true;
-
-			} else {
-				$prefix_found = stripos( $name, $prefix . '_' );
-
-				if ( 0 === $prefix_found ) {
-					// Ok, prefix found as start of hook/constant name.
-					return true;
-				}
 			}
 		}
 
@@ -688,6 +770,35 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		return $this->is_prefixed( $name );
+	}
+
+	/**
+	 * Determine if a variable is the `as $var` part of a foreach condition.
+	 *
+	 * @param int $stackPtr Pointer to the variable.
+	 *
+	 * @return bool True if it is. False otherwise.
+	 */
+	private function is_foreach_as( $stackPtr ) {
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false === $prev || T_AS !== $this->tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
+			return false;
+		}
+
+		if ( T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -731,6 +842,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					array( $prefix )
 				);
 				unset( $this->prefixes[ $key ] );
+				continue;
 			}
 
 			// Lowercase the prefix to allow for direct compare.

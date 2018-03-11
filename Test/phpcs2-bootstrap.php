@@ -20,8 +20,8 @@ $ds = DIRECTORY_SEPARATOR;
 $phpcsDir = getenv( 'PHPCS_DIR' );
 
 if ( false === $phpcsDir && is_dir( dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer' ) ) {
-	$phpcsDir  = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
-} else if ( false !== $phpcsDir ) {
+	$phpcsDir = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
+} elseif ( false !== $phpcsDir ) {
 	$phpcsDir = realpath( $phpcsDir );
 }
 
@@ -35,7 +35,7 @@ Otherwise, make sure you set a `PHPCS_DIR` environment variable in your phpunit.
 pointing to the PHPCS directory.
 
 Please read the contributors guidelines for more information:
-https://is.gd/WPCScontributing
+https://is.gd/contributing2WPCS
 ';
 
 	die( 1 );
@@ -44,9 +44,9 @@ https://is.gd/WPCScontributing
 }
 
 // Load the PHPCS test classes and the WPCS versions where necessary.
-include_once PHPCS_DIR . $ds . 'tests' . $ds . 'AllTests.php';
-include_once __DIR__ . $ds . 'Standards' . $ds . 'AllSniffs.php';
-include_once __DIR__ . $ds . 'Standards' . $ds . 'AbstractSniffUnitTest.php';
+require_once PHPCS_DIR . $ds . 'tests' . $ds . 'AllTests.php';
+require_once __DIR__ . $ds . 'Standards' . $ds . 'AllSniffs.php';
+require_once __DIR__ . $ds . 'Standards' . $ds . 'AbstractSniffUnitTest.php';
 
 class_alias( 'WordPressCS\Test\AbstractSniffUnitTest', 'PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest' );
 

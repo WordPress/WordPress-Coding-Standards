@@ -14,34 +14,23 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Restricts the use of various deprecated WordPress functions and suggests alternatives.
  *
+ * This sniff will throw an error when usage of deprecated functions is detected
+ * if the function was deprecated before the minimum supported WP version;
+ * a warning otherwise.
+ * By default, it is set to presume that a project will support the current
+ * WP version and up to three releases before.
+ *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.11.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Now has the ability to handle minimum supported WP version
+ *                 being provided via the command-line or as as <config> value
+ *                 in a custom ruleset.
+ *
+ * @uses    \WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
-
-	/**
-	 * Minimum WordPress version.
-	 *
-	 * This sniff will throw an error when usage of deprecated functions is
-	 * detected if the function was deprecated before the minimum supported
-	 * WP version; a warning otherwise.
-	 * By default, it is set to presume that a project will support the current
-	 * WP version and up to three releases before.
-	 * This variable allows changing the minimum supported WP version used by
-	 * this sniff by setting a property in a custom phpcs.xml ruleset.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.WP.DeprecatedFunctions">
-	 *  <properties>
-	 *   <property name="minimum_supported_version" value="4.3"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * @var string WordPress versions.
-	 */
-	public $minimum_supported_version = '4.5';
 
 	/**
 	 * List of deprecated functions with alternative when available.
@@ -545,6 +534,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'delete_user_meta()',
 			'version' => '3.0.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'funky_javascript_callback' => array(
 			'alt'     => '',
 			'version' => '3.0.0',
@@ -656,7 +646,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.1.0',
 		),
 		'get_dashboard_blog' => array(
-			'alt'     => '',
+			'alt'     => 'get_site()',
 			'version' => '3.1.0',
 		),
 		'get_editable_authors' => array(
@@ -780,6 +770,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '$current_screen->render_screen_layout()',
 			'version' => '3.3.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'screen_meta' => array(
 			'alt'     => '$current_screen->render_screen_meta()',
 			'version' => '3.3.0',
@@ -833,11 +824,11 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.3.0',
 		),
 		'wpmu_admin_do_redirect' => array(
-			'alt'     => '',
+			'alt'     => 'wp_redirect()',
 			'version' => '3.3.0',
 		),
 		'wpmu_admin_redirect_add_updated_param' => array(
-			'alt'     => '',
+			'alt'     => 'add_query_arg()',
 			'version' => '3.3.0',
 		),
 
@@ -954,6 +945,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'WP_Image_Editor::rotate()',
 			'version' => '3.5.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'_save_post_hook' => array(
 			'alt'     => '',
 			'version' => '3.5.0',
@@ -987,7 +979,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.5.0',
 		),
 		'wp_cache_reset' => array(
-			'alt'     => '',
+			'alt'     => 'WP_Object_Cache::reset()',
 			'version' => '3.5.0',
 		),
 		'wp_create_thumbnail' => array(
@@ -1052,38 +1044,47 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_incoming_links' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_incoming_links_control' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_incoming_links_output' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_plugins' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_primary_control' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_recent_comments_control' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_secondary' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_secondary_control' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_dashboard_secondary_output' => array(
 			'alt'     => '',
 			'version' => '3.8.0',
@@ -1094,6 +1095,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '3.9.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'default_topic_count_text' => array(
 			'alt'     => '',
 			'version' => '3.9.0',
@@ -1194,6 +1196,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '4.3.0',
 		),
+		// Verified; see https://core.trac.wordpress.org/ticket/41121, patch 3.
 		'wp_ajax_wp_fullscreen_save_post' => array(
 			'alt'     => '',
 			'version' => '4.3.0',
@@ -1309,6 +1312,24 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '4.8.0',
 		),
+
+		// WP 4.9.0.
+		'get_shortcut_link' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
+		'is_user_option_local' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
+		'wp_ajax_press_this_add_category' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
+		'wp_ajax_press_this_save_post' => array(
+			'alt'     => '',
+			'version' => '4.9.0',
+		),
 	);
 
 	/**
@@ -1318,8 +1339,8 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$keys = array_keys( $this->deprecated_functions );
-		$keys = array_map( 'strtolower', $keys );
+		$keys                       = array_keys( $this->deprecated_functions );
+		$keys                       = array_map( 'strtolower', $keys );
 		$this->deprecated_functions = array_combine( $keys, $this->deprecated_functions );
 
 		return array(
@@ -1341,6 +1362,9 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @return void
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+
+		$this->get_wp_version_from_cl();
+
 		$function_name = strtolower( $matched_content );
 
 		$message = '%s() has been deprecated since WordPress version %s.';

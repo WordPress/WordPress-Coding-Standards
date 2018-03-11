@@ -26,14 +26,22 @@ $phpcsDir = getenv( 'PHPCS_DIR' );
 
 // This may be a Composer install.
 if ( false === $phpcsDir && is_dir( dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer' ) ) {
-	$phpcsDir  = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
-} else if ( false !== $phpcsDir ) {
+	$phpcsDir = dirname( __DIR__ ) . $ds . 'vendor' . $ds . 'squizlabs' . $ds . 'php_codesniffer';
+} elseif ( false !== $phpcsDir ) {
 	$phpcsDir = realpath( $phpcsDir );
 }
 
 // Try and load the PHPCS autoloader.
 if ( false !== $phpcsDir && file_exists( $phpcsDir . $ds . 'autoload.php' ) ) {
 	require_once $phpcsDir . $ds . 'autoload.php';
+
+	/*
+	 * As of PHPCS 3.1, PHPCS support PHPUnit 6.x, but needs a bootstrap, so
+	 * load it if it's available.
+	 */
+	if ( file_exists( $phpcsDir . $ds . 'tests' . $ds . 'bootstrap.php' ) ) {
+		require_once $phpcsDir . $ds . 'tests' . $ds . 'bootstrap.php';
+	}
 } else {
 	echo 'Uh oh... can\'t find PHPCS. Are you sure you are using PHPCS 3.x ?
 
@@ -42,38 +50,12 @@ Otherwise, make sure you set a `PHPCS_DIR` environment variable in your phpunit.
 pointing to the PHPCS directory.
 
 Please read the contributors guidelines for more information:
-https://is.gd/WPCScontributing
+https://is.gd/contributing2WPCS
 ';
 
 	die( 1 );
 }
 
 // Load our class aliases.
-include_once dirname( __DIR__ ) . $ds . 'WordPress' . $ds . 'PHPCSAliases.php';
+require_once dirname( __DIR__ ) . $ds . 'WordPress' . $ds . 'PHPCSAliases.php';
 unset( $ds, $phpcsDir );
-
-/*
- * Register our own autoloader for the WPCS abstract classes & the helper class.
- *
- * This can be removed once the minimum required version of WPCS for the
- * PHPCS 3.x branch has gone up to 3.1.0 (unreleased as of yet).
- *
- * @link https://github.com/squizlabs/PHP_CodeSniffer/issues/1564
- */
-spl_autoload_register( function ( $class ) {
-	// Only try & load our own classes.
-	if ( stripos( $class, 'WordPress' ) !== 0 ) {
-		return;
-	}
-
-	// PHPCS handles the Test and Sniff classes without problem.
-	if ( stripos( $class, '\Tests\\' ) !== false || stripos( $class, '\Sniffs\\' ) !== false ) {
-		return;
-	}
-
-	$file = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . strtr( $class, '\\', DIRECTORY_SEPARATOR ) . '.php';
-
-	if ( file_exists( $file ) ) {
-		include_once $file;
-	}
-} );
