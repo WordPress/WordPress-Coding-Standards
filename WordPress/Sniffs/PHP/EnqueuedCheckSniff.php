@@ -93,7 +93,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		 * Check to make sure that $in_footer is set to true
 		 * Otherwise it will warn the user to make sure if its correct
 		 */
-		if ( isset( $parameters[5] || 'true' !== $parameters[5]['raw'] ) ) {
+		if ( isset( $parameters[5] ) ) {
 			/*
 			 * Only wp_register_script and wp_enqueue_script need this check
 			 * As it is not available to wp_register_style and wp_enqueue_style
@@ -101,8 +101,10 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 			switch ( $matched_content ) {
 				case 'wp_register_script':
 				case 'wp_enqueue_script':
-					$this->phpcsFile->addWarning( 'If the Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
-					return;
+					if ( 'true' !== $parameters[5]['raw'] ) {
+						$this->phpcsFile->addWarning( 'If the Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
+						return;
+					}
 			}
 		}
 	}
