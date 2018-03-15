@@ -93,7 +93,7 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 		 * Check to make sure that $in_footer is set to true
 		 * Otherwise it will warn the user to make sure if its correct
 		 */
-		if ( isset( $parameters[5] ) ) {
+		if ( isset( $parameters[5] || 'true' !== $parameters[5]['raw'] ) ) {
 			/*
 			 * Only wp_register_script and wp_enqueue_script need this check
 			 * As it is not available to wp_register_style and wp_enqueue_style
