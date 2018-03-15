@@ -101,10 +101,8 @@ class EnqueuedCheckSniff extends AbstractFunctionParameterSniff {
 			switch ( $matched_content ) {
 				case 'wp_register_script':
 				case 'wp_enqueue_script':
-					if ( 'true' !== $parameters[5]['raw'] ) {
-						$this->phpcsFile->addWarning( 'If the Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
-						return;
-					}
+					$this->phpcsFile->addWarning( 'If the Footer is not set to True for %s; Double check if correct or set to True', $stackPtr, 'MissingInFooter', array( $matched_content ) );
+					return;
 			}
 		}
 	}
