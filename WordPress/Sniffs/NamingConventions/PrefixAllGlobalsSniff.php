@@ -789,7 +789,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return false;
 		}
 
-		$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$close_parenthesis  = end( $nested_parenthesis );
 		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
 			return false;
 		}

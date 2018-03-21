@@ -1467,9 +1467,10 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$open_parenthesis = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		reset( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+
+		end( $nested_parenthesis );
+		$open_parenthesis = key( $nested_parenthesis );
 
 		return in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( T_ISSET, T_EMPTY ), true );
 	}
@@ -1557,9 +1558,10 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Get the function that it's in.
-		$function_closer = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$function        = $this->tokens[ ( $function_opener - 1 ) ];
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$function_closer    = end( $nested_parenthesis );
+		$function_opener    = key( $nested_parenthesis );
+		$function           = $this->tokens[ ( $function_opener - 1 ) ];
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
 		if ( T_UNSET === $function['code'] ) {
@@ -1580,14 +1582,14 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( 'wp_unslash' === $functionName ) {
 
 			$is_unslashed    = true;
-			$function_closer = prev( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$function_closer = prev( $nested_parenthesis );
 
 			// If there is no other function being used, this value is unsanitized.
 			if ( ! $function_closer ) {
 				return false;
 			}
 
-			$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$function_opener = key( $nested_parenthesis );
 			$functionName    = $this->tokens[ ( $function_opener - 1 ) ]['content'];
 
 		} else {
@@ -1817,7 +1819,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// We first check if this is a switch statement (switch ( $var )).
 		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+			$close_parenthesis  = end( $nested_parenthesis );
 
 			if (
 				isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
