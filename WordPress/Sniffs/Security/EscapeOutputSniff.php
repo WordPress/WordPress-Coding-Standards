@@ -262,7 +262,7 @@ class EscapeOutputSniff extends Sniff {
 			return;
 		}
 
-		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
+		if ( isset( $this->unsafePrintingFunctions[ $function ] ) ) {
 			$error = $this->phpcsFile->addError(
 				"All output should be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
@@ -272,7 +272,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {
-				return $end_of_statement;
+				return isset( $end_of_statement ) ? $end_of_statement : null;
 			}
 		}
 
