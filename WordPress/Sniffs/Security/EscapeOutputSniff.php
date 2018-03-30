@@ -355,6 +355,12 @@ class EscapeOutputSniff extends Sniff {
 				continue;
 			}
 
+			if ( T_OPEN_SHORT_ARRAY === $this->tokens[ $i ]['code']
+				|| T_CLOSE_SHORT_ARRAY === $this->tokens[ $i ]['code']
+			) {
+				continue;
+			}
+
 			if ( in_array( $this->tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ), true ) ) {
 				continue;
 			}
