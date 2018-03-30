@@ -233,7 +233,9 @@ class EscapeOutputSniff extends Sniff {
 
 			// These functions only need to have the first argument escaped.
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
-				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
+				$first_param      = $this->get_function_call_parameter( $stackPtr, 1 );
+				$end_of_statement = ( $first_param['end'] + 1 );
+				unset( $first_param );
 			}
 		} elseif ( T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if no PHP short_open_tag is found in the string.
