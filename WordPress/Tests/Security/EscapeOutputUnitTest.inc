@@ -259,3 +259,9 @@ echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
 <?php
 
 echo PHP_VERSION_ID, PHP_VERSION, PHP_EOL, PHP_EXTRA_VERSION; // OK.
+
+trigger_error( 'DEBUG INFO - ' . __METHOD__ . '::internal_domains: domain = ' . $domain ); // Bad.
+trigger_error( $domain ); // Bad.
+
+vprintf( 'Hello %s', [ $foo ] ); // Bad.
+vprintf( 'Hello %s', [ esc_html( $foo ) ] ); // Ok.
