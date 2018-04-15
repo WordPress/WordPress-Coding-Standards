@@ -50,13 +50,11 @@ class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificatio
 	 */
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.CSRF.NonceVerification" sniff has been renamed to "WordPress.Security.NonceVerification". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
-
-			$this->thrown['DeprecatedSniff'] = true;
 		}
 
 		if ( ( $this->customNonceVerificationFunctions !== $this->addedCustomFunctions['nonce']
@@ -64,13 +62,11 @@ class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificatio
 			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] )
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.CSRF.NonceVerification" sniff has been renamed to "WordPress.Security.NonceVerification". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
-
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
 		}
 
 		return parent::process_token( $stackPtr );

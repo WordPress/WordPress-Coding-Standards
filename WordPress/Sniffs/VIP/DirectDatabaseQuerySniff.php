@@ -54,13 +54,11 @@ class DirectDatabaseQuerySniff extends \WordPress\Sniffs\DB\DirectDatabaseQueryS
 	 */
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.DirectDatabaseQuery" sniff has been renamed to "WordPress.DB.DirectDatabaseQuery". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
-
-			$this->thrown['DeprecatedSniff'] = true;
 		}
 
 		if ( ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget']
@@ -68,13 +66,11 @@ class DirectDatabaseQuerySniff extends \WordPress\Sniffs\DB\DirectDatabaseQueryS
 			|| $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] )
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.DirectDatabaseQuery" sniff has been renamed to "WordPress.DB.DirectDatabaseQuery". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
-
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
 		}
 
 		return parent::process_token( $stackPtr );

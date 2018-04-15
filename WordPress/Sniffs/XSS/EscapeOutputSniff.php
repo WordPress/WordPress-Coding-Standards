@@ -56,13 +56,11 @@ class EscapeOutputSniff extends \WordPress\Sniffs\Security\EscapeOutputSniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.Security.EscapeOutput". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
-
-			$this->thrown['DeprecatedSniff'] = true;
 		}
 
 		if ( ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape']
@@ -71,13 +69,11 @@ class EscapeOutputSniff extends \WordPress\Sniffs\Security\EscapeOutputSniff {
 			|| $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] )
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.Security.EscapeOutput". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
-
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
 		}
 
 		return parent::process_token( $stackPtr );

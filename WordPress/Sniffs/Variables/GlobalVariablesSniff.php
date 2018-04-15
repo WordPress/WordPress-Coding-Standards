@@ -53,25 +53,21 @@ class GlobalVariablesSniff extends \WordPress\Sniffs\WP\GlobalVariablesOverrideS
 	 */
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.Variables.GlobalVariables" sniff has been renamed to "WordPress.WP.GlobalVariablesOverride". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
-
-			$this->thrown['DeprecatedSniff'] = true;
 		}
 
 		if ( ! empty( $this->custom_test_class_whitelist )
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.Variables.GlobalVariables" sniff has been renamed to "WordPress.WP.GlobalVariablesOverride". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
-
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
 		}
 
 		return parent::process_token( $stackPtr );
