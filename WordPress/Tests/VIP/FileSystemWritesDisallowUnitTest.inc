@@ -35,3 +35,9 @@ chown();
 chmod();
 lchgrp();
 lchown();
+
+// Issue #956.
+use Fieldmanager_Link as Link;
+
+namespace Fieldmanager\Link\Something;
+namespace Fieldmanager\Link;

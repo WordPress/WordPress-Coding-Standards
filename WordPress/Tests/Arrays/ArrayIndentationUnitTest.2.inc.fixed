@@ -400,4 +400,15 @@ b(
     ]
 );
 
+            $a = array(
+                'post_type'    => 'post',
+                'post_content' => '
+Page 1/5
+<!--nextpage-->
+Page 2/3
+<!--nextpage-->
+Page 3/3
+',
+            );
+
 // @codingStandardsChangeSetting WordPress.Arrays.ArrayIndentation tabIndent true

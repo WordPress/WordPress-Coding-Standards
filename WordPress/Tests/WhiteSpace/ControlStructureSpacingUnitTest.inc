@@ -268,3 +268,9 @@ if ( $foo ) {
 
 
 }
+
+// Issue 1202.
+function hi(): array
+{
+    return [];
+}

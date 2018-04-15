@@ -103,7 +103,7 @@ The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x
 
 * Make sure you have registered the directory in which you installed WPCS with PHPCS using;
     ```sh
-    phpcs --config-set installed_path path/to/WPCS
+    phpcs --config-set installed_paths path/to/WPCS
     ```
 * Navigate to the directory in which you installed WPCS.
 * To run the unit tests with PHPCS 3.x:
@@ -207,4 +207,4 @@ The `--sniffs=...` directive limits the output to the sniff you are testing.
 
 ## Code Standards for this project
 
-The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/bin/phpcs.xml`.
+The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/.phpcs.xml.dist`.

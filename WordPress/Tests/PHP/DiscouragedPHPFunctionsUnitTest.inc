@@ -38,3 +38,7 @@ $process = proc_open( 'php', $descriptorspec, $pipes, $cwd, $env );
 $output = shell_exec( 'ls -lart' );
 $last_line = system( 'ls', $retval );
 $handle = popen( '/bin/ls', 'r' );
+
+// Issue #898.
+class System {}
+class Serialize {}
