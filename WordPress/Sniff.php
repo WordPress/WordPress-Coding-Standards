@@ -220,8 +220,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'get_bookmark'              => true,
 		'get_calendar'              => true,
 		'get_comment_author_link'   => true,
-		'get_comment_date'          => true,
-		'get_comment_time'          => true,
 		'get_current_blog_id'       => true,
 		'get_delete_post_link'      => true,
 		'get_footer'                => true,
