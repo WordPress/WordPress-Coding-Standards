@@ -176,7 +176,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'bloginfo'                  => true,
 		'body_class'                => true,
 		'calendar_week_mod'         => true,
-		'cancel_comment_reply_link' => true,
 		'category_description'      => true,
 		'checked'                   => true,
 		'comment_author_email_link' => true,
