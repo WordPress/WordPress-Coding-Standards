@@ -251,6 +251,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'previous_image_link'       => true,
 		'previous_post_link'        => true,
 		'previous_posts_link'       => true,
+		'readonly'                  => true,
 		'selected'                  => true,
 		'single_cat_title'          => true,
 		'single_month_title'        => true,
