@@ -27,10 +27,10 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList( $testFile = 'PrefixAllGlobalsUnitTest.inc' ) {
+	public function getErrorList( $testFile = 'PrefixAllGlobalsUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
-			case 'PrefixAllGlobalsUnitTest.inc':
+			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
 					1   => 2, // 2 x error for incorrect prefix passed.
 					18  => 1,
@@ -63,8 +63,10 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					354 => 1,
 				);
 
-			case 'PrefixAllGlobalsUnitTest.1.inc':
+			case 'PrefixAllGlobalsUnitTest.2.inc':
 				// Namespaced - all OK, fall through to the default case.
+			case 'PrefixAllGlobalsUnitTest.3.inc':
+				// Test class - non-prefixed constant is fine, fall through to the default case.
 			default:
 				return array();
 		}
@@ -76,10 +78,10 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = 'PrefixAllGlobalsUnitTest.inc' ) {
+	public function getWarningList( $testFile = 'PrefixAllGlobalsUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
-			case 'PrefixAllGlobalsUnitTest.inc':
+			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
 					249 => 1,
 					250 => 1,
