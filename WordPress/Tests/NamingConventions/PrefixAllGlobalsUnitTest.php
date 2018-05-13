@@ -63,7 +63,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					354 => 1,
 				);
 
-			case 'PrefixAllGlobalsUnitTest.1.inc':
+			case 'PrefixAllGlobalsUnitTest.2.inc':
 				// Namespaced - all OK, fall through to the default case.
 			default:
 				return array();
