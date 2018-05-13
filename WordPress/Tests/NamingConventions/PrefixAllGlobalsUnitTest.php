@@ -65,6 +65,8 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 
 			case 'PrefixAllGlobalsUnitTest.2.inc':
 				// Namespaced - all OK, fall through to the default case.
+			case 'PrefixAllGlobalsUnitTest.3.inc':
+				// Test class - non-prefixed constant is fine, fall through to the default case.
 			default:
 				return array();
 		}

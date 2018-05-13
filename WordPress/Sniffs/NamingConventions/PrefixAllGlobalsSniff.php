@@ -240,6 +240,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
+		// Ignore test classes.
+		if ( T_CLASS === $this->tokens[ $stackPtr ]['code'] && true === $this->is_test_class( $stackPtr ) ) {
+			if ( $this->tokens[ $stackPtr ]['scope_condition'] === $stackPtr && isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
+				// Skip forward to end of test class.
+				return $this->tokens[ $stackPtr ]['scope_closer'];
+			}
+			return;
+		}
+
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Disallow excluding function groups for this sniff.
 			$this->exclude = '';
@@ -286,15 +295,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				case 'T_CLASS':
 				case 'T_INTERFACE':
 				case 'T_TRAIT':
-					// Ignore test classes.
-					if ( true === $this->is_test_class( $stackPtr ) ) {
-						if ( $this->tokens[ $stackPtr ]['scope_condition'] === $stackPtr && isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
-							// Skip forward to end of test class.
-							return $this->tokens[ $stackPtr ]['scope_closer'];
-						}
-						return;
-					}
-
 					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
 					$error_text = 'Classes declared';
 					$error_code = 'NonPrefixedClassFound';
@@ -385,7 +385,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	} // End process_token().
 
 	/**
-	 * Handle variable variable defined in the global namespace.
+	 * Handle variable variables defined in the global namespace.
 	 *
 	 * @since 0.12.0
 	 *
