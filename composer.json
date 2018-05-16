@@ -15,7 +15,7 @@
 		"squizlabs/php_codesniffer": "^2.9.0 || ^3.0.2"
 	},
 	"suggest" : {
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3"
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
 	},
 	"minimum-stability" : "RC",
 	"support"    : {
