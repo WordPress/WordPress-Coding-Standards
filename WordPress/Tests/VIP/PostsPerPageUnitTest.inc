@@ -20,5 +20,5 @@ $query_args['my_posts_per_page'] = -1; // OK.
 
 // Test deprecated property message.
 // @codingStandardsChangeSetting WordPress.VIP.PostsPerPage posts_per_page 50
- $query_args['posts_per_page'] = 50; // OK.
+$query_args['posts_per_page'] = 50; // OK.
 // @codingStandardsChangeSetting WordPress.VIP.PostsPerPage posts_per_page 100
