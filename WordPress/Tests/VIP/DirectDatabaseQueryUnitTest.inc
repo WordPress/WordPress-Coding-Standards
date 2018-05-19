@@ -1,6 +1,6 @@
 <?php
 
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheGetFunctions my_cacheget
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions my_cacheget
 $variable = 'abc'; // Warning, deprecated sniff.
 
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheGetFunctions false
+// @codingStandardsChangeSetting WordPress.VIP.DirectDatabaseQuery customCacheGetFunctions false
