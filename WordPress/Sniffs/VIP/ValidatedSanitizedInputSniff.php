@@ -59,10 +59,10 @@ class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedS
 			);
 		}
 
-		if ( ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
-			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize']
+		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff']
+			&& ( ( array() !== $this->customSanitizingFunctions && $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] )
+			|| ( array() !== $this->customUnslashingSanitizingFunctions && $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] )
 			|| false !== $this->check_validation_in_scope_only )
-			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.ValidatedSanitizedInput" sniff has been renamed to "WordPress.Security.ValidatedSanitizedInput". Please update your custom ruleset.',

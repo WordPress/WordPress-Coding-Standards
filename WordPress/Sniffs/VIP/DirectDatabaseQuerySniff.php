@@ -61,10 +61,10 @@ class DirectDatabaseQuerySniff extends \WordPress\Sniffs\DB\DirectDatabaseQueryS
 			);
 		}
 
-		if ( ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget']
-			|| $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset']
-			|| $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] )
-			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff']
+			&& ( ( array() !== $this->customCacheGetFunctions && $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget'] )
+			|| ( array() !== $this->customCacheSetFunctions && $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset'] )
+			|| ( array() !== $this->customCacheDeleteFunctions && $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] ) )
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.DirectDatabaseQuery" sniff has been renamed to "WordPress.DB.DirectDatabaseQuery". Please update your custom ruleset.',

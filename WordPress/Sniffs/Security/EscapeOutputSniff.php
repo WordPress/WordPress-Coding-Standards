@@ -93,10 +93,10 @@ class EscapeOutputSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'escape'     => null,
-		'autoescape' => null,
-		'sanitize'   => null,
-		'print'      => null,
+		'escape'     => array(),
+		'autoescape' => array(),
+		'sanitize'   => array(),
+		'print'      => array(),
 	);
 
 	/**

@@ -57,10 +57,10 @@ class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificatio
 			);
 		}
 
-		if ( ( $this->customNonceVerificationFunctions !== $this->addedCustomFunctions['nonce']
-			|| $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
-			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] )
-			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff']
+			&& ( ( array() !== $this->customNonceVerificationFunctions && $this->customNonceVerificationFunctions !== $this->addedCustomFunctions['nonce'] )
+			|| ( array() !== $this->customSanitizingFunctions && $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] )
+			|| ( array() !== $this->customUnslashingSanitizingFunctions && $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] ) )
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.CSRF.NonceVerification" sniff has been renamed to "WordPress.Security.NonceVerification". Please update your custom ruleset.',
