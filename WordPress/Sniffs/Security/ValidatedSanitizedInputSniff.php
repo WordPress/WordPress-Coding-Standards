@@ -152,8 +152,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
 			$this->phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -182,4 +181,4 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

@@ -90,4 +90,4 @@ class CronIntervalSniff extends \WordPress\Sniffs\WP\CronIntervalSniff {
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

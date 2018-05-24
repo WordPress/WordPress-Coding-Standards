@@ -562,7 +562,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				}
 			}
 		}
-	} // End process_multi_line_array().
+	}
 
 	/**
 	 * Validate that a valid value has been received for the alignMultilineItems property.
@@ -606,4 +606,4 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$this->alignMultilineItems = 'always';
 	}
 
-} // End class.
+}

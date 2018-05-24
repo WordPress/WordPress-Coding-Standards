@@ -28,8 +28,7 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -63,7 +62,6 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 			173 => 1,
 			181 => 1,
 		);
-
 	}
 
-} // End class.
+}

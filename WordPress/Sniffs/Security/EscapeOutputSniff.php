@@ -483,8 +483,7 @@ class EscapeOutputSniff extends Sniff {
 		}
 
 		return $end_of_statement;
-
-	} // End process_token().
+	}
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -542,4 +541,4 @@ class EscapeOutputSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

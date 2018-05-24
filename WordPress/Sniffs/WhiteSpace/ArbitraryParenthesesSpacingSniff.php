@@ -250,7 +250,6 @@ class ArbitraryParenthesesSpacingSniff extends Sniff {
 				}
 			}
 		}
+	}
 
-	} // End process_token().
-
-} // End class.
+}

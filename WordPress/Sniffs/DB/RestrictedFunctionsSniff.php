@@ -60,8 +60,7 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'mysql_to_rfc3339' => true,
 				),
 			),
-
 		);
 	}
 
-} // End class.
+}

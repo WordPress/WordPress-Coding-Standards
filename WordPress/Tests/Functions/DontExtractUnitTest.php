@@ -33,7 +33,6 @@ class DontExtractUnitTest extends AbstractSniffUnitTest {
 		return array(
 			4 => 1,
 		);
-
 	}
 
 	/**
@@ -45,7 +44,6 @@ class DontExtractUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 2,
 		);
-
 	}
 
-} // End class.
+}

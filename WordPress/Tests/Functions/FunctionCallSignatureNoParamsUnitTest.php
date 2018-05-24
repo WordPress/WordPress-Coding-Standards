@@ -40,7 +40,6 @@ class FunctionCallSignatureNoParamsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

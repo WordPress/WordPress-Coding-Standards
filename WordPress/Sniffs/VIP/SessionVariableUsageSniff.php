@@ -36,7 +36,6 @@ class SessionVariableUsageSniff extends Sniff {
 		return array(
 			T_VARIABLE,
 		);
-
 	}
 
 	/**
@@ -56,4 +55,4 @@ class SessionVariableUsageSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

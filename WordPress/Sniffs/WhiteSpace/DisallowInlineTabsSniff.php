@@ -99,7 +99,6 @@ class DisallowInlineTabsSniff extends Sniff {
 
 		// Ignore the rest of the file.
 		return ( $this->phpcsFile->numTokens + 1 );
+	}
 
-	} // End process().
-
-} // End class.
+}

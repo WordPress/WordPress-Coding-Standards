@@ -28,7 +28,6 @@ class DevelopmentFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -54,7 +53,6 @@ class DevelopmentFunctionsUnitTest extends AbstractSniffUnitTest {
 			33 => 1,
 			34 => 1,
 		);
-
 	}
 
-} // End class.
+}

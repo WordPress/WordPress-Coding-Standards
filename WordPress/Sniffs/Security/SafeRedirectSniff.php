@@ -43,6 +43,6 @@ class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

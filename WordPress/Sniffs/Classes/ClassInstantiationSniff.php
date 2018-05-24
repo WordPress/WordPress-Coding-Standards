@@ -199,6 +199,6 @@ class ClassInstantiationSniff extends Sniff {
 				$this->phpcsFile->recordMetric( $stackPtr, 'Space between classname and parenthesis', 0 );
 			}
 		}
-	} // End process_token().
+	}
 
-} // End class.
+}

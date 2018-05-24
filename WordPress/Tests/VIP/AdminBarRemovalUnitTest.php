@@ -79,8 +79,7 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
+		}
 	}
 
 	/**
@@ -90,7 +89,6 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

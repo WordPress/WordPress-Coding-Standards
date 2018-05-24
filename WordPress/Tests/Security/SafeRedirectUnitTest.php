@@ -27,8 +27,7 @@ class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
-	} // End getErrorList().
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -39,7 +38,6 @@ class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 		return array(
 			3 => 1,
 		);
-
 	}
 
-} // End class.
+}

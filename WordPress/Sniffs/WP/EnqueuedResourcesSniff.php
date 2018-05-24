@@ -59,7 +59,6 @@ class EnqueuedResourcesSniff extends Sniff {
 				'NonEnqueuedScript'
 			);
 		}
+	}
 
-	} // End process().
-
-} // End class.
+}

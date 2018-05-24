@@ -51,8 +51,7 @@ class DiscouragedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'wp_reset_query',
 				),
 			),
-
 		);
-	} // end getGroups()
+	}
 
-} // end class
+}

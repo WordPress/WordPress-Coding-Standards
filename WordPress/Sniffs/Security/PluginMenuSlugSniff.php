@@ -85,4 +85,4 @@ class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-} // End class.
+}

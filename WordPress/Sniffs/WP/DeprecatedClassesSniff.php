@@ -67,8 +67,7 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 				'classes' => $keys,
 			),
 		);
-
-	} // End getGroups().
+	}
 
 	/**
 	 * Process a matched token.
@@ -104,7 +103,6 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			$this->string_to_errorcode( $matched_content . 'Found' ),
 			$data
 		);
+	}
 
-	} // End process_matched_token().
-
-} // End class.
+}

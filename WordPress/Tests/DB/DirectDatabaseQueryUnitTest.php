@@ -29,7 +29,6 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -57,7 +56,6 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 			257 => 1,
 			274 => 1,
 		);
-
 	}
 
-} // End class.
+}

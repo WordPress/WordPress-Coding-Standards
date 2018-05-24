@@ -36,7 +36,6 @@ class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 			24 => 1,
 			26 => 1,
 		);
-
 	}
 
 	/**
@@ -46,7 +45,6 @@ class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

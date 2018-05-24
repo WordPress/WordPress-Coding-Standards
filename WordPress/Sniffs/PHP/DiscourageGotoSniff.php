@@ -47,4 +47,4 @@ class DiscourageGotoSniff extends Sniff {
 		$this->phpcsFile->addWarning( 'Using the "goto" language construct is discouraged', $stackPtr, 'Found' );
 	}
 
-}//end class
+}

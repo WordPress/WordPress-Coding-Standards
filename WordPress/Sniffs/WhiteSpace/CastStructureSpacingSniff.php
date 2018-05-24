@@ -62,4 +62,4 @@ class CastStructureSpacingSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

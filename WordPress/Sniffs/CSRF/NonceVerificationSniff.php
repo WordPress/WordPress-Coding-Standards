@@ -76,4 +76,4 @@ class NonceVerificationSniff extends \WordPress\Sniffs\Security\NonceVerificatio
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

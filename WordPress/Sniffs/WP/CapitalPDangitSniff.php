@@ -260,8 +260,7 @@ class CapitalPDangitSniff extends Sniff {
 				$this->phpcsFile->fixer->replaceToken( $stackPtr, $replacement );
 			}
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Retrieve a list of misspellings based on an array of matched variations on the target word.
@@ -285,4 +284,4 @@ class CapitalPDangitSniff extends Sniff {
 		return $mispelled;
 	}
 
-} // End class.
+}

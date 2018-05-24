@@ -222,8 +222,7 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'wp_is_mobile',
 				),
 			),
-
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

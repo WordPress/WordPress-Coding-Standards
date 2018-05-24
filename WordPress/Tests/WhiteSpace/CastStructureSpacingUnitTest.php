@@ -36,7 +36,6 @@ class CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
 			18 => 2,
 			21 => 2,
 		);
-
 	}
 
 	/**
@@ -46,7 +45,6 @@ class CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

@@ -33,7 +33,6 @@ class SuperGlobalInputUsageSniff extends Sniff {
 		return array(
 			T_VARIABLE,
 		);
-
 	}
 
 	/**
@@ -60,7 +59,6 @@ class SuperGlobalInputUsageSniff extends Sniff {
 		if ( ! $this->has_whitelist_comment( 'input var', $stackPtr ) ) {
 			$this->phpcsFile->addWarning( 'Detected access of super global var %s, probably needs manual inspection.', $stackPtr, 'AccessDetected', array( $varName ) );
 		}
-
 	}
 
-} // End class.
+}

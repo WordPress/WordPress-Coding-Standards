@@ -29,7 +29,6 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -53,7 +52,6 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 			108 => 1,
 			115 => 1,
 		);
-
 	}
 
-} // End class.
+}

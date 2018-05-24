@@ -205,7 +205,6 @@ class PreparedSQLSniff extends Sniff {
 		}
 
 		return $this->end;
+	}
 
-	} // End process_token().
-
-} // End class.
+}

@@ -77,8 +77,7 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 		 */
 
 		return $ret;
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -87,7 +86,6 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

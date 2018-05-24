@@ -64,4 +64,4 @@ class EmptyStatementUnitTest extends AbstractSniffUnitTest {
 		}
 	}
 
-} // End class.
+}

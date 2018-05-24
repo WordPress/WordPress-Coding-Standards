@@ -31,7 +31,6 @@ class TimezoneChangeUnitTest extends AbstractSniffUnitTest {
 		return array(
 			3 => 1,
 		);
-
 	}
 
 	/**
@@ -41,7 +40,6 @@ class TimezoneChangeUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}
