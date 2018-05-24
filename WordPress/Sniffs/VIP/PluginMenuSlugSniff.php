@@ -62,4 +62,4 @@ class PluginMenuSlugSniff extends \WordPress\Sniffs\Security\PluginMenuSlugSniff
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

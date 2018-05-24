@@ -70,7 +70,6 @@ class ArbitraryParenthesesSpacingUnitTest extends AbstractSniffUnitTest {
 			55 => 1,
 			56 => 1,
 		);
-
 	}
 
-} // End class.
+}

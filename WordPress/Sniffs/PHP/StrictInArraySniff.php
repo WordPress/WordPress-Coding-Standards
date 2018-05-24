@@ -101,4 +101,4 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-} // End class.
+}

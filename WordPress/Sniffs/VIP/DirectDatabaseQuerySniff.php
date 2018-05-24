@@ -80,4 +80,4 @@ class DirectDatabaseQuerySniff extends \WordPress\Sniffs\DB\DirectDatabaseQueryS
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

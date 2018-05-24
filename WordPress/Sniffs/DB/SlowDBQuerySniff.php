@@ -97,4 +97,4 @@ class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
 		return true;
 	}
 
-} // End class.
+}

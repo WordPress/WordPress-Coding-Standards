@@ -65,4 +65,4 @@ class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 		);
 	}
 
-} // End class.
+}

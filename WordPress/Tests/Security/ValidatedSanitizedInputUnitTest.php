@@ -55,7 +55,6 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			150 => 2,
 			160 => 2,
 		);
-
 	}
 
 	/**
@@ -65,7 +64,6 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

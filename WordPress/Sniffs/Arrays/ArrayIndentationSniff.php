@@ -59,7 +59,6 @@ class ArrayIndentationSniff extends Sniff {
 	 */
 	private $ignore_tokens = array();
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -390,9 +389,7 @@ class ArrayIndentationSniff extends Sniff {
 
 			$end_of_previous_item = $end_of_this_item;
 		}
-
-	} // End process_token().
-
+	}
 
 	/**
 	 * Should the token be ignored ?
@@ -534,4 +531,4 @@ class ArrayIndentationSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

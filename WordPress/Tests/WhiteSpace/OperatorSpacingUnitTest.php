@@ -43,7 +43,6 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 			50 => 2,
 			51 => 2,
 		);
-
 	}
 
 	/**
@@ -53,7 +52,6 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

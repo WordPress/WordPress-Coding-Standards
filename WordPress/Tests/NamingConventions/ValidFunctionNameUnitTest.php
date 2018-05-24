@@ -45,7 +45,6 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 			89  => 2,
 			106 => 2,
 		);
-
 	}
 
 	/**
@@ -55,7 +54,6 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

@@ -381,8 +381,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				)
 			);
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Handle variable variables defined in the global namespace.
@@ -622,8 +621,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				'$' . $variable_name,
 			)
 		);
-
-	} // End process_variable_assignment().
+	}
 
 	/**
 	 * Process the parameters of a matched function.
@@ -724,8 +722,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$data[] = $raw_content;
 
 		$this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
-
-	} // End process_parameters().
+	}
 
 	/**
 	 * Check if a function/class/constant/variable name is prefixed with one of the expected prefixes.
@@ -852,7 +849,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		// Set the validated prefixes cache.
 		$this->validated_prefixes = $this->prefixes;
+	}
 
-	} // End validate_prefixes().
-
-} // End class.
+}

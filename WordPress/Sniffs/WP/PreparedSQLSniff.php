@@ -64,4 +64,4 @@ class PreparedSQLSniff extends \WordPress\Sniffs\DB\PreparedSQLSniff {
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

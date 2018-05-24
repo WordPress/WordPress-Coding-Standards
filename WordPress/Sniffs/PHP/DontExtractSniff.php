@@ -49,6 +49,6 @@ class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
 			),
 
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

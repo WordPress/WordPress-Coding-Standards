@@ -77,7 +77,6 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			T_CONSTANT_ENCAPSED_STRING,
 			T_DOUBLE_QUOTED_STRING,
 		);
-
 	}
 
 	/**
@@ -218,8 +217,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				}
 			}
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Callback to process each confirmed key, to check value.
@@ -235,4 +233,4 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 */
 	abstract public function callback( $key, $val, $line, $group );
 
-} // End class.
+}

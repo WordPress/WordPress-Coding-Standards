@@ -27,7 +27,6 @@ class AssignmentInConditionUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -92,7 +91,6 @@ class AssignmentInConditionUnitTest extends AbstractSniffUnitTest {
 			149 => 1,
 			150 => 1,
 		);
-
 	}
 
-} // End class.
+}

@@ -48,4 +48,4 @@ class VariableRestrictionsSniff extends AbstractVariableRestrictionsSniff {
 		return array();
 	}
 
-} // End class.
+}

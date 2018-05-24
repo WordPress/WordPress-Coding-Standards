@@ -74,10 +74,8 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 			case 'ValidHookNameUnitTest.2.inc':
 			default:
 				return array();
-
-		} // End switch().
-
-	} // End getErrorList().
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -110,9 +108,7 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
 		}
-
 	}
 
-} // End class.
+}

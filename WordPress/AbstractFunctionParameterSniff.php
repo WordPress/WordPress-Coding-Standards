@@ -109,4 +109,4 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 		return;
 	}
 
-} // End class.
+}

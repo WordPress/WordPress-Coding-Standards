@@ -74,7 +74,6 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 			T_EXTENDS,
 			T_IMPLEMENTS,
 		);
-
 	}
 
 	/**
@@ -157,8 +156,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 		$this->classname = $classname;
 		return true;
-
-	} // End is_targetted_token().
+	}
 
 	/**
 	 * Verify if the current token is one of the targetted classes.
@@ -189,8 +187,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		return min( $skip_to );
-
-	} // End is_targetted_token().
+	}
 
 	/**
 	 * Prepare the class name for use in a regular expression.
@@ -245,4 +242,4 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		return $classname;
 	}
 
-} // End class.
+}

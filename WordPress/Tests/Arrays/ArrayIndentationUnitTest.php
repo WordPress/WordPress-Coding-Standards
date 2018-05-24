@@ -65,7 +65,6 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 		}
 	}
 
-
 	/**
 	 * Returns the lines where errors should occur.
 	 *
@@ -174,7 +173,6 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

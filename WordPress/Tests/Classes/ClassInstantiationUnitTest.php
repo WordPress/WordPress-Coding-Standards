@@ -68,7 +68,6 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
 		}
 	}
 
@@ -79,7 +78,6 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

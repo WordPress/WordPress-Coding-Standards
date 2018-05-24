@@ -124,4 +124,4 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 		}
 	}
 
-} // End class.
+}

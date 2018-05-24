@@ -31,4 +31,6 @@
 		</properties>
 	</rule>
 
+	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
+
 </ruleset>

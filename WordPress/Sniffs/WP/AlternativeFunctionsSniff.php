@@ -121,9 +121,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'mt_rand',
 				),
 			),
-
 		);
-	} // End getGroups().
+	}
 
 	/**
 	 * Process a matched token.
@@ -149,4 +148,4 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		}
 	}
 
-} // End class.
+}

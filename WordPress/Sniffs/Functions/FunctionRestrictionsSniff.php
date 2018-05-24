@@ -45,4 +45,4 @@ class FunctionRestrictionsSniff extends AbstractFunctionRestrictionsSniff {
 		return array();
 	}
 
-} // End class.
+}

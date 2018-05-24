@@ -78,4 +78,4 @@ class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedS
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

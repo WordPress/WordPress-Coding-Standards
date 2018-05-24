@@ -86,7 +86,6 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 			// If there is only whitespace between the parenthesis, it will just be the one token.
 			$this->phpcsFile->fixer->replaceToken( ( $openParenthesis + 1 ), '' );
 		}
+	}
 
-	} // End process_token().
-
-} // End class.
+}

@@ -77,4 +77,4 @@ class GlobalVariablesSniff extends \WordPress\Sniffs\WP\GlobalVariablesOverrideS
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

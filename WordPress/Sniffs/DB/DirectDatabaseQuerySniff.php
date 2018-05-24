@@ -103,7 +103,6 @@ class DirectDatabaseQuerySniff extends Sniff {
 		return array(
 			T_VARIABLE,
 		);
-
 	}
 
 	/**
@@ -221,8 +220,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		return $endOfStatement;
-
-	} // End process_token().
+	}
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -264,4 +262,4 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

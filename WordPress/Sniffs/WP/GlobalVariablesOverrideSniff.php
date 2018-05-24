@@ -159,8 +159,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				}
 			}
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Add the error if there is no whitelist comment present and the assignment
@@ -176,4 +175,4 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

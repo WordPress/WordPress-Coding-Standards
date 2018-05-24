@@ -65,7 +65,6 @@ class CronIntervalSniff extends Sniff {
 			T_CONSTANT_ENCAPSED_STRING,
 			T_DOUBLE_QUOTED_STRING,
 		);
-
 	}
 
 	/**
@@ -198,8 +197,7 @@ class CronIntervalSniff extends Sniff {
 			);
 			return;
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Add warning about unclear cron schedule change.
@@ -214,4 +212,4 @@ class CronIntervalSniff extends Sniff {
 		);
 	}
 
-} // End class.
+}

@@ -34,7 +34,6 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		return array(
 			T_OPEN_SQUARE_BRACKET,
 		);
-
 	}
 
 	/**
@@ -86,7 +85,6 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 				}
 			}
 		}
+	}
 
-	} // End process().
-
-} // End class.
+}

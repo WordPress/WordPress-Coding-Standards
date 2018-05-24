@@ -73,6 +73,6 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

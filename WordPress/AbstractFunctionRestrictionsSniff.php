@@ -195,8 +195,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 			return $this->check_for_matches( $stackPtr );
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Verify is the current token is a function call.
@@ -240,8 +239,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return false;
-
-	} // End is_targetted_token().
+	}
 
 	/**
 	 * Verify if the current token is one of the targetted functions.
@@ -277,8 +275,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return min( $skip_to );
-
-	} // End check_for_matches().
+	}
 
 	/**
 	 * Process a matched token.
@@ -303,7 +300,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		);
 
 		return;
-	} // End process_matched_token().
+	}
 
 	/**
 	 * Prepare the function name for use in a regular expression.
@@ -325,4 +322,4 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		return $function;
 	}
 
-} // End class.
+}

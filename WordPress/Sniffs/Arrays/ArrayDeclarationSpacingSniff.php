@@ -437,4 +437,4 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

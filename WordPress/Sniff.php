@@ -2537,7 +2537,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return true;
-	} // End is_wpdb_method_call().
+	}
 
 	/**
 	 * Determine whether an arbitrary T_STRING token is the use of a global constant.

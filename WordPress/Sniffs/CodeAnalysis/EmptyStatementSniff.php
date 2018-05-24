@@ -144,7 +144,6 @@ class EmptyStatementSniff extends Sniff {
 				/* Deliberately left empty. */
 				break;
 		}
+	}
 
-	} // End process_token().
-
-} // End class.
+}

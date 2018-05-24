@@ -77,4 +77,4 @@ class SlowDBQuerySniff extends \WordPress\Sniffs\DB\SlowDBQuerySniff {
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

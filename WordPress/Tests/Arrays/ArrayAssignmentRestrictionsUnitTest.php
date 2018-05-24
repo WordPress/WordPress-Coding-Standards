@@ -60,7 +60,6 @@ class ArrayAssignmentRestrictionsUnitTest extends AbstractSniffUnitTest {
 			7  => 2,
 			20 => 1,
 		);
-
 	}
 
 	/**
@@ -70,7 +69,6 @@ class ArrayAssignmentRestrictionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

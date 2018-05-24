@@ -41,7 +41,6 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 2,
 		);
-
 	}
 
-} // End class.
+}

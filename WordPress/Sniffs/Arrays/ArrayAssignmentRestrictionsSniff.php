@@ -61,4 +61,4 @@ class ArrayAssignmentRestrictionsSniff extends AbstractArrayAssignmentRestrictio
 		return true;
 	}
 
-} // End class.
+}

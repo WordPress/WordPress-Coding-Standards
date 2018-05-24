@@ -31,7 +31,6 @@ class SessionVariableUsageUnitTest extends AbstractSniffUnitTest {
 			3 => 1,
 			4 => 1,
 		);
-
 	}
 
 	/**
@@ -41,7 +40,6 @@ class SessionVariableUsageUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

@@ -70,6 +70,6 @@ class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

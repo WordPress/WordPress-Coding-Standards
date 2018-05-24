@@ -74,4 +74,4 @@ class DontExtractSniff extends \WordPress\Sniffs\PHP\DontExtractSniff {
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

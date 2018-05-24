@@ -83,4 +83,4 @@ class EscapeOutputSniff extends \WordPress\Sniffs\Security\EscapeOutputSniff {
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

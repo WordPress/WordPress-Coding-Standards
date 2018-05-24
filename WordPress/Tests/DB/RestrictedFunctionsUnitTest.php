@@ -75,8 +75,7 @@ class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 			75 => 1,
 			76 => 1,
 		);
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -85,7 +84,6 @@ class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

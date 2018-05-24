@@ -283,4 +283,4 @@ class CommaAfterArrayItemSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

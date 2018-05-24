@@ -76,4 +76,4 @@ class TimezoneChangeSniff extends \WordPress\Sniffs\WP\TimezoneChangeSniff {
 		return parent::process_token( $stackPtr );
 	}
 
-} // End class.
+}

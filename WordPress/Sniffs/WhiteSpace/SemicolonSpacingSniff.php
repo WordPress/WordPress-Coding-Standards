@@ -63,4 +63,4 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 		return parent::process( $phpcsFile, $stackPtr );
 	}
 
-} // End class.
+}

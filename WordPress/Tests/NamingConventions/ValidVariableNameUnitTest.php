@@ -74,8 +74,7 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 		);
 
 		return $errors;
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -84,7 +83,6 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

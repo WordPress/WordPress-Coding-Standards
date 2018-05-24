@@ -29,7 +29,6 @@ class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -43,7 +42,6 @@ class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 			5 => 1,
 			9 => 2,
 		);
-
 	}
 
-} // End class.
+}
