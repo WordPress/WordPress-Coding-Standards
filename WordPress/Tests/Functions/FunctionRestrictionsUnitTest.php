@@ -7,13 +7,18 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
+namespace WordPress\Tests\Functions;
+
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\AbstractFunctionRestrictionsSniff;
+
 /**
  * Unit test class for the FunctionRestrictions sniff.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.10.0
  */
-class WordPress_Tests_Functions_FunctionRestrictionsUnitTest extends AbstractSniffUnitTest {
+class FunctionRestrictionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Add a number of extra restricted functions to unit test the abstract
@@ -25,7 +30,7 @@ class WordPress_Tests_Functions_FunctionRestrictionsUnitTest extends AbstractSni
 	protected function setUp() {
 		parent::setUp();
 
-		WordPress_AbstractFunctionRestrictionsSniff::$unittest_groups = array(
+		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
 			'test' => array(
 				'type'      => 'warning',
 				'message'   => 'Detected usage of %s.',
@@ -34,7 +39,6 @@ class WordPress_Tests_Functions_FunctionRestrictionsUnitTest extends AbstractSni
 					'barfoo',
 				),
 			),
-
 		);
 	}
 
