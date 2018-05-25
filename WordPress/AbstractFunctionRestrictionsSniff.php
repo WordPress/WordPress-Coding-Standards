@@ -188,9 +188,9 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		// Preliminary check. If the content of the T_STRING is not one of the functions we're
 		// looking for, we can bow out before doing the heavy lifting of checking whether
 		// this is a function call.
-		if ( preg_match( $this->prelim_check_regex, $this->tokens[ $stackPtr ]['content'] ) !== 1 ) {
-			return;
-		}
+		// if ( preg_match( $this->prelim_check_regex, $this->tokens[ $stackPtr ]['content'] ) !== 1 ) {
+		// 	return;
+		// }
 
 		if ( false === $this->is_targetted_token( $stackPtr ) ) {
 			return;
