@@ -861,39 +861,39 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var array <string function name> => <int callback argument position>
 	 */
 	protected $callback_functions = array(
-		'add_filter'                  => array( 2 ),
-		'add_action'                  => array( 2 ),
-		'array_diff_uassoc'           => array( -1 ), // = last argument passed.
-		'array_diff_ukey'             => array( -1 ), // = last argument passed.
-		'array_filter'                => array( 2 ),
-		'array_intersect_uassoc'      => array( -1 ), // = last argument passed.
-		'array_intersect_ukey'        => array( -1 ), // = last argument passed.
-		'array_map'                   => array( 1 ),
-		'array_reduce'                => array( 2 ),
-		'array_udiff_assoc'           => array( -1 ), // = last argument passed.
-		'array_udiff_uassoc'          => array( -1, -2 ), // = last argument passed.
-		'array_udiff'                 => array( -1 ), // = last argument passed.
-		'array_uintersect_assoc'      => array( -1 ), // = last argument passed.
-		'array_uintersect_uassoc'     => array( -1, -2 ), // = last argument passed.
-		'array_uintersect'            => array( -1 ), // = last argument passed.
-		'array_walk'                  => array( 2 ),
-		'array_walk_recursive'        => array( 2 ),
-		'call_user_func'              => array( 1 ),
-		'call_user_func_array'        => array( 1 ),
-		'forward_static_call'         => array( 1 ),
-		'forward_static_call_array'   => array( 1 ),
-		'header_register_callback'    => array( 1 ),
-		'iterator_apply'              => array( 2 ),
-		'mb_ereg_replace_callback'    => array( 2 ),
-		'ob_start'                    => array( 1 ),
-		'preg_replace_callback'       => array( 2 ),
-		'register_shutdown_function'  => array( 1 ),
-		'register_tick_function'      => array( 1 ),
-		'set_error_handler'           => array( 1 ),
-		'set_exception_handler'       => array( 1 ),
-		'uasort'                      => array( 2 ),
-		'uksort'                      => array( 2 ),
-		'usort'                       => array( 2 ),
+		'add_filter'                 => array( 2 ),
+		'add_action'                 => array( 2 ),
+		'array_diff_uassoc'          => array( -1 ), // = last argument passed.
+		'array_diff_ukey'            => array( -1 ), // = last argument passed.
+		'array_filter'               => array( 2 ),
+		'array_intersect_uassoc'     => array( -1 ), // = last argument passed.
+		'array_intersect_ukey'       => array( -1 ), // = last argument passed.
+		'array_map'                  => array( 1 ),
+		'array_reduce'               => array( 2 ),
+		'array_udiff_assoc'          => array( -1 ), // = last argument passed.
+		'array_udiff_uassoc'         => array( -1, -2 ), // = last argument passed.
+		'array_udiff'                => array( -1 ), // = last argument passed.
+		'array_uintersect_assoc'     => array( -1 ), // = last argument passed.
+		'array_uintersect_uassoc'    => array( -1, -2 ), // = last argument passed.
+		'array_uintersect'           => array( -1 ), // = last argument passed.
+		'array_walk'                 => array( 2 ),
+		'array_walk_recursive'       => array( 2 ),
+		'call_user_func'             => array( 1 ),
+		'call_user_func_array'       => array( 1 ),
+		'forward_static_call'        => array( 1 ),
+		'forward_static_call_array'  => array( 1 ),
+		'header_register_callback'   => array( 1 ),
+		'iterator_apply'             => array( 2 ),
+		'mb_ereg_replace_callback'   => array( 2 ),
+		'ob_start'                   => array( 1 ),
+		'preg_replace_callback'      => array( 2 ),
+		'register_shutdown_function' => array( 1 ),
+		'register_tick_function'     => array( 1 ),
+		'set_error_handler'          => array( 1 ),
+		'set_exception_handler'      => array( 1 ),
+		'uasort'                     => array( 2 ),
+		'uksort'                     => array( 2 ),
+		'usort'                      => array( 2 ),
 	);
 
 	/**

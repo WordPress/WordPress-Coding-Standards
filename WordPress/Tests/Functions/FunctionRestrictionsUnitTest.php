@@ -49,7 +49,6 @@ class FunctionRestrictionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -62,7 +61,6 @@ class FunctionRestrictionsUnitTest extends AbstractSniffUnitTest {
 		$array[18] = 2;
 		$array[21] = 2;
 		return $array;
-
 	}
 
-} // End class.
+}
