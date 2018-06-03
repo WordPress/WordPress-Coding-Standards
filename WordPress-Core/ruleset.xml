@@ -425,6 +425,7 @@
 	-->
 	<!-- Important to prevent issues with content being sent before headers. -->
 	<rule ref="Generic.Files.ByteOrderMark"/>
+	<rule ref="WordPress.PHP.WhitespaceBeforePHPOpenTag"/>
 
 	<!-- All line endings should be \n. -->
 	<rule ref="Generic.Files.LineEndings">
