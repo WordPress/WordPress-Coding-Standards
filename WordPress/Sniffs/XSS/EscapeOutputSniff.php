@@ -56,28 +56,24 @@ class EscapeOutputSniff extends \WordPress\Sniffs\Security\EscapeOutputSniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.Security.EscapeOutput". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
-
-			$this->thrown['DeprecatedSniff'] = true;
 		}
 
-		if ( ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape']
-			|| $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
-			|| $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape']
-			|| $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] )
-			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff']
+			&& ( ( array() !== $this->customEscapingFunctions && $this->customEscapingFunctions !== $this->addedCustomFunctions['escape'] )
+			|| ( array() !== $this->customSanitizingFunctions && $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] )
+			|| ( array() !== $this->customAutoEscapedFunctions && $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] )
+			|| ( array() !== $this->customPrintingFunctions && $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] ) )
 		) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.XSS.EscapeOutput" sniff has been renamed to "WordPress.Security.EscapeOutput". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
-
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
 		}
 
 		return parent::process_token( $stackPtr );

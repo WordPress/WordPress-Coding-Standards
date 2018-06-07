@@ -65,9 +65,9 @@ class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'cacheget'    => null,
-		'cacheset'    => null,
-		'cachedelete' => null,
+		'cacheget'    => array(),
+		'cacheset'    => array(),
+		'cachedelete' => array(),
 	);
 
 	/**

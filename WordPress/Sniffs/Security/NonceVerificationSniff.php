@@ -105,9 +105,9 @@ class NonceVerificationSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'nonce'           => null,
-		'sanitize'        => null,
-		'unslashsanitize' => null,
+		'nonce'           => array(),
+		'sanitize'        => array(),
+		'unslashsanitize' => array(),
 	);
 
 	/**

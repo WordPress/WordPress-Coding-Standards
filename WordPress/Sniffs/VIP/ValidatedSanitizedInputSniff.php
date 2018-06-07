@@ -52,27 +52,23 @@ class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedS
 	 */
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.ValidatedSanitizedInput" sniff has been renamed to "WordPress.Security.ValidatedSanitizedInput". Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
-
-			$this->thrown['DeprecatedSniff'] = true;
 		}
 
-		if ( ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
-			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize']
+		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff']
+			&& ( ( array() !== $this->customSanitizingFunctions && $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] )
+			|| ( array() !== $this->customUnslashingSanitizingFunctions && $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] )
 			|| false !== $this->check_validation_in_scope_only )
-			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
-			$this->phpcsFile->addWarning(
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.ValidatedSanitizedInput" sniff has been renamed to "WordPress.Security.ValidatedSanitizedInput". Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);
-
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = true;
 		}
 
 		return parent::process_token( $stackPtr );

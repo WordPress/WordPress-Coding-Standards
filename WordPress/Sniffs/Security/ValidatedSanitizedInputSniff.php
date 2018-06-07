@@ -63,8 +63,8 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'sanitize'        => null,
-		'unslashsanitize' => null,
+		'sanitize'        => array(),
+		'unslashsanitize' => array(),
 	);
 
 	/**
