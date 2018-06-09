@@ -60,6 +60,8 @@ class AlternativeFunctionsUnitTest extends AbstractSniffUnitTest {
 			26 => 1,
 			27 => 1,
 			28 => 1,
+
+			40 => 1,
 		);
 	}
 

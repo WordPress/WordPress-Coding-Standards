@@ -18,7 +18,8 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.11.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  Takes the minimum supported WP version into account.
+ * @since   1.0.0  - Takes the minimum supported WP version into account.
+ *                 - Takes exceptions based on passed parameters into account.
  *
  * @uses    \WordPress\Sniff::$minimum_supported_version
  */
@@ -136,13 +137,44 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
+		$this->get_wp_version_from_cl();
+
+		/*
+		 * Deal with exceptions.
+		 */
+		switch ( $matched_content ) {
+			case 'strip_tags':
+				/*
+				 * The function `wp_strip_all_tags()` is only a valid alternative when
+				 * only the first parameter is passed to `strip_tags()`.
+				 */
+				if ( $this->get_function_call_parameter_count( $stackPtr ) !== 1 ) {
+					return;
+				}
+
+				break;
+
+			case 'wp_parse_url':
+				/*
+				 * Before WP 4.7.0, the function `wp_parse_url()` was only a valid alternative
+				 * if no second param was passed to `parse_url()`.
+				 *
+				 * @see https://developer.wordpress.org/reference/functions/wp_parse_url/#changelog
+				 */
+				if ( $this->get_function_call_parameter_count( $stackPtr ) !== 1
+					&& version_compare( $this->minimum_supported_version, '4.7.0', '<' )
+				) {
+					return;
+				}
+
+				break;
+		}
+
 		if ( ! isset( $this->groups[ $group_name ]['since'] ) ) {
 			return parent::process_matched_token( $stackPtr, $group_name, $matched_content );
 		}
 
 		// Verify if the alternative is available in the minimum supported WP version.
-		$this->get_wp_version_from_cl();
-
 		if ( version_compare( $this->groups[ $group_name ]['since'], $this->minimum_supported_version, '<=' ) ) {
 			return parent::process_matched_token( $stackPtr, $group_name, $matched_content );
 		}
