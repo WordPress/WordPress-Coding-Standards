@@ -15,7 +15,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Check that capabilities are used correctly.
  *
- * User capabilities should be used not roles. Deprecated capabilities.
+ * User capabilities should be used not roles nor deprecated capabilities.
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -209,17 +209,17 @@ class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 * @var array All deprecated capabilities in core.
 	 */
 	protected $deprecated_capabilities = array(
-		'level_10' => true,
-		'level_9'  => true,
-		'level_8'  => true,
-		'level_7'  => true,
-		'level_6'  => true,
-		'level_5'  => true,
-		'level_4'  => true,
-		'level_3'  => true,
-		'level_2'  => true,
-		'level_1'  => true,
-		'level_0'  => true,
+		'level_10' => '3.0.0',
+		'level_9'  => '3.0.0',
+		'level_8'  => '3.0.0',
+		'level_7'  => '3.0.0',
+		'level_6'  => '3.0.0',
+		'level_5'  => '3.0.0',
+		'level_4'  => '3.0.0',
+		'level_3'  => '3.0.0',
+		'level_2'  => '3.0.0',
+		'level_1'  => '3.0.0',
+		'level_0'  => '3.0.0',
 	);
 
 	/**
@@ -259,13 +259,16 @@ class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->deprecated_capabilities[ $matched_parameter ] ) ) {
-			$this->phpcsFile->addError(
-				'The capatibility "%s" found in function call "%s()" has been deprecated since WordPress version 3.0.',
+			$this->get_wp_version_from_cl();
+			$this->addMessage(
+				'The capability "%s" found in function call "%s()" has been deprecated since WordPress version %s.',
 				$next_not_empty,
-				'DeprecatedCapability',
+				version_compare( $this->deprecated_capabilities[ $matched_parameter ], $this->minimum_supported_version, '<' ),
+				'Deprecated',
 				array(
 					$matched_parameter,
 					$matched_content,
+					$this->deprecated_capabilities[ $matched_parameter ],
 				)
 			);
 			return;
@@ -288,7 +291,7 @@ class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 			$this->phpcsFile->addWarning(
 				'"%s" is an unknown role or capability. Check the "%s()" function call to ensure it is a capability and not a role.',
 				$next_not_empty,
-				'UnknownCapabilityFound',
+				'Unknown',
 				array(
 					$matched_parameter,
 					$matched_content,

@@ -56,3 +56,5 @@ if ( current_user_can_for_blog( '3', 'custom_cap' ) ) { } // Warning.
 // @codingStandardsChangeSetting WordPress.WP.Capabilities check_only_known_caps true
 
 if ( author_can( $post, 'read' ) ) { } // OK.
+if ( author_can( $post, '' ) ) { } // OK.
+if ( author_can( $post, 'custom_cap' ) ) { } // OK.
