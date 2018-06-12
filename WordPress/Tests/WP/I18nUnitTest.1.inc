@@ -171,5 +171,8 @@ class Foo {
 	}
 }
 
+// Issue 1355.
+$offset_or_tz = _x( '0', 'default GMT offset or timezone string', 'my-slug' );
+
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true

@@ -624,7 +624,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$non_placeholder_content = $this->strip_quotes( $content );
 		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $non_placeholder_content );
 
-		if ( empty( $non_placeholder_content ) ) {
+		if ( '' === $non_placeholder_content ) {
 			$this->phpcsFile->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
 		}
 	}
