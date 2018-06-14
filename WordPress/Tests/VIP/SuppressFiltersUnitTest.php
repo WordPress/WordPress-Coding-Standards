@@ -48,6 +48,15 @@ class SuppressFiltersUnitTest extends AbstractSniffUnitTest {
 			28 => 1,
 			29 => 1,
 			30 => 1,
+			35 => 1,
+			36 => 1,
+			37 => 1,
+			41 => 1,
+			42 => 1,
+			43 => 1,
+			46 => 1,
+			47 => 1,
+			48 => 1
 		);
 
 	}
