@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\PHP;
+namespace WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   1.0.0
  */
-class EnqueuedCheckUnitTest extends AbstractSniffUnitTest {
+class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -27,10 +27,16 @@ class EnqueuedCheckUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			5  => 1,
+			3  => 1,
+			8  => 1,
 			9  => 1,
+			10 => 1,
+			11 => 1,
 			12 => 1,
-			15 => 1,
+			13 => 1,
+			32 => 1,
+			35 => 1,
+			38 => 1,
 		);
 	}
 
@@ -41,9 +47,10 @@ class EnqueuedCheckUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			4 => 1,
-			8 => 1,
+			3  => 1,
+			25 => 1,
+			32 => 1,
 		);
 	}
 
-} // End class.
+}
