@@ -185,16 +185,27 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			return;
 		}
 
+		$is_callback_function = $this->is_callback_function( $stackPtr );
+
 		// Preliminary check. If the content of the T_STRING is not one of the functions we're
 		// looking for, we can bow out before doing the heavy lifting of checking whether
 		// this is a function call.
-		if ( preg_match( $this->prelim_check_regex, $this->tokens[ $stackPtr ]['content'] ) !== 1 ) {
+		if ( ! $is_callback_function && preg_match( $this->prelim_check_regex, $this->tokens[ $stackPtr ]['content'] ) !== 1 ) {
 			return;
 		}
 
-		if ( true === $this->is_targetted_token( $stackPtr ) ) {
-			return $this->check_for_matches( $stackPtr );
+		if ( false === $this->is_targetted_token( $stackPtr ) ) {
+			return;
 		}
+
+		if ( $is_callback_function ) {
+			$callback_matches = $this->check_for_callback_matches( $stackPtr );
+			if ( ! empty( $callback_matches ) ) {
+				$stackPtr = $callback_matches;
+			}
+		}
+
+		return $this->check_for_matches( $stackPtr );
 	}
 
 	/**
@@ -278,6 +289,57 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	}
 
 	/**
+	 * Verify if the current token is one of the targetted functions as callback.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void If a callback was found return stackPtr for where to skip to.
+	 */
+	public function check_for_callback_matches( $stackPtr ) {
+		$token_content = strtolower( $this->tokens[ $stackPtr ]['content'] );
+
+		$skip_to    = array();
+		$parameters = $this->get_function_call_parameters( $stackPtr );
+		$positions  = $this->callback_functions[ $token_content ];
+
+		foreach ( $positions as $position ) {
+
+			// Calculate the last argument if the position is negative.
+			if ( $position < 0 ) {
+				$position = count( $parameters ) + 1 + $position;
+			}
+
+			if ( ! isset( $parameters[ $position ] ) ) {
+				return;
+			}
+
+			// Only get function name not anonymous funtions.
+			$callback = $this->phpcsFile->findNext(
+				array( T_CONSTANT_ENCAPSED_STRING ),
+				$parameters[ $position ]['start'],
+				null, // Do not deine the end so to catch the second callback.
+				false,
+				null,
+				true
+			);
+
+			if ( ! $callback ) {
+				return;
+			}
+
+			$skip_to[] = $this->check_for_matches( $this->strip_quotes( $callback ) );
+		}
+
+		if ( empty( $skip_to ) || min( $skip_to ) === 0 ) {
+			return;
+		}
+
+		return min( $skip_to );
+	}
+
+	/**
 	 * Process a matched token.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
@@ -298,8 +360,6 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
-
-		return;
 	}
 
 	/**

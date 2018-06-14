@@ -24,6 +24,8 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *                    This class is left here to prevent backward-compatibility breaks for
  *                    custom sniffs extending the old class and references to this
  *                    sniff from custom phpcs.xml files.
+ *             0.12.0 Use the UnitTest to check that callback functions are corectly
+ *                    being checked for.
  * @see        \WordPress\AbstractFunctionRestrictionsSniff
  */
 class FunctionRestrictionsSniff extends AbstractFunctionRestrictionsSniff {
