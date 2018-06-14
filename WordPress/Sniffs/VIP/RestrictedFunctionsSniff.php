@@ -29,6 +29,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
  *                 The check for `eval()` now defers to the upstream Squiz.PHP.Eval sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Checks for get_posts() has been moved to the `Security` SuppressFilterSniff.
  */
 class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
