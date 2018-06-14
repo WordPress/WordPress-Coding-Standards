@@ -151,42 +151,33 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 				// If 'raw' contains suppress_filters value.
 				if ( false !== strpos( $item['raw'], 'suppress_filters' ) ) {
 
-					// Finding the value by token pointer.
-					for ( $ptr = $item['start']; $ptr <= $item['end']; $ptr++ ) {
+					// Move to the next pointer where '=>' or ']' is placed.
+					$variable = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $item['start'], $item['end'] );
 
-						// '=>' detected.
-						if ( T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
+					// Type of the suppress_filter's value can be.
+					$accept_type = array(
+						T_FALSE   => T_FALSE,
+						T_TRUE    => T_TRUE,
+						T_LNUMBER => T_LNUMBER,
+					);
 
-							$accept_type = array( T_DOUBLE_QUOTED_STRING, T_CONSTANT_ENCAPSED_STRING, T_FALSE, T_TRUE, T_LNUMBER, T_INT_CAST );
+					// Get the value of the suppress_filters array key.
+					$key_value = $this->phpcsFile->findNext( Tokens::$emptyTokens, $variable + 1, null, true );
 
-							$key_value = $this->phpcsFile->findNext( Tokens::$emptyTokens, $ptr + 1, null, true );
-
-							if ( in_array( $this->tokens[ $key_value ]['code'], $accept_type,true ) ) {
-
-								$is_used = true;
-								$array_value = $this->strip_quotes( $this->tokens[ $key_value ]['content'] );
-							}
-						}
+					// Get the value of the suppress_filters array key.
+					$key_value1 = $this->phpcsFile->findNext( array_keys($accept_type), $this->tokens[ $key_value ]['nested_parenthesis'] );
+					if ( isset( $accept_type[ $this->tokens[ $key_value ]['code'] ] ) ) {
+						$array_value = $this->tokens[ $key_value ]['content'];
 					}
 				}
 			}
 		}
 
-		// If so, expected value was not passed.
-		if ( ! $is_used || ! empty( $array_value ) ) {
+		// In case numeric value is passed.
+		$item_value = ( '0' === $array_value ) ? 'false' : $this->strip_quotes( $array_value );
 
-			// In case numeric value is passed.
-			$item_value = ( '0' === $array_value ) ? 'false' : $array_value;
-
-			if ( 'false' !== $item_value ) {
-
-				$this->phpcsFile->addWarning(
-					'%s() is discouraged in favor of creating a new WP_Query() so that Advanced Post Cache will cache the query, unless you explicitly supply suppress_filters => false.',
-					$parameters[1]['start'],
-					'SuppressFilters',
-					array( $matched_content )
-				);
-			}
+		if ( 'false' !== $item_value ) {
+			$this->phpcsFile->addWarning( '%s() is discouraged in favor of creating a new WP_Query() so that Advanced Post Cache will cache the query, unless you explicitly supply suppress_filters => false.', $parameters[1]['start'], 'SuppressFilters', array( $matched_content ) );
 		}
 	}
 
