@@ -49,13 +49,11 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-
 		if ( false === $this->target_functions[ $matched_content ] ) {
 			return;
 		}
 
 		// Flag to check if suppress_filters is passed or not.
-		$is_used     = false;
 		$array_value = '';
 
 		// Retrieve the value parameter's details.
@@ -64,7 +62,6 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 		// When the list of argument were passed through variable.
 		// eg.  $args = array( 'foo' => 'bar' ), $args['foo'] => 'bar'.
 		if ( T_VARIABLE === $this->tokens[ $argument_data ]['code'] ) {
-
 			$start = 0;
 
 			// Check if we are in a function.
@@ -83,38 +80,49 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 				}
 			}
 
-			$end = $stackPtr;
+			// Move to the next pointer where '=>' or ']' is placed.
+			$variable = $this->phpcsFile->findNext( T_VARIABLE, $start, $stackPtr );
 
-			// Walking through the tokens.
-			for ( $i = ( $start + 1 ); $i < $end; $i ++ ) {
+			// Check if the variable we're looking for was found.
+			if ( $this->is_assignment( $variable ) ) {
 
-				if ( $this->tokens[ $i ]['content'] === $this->tokens[ $argument_data ]['content'] ) {
+				// Move to the next pointer where '=>' or ']' is placed.
+				$varData = $this->phpcsFile->findNext( array(
+					T_CLOSE_SQUARE_BRACKET,
+					T_DOUBLE_ARROW,
+					T_ARRAY,
+					T_OPEN_SHORT_ARRAY,
+				), $variable );
 
-					// Move to the next pointer where '=>' or ']' is placed.
-					$varData = $this->phpcsFile->findNext( array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW, T_ARRAY, T_OPEN_SHORT_ARRAY ),  $i );
+				if ( in_array( $this->tokens[ $varData ]['code'], array(
+					T_CLOSE_SQUARE_BRACKET,
+					T_DOUBLE_ARROW,
+				), true ) ) {
 
-					if ( in_array( $this->tokens[ $varData ]['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ),true ) ) {
+					$operator = $varData; // T_DOUBLE_ARROW.
 
-						$operator = $varData; // T_DOUBLE_ARROW.
-
-						if ( T_CLOSE_SQUARE_BRACKET === $this->tokens[ $varData ]['code'] ) {
-							$operator = $this->phpcsFile->findNext( T_EQUAL, ( $varData ) );
-						}
-
-						$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ),null,true );
-
-						if ( ! is_numeric( $this->tokens[ $keyIdx  ]['content'] ) ) {
-							$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
-							$valStart       = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
-							$valEnd         = $this->phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
-							$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
-							$val            = $this->strip_quotes( $val );
-							$array_value = $val;
-						}
-					} elseif ( in_array( $this->tokens[ $varData ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
-						// Store array data into variable so that we can proceed later.
-						$param_items = $this->get_function_call_parameters( $varData );
+					if ( T_CLOSE_SQUARE_BRACKET === $this->tokens[ $varData ]['code'] ) {
+						$operator = $this->phpcsFile->findNext( T_EQUAL, ( $varData ) );
 					}
+
+					$keyIdx = $this->phpcsFile->findPrevious( array(
+						T_WHITESPACE,
+						T_CLOSE_SQUARE_BRACKET,
+					), ( $operator - 1 ), null, true );
+
+					if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
+						$valStart    = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
+						$valEnd      = $this->phpcsFile->findNext( array(
+							T_COMMA,
+							T_SEMICOLON,
+						), ( $valStart + 1 ), null, false, null, true );
+						$array_value = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
+					}
+
+				} elseif ( in_array( $this->tokens[ $varData ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
+					// Store array data into variable so that we can proceed later.
+					$param_items = $this->get_function_call_parameters( $varData );
+					//  $this->phpcsFile->addWarning( print_r( $param_items, true ), $parameters[1]['start'], 'SuppressFilters' );
 				}
 			}
 		} elseif ( T_ARRAY === $this->tokens[ $argument_data ]['code'] || T_OPEN_SHORT_ARRAY === $this->tokens[ $argument_data ]['code'] ) {
@@ -123,23 +131,16 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 			// eg. get_posts( array( 'foo' => 'bar', 'baz' => 'quux' ) ).
 			$param_items = $this->get_function_call_parameters( $argument_data );
 
-		} elseif ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $argument_data ]['code'] || T_DOUBLE_QUOTED_STRING === $this->tokens[ $argument_data ]['code'] ) {
-
+		} elseif ( isset( Tokens::$stringTokens[ $this->tokens[ $argument_data ]['code'] ] ) ) {
 			// It handles when key value comes in '&query=arg' format.
 			// eg. get_posts( 'foo=bar&baz=quux' ).
-			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', $this->strip_quotes( $this->tokens[ $argument_data ]['content'] ), $arrKey ) <= 0 ) {
-				return;
-			}
+			$query_args = parse_str( $this->strip_quotes( $this->tokens[ $argument_data ]['content'] ), $arrKey );
 
-			foreach ( $arrKey[1] as $i => $query_key ) {
-
-				if ( 'suppress_filters' === $query_key ) {
-
-					$is_used     = true;
-					$array_value = $arrKey[2][ $i ];
-				}
+			if ( isset( $query_args['suppress_filters'] ) ) {
+				$array_value = $query_args['suppress_filters'];
 			}
 		}
+
 
 		// Process multi dimensional array.
 		if ( ! empty( $param_items ) ) {
