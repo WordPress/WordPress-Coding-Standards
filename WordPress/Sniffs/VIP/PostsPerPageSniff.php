@@ -102,4 +102,4 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 		return false;
 	}
 
-} // End class.
+}

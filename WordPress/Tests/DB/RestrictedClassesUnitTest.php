@@ -135,10 +135,8 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
-	} // End getErrorList().
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -147,7 +145,6 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

@@ -31,7 +31,6 @@ class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -44,7 +43,6 @@ class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 			1 => 2,
 			4 => 1,
 		);
-
 	}
 
-} // End class.
+}

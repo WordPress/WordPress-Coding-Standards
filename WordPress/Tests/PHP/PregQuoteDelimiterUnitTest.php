@@ -7,17 +7,18 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the WP_DiscouragedConstants sniff.
+ * Unit test class for the PregQuoteDelimiter sniff.
  *
  * @package WPCS\WordPressCodingStandards
- * @since   0.14.0
+ *
+ * @since   1.0.0
  */
-class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
+class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -35,24 +36,8 @@ class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			50 => 1,
-			51 => 1,
-			52 => 1,
-			53 => 1,
-			54 => 1,
-			55 => 1,
-			56 => 1,
-			57 => 1,
-			58 => 1,
-			59 => 1,
-			60 => 1,
-			61 => 1,
-			63 => 1,
-			64 => 1,
-			66 => 1,
-			67 => 1,
-			71 => 1,
-			72 => 1,
+			6 => 1,
+			7 => 1,
 		);
 	}
 

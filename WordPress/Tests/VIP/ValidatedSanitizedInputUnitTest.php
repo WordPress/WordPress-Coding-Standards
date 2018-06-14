@@ -33,7 +33,6 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 		return array(
 			4 => 3,
 		);
-
 	}
 
 	/**
@@ -45,7 +44,6 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 2,
 		);
-
 	}
 
-} // End class.
+}

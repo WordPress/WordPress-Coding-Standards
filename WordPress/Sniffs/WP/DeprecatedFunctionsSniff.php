@@ -1348,8 +1348,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'functions' => $keys,
 			),
 		);
-
-	} // End getGroups().
+	}
 
 	/**
 	 * Process a matched token.
@@ -1385,7 +1384,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			$this->string_to_errorcode( $matched_content . 'Found' ),
 			$data
 		);
-
-	} // End process_matched_token().
+	}
 
 }

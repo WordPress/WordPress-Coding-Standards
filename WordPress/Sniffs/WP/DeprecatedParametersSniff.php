@@ -263,8 +263,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 				'version' => '2.5.0',
 			),
 		),
-
-	); // End $target_functions.
+	);
 
 	/**
 	 * Process the parameters of a matched function.

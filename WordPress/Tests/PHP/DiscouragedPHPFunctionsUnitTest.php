@@ -28,7 +28,6 @@ class DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -64,7 +63,6 @@ class DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 			39 => 1,
 			40 => 1,
 		);
-
 	}
 
-} // End class.
+}

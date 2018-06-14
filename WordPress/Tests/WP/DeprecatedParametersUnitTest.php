@@ -52,4 +52,4 @@ class DeprecatedParametersUnitTest extends AbstractSniffUnitTest {
 		);
 	}
 
-} // End class.
+}

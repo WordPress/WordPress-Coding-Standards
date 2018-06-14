@@ -110,4 +110,4 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 		}
 	}
 
-} // End class.
+}

@@ -105,9 +105,9 @@ class NonceVerificationSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'nonce'           => null,
-		'sanitize'        => null,
-		'unslashsanitize' => null,
+		'nonce'           => array(),
+		'sanitize'        => array(),
+		'unslashsanitize' => array(),
 	);
 
 	/**
@@ -162,8 +162,7 @@ class NonceVerificationSniff extends Sniff {
 			$this->superglobals[ $instance['content'] ],
 			'NoNonceVerification'
 		);
-
-	} // End process_token().
+	}
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -201,4 +200,4 @@ class NonceVerificationSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

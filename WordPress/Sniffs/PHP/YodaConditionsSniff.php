@@ -58,7 +58,6 @@ class YodaConditionsSniff extends Sniff {
 			T_IS_IDENTICAL,
 			T_IS_NOT_IDENTICAL,
 		);
-
 	}
 
 	/**
@@ -121,7 +120,6 @@ class YodaConditionsSniff extends Sniff {
 		}
 
 		$this->phpcsFile->addError( 'Use Yoda Condition checks, you must.', $stackPtr, 'NotYoda' );
+	}
 
-	} // End process().
-
-} // End class.
+}

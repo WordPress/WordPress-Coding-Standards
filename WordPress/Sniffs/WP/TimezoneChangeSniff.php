@@ -49,6 +49,6 @@ class TimezoneChangeSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

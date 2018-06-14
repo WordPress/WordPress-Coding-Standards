@@ -355,7 +355,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 							 * Don't throw `UnescapedLiteral`, `UnsupportedPlaceholder` or `QuotedPlaceholder`
 							 * for this part of the SQL query.
 							 */
-							$content = preg_replace( '`' . preg_quote( $match ) . '`', '', $content, 1 );
+							$content = preg_replace( '`' . preg_quote( $match, '`' ) . '`', '', $content, 1 );
 						}
 					}
 				}

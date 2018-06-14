@@ -59,7 +59,6 @@ class ArrayIndentationSniff extends Sniff {
 	 */
 	private $ignore_tokens = array();
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -390,9 +389,7 @@ class ArrayIndentationSniff extends Sniff {
 
 			$end_of_previous_item = $end_of_this_item;
 		}
-
-	} // End process_token().
-
+	}
 
 	/**
 	 * Should the token be ignored ?
@@ -411,13 +408,26 @@ class ArrayIndentationSniff extends Sniff {
 			return true;
 		}
 
-		// If it's a subsequent line of a multi-line sting, it will not start with a quote character.
-		if ( ( T_CONSTANT_ENCAPSED_STRING === $token_code
-			|| T_DOUBLE_QUOTED_STRING === $token_code )
-			&& "'" !== $this->tokens[ $ptr ]['content'][0]
-			&& '"' !== $this->tokens[ $ptr ]['content'][0]
+		/*
+		 * If it's a subsequent line of a multi-line sting, it will not start with a quote
+		 * character, nor just *be* a quote character.
+		 */
+		if ( T_CONSTANT_ENCAPSED_STRING === $token_code
+			|| T_DOUBLE_QUOTED_STRING === $token_code
 		) {
-			return true;
+			// Deal with closing quote of a multi-line string being on its own line.
+			if ( "'" === $this->tokens[ $ptr ]['content']
+				|| '"' === $this->tokens[ $ptr ]['content']
+			) {
+				return true;
+			}
+
+			// Deal with subsequent lines of a multi-line string where the token is broken up per line.
+			if ( "'" !== $this->tokens[ $ptr ]['content'][0]
+				&& '"' !== $this->tokens[ $ptr ]['content'][0]
+			) {
+				return true;
+			}
 		}
 
 		return false;
@@ -521,4 +531,4 @@ class ArrayIndentationSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

@@ -43,7 +43,6 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 			128 => 1,
 			133 => 1,
 		);
-
 	}
 
 	/**
@@ -53,7 +52,6 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

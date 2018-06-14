@@ -206,7 +206,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
 			}
 		}
-
 	}
 
 	/**
@@ -240,7 +239,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			$error = 'Member variable "%s" is not in valid snake_case format.';
 			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
 		}
-
 	}
 
 	/**
@@ -279,7 +277,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -333,4 +330,4 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 	}
 
-} // End class.
+}

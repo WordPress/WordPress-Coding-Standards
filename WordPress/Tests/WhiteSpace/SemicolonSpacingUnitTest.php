@@ -32,7 +32,6 @@ class SemicolonSpacingUnitTest extends AbstractSniffUnitTest {
 		return array(
 			12 => 1,
 		);
-
 	}
 
 	/**
@@ -42,7 +41,6 @@ class SemicolonSpacingUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

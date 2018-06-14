@@ -30,8 +30,7 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -42,7 +41,6 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 2,
 		);
-
 	}
 
-} // End class.
+}

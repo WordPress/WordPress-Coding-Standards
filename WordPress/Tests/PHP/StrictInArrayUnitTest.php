@@ -51,4 +51,4 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 		);
 	}
 
-} // End class.
+}

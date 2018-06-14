@@ -72,7 +72,6 @@ class CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

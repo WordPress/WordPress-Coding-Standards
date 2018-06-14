@@ -45,7 +45,6 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 2,
 		);
-
 	}
 
-} // End class.
+}

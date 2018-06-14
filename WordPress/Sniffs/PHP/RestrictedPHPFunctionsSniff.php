@@ -42,8 +42,7 @@ class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'create_function',
 				),
 			),
-
 		);
-	} // end getGroups()
+	}
 
-} // End class.
+}

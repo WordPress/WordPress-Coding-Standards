@@ -157,8 +157,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
 			$this->phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
 		}
-
-	} // End process_parameters().
+	}
 
 	/**
 	 * Prepare the punctuation regular expression.
@@ -176,8 +175,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		}
 
 		return sprintf( $this->punctuation_regex, $extra );
-
-	} // End prepare_regex().
+	}
 
 	/**
 	 * Transform an arbitrary string to lowercase and replace punctuation and spaces with underscores.
@@ -201,7 +199,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			default:
 				return preg_replace( $regex, '_', strtolower( $string ) );
 		}
-	} // End transform().
+	}
 
 	/**
 	 * Transform a complex string which may contain variable extrapolation.
@@ -253,6 +251,6 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		}
 
 		return implode( '', $output );
-	} // End transform_complex_string().
+	}
 
-} // End class.
+}

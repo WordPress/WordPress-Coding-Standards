@@ -30,7 +30,6 @@ class GlobalVariablesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -42,7 +41,6 @@ class GlobalVariablesUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 2,
 		);
-
 	}
 
-} // End class.
+}

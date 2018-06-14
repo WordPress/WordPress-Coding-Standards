@@ -100,7 +100,6 @@ class FileSystemWritesDisallowSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		return $groups;
+	}
 
-	} // End getGroups().
-
-} // End class.
+}

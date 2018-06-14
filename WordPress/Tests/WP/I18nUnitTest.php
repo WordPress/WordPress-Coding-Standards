@@ -157,10 +157,8 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
-	} // end getErrorList()
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -195,8 +193,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
 		}
 	}
 
-} // End class.
+}

@@ -200,8 +200,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		} else {
 			return parent::process_token( $stackPtr );
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Process the parameters of a matched function.
@@ -428,4 +427,4 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-} // End class.
+}

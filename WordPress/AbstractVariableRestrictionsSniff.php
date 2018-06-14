@@ -80,7 +80,6 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 			T_DOUBLE_QUOTED_STRING,
 			T_HEREDOC,
 		);
-
 	}
 
 	/**
@@ -213,10 +212,8 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 			);
 
 			return; // Show one error only.
-
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Transform a wildcard pattern to a usable regex pattern.
@@ -234,4 +231,4 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 		return $pattern;
 	}
 
-} // End class.
+}

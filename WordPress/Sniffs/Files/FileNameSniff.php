@@ -218,7 +218,6 @@ class FileNameSniff extends Sniff {
 
 		// Only run this sniff once per file, no need to run it again.
 		return ( $this->phpcsFile->numTokens + 1 );
+	}
 
-	} // End process_token().
-
-} // End class.
+}

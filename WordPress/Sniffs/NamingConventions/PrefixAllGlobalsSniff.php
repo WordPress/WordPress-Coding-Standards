@@ -240,6 +240,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
+		// Ignore test classes.
+		if ( T_CLASS === $this->tokens[ $stackPtr ]['code'] && true === $this->is_test_class( $stackPtr ) ) {
+			if ( $this->tokens[ $stackPtr ]['scope_condition'] === $stackPtr && isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
+				// Skip forward to end of test class.
+				return $this->tokens[ $stackPtr ]['scope_closer'];
+			}
+			return;
+		}
+
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Disallow excluding function groups for this sniff.
 			$this->exclude = '';
@@ -286,15 +295,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				case 'T_CLASS':
 				case 'T_INTERFACE':
 				case 'T_TRAIT':
-					// Ignore test classes.
-					if ( true === $this->is_test_class( $stackPtr ) ) {
-						if ( $this->tokens[ $stackPtr ]['scope_condition'] === $stackPtr && isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
-							// Skip forward to end of test class.
-							return $this->tokens[ $stackPtr ]['scope_closer'];
-						}
-						return;
-					}
-
 					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
 					$error_text = 'Classes declared';
 					$error_code = 'NonPrefixedClassFound';
@@ -381,11 +381,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				)
 			);
 		}
-
-	} // End process_token().
+	}
 
 	/**
-	 * Handle variable variable defined in the global namespace.
+	 * Handle variable variables defined in the global namespace.
 	 *
 	 * @since 0.12.0
 	 *
@@ -622,8 +621,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				'$' . $variable_name,
 			)
 		);
-
-	} // End process_variable_assignment().
+	}
 
 	/**
 	 * Process the parameters of a matched function.
@@ -724,8 +722,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$data[] = $raw_content;
 
 		$this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
-
-	} // End process_parameters().
+	}
 
 	/**
 	 * Check if a function/class/constant/variable name is prefixed with one of the expected prefixes.
@@ -789,7 +786,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return false;
 		}
 
-		$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$close_parenthesis  = end( $nested_parenthesis );
 		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
 			return false;
 		}
@@ -851,7 +849,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		// Set the validated prefixes cache.
 		$this->validated_prefixes = $this->prefixes;
+	}
 
-	} // End validate_prefixes().
-
-} // End class.
+}

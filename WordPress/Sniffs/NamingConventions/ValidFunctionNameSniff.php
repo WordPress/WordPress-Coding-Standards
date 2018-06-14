@@ -96,8 +96,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
-
-	} // End processTokenOutsideScope().
+	}
 
 	/**
 	 * Processes the tokens within the scope.
@@ -164,8 +163,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
-
-	} // End processTokenWithinScope().
+	}
 
 	/**
 	 * Transform the existing function/method name to one which complies with the naming conventions.
@@ -181,4 +179,4 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		return $suggested;
 	}
 
-} // End class.
+}

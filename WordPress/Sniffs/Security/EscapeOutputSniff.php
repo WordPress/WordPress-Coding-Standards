@@ -93,10 +93,10 @@ class EscapeOutputSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'escape'     => null,
-		'autoescape' => null,
-		'sanitize'   => null,
-		'print'      => null,
+		'escape'     => array(),
+		'autoescape' => array(),
+		'sanitize'   => array(),
+		'print'      => array(),
 	);
 
 	/**
@@ -233,7 +233,9 @@ class EscapeOutputSniff extends Sniff {
 
 			// These functions only need to have the first argument escaped.
 			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
-				$end_of_statement = $this->phpcsFile->findEndOfStatement( $open_paren + 1 );
+				$first_param      = $this->get_function_call_parameter( $stackPtr, 1 );
+				$end_of_statement = ( $first_param['end'] + 1 );
+				unset( $first_param );
 			}
 		} elseif ( T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if no PHP short_open_tag is found in the string.
@@ -260,7 +262,7 @@ class EscapeOutputSniff extends Sniff {
 			return;
 		}
 
-		if ( isset( $end_of_statement, $this->unsafePrintingFunctions[ $function ] ) ) {
+		if ( isset( $this->unsafePrintingFunctions[ $function ] ) ) {
 			$error = $this->phpcsFile->addError(
 				"All output should be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
@@ -270,7 +272,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {
-				return $end_of_statement;
+				return isset( $end_of_statement ) ? $end_of_statement : null;
 			}
 		}
 
@@ -350,6 +352,12 @@ class EscapeOutputSniff extends Sniff {
 			// Handle arrays for those functions that accept them.
 			if ( T_ARRAY === $this->tokens[ $i ]['code'] ) {
 				$i++; // Skip the opening parenthesis.
+				continue;
+			}
+
+			if ( T_OPEN_SHORT_ARRAY === $this->tokens[ $i ]['code']
+				|| T_CLOSE_SHORT_ARRAY === $this->tokens[ $i ]['code']
+			) {
 				continue;
 			}
 
@@ -475,8 +483,7 @@ class EscapeOutputSniff extends Sniff {
 		}
 
 		return $end_of_statement;
-
-	} // End process_token().
+	}
 
 	/**
 	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
@@ -534,4 +541,4 @@ class EscapeOutputSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

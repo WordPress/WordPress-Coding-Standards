@@ -101,7 +101,6 @@ class ControlStructureSpacingSniff extends Sniff {
 			T_TRY,
 			T_CATCH,
 		);
-
 	}
 
 	/**
@@ -552,7 +551,6 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 			}
 		}
+	}
 
-	} // End process_token().
-
-} // End class.
+}

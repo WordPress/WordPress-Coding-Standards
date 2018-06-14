@@ -103,7 +103,7 @@ The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x
 
 * Make sure you have registered the directory in which you installed WPCS with PHPCS using;
     ```sh
-    phpcs --config-set installed_path path/to/WPCS
+    phpcs --config-set installed_paths path/to/WPCS
     ```
 * Navigate to the directory in which you installed WPCS.
 * To run the unit tests with PHPCS 3.x:

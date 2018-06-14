@@ -38,7 +38,6 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 			16 => 1,
 			17 => 1,
 		);
-
 	}
 
 	/**
@@ -50,7 +49,6 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 		return array(
 			1 => 1,
 		);
-
 	}
 
-} // End class.
+}

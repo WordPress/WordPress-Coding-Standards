@@ -176,7 +176,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'bloginfo'                  => true,
 		'body_class'                => true,
 		'calendar_week_mod'         => true,
-		'cancel_comment_reply_link' => true,
 		'category_description'      => true,
 		'checked'                   => true,
 		'comment_author_email_link' => true,
@@ -217,11 +216,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		'get_attachment_link'       => true,
 		'get_avatar'                => true,
 		'get_bookmark_field'        => true,
-		'get_bookmark'              => true,
 		'get_calendar'              => true,
 		'get_comment_author_link'   => true,
-		'get_comment_date'          => true,
-		'get_comment_time'          => true,
 		'get_current_blog_id'       => true,
 		'get_delete_post_link'      => true,
 		'get_footer'                => true,
@@ -229,7 +225,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'get_search_form'           => true,
 		'get_search_query'          => true,
 		'get_sidebar'               => true,
-		'get_template_part'         => true,
 		'get_the_author_link'       => true,
 		'get_the_author'            => true,
 		'get_the_date'              => true,
@@ -252,6 +247,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'previous_image_link'       => true,
 		'previous_post_link'        => true,
 		'previous_posts_link'       => true,
+		'readonly'                  => true,
 		'selected'                  => true,
 		'single_cat_title'          => true,
 		'single_month_title'        => true,
@@ -1467,9 +1463,10 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$open_parenthesis = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		reset( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+
+		end( $nested_parenthesis );
+		$open_parenthesis = key( $nested_parenthesis );
 
 		return in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( T_ISSET, T_EMPTY ), true );
 	}
@@ -1557,9 +1554,10 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Get the function that it's in.
-		$function_closer = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-		$function        = $this->tokens[ ( $function_opener - 1 ) ];
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$function_closer    = end( $nested_parenthesis );
+		$function_opener    = key( $nested_parenthesis );
+		$function           = $this->tokens[ ( $function_opener - 1 ) ];
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
 		if ( T_UNSET === $function['code'] ) {
@@ -1580,14 +1578,14 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( 'wp_unslash' === $functionName ) {
 
 			$is_unslashed    = true;
-			$function_closer = prev( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$function_closer = prev( $nested_parenthesis );
 
 			// If there is no other function being used, this value is unsanitized.
 			if ( ! $function_closer ) {
 				return false;
 			}
 
-			$function_opener = key( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$function_opener = key( $nested_parenthesis );
 			$functionName    = $this->tokens[ ( $function_opener - 1 ) ]['content'];
 
 		} else {
@@ -1817,7 +1815,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// We first check if this is a switch statement (switch ( $var )).
 		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			$close_parenthesis = end( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+			$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+			$close_parenthesis  = end( $nested_parenthesis );
 
 			if (
 				isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
@@ -2537,7 +2536,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return true;
-	} // End is_wpdb_method_call().
+	}
 
 	/**
 	 * Determine whether an arbitrary T_STRING token is the use of a global constant.

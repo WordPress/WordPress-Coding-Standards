@@ -170,7 +170,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 		);
-	} // End getGroups().
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -624,10 +624,10 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$non_placeholder_content = $this->strip_quotes( $content );
 		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $non_placeholder_content );
 
-		if ( empty( $non_placeholder_content ) ) {
+		if ( '' === $non_placeholder_content ) {
 			$this->phpcsFile->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
 		}
-	} // End check_text().
+	}
 
 	/**
 	 * Check for the presence of a translators comment if one of the text strings contains a placeholder.
@@ -725,8 +725,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 				return;
 			}
 		}
-
-	} // End check_for_translator_comment().
+	}
 
 	/**
 	 * Check if a (collated) comment string starts with 'translators:'.

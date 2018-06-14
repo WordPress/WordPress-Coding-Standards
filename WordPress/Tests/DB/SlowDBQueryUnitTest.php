@@ -29,7 +29,6 @@ class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -47,7 +46,6 @@ class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 			30 => 1,
 			32 => 1, // Warning about deprecated whitelist comment.
 		);
-
 	}
 
-} // End class.
+}

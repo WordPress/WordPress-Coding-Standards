@@ -77,8 +77,7 @@ class AssignmentInConditionSniff extends Sniff {
 			T_WHILE,
 			T_INLINE_THEN,
 		);
-
-	}//end register()
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -231,7 +230,6 @@ class AssignmentInConditionSniff extends Sniff {
 			$startPos = $hasAssignment;
 
 		} while ( $startPos < $closer );
-
 	}
 
 }
