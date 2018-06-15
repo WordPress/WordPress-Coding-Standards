@@ -122,7 +122,6 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 				} elseif ( in_array( $this->tokens[ $varData ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
 					// Store array data into variable so that we can proceed later.
 					$param_items = $this->get_function_call_parameters( $varData );
-					//  $this->phpcsFile->addWarning( print_r( $param_items, true ), $parameters[1]['start'], 'SuppressFilters' );
 				}
 			}
 		} elseif ( T_ARRAY === $this->tokens[ $argument_data ]['code'] || T_OPEN_SHORT_ARRAY === $this->tokens[ $argument_data ]['code'] ) {
