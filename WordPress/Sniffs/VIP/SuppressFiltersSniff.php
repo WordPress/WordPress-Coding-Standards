@@ -133,7 +133,7 @@ class SuppressFiltersSniff extends AbstractFunctionParameterSniff {
 		} elseif ( isset( Tokens::$stringTokens[ $this->tokens[ $argument_data ]['code'] ] ) ) {
 			// It handles when key value comes in '&query=arg' format.
 			// eg. get_posts( 'foo=bar&baz=quux' ).
-			$query_args = parse_str( $this->strip_quotes( $this->tokens[ $argument_data ]['content'] ), $arrKey );
+			parse_str( $this->strip_quotes( $this->tokens[ $argument_data ]['content'] ), $query_args );
 
 			if ( isset( $query_args['suppress_filters'] ) ) {
 				$array_value = $query_args['suppress_filters'];
