@@ -833,13 +833,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Validate the prefix against characters allowed for function, class, constant names etc.
 			if ( preg_match( '`^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$`', $prefix ) !== 1 ) {
-				$this->phpcsFile->addError(
+				$this->phpcsFile->addWarning(
 					'The "%s" prefix is not a valid function/class/variable/constant prefix in PHP.',
 					0,
 					'InvalidPrefixPassed',
 					array( $prefix )
 				);
-				unset( $this->prefixes[ $key ] );
 				continue;
 			}
 

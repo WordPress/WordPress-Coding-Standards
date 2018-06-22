@@ -374,4 +374,9 @@ function acronymFunction() {
 define( 'FORCE_SSL_ADMIN', true );
 const SCRIPT_DEBUG = $develop_src;
 
+// Allow for hook name prefixes with less conventional separators.
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes test-this,myplugin\
+do_action( 'test-this-hookname' ); // OK.
+apply_filters( 'myplugin\filtername', $var ); // OK.
+
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
