@@ -184,7 +184,7 @@ class ArrayIndentationSniff extends Sniff {
 				&& $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
 			) {
 				$first_content = $this->phpcsFile->findNext(
-					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE, T_COMMENT ),
 					( $first_content + 1 ),
 					$end_of_this_item,
 					true
