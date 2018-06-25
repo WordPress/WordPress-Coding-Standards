@@ -251,7 +251,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Disallow excluding function groups for this sniff.
-			$this->exclude = '';
+			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 

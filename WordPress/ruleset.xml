@@ -12,7 +12,7 @@
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- From "VIP": The obfuscation group is excluded as there are plenty of legitimate uses for the base64 functions. -->
 		<properties>
-			<property name="exclude" value="obfuscation"/>
+			<property name="exclude" type="array" value="obfuscation"/>
 		</properties>
 	</rule>
 
