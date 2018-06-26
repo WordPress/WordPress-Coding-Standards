@@ -222,7 +222,7 @@ class EscapeOutputSniff extends Sniff {
 
 		// If function, not T_ECHO nor T_PRINT.
 		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			// Skip if it is a function but is not of the printing functions.
+			// Skip if it is a function but is not one of the printing functions.
 			if ( ! isset( $this->printingFunctions[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
 				return;
 			}

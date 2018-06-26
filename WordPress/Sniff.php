@@ -915,7 +915,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Strip quotes surrounding an arbitrary string.
 	 *
-	 * Intended for use with the content of a T_CONSTANT_ENCAPSED_STRING / T_DOUBLE_QUOTED_STRING.
+	 * Intended for use with the contents of a T_CONSTANT_ENCAPSED_STRING / T_DOUBLE_QUOTED_STRING.
 	 *
 	 * @since 0.11.0
 	 *
@@ -1913,7 +1913,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.9.0
 	 *
-	 * @param string $string A T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
+	 * @param string $string The contents of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
 	 *
 	 * @return array Variable names (without '$' sigil).
 	 */
@@ -1932,7 +1932,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Strip variables from an arbitrary double quoted/heredoc string.
 	 *
-	 * Intended for use with the content of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
+	 * Intended for use with the contents of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
 	 *
 	 * @since 0.14.0
 	 *
@@ -2056,7 +2056,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @param int $stackPtr The position of the function call token.
 	 *
 	 * @return array Multi-dimentional array with parameter details or
-	 *               empty array if no parameter are found.
+	 *               empty array if no parameters are found.
 	 *
 	 *               @type int $position 1-based index position of the parameter. {
 	 *                   @type int $start Stack pointer for the start of the parameter.
