@@ -2096,7 +2096,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$next_comma  = $opener;
 		$param_start = ( $opener + 1 );
 		$cnt         = 1;
-		while ( $next_comma = $this->phpcsFile->findNext( array( T_COMMA, $this->tokens[ $closer ]['code'], T_OPEN_SHORT_ARRAY ), ( $next_comma + 1 ), ( $closer + 1 ) ) ) {
+		while ( $next_comma = $this->phpcsFile->findNext( array( T_COMMA, $this->tokens[ $closer ]['code'], T_OPEN_SHORT_ARRAY, T_CLOSURE ), ( $next_comma + 1 ), ( $closer + 1 ) ) ) {
 			// Ignore anything within short array definition brackets.
 			if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $next_comma ]['type']
 				&& ( isset( $this->tokens[ $next_comma ]['bracket_opener'] )
@@ -2105,6 +2105,17 @@ abstract class Sniff implements PHPCS_Sniff {
 			) {
 				// Skip forward to the end of the short array definition.
 				$next_comma = $this->tokens[ $next_comma ]['bracket_closer'];
+				continue;
+			}
+
+			// Skip past closures passed as function parameters.
+			if ( 'T_CLOSURE' === $this->tokens[ $next_comma ]['type']
+				&& ( isset( $this->tokens[ $next_comma ]['scope_condition'] )
+					&& $this->tokens[ $next_comma ]['scope_condition'] === $next_comma )
+				&& isset( $this->tokens[ $next_comma ]['scope_closer'] )
+			) {
+				// Skip forward to the end of the closure declaration.
+				$next_comma = $this->tokens[ $next_comma ]['scope_closer'];
 				continue;
 			}
 
