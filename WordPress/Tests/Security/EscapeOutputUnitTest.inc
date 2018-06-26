@@ -265,3 +265,14 @@ trigger_error( $domain ); // Bad.
 
 vprintf( 'Hello %s', [ $foo ] ); // Bad.
 vprintf( 'Hello %s', [ esc_html( $foo ) ] ); // Ok.
+
+function testIt( $obj ) {
+	$obj->print = new \Printer();
+	$obj->exit->customExit();
+	return $obj->print->transform( 'something' );
+}
+
+class Silly {
+	function echo() {}
+	function print() {}
+}
