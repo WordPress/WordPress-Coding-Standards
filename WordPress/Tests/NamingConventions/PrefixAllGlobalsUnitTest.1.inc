@@ -341,6 +341,9 @@ if ( ( $abc = function_call() ) === true ) {} // Bad.
 $acronym_something = array();
 foreach ( $acronym_something as $acronym_some ) {} // OK.
 foreach ( $acronym_something as $something ) {} // Bad.
+foreach ( $acronym_something as $key => $acronym_something ) {} // Bad.
+foreach ( $acronym_something as $acronym_key => $something ) {} // Bad.
+foreach ( $acronym_something as $key => $something ) {} // Bad x 2.
 
 while ( ( $acronymSomething = function_call() ) === true ) {} // OK.
 while ( ( $something = function_call() ) === true ) {} // Bad.
@@ -361,6 +364,7 @@ switch( true ) {
 function acronymFunction() {
 	if ( ( $abc = function_call() ) === true ) {}
 	foreach ( $acronym_something as $something ) {}
+	foreach ( $acronym_something as $key => $something ) {}
 	while ( ( $something = function_call() ) === true ) {}
 	for ( $i = 0; $i < 10; $i++ ) {}
 

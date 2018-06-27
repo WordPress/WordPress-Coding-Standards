@@ -770,33 +770,35 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	}
 
 	/**
-	 * Determine if a variable is the `as $var` part of a foreach condition.
+	 * Determine if a variable is in the `as $key => $value` part of a foreach condition.
 	 *
 	 * @param int $stackPtr Pointer to the variable.
 	 *
 	 * @return bool True if it is. False otherwise.
 	 */
 	private function is_foreach_as( $stackPtr ) {
-		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false === $prev || T_AS !== $this->tokens[ $prev ]['code'] ) {
-			return false;
-		}
-
 		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 			return false;
 		}
 
 		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
 		$close_parenthesis  = end( $nested_parenthesis );
+		$open_parenthesis   = key( $nested_parenthesis );
 		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
 			return false;
 		}
 
-		if ( T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
-			return true;
+		if ( T_FOREACH !== $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+			return false;
 		}
 
-		return false;
+		$as_ptr = $this->phpcsFile->findNext( T_AS, ( $open_parenthesis + 1 ), $close_parenthesis );
+		if ( false === $as_ptr ) {
+			// Should ever happen.
+			return false;
+		}
+
+		return ( $stackPtr > $as_ptr );
 	}
 
 	/**
