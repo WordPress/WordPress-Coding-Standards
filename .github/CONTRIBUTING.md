@@ -66,7 +66,7 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 ## Pre-requisites
 * WordPress-Coding-Standards
 * PHP_CodeSniffer 2.9.x or 3.x
-* PHPUnit 4.x, 5.x or 6.x
+* PHPUnit 4.x, 5.x, 6.x or 7.x
 
 The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
