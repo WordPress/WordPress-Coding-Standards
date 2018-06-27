@@ -25,12 +25,12 @@
 
 ## Introduction
 
-This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
+This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
 
 ## Project history
 
- - In April 2009 original project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
- - In May 2011 the project was forked on GitHub by [Chris Adams](http://chrisadams.me.uk/).
+ - In April 2009 original project from [Urban Giraffe](https://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
+ - In May 2011 the project was forked on GitHub by [Chris Adams](https://chrisadams.me.uk/).
  - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to develop and lead the creation of the sniffs and rulesets for `WordPress-Core`, `WordPress-VIP` (WordPress.com VIP), and `WordPress-Extra`.
  - In 2015, [J.D. Grimes](https://github.com/JDGrimes) began significant contributions, along with maintenance from [Gary Jones](https://github.com/GaryJones).
  - In 2016, [Juliette Reinders Folmer](https://github.com/jrfnl) began contributing heavily, adding more commits in a year than anyone else in 5 years previous since the project's inception.
@@ -112,11 +112,11 @@ The project encompasses a super-set of the sniffs that the WordPress community m
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
 * `WordPress` - complete set with all of the sniffs in the project
-  - `WordPress-Core` - main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
+  - `WordPress-Core` - main ruleset for [WordPress core coding standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/)
   - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
-  - `WordPress-VIP` - extended ruleset for [WordPress.com VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+  - `WordPress-VIP` - extended ruleset for [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/)
     - includes `WordPress-Core`
 
 ### Using a custom ruleset
@@ -138,7 +138,7 @@ Install it as a separate ruleset and either run it separately against your code 
 Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-7.1` to support the same PHP versions as WordPress Core supports.
 
 For more information about setting the `testVersion`, see:
-* [PHPCompatibility: Using the compatibility sniffs](https://github.com/wimg/PHPCompatibility#using-the-compatibility-sniffs)
+* [PHPCompatibility: Sniffing your code for compatibility with specific PHP version(s)](https://github.com/wimg/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions)
 * [PHPCompatibility: Using a custom ruleset](https://github.com/wimg/PHPCompatibility#using-a-custom-ruleset)
 
 ## How to use
