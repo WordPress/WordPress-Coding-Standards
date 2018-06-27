@@ -135,7 +135,7 @@ The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset comes h
 The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) sniffs are designed to analyse your code for cross-PHP version compatibility.
 Install it as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
 
-Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-7.1` to support the same PHP versions as WordPress Core supports.
+Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-` to support the same PHP versions as WordPress Core supports.
 
 For more information about setting the `testVersion`, see:
 * [PHPCompatibility: Using the compatibility sniffs](https://github.com/wimg/PHPCompatibility#using-the-compatibility-sniffs)
