@@ -151,34 +151,42 @@ Run the `phpcs` command line tool on a given file or directory, for example:
 
 Will result in following output:
 
-	--------------------------------------------------------------------------------
-	FOUND 10 ERRORS AND 5 WARNINGS AFFECTING 8 LINES
-	--------------------------------------------------------------------------------
+	------------------------------------------------------------------------------------------
+	FOUND 8 ERRORS AND 10 WARNINGS AFFECTING 11 LINES
+	------------------------------------------------------------------------------------------
 	 24 | WARNING | [ ] error_reporting() can lead to full path disclosure.
-	 24 | WARNING | [ ] error_reporting() found. Changing configuration at runtime
-	    |         |     is rarely necessary.
-	 34 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
+	 24 | WARNING | [ ] error_reporting() found. Changing configuration at runtime is rarely
+	    |         |     necessary.
+	 37 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
 	 39 | WARNING | [ ] Silencing errors is discouraged
 	 39 | WARNING | [ ] Silencing errors is discouraged
-	 46 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
-	    |         |     or question marks
+	 42 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 46 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
+	    |         |     question marks
 	 46 | ERROR   | [x] There must be no blank line following an inline comment
-	 63 | WARNING | [ ] Detected access of super global var $_SERVER, probably
-	    |         |     needs manual inspection.
+	 49 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 54 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 63 | WARNING | [ ] Detected access of super global var $_SERVER, probably needs manual
+	    |         |     inspection.
 	 63 | ERROR   | [ ] Detected usage of a non-validated input variable: $_SERVER
 	 63 | ERROR   | [ ] Missing wp_unslash() before sanitization.
 	 63 | ERROR   | [ ] Detected usage of a non-sanitized input variable: $_SERVER
-	 74 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
-	    |         |     or question marks
-	 90 | ERROR   | [x] String "Create a Configuration File" does not require
-	    |         |     double quotes; use single quotes instead
-	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
-	    |         |     for 'Data Validation'), not '$die'
-	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
-	    |         |     for 'Data Validation'), not '__'
-	--------------------------------------------------------------------------------
-	PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
-	--------------------------------------------------------------------------------
+	 69 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 74 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
+	    |         |     question marks
+	 92 | ERROR   | [ ] All output should be run through an escaping function (see the
+	    |         |     Security sections in the WordPress Developer Handbooks), found
+	    |         |     '$die'.
+	 92 | ERROR   | [ ] All output should be run through an escaping function (see the
+	    |         |     Security sections in the WordPress Developer Handbooks), found '__'.
+	------------------------------------------------------------------------------------------
+	PHPCBF CAN FIX THE 6 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+	------------------------------------------------------------------------------------------
 
 ### Using PHPCS and WPCS from within your IDE
 
