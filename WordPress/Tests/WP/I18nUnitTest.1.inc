@@ -174,5 +174,8 @@ class Foo {
 // Issue 1355.
 $offset_or_tz = _x( '0', 'default GMT offset or timezone string', 'my-slug' );
 
+$test = __( '%1$s %2$s', 'my-slug' ); // OK(ish), placeholder order may change depending on language.
+$test = __( '   %s    ', 'my-slug' ); // Bad, no translatable content.
+
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
 // @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
