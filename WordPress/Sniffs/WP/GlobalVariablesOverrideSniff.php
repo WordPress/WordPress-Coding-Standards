@@ -186,7 +186,12 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 */
 	public function maybe_add_error( $stackPtr ) {
 		if ( ! $this->is_token_in_test_method( $stackPtr ) && ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
-			$this->phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
+			$this->phpcsFile->addError(
+				'Overriding WordPress globals is prohibited. Found assignment to %s',
+				$stackPtr,
+				'OverrideProhibited',
+				array( $this->tokens[ $stackPtr ]['content'] )
+			);
 		}
 	}
 
