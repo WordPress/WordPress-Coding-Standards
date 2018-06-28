@@ -35,7 +35,7 @@
 
 		<!--
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
-		<exclude name="WordPress.XSS.EscapeOutput"/>
+		<exclude name="WordPress.Security.EscapeOutput"/>
 		-->
 	</rule>
 
@@ -54,7 +54,7 @@
 	https://github.com/wimg/PHPCompatibility
 	-->
 	<!--
-	<config name="testVersion" value="5.2-99.0"/>
+	<config name="testVersion" value="5.2-"/>
 	<rule ref="PHPCompatibility"/>
 	-->
 
