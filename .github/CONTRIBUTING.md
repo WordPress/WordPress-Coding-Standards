@@ -15,7 +15,7 @@ Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will b
 
 ## Branches
 
-Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
+Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
 
 To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
@@ -66,7 +66,7 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 ## Pre-requisites
 * WordPress-Coding-Standards
 * PHP_CodeSniffer 2.9.x or 3.x
-* PHPUnit 4.x, 5.x or 6.x
+* PHPUnit 4.x, 5.x, 6.x or 7.x
 
 The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
@@ -117,18 +117,19 @@ The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x
 
 Expected output:
 ```
-PHPUnit 4.8.19 by Sebastian Bergmann and contributors.
+PHPUnit 6.5.8 by Sebastian Bergmann and contributors.
 
-Runtime:        PHP 7.1.3 with Xdebug 2.5.1
-Configuration:  /WordPressCS/phpunit.xml
+Runtime:       PHP 7.2.7 with Xdebug 2.6.0
+Configuration: /WordPressCS/phpunit.xml
 
-..........................................................
+................................................................. 65 / 77 ( 84%)
+............                                                      77 / 77 (100%)
 
-Tests generated 556 unique error codes; 48 were fixable (8.63%)
+Tests generated 576 unique error codes; 51 were fixable (8.85%)
 
-Time: 24.08 seconds, Memory: 41.75Mb
+Time: 22.93 seconds, Memory: 40.00MB
 
-OK (58 tests, 0 assertions)
+OK (77 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
