@@ -621,7 +621,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 *
 		 * Strip placeholders and surrounding quotes.
 		 */
-		$non_placeholder_content = $this->strip_quotes( $content );
+		$non_placeholder_content = trim( $this->strip_quotes( $content ) );
 		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $non_placeholder_content );
 
 		if ( '' === $non_placeholder_content ) {
