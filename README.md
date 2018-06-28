@@ -25,12 +25,12 @@
 
 ## Introduction
 
-This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
+This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
 
 ## Project history
 
- - In April 2009 original project from [Urban Giraffe](http://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
- - In May 2011 the project was forked on GitHub by [Chris Adams](http://chrisadams.me.uk/).
+ - In April 2009 original project from [Urban Giraffe](https://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
+ - In May 2011 the project was forked on GitHub by [Chris Adams](https://chrisadams.me.uk/).
  - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to develop and lead the creation of the sniffs and rulesets for `WordPress-Core`, `WordPress-VIP` (WordPress.com VIP), and `WordPress-Extra`.
  - In 2015, [J.D. Grimes](https://github.com/JDGrimes) began significant contributions, along with maintenance from [Gary Jones](https://github.com/GaryJones).
  - In 2016, [Juliette Reinders Folmer](https://github.com/jrfnl) began contributing heavily, adding more commits in a year than anyone else in 5 years previous since the project's inception.
@@ -112,11 +112,11 @@ The project encompasses a super-set of the sniffs that the WordPress community m
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
 * `WordPress` - complete set with all of the sniffs in the project
-  - `WordPress-Core` - main ruleset for [WordPress core coding standards](http://make.wordpress.org/core/handbook/coding-standards/)
+  - `WordPress-Core` - main ruleset for [WordPress core coding standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/)
   - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
-  - `WordPress-VIP` - extended ruleset for [WordPress.com VIP coding requirements](http://vip.wordpress.com/documentation/code-review-what-we-look-for/)
+  - `WordPress-VIP` - extended ruleset for [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/)
     - includes `WordPress-Core`
 
 ### Using a custom ruleset
@@ -138,7 +138,7 @@ Install it as a separate ruleset and either run it separately against your code 
 Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-7.1` to support the same PHP versions as WordPress Core supports.
 
 For more information about setting the `testVersion`, see:
-* [PHPCompatibility: Using the compatibility sniffs](https://github.com/wimg/PHPCompatibility#using-the-compatibility-sniffs)
+* [PHPCompatibility: Sniffing your code for compatibility with specific PHP version(s)](https://github.com/wimg/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions)
 * [PHPCompatibility: Using a custom ruleset](https://github.com/wimg/PHPCompatibility#using-a-custom-ruleset)
 
 ## How to use
@@ -151,34 +151,42 @@ Run the `phpcs` command line tool on a given file or directory, for example:
 
 Will result in following output:
 
-	--------------------------------------------------------------------------------
-	FOUND 10 ERRORS AND 5 WARNINGS AFFECTING 8 LINES
-	--------------------------------------------------------------------------------
+	------------------------------------------------------------------------------------------
+	FOUND 8 ERRORS AND 10 WARNINGS AFFECTING 11 LINES
+	------------------------------------------------------------------------------------------
 	 24 | WARNING | [ ] error_reporting() can lead to full path disclosure.
-	 24 | WARNING | [ ] error_reporting() found. Changing configuration at runtime
-	    |         |     is rarely necessary.
-	 34 | ERROR   | [x] Expected 1 spaces before closing bracket; 0 found
+	 24 | WARNING | [ ] error_reporting() found. Changing configuration at runtime is rarely
+	    |         |     necessary.
+	 37 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
 	 39 | WARNING | [ ] Silencing errors is discouraged
 	 39 | WARNING | [ ] Silencing errors is discouraged
-	 46 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
-	    |         |     or question marks
+	 42 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 46 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
+	    |         |     question marks
 	 46 | ERROR   | [x] There must be no blank line following an inline comment
-	 63 | WARNING | [ ] Detected access of super global var $_SERVER, probably
-	    |         |     needs manual inspection.
+	 49 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 54 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 63 | WARNING | [ ] Detected access of super global var $_SERVER, probably needs manual
+	    |         |     inspection.
 	 63 | ERROR   | [ ] Detected usage of a non-validated input variable: $_SERVER
 	 63 | ERROR   | [ ] Missing wp_unslash() before sanitization.
 	 63 | ERROR   | [ ] Detected usage of a non-sanitized input variable: $_SERVER
-	 74 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks,
-	    |         |     or question marks
-	 90 | ERROR   | [x] String "Create a Configuration File" does not require
-	    |         |     double quotes; use single quotes instead
-	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
-	    |         |     for 'Data Validation'), not '$die'
-	 92 | ERROR   | [ ] Expected next thing to be an escaping function (see Codex
-	    |         |     for 'Data Validation'), not '__'
-	--------------------------------------------------------------------------------
-	PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
-	--------------------------------------------------------------------------------
+	 69 | WARNING | [x] "require_once" is a statement not a function; no parentheses are
+	    |         |     required
+	 74 | ERROR   | [ ] Inline comments must end in full-stops, exclamation marks, or
+	    |         |     question marks
+	 92 | ERROR   | [ ] All output should be run through an escaping function (see the
+	    |         |     Security sections in the WordPress Developer Handbooks), found
+	    |         |     '$die'.
+	 92 | ERROR   | [ ] All output should be run through an escaping function (see the
+	    |         |     Security sections in the WordPress Developer Handbooks), found '__'.
+	------------------------------------------------------------------------------------------
+	PHPCBF CAN FIX THE 6 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+	------------------------------------------------------------------------------------------
 
 ### Using PHPCS and WPCS from within your IDE
 
@@ -229,6 +237,8 @@ script:
   # https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage
   - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p . --standard=WordPress; fi
 ```
+
+More examples and advice about integrating PHPCS in your Travis build tests can be found here: https://github.com/jrfnl/make-phpcs-work-for-you/tree/master/travis-examples
 
 
 ## Fixing errors or whitelisting them
