@@ -155,6 +155,21 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 					if ( true === $this->is_assignment( $ptr ) ) {
 						$this->maybe_add_error( $ptr );
+						continue;
+					}
+
+					// Check if this is a variable assignment within a `foreach()` declaration.
+					if ( isset( $this->tokens[ $ptr ]['nested_parenthesis'] ) ) {
+						$nested_parenthesis = $this->tokens[ $ptr ]['nested_parenthesis'];
+						$close_parenthesis  = end( $nested_parenthesis );
+						if ( isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
+							&& T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+							&& ( false !== $previous
+								&& ( T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
+								|| T_AS === $this->tokens[ $previous ]['code'] ) )
+						) {
+							$this->maybe_add_error( $ptr );
+						}
 					}
 				}
 			}
