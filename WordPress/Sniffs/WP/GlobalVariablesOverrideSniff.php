@@ -155,6 +155,21 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 					if ( true === $this->is_assignment( $ptr ) ) {
 						$this->maybe_add_error( $ptr );
+						continue;
+					}
+
+					// Check if this is a variable assignment within a `foreach()` declaration.
+					if ( isset( $this->tokens[ $ptr ]['nested_parenthesis'] ) ) {
+						$nested_parenthesis = $this->tokens[ $ptr ]['nested_parenthesis'];
+						$close_parenthesis  = end( $nested_parenthesis );
+						if ( isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
+							&& T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+							&& ( false !== $previous
+								&& ( T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
+								|| T_AS === $this->tokens[ $previous ]['code'] ) )
+						) {
+							$this->maybe_add_error( $ptr );
+						}
 					}
 				}
 			}
@@ -171,7 +186,12 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 */
 	public function maybe_add_error( $stackPtr ) {
 		if ( ! $this->is_token_in_test_method( $stackPtr ) && ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
-			$this->phpcsFile->addError( 'Overriding WordPress globals is prohibited', $stackPtr, 'OverrideProhibited' );
+			$this->phpcsFile->addError(
+				'Overriding WordPress globals is prohibited. Found assignment to %s',
+				$stackPtr,
+				'OverrideProhibited',
+				array( $this->tokens[ $stackPtr ]['content'] )
+			);
 		}
 	}
 

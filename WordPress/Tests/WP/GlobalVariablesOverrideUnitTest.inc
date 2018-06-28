@@ -131,3 +131,33 @@ add_filter( 'comments_open', new class {
 }, 10, 2 );
 
 $GLOBALS['totals']   ??= 10; // Bad.
+
+// Variant of issue #1236 - detect overriding WP variables in control structure conditions.
+function acronymFunction() {
+	global $pagenow, $menu;
+
+	if ( ( $pagenow = function_call() ) === true ) {}  // Bad.
+	foreach ( $something as $pagenow ) {}  // Bad.
+	foreach ( $something as $pagenow => $menu ) {}  // Bad x 2.
+	while ( ( $pagenow = function_call() ) === true ) {}  // Bad.
+	for ( $pagenow = 0; $pagenow < 10; $pagenow++ ) {}  // Bad.
+
+	switch( true ) {
+		case ($pagenow = 'abc'):  // Bad.
+			break;
+	}
+}
+
+// All OK: Function local variables, not the WP variable.
+function acronymFunction() {
+	if ( ( $pagenow = function_call() ) === true ) {}
+	foreach ( $something as $pagenow ) {}
+	foreach ( $something as $pagenow => $menu ) {}
+	while ( ( $pagenow = function_call() ) === true ) {}
+	for ( $pagenow = 0; $pagenow < 10; $pagenow++ ) {}
+
+	switch( true ) {
+		case ($pagenow = 'abc'):
+			break;
+	}
+}
