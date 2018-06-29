@@ -1,18 +1,21 @@
+<div aria-hidden="true">
+
 [![Latest Stable Version](https://poser.pugx.org/wp-coding-standards/wpcs/v/stable)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png?branch=master)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
-[![GitHub Release Date](https://img.shields.io/github/release-date/WordPress-Coding-Standards/WordPress-Coding-Standards.svg?maxAge=1800)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/releases)
+[![Travis Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png?branch=master)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+[![Release Date of the Latest Version](https://img.shields.io/github/release-date/WordPress-Coding-Standards/WordPress-Coding-Standards.svg?maxAge=1800)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/releases)
 :construction:
 [![Latest Unstable Version](https://img.shields.io/badge/unstable-dev--develop-e68718.svg?maxAge=2419200)](https://packagist.org/packages/wp-coding-standards/wpcs#dev-develop)
-[![Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png?branch=develop)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
-[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/WordPress-Coding-Standards/WordPress-Coding-Standards/develop.svg)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commits/develop)
+[![Travis Build Status](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards.png?branch=develop)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+[![Last Commit to Unstable](https://img.shields.io/github/last-commit/WordPress-Coding-Standards/WordPress-Coding-Standards/develop.svg)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commits/develop)
 
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Tested on](https://img.shields.io/badge/tested%20on-PHP%205.3%20|%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+[![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
+[![Tested on PHP 5.3 to nightly](https://img.shields.io/badge/tested%20on-PHP%205.3%20|%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
-[![License](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/LICENSE)
+[![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/LICENSE)
 [![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
-[![GitHub contributors](https://img.shields.io/github/contributors/WordPress-Coding-Standards/WordPress-Coding-Standards.svg?maxAge=3600)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors)
+[![Number of Contributors](https://img.shields.io/github/contributors/WordPress-Coding-Standards/WordPress-Coding-Standards.svg?maxAge=3600)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors)
 
+</div>
 
 
 # WordPress Coding Standards for PHP_CodeSniffer
