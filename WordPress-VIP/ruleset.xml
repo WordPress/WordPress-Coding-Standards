@@ -43,7 +43,7 @@
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/633#issuecomment-266634811 -->
 		<properties>
-			<property name="exclude" value="obfuscation"/>
+			<property name="exclude" type="array" value="obfuscation"/>
 		</properties>
 	</rule>
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->

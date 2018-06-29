@@ -88,7 +88,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	public function process_token( $stackPtr ) {
 		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
 			// Disallow excluding function groups for this sniff.
-			$this->exclude = '';
+			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 

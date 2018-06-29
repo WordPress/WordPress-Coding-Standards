@@ -207,7 +207,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		// Prevent exclusion of the i18n group.
-		$this->exclude = '';
+		$this->exclude = array();
 
 		parent::process_token( $stack_ptr );
 	}

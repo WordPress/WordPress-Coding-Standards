@@ -30,9 +30,13 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 	 *
 	 * Example: 'foo,bar'
 	 *
-	 * @var string Comma-delimited group list.
+	 * @since 0.3.0
+	 * @since 1.0.0 This property now expects to be passed an array.
+	 *              Previously a comma-delimited string was expected.
+	 *
+	 * @var array
 	 */
-	public $exclude = '';
+	public $exclude = array();
 
 	/**
 	 * Groups of variable data to check against.
