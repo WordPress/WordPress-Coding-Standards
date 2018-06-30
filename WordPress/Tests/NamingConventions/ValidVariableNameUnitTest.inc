@@ -136,3 +136,34 @@ echo $object->varName;  // Ok, whitelisted.
 // @codingStandardsChangeSetting WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist false
 
 echo $object->varName;  // Bad, no longer whitelisted.
+
+// Code style independent token checking.
+echo $object
+	// Silly but allowed.
+	->
+		// Bad.
+		varName2
+			// More sillyness.
+			['test'];
+echo $object
+	// Silly but allowed.
+	->
+		// OK.
+		var_name2
+			// More sillyness.
+			['test'];
+
+echo ClassName
+	// Silly but allowed.
+	::
+		// Bad.
+		$varName2
+			// More sillyness.
+			['test'];
+echo ClassName
+	// Silly but allowed.
+	::
+		// OK.
+		$var_name2
+			// More sillyness.
+			['test'];
