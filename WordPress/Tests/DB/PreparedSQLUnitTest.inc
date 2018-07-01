@@ -106,5 +106,13 @@ $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . (int) $foo . ";" ); // 
 
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . (float) $foo . ";" ); // Ok.
 
+$wpdb->query(
+	"SELECT * FROM $wpdb->posts
+	WHERE ID = "
+	. absint // Ok.
+		( $foo )
+	. ";"
+);
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts
