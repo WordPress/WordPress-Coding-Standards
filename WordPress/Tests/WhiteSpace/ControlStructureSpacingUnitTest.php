@@ -10,6 +10,7 @@
 namespace WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the ControlStructureSpacing sniff.
@@ -22,61 +23,104 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
+	 * Get a list of all test files to check.
+	 *
+	 * @param string $testFileBase The base path that the unit tests files will have.
+	 *
+	 * @return string[]
+	 */
+	protected function getTestFiles( $testFileBase ) {
+
+		$testFiles = parent::getTestFiles( $testFileBase );
+
+		/*
+		 * Testing whether the PHPCS annotations are properly handled is only useful on
+		 * PHPCS versions which support the PHPCS annotations.
+		 * Prior to PHPCS 3.2.0 they would be treated the same as ordinary comments
+		 * for the purposes of this sniff.
+		 */
+		if ( version_compare( PHPCSHelper::get_version(), '3.2.0', '<' ) === true ) {
+			$key = array_search( $testFileBase . '2.inc', $testFiles, true );
+			if ( false !== $key ) {
+				unset( $testFiles[ $key ] );
+			}
+		}
+
+		return $testFiles;
+	}
+
+	/**
 	 * Returns the lines where errors should occur.
+	 *
+	 * @param string $testFile The name of the file being tested.
 	 *
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
-		$ret = array(
-			4   => 2,
-			17  => 2,
-			29  => 5,
-			37  => 1,
-			41  => 1,
-			42  => 1,
-			49  => 5,
-			58  => 3,
-			67  => 1,
-			68  => 1,
-			69  => 1,
-			71  => 1,
-			72  => 1,
-			81  => 3,
-			82  => 1,
-			85  => 1,
-			91  => 2,
-			92  => 1,
-			94  => 1,
-			95  => 1,
-			97  => 1,
-			98  => 1,
-			135 => 2,
-			137 => 5,
-			144 => 1,
-			152 => 2,
-			179 => 1,
-			180 => 1,
-			182 => 1,
-			184 => 1,
-			190 => 1,
-			192 => 1,
-			196 => 2,
-			200 => 2,
-			247 => 1,
-			257 => 1,
-			267 => 1,
-		);
+	public function getErrorList( $testFile = '' ) {
 
-		/*
-		Uncomment when "$blank_line_check" parameter will be "true" by default.
+		switch ( $testFile ) {
+			case 'ControlStructureSpacingUnitTest.1.inc':
+				$ret = array(
+					4   => 2,
+					17  => 2,
+					29  => 5,
+					37  => 1,
+					41  => 1,
+					42  => 1,
+					49  => 5,
+					58  => 3,
+					67  => 1,
+					68  => 1,
+					69  => 1,
+					71  => 1,
+					72  => 1,
+					81  => 3,
+					82  => 1,
+					85  => 1,
+					91  => 2,
+					92  => 1,
+					94  => 1,
+					95  => 1,
+					97  => 1,
+					98  => 1,
+					135 => 2,
+					137 => 5,
+					144 => 1,
+					152 => 2,
+					179 => 1,
+					180 => 1,
+					182 => 1,
+					184 => 1,
+					190 => 1,
+					192 => 1,
+					196 => 2,
+					200 => 2,
+					247 => 1,
+					257 => 1,
+					267 => 1,
+				);
 
-		$ret[29] += 1;
-		$ret[33]  = 1;
-		$ret[36]  = 1;
-		$ret[38]  = 1;
-		 */
+				/*
+				Uncomment when "$blank_line_check" parameter will be "true" by default.
 
-		return $ret;
+				$ret[29] += 1;
+				$ret[33]  = 1;
+				$ret[36]  = 1;
+				$ret[38]  = 1;
+				 */
+
+				return $ret;
+
+			case 'ControlStructureSpacingUnitTest.2.inc':
+				return array(
+					6  => 1,
+					16 => 1,
+					19 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**

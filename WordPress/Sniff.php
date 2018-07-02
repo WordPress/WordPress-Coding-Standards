@@ -847,6 +847,32 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
+	 * The token "type" values for the PHPCS 3.2+ whitelist comments.
+	 *
+	 * PHPCS cross-version compatibility layer to allow sniffs to
+	 * allow for the new PHPCS annotation comments without breaking in older
+	 * PHPCS versions.
+	 *
+	 * @internal Can be replaced with using the PHPCS native Token::$phpcsCommentTokens
+	 *           array once the minimum WPCS requirement for PHPCS has gone up
+	 *           to PHPCS 3.2.3.
+	 *           Note: The PHPCS native property uses the constants/ token "code",
+	 *           so code referring to this property will need to be adjusted when
+	 *           the property is removed.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $phpcsCommentTokens = array(
+		'T_PHPCS_ENABLE'      => true,
+		'T_PHPCS_DISABLE'     => true,
+		'T_PHPCS_SET'         => true,
+		'T_PHPCS_IGNORE'      => true,
+		'T_PHPCS_IGNORE_FILE' => true,
+	);
+
+	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
@@ -1159,7 +1185,8 @@ abstract class Sniff implements PHPCS_Sniff {
 				$lastPtr = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 
-			if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+			if ( ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+					|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
@@ -1172,7 +1199,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
 		$lastPtr     = $this->phpcsFile->findPrevious( T_WHITESPACE, $end_of_line, null, true );
 
-		if ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+		if ( ( T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {

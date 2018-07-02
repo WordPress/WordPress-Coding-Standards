@@ -153,3 +153,40 @@ Here comes some text.
 EOD
 . '</hr>',
 ) );
+
+// Test various situations using PHPCS annotations.
+// Combining a lot of errors in a nested array.
+$bad = array(
+	1 => 'value' ,
+	2 => [
+		'a' => 'value'     ,// phpcs:disable Standard.Category.Sniff - the extra spacing is fine, might be for alignment with other comments.
+		'b' => array(
+			1
+		),
+		'c' => apply_filters( 'filter', $input, $var )
+	],
+	3 => apply_filters( 'filter', $input, $var )/* phpcs:ignore Standard.Category.Sniff */
+);
+
+// Alternative array style.
+$bad = array(
+          1 => 'value'
+        , 2 => array( 1 )
+        , 3 => apply_filters( 'filter', $input, $var )/* phpcs:ignore Standard.Category.Sniff. */
+);
+$bad = [
+	  'a' => 'value'          // phpcs:disable Standard.Category.Sniff - the extra spacing is fine, might be for alignment with other comments.
+	, 'b' => array( 1 )
+	, 'c' => apply_filters( 'filter', $input, $var )
+];
+$bad = [
+	 'a' => 'value'          // phpcs:disable Standard.Category.Sniff - the extra spacing is fine, might be for alignment with other comments.
+	,'b' => array( 1 )
+	,'c' => apply_filters( 'filter', $input, $var ),
+];
+
+$bad = array(
+         'first', // phpcs:disable Standard.Category.Sniff
+         'second'
+         // phpcs:enable Standard.Category.Sniff
+        );

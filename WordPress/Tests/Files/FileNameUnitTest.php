@@ -56,6 +56,17 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		'ClassNonStrictClass.inc'                    => 1,
 
 		/*
+		 * In /FileNameUnitTests/PHPCSAnnotations.
+		 */
+
+		// Non-strict class names still have to comply with lowercase hyphenated.
+		'blanket-disable.inc'                        => 0,
+		'non-relevant-disable.inc'                   => 1,
+		'partial-file-disable.inc'                   => 1,
+		'rule-disable.inc'                           => 0,
+		'wordpress-disable.inc'                      => 0,
+
+		/*
 		 * In /FileNameUnitTests/TestFiles.
 		 */
 		'test-sample-phpunit.inc'                    => 0,
@@ -111,6 +122,13 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		// Work around for PHP 5.3/PHPCS 2.x.
 		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
 			unset( $this->expected_results['SomeView.inc'] );
+		}
+
+		// Work around for PHPCS < 3.2.0. The disables will be diregarded.
+		if ( ! defined( 'T_PHPCS_DISABLE' ) && ! defined( 'T_PHPCS_ENABLE' ) ) {
+			$this->expected_results['blanket-disable.inc']   = 1;
+			$this->expected_results['rule-disable.inc']      = 1;
+			$this->expected_results['wordpress-disable.inc'] = 1;
 		}
 
 		$sep        = DIRECTORY_SEPARATOR;
