@@ -70,7 +70,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'file_get_contents' => array(
 				'type'      => 'warning',
-				'message'   => '%s() is discouraged. Use wp_remote_get() instead.',
+				'message'   => '%s() is discouraged. Use wp_remote_get() for remote URLs instead.',
 				'since'     => '2.7.0',
 				'functions' => array(
 					'file_get_contents',
@@ -90,7 +90,6 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'fread',
 					'fwrite',
 					'file_put_contents',
-					'file_get_contents',
 				),
 			),
 
@@ -166,6 +165,44 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				) {
 					return;
 				}
+
+				break;
+
+			case 'file_get_contents':
+				/*
+				 * Using `wp_remote_get()` will only work for remote URLs.
+				 * See if we can determine is this function call is for a local file and if so, bow out.
+				 */
+				$params = $this->get_function_call_parameters( $stackPtr );
+
+				if ( isset( $params[2] ) && 'true' === $params[2]['raw'] ) {
+					// Setting `$use_include_path` to `true` is only relevant for local files.
+					return;
+				}
+
+				if ( isset( $params[1] ) === false ) {
+					// If the file to get is not set, this is a non-issue anyway.
+					return;
+				}
+
+				if ( strpos( $params[1]['raw'], 'http:' ) !== false
+					|| strpos( $params[1]['raw'], 'https:' ) !== false
+				) {
+					// Definitely a URL, throw notice.
+					break;
+				}
+
+				if ( preg_match( '`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`', $params[1]['raw'] ) === 1 ) {
+					// Using any of the constants matched in this regex is an indicator of a local file.
+					return;
+				}
+
+				if ( preg_match( '`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i', $params[1]['raw'] ) === 1 ) {
+					// Using any of the functions matched in the regex is an indicator of a local file.
+					return;
+				}
+
+				unset( $params );
 
 				break;
 		}
