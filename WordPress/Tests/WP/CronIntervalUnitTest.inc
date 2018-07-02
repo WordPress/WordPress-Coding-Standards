@@ -128,3 +128,14 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 } ); // Ok: > 30 min.
 
 // @codingStandardsChangeSetting WordPress.WP.CronInterval min_interval 900
+
+
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_9_mins'] = array(
+		'interval' =>
+			// phpcs:ignore Standard.Cat.Sniff -- for reasons
+			9 /* minutes */ * 60 /* seconds */,
+		'display' => __( 'Once every 9 minutes' )
+	);
+	return $schedules;
+} ); // Error: 9 min.
