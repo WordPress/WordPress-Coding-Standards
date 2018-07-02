@@ -66,7 +66,6 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 *                       with custom error message passed to ->process().
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		$key                  = strtolower( $key );
 		$this->posts_per_page = (int) $this->posts_per_page;
 
 		if ( $val > $this->posts_per_page ) {

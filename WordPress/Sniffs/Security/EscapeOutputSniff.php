@@ -385,7 +385,7 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Wake up after a ternary else (:).
-			if ( $ternary && T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
+			if ( false !== $ternary && T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
