@@ -185,7 +185,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                 $cliValues = $this->getCliValues($filename);
                 self::$phpcs->cli->setCommandLineValues($cliValues);
                 $phpcsFile = self::$phpcs->processFile($testFile);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->fail('An unexpected exception has been caught: '.$e->getMessage());
             }
 

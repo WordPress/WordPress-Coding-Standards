@@ -161,11 +161,11 @@ class CronIntervalSniff extends Sniff {
 					$valueStart = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true, null, true );
 					$valueEnd   = $this->phpcsFile->findNext( array( T_COMMA, T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
 					$value = '';
-					for ( $i = $valueStart; $i < $valueEnd; $i++ ) {
-						if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+					for ( $j = $valueStart; $j < $valueEnd; $j++ ) {
+						if ( isset( Tokens::$emptyTokens[ $this->tokens[ $j ]['code'] ] ) ) {
 							continue;
 						}
-						$value .= $this->tokens[ $i ]['content'];
+						$value .= $this->tokens[ $j ]['content'];
 					}
 
 					if ( is_numeric( $value ) ) {

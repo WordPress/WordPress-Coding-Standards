@@ -193,7 +193,7 @@ class ClassInstantiationSniff extends Sniff {
 						$this->phpcsFile->fixer->endChangeset();
 					}
 				} else {
-					$fix = $this->phpcsFile->addError( $error, $next_non_empty_after_class_name, $error_code );
+					$this->phpcsFile->addError( $error, $next_non_empty_after_class_name, $error_code );
 				}
 			} else {
 				$this->phpcsFile->recordMetric( $stackPtr, 'Space between classname and parenthesis', 0 );
