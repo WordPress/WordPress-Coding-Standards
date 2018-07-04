@@ -166,19 +166,19 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function register() {
 		$targets = array(
-			T_FUNCTION  => T_FUNCTION,
-			T_CLASS     => T_CLASS,
-			T_INTERFACE => T_INTERFACE,
-			T_TRAIT     => T_TRAIT,
-			T_CONST     => T_CONST,
-			T_VARIABLE  => T_VARIABLE,
-			T_DOLLAR    => T_DOLLAR, // Variable variables.
+			\T_FUNCTION  => \T_FUNCTION,
+			\T_CLASS     => \T_CLASS,
+			\T_INTERFACE => \T_INTERFACE,
+			\T_TRAIT     => \T_TRAIT,
+			\T_CONST     => \T_CONST,
+			\T_VARIABLE  => \T_VARIABLE,
+			\T_DOLLAR    => \T_DOLLAR, // Variable variables.
 		);
 
 		// Add function call target for hook names and constants defined using define().
 		$parent = parent::register();
 		if ( ! empty( $parent ) ) {
-			$targets[] = T_STRING;
+			$targets[] = \T_STRING;
 		}
 
 		return $targets;
@@ -241,7 +241,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Ignore test classes.
-		if ( T_CLASS === $this->tokens[ $stackPtr ]['code'] && true === $this->is_test_class( $stackPtr ) ) {
+		if ( \T_CLASS === $this->tokens[ $stackPtr ]['code'] && true === $this->is_test_class( $stackPtr ) ) {
 			if ( $this->tokens[ $stackPtr ]['scope_condition'] === $stackPtr && isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
 				// Skip forward to end of test class.
 				return $this->tokens[ $stackPtr ]['scope_closer'];
@@ -249,17 +249,17 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Disallow excluding function groups for this sniff.
 			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 
-		} elseif ( T_DOLLAR === $this->tokens[ $stackPtr ]['code'] ) {
+		} elseif ( \T_DOLLAR === $this->tokens[ $stackPtr ]['code'] ) {
 
 			return $this->process_variable_variable( $stackPtr );
 
-		} elseif ( T_VARIABLE === $this->tokens[ $stackPtr ]['code'] ) {
+		} elseif ( \T_VARIABLE === $this->tokens[ $stackPtr ]['code'] ) {
 
 			return $this->process_variable_assignment( $stackPtr );
 
@@ -278,7 +278,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			switch ( $this->tokens[ $stackPtr ]['type'] ) {
 				case 'T_FUNCTION':
 					// Methods in a class do not need to be prefixed.
-					if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ) ) === true ) {
+					if ( $this->phpcsFile->hasCondition( $stackPtr, array( \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ) ) === true ) {
 						return;
 					}
 
@@ -395,8 +395,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	protected function process_variable_variable( $stackPtr ) {
 		static $indicators = array(
-			T_OPEN_CURLY_BRACKET => true,
-			T_VARIABLE           => true,
+			\T_OPEN_CURLY_BRACKET => true,
+			\T_VARIABLE           => true,
 		);
 
 		// Is this a variable variable ?
@@ -406,7 +406,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( T_OPEN_CURLY_BRACKET === $this->tokens[ $next_non_empty ]['code']
+		if ( \T_OPEN_CURLY_BRACKET === $this->tokens[ $next_non_empty ]['code']
 			&& isset( $this->tokens[ $next_non_empty ]['bracket_closer'] )
 		) {
 			// Skip over the variable part.
@@ -416,7 +416,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$maybe_assignment = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
 
 		while ( false !== $maybe_assignment
-			&& T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
+			&& \T_OPEN_SQUARE_BRACKET === $this->tokens[ $maybe_assignment ]['code']
 			&& isset( $this->tokens[ $maybe_assignment ]['bracket_closer'] )
 		) {
 			$maybe_assignment = $this->phpcsFile->findNext(
@@ -448,13 +448,13 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		 * forbidden since PHP 7.0. Presuming cross-version code and if not, that
 		 * is for the PHPCompatibility standard to detect.
 		 */
-		if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_FUNCTION, T_CLOSURE ) ) === true ) {
-			$condition = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+		if ( $this->phpcsFile->hasCondition( $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) ) === true ) {
+			$condition = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 			if ( false === $condition ) {
-				$condition = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+				$condition = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
 			}
 
-			$has_global = $this->phpcsFile->findPrevious( T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $condition ]['scope_opener'] );
+			$has_global = $this->phpcsFile->findPrevious( \T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $condition ]['scope_opener'] );
 			if ( false === $has_global ) {
 				// No variable import happening.
 				return;
@@ -513,7 +513,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		if ( 'GLOBALS' === $variable_name ) {
 			$array_open = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-			if ( false === $array_open || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $array_open ]['code'] ) {
+			if ( false === $array_open || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $array_open ]['code'] ) {
 				// Live coding or something very silly.
 				return;
 			}
@@ -534,7 +534,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $array_key ]['code'] ) {
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $array_key ]['code'] ) {
 				// If the array key is a double quoted string, try again with only
 				// the part before the first variable (if any).
 				$exploded = explode( '$', $variable_name );
@@ -556,8 +556,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
 					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
-						&& ( T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
-							|| T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
+						&& ( \T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
+							|| \T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
 					) {
 						return;
 					}
@@ -571,20 +571,20 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Local variables in a function do not need to be prefixed unless they are being imported.
-			if ( $this->phpcsFile->hasCondition( $stackPtr, array( T_FUNCTION, T_CLOSURE ) ) === true ) {
-				$condition = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			if ( $this->phpcsFile->hasCondition( $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) ) === true ) {
+				$condition = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 				if ( false === $condition ) {
-					$condition = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+					$condition = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
 				}
 
-				$has_global = $this->phpcsFile->findPrevious( T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $condition ]['scope_opener'] );
+				$has_global = $this->phpcsFile->findPrevious( \T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $condition ]['scope_opener'] );
 				if ( false === $has_global ) {
 					// No variable import happening.
 					return;
 				}
 
 				// Ok, this may be an imported global variable.
-				$end_of_statement = $this->phpcsFile->findNext( T_SEMICOLON, ( $has_global + 1 ) );
+				$end_of_statement = $this->phpcsFile->findNext( \T_SEMICOLON, ( $has_global + 1 ) );
 				if ( false === $end_of_statement ) {
 					// No semi-colon - live coding.
 					return;
@@ -592,7 +592,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 				for ( $ptr = ( $has_global + 1 ); $ptr <= $end_of_statement; $ptr++ ) {
 					// Move the stack pointer to the next variable.
-					$ptr = $this->phpcsFile->findNext( T_VARIABLE, $ptr, $end_of_statement, false, null, true );
+					$ptr = $this->phpcsFile->findNext( \T_VARIABLE, $ptr, $end_of_statement, false, null, true );
 
 					if ( false === $ptr ) {
 						// Reached the end of the global statement without finding the variable,
@@ -682,7 +682,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
 				// If the first part of the parameter is a double quoted string, try again with only
 				// the part before the first variable (if any).
 				$exploded = explode( '$', $first_non_empty_content );
@@ -788,11 +788,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return false;
 		}
 
-		if ( T_FOREACH !== $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+		if ( \T_FOREACH !== $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
 			return false;
 		}
 
-		$as_ptr = $this->phpcsFile->findNext( T_AS, ( $open_parenthesis + 1 ), $close_parenthesis );
+		$as_ptr = $this->phpcsFile->findNext( \T_AS, ( $open_parenthesis + 1 ), $close_parenthesis );
 		if ( false === $as_ptr ) {
 			// Should ever happen.
 			return false;

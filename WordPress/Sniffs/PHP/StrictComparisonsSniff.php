@@ -33,8 +33,8 @@ class StrictComparisonsSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_IS_EQUAL,
-			T_IS_NOT_EQUAL,
+			\T_IS_EQUAL,
+			\T_IS_NOT_EQUAL,
 		);
 	}
 

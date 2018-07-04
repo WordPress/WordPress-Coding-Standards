@@ -57,11 +57,11 @@ class CapitalPDangitSniff extends Sniff {
 	 * @var array
 	 */
 	private $text_string_tokens = array(
-		T_CONSTANT_ENCAPSED_STRING => T_CONSTANT_ENCAPSED_STRING,
-		T_DOUBLE_QUOTED_STRING     => T_DOUBLE_QUOTED_STRING,
-		T_HEREDOC                  => T_HEREDOC,
-		T_NOWDOC                   => T_NOWDOC,
-		T_INLINE_HTML              => T_INLINE_HTML,
+		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
+		\T_DOUBLE_QUOTED_STRING     => \T_DOUBLE_QUOTED_STRING,
+		\T_HEREDOC                  => \T_HEREDOC,
+		\T_NOWDOC                   => \T_NOWDOC,
+		\T_INLINE_HTML              => \T_INLINE_HTML,
 	);
 
 	/**
@@ -70,9 +70,9 @@ class CapitalPDangitSniff extends Sniff {
 	 * @var array
 	 */
 	private $comment_text_tokens = array(
-		T_DOC_COMMENT        => T_DOC_COMMENT,
-		T_DOC_COMMENT_STRING => T_DOC_COMMENT_STRING,
-		T_COMMENT            => T_COMMENT,
+		\T_DOC_COMMENT        => \T_DOC_COMMENT,
+		\T_DOC_COMMENT_STRING => \T_DOC_COMMENT_STRING,
+		\T_COMMENT            => \T_COMMENT,
 	);
 
 	/**
@@ -83,9 +83,9 @@ class CapitalPDangitSniff extends Sniff {
 	 * @var array
 	 */
 	private $class_tokens = array(
-		T_CLASS     => T_CLASS,
-		T_INTERFACE => T_INTERFACE,
-		T_TRAIT     => T_TRAIT,
+		\T_CLASS     => \T_CLASS,
+		\T_INTERFACE => \T_INTERFACE,
+		\T_TRAIT     => \T_TRAIT,
 	);
 
 	/**
@@ -111,8 +111,8 @@ class CapitalPDangitSniff extends Sniff {
 		$targets = ( $this->text_and_comment_tokens + $this->class_tokens );
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
-		$targets[ T_ARRAY ]            = T_ARRAY;
-		$targets[ T_OPEN_SHORT_ARRAY ] = T_OPEN_SHORT_ARRAY;
+		$targets[ \T_ARRAY ]            = \T_ARRAY;
+		$targets[ \T_OPEN_SHORT_ARRAY ] = \T_OPEN_SHORT_ARRAY;
 
 		return $targets;
 	}
@@ -139,9 +139,9 @@ class CapitalPDangitSniff extends Sniff {
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
 		 */
-		if ( T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
 			return $this->tokens[ $stackPtr ]['bracket_closer'];
-		} elseif ( T_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
+		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
@@ -155,7 +155,7 @@ class CapitalPDangitSniff extends Sniff {
 				return;
 			}
 
-			if ( preg_match_all( self::WP_CLASSNAME_REGEX, $classname, $matches, PREG_PATTERN_ORDER ) > 0 ) {
+			if ( preg_match_all( self::WP_CLASSNAME_REGEX, $classname, $matches, \PREG_PATTERN_ORDER ) > 0 ) {
 				$mispelled = $this->retrieve_misspellings( $matches[1] );
 
 				if ( ! empty( $mispelled ) ) {
@@ -176,13 +176,13 @@ class CapitalPDangitSniff extends Sniff {
 		 */
 
 		// Ignore content of docblock @link tags.
-		if ( T_DOC_COMMENT_STRING === $this->tokens[ $stackPtr ]['code']
-			|| T_DOC_COMMENT === $this->tokens[ $stackPtr ]['code']
+		if ( \T_DOC_COMMENT_STRING === $this->tokens[ $stackPtr ]['code']
+			|| \T_DOC_COMMENT === $this->tokens[ $stackPtr ]['code']
 		) {
 
-			$comment_start = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $stackPtr - 1 ) );
+			$comment_start = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, ( $stackPtr - 1 ) );
 			if ( false !== $comment_start ) {
-				$comment_tag = $this->phpcsFile->findPrevious( T_DOC_COMMENT_TAG, ( $stackPtr - 1 ), $comment_start );
+				$comment_tag = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_TAG, ( $stackPtr - 1 ), $comment_start );
 				if ( false !== $comment_tag && '@link' === $this->tokens[ $comment_tag ]['content'] ) {
 					// @link tag, so ignore.
 					return;
@@ -191,11 +191,11 @@ class CapitalPDangitSniff extends Sniff {
 		}
 
 		// Ignore any text strings which are array keys `$var['key']` as this is a false positive in 80% of all cases.
-		if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			$prevToken = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-			if ( false !== $prevToken && T_OPEN_SQUARE_BRACKET === $this->tokens[ $prevToken ]['code'] ) {
+			if ( false !== $prevToken && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $prevToken ]['code'] ) {
 				$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-				if ( false !== $nextToken && T_CLOSE_SQUARE_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
+				if ( false !== $nextToken && \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
 					return;
 				}
 			}
@@ -203,7 +203,7 @@ class CapitalPDangitSniff extends Sniff {
 
 		$content = $this->tokens[ $stackPtr ]['content'];
 
-		if ( preg_match_all( self::WP_REGEX, $content, $matches, ( PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) ) > 0 ) {
+		if ( preg_match_all( self::WP_REGEX, $content, $matches, ( \PREG_PATTERN_ORDER | \PREG_OFFSET_CAPTURE ) ) > 0 ) {
 			/*
 			 * Prevent some typical false positives.
 			 */

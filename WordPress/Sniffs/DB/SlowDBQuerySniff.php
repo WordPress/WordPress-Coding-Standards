@@ -68,7 +68,7 @@ class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
 			 * Only throw the warning about a deprecated comment when the sniff would otherwise
 			 * have been triggered on the array key.
 			 */
-			if ( in_array( $this->tokens[ $stackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+			if ( in_array( $this->tokens[ $stackPtr ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 				$this->phpcsFile->addWarning(
 					'The "tax_query" whitelist comment is deprecated in favor of the "slow query" whitelist comment.',
 					$stackPtr,

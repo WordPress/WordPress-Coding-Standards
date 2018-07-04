@@ -101,7 +101,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_VARIABLE,
+			\T_VARIABLE,
 		);
 	}
 
@@ -119,12 +119,12 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$is_object_call = $this->phpcsFile->findNext( T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
+		$is_object_call = $this->phpcsFile->findNext( \T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
 		if ( false === $is_object_call ) {
 			return; // This is not a call to the wpdb object.
 		}
 
-		$methodPtr = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
+		$methodPtr = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
 		$method    = $this->tokens[ $methodPtr ]['content'];
 
 		$this->mergeFunctionLists();
@@ -133,7 +133,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$endOfStatement   = $this->phpcsFile->findNext( T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
+		$endOfStatement   = $this->phpcsFile->findNext( \T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
 		$endOfLineComment = '';
 		for ( $i = ( $endOfStatement + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
 
@@ -141,7 +141,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				break;
 			}
 
-			if ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+			if ( \T_COMMENT === $this->tokens[ $i ]['code'] ) {
 				$endOfLineComment .= $this->tokens[ $i ]['content'];
 			}
 		}
@@ -179,10 +179,10 @@ class DirectDatabaseQuerySniff extends Sniff {
 			$whitelisted_cache = true;
 		}
 		if ( ! $whitelisted_cache && ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
-			$scope_function = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 
 			if ( false === $scope_function ) {
-				$scope_function = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+				$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
 			}
 
 			if ( false !== $scope_function ) {
@@ -190,7 +190,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 				$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
 
 				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
-					if ( T_STRING === $this->tokens[ $i ]['code'] ) {
+					if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
 						if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 

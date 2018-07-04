@@ -154,12 +154,12 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		$obj_operator = $phpcs_file->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
-		if ( T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+		if ( \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
 			// Check to see if we are using a variable from an object.
 			$var = $phpcs_file->findNext( Tokens::$emptyTokens, ( $obj_operator + 1 ), null, true );
-			if ( T_STRING === $tokens[ $var ]['code'] ) {
+			if ( \T_STRING === $tokens[ $var ]['code'] ) {
 				$bracket = $phpcs_file->findNext( Tokens::$emptyTokens, ( $var + 1 ), null, true );
-				if ( T_OPEN_PARENTHESIS !== $tokens[ $bracket ]['code'] ) {
+				if ( \T_OPEN_PARENTHESIS !== $tokens[ $bracket ]['code'] ) {
 					$obj_var_name = $tokens[ $var ]['content'];
 
 					// There is no way for us to know if the var is public or
@@ -181,7 +181,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 		$in_class     = false;
 		$obj_operator = $phpcs_file->findPrevious( Tokens::$emptyTokens, ( $stack_ptr - 1 ), null, true );
-		if ( T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] || T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+		if ( \T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] || \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
 			// The variable lives within a class, and is referenced like
 			// this: MyClass::$_variable or $class->variable.
 			$in_class = true;

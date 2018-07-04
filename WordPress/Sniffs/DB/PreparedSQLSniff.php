@@ -52,23 +52,23 @@ class PreparedSQLSniff extends Sniff {
 	 * @var array
 	 */
 	protected $ignored_tokens = array(
-		T_OBJECT_OPERATOR          => true,
-		T_OPEN_PARENTHESIS         => true,
-		T_CLOSE_PARENTHESIS        => true,
-		T_STRING_CONCAT            => true,
-		T_CONSTANT_ENCAPSED_STRING => true,
-		T_OPEN_SQUARE_BRACKET      => true,
-		T_CLOSE_SQUARE_BRACKET     => true,
-		T_COMMA                    => true,
-		T_LNUMBER                  => true,
-		T_START_HEREDOC            => true,
-		T_END_HEREDOC              => true,
-		T_START_NOWDOC             => true,
-		T_NOWDOC                   => true,
-		T_END_NOWDOC               => true,
-		T_INT_CAST                 => true,
-		T_DOUBLE_CAST              => true,
-		T_BOOL_CAST                => true,
+		\T_OBJECT_OPERATOR          => true,
+		\T_OPEN_PARENTHESIS         => true,
+		\T_CLOSE_PARENTHESIS        => true,
+		\T_STRING_CONCAT            => true,
+		\T_CONSTANT_ENCAPSED_STRING => true,
+		\T_OPEN_SQUARE_BRACKET      => true,
+		\T_CLOSE_SQUARE_BRACKET     => true,
+		\T_COMMA                    => true,
+		\T_LNUMBER                  => true,
+		\T_START_HEREDOC            => true,
+		\T_END_HEREDOC              => true,
+		\T_START_NOWDOC             => true,
+		\T_NOWDOC                   => true,
+		\T_END_NOWDOC               => true,
+		\T_INT_CAST                 => true,
+		\T_DOUBLE_CAST              => true,
+		\T_BOOL_CAST                => true,
 	);
 
 	/**
@@ -105,8 +105,8 @@ class PreparedSQLSniff extends Sniff {
 		$this->ignored_tokens = $this->ignored_tokens + Tokens::$emptyTokens;
 
 		return array(
-			T_VARIABLE,
-			T_STRING,
+			\T_VARIABLE,
+			\T_STRING,
 		);
 	}
 
@@ -136,8 +136,8 @@ class PreparedSQLSniff extends Sniff {
 				continue;
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code']
-				|| T_HEREDOC === $this->tokens[ $this->i ]['code']
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $this->i ]['code']
+				|| \T_HEREDOC === $this->tokens[ $this->i ]['code']
 			) {
 
 				$bad_variables = array_filter(
@@ -161,7 +161,7 @@ class PreparedSQLSniff extends Sniff {
 				continue;
 			}
 
-			if ( T_VARIABLE === $this->tokens[ $this->i ]['code'] ) {
+			if ( \T_VARIABLE === $this->tokens[ $this->i ]['code'] ) {
 				if ( '$wpdb' === $this->tokens[ $this->i ]['content'] ) {
 					$this->is_wpdb_method_call( $this->i, $this->methods );
 					continue;
@@ -172,7 +172,7 @@ class PreparedSQLSniff extends Sniff {
 				}
 			}
 
-			if ( T_STRING === $this->tokens[ $this->i ]['code'] ) {
+			if ( \T_STRING === $this->tokens[ $this->i ]['code'] ) {
 
 				if (
 					isset( $this->SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
@@ -183,7 +183,7 @@ class PreparedSQLSniff extends Sniff {
 					$opening_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $this->i + 1 ), null, true, null, true );
 
 					if ( false !== $opening_paren
-						&& T_OPEN_PARENTHESIS === $this->tokens[ $opening_paren ]['code']
+						&& \T_OPEN_PARENTHESIS === $this->tokens[ $opening_paren ]['code']
 						&& isset( $this->tokens[ $opening_paren ]['parenthesis_closer'] )
 					) {
 						// Skip past the end of the function.

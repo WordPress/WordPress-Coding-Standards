@@ -108,14 +108,14 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+			if ( in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
 
 				/*
 				 * Here be dragons - a double quoted string can contain extrapolated variables
 				 * which don't have to comply with these rules.
 				 */
-				if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
 					$transform       = $this->transform_complex_string( $string, $regex );
 					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
 					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
@@ -129,7 +129,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 					continue;
 				}
 
-				if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
 					$expected[ $i ] = '"' . $transform . '"';
 				} else {
 					$expected[ $i ] = '\'' . $transform . '\'';
@@ -211,7 +211,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @return string
 	 */
 	protected function transform_complex_string( $string, $regex, $transform_type = 'full' ) {
-		$output = preg_split( '`([\{\}\$\[\] ])`', $string, -1, PREG_SPLIT_DELIM_CAPTURE );
+		$output = preg_split( '`([\{\}\$\[\] ])`', $string, -1, \PREG_SPLIT_DELIM_CAPTURE );
 
 		$is_variable = false;
 		$has_braces  = false;

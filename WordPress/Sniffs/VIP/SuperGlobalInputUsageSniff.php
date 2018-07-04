@@ -31,7 +31,7 @@ class SuperGlobalInputUsageSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_VARIABLE,
+			\T_VARIABLE,
 		);
 	}
 

@@ -74,9 +74,9 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_VARIABLE,
-			T_DOUBLE_QUOTED_STRING,
-			T_HEREDOC,
+			\T_VARIABLE,
+			\T_DOUBLE_QUOTED_STRING,
+			\T_HEREDOC,
 		);
 	}
 
@@ -92,8 +92,8 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		$superglobals = $this->input_superglobals;
 
 		// Handling string interpolation.
-		if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code']
-			|| T_HEREDOC === $this->tokens[ $stackPtr ]['code']
+		if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code']
+			|| \T_HEREDOC === $this->tokens[ $stackPtr ]['code']
 		) {
 			$interpolated_variables = array_map(
 				function ( $symbol ) {

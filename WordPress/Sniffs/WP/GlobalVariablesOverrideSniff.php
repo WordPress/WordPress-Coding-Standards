@@ -35,8 +35,8 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_GLOBAL,
-			T_VARIABLE,
+			\T_GLOBAL,
+			\T_VARIABLE,
 		);
 	}
 
@@ -50,15 +50,15 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
+		if ( \T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
 			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-			if ( false === $bracketPtr || T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
+			if ( false === $bracketPtr || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				return;
 			}
 
 			// Bow out if the array key contains a variable.
-			$has_variable = $this->phpcsFile->findNext( T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
+			$has_variable = $this->phpcsFile->findNext( \T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
 			if ( false !== $has_variable ) {
 				return;
 			}
@@ -67,7 +67,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			$var_name = '';
 			$start    = ( $bracketPtr + 1 );
 			for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
-				if ( T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
+				if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
 					$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
 				}
 			}
@@ -79,7 +79,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			if ( true === $this->is_assignment( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
 				$this->maybe_add_error( $stackPtr );
 			}
-		} elseif ( T_GLOBAL === $token['code'] ) {
+		} elseif ( \T_GLOBAL === $token['code'] ) {
 			$search = array(); // Array of globals to watch for.
 			$ptr    = ( $stackPtr + 1 );
 			while ( $ptr ) {
@@ -90,11 +90,11 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				$var = $this->tokens[ $ptr ];
 
 				// Halt the loop at end of statement.
-				if ( T_SEMICOLON === $var['code'] ) {
+				if ( \T_SEMICOLON === $var['code'] ) {
 					break;
 				}
 
-				if ( T_VARIABLE === $var['code'] ) {
+				if ( \T_VARIABLE === $var['code'] ) {
 					if ( isset( $this->wp_globals[ substr( $var['content'], 1 ) ] ) ) {
 						$search[] = $var['content'];
 					}
@@ -115,9 +115,9 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 			// Is the global statement within a function call or closure ?
 			// If so, limit the token walking to the function scope.
-			$function_token = $this->phpcsFile->getCondition( $stackPtr, T_FUNCTION );
+			$function_token = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 			if ( false === $function_token ) {
-				$function_token = $this->phpcsFile->getCondition( $stackPtr, T_CLOSURE );
+				$function_token = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
 			}
 
 			if ( false !== $function_token ) {
@@ -134,7 +134,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
 				// If the global statement was in the global scope, skip over functions, classes and the likes.
-				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ), true ) ) {
 					if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
 						// Live coding, skip the rest of the file.
 						return;
@@ -144,12 +144,12 @@ class GlobalVariablesOverrideSniff extends Sniff {
 					continue;
 				}
 
-				if ( T_VARIABLE === $this->tokens[ $ptr ]['code']
+				if ( \T_VARIABLE === $this->tokens[ $ptr ]['code']
 					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
 				) {
 					// Don't throw false positives for static class properties.
 					$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
-					if ( false !== $previous && T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
+					if ( false !== $previous && \T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
 						continue;
 					}
 
@@ -163,10 +163,10 @@ class GlobalVariablesOverrideSniff extends Sniff {
 						$nested_parenthesis = $this->tokens[ $ptr ]['nested_parenthesis'];
 						$close_parenthesis  = end( $nested_parenthesis );
 						if ( isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
-							&& T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+							&& \T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
 							&& ( false !== $previous
-								&& ( T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
-								|| T_AS === $this->tokens[ $previous ]['code'] ) )
+								&& ( \T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
+								|| \T_AS === $this->tokens[ $previous ]['code'] ) )
 						) {
 							$this->maybe_add_error( $ptr );
 						}

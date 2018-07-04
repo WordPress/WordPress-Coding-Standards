@@ -71,12 +71,12 @@ class ArrayIndentationSniff extends Sniff {
 		 * Existing heredoc, nowdoc and inline HTML indentation should be respected at all times.
 		 */
 		$this->ignore_tokens = Tokens::$heredocTokens;
-		unset( $this->ignore_tokens[ T_START_HEREDOC ], $this->ignore_tokens[ T_START_NOWDOC ] );
-		$this->ignore_tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
+		unset( $this->ignore_tokens[ \T_START_HEREDOC ], $this->ignore_tokens[ \T_START_NOWDOC ] );
+		$this->ignore_tokens[ \T_INLINE_HTML ] = \T_INLINE_HTML;
 
 		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
+			\T_ARRAY,
+			\T_OPEN_SHORT_ARRAY,
 		);
 	}
 
@@ -125,7 +125,7 @@ class ArrayIndentationSniff extends Sniff {
 			 * nothing or only indentation whitespace before it.
 			 */
 			if ( 0 === $closer_line_spaces
-				|| ( T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
+				|| ( \T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
 					&& 1 === $this->tokens[ ( $closer - 1 ) ]['column'] )
 			) {
 				$this->add_array_alignment_error(
@@ -172,7 +172,7 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Find the line on which the item starts.
 			$first_content = $this->phpcsFile->findNext(
-				array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+				array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 				$item['start'],
 				$end_of_this_item,
 				true
@@ -180,11 +180,11 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Deal with trailing comments.
 			if ( false !== $first_content
-				&& T_COMMENT === $this->tokens[ $first_content ]['code']
+				&& \T_COMMENT === $this->tokens[ $first_content ]['code']
 				&& $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
 			) {
 				$first_content = $this->phpcsFile->findNext(
-					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE, T_COMMENT ),
+					array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE, \T_COMMENT ),
 					( $first_content + 1 ),
 					$end_of_this_item,
 					true
@@ -200,7 +200,7 @@ class ArrayIndentationSniff extends Sniff {
 			// That is handled by the ArrayDeclarationSpacingSniff.
 			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
 				|| ( 1 !== $this->tokens[ $first_content ]['column']
-					&& T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )
+					&& \T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )
 			) {
 				return $closer;
 			}
@@ -247,7 +247,7 @@ class ArrayIndentationSniff extends Sniff {
 			}
 
 			$first_content_on_line2 = $this->phpcsFile->findNext(
-				array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+				array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 				$ptr,
 				$end_of_this_item,
 				true
@@ -261,7 +261,7 @@ class ArrayIndentationSniff extends Sniff {
 				 * so check its placement.
 				 */
 				if ( $this->tokens[ $item['end'] ]['line'] !== $this->tokens[ $end_of_this_item ]['line']
-					&& T_COMMA === $this->tokens[ $end_of_this_item ]['code']
+					&& \T_COMMA === $this->tokens[ $end_of_this_item ]['code']
 					&& ( $this->tokens[ $end_of_this_item ]['column'] - 1 ) !== $expected_spaces
 				) {
 					$this->add_array_alignment_error(
@@ -304,7 +304,7 @@ class ArrayIndentationSniff extends Sniff {
 
 					// Fix second line for the array item.
 					if ( 1 === $this->tokens[ $first_content_on_line2 ]['column']
-						&& T_COMMENT === $this->tokens[ $first_content_on_line2 ]['code']
+						&& \T_COMMENT === $this->tokens[ $first_content_on_line2 ]['code']
 					) {
 						$actual_comment = ltrim( $this->tokens[ $first_content_on_line2 ]['content'] );
 						$replacement    = $expected_indent_on_line2 . $actual_comment;
@@ -327,7 +327,7 @@ class ArrayIndentationSniff extends Sniff {
 						}
 
 						$first_content_on_line = $this->phpcsFile->findNext(
-							array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+							array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 							$i,
 							$end_of_this_item,
 							true
@@ -350,7 +350,7 @@ class ArrayIndentationSniff extends Sniff {
 
 						if ( $found_spaces_on_line !== $expected_spaces_on_line ) {
 							if ( 1 === $this->tokens[ $first_content_on_line ]['column']
-								&& T_COMMENT === $this->tokens[ $first_content_on_line ]['code']
+								&& \T_COMMENT === $this->tokens[ $first_content_on_line ]['code']
 							) {
 								$actual_comment = ltrim( $this->tokens[ $first_content_on_line ]['content'] );
 								$replacement    = $expected_indent_on_line . $actual_comment;
@@ -370,7 +370,7 @@ class ArrayIndentationSniff extends Sniff {
 					 * Check the placement of the comma after the array item as it might be on a line by itself.
 					 */
 					if ( $this->tokens[ $item['end'] ]['line'] !== $this->tokens[ $end_of_this_item ]['line']
-						&& T_COMMA === $this->tokens[ $end_of_this_item ]['code']
+						&& \T_COMMA === $this->tokens[ $end_of_this_item ]['code']
 						&& ( $this->tokens[ $end_of_this_item ]['column'] - 1 ) !== $expected_spaces
 					) {
 						$this->add_array_alignment_error(
@@ -412,8 +412,8 @@ class ArrayIndentationSniff extends Sniff {
 		 * If it's a subsequent line of a multi-line sting, it will not start with a quote
 		 * character, nor just *be* a quote character.
 		 */
-		if ( T_CONSTANT_ENCAPSED_STRING === $token_code
-			|| T_DOUBLE_QUOTED_STRING === $token_code
+		if ( \T_CONSTANT_ENCAPSED_STRING === $token_code
+			|| \T_DOUBLE_QUOTED_STRING === $token_code
 		) {
 			// Deal with closing quote of a multi-line string being on its own line.
 			if ( "'" === $this->tokens[ $ptr ]['content']
@@ -451,8 +451,8 @@ class ArrayIndentationSniff extends Sniff {
 
 		$whitespace = '';
 
-		if ( T_WHITESPACE === $this->tokens[ $ptr ]['code']
-			|| T_DOC_COMMENT_WHITESPACE === $this->tokens[ $ptr ]['code']
+		if ( \T_WHITESPACE === $this->tokens[ $ptr ]['code']
+			|| \T_DOC_COMMENT_WHITESPACE === $this->tokens[ $ptr ]['code']
 		) {
 			return $this->tokens[ $ptr ]['length'];
 		}
@@ -464,7 +464,7 @@ class ArrayIndentationSniff extends Sniff {
 		 * First/Single line is tokenized as T_WHITESPACE + T_COMMENT
 		 * Subsequent lines are tokenized as T_COMMENT including the indentation whitespace.
 		 */
-		if ( T_COMMENT === $this->tokens[ $ptr ]['code'] ) {
+		if ( \T_COMMENT === $this->tokens[ $ptr ]['code'] ) {
 			$content        = $this->tokens[ $ptr ]['content'];
 			$actual_comment = ltrim( $content );
 			$whitespace     = str_replace( $actual_comment, '', $content );

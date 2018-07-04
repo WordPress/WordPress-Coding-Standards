@@ -42,7 +42,7 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 			if ( isset( $tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
 				$owner = $tokens[ $close_parenthesis ]['parenthesis_owner'];
 
-				if ( T_FOR === $tokens[ $owner ]['code'] ) {
+				if ( \T_FOR === $tokens[ $owner ]['code'] ) {
 					$previous = $phpcsFile->findPrevious(
 						Tokens::$emptyTokens,
 						( $stackPtr - 1 ),
@@ -52,7 +52,7 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 
 					if ( false !== $previous
 						&& ( $previous === $tokens[ $owner ]['parenthesis_opener']
-							|| T_SEMICOLON === $tokens[ $previous ]['code'] )
+							|| \T_SEMICOLON === $tokens[ $previous ]['code'] )
 					) {
 						return;
 					}

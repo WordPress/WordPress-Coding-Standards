@@ -41,22 +41,22 @@ class YodaConditionsSniff extends Sniff {
 	 */
 	public function register() {
 
-		$starters                       = Tokens::$booleanOperators;
-		$starters                      += Tokens::$assignmentTokens;
-		$starters[ T_CASE ]             = T_CASE;
-		$starters[ T_RETURN ]           = T_RETURN;
-		$starters[ T_INLINE_THEN ]      = T_INLINE_THEN;
-		$starters[ T_INLINE_ELSE ]      = T_INLINE_ELSE;
-		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
-		$starters[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
+		$starters                        = Tokens::$booleanOperators;
+		$starters                       += Tokens::$assignmentTokens;
+		$starters[ \T_CASE ]             = \T_CASE;
+		$starters[ \T_RETURN ]           = \T_RETURN;
+		$starters[ \T_INLINE_THEN ]      = \T_INLINE_THEN;
+		$starters[ \T_INLINE_ELSE ]      = \T_INLINE_ELSE;
+		$starters[ \T_SEMICOLON ]        = \T_SEMICOLON;
+		$starters[ \T_OPEN_PARENTHESIS ] = \T_OPEN_PARENTHESIS;
 
 		$this->condition_start_tokens = $starters;
 
 		return array(
-			T_IS_EQUAL,
-			T_IS_NOT_EQUAL,
-			T_IS_IDENTICAL,
-			T_IS_NOT_IDENTICAL,
+			\T_IS_EQUAL,
+			\T_IS_NOT_EQUAL,
+			\T_IS_IDENTICAL,
+			\T_IS_NOT_IDENTICAL,
 		);
 	}
 
@@ -82,15 +82,15 @@ class YodaConditionsSniff extends Sniff {
 			}
 
 			// If this is a variable or array, we've seen all we need to see.
-			if ( T_VARIABLE === $this->tokens[ $i ]['code']
-				|| T_CLOSE_SQUARE_BRACKET === $this->tokens[ $i ]['code']
+			if ( \T_VARIABLE === $this->tokens[ $i ]['code']
+				|| \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $i ]['code']
 			) {
 				$needs_yoda = true;
 				break;
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
+			if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 				return;
 			}
 		}
@@ -106,16 +106,16 @@ class YodaConditionsSniff extends Sniff {
 			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
 		}
 
-		if ( in_array( $this->tokens[ $next_non_empty ]['code'], array( T_SELF, T_PARENT, T_STATIC ), true ) ) {
+		if ( in_array( $this->tokens[ $next_non_empty ]['code'], array( \T_SELF, \T_PARENT, \T_STATIC ), true ) ) {
 			$next_non_empty = $this->phpcsFile->findNext(
-				array_merge( Tokens::$emptyTokens, array( T_DOUBLE_COLON ) ),
+				array_merge( Tokens::$emptyTokens, array( \T_DOUBLE_COLON ) ),
 				( $next_non_empty + 1 ),
 				null,
 				true
 			);
 		}
 
-		if ( T_VARIABLE === $this->tokens[ $next_non_empty ]['code'] ) {
+		if ( \T_VARIABLE === $this->tokens[ $next_non_empty ]['code'] ) {
 			return;
 		}
 

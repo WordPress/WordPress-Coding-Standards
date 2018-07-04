@@ -32,8 +32,8 @@ class DiscourageGotoSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_GOTO,
-			T_GOTO_LABEL,
+			\T_GOTO,
+			\T_GOTO_LABEL,
 		);
 	}
 

@@ -59,7 +59,7 @@ class AllSniffs extends PHP_CodeSniffer_Standards_AllSniffs
 
         /* Start of WPCS adjustment */
         // Set the correct path to PHPCS.
-        $isInstalled = !is_file(PHPCS_DIR.'/CodeSniffer.php');
+        $isInstalled = !is_file(\PHPCS_DIR.'/CodeSniffer.php');
         /* End of WPCS adjustment */
 
         // Optionally allow for ignoring the tests for one or more standards.
@@ -80,7 +80,7 @@ class AllSniffs extends PHP_CodeSniffer_Standards_AllSniffs
             // are split into different directories; one for the sniffs and
             // a different file system location for tests.
             if ($isInstalled === true
-                && is_dir($path.DIRECTORY_SEPARATOR.'Generic') === true
+                && is_dir($path.\DIRECTORY_SEPARATOR.'Generic') === true
             ) {
                 $path = dirname(__FILE__);
             }
@@ -90,7 +90,7 @@ class AllSniffs extends PHP_CodeSniffer_Standards_AllSniffs
                     continue;
                 }
 
-                $testsDir = $path.DIRECTORY_SEPARATOR.$standard.DIRECTORY_SEPARATOR.'Tests'.DIRECTORY_SEPARATOR;
+                $testsDir = $path.\DIRECTORY_SEPARATOR.$standard.\DIRECTORY_SEPARATOR.'Tests'.\DIRECTORY_SEPARATOR;
 
                 if (is_dir($testsDir) === false) {
                     // No tests for this standard.
@@ -113,14 +113,14 @@ class AllSniffs extends PHP_CodeSniffer_Standards_AllSniffs
                     }
 
                     $filePath  = $file->getPathname();
-                    $className = str_replace($path.DIRECTORY_SEPARATOR, '', $filePath);
+                    $className = str_replace($path.\DIRECTORY_SEPARATOR, '', $filePath);
                     $className = substr($className, 0, -4);
-                    $className = str_replace(DIRECTORY_SEPARATOR, '_', $className);
+                    $className = str_replace(\DIRECTORY_SEPARATOR, '_', $className);
 
                     // Include the sniff here so tests can use it in their setup() methods.
                     $parts = explode('_', $className);
                     if (isset($parts[0],$parts[2],$parts[3]) === true) {
-                        $sniffPath = $origPath.DIRECTORY_SEPARATOR.$parts[0].DIRECTORY_SEPARATOR.'Sniffs'.DIRECTORY_SEPARATOR.$parts[2].DIRECTORY_SEPARATOR.$parts[3];
+                        $sniffPath = $origPath.\DIRECTORY_SEPARATOR.$parts[0].\DIRECTORY_SEPARATOR.'Sniffs'.\DIRECTORY_SEPARATOR.$parts[2].\DIRECTORY_SEPARATOR.$parts[3];
                         $sniffPath = substr($sniffPath, 0, -8).'Sniff.php';
 
                         if (file_exists($sniffPath) === true) {

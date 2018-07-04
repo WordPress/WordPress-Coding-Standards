@@ -100,7 +100,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
     {
         $testFiles = array();
 
-        $dir = substr($testFileBase, 0, strrpos($testFileBase, DIRECTORY_SEPARATOR));
+        $dir = substr($testFileBase, 0, strrpos($testFileBase, \DIRECTORY_SEPARATOR));
         $di  = new DirectoryIterator($dir);
 
         foreach ($di as $file) {
@@ -169,7 +169,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         $parts     = explode('_', $basename);
         $sniffCode = $parts[0].'.'.$parts[2].'.'.$parts[3];
 
-        $testFileBase = $this->standardsDir.DIRECTORY_SEPARATOR.str_replace('_', DIRECTORY_SEPARATOR, $basename).'UnitTest.';
+        $testFileBase = $this->standardsDir.\DIRECTORY_SEPARATOR.str_replace('_', \DIRECTORY_SEPARATOR, $basename).'UnitTest.';
 
         // Get a list of all test files to check.
         $testFiles = $this->getTestFiles($testFileBase);
@@ -214,7 +214,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         }//end foreach
 
         if (empty($failureMessages) === false) {
-            $this->fail(implode(PHP_EOL, $failureMessages));
+            $this->fail(implode(\PHP_EOL, $failureMessages));
         }
 
     }//end runTest()
@@ -380,7 +380,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                     $foundMessage    .= "$numErrors error(s)";
                     if ($numErrors !== 0) {
                         $foundString .= 'error(s)';
-                        $errors      .= implode(PHP_EOL.' -> ', $problems['found_errors']);
+                        $errors      .= implode(\PHP_EOL.' -> ', $problems['found_errors']);
                     }
 
                     if ($expectedWarnings !== $numWarnings) {
@@ -400,16 +400,16 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                     if ($numWarnings !== 0) {
                         $foundString .= 'warning(s)';
                         if (empty($errors) === false) {
-                            $errors .= PHP_EOL.' -> ';
+                            $errors .= \PHP_EOL.' -> ';
                         }
 
-                        $errors .= implode(PHP_EOL.' -> ', $problems['found_warnings']);
+                        $errors .= implode(\PHP_EOL.' -> ', $problems['found_warnings']);
                     }
                 }
 
                 $fullMessage = "$lineMessage $expectedMessage $foundMessage.";
                 if ($errors !== '') {
-                    $fullMessage .= " The $foundString found were:".PHP_EOL." -> $errors";
+                    $fullMessage .= " The $foundString found were:".\PHP_EOL." -> $errors";
                 }
 
                 $failureMessages[] = $fullMessage;

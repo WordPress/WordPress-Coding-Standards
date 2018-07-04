@@ -76,7 +76,7 @@ class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		foreach ( $this->target_functions[ $matched_content ] as $position ) {
 			if ( isset( $parameters[ $position ] ) ) {
-				$file_constant = $this->phpcsFile->findNext( T_FILE, $parameters[ $position ]['start'], ( $parameters[ $position ]['end'] + 1 ) );
+				$file_constant = $this->phpcsFile->findNext( \T_FILE, $parameters[ $position ]['start'], ( $parameters[ $position ]['end'] + 1 ) );
 
 				if ( false !== $file_constant ) {
 					$this->phpcsFile->addWarning( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );

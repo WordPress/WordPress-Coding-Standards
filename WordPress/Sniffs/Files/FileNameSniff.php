@@ -123,8 +123,8 @@ class FileNameSniff extends Sniff {
 		}
 
 		return array(
-			T_OPEN_TAG,
-			T_OPEN_TAG_WITH_ECHO,
+			\T_OPEN_TAG,
+			\T_OPEN_TAG_WITH_ECHO,
 		);
 	}
 
@@ -145,16 +145,16 @@ class FileNameSniff extends Sniff {
 		}
 
 		// Respect phpcs:disable comments as long as they are not accompanied by an enable (PHPCS 3.2+).
-		if ( defined( 'T_PHPCS_DISABLE' ) && defined( 'T_PHPCS_ENABLE' ) ) {
+		if ( defined( '\T_PHPCS_DISABLE' ) && defined( '\T_PHPCS_ENABLE' ) ) {
 			$i = -1;
-			while ( $i = $this->phpcsFile->findNext( T_PHPCS_DISABLE, ( $i + 1 ) ) ) {
+			while ( $i = $this->phpcsFile->findNext( \T_PHPCS_DISABLE, ( $i + 1 ) ) ) {
 				if ( empty( $this->tokens[ $i ]['sniffCodes'] )
 					|| isset( $this->tokens[ $i ]['sniffCodes']['WordPress'] )
 					|| isset( $this->tokens[ $i ]['sniffCodes']['WordPress.Files'] )
 					|| isset( $this->tokens[ $i ]['sniffCodes']['WordPress.Files.FileName'] )
 				) {
 					do {
-						$i = $this->phpcsFile->findNext( T_PHPCS_ENABLE, ( $i + 1 ) );
+						$i = $this->phpcsFile->findNext( \T_PHPCS_ENABLE, ( $i + 1 ) );
 					} while ( false !== $i
 						&& ! empty( $this->tokens[ $i ]['sniffCodes'] )
 						&& ! isset( $this->tokens[ $i ]['sniffCodes']['WordPress'] )
@@ -190,7 +190,7 @@ class FileNameSniff extends Sniff {
 		 * the file name reflects the class name.
 		 */
 		if ( true === $this->strict_class_file_names ) {
-			$has_class = $this->phpcsFile->findNext( T_CLASS, $stackPtr );
+			$has_class = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
 			if ( false !== $has_class && false === $this->is_test_class( $has_class ) ) {
 				$class_name = $this->phpcsFile->getDeclarationName( $has_class );
 				$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
@@ -213,13 +213,13 @@ class FileNameSniff extends Sniff {
 		/*
 		 * Check non-class files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
 		 */
-		if ( false !== strpos( $file, DIRECTORY_SEPARATOR . 'wp-includes' . DIRECTORY_SEPARATOR ) ) {
-			$subpackage_tag = $this->phpcsFile->findNext( T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
+		if ( false !== strpos( $file, \DIRECTORY_SEPARATOR . 'wp-includes' . \DIRECTORY_SEPARATOR ) ) {
+			$subpackage_tag = $this->phpcsFile->findNext( \T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
 			if ( false !== $subpackage_tag ) {
-				$subpackage = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, $subpackage_tag );
+				$subpackage = $this->phpcsFile->findNext( \T_DOC_COMMENT_STRING, $subpackage_tag );
 				if ( false !== $subpackage ) {
 					$fileName_end = substr( $fileName, -13 );
-					$has_class    = $this->phpcsFile->findNext( T_CLASS, $stackPtr );
+					$has_class    = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
 
 					if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
 						&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
