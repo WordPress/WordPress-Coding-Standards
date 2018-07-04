@@ -282,7 +282,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$index_end_cols    = array(); // Keep track of the end column position of index keys.
 		$double_arrow_cols = array(); // Keep track of arrow column position and count.
 		$multi_line_count  = 0;
-		$total_items       = count( $items );
+		$total_items       = \count( $items );
 
 		foreach ( $items as $key => $item ) {
 			if ( strpos( $item['raw'], '=>' ) === false ) {
@@ -428,7 +428,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			reset( $double_arrow_cols );
 			$count = current( $double_arrow_cols );
 
-			if ( $count > 1 || ( 1 === $count && count( $items ) === 1 ) ) {
+			if ( $count > 1 || ( 1 === $count && \count( $items ) === 1 ) ) {
 				// Allow for several groups of arrows having the same $count.
 				$filtered_double_arrow_cols = array_keys( $double_arrow_cols, $count, true );
 
@@ -584,7 +584,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				$operator = $matches[1];
 				$number   = (int) $matches[2];
 
-				if ( in_array( $operator, array( '<', '<=', '>', '>=', '==', '=', '!=', '<>' ), true ) === true
+				if ( \in_array( $operator, array( '<', '<=', '>', '>=', '==', '=', '!=', '<>' ), true ) === true
 					&& ( $number >= 0 && $number <= 100 )
 				) {
 					$this->alignMultilineItems = $alignMultilineItems;

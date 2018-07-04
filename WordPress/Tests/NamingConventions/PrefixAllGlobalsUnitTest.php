@@ -54,7 +54,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					// Backfills.
 					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
 					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
-					234 => ( defined( '\E_DEPRECATED' ) ) ? 0 : 1,
+					234 => ( \defined( '\E_DEPRECATED' ) ) ? 0 : 1,
 					238 => ( class_exists( '\IntlTimeZone' ) ) ? 0 : 1,
 					318 => 1,
 					339 => 1,

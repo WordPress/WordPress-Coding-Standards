@@ -347,7 +347,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 
 					$item_name = $this->tokens[ $constant_name_ptr ]['content'];
-					if ( defined( '\\' . $item_name ) ) {
+					if ( \defined( '\\' . $item_name ) ) {
 						// Backfill for PHP native constant.
 						return;
 					}
@@ -702,7 +702,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( 'define' === $matched_content ) {
-			if ( defined( '\\' . $raw_content ) ) {
+			if ( \defined( '\\' . $raw_content ) ) {
 				// Backfill for PHP native constant.
 				return;
 			}

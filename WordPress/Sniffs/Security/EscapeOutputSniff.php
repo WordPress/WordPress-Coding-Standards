@@ -232,7 +232,7 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// These functions only need to have the first argument escaped.
-			if ( in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
+			if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$first_param      = $this->get_function_call_parameter( $stackPtr, 1 );
 				$end_of_statement = ( $first_param['end'] + 1 );
 				unset( $first_param );
@@ -361,7 +361,7 @@ class EscapeOutputSniff extends Sniff {
 				continue;
 			}
 
-			if ( in_array( $this->tokens[ $i ]['code'], array( \T_DOUBLE_ARROW, \T_CLOSE_PARENTHESIS ), true ) ) {
+			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_DOUBLE_ARROW, \T_CLOSE_PARENTHESIS ), true ) ) {
 				continue;
 			}
 

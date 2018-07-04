@@ -55,7 +55,7 @@ class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		if ( count( $parameters ) > 1 ) {
+		if ( \count( $parameters ) > 1 ) {
 			return;
 		}
 

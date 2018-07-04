@@ -106,7 +106,7 @@ class YodaConditionsSniff extends Sniff {
 			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
 		}
 
-		if ( in_array( $this->tokens[ $next_non_empty ]['code'], array( \T_SELF, \T_PARENT, \T_STATIC ), true ) ) {
+		if ( \in_array( $this->tokens[ $next_non_empty ]['code'], array( \T_SELF, \T_PARENT, \T_STATIC ), true ) ) {
 			$next_non_empty = $this->phpcsFile->findNext(
 				array_merge( Tokens::$emptyTokens, array( \T_DOUBLE_COLON ) ),
 				( $next_non_empty + 1 ),

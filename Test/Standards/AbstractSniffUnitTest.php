@@ -80,7 +80,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
             self::$phpcs = new PHP_CodeSniffer();
         }
 
-        $class = get_class($this);
+        $class = \get_class($this);
         $this->standardsDir = $GLOBALS['PHP_CODESNIFFER_STANDARD_DIRS'][$class];
 
     }//end setUp()
@@ -105,7 +105,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
 
         foreach ($di as $file) {
             $path = $file->getPathname();
-            if (substr($path, 0, strlen($testFileBase)) === $testFileBase) {
+            if (substr($path, 0, \strlen($testFileBase)) === $testFileBase) {
 
                 /* Start of WPCS adjustment */
                 // If we're changing things anyway, we may as well exclude backup files
@@ -153,7 +153,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         }
 
         // The basis for determining file locations.
-        $basename = substr(get_class($this), 0, -8);
+        $basename = substr(\get_class($this), 0, -8);
 
         /* Start of WPCS adjustment */
         // Support the use of PHP namespaces.
@@ -237,11 +237,11 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         $expectedErrors   = $this->getErrorList(basename($testFile));
         $expectedWarnings = $this->getWarningList(basename($testFile));
 
-        if (is_array($expectedErrors) === false) {
+        if (\is_array($expectedErrors) === false) {
             throw new PHP_CodeSniffer_Exception('getErrorList() must return an array');
         }
 
-        if (is_array($expectedWarnings) === false) {
+        if (\is_array($expectedWarnings) === false) {
             throw new PHP_CodeSniffer_Exception('getWarningList() must return an array');
         }
 
@@ -276,12 +276,12 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                     $errorsTemp[] = $foundError['message'].' ('.$foundError['source'].')';
 
                     $source = $foundError['source'];
-                    if (in_array($source, $GLOBALS['PHP_CODESNIFFER_SNIFF_CODES']) === false) {
+                    if (\in_array($source, $GLOBALS['PHP_CODESNIFFER_SNIFF_CODES']) === false) {
                         $GLOBALS['PHP_CODESNIFFER_SNIFF_CODES'][] = $source;
                     }
 
                     if ($foundError['fixable'] === true
-                        && in_array($source, $GLOBALS['PHP_CODESNIFFER_FIXABLE_CODES']) === false
+                        && \in_array($source, $GLOBALS['PHP_CODESNIFFER_FIXABLE_CODES']) === false
                     ) {
                         $GLOBALS['PHP_CODESNIFFER_FIXABLE_CODES'][] = $source;
                     }
@@ -362,8 +362,8 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         ksort($allProblems);
 
         foreach ($allProblems as $line => $problems) {
-            $numErrors        = count($problems['found_errors']);
-            $numWarnings      = count($problems['found_warnings']);
+            $numErrors        = \count($problems['found_errors']);
+            $numWarnings      = \count($problems['found_warnings']);
             $expectedErrors   = $problems['expected_errors'];
             $expectedWarnings = $problems['expected_warnings'];
 

@@ -191,7 +191,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 			if ( ( false === $this->allow_single_item_single_line_associative_arrays
 					&& ! empty( $array_items ) )
 				|| ( true === $this->allow_single_item_single_line_associative_arrays
-					&& count( $array_items ) > 1 )
+					&& \count( $array_items ) > 1 )
 			) {
 				/*
 				 * Make sure the double arrow is for *this* array, not for a nested one.
@@ -290,7 +290,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 				'Expected 1 space after array opener, found %s.',
 				$opener,
 				'SpaceAfterArrayOpener',
-				array( strlen( $this->tokens[ ( $opener + 1 ) ]['content'] ) )
+				array( \strlen( $this->tokens[ ( $opener + 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
@@ -315,7 +315,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 				'Expected 1 space before array closer, found %s.',
 				$closer,
 				'SpaceBeforeArrayCloser',
-				array( strlen( $this->tokens[ ( $closer - 1 ) ]['content'] ) )
+				array( \strlen( $this->tokens[ ( $closer - 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {

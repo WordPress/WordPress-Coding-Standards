@@ -118,7 +118,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		$token     = $this->tokens[ $stackPtr ];
 		$classname = '';
 
-		if ( in_array( $token['code'], array( \T_NEW, \T_EXTENDS, \T_IMPLEMENTS ), true ) ) {
+		if ( \in_array( $token['code'], array( \T_NEW, \T_EXTENDS, \T_IMPLEMENTS ), true ) ) {
 			if ( \T_NEW === $token['code'] ) {
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_OBJECT_OPERATOR ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
@@ -150,7 +150,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		// Nothing to do if 'parent', 'self' or 'static'.
-		if ( in_array( $classname, array( 'parent', 'self', 'static' ), true ) ) {
+		if ( \in_array( $classname, array( 'parent', 'self', 'static' ), true ) ) {
 			return false;
 		}
 

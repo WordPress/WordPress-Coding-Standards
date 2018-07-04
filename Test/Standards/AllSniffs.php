@@ -86,7 +86,7 @@ class AllSniffs extends PHP_CodeSniffer_Standards_AllSniffs
             }
 
             foreach ($standards as $standard) {
-                if (in_array($standard, $ignoreTestsForStandards, true)) {
+                if (\in_array($standard, $ignoreTestsForStandards, true)) {
                     continue;
                 }
 

@@ -80,7 +80,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 			return;
 		}
 
-		$array_item_count = count( $array_items );
+		$array_item_count = \count( $array_items );
 
 		// Note: $item_index is 1-based and the array items are split on the commas!
 		foreach ( $array_items as $item_index => $item ) {

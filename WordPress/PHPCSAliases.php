@@ -23,7 +23,7 @@
  * external PHPCS standards creating cross-version compatibility in the same
  * manner.}}
  */
-if ( ! defined( 'WPCS_PHPCS_ALIASES_SET' ) ) {
+if ( ! \defined( 'WPCS_PHPCS_ALIASES_SET' ) ) {
 	// PHPCS base classes/interface.
 	if ( ! interface_exists( '\PHP_CodeSniffer_Sniff' ) ) {
 		class_alias( 'PHP_CodeSniffer\Sniffs\Sniff', '\PHP_CodeSniffer_Sniff' );

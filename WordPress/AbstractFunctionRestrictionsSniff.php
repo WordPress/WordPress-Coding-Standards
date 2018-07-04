@@ -165,7 +165,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		// Create one "super-regex" to allow for initial filtering.
-		$all_items                = call_user_func_array( 'array_merge', $all_items );
+		$all_items                = \call_user_func_array( 'array_merge', $all_items );
 		$all_items                = implode( '|', array_unique( $all_items ) );
 		$this->prelim_check_regex = sprintf( $this->regex_pattern, $all_items );
 

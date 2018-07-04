@@ -94,7 +94,7 @@ class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 		$key = strtolower( $key );
 
 		if ( ( 'nopaging' === $key && ( 'true' === $val || 1 === $val ) )
-			|| ( in_array( $key, array( 'numberposts', 'posts_per_page' ), true ) && '-1' === $val )
+			|| ( \in_array( $key, array( 'numberposts', 'posts_per_page' ), true ) && '-1' === $val )
 		) {
 			return 'Disabling pagination is prohibited in VIP context, do not set `%s` to `%s` ever.';
 		}

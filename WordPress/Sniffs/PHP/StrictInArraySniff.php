@@ -74,7 +74,7 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		// Check if the strict check is actually needed.
 		if ( false === $this->target_functions[ $matched_content ] ) {
-			if ( count( $parameters ) === 1 ) {
+			if ( \count( $parameters ) === 1 ) {
 				return;
 			}
 		}

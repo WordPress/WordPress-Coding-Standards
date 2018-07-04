@@ -44,7 +44,7 @@ class SuperGlobalInputUsageSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		// Check for global input variable.
-		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], $this->input_superglobals, true ) ) {
+		if ( ! \in_array( $this->tokens[ $stackPtr ]['content'], $this->input_superglobals, true ) ) {
 			return;
 		}
 

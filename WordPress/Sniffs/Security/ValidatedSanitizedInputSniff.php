@@ -109,7 +109,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// Check if this is a superglobal.
-		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
+		if ( ! \in_array( $this->tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
 			return;
 		}
 
