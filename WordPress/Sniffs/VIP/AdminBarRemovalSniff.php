@@ -146,7 +146,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$targets = $this->string_tokens;
 
 		// Add CSS style target.
-		$targets[] = T_STYLE;
+		$targets[] = \T_STYLE;
 
 		// Set the target selectors regex only once.
 		$selectors = array_map(
@@ -160,7 +160,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		// Add function call targets.
 		$parent = parent::register();
 		if ( ! empty( $parent ) ) {
-			$targets[] = T_STRING;
+			$targets[] = \T_STRING;
 		}
 
 		return $targets;
@@ -180,7 +180,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$file_extension = substr( strrchr( $file_name, '.' ), 1 );
 
 		if ( 'css' === $file_extension ) {
-			if ( T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
+			if ( \T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
 				return $this->process_css_style( $stackPtr );
 			}
 		} elseif ( isset( $this->string_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
@@ -363,11 +363,11 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$css_property = $this->target_css_properties[ $this->tokens[ $stackPtr ]['content'] ];
 
 		// Check if the CSS selector matches.
-		$opener = $this->phpcsFile->findPrevious( T_OPEN_CURLY_BRACKET, $stackPtr );
+		$opener = $this->phpcsFile->findPrevious( \T_OPEN_CURLY_BRACKET, $stackPtr );
 		if ( false !== $opener ) {
 			for ( $i = ( $opener - 1 ); $i >= 0; $i-- ) {
 				if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
-					|| T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
+					|| \T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
 				) {
 					break;
 				}
@@ -382,7 +382,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 					if ( true === $this->remove_only ) {
 						// Check the value of the CSS property.
-						$valuePtr = $this->phpcsFile->findNext( array( T_COLON, T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
+						$valuePtr = $this->phpcsFile->findNext( array( \T_COLON, \T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
 						$value    = $this->tokens[ $valuePtr ]['content'];
 						$valid    = $this->validate_css_property_value( $value, $css_property['type'], $css_property['value'] );
 						if ( true === $valid ) {

@@ -181,11 +181,11 @@ class EscapeOutputSniff extends Sniff {
 	public function register() {
 
 		$tokens = array(
-			T_ECHO,
-			T_PRINT,
-			T_EXIT,
-			T_STRING,
-			T_OPEN_TAG_WITH_ECHO,
+			\T_ECHO,
+			\T_PRINT,
+			\T_EXIT,
+			\T_STRING,
+			\T_OPEN_TAG_WITH_ECHO,
 		);
 
 		/*
@@ -197,8 +197,8 @@ class EscapeOutputSniff extends Sniff {
 		 * For PHP >= 5.4, the `short_open_tag` no longer affects the short open
 		 * echo tags and these are now always enabled.
 		 */
-		if ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
-			$tokens[] = T_INLINE_HTML;
+		if ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			$tokens[] = \T_INLINE_HTML;
 		}
 		return $tokens;
 	}
@@ -221,7 +221,7 @@ class EscapeOutputSniff extends Sniff {
 		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		// If function, not T_ECHO nor T_PRINT.
-		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if it is a function but is not one of the printing functions.
 			if ( ! isset( $this->printingFunctions[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
 				return;
@@ -237,7 +237,7 @@ class EscapeOutputSniff extends Sniff {
 				$end_of_statement = ( $first_param['end'] + 1 );
 				unset( $first_param );
 			}
-		} elseif ( T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
+		} elseif ( \T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if no PHP short_open_tag is found in the string.
 			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
 				return;
@@ -281,14 +281,14 @@ class EscapeOutputSniff extends Sniff {
 		// This is already determined if this is a function and not T_ECHO.
 		if ( ! isset( $end_of_statement ) ) {
 
-			$end_of_statement = $this->phpcsFile->findNext( array( T_SEMICOLON, T_CLOSE_TAG ), $stackPtr );
+			$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
 			$last_token       = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
 
 			// Check for the ternary operator. We only need to do this here if this
 			// echo is lacking parenthesis. Otherwise it will be handled below.
-			if ( T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code'] || T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code'] ) {
+			if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code'] || \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code'] ) {
 
-				$ternary = $this->phpcsFile->findNext( T_INLINE_THEN, $stackPtr, $end_of_statement );
+				$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end_of_statement );
 
 				// If there is a ternary skip over the part before the ?. However, if
 				// the ternary is within parentheses, it will be handled in the loop.
@@ -313,11 +313,11 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Ignore namespace separators.
-			if ( T_NS_SEPARATOR === $this->tokens[ $i ]['code'] ) {
+			if ( \T_NS_SEPARATOR === $this->tokens[ $i ]['code'] ) {
 				continue;
 			}
 
-			if ( T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
+			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 
 				if ( ! isset( $this->tokens[ $i ]['parenthesis_closer'] ) ) {
 					// Live coding or parse error.
@@ -333,11 +333,11 @@ class EscapeOutputSniff extends Sniff {
 				} else {
 
 					// Skip over the condition part of a ternary (i.e., to after the ?).
-					$ternary = $this->phpcsFile->findNext( T_INLINE_THEN, $i, $this->tokens[ $i ]['parenthesis_closer'] );
+					$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $i, $this->tokens[ $i ]['parenthesis_closer'] );
 
 					if ( false !== $ternary ) {
 
-						$next_paren = $this->phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
+						$next_paren = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
 
 						// We only do it if the ternary isn't within a subset of parentheses.
 						if ( false === $next_paren || ( isset( $this->tokens[ $next_paren ]['parenthesis_closer'] ) && $ternary > $this->tokens[ $next_paren ]['parenthesis_closer'] ) ) {
@@ -350,18 +350,18 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Handle arrays for those functions that accept them.
-			if ( T_ARRAY === $this->tokens[ $i ]['code'] ) {
+			if ( \T_ARRAY === $this->tokens[ $i ]['code'] ) {
 				$i++; // Skip the opening parenthesis.
 				continue;
 			}
 
-			if ( T_OPEN_SHORT_ARRAY === $this->tokens[ $i ]['code']
-				|| T_CLOSE_SHORT_ARRAY === $this->tokens[ $i ]['code']
+			if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $i ]['code']
+				|| \T_CLOSE_SHORT_ARRAY === $this->tokens[ $i ]['code']
 			) {
 				continue;
 			}
 
-			if ( in_array( $this->tokens[ $i ]['code'], array( T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS ), true ) ) {
+			if ( in_array( $this->tokens[ $i ]['code'], array( \T_DOUBLE_ARROW, \T_CLOSE_PARENTHESIS ), true ) ) {
 				continue;
 			}
 
@@ -371,7 +371,7 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Handle safe PHP native constants.
-			if ( T_STRING === $this->tokens[ $i ]['code']
+			if ( \T_STRING === $this->tokens[ $i ]['code']
 				&& isset( $this->safe_php_constants[ $this->tokens[ $i ]['content'] ] )
 				&& $this->is_use_of_global_constant( $i )
 			) {
@@ -379,19 +379,19 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Wake up on concatenation characters, another part to check.
-			if ( T_STRING_CONCAT === $this->tokens[ $i ]['code'] ) {
+			if ( \T_STRING_CONCAT === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up after a ternary else (:).
-			if ( false !== $ternary && T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
+			if ( false !== $ternary && \T_INLINE_ELSE === $this->tokens[ $i ]['code'] ) {
 				$watch = true;
 				continue;
 			}
 
 			// Wake up for commas.
-			if ( T_COMMA === $this->tokens[ $i ]['code'] ) {
+			if ( \T_COMMA === $this->tokens[ $i ]['code'] ) {
 				$in_cast = false;
 				$watch   = true;
 				continue;
@@ -416,11 +416,11 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Now check that next token is a function call.
-			if ( T_STRING === $this->tokens[ $i ]['code'] ) {
+			if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
-				$function_opener        = $this->phpcsFile->findNext( T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
+				$function_opener        = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
 				$is_formatting_function = isset( $this->formattingFunctions[ $functionName ] );
 
 				if ( false !== $function_opener ) {
@@ -436,7 +436,7 @@ class EscapeOutputSniff extends Sniff {
 						);
 
 						// If we're able to resolve the function name, do so.
-						if ( $mapped_function && T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
+						if ( $mapped_function && \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
 							$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
 							$ptr          = $mapped_function;
 						}

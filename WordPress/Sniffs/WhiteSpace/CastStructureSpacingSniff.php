@@ -45,7 +45,7 @@ class CastStructureSpacingSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( T_WHITESPACE !== $this->tokens[ ( $stackPtr - 1 ) ]['code'] ) {
+		if ( \T_WHITESPACE !== $this->tokens[ ( $stackPtr - 1 ) ]['code'] ) {
 			$error = 'No space before opening casting parenthesis is prohibited';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 			if ( true === $fix ) {
@@ -53,7 +53,7 @@ class CastStructureSpacingSniff extends Sniff {
 			}
 		}
 
-		if ( T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
+		if ( \T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
 			$error = 'No space after closing casting parenthesis is prohibited';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterCloseParenthesis' );
 			if ( true === $fix ) {

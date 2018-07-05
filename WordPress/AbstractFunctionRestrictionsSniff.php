@@ -122,7 +122,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return array(
-			T_STRING,
+			\T_STRING,
 		);
 	}
 
@@ -213,17 +213,17 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	public function is_targetted_token( $stackPtr ) {
 
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
 			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 			if ( false !== $prev ) {
 				// Skip sniffing if calling a same-named method, or on function definitions.
 				$skipped = array(
-					T_FUNCTION        => T_FUNCTION,
-					T_CLASS           => T_CLASS,
-					T_AS              => T_AS, // Use declaration alias.
-					T_DOUBLE_COLON    => T_DOUBLE_COLON,
-					T_OBJECT_OPERATOR => T_OBJECT_OPERATOR,
+					\T_FUNCTION        => \T_FUNCTION,
+					\T_CLASS           => \T_CLASS,
+					\T_AS              => \T_AS, // Use declaration alias.
+					\T_DOUBLE_COLON    => \T_DOUBLE_COLON,
+					\T_OBJECT_OPERATOR => \T_OBJECT_OPERATOR,
 				);
 
 				if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
@@ -231,9 +231,9 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				}
 
 				// Skip namespaced functions, ie: \foo\bar() not \bar().
-				if ( T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
+				if ( \T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
 					$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
-					if ( false !== $pprev && T_STRING === $this->tokens[ $pprev ]['code'] ) {
+					if ( false !== $pprev && \T_STRING === $this->tokens[ $pprev ]['code'] ) {
 						return false;
 					}
 				}

@@ -56,7 +56,7 @@ class EmptyStatementUnitTest extends AbstractSniffUnitTest {
 			case 'EmptyStatementUnitTest.2.inc':
 				return array(
 					1 => 1, // Internal.NoCode warning when short open tags is off, otherwise EmptyStatement warning.
-					2 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
+					2 => ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
 				);
 
 			default:

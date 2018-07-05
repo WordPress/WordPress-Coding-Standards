@@ -59,26 +59,26 @@ class ClassInstantiationSniff extends Sniff {
 		 *
 		 * Currently does not account for classnames passed as a variable variable.
 		 */
-		$this->classname_tokens                   = Tokens::$emptyTokens;
-		$this->classname_tokens[ T_NS_SEPARATOR ] = T_NS_SEPARATOR;
-		$this->classname_tokens[ T_STRING ]       = T_STRING;
-		$this->classname_tokens[ T_SELF ]         = T_SELF;
-		$this->classname_tokens[ T_STATIC ]       = T_STATIC;
-		$this->classname_tokens[ T_PARENT ]       = T_PARENT;
-		$this->classname_tokens[ T_ANON_CLASS ]   = T_ANON_CLASS;
+		$this->classname_tokens                    = Tokens::$emptyTokens;
+		$this->classname_tokens[ \T_NS_SEPARATOR ] = \T_NS_SEPARATOR;
+		$this->classname_tokens[ \T_STRING ]       = \T_STRING;
+		$this->classname_tokens[ \T_SELF ]         = \T_SELF;
+		$this->classname_tokens[ \T_STATIC ]       = \T_STATIC;
+		$this->classname_tokens[ \T_PARENT ]       = \T_PARENT;
+		$this->classname_tokens[ \T_ANON_CLASS ]   = \T_ANON_CLASS;
 
 		// Classname in a variable.
-		$this->classname_tokens[ T_VARIABLE ]                 = T_VARIABLE;
-		$this->classname_tokens[ T_DOUBLE_COLON ]             = T_DOUBLE_COLON;
-		$this->classname_tokens[ T_OBJECT_OPERATOR ]          = T_OBJECT_OPERATOR;
-		$this->classname_tokens[ T_OPEN_SQUARE_BRACKET ]      = T_OPEN_SQUARE_BRACKET;
-		$this->classname_tokens[ T_CLOSE_SQUARE_BRACKET ]     = T_CLOSE_SQUARE_BRACKET;
-		$this->classname_tokens[ T_CONSTANT_ENCAPSED_STRING ] = T_CONSTANT_ENCAPSED_STRING;
-		$this->classname_tokens[ T_LNUMBER ]                  = T_LNUMBER;
+		$this->classname_tokens[ \T_VARIABLE ]                 = \T_VARIABLE;
+		$this->classname_tokens[ \T_DOUBLE_COLON ]             = \T_DOUBLE_COLON;
+		$this->classname_tokens[ \T_OBJECT_OPERATOR ]          = \T_OBJECT_OPERATOR;
+		$this->classname_tokens[ \T_OPEN_SQUARE_BRACKET ]      = \T_OPEN_SQUARE_BRACKET;
+		$this->classname_tokens[ \T_CLOSE_SQUARE_BRACKET ]     = \T_CLOSE_SQUARE_BRACKET;
+		$this->classname_tokens[ \T_CONSTANT_ENCAPSED_STRING ] = \T_CONSTANT_ENCAPSED_STRING;
+		$this->classname_tokens[ \T_LNUMBER ]                  = \T_LNUMBER;
 
 		return array(
-			T_NEW,
-			T_STRING, // JS.
+			\T_NEW,
+			\T_STRING, // JS.
 		);
 	}
 
@@ -91,9 +91,9 @@ class ClassInstantiationSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		// Make sure we have the right token, JS vs PHP.
-		if ( ( 'PHP' === $this->phpcsFile->tokenizerType && T_NEW !== $this->tokens[ $stackPtr ]['code'] )
+		if ( ( 'PHP' === $this->phpcsFile->tokenizerType && \T_NEW !== $this->tokens[ $stackPtr ]['code'] )
 			|| ( 'JS' === $this->phpcsFile->tokenizerType
-				&& ( T_STRING !== $this->tokens[ $stackPtr ]['code']
+				&& ( \T_STRING !== $this->tokens[ $stackPtr ]['code']
 				|| 'new' !== strtolower( $this->tokens[ $stackPtr ]['content'] ) ) )
 		) {
 			return;
@@ -152,12 +152,12 @@ class ClassInstantiationSniff extends Sniff {
 				break;
 			}
 
-			if ( T_WHITESPACE !== $this->tokens[ $classname_ptr ]['code'] ) {
+			if ( \T_WHITESPACE !== $this->tokens[ $classname_ptr ]['code'] ) {
 				$has_comment = true;
 			}
 		}
 
-		if ( T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty_after_class_name ]['code'] ) {
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty_after_class_name ]['code'] ) {
 			$this->phpcsFile->recordMetric( $stackPtr, 'Object instantiation with parenthesis', 'no' );
 
 			$fix = $this->phpcsFile->addFixableError(

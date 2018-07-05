@@ -228,7 +228,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 		$func_open_paren_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token
-			|| T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
+			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
 			|| ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] )
 		) {
 			// Live coding, parse error or not a function call.
@@ -255,7 +255,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			if ( isset( Tokens::$emptyTokens[ $this_token['code'] ] ) ) {
 				continue;
 			}
-			if ( T_COMMA === $this_token['code'] ) {
+			if ( \T_COMMA === $this_token['code'] ) {
 				$arguments_tokens[] = $argument_tokens;
 				$argument_tokens    = array();
 				continue;
@@ -455,7 +455,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			$this->check_text( $context );
 		}
 
-		if ( T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || T_HEREDOC === $tokens[0]['code'] ) {
+		if ( \T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || \T_HEREDOC === $tokens[0]['code'] ) {
 			$interpolated_variables = $this->get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
 				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
@@ -487,8 +487,8 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 					$error_code = 'SuperfluousDefaultTextDomain';
 
 					if ( $tokens[0]['token_index'] === $stack_ptr ) {
-						$prev = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $stack_ptr - 1 ), null, true );
-						if ( false !== $prev && T_COMMA === $this->tokens[ $prev ]['code'] ) {
+						$prev = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $stack_ptr - 1 ), null, true );
+						if ( false !== $prev && \T_COMMA === $this->tokens[ $prev ]['code'] ) {
 							$fixable = true;
 						}
 					}
@@ -668,7 +668,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 					if ( ( $this->tokens[ $previous_comment ]['line'] + 1 ) === $this->tokens[ $stack_ptr ]['line'] ) {
 						$correctly_placed = true;
 					} else {
-						$next_non_whitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $previous_comment + 1 ), $stack_ptr, true );
+						$next_non_whitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $previous_comment + 1 ), $stack_ptr, true );
 						if ( false === $next_non_whitespace || $this->tokens[ $next_non_whitespace ]['line'] === $this->tokens[ $stack_ptr ]['line'] ) {
 							// No non-whitespace found or next non-whitespace is on same line as gettext call.
 							$correctly_placed = true;
@@ -681,13 +681,13 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 					 */
 					if ( true === $correctly_placed ) {
 
-						if ( T_COMMENT === $this->tokens[ $previous_comment ]['code'] ) {
+						if ( \T_COMMENT === $this->tokens[ $previous_comment ]['code'] ) {
 							$comment_text = trim( $this->tokens[ $previous_comment ]['content'] );
 
 							// If it's multi-line /* */ comment, collect all the parts.
 							if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
 								for ( $i = ( $previous_comment - 1 ); 0 <= $i; $i-- ) {
-									if ( T_COMMENT !== $this->tokens[ $i ]['code'] ) {
+									if ( \T_COMMENT !== $this->tokens[ $i ]['code'] ) {
 										break;
 									}
 
@@ -699,10 +699,10 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 								// Comment is ok.
 								return;
 							}
-						} elseif ( T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
+						} elseif ( \T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
 							// If it's docblock comment (wrong style) make sure that it's a translators comment.
-							$db_start      = $this->phpcsFile->findPrevious( T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
-							$db_first_text = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, ( $db_start + 1 ), $previous_comment );
+							$db_start      = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
+							$db_first_text = $this->phpcsFile->findNext( \T_DOC_COMMENT_STRING, ( $db_start + 1 ), $previous_comment );
 
 							if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
 								$this->phpcsFile->addWarning(

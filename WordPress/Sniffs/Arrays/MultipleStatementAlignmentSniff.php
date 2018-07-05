@@ -148,8 +148,8 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
+			\T_ARRAY,
+			\T_OPEN_SHORT_ARRAY,
 		);
 	}
 
@@ -216,13 +216,13 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		 * Just find and fix them all.
 		 */
 		$next_arrow = $this->phpcsFile->findNext(
-			T_DOUBLE_ARROW,
+			\T_DOUBLE_ARROW,
 			( $opener + 1 ),
 			$closer
 		);
 
 		while ( false !== $next_arrow ) {
-			if ( T_WHITESPACE === $this->tokens[ ( $next_arrow - 1 ) ]['code'] ) {
+			if ( \T_WHITESPACE === $this->tokens[ ( $next_arrow - 1 ) ]['code'] ) {
 				$space_length = $this->tokens[ ( $next_arrow - 1 ) ]['length'];
 				if ( 1 !== $space_length ) {
 					$error = 'Expected 1 space between "%s" and double arrow; %s found';
@@ -240,7 +240,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			// Find the position of the next double arrow.
 			$next_arrow = $this->phpcsFile->findNext(
-				T_DOUBLE_ARROW,
+				\T_DOUBLE_ARROW,
 				( $next_arrow + 1 ),
 				$closer
 			);
@@ -293,7 +293,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			// Find the position of the first double arrow.
 			$double_arrow = $this->phpcsFile->findNext(
-				T_DOUBLE_ARROW,
+				\T_DOUBLE_ARROW,
 				$item['start'],
 				( $item['end'] + 1 )
 			);
@@ -319,7 +319,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			// Find the end of the array key.
 			$last_index_token = $this->phpcsFile->findPrevious(
-				T_WHITESPACE,
+				\T_WHITESPACE,
 				( $double_arrow - 1 ),
 				$item['start'],
 				true
@@ -424,7 +424,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			 * If the alignment does not have to be exact, see if a majority
 			 * group of the arrows is already at an acceptable position.
 			 */
-			arsort( $double_arrow_cols, SORT_NUMERIC );
+			arsort( $double_arrow_cols, \SORT_NUMERIC );
 			reset( $double_arrow_cols );
 			$count = current( $double_arrow_cols );
 
@@ -453,7 +453,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				continue;
 			}
 
-			if ( T_WHITESPACE !== $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['code'] ) {
+			if ( \T_WHITESPACE !== $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['code'] ) {
 				$before = 0;
 			} else {
 				if ( $this->tokens[ $item['last_index_token'] ]['line'] !== $this->tokens[ $item['operatorPtr'] ]['line'] ) {

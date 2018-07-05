@@ -116,10 +116,10 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 			case 'PrecisionAlignmentUnitTest.4.inc':
 				return array(
 					1 => 1, // Will show a `Internal.NoCodeFound` warning in PHP 5.3 with short open tags off.
-					2 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
-					3 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
-					4 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
-					5 => ( PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
+					2 => ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
+					3 => ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
+					4 => ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
+					5 => ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
 				);
 
 			case 'PrecisionAlignmentUnitTest.5.inc':

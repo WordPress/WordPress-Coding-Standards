@@ -45,7 +45,7 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 		// Find the next non-empty token.
 		$openParenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-		if ( T_OPEN_PARENTHESIS !== $this->tokens[ $openParenthesis ]['code'] ) {
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $openParenthesis ]['code'] ) {
 			// Not a function call.
 			return;
 		}
@@ -57,9 +57,9 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 
 		// Find the previous non-empty token.
 		$search   = Tokens::$emptyTokens;
-		$search[] = T_BITWISE_AND;
+		$search[] = \T_BITWISE_AND;
 		$previous = $this->phpcsFile->findPrevious( $search, ( $stackPtr - 1 ), null, true );
-		if ( T_FUNCTION === $this->tokens[ $previous ]['code'] ) {
+		if ( \T_FUNCTION === $this->tokens[ $previous ]['code'] ) {
 			// It's a function definition, not a function call.
 			return;
 		}
@@ -70,7 +70,7 @@ class FunctionCallSignatureNoParamsSniff extends Sniff {
 			return;
 		}
 
-		$nextNonWhitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $openParenthesis + 1 ), null, true );
+		$nextNonWhitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $openParenthesis + 1 ), null, true );
 
 		if ( $nextNonWhitespace !== $closer ) {
 			// Function has params or comment between parenthesis.
