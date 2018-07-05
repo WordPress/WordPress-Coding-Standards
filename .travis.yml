@@ -20,6 +20,8 @@ php:
 env:
   # `master` is now 3.x.
   - PHPCS_BRANCH=master LINT=1
+  # Lowest supported release in the 3.x series with which WPCS is compatible (and which can run the unit tests).
+  - PHPCS_BRANCH=3.1.0
   # Lowest tagged release in the 2.x series with which WPCS is compatible.
   - PHPCS_BRANCH=2.9.0
 
@@ -55,7 +57,7 @@ before_install:
     - export XMLLINT_INDENT="	"
     - export PHPCS_DIR=/tmp/phpcs
     - export PHPUNIT_DIR=/tmp/phpunit
-    - export PHPCS_BIN=$(if [[ $PHPCS_BRANCH == master ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
+    - export PHPCS_BIN=$(if [[ ${PHPCS_BRANCH:0:2} != "2." ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
     - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
     - $PHPCS_BIN --config-set installed_paths $(pwd)
     # Download PHPUnit 5.x for builds on PHP 7 and nightly as the PHPCS
