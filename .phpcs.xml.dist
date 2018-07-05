@@ -33,4 +33,22 @@
 
 	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
 
+	<!-- Check code for cross-version PHP compatibility. -->
+	<config name="testVersion" value="5.3-"/>
+	<rule ref="PHPCompatibility">
+		<!-- Exclude PHP constants back-filled by PHPCS. -->
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_finallyFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_yieldFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_ellipsisFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_powFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_pow_equalFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_spaceshipFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_coalesceFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_coalesce_equalFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_yield_fromFound"/>
+
+		<!-- Unclear how, but appears to be back-filled anyhow, could be that PHP did so before the token was in use. -->
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_traitFound"/>
+	</rule>
+
 </ruleset>

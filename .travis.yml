@@ -19,18 +19,18 @@ php:
 
 env:
   # `master` is now 3.x.
-  - PHPCS_BRANCH=master LINT=1
+  - PHPCS_BRANCH="dev-master" LINT=1
   # Lowest supported release in the 3.x series with which WPCS is compatible (and which can run the unit tests).
-  - PHPCS_BRANCH=3.1.0
+  - PHPCS_BRANCH="3.1.0"
   # Lowest tagged release in the 2.x series with which WPCS is compatible.
-  - PHPCS_BRANCH=2.9.0
+  - PHPCS_BRANCH="2.9.0"
 
 matrix:
   fast_finish: true
   include:
     # Run PHPCS against WPCS. I just picked to run it against 7.2.
     - php: 7.2
-      env: PHPCS_BRANCH=master SNIFF=1
+      env: PHPCS_BRANCH="dev-master" SNIFF=1
       addons:
         apt:
           packages:
@@ -38,11 +38,11 @@ matrix:
 
     # Test PHP 5.3 only against PHPCS 2.x as PHPCS 3.x has a minimum requirement of PHP 5.4.
     - php: 5.3
-      env: PHPCS_BRANCH=2.9 LINT=1
+      env: PHPCS_BRANCH="2.9.*" LINT=1
       dist: precise
     # Test PHP 5.3 with short_open_tags set to On (is Off by default)
     - php: 5.3
-      env: PHPCS_BRANCH=2.9.0 SHORT_OPEN_TAGS=true
+      env: PHPCS_BRANCH="2.9.0" SHORT_OPEN_TAGS=true
       dist: precise
 
   allow_failures:
@@ -55,11 +55,22 @@ before_install:
     # https://twitter.com/kelunik/status/954242454676475904
     - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
     - export XMLLINT_INDENT="	"
-    - export PHPCS_DIR=/tmp/phpcs
     - export PHPUNIT_DIR=/tmp/phpunit
-    - export PHPCS_BIN=$(if [[ ${PHPCS_BRANCH:0:2} != "2." ]]; then echo $PHPCS_DIR/bin/phpcs; else echo $PHPCS_DIR/scripts/phpcs; fi)
-    - mkdir -p $PHPCS_DIR && git clone --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git -b $PHPCS_BRANCH $PHPCS_DIR
-    - $PHPCS_BIN --config-set installed_paths $(pwd)
+    - |
+      if [[ ${PHPCS_BRANCH:0:2} == "2." ]]; then
+          # --prefer-source is needed to ensure that the PHPCS unit test suite is available in PHPCS 2.9.
+          composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --prefer-source --update-no-dev --no-suggest --no-scripts
+      else
+          composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --update-no-dev --no-suggest --no-scripts
+      fi
+    - |
+      if [[ "$SNIFF" == "1" ]]; then
+          composer install --dev --no-suggest
+          # The post-install-cmd script takes care of the installed_paths.
+      else
+          # The above require already does the install.
+          $(pwd)/vendor/bin/phpcs --config-set installed_paths $(pwd)
+      fi
     # Download PHPUnit 5.x for builds on PHP 7 and nightly as the PHPCS
     # test suite is currently not compatible with PHPUnit 6.x.
     # Fixed at a very specific PHPUnit version.
@@ -69,22 +80,22 @@ before_install:
 
 script:
     # Lint the PHP files against parse errors.
-    - if [[ "$LINT" == "1" ]]; then if find . -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
+    - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then phpunit --filter WordPress $(pwd)/Test/AllTests.php; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then phpunit --filter WordPress $PHPCS_DIR/tests/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then phpunit --filter WordPress $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar --filter WordPress $(pwd)/Test/AllTests.php; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar  --filter WordPress $PHPCS_DIR/tests/AllTests.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar  --filter WordPress $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php; fi
     # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
     # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
     # For the first run, the exit code will be 1 (= all fixable errors fixed).
     # `travis_retry` should then kick in to run the fixer again which should now return 0 (= no fixable errors found).
     # All error codes for the PHPCBF: https://github.com/squizlabs/PHP_CodeSniffer/issues/1270#issuecomment-272768413
-    - if [[ "$SNIFF" == "1" ]]; then travis_retry $PHPCS_DIR/bin/phpcbf -p ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; fi
+    - if [[ "$SNIFF" == "1" ]]; then travis_retry $(pwd)/vendor/bin/phpcbf -p ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
-    - if [[ "$SNIFF" == "1" ]]; then $PHPCS_BIN --runtime-set ignore_warnings_on_exit 1; fi
+    - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1; fi
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
     - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
