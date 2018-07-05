@@ -22,3 +22,10 @@ $query_args['my_posts_per_page'] = -1; // OK.
 // @codingStandardsChangeSetting WordPress.VIP.PostsPerPage posts_per_page 50
 $query_args['posts_per_page'] = 50; // OK.
 // @codingStandardsChangeSetting WordPress.VIP.PostsPerPage posts_per_page 100
+
+$args = array( 'posts_per_page' => -1 ); // Bad
+$args = array( 'posts_per_page' => '-1' ); // Bad
+$args = array(
+	'foobar'         => 'doobar',
+	'posts_per_page' => -1 // With a comment // Bad
+);
