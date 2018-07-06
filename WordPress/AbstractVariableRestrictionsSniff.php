@@ -175,7 +175,7 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 				$patterns = array_merge( $patterns, $group['object_vars'] );
 
 				$owner = $this->phpcsFile->findPrevious( array( \T_VARIABLE, \T_STRING ), $stackPtr );
-				$child = $this->phpcsFile->findNext( array( \T_STRING, \T_VAR, \T_VARIABLE ), $stackPtr );
+				$child = $this->phpcsFile->findNext( array( \T_STRING, \T_VARIABLE ), $stackPtr );
 				$var   = implode( '', array( $this->tokens[ $owner ]['content'], $token['content'], $this->tokens[ $child ]['content'] ) );
 
 			}
