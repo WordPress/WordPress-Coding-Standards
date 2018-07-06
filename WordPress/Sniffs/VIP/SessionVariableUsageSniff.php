@@ -24,8 +24,31 @@ use WordPress\Sniff;
  *                 which it didn't use.
  * @since   0.12.0 This class now extends WordPress_Sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 1.0.0  This sniff has been deprecated.
+ *                    This file remains for now to prevent BC breaks.
  */
 class SessionVariableUsageSniff extends Sniff {
+
+	/**
+	 * If true, an error will be thrown; otherwise a warning.
+	 *
+	 * @var bool
+	 */
+	public $error = true;
+
+	/**
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -46,6 +69,24 @@ class SessionVariableUsageSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.SessionVariableUsageSniff" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.SessionVariableUsageSniff" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
+		
 		if ( '$_SESSION' === $this->tokens[ $stackPtr ]['content'] ) {
 			$this->phpcsFile->addError(
 				'Usage of $_SESSION variable is prohibited.',
