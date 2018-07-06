@@ -24,8 +24,31 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                 - Added the $remove_only property.
  *                 - Now also sniffs for manipulation of the admin bar visibility through CSS.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 1.0.0  This sniff has been deprecated.
+ *                    This file remains for now to prevent BC breaks.
  */
 class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
+
+	/**
+	 * If true, an error will be thrown; otherwise a warning.
+	 *
+	 * @var bool
+	 */
+	public $error = true;
+
+	/**
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
 	/**
 	 * A list of tokenizers this sniff supports.
@@ -71,15 +94,15 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 */
 	protected $target_css_properties = array(
 		'visibility' => array(
-			'type'  => '!=',
+			'type' => '!=',
 			'value' => 'hidden',
 		),
 		'display' => array(
-			'type'  => '!=',
+			'type' => '!=',
 			'value' => 'none',
 		),
 		'opacity' => array(
-			'type'  => '>',
+			'type' => '>',
 			'value' => 0.3,
 		),
 	);
@@ -169,12 +192,30 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * @since 1.0.0 Adjusted to allow for throwing the deprecation notices.
+	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
+
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.AdminBarRemovalSniff" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff'] ) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.AdminBarRemovalSniff" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
 
 		$file_name      = $this->phpcsFile->getFileName();
 		$file_extension = substr( strrchr( $file_name, '.' ), 1 );

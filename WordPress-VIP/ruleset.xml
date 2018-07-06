@@ -132,6 +132,11 @@
 	-->
 
 	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<rule ref="WordPress.VIP.AdminBarRemovalSniff.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
 	<rule ref="WordPress.VIP.DirectDatabaseQuery.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
@@ -208,6 +213,11 @@
 		<severity>0</severity>
 	</rule>
 	<rule ref="WordPress.VIP.CronInterval.ChangeDetected">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<rule ref="WordPress.VIP.FileSystemWritesDisallow.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
