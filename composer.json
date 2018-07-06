@@ -14,6 +14,9 @@
 		"php" : ">=5.3",
 		"squizlabs/php_codesniffer": "^2.9.0 || ^3.0.2"
 	},
+	"require-dev" : {
+		"wimg/php-compatibility": "*"
+	},
 	"suggest" : {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
 	},
@@ -25,7 +28,7 @@
 	},
 	"type"       : "phpcodesniffer-standard",
 	"scripts"    : {
-		"post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..",
-		"post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths ../../.."
+		"post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../wimg/php-compatibility",
+		"post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../wimg/php-compatibility"
 	}
 }
