@@ -29,8 +29,31 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
  *                 The check for `eval()` now defers to the upstream Squiz.PHP.Eval sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * 
+ * @deprecated 1.0.0  This sniff has been deprecated.
+ *                    This file remains for now to prevent BC breaks.
  */
 class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+
+	/**
+	 * If true, an error will be thrown; otherwise a warning.
+	 *
+	 * @var bool
+	 */
+	public $error = true;
+
+	/**
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
 	/**
 	 * Groups of functions to restrict.
@@ -223,6 +246,37 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 		);
+	}
+
+	/**
+	 * This sniff is active, but it's deprecated, handle the deprecation notices
+	 *
+	 * @since 1.0.0 Added to allow for throwing the deprecation notices.
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void|int
+	 */
+	public function process_token( $stackPtr ) {
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.RestrictedFunctionsSniff" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.RestrictedFunctionsSniff" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
+
+		return parent::process_token( $stackPtr );
 	}
 
 }
