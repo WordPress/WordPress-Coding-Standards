@@ -150,7 +150,7 @@ class CronIntervalSniff extends Sniff {
 		$closing = $this->tokens[ $functionPtr ]['scope_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
-			if ( in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
+			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 				if ( 'interval' === $this->strip_quotes( $this->tokens[ $i ]['content'] ) ) {
 					$operator = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( false === $operator ) {

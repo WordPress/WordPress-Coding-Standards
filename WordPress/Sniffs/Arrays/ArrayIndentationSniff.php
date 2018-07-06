@@ -470,7 +470,7 @@ class ArrayIndentationSniff extends Sniff {
 			$whitespace     = str_replace( $actual_comment, '', $content );
 		}
 
-		return strlen( $whitespace );
+		return \strlen( $whitespace );
 	}
 
 	/**

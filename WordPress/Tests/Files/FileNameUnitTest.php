@@ -125,7 +125,7 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		}
 
 		// Work around for PHPCS < 3.2.0. The disables will be diregarded.
-		if ( ! defined( '\T_PHPCS_DISABLE' ) && ! defined( '\T_PHPCS_ENABLE' ) ) {
+		if ( ! \defined( '\T_PHPCS_DISABLE' ) && ! \defined( '\T_PHPCS_ENABLE' ) ) {
 			$this->expected_results['blanket-disable.inc']   = 1;
 			$this->expected_results['rule-disable.inc']      = 1;
 			$this->expected_results['wordpress-disable.inc'] = 1;

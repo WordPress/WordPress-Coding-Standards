@@ -198,9 +198,9 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
 
 		if ( ! empty( $this->text_domain ) ) {
-			if ( in_array( 'default', $this->text_domain, true ) ) {
+			if ( \in_array( 'default', $this->text_domain, true ) ) {
 				$this->text_domain_contains_default = true;
-				if ( count( $this->text_domain ) === 1 ) {
+				if ( \count( $this->text_domain ) === 1 ) {
 					$this->text_domain_is_default = true;
 				}
 			}
@@ -240,7 +240,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			return;
 		}
 
-		if ( in_array( $matched_content, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
+		if ( \in_array( $matched_content, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
 			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stack_ptr, 'LowLevelTranslationFunction', array( $matched_content ) );
 		}
 
@@ -415,7 +415,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$is_error  = empty( $context['warning'] );
 		$content   = isset( $tokens[0] ) ? $tokens[0]['content'] : '';
 
-		if ( empty( $tokens ) || 0 === count( $tokens ) ) {
+		if ( empty( $tokens ) || 0 === \count( $tokens ) ) {
 			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
 			if ( 'domain' !== $arg_name ) {
 				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
@@ -441,7 +441,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			return false;
 		}
 
-		if ( count( $tokens ) > 1 ) {
+		if ( \count( $tokens ) > 1 ) {
 			$contents = '';
 			foreach ( $tokens as $token ) {
 				$contents .= $token['content'];
@@ -451,7 +451,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			return false;
 		}
 
-		if ( in_array( $arg_name, array( 'text', 'single', 'plural' ), true ) ) {
+		if ( \in_array( $arg_name, array( 'text', 'single', 'plural' ), true ) ) {
 			$this->check_text( $context );
 		}
 
@@ -470,7 +470,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) ) {
 				$stripped_content = $this->strip_quotes( $content );
 
-				if ( ! in_array( $stripped_content, $this->text_domain, true ) ) {
+				if ( ! \in_array( $stripped_content, $this->text_domain, true ) ) {
 					$this->addMessage(
 						'Mismatched text domain. Expected \'%s\' but got %s.',
 						$stack_ptr,
@@ -540,7 +540,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 		// English conflates "singular" with "only one", described in the codex:
 		// https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals .
-		if ( count( $single_placeholders ) < count( $plural_placeholders ) ) {
+		if ( \count( $single_placeholders ) < \count( $plural_placeholders ) ) {
 			$error_string = 'Missing singular placeholder, needed for some languages. See https://codex.wordpress.org/I18n_for_WordPress_Developers#Plurals';
 			$single_index = $single_context['tokens'][0]['token_index'];
 
@@ -638,7 +638,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	protected function check_for_translator_comment( $stack_ptr, $args ) {
 		foreach ( $args as $arg ) {
-			if ( false === in_array( $arg['arg_name'], array( 'text', 'single', 'plural' ), true ) ) {
+			if ( false === \in_array( $arg['arg_name'], array( 'text', 'single', 'plural' ), true ) ) {
 				continue;
 			}
 

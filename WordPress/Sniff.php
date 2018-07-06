@@ -1015,7 +1015,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			$method .= 'Warning';
 		}
 
-		return call_user_func( array( $this->phpcsFile, $method ), $message, $stackPtr, $code, $data, $severity );
+		return \call_user_func( array( $this->phpcsFile, $method ), $message, $stackPtr, $code, $data, $severity );
 	}
 
 	/**
@@ -1069,12 +1069,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			$base = array_filter( $base );
 		}
 
-		if ( empty( $custom ) || ( ! is_array( $custom ) && ! is_string( $custom ) ) ) {
+		if ( empty( $custom ) || ( ! \is_array( $custom ) && ! \is_string( $custom ) ) ) {
 			return $base;
 		}
 
 		// Allow for a comma delimited list.
-		if ( is_string( $custom ) ) {
+		if ( \is_string( $custom ) ) {
 			$custom = explode( ',', $custom );
 		}
 
@@ -1263,7 +1263,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	protected function is_test_class( $stackPtr ) {
 
 		if ( ! isset( $this->tokens[ $stackPtr ] )
-			|| in_array( $this->tokens[ $stackPtr ]['type'], array( 'T_CLASS', 'T_ANON_CLASS', 'T_TRAIT' ), true ) === false
+			|| \in_array( $this->tokens[ $stackPtr ]['type'], array( 'T_CLASS', 'T_ANON_CLASS', 'T_TRAIT' ), true ) === false
 		) {
 			return false;
 		}
@@ -1492,7 +1492,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		end( $nested_parenthesis );
 		$open_parenthesis = key( $nested_parenthesis );
 
-		return in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( \T_ISSET, \T_EMPTY ), true );
+		return \in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( \T_ISSET, \T_EMPTY ), true );
 	}
 
 	/**
@@ -1525,7 +1525,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// The only parentheses should belong to the sanitizing function. If there's
 		// more than one set, this isn't *only* sanitization.
-		return ( count( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) === 1 );
+		return ( \count( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) === 1 );
 	}
 
 	/**
@@ -1548,7 +1548,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		);
 
 		// Check if it is a safe cast.
-		return in_array( $this->tokens[ $prev ]['code'], array( \T_INT_CAST, \T_DOUBLE_CAST, \T_BOOL_CAST ), true );
+		return \in_array( $this->tokens[ $prev ]['code'], array( \T_INT_CAST, \T_DOUBLE_CAST, \T_BOOL_CAST ), true );
 	}
 
 	/**
@@ -1795,7 +1795,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
-			if ( ! in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
+			if ( ! \in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
 				continue;
 			}
 
@@ -1945,7 +1945,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$variables = array();
 		if ( preg_match_all( '/(?P<backslashes>\\\\*)\$(?P<symbol>\w+)/', $string, $match_sets, \PREG_SET_ORDER ) ) {
 			foreach ( $match_sets as $matches ) {
-				if ( ! isset( $matches['backslashes'] ) || ( strlen( $matches['backslashes'] ) % 2 ) === 0 ) {
+				if ( ! isset( $matches['backslashes'] ) || ( \strlen( $matches['backslashes'] ) % 2 ) === 0 ) {
 					$variables[] = $matches['symbol'];
 				}
 			}
@@ -1998,7 +1998,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Is this one of the tokens this function handles ?
-		if ( false === in_array( $this->tokens[ $stackPtr ]['code'], array( \T_STRING, \T_ARRAY, \T_OPEN_SHORT_ARRAY ), true ) ) {
+		if ( false === \in_array( $this->tokens[ $stackPtr ]['code'], array( \T_STRING, \T_ARRAY, \T_OPEN_SHORT_ARRAY ), true ) ) {
 			return false;
 		}
 
@@ -2063,7 +2063,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			return 0;
 		}
 
-		return count( $this->get_function_call_parameters( $stackPtr ) );
+		return \count( $this->get_function_call_parameters( $stackPtr ) );
 	}
 
 	/**
@@ -2113,7 +2113,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Which nesting level is the one we are interested in ?
 		if ( isset( $this->tokens[ $opener ]['nested_parenthesis'] ) ) {
-			$nestedParenthesisCount += count( $this->tokens[ $opener ]['nested_parenthesis'] );
+			$nestedParenthesisCount += \count( $this->tokens[ $opener ]['nested_parenthesis'] );
 		}
 
 		$parameters  = array();
@@ -2146,7 +2146,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			// Ignore comma's at a lower nesting level.
 			if ( \T_COMMA === $this->tokens[ $next_comma ]['code']
 				&& isset( $this->tokens[ $next_comma ]['nested_parenthesis'] )
-				&& count( $this->tokens[ $next_comma ]['nested_parenthesis'] ) !== $nestedParenthesisCount
+				&& \count( $this->tokens[ $next_comma ]['nested_parenthesis'] ) !== $nestedParenthesisCount
 			) {
 				continue;
 			}

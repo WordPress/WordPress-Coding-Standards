@@ -156,7 +156,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		 * $foo = array( 'bar' => 'taz' );
 		 * $foo['bar'] = $taz;
 		 */
-		if ( in_array( $token['code'], array( \T_CLOSE_SQUARE_BRACKET, \T_DOUBLE_ARROW ), true ) ) {
+		if ( \in_array( $token['code'], array( \T_CLOSE_SQUARE_BRACKET, \T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 				$operator = $this->phpcsFile->findNext( \T_EQUAL, ( $stackPtr + 1 ) );
@@ -171,7 +171,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$val            = $this->strip_quotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
-		} elseif ( in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
+		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 			// $foo = 'bar=taz&other=thing';
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', $this->strip_quotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
@@ -197,11 +197,11 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				foreach ( $assignments as $occurance ) {
 					list( $val, $line ) = $occurance;
 
-					if ( ! in_array( $key, $group['keys'], true ) ) {
+					if ( ! \in_array( $key, $group['keys'], true ) ) {
 						continue;
 					}
 
-					$output = call_user_func( $callback, $key, $val, $line, $group );
+					$output = \call_user_func( $callback, $key, $val, $line, $group );
 
 					if ( ! isset( $output ) || false === $output ) {
 						continue;

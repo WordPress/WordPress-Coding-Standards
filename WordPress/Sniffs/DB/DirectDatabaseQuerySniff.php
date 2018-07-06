@@ -194,7 +194,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 
 						if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-							if ( in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
+							if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 								$cached = true;
 								break;
 							}

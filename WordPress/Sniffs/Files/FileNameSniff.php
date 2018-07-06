@@ -118,7 +118,7 @@ class FileNameSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		if ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
+		if ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
 			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
 		}
 
@@ -145,7 +145,7 @@ class FileNameSniff extends Sniff {
 		}
 
 		// Respect phpcs:disable comments as long as they are not accompanied by an enable (PHPCS 3.2+).
-		if ( defined( '\T_PHPCS_DISABLE' ) && defined( '\T_PHPCS_ENABLE' ) ) {
+		if ( \defined( '\T_PHPCS_DISABLE' ) && \defined( '\T_PHPCS_ENABLE' ) ) {
 			$i = -1;
 			while ( $i = $this->phpcsFile->findNext( \T_PHPCS_DISABLE, ( $i + 1 ) ) ) {
 				if ( empty( $this->tokens[ $i ]['sniffCodes'] )
@@ -223,8 +223,8 @@ class FileNameSniff extends Sniff {
 
 					if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
 						&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
-						&& ( ( ! defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
-						|| ( defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
+						&& ( ( ! \defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
+						|| ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
 						&& false === $has_class
 					) {
 						$this->phpcsFile->addError(

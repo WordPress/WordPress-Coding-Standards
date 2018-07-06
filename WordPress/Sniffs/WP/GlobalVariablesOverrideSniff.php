@@ -134,7 +134,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
 				// If the global statement was in the global scope, skip over functions, classes and the likes.
-				if ( true === $global_scope && in_array( $this->tokens[ $ptr ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ), true ) ) {
+				if ( true === $global_scope && \in_array( $this->tokens[ $ptr ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ), true ) ) {
 					if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
 						// Live coding, skip the rest of the file.
 						return;
@@ -145,7 +145,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				}
 
 				if ( \T_VARIABLE === $this->tokens[ $ptr ]['code']
-					&& in_array( $this->tokens[ $ptr ]['content'], $search, true )
+					&& \in_array( $this->tokens[ $ptr ]['content'], $search, true )
 				) {
 					// Don't throw false positives for static class properties.
 					$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );

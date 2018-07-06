@@ -281,7 +281,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
 		$this->get_wp_version_from_cl();
 
-		$paramCount = count( $parameters );
+		$paramCount = \count( $parameters );
 		foreach ( $this->target_functions[ $matched_content ] as $position => $parameter_args ) {
 
 			// Check that number of parameters defined is not less than the position to check.

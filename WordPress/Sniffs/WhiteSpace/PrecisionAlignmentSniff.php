@@ -148,7 +148,7 @@ class PrecisionAlignmentSniff extends Sniff {
 					 */
 					$comment    = ltrim( $this->tokens[ $i ]['content'] );
 					$whitespace = str_replace( $comment, '', $this->tokens[ $i ]['content'] );
-					$length     = strlen( $whitespace );
+					$length     = \strlen( $whitespace );
 					$spaces     = ( $length % $this->tab_width );
 
 					if ( isset( $comment[0] ) && '*' === $comment[0] && 0 !== $spaces ) {
@@ -165,7 +165,7 @@ class PrecisionAlignmentSniff extends Sniff {
 						 */
 						$content    = ltrim( $this->tokens[ $i ]['content'] );
 						$whitespace = str_replace( $content, '', $this->tokens[ $i ]['content'] );
-						$spaces     = ( strlen( $whitespace ) % $this->tab_width );
+						$spaces     = ( \strlen( $whitespace ) % $this->tab_width );
 					}
 					break;
 			}

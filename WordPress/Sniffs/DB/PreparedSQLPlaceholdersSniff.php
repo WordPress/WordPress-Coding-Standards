@@ -184,7 +184,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 		$variable_found           = false;
 		$sql_wildcard_found       = false;
 		$total_placeholders       = 0;
-		$total_parameters         = count( $parameters );
+		$total_parameters         = \count( $parameters );
 		$valid_in_clauses         = array(
 			'uses_in'          => 0,
 			'implode_fill'     => 0,
@@ -218,7 +218,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 							$skip_to    = ( $last_param['end'] + 1 );
 
 							$valid_in_clauses['implode_fill']     += $this->analyse_sprintf( $sprintf_parameters );
-							$valid_in_clauses['adjustment_count'] += ( count( $sprintf_parameters ) - 1 );
+							$valid_in_clauses['adjustment_count'] += ( \count( $sprintf_parameters ) - 1 );
 						}
 						unset( $sprintf_parameters, $last_param );
 
@@ -510,7 +510,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 		}
 
-		$total_replacements  = count( $replacements );
+		$total_replacements  = \count( $replacements );
 		$total_placeholders -= $valid_in_clauses['adjustment_count'];
 
 		// Bow out when `IN` clauses have been used which appear to be correct.
@@ -624,7 +624,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	protected function analyse_implode( $implode_token ) {
 		$implode_params = $this->get_function_call_parameters( $implode_token );
 
-		if ( empty( $implode_params ) || count( $implode_params ) !== 2 ) {
+		if ( empty( $implode_params ) || \count( $implode_params ) !== 2 ) {
 			return false;
 		}
 
@@ -651,7 +651,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		$array_fill_params = $this->get_function_call_parameters( $array_fill );
 
-		if ( empty( $array_fill_params ) || count( $array_fill_params ) !== 3 ) {
+		if ( empty( $array_fill_params ) || \count( $array_fill_params ) !== 3 ) {
 			return false;
 		}
 

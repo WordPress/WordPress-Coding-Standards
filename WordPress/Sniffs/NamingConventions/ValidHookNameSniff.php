@@ -108,7 +108,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			if ( in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
+			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
 
 				/*
@@ -170,7 +170,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 */
 	protected function prepare_regex() {
 		$extra = '';
-		if ( '' !== $this->additionalWordDelimiters && is_string( $this->additionalWordDelimiters ) ) {
+		if ( '' !== $this->additionalWordDelimiters && \is_string( $this->additionalWordDelimiters ) ) {
 			$extra = preg_quote( $this->additionalWordDelimiters, '`' );
 		}
 
@@ -218,7 +218,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		$braces      = 0;
 
 		foreach ( $output as $i => $part ) {
-			if ( in_array( $part, array( '$', '{' ), true ) ) {
+			if ( \in_array( $part, array( '$', '{' ), true ) ) {
 				$is_variable = true;
 				if ( '{' === $part ) {
 					$has_braces = true;
@@ -232,7 +232,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 					$has_braces = true;
 					$braces++;
 				}
-				if ( in_array( $part, array( '}', ']' ), true ) ) {
+				if ( \in_array( $part, array( '}', ']' ), true ) ) {
 					$braces--;
 				}
 				if ( false === $has_braces && ' ' === $part ) {
@@ -240,7 +240,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 					$output[ $i ] = $this->transform( $part, $regex, $transform_type );
 				}
 
-				if ( ( true === $has_braces && 0 === $braces ) && false === in_array( $output[ ( $i + 1 ) ], array( '{', '[' ), true ) ) {
+				if ( ( true === $has_braces && 0 === $braces ) && false === \in_array( $output[ ( $i + 1 ) ], array( '{', '[' ), true ) ) {
 					$has_braces  = false;
 					$is_variable = false;
 				}

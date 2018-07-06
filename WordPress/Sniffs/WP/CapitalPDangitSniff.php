@@ -210,7 +210,7 @@ class CapitalPDangitSniff extends Sniff {
 			if ( isset( $this->text_and_comment_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 				$offset = 0;
 				foreach ( $matches[1] as $key => $match_data ) {
-					$next_offset = ( $match_data[1] + strlen( $match_data[0] ) );
+					$next_offset = ( $match_data[1] + \strlen( $match_data[0] ) );
 
 					// Prevent matches on part of a URL.
 					if ( preg_match( '`http[s]?://[^\s<>\'"()]*' . preg_quote( $match_data[0], '`' ) . '`', $content, $discard, 0, $offset ) === 1 ) {
@@ -245,7 +245,7 @@ class CapitalPDangitSniff extends Sniff {
 				$stackPtr,
 				'Misspelled',
 				array(
-					count( $mispelled ),
+					\count( $mispelled ),
 					implode( ', ', $mispelled ),
 				)
 			);
@@ -254,7 +254,7 @@ class CapitalPDangitSniff extends Sniff {
 				// Apply fixes based on offset to ensure we don't replace false positives.
 				$replacement = $content;
 				foreach ( $matches[1] as $match ) {
-					$replacement = substr_replace( $replacement, 'WordPress', $match[1], strlen( $match[0] ) );
+					$replacement = substr_replace( $replacement, 'WordPress', $match[1], \strlen( $match[0] ) );
 				}
 
 				$this->phpcsFile->fixer->replaceToken( $stackPtr, $replacement );
@@ -272,7 +272,7 @@ class CapitalPDangitSniff extends Sniff {
 		$mispelled = array();
 		foreach ( $match_stack as $match ) {
 			// Deal with multi-dimensional arrays when capturing offset.
-			if ( is_array( $match ) ) {
+			if ( \is_array( $match ) ) {
 				$match = $match[0];
 			}
 

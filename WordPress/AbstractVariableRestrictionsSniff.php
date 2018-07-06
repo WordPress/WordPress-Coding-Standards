@@ -147,7 +147,7 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 		}
 
 		// Check if it is a function not a variable.
-		if ( in_array( $token['code'], array( \T_OBJECT_OPERATOR, \T_DOUBLE_COLON ), true ) ) { // This only works for object vars and array members.
+		if ( \in_array( $token['code'], array( \T_OBJECT_OPERATOR, \T_DOUBLE_COLON ), true ) ) { // This only works for object vars and array members.
 			$method               = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			$possible_parenthesis = $this->phpcsFile->findNext( \T_WHITESPACE, ( $method + 1 ), null, true );
 			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $possible_parenthesis ]['code'] ) {
@@ -164,13 +164,13 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 			$patterns = array();
 
 			// Simple variable.
-			if ( in_array( $token['code'], array( \T_VARIABLE, \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) && ! empty( $group['variables'] ) ) {
+			if ( \in_array( $token['code'], array( \T_VARIABLE, \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) && ! empty( $group['variables'] ) ) {
 				$patterns = array_merge( $patterns, $group['variables'] );
 				$var      = $token['content'];
 
 			}
 
-			if ( in_array( $token['code'], array( \T_OBJECT_OPERATOR, \T_DOUBLE_COLON, \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) && ! empty( $group['object_vars'] ) ) {
+			if ( \in_array( $token['code'], array( \T_OBJECT_OPERATOR, \T_DOUBLE_COLON, \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) && ! empty( $group['object_vars'] ) ) {
 				// Object var, ex: $foo->bar / $foo::bar / Foo::bar / Foo::$bar .
 				$patterns = array_merge( $patterns, $group['object_vars'] );
 
@@ -180,7 +180,7 @@ abstract class AbstractVariableRestrictionsSniff extends Sniff {
 
 			}
 
-			if ( in_array( $token['code'], array( \T_OPEN_SQUARE_BRACKET, \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) && ! empty( $group['array_members'] ) ) {
+			if ( \in_array( $token['code'], array( \T_OPEN_SQUARE_BRACKET, \T_DOUBLE_QUOTED_STRING, \T_HEREDOC ), true ) && ! empty( $group['array_members'] ) ) {
 				// Array members.
 				$patterns = array_merge( $patterns, $group['array_members'] );
 

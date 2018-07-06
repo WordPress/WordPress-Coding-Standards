@@ -15,7 +15,7 @@
  * @since   0.13.0
  */
 
-if ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
+if ( ! \defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
 	define( 'PHP_CODESNIFFER_IN_TESTS', true );
 }
 
