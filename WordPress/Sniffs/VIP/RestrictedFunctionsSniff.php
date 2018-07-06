@@ -29,6 +29,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
  *                 The check for `eval()` now defers to the upstream Squiz.PHP.Eval sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   0.14.0 Checks for get_posts() has been moved to the `Security` SuppressFilterSniff.
  */
 class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -156,17 +157,6 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'update_user_meta',
 					'delete_user_meta',
 					'add_user_meta',
-				),
-			),
-
-			// @todo Introduce a sniff specific to get_posts() that checks for suppress_filters=>false being supplied.
-			'get_posts' => array(
-				'type'      => 'warning',
-				'message'   => '%s() is discouraged in favor of creating a new WP_Query() so that Advanced Post Cache will cache the query, unless you explicitly supply suppress_filters => false.',
-				'functions' => array(
-					'get_posts',
-					'wp_get_recent_posts',
-					'get_children',
 				),
 			),
 

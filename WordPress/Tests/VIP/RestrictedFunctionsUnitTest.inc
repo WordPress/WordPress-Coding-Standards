@@ -51,10 +51,10 @@ get_category_link(); // Ok.
 get_cat_ID(); // Ok.
 url_to_post_id(); // Error.
 
-get_posts(); // Warning.
-wp_get_recent_posts(); // Warning.
 
-get_children(); // Warning.
+
+
+
 
 
 
