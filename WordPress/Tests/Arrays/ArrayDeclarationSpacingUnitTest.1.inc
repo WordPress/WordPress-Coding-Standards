@@ -114,3 +114,13 @@ $foo = array(
 	'meta_key'   => 'foo', // phpcs:ignore Standard.Category.SniffName.ErrorCode
 	'meta_value' => 'bar', // phpcs:ignore Standard.Category.SniffName.ErrorCode
 );
+
+// Test for fixing array with multi-line comments between values.
+$bad = array(
+	'key1' => 'value1', /* comment
+	end */ 'key2' => 'value2', // Bad.
+	/* Non-trailing comment. */
+	'key3' => 'value3', /* comment
+	end */
+	'key4' => 'value4'
+);

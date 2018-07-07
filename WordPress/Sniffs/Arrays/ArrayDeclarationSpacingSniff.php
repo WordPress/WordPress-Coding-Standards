@@ -383,12 +383,31 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 			);
 
 			// Ignore comments after array items if the next real content starts on a new line.
-			if ( \T_COMMENT === $this->tokens[ $first_content ]['code']
-				|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $first_content ]['code'] ] )
+			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_last_item ]['line']
+				&& ( \T_COMMENT === $this->tokens[ $first_content ]['code']
+				|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $first_content ]['code'] ] ) )
 			) {
+				$end_of_comment = $first_content;
+
+				// Find the end of (multi-line) /* */- style trailing comments.
+				if ( substr( ltrim( $this->tokens[ $end_of_comment ]['content'] ), 0, 2 ) === '/*' ) {
+					while ( ( \T_COMMENT === $this->tokens[ $end_of_comment ]['code']
+						|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $end_of_comment ]['code'] ] ) )
+						&& substr( rtrim( $this->tokens[ $end_of_comment ]['content'] ), -2 ) !== '*/'
+						&& ( $end_of_comment + 1 ) < $end_of_this_item
+					) {
+						$end_of_comment++;
+					}
+
+					if ( $this->tokens[ $end_of_comment ]['line'] !== $this->tokens[ $end_of_last_item ]['line'] ) {
+						// Multi-line trailing comment.
+						$end_of_last_item = $end_of_comment;
+					}
+				}
+
 				$next = $this->phpcsFile->findNext(
 					array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
-					( $first_content + 1 ),
+					( $end_of_comment + 1 ),
 					$end_of_this_item,
 					true
 				);
@@ -422,7 +441,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 					$this->phpcsFile->fixer->beginChangeset();
 
-					if ( $item['start'] <= ( $first_content - 1 )
+					if ( ( $end_of_last_item + 1 ) <= ( $first_content - 1 )
 						&& \T_WHITESPACE === $this->tokens[ ( $first_content - 1 ) ]['code']
 					) {
 						// Remove whitespace which would otherwise becoming trailing
