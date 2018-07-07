@@ -98,7 +98,7 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 		);
 	}
 
-	
+
 	/**
 	 * This sniff is active, but it's deprecated, handle the deprecation notices
 	 *

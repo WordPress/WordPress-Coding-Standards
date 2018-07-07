@@ -97,14 +97,14 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 
 			case 'AdminBarRemovalUnitTest.css':
 				return array(
-					1   => 1,
+					1  => 1,
 				);
 
 			default:
 				return array();
 		}
 		return array(
-			1 => 2
+			1 => 2,
 		);
 	}
 

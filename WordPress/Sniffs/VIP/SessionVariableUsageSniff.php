@@ -86,7 +86,7 @@ class SessionVariableUsageSniff extends Sniff {
 				'FoundPropertyForDeprecatedSniff'
 			);
 		}
-		
+
 		if ( '$_SESSION' === $this->tokens[ $stackPtr ]['content'] ) {
 			$this->phpcsFile->addError(
 				'Usage of $_SESSION variable is prohibited.',

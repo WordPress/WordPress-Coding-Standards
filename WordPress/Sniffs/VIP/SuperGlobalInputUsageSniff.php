@@ -83,7 +83,7 @@ class SuperGlobalInputUsageSniff extends Sniff {
 				'FoundPropertyForDeprecatedSniff'
 			);
 		}
-		
+
 		// Check for global input variable.
 		if ( ! in_array( $this->tokens[ $stackPtr ]['content'], $this->input_superglobals, true ) ) {
 			return;

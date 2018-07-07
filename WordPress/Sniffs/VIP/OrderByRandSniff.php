@@ -20,7 +20,7 @@ use WordPress\AbstractArrayAssignmentRestrictionsSniff;
  *
  * @since   0.9.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * 
+ *
  * @deprecated 1.0.0  This sniff has been deprecated.
  *                    This file remains for now to prevent BC breaks.
  */

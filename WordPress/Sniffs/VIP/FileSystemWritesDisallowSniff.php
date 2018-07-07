@@ -22,7 +22,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
  *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * 
+ *
  * @deprecated 1.0.0  This sniff has been deprecated.
  *                    This file remains for now to prevent BC breaks.
  */
