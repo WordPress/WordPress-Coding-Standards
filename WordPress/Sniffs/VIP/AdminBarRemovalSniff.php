@@ -31,13 +31,6 @@ use PHP_CodeSniffer_Tokens as Tokens;
 class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 	/**
-	 * If true, an error will be thrown; otherwise a warning.
-	 *
-	 * @var bool
-	 */
-	public $error = true;
-
-	/**
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
@@ -94,15 +87,15 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 */
 	protected $target_css_properties = array(
 		'visibility' => array(
-			'type' => '!=',
+			'type'  => '!=',
 			'value' => 'hidden',
 		),
 		'display' => array(
-			'type' => '!=',
+			'type'  => '!=',
 			'value' => 'none',
 		),
 		'opacity' => array(
-			'type' => '>',
+			'type'  => '>',
 			'value' => 0.3,
 		),
 	);
@@ -190,7 +183,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	}
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @since 1.0.0 Adjusted to allow for throwing the deprecation notices.
 	 *
@@ -203,15 +196,16 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.AdminBarRemovalSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.AdminBarRemoval" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
 		}
 
-		if ( false === $this->thrown['FoundPropertyForDeprecatedSniff'] ) {
+		if ( ( $this->remove_only === false ) &&
+			false === $this->thrown['FoundPropertyForDeprecatedSniff'] ) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.AdminBarRemovalSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.AdminBarRemoval" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);

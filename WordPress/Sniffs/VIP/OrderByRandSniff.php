@@ -63,7 +63,7 @@ class OrderByRandSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	}
 
 	/**
-	 * This sniff is active, but it's deprecated, handle the deprecation notices
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @since 1.0.0 Added to allow for throwing the deprecation notices.
 	 *
@@ -74,7 +74,7 @@ class OrderByRandSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.OrderByRandSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.OrderByRand" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
@@ -84,7 +84,7 @@ class OrderByRandSniff extends AbstractArrayAssignmentRestrictionsSniff {
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.OrderByRandSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.OrderByRand" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);

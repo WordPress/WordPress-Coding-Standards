@@ -92,20 +92,16 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'AdminBarRemovalUnitTest.css':
 				return array(
-					1  => 2,
+					1 => 2,
 				);
 
-			case 'AdminBarRemovalUnitTest.css':
+			case 'AdminBarRemovalUnitTest.inc':
 				return array(
-					1  => 1,
+					1 => 1,
 				);
 
 			default:
 				return array();
 		}
-		return array(
-			1 => 2,
-		);
 	}
-
 }

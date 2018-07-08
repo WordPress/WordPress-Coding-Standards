@@ -27,13 +27,6 @@ use WordPress\AbstractVariableRestrictionsSniff;
 class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 
 	/**
-	 * If true, an error will be thrown; otherwise a warning.
-	 *
-	 * @var bool
-	 */
-	public $error = true;
-
-	/**
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
@@ -89,7 +82,7 @@ class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 	}
 
 	/**
-	 * This sniff is active, but it's deprecated, handle the deprecation notices
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @since 1.0.0 Added to allow for throwing the deprecation notices.
 	 *
@@ -100,7 +93,7 @@ class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.RestrictedVariablesSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.RestrictedVariables" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
@@ -110,7 +103,7 @@ class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.RestrictedVariablesSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.RestrictedVariables" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);

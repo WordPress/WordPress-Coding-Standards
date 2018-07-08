@@ -119,7 +119,7 @@ class FileSystemWritesDisallowSniff extends AbstractFunctionRestrictionsSniff {
 	}
 
 	/**
-	 * This sniff is active, but it's deprecated, handle the deprecation notices
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @since 1.0.0 Added to allow for throwing the deprecation notices.
 	 *
@@ -130,17 +130,17 @@ class FileSystemWritesDisallowSniff extends AbstractFunctionRestrictionsSniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.FileSystemWritesDisallowSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.FileSystemWritesDisallow" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
 		}
 
-		if ( ! empty( $this->exclude )
+		if ( ( ! empty( $this->exclude ) || !empty( $this->error ) )
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.FileSystemWritesDisallowSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.FileSystemWritesDisallow" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);

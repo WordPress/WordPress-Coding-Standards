@@ -28,13 +28,6 @@ use WordPress\Sniff;
 class SuperGlobalInputUsageSniff extends Sniff {
 
 	/**
-	 * If true, an error will be thrown; otherwise a warning.
-	 *
-	 * @var bool
-	 */
-	public $error = true;
-
-	/**
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
@@ -44,7 +37,6 @@ class SuperGlobalInputUsageSniff extends Sniff {
 	 */
 	private $thrown = array(
 		'DeprecatedSniff'                 => false,
-		'FoundPropertyForDeprecatedSniff' => false,
 	);
 
 	/**
@@ -59,7 +51,7 @@ class SuperGlobalInputUsageSniff extends Sniff {
 	}
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
@@ -68,19 +60,9 @@ class SuperGlobalInputUsageSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.SessionVariableUsageSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.SuperGlobalInputUsage" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
-			);
-		}
-
-		if ( ! empty( $this->exclude )
-			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
-		) {
-			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.SessionVariableUsageSniff" sniff has been deprecated. Please update your custom ruleset.',
-				0,
-				'FoundPropertyForDeprecatedSniff'
 			);
 		}
 

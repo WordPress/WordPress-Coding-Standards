@@ -29,13 +29,6 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * If true, an error will be thrown; otherwise a warning.
-	 *
-	 * @var bool
-	 */
-	public $error = true;
-
-	/**
 	 * Keep track of whether the warnings have been thrown to prevent
 	 * the messages being thrown for every token triggering the sniff.
 	 *
@@ -100,7 +93,7 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 
 
 	/**
-	 * This sniff is active, but it's deprecated, handle the deprecation notices
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @since 1.0.0 Added to allow for throwing the deprecation notices.
 	 *
@@ -111,7 +104,7 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 	public function process_token( $stackPtr ) {
 		if ( false === $this->thrown['DeprecatedSniff'] ) {
 			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.SessionFunctionsUsageSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.SessionFunctionsUsage" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'DeprecatedSniff'
 			);
@@ -121,7 +114,7 @@ class SessionFunctionsUsageSniff extends AbstractFunctionRestrictionsSniff {
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
-				'The "WordPress.VIP.SessionFunctionsUsageSniff" sniff has been deprecated. Please update your custom ruleset.',
+				'The "WordPress.VIP.SessionFunctionsUsage" sniff has been deprecated. Please update your custom ruleset.',
 				0,
 				'FoundPropertyForDeprecatedSniff'
 			);

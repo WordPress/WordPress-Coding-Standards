@@ -44,7 +44,7 @@ class DirectDatabaseQuerySniff extends \WordPress\Sniffs\DB\DirectDatabaseQueryS
 	);
 
 	/**
-	 * Don't use.
+	 * Process the token and handle the deprecation notices.
 	 *
 	 * @deprecated 1.0.0
 	 *
