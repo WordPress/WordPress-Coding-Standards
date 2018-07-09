@@ -39,7 +39,7 @@ class SessionVariableUsageSniff extends Sniff {
 	 * @var array
 	 */
 	private $thrown = array(
-		'DeprecatedSniff'                 => false,
+		'DeprecatedSniff' => false,
 	);
 
 	/**

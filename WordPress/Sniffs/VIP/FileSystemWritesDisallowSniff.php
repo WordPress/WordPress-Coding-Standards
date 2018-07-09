@@ -136,7 +136,7 @@ class FileSystemWritesDisallowSniff extends AbstractFunctionRestrictionsSniff {
 			);
 		}
 
-		if ( ( ! empty( $this->exclude ) || !empty( $this->error ) )
+		if ( ( ! empty( $this->exclude ) || true !== $this->error )
 			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
 		) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(

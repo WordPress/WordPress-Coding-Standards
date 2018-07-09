@@ -8,14 +8,14 @@ G
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 
-	<exclude name="WordPress.VIP" />
+	<exclude name="WordPress.VIP"/>
 
 	<!--
 	#############################################################################
 	Account for deprecated sniffs.
 	These directives can be removed when the deprecated sniffs are removed.
 	#############################################################################
-	-->
+	-->g
 
 	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
 	<rule ref="WordPress.WP.PreparedSQL.DeprecatedSniff">
