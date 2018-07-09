@@ -22,6 +22,8 @@ use WordPress\Sniff;
  *                 `WordPress_Sniffs_Variables_VariableRestrictionsSniff` to
  *                 `WordPress_AbstractVariableRestrictionsSniff`.
  * @since   0.11.0 Extends the WordPress_Sniff class.
+ *
+ * @deprecated 1.0.0 All sniffs depending on this class were deprecated
  */
 abstract class AbstractVariableRestrictionsSniff extends Sniff {
 
