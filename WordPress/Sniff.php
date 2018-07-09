@@ -2382,6 +2382,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                         substring of the original string.
 	 *                         Defaults to `false` to distinguish between a passed
 	 *                         empty string and not passing the $content string.
+	 * @deprecated 1.0.0 This method is only used by deprecated sniffs
 	 *
 	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
 	 */
