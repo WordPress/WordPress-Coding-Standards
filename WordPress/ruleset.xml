@@ -3,18 +3,12 @@
 	<description>WordPress Coding Standards</description>
 
 	<autoload>./PHPCSAliases.php</autoload>
-
+G
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
-	<rule ref="WordPress-VIP"/>
 
-	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
-		<!-- From "VIP": The obfuscation group is excluded as there are plenty of legitimate uses for the base64 functions. -->
-		<properties>
-			<property name="exclude" type="array" value="obfuscation"/>
-		</properties>
-	</rule>
+	<exclude name="WordPress.VIP" />
 
 	<!--
 	#############################################################################
@@ -22,44 +16,6 @@
 	These directives can be removed when the deprecated sniffs are removed.
 	#############################################################################
 	-->
-
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
-	<rule ref="WordPress.VIP.DirectDatabaseQuery.DeprecatedSniff">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent duplicate messages from deprecated sniff. -->
-	<rule ref="WordPress.VIP.DirectDatabaseQuery.SchemaChange">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.DirectDatabaseQuery.DirectQuery">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.DirectDatabaseQuery.NoCaching">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
-	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedSniff">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent duplicate messages from deprecated sniff. -->
-	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_tax_query">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_query">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_key">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_value">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedWhitelistFlagFound">
-		<severity>0</severity>
-	</rule>
 
 	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
 	<rule ref="WordPress.WP.PreparedSQL.DeprecatedSniff">
@@ -107,58 +63,6 @@
 		<severity>0</severity>
 	</rule>
 	<rule ref="WordPress.XSS.EscapeOutput.DeprecatedCustomSanitizingFunctions">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
-	<rule ref="WordPress.VIP.PluginMenuSlug.DeprecatedSniff">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent duplicate messages from deprecated sniff. -->
-	<rule ref="WordPress.VIP.PluginMenuSlug.Using__FILE__">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.DeprecatedSniff">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent duplicate messages from deprecated sniff. -->
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.MissingUnslash">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidated">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
-	<rule ref="WordPress.VIP.CronInterval.DeprecatedSniff">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent duplicate messages from deprecated sniff. -->
-	<rule ref="WordPress.VIP.CronInterval.CronSchedulesInterval">
-		<severity>0</severity>
-	</rule>
-	<rule ref="WordPress.VIP.CronInterval.ChangeDetected">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
-	<rule ref="WordPress.VIP.TimezoneChange.DeprecatedSniff">
-		<severity>0</severity>
-	</rule>
-
-	<!-- Prevent duplicate messages from deprecated sniff. -->
-	<rule ref="WordPress.VIP.TimezoneChange.timezone_change_date_default_timezone_set">
 		<severity>0</severity>
 	</rule>
 

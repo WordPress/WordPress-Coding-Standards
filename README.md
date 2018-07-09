@@ -133,8 +133,8 @@ You can use the following as standard names when invoking `phpcs` to select snif
   - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
-  - `WordPress-VIP` - extended ruleset for [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/)
-    - includes `WordPress-Core`
+
+**Note:** The `WordPress-VIP` ruleset, which includes `WordPress-Core`, is also currently present as a subset of `WordPress`. It was originally intended for [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/), but this is no longer used or recommended by the WordPress.com VIP team or their clients. **This ruleset is considered to be deprecated, and will be removed in due course.** See [#1309](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1309) for more information.
 
 ### Using a custom ruleset
 
