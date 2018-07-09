@@ -96,9 +96,7 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 				);
 
 			case 'AdminBarRemovalUnitTest.inc':
-				return array(
-					1 => 1,
-				);
+				return array();
 
 			default:
 				return array();
