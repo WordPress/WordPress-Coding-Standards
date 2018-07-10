@@ -42,7 +42,7 @@ class ValidatedSanitizedInputSniff extends \WordPress\Sniffs\Security\ValidatedS
 	);
 
 	/**
-	 * Process the token and handle the deprecation notices.
+	 * Don't use.
 	 *
 	 * @deprecated 1.0.0
 	 *

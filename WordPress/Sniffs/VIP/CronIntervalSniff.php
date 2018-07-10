@@ -56,7 +56,7 @@ class CronIntervalSniff extends \WordPress\Sniffs\WP\CronIntervalSniff {
 	);
 
 	/**
-	 * Process the token and handle the deprecation notices.
+	 * Don't use.
 	 *
 	 * @deprecated 1.0.0
 	 *

@@ -3,10 +3,12 @@
 	<description>WordPress Coding Standards</description>
 
 	<autoload>./PHPCSAliases.php</autoload>
-G
+
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
+
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
 
 	<exclude name="WordPress.VIP"/>
 
@@ -15,7 +17,7 @@ G
 	Account for deprecated sniffs.
 	These directives can be removed when the deprecated sniffs are removed.
 	#############################################################################
-	-->g
+	-->
 
 	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
 	<rule ref="WordPress.WP.PreparedSQL.DeprecatedSniff">

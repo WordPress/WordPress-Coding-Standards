@@ -202,7 +202,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 			);
 		}
 
-		if ( ( false === $this->remove_only ) &&
+		if ( ( true !== $this->remove_only ) &&
 			false === $this->thrown['FoundPropertyForDeprecatedSniff'] ) {
 			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
 				'The "WordPress.VIP.AdminBarRemoval" sniff has been deprecated. Please update your custom ruleset.',

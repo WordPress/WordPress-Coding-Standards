@@ -42,7 +42,7 @@ class TimezoneChangeSniff extends \WordPress\Sniffs\WP\TimezoneChangeSniff {
 	);
 
 	/**
-	 * Process the token and handle the deprecation notices.
+	 * Don't use.
 	 *
 	 * @deprecated 1.0.0
 	 *

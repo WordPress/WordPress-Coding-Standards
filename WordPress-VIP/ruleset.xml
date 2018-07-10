@@ -132,12 +132,12 @@
 	#############################################################################
 	-->
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.AdminBarRemoval.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.DirectDatabaseQuery.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
@@ -153,7 +153,7 @@
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
@@ -175,7 +175,7 @@
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.PluginMenuSlug.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
@@ -185,7 +185,7 @@
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.ValidatedSanitizedInput.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
@@ -204,7 +204,7 @@
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.CronInterval.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
@@ -217,42 +217,42 @@
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.FileSystemWritesDisallow.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.OrderByRand.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.RestrictedFunctions.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.RestrictedVariables.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.SessionFunctionsUsage.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.SessionVariableUsage.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.SuperGlobalInputUsage.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>
 
-	<!-- Prevent deprecation notice when the sniff is not explicitely included. -->
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
 	<rule ref="WordPress.VIP.TimezoneChange.DeprecatedSniff">
 		<severity>0</severity>
 	</rule>

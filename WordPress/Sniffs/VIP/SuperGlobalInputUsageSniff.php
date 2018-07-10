@@ -51,7 +51,7 @@ class SuperGlobalInputUsageSniff extends Sniff {
 	}
 
 	/**
-	 * Process the token and handle the deprecation notices.
+	 * Process the token and handle the deprecation notice.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *

@@ -43,7 +43,7 @@ class SlowDBQuerySniff extends \WordPress\Sniffs\DB\SlowDBQuerySniff {
 	);
 
 	/**
-	 * Process the token and handle the deprecation notices.
+	 * Don't use.
 	 *
 	 * @deprecated 1.0.0
 	 *

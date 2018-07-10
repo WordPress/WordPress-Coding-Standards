@@ -2371,6 +2371,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *               originally created.
 	 * @since 0.13.0 The $stackPtr parameter is now optional. Either that or the
 	 *               $content parameter has to be passed.
+	 * @deprecated 1.0.0 This method is only used by deprecated sniffs.
 	 *
 	 * @param string $tag_name The name of the HTML tag without brackets. So if
 	 *                         searching for '<span...', this would be 'span'.
@@ -2382,7 +2383,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                         substring of the original string.
 	 *                         Defaults to `false` to distinguish between a passed
 	 *                         empty string and not passing the $content string.
-	 * @deprecated 1.0.0 This method is only used by deprecated sniffs
 	 *
 	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
 	 */

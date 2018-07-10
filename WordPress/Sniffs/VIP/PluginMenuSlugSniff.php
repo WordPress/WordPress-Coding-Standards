@@ -40,7 +40,7 @@ class PluginMenuSlugSniff extends \WordPress\Sniffs\Security\PluginMenuSlugSniff
 	);
 
 	/**
-	 * Process the token and handle the deprecation notices.
+	 * Don't use.
 	 *
 	 * @deprecated 1.0.0
 	 *
