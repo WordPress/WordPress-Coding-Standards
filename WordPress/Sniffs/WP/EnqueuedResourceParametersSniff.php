@@ -53,6 +53,59 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
+	 * False + the empty tokens array.
+	 *
+	 * This array is enriched with the $emptyTokens array in the register() method.
+	 *
+	 * @var array
+	 */
+	private $false_tokens = array(
+		\T_FALSE => \T_FALSE,
+	);
+
+	/**
+	 * Token codes which are "safe" to accept to determine whether a version would evaluate to `false`.
+	 *
+	 * This array is enriched with the several of the PHPCS token arrays in the register() method.
+	 *
+	 * @var array
+	 */
+	private $safe_tokens = array(
+		\T_NULL                     => \T_NULL,
+		\T_FALSE                    => \T_FALSE,
+		\T_TRUE                     => \T_TRUE,
+		\T_LNUMBER                  => \T_LNUMBER,
+		\T_DNUMBER                  => \T_DNUMBER,
+		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
+		\T_START_NOWDOC             => \T_START_NOWDOC,
+		\T_NOWDOC                   => \T_NOWDOC,
+		\T_END_NOWDOC               => \T_END_NOWDOC,
+		\T_OPEN_PARENTHESIS         => \T_OPEN_PARENTHESIS,
+		\T_CLOSE_PARENTHESIS        => \T_CLOSE_PARENTHESIS,
+		\T_STRING_CONCAT            => \T_STRING_CONCAT,
+	);
+
+	/**
+	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * Overloads and calls the parent method to allow for adding additional tokens to the $safe_tokens property.
+	 *
+	 * @return array
+	 */
+	public function register() {
+		$this->false_tokens += Tokens::$emptyTokens;
+
+		$this->safe_tokens += Tokens::$emptyTokens;
+		$this->safe_tokens += Tokens::$assignmentTokens;
+		$this->safe_tokens += Tokens::$comparisonTokens;
+		$this->safe_tokens += Tokens::$operators;
+		$this->safe_tokens += Tokens::$booleanOperators;
+		$this->safe_tokens += Tokens::$castTokens;
+
+		return parent::register();
+	}
+
+	/**
 	 * Process the parameters of a matched function.
 	 *
 	 * @since 1.0.0
@@ -132,30 +185,39 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 	 * @param int $end   The position to stop looking (inclusive).
 	 *
 	 * @return bool True if the parameter is falsy.
+	 *              False if the parameter is not falsy or when it
+	 *              couldn't be reliably determined.
 	 */
 	protected function is_falsy( $start, $end ) {
-		$falseTokens   = Tokens::$emptyTokens;
-		$falseTokens[] = T_FALSE;
 
 		// Find anything excluding the false tokens.
-		$hasNonFalse = $this->phpcsFile->findNext( $falseTokens, $start, $end + 1, true );
+		$has_non_false = $this->phpcsFile->findNext( $this->false_tokens, $start, ( $end + 1 ), true );
 		// If no non-false tokens are found, we are good.
-		if ( false === $hasNonFalse ) {
+		if ( false === $has_non_false ) {
 			return true;
 		}
 
-		// If there is a number, it can be a falsy-value.
-		$numberToken = $this->phpcsFile->findNext( array( T_DNUMBER, T_LNUMBER ), $start, $end + 1 );
-		if ( $numberToken ) {
-			$value = trim( $this->phpcsFile->getTokensAsString( $start, ( $end - $start ) + 1 ) );
-
-			// Only parse values that have a format we can safely evaulate.
-			if ( preg_match( '#^[\s(?:\d+(?:\.\d+|x\d+)?)*/-]+$#', $value ) > 0 ) {
-				// Evaluate the argument to figure out the outcome is false or not.
-				return false === eval( "return (bool) $value;" ); // @codingStandardsIgnoreLine - No harm here.
+		$code_string = '';
+		for ( $i = $start; $i <= $end; $i++ ) {
+			if ( isset( $this->safe_tokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
+				// Function call/variable or other token which makes it neigh impossible
+				// to determine whether the actual value would evaluate to false.
+				return false;
 			}
+
+			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) === true ) {
+				continue;
+			}
+
+			$code_string .= $this->tokens[ $i ]['content'];
 		}
 
-		return false;
+		if ( '' === $code_string ) {
+			return false;
+		}
+
+		// Evaluate the argument to figure out the outcome is false or not.
+		// phpcs:ignore Squiz.PHP.Eval -- No harm here.
+		return ( false === eval( "return (bool) $code_string;" ) );
 	}
 }

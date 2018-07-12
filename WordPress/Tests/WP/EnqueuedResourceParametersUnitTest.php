@@ -28,15 +28,17 @@ class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList() {
 		return array(
 			3  => 1,
-			8  => 1,
+			6  => 1,
 			9  => 1,
 			10 => 1,
 			11 => 1,
 			12 => 1,
 			13 => 1,
-			32 => 1,
-			35 => 1,
-			38 => 1,
+			14 => 1,
+			22 => 1,
+			39 => 1,
+			42 => 1,
+			45 => 1,
 		);
 	}
 
@@ -48,8 +50,8 @@ class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array(
 			3  => 1,
-			25 => 1,
 			32 => 1,
+			39 => 1,
 		);
 	}
 
