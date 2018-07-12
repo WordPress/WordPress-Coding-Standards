@@ -8,6 +8,12 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 _Nothing yet._
 
+
+## [0.14.1] - 2018-02-15
+
+### Fixed
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff contained a bug which could inadvertently trigger class autoloading of the project being sniffed and by extension could cause fatal errors during the PHPCS run.
+
 ## [0.14.0] - 2017-11-01
 
 ### Added
@@ -524,6 +530,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[0.14.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.14.0...0.14.1
 [0.14.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.13.1...0.14.0
 [0.13.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.12.0...0.13.0
