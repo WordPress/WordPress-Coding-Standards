@@ -141,6 +141,10 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
 	<rule ref="WordPress.PHP.StrictInArray"/>
 
+	<!-- Check enqueue and register styles and scripts to have version and in_footer parameters explicitly set.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146 -->
+	<rule ref="WordPress.WP.EnqueuedResourceParameters"/>
+
 	<!-- Discourage use of the backtick operator (execution of shell commands).
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/646 -->
 	<rule ref="Generic.PHP.BacktickOperator"/>
