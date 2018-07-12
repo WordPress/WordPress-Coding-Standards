@@ -274,3 +274,19 @@ function hi(): array
 {
     return [];
 }
+
+// Issue 1420.
+function returntype1(): string {} // Ok.
+function returntype2( $input ): string {} // Ok.
+function returntype3( $input ) : string {} // Ok.
+function returntype4( string $input ): string {} // Ok.
+function returntype5( string $input ) : string {} // Ok.
+function returntype6( string $input, array $inputs ): string {} // Ok.
+function returntype7( string $input, array $inputs ) : string {} // Ok.
+$returntype = function (): string {}; // Ok.
+$returntype = function ( $input ): string {}; // Ok.
+$returntype = function ( $input ) : string {}; // Ok.
+$returntype = function ( string $input ): string {}; // Ok.
+$returntype = function ( string $input ) : string {}; // Ok.
+$returntype = function ( string $input, array $inputs ): string {}; // Ok.
+$returntype = function ( string $input, array $inputs ) : string {}; // Ok.
