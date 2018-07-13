@@ -61,7 +61,7 @@ class FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			1 => 1,
+			1 => 2,
 		);
 	}
 

@@ -8,7 +8,12 @@
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 
-	<rule ref="WordPress.PHP.DiscouragedPHPFunctions"/>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
+		<!-- From "VIP": The obfuscation group is excluded as there are plenty of legitimate uses for the base64 functions. -->
+		<properties>
+			<property name="exclude" type="array" value="obfuscation"/>
+		</properties>
+	</rule>
 
 	<exclude name="WordPress.VIP"/>
 

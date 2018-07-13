@@ -43,7 +43,7 @@ class RestrictedVariablesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			1  => 1,
+			1  => 2,
 			13 => 1,
 			14 => 1,
 			17 => 1,

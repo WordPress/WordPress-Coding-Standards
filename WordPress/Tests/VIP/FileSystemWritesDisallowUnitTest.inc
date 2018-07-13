@@ -36,6 +36,12 @@ chmod();
 lchgrp();
 lchown();
 
+// @codingStandardsChangeSetting WordPress.VIP.FileSystemWritesDisallow exclude directory
+mkdir();
+
+// @codingStandardsChangeSetting WordPress.VIP.FileSystemWritesDisallow exclude false
+
+
 // Issue #956.
 use Fieldmanager_Link as Link;
 
