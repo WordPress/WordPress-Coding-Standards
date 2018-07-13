@@ -344,6 +344,10 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 
 				if ( \T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
+					&& ! ( // Do NOT flag : immediately following ) for return types declarations.
+						\T_COLON === $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
+						&& in_array( $this->tokens[ $this->tokens[ $parenthesisCloser ]['parenthesis_owner'] ]['code'], array( \T_FUNCTION, \T_CLOSURE ), true )
+					)
 					&& ( isset( $scopeOpener ) && \T_COLON !== $this->tokens[ $scopeOpener ]['code'] )
 				) {
 					$error = 'Space between opening control structure and closing parenthesis is required';
@@ -355,7 +359,7 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 			}
 
-			// Ignore this for function declarations. Handled by the OpeningFunctionBraceKrnighanRitchie sniff.
+			// Ignore this for function declarations. Handled by the OpeningFunctionBraceKernighanRitchie sniff.
 			if ( \T_FUNCTION !== $this->tokens[ $stackPtr ]['code']
 				&& \T_CLOSURE !== $this->tokens[ $stackPtr ]['code']
 				&& isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
