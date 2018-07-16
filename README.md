@@ -134,7 +134,9 @@ You can use the following as standard names when invoking `phpcs` to select snif
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
 
-**Note:** The `WordPress-VIP` ruleset, which includes `WordPress-Core`, is also currently present as a subset of `WordPress`. It was originally intended for [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/), but this is no longer used or recommended by the WordPress.com VIP team or their clients. **This ruleset is considered to be deprecated, and will be removed in due course.** See [#1309](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1309) for more information.
+**Notes:** This WPCS package contains the sniffs for another ruleset, `WordPress-VIP`. This ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/), but this is no longer used or recommended by the WordPress.com VIP team or their clients, since they prefer to use their [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead.
+
+Before WPCS `1.0.0`, the WordPress-VIP ruleset was included as part of the complete `WordPress` ruleset. **As of `1.0.0` the `WordPress-VIP` ruleset is not part of the WordPress ruleset, and it is deprecated**. The remaining `WordPress-VIP` sniffs may still be referenced in custom rulesets, so to maintain some backwards compatibility, they will remain in WPCS until `2.0.0`. See [#1309](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1309) for more information.
 
 ### Using a custom ruleset
 
