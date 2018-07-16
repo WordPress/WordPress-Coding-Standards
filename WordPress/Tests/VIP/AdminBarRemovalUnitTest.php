@@ -85,10 +85,21 @@ class AdminBarRemovalUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array();
-	}
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'AdminBarRemovalUnitTest.css':
+				return array(
+					1 => 2,
+				);
 
+			case 'AdminBarRemovalUnitTest.inc':
+				return array();
+
+			default:
+				return array();
+		}
+	}
 }

@@ -82,3 +82,8 @@ get_user_meta(); // Error.
 update_user_meta(); // Error.
 delete_user_meta(); // Error.
 add_user_meta(); // Error.
+
+// @codingStandardsChangeSetting WordPress.VIP.RestrictedFunctions exclude switch_to_blog
+switch_to_blog( $blogid ); // Error.
+
+// @codingStandardsChangeSetting WordPress.VIP.RestrictedFunctions exclude false

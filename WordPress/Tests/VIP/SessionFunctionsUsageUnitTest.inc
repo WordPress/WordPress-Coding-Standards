@@ -26,3 +26,9 @@ session_status();
 session_unregister();
 session_unset();
 session_write_close();
+
+// @codingStandardsChangeSetting WordPress.VIP.SessionFunctionsUsage exclude session
+session_start();
+
+// @codingStandardsChangeSetting WordPress.VIP.SessionFunctionsUsage exclude false
+
