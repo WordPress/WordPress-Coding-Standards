@@ -150,15 +150,18 @@ You can find a complete list of all the properties you can change in the [wiki](
 
 ### Recommended additional rulesets
 
-The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset comes highly recommended.
-The [PHPCompatibility](https://github.com/wimg/PHPCompatibility) sniffs are designed to analyse your code for cross-PHP version compatibility.
-Install it as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
+The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) ruleset and its subset [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) come highly recommended.
+The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) sniffs are designed to analyse your code for cross-PHP version compatibility.
+
+The [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) ruleset is based on PHPCompatibility, but specifically crafted to prevent false positives for projects which expect to run within the context of WordPress, i.e. core, plugins and themes.
+
+Install either as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
 
 Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-` to support the same PHP versions as WordPress Core supports.
 
 For more information about setting the `testVersion`, see:
-* [PHPCompatibility: Sniffing your code for compatibility with specific PHP version(s)](https://github.com/wimg/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions)
-* [PHPCompatibility: Using a custom ruleset](https://github.com/wimg/PHPCompatibility#using-a-custom-ruleset)
+* [PHPCompatibility: Sniffing your code for compatibility with specific PHP version(s)](https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions)
+* [PHPCompatibility: Using a custom ruleset](https://github.com/PHPCompatibility/PHPCompatibility#using-a-custom-ruleset)
 
 ## How to use
 
