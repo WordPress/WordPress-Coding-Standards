@@ -52,7 +52,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		}
 
 		$need_spaces = $this->phpcsFile->findNext(
-			array( \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
+			array( T_DOUBLE_QUOTED_STRING, \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
 			( $stackPtr + 1 ),
 			$token['bracket_closer'],
 			true
