@@ -33,3 +33,9 @@ $arr[0]; // Good.
 $arr[ 0 ]; // Bad.
 $arr[-1]; // Good.
 $arr[ -1 ]; // Bad.
+
+// Dynamic keys
+$events["{$prefix}_before_header"]; // Good.
+$events[ "{$prefix}_before_header"]; // Bad.
+$events["{$prefix}_before_header" ]; // Bad.
+$events[ "{$prefix}_before_header" ]; // Bad.
