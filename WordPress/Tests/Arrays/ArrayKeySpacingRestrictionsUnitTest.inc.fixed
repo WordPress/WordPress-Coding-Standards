@@ -11,11 +11,15 @@ foo( $arr['test'] ); // Good.
 bar( $arr['test'] ); // Bad.
 foo( $arr['test'] ); // Bad.
 bar( $arr['test'] ); // Bad.
+foo( $arr["test"] ); // Good.
+bar( $arr["test"] ); // Bad.
+foo( $arr["test"] ); // Bad.
+bar( $arr["test"] ); // Bad.
 
 // Nested ones.
 foo( $arr[ $test[ $taz ] ] ); // Bad.
 bar( $arr[ $test['taz'] ] ); // Bad.
-foo( $arr[ $test['taz'] ] ); // Bad.
+foo( $arr[ $test['taz'] ] ); // Bad x2.
 bar( $arr[ $test['taz'] ] ); // Good.
 
 // Mixed key.
