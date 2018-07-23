@@ -32,14 +32,24 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ## Whitelist comments
 
+> **Important**:
+> PHPCS 3.2.0 introduced new selective ignore annotations, which can be considered an improved version of the whitelist mechanism which WPCS contains.
+>
+> There is a [tentative intention to drop support for the WPCS native whitelist comments](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-340698249) in WPCS 2.0.0.
+> 
+> Considering that, the introduction of new whitelist comments is discouraged.
+>
+> The below information remains as guidance for exceptional cases and to aid in understanding the previous implementation.
+
 Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
+
 If the sniff you are writing is susceptible to this, please consider adding the ability to [whitelist lines of code](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
 
 To this end, the `WordPress\Sniff::has_whitelist_comment()` method was introduced.
 
 Example usage:
 ```php
-namespace WordPress\Sniffs\CSRF;
+namespace WordPress\Sniffs\Security;
 
 use WordPress\Sniff;
 
