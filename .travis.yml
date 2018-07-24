@@ -80,7 +80,7 @@ before_install:
 
 script:
     # Lint the PHP files against parse errors.
-    - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
+    - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then phpunit --filter WordPress $(pwd)/Test/AllTests.php; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then phpunit --filter WordPress $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php; fi
@@ -92,6 +92,14 @@ script:
     # `travis_retry` should then kick in to run the fixer again which should now return 0 (= no fixable errors found).
     # All error codes for the PHPCBF: https://github.com/squizlabs/PHP_CodeSniffer/issues/1270#issuecomment-272768413
     - if [[ "$SNIFF" == "1" ]]; then travis_retry $(pwd)/vendor/bin/phpcbf -p ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; fi
+    # Make sure the rulesets don't thrown unexpected errors or warnings.
+    # This check needs to be run against a high PHP version to prevent triggering the syntax error check.
+    # It also needs to be run against all PHPCS versions WPCS is tested against.
+    - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-Core; fi
+    - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-Docs; fi
+    - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-Extra; fi
+    - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-VIP; fi
+    - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
     # @link http://pear.php.net/package/PHP_CodeSniffer/
