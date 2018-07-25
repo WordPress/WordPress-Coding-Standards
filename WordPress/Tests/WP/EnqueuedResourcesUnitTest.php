@@ -45,7 +45,6 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 			30 => 1,
 			31 => 1,
 		);
-
 	}
 
 	/**
@@ -55,7 +54,6 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

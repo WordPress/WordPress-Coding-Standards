@@ -38,8 +38,8 @@ class EmptyStatementSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_SEMICOLON,
-			T_CLOSE_TAG,
+			\T_SEMICOLON,
+			\T_CLOSE_TAG,
 		);
 	}
 
@@ -65,8 +65,9 @@ class EmptyStatementSniff extends Sniff {
 				);
 
 				if ( false === $prevNonEmpty
-					|| ( T_SEMICOLON !== $this->tokens[ $prevNonEmpty ]['code']
-						&& T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code'] )
+					|| ( \T_SEMICOLON !== $this->tokens[ $prevNonEmpty ]['code']
+						&& \T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code']
+						&& \T_OPEN_TAG_WITH_ECHO !== $this->tokens[ $prevNonEmpty ]['code'] )
 				) {
 					return;
 				}
@@ -79,22 +80,24 @@ class EmptyStatementSniff extends Sniff {
 				if ( true === $fix ) {
 					$this->phpcsFile->fixer->beginChangeset();
 
-					if ( T_OPEN_TAG === $this->tokens[ $prevNonEmpty ]['code'] ) {
+					if ( \T_OPEN_TAG === $this->tokens[ $prevNonEmpty ]['code']
+						|| \T_OPEN_TAG_WITH_ECHO === $this->tokens[ $prevNonEmpty ]['code']
+					) {
 						/*
 						 * Check for superfluous whitespace after the semi-colon which will be
 						 * removed as the `<?php ` open tag token already contains whitespace,
 						 * either a space or a new line and in case of a new line, the indentation
 						 * should be done via tabs, so spaces can be safely removed.
 						 */
-						if ( T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
+						if ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
 							$replacement = str_replace( ' ', '', $this->tokens[ ( $stackPtr + 1 ) ]['content'] );
 							$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), $replacement );
 						}
 					}
 
 					for ( $i = $stackPtr; $i > $prevNonEmpty; $i-- ) {
-						if ( T_SEMICOLON !== $this->tokens[ $i ]['code']
-							&& T_WHITESPACE !== $this->tokens[ $i ]['code']
+						if ( \T_SEMICOLON !== $this->tokens[ $i ]['code']
+							&& \T_WHITESPACE !== $this->tokens[ $i ]['code']
 						) {
 							break;
 						}
@@ -110,13 +113,16 @@ class EmptyStatementSniff extends Sniff {
 			 */
 			case 'T_CLOSE_TAG':
 				$prevNonEmpty = $this->phpcsFile->findPrevious(
-					T_WHITESPACE,
+					\T_WHITESPACE,
 					( $stackPtr - 1 ),
 					null,
 					true
 				);
 
-				if ( false === $prevNonEmpty || T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code'] ) {
+				if ( false === $prevNonEmpty
+					|| ( \T_OPEN_TAG !== $this->tokens[ $prevNonEmpty ]['code']
+						&& \T_OPEN_TAG_WITH_ECHO !== $this->tokens[ $prevNonEmpty ]['code'] )
+				) {
 					return;
 				}
 
@@ -138,7 +144,6 @@ class EmptyStatementSniff extends Sniff {
 				/* Deliberately left empty. */
 				break;
 		}
+	}
 
-	} // End process_token().
-
-} // End class.
+}

@@ -31,7 +31,6 @@ class SessionVariableUsageUnitTest extends AbstractSniffUnitTest {
 			3 => 1,
 			4 => 1,
 		);
-
 	}
 
 	/**
@@ -40,8 +39,9 @@ class SessionVariableUsageUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
-
+		return array(
+			1 => 1,
+		);
 	}
 
-} // End class.
+}

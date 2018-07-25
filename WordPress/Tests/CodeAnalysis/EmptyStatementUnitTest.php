@@ -33,21 +33,35 @@ class EmptyStatementUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array(
-			9  => 1,
-			12 => 1,
-			15 => 1,
-			18 => 1,
-			21 => 1,
-			22 => 1,
-			31 => 1,
-			33 => 1,
-			43 => 1,
-			45 => 1,
-		);
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'EmptyStatementUnitTest.1.inc':
+				return array(
+					9  => 1,
+					12 => 1,
+					15 => 1,
+					18 => 1,
+					21 => 1,
+					22 => 1,
+					31 => 1,
+					33 => 1,
+					43 => 1,
+					45 => 1,
+				);
+
+			case 'EmptyStatementUnitTest.2.inc':
+				return array(
+					1 => 1, // Internal.NoCode warning when short open tags is off, otherwise EmptyStatement warning.
+					2 => ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) ? 0 : 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
-} // End class.
+}

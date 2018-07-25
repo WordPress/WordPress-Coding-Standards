@@ -28,7 +28,6 @@ class StrictComparisonsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -44,7 +43,6 @@ class StrictComparisonsUnitTest extends AbstractSniffUnitTest {
 			24 => 1,
 			29 => 1,
 		);
-
 	}
 
-} // End class.
+}

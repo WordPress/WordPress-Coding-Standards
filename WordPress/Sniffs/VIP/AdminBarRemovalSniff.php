@@ -24,8 +24,24 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                 - Added the $remove_only property.
  *                 - Now also sniffs for manipulation of the admin bar visibility through CSS.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 1.0.0  This sniff has been deprecated.
+ *                    This file remains for now to prevent BC breaks.
  */
 class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
+
+	/**
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
 	/**
 	 * A list of tokenizers this sniff supports.
@@ -146,13 +162,13 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$targets = $this->string_tokens;
 
 		// Add CSS style target.
-		$targets[] = T_STYLE;
+		$targets[] = \T_STYLE;
 
 		// Set the target selectors regex only once.
 		$selectors = array_map(
 			'preg_quote',
 			$this->target_css_selectors,
-			array_fill( 0, count( $this->target_css_selectors ), '`' )
+			array_fill( 0, \count( $this->target_css_selectors ), '`' )
 		);
 		// Parse the selectors array into the regex string.
 		$this->target_css_selectors_regex = sprintf( $this->target_css_selectors_regex, implode( '|', $selectors ) );
@@ -160,14 +176,16 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		// Add function call targets.
 		$parent = parent::register();
 		if ( ! empty( $parent ) ) {
-			$targets[] = T_STRING;
+			$targets[] = \T_STRING;
 		}
 
 		return $targets;
 	}
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Process the token and handle the deprecation notices.
+	 *
+	 * @since 1.0.0 Adjusted to allow for throwing the deprecation notices.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
@@ -176,11 +194,28 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_token( $stackPtr ) {
 
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.AdminBarRemoval" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( ( true !== $this->remove_only ) &&
+			false === $this->thrown['FoundPropertyForDeprecatedSniff'] ) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.AdminBarRemoval" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
+
 		$file_name      = $this->phpcsFile->getFileName();
 		$file_extension = substr( strrchr( $file_name, '.' ), 1 );
 
 		if ( 'css' === $file_extension ) {
-			if ( T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
+			if ( \T_STYLE === $this->tokens[ $stackPtr ]['code'] ) {
 				return $this->process_css_style( $stackPtr );
 			}
 		} elseif ( isset( $this->string_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
@@ -200,8 +235,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		} else {
 			return parent::process_token( $stackPtr );
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Process the parameters of a matched function.
@@ -364,11 +398,11 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		$css_property = $this->target_css_properties[ $this->tokens[ $stackPtr ]['content'] ];
 
 		// Check if the CSS selector matches.
-		$opener = $this->phpcsFile->findPrevious( T_OPEN_CURLY_BRACKET, $stackPtr );
+		$opener = $this->phpcsFile->findPrevious( \T_OPEN_CURLY_BRACKET, $stackPtr );
 		if ( false !== $opener ) {
 			for ( $i = ( $opener - 1 ); $i >= 0; $i-- ) {
 				if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] )
-					|| T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
+					|| \T_CLOSE_CURLY_BRACKET === $this->tokens[ $i ]['code']
 				) {
 					break;
 				}
@@ -383,7 +417,7 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 
 					if ( true === $this->remove_only ) {
 						// Check the value of the CSS property.
-						$valuePtr = $this->phpcsFile->findNext( array( T_COLON, T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
+						$valuePtr = $this->phpcsFile->findNext( array( \T_COLON, \T_WHITESPACE ), ( $stackPtr + 1 ), null, true );
 						$value    = $this->tokens[ $valuePtr ]['content'];
 						$valid    = $this->validate_css_property_value( $value, $css_property['type'], $css_property['value'] );
 						if ( true === $valid ) {
@@ -428,4 +462,4 @@ class AdminBarRemovalSniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-} // End class.
+}

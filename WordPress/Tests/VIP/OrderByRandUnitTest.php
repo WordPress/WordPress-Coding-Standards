@@ -33,8 +33,8 @@ class OrderByRandUnitTest extends AbstractSniffUnitTest {
 			6  => 1,
 			9  => 1,
 			11 => 1,
+			16 => 1,
 		);
-
 	}
 
 	/**
@@ -43,8 +43,9 @@ class OrderByRandUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
-
+		return array(
+			1 => 2,
+		);
 	}
 
-} // End class.
+}

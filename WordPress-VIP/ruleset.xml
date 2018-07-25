@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress VIP">
-	<description>WordPress VIP Coding Standards</description>
+	<description>Deprecated WordPress.com VIP Coding Standards, use the official VIP coding standards instead, these can be found at https://github.com/Automattic/VIP-Coding-Standards</description>
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
@@ -8,25 +8,23 @@
 
 	<!-- Covers:
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#removing-the-admin-bar
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#direct-database-queries
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#filesystem-writes
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-__file__-for-page-registration
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#uncached-functions
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#flush_rewrite_rules
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#session_start-and-other-session-related-functions
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#functions-that-use-joins-taxonomy-relation-queries-cat-tax-queries-subselects-or-api-calls
 		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#querying-on-meta_value
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping
 	-->
 	<rule ref="WordPress.VIP"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping -->
 	<!-- https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/ -->
-	<rule ref="WordPress.XSS.EscapeOutput"/>
-	<rule ref="WordPress.CSRF.NonceVerification"/>
+	<rule ref="WordPress.Security.EscapeOutput"/>
+	<rule ref="WordPress.Security.NonceVerification"/>
+
+	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69 -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-instead-of -->
 	<rule ref="WordPress.PHP.StrictComparisons"/>
@@ -45,7 +43,7 @@
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/633#issuecomment-266634811 -->
 		<properties>
-			<property name="exclude" value="obfuscation"/>
+			<property name="exclude" type="array" value="obfuscation"/>
 		</properties>
 	</rule>
 	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
@@ -81,5 +79,186 @@
 
 	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-theme-constants -->
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries -->
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration -->
+	<rule ref="WordPress.DB.DirectDatabaseQuery"/>
+	<rule ref="WordPress.DB.DirectDatabaseQuery.SchemaChange">
+		<type>error</type>
+		<message>Attempting a database schema change is highly discouraged.</message>
+	</rule>
+	<rule ref="WordPress.DB.DirectDatabaseQuery.NoCaching">
+		<type>error</type>
+		<message>Usage of a direct database call without caching is prohibited on the VIP platform. Use wp_cache_get / wp_cache_set or wp_cache_delete.</message>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload -->
+	<rule ref="WordPress.DB.SlowDBQuery"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#using-__file__-for-page-registration -->
+	<rule ref="WordPress.Security.PluginMenuSlug"/>
+	<rule ref="WordPress.Security.PluginMenuSlug.Using__FILE__">
+		<type>error</type>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events -->
+	<rule ref="WordPress.WP.CronInterval"/>
+	<rule ref="WordPress.WP.CronInterval.CronSchedulesInterval">
+		<type>error</type>
+		<message>Scheduling crons at %s sec ( less than %s minutes ) is prohibited.</message>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side -->
+	<!-- https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/ -->
+	<rule ref="WordPress.WP.TimezoneChange"/>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#no-limit-queries -->
+	<rule ref="WordPress.WP.PostsPerPage"/>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_posts_per_page">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_numberposts">
+		<type>error</type>
+	</rule>
+
+	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect -->
+	<rule ref="WordPress.Security.SafeRedirect"/>
+
+	<!--
+	#############################################################################
+	Account for deprecated sniffs.
+	These directives can be removed when the deprecated sniffs are removed.
+	#############################################################################
+	-->
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.AdminBarRemoval.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.DirectDatabaseQuery.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.DirectDatabaseQuery.SchemaChange">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.DirectDatabaseQuery.DirectQuery">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.DirectDatabaseQuery.NoCaching">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_tax_query">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_query">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_key">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query_meta_value">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.SlowDBQuery.DeprecatedWhitelistFlagFound">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.PluginMenuSlug.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.PluginMenuSlug.Using__FILE__">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotSanitized">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.MissingUnslash">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidated">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput.InputNotValidatedNotSanitized">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.CronInterval.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.CronInterval.CronSchedulesInterval">
+		<severity>0</severity>
+	</rule>
+	<rule ref="WordPress.VIP.CronInterval.ChangeDetected">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.FileSystemWritesDisallow.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.OrderByRand.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.RestrictedFunctions.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.RestrictedVariables.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.SessionFunctionsUsage.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.SessionVariableUsage.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.SuperGlobalInputUsage.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent deprecation notice when the sniff is not explicitly included. -->
+	<rule ref="WordPress.VIP.TimezoneChange.DeprecatedSniff">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages from deprecated sniff. -->
+	<rule ref="WordPress.VIP.TimezoneChange.timezone_change_date_default_timezone_set">
+		<severity>0</severity>
+	</rule>
 
 </ruleset>

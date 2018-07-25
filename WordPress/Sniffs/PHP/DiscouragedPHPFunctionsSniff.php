@@ -99,8 +99,7 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'str_rot13',
 				),
 			),
-
 		);
-	} // end getGroups()
+	}
 
-} // End class.
+}

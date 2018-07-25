@@ -253,7 +253,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 		),
 		'wp_upload_bits' => array(
 			2 => array(
-				'value'   => '',
+				'value'   => null,
 				'version' => '2.0.0',
 			),
 		),
@@ -263,8 +263,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 				'version' => '2.5.0',
 			),
 		),
-
-	); // End $target_functions.
+	);
 
 	/**
 	 * Process the parameters of a matched function.
@@ -282,7 +281,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
 		$this->get_wp_version_from_cl();
 
-		$paramCount = count( $parameters );
+		$paramCount = \count( $parameters );
 		foreach ( $this->target_functions[ $matched_content ] as $position => $parameter_args ) {
 
 			// Check that number of parameters defined is not less than the position to check.

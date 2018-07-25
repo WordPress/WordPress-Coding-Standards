@@ -80,7 +80,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
             self::$phpcs = new PHP_CodeSniffer();
         }
 
-        $class = get_class($this);
+        $class = \get_class($this);
         $this->standardsDir = $GLOBALS['PHP_CODESNIFFER_STANDARD_DIRS'][$class];
 
     }//end setUp()
@@ -100,12 +100,12 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
     {
         $testFiles = array();
 
-        $dir = substr($testFileBase, 0, strrpos($testFileBase, DIRECTORY_SEPARATOR));
+        $dir = substr($testFileBase, 0, strrpos($testFileBase, \DIRECTORY_SEPARATOR));
         $di  = new DirectoryIterator($dir);
 
         foreach ($di as $file) {
             $path = $file->getPathname();
-            if (substr($path, 0, strlen($testFileBase)) === $testFileBase) {
+            if (substr($path, 0, \strlen($testFileBase)) === $testFileBase) {
 
                 /* Start of WPCS adjustment */
                 // If we're changing things anyway, we may as well exclude backup files
@@ -153,7 +153,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         }
 
         // The basis for determining file locations.
-        $basename = substr(get_class($this), 0, -8);
+        $basename = substr(\get_class($this), 0, -8);
 
         /* Start of WPCS adjustment */
         // Support the use of PHP namespaces.
@@ -169,7 +169,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         $parts     = explode('_', $basename);
         $sniffCode = $parts[0].'.'.$parts[2].'.'.$parts[3];
 
-        $testFileBase = $this->standardsDir.DIRECTORY_SEPARATOR.str_replace('_', DIRECTORY_SEPARATOR, $basename).'UnitTest.';
+        $testFileBase = $this->standardsDir.\DIRECTORY_SEPARATOR.str_replace('_', \DIRECTORY_SEPARATOR, $basename).'UnitTest.';
 
         // Get a list of all test files to check.
         $testFiles = $this->getTestFiles($testFileBase);
@@ -185,7 +185,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                 $cliValues = $this->getCliValues($filename);
                 self::$phpcs->cli->setCommandLineValues($cliValues);
                 $phpcsFile = self::$phpcs->processFile($testFile);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->fail('An unexpected exception has been caught: '.$e->getMessage());
             }
 
@@ -214,7 +214,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         }//end foreach
 
         if (empty($failureMessages) === false) {
-            $this->fail(implode(PHP_EOL, $failureMessages));
+            $this->fail(implode(\PHP_EOL, $failureMessages));
         }
 
     }//end runTest()
@@ -237,11 +237,11 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         $expectedErrors   = $this->getErrorList(basename($testFile));
         $expectedWarnings = $this->getWarningList(basename($testFile));
 
-        if (is_array($expectedErrors) === false) {
+        if (\is_array($expectedErrors) === false) {
             throw new PHP_CodeSniffer_Exception('getErrorList() must return an array');
         }
 
-        if (is_array($expectedWarnings) === false) {
+        if (\is_array($expectedWarnings) === false) {
             throw new PHP_CodeSniffer_Exception('getWarningList() must return an array');
         }
 
@@ -276,12 +276,12 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                     $errorsTemp[] = $foundError['message'].' ('.$foundError['source'].')';
 
                     $source = $foundError['source'];
-                    if (in_array($source, $GLOBALS['PHP_CODESNIFFER_SNIFF_CODES']) === false) {
+                    if (\in_array($source, $GLOBALS['PHP_CODESNIFFER_SNIFF_CODES']) === false) {
                         $GLOBALS['PHP_CODESNIFFER_SNIFF_CODES'][] = $source;
                     }
 
                     if ($foundError['fixable'] === true
-                        && in_array($source, $GLOBALS['PHP_CODESNIFFER_FIXABLE_CODES']) === false
+                        && \in_array($source, $GLOBALS['PHP_CODESNIFFER_FIXABLE_CODES']) === false
                     ) {
                         $GLOBALS['PHP_CODESNIFFER_FIXABLE_CODES'][] = $source;
                     }
@@ -362,8 +362,8 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
         ksort($allProblems);
 
         foreach ($allProblems as $line => $problems) {
-            $numErrors        = count($problems['found_errors']);
-            $numWarnings      = count($problems['found_warnings']);
+            $numErrors        = \count($problems['found_errors']);
+            $numWarnings      = \count($problems['found_warnings']);
             $expectedErrors   = $problems['expected_errors'];
             $expectedWarnings = $problems['expected_warnings'];
 
@@ -380,7 +380,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                     $foundMessage    .= "$numErrors error(s)";
                     if ($numErrors !== 0) {
                         $foundString .= 'error(s)';
-                        $errors      .= implode(PHP_EOL.' -> ', $problems['found_errors']);
+                        $errors      .= implode(\PHP_EOL.' -> ', $problems['found_errors']);
                     }
 
                     if ($expectedWarnings !== $numWarnings) {
@@ -400,16 +400,16 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
                     if ($numWarnings !== 0) {
                         $foundString .= 'warning(s)';
                         if (empty($errors) === false) {
-                            $errors .= PHP_EOL.' -> ';
+                            $errors .= \PHP_EOL.' -> ';
                         }
 
-                        $errors .= implode(PHP_EOL.' -> ', $problems['found_warnings']);
+                        $errors .= implode(\PHP_EOL.' -> ', $problems['found_warnings']);
                     }
                 }
 
                 $fullMessage = "$lineMessage $expectedMessage $foundMessage.";
                 if ($errors !== '') {
-                    $fullMessage .= " The $foundString found were:".PHP_EOL." -> $errors";
+                    $fullMessage .= " The $foundString found were:".\PHP_EOL." -> $errors";
                 }
 
                 $failureMessages[] = $fullMessage;

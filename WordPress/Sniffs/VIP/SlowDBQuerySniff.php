@@ -23,77 +23,54 @@ use WordPress\AbstractArrayAssignmentRestrictionsSniff;
  *                 comment, replacing the 'tax_query' whitelist comment which is now
  *                 deprecated.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 1.0.0  This sniff has been moved to the `DB` category.
+ *                    This file remains for now to prevent BC breaks.
  */
-class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
+class SlowDBQuerySniff extends \WordPress\Sniffs\DB\SlowDBQuerySniff {
 
 	/**
-	 * Groups of variables to restrict.
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * @return array
+	 * @since 1.0.0
+	 *
+	 * @var array
 	 */
-	public function getGroups() {
-		return array(
-			'slow_db_query' => array(
-				'type'    => 'warning',
-				'message' => 'Detected usage of %s, possible slow query.',
-				'keys'    => array(
-					'tax_query',
-					'meta_query',
-					'meta_key',
-					'meta_value',
-				),
-			),
-		);
-	}
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
+	 * Don't use.
 	 *
-	 * @since 0.10.0
+	 * @deprecated 1.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
+	 * @return void|int
 	 */
 	public function process_token( $stackPtr ) {
-
-		if ( $this->has_whitelist_comment( 'slow query', $stackPtr ) ) {
-			return;
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.SlowDBQuery" sniff has been renamed to "WordPress.DB.SlowDBQuery". Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
 		}
 
-		if ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
-			/*
-			 * Only throw the warning about a deprecated comment when the sniff would otherwise
-			 * have been triggered on the array key.
-			 */
-			if ( in_array( $this->tokens[ $stackPtr ]['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
-				$this->phpcsFile->addWarning(
-					'The "tax_query" whitelist comment is deprecated in favor of the "slow query" whitelist comment.',
-					$stackPtr,
-					'DeprecatedWhitelistFlagFound'
-				);
-			}
-
-			return;
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.SlowDBQuery" sniff has been renamed to "WordPress.DB.SlowDBQuery". Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
 		}
 
 		return parent::process_token( $stackPtr );
 	}
 
-	/**
-	 * Callback to process each confirmed key, to check value.
-	 * This must be extended to add the logic to check assignment value.
-	 *
-	 * @param  string $key   Array index / key.
-	 * @param  mixed  $val   Assigned value.
-	 * @param  int    $line  Token line.
-	 * @param  array  $group Group definition.
-	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
-	 *                       with custom error message passed to ->process().
-	 */
-	public function callback( $key, $val, $line, $group ) {
-		return true;
-	}
-
-} // End class.
+}

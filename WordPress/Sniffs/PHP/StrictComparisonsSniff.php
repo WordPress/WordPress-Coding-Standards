@@ -33,10 +33,9 @@ class StrictComparisonsSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_IS_EQUAL,
-			T_IS_NOT_EQUAL,
+			\T_IS_EQUAL,
+			\T_IS_NOT_EQUAL,
 		);
-
 	}
 
 	/**
@@ -52,7 +51,6 @@ class StrictComparisonsSniff extends Sniff {
 			$error = 'Found: ' . $this->tokens[ $stackPtr ]['content'] . '. Use strict comparisons (=== or !==).';
 			$this->phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
 		}
-
 	}
 
-} // End class.
+}

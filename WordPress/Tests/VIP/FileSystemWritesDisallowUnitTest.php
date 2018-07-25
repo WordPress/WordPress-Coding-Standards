@@ -52,7 +52,6 @@ class FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest {
 			36 => 1,
 			37 => 1,
 		);
-
 	}
 
 	/**
@@ -61,8 +60,9 @@ class FileSystemWritesDisallowUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
-
+		return array(
+			1 => 2,
+		);
 	}
 
-} // End class.
+}

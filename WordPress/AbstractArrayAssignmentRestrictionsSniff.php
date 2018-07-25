@@ -29,9 +29,13 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * Example: 'foo,bar'
 	 *
-	 * @var string Comma-delimited group list.
+	 * @since 0.3.0
+	 * @since 1.0.0 This property now expects to be passed an array.
+	 *              Previously a comma-delimited string was expected.
+	 *
+	 * @var array
 	 */
-	public $exclude = '';
+	public $exclude = array();
 
 	/**
 	 * Groups of variable data to check against.
@@ -72,12 +76,11 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		}
 
 		return array(
-			T_DOUBLE_ARROW,
-			T_CLOSE_SQUARE_BRACKET,
-			T_CONSTANT_ENCAPSED_STRING,
-			T_DOUBLE_QUOTED_STRING,
+			\T_DOUBLE_ARROW,
+			\T_CLOSE_SQUARE_BRACKET,
+			\T_CONSTANT_ENCAPSED_STRING,
+			\T_DOUBLE_QUOTED_STRING,
 		);
-
 	}
 
 	/**
@@ -138,9 +141,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-			$equal = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
-			if ( T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
+		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
+			$equal = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+			if ( \T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				return; // This is not an assignment!
 			}
 		}
@@ -153,22 +156,22 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		 * $foo = array( 'bar' => 'taz' );
 		 * $foo['bar'] = $taz;
 		 */
-		if ( in_array( $token['code'], array( T_CLOSE_SQUARE_BRACKET, T_DOUBLE_ARROW ), true ) ) {
+		if ( \in_array( $token['code'], array( \T_CLOSE_SQUARE_BRACKET, \T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
-			if ( T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-				$operator = $this->phpcsFile->findNext( T_EQUAL, ( $stackPtr + 1 ) );
+			if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
+				$operator = $this->phpcsFile->findNext( \T_EQUAL, ( $stackPtr + 1 ) );
 			}
 
-			$keyIdx = $this->phpcsFile->findPrevious( array( T_WHITESPACE, T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
+			$keyIdx = $this->phpcsFile->findPrevious( array( \T_WHITESPACE, \T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
 			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
 				$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
-				$valStart       = $this->phpcsFile->findNext( array( T_WHITESPACE ), ( $operator + 1 ), null, true );
-				$valEnd         = $this->phpcsFile->findNext( array( T_COMMA, T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
+				$valStart       = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $operator + 1 ), null, true );
+				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 				$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
 				$val            = $this->strip_quotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
-		} elseif ( in_array( $token['code'], array( T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING ), true ) ) {
+		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 			// $foo = 'bar=taz&other=thing';
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', $this->strip_quotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
@@ -194,11 +197,11 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				foreach ( $assignments as $occurance ) {
 					list( $val, $line ) = $occurance;
 
-					if ( ! in_array( $key, $group['keys'], true ) ) {
+					if ( ! \in_array( $key, $group['keys'], true ) ) {
 						continue;
 					}
 
-					$output = call_user_func( $callback, $key, $val, $line, $group );
+					$output = \call_user_func( $callback, $key, $val, $line, $group );
 
 					if ( ! isset( $output ) || false === $output ) {
 						continue;
@@ -218,8 +221,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				}
 			}
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Callback to process each confirmed key, to check value.
@@ -235,4 +237,4 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 */
 	abstract public function callback( $key, $val, $line, $group );
 
-} // End class.
+}

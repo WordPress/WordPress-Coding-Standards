@@ -11,6 +11,7 @@ namespace WordPress\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer_Standards_AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer_File as File;
+use PHP_CodeSniffer_Tokens as Tokens;
 use WordPress\Sniff;
 
 /**
@@ -23,8 +24,10 @@ use WordPress\Sniff;
  * @since   0.9.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * Last synced with base class July 2014 at commit ed257ca0e56ad86cd2a4d6fa38ce0b95141c824f.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
+ * Last synced with base class June 2018 at commit 78ddbae97cac078f09928bf89e3ab9e53ad2ace0.
+ * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
+ * One change from upstream deferred till later (PHPCS 3.3.0+):
+ * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-364282100
  */
 class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
@@ -150,13 +153,13 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			return;
 		}
 
-		$obj_operator = $phpcs_file->findNext( array( T_WHITESPACE ), ( $stack_ptr + 1 ), null, true );
-		if ( T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+		$obj_operator = $phpcs_file->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
+		if ( \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
 			// Check to see if we are using a variable from an object.
-			$var = $phpcs_file->findNext( array( T_WHITESPACE ), ( $obj_operator + 1 ), null, true );
-			if ( T_STRING === $tokens[ $var ]['code'] ) {
-				$bracket = $phpcs_file->findNext( array( T_WHITESPACE ), ( $var + 1 ), null, true );
-				if ( T_OPEN_PARENTHESIS !== $tokens[ $bracket ]['code'] ) {
+			$var = $phpcs_file->findNext( Tokens::$emptyTokens, ( $obj_operator + 1 ), null, true );
+			if ( \T_STRING === $tokens[ $var ]['code'] ) {
+				$bracket = $phpcs_file->findNext( Tokens::$emptyTokens, ( $var + 1 ), null, true );
+				if ( \T_OPEN_PARENTHESIS !== $tokens[ $bracket ]['code'] ) {
 					$obj_var_name = $tokens[ $var ]['content'];
 
 					// There is no way for us to know if the var is public or
@@ -177,8 +180,8 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		$in_class     = false;
-		$obj_operator = $phpcs_file->findPrevious( array( T_WHITESPACE ), ( $stack_ptr - 1 ), null, true );
-		if ( T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] || T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+		$obj_operator = $phpcs_file->findPrevious( Tokens::$emptyTokens, ( $stack_ptr - 1 ), null, true );
+		if ( \T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] || \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
 			// The variable lives within a class, and is referenced like
 			// this: MyClass::$_variable or $class->variable.
 			$in_class = true;
@@ -206,7 +209,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
 			}
 		}
-
 	}
 
 	/**
@@ -240,7 +242,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			$error = 'Member variable "%s" is not in valid snake_case format.';
 			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
 		}
-
 	}
 
 	/**
@@ -279,7 +280,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -333,4 +333,4 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 	}
 
-} // End class.
+}

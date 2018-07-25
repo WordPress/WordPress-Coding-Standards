@@ -59,20 +59,19 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * @var array
 	 */
 	private $preceding_tokens_to_ignore = array(
-		T_NAMESPACE       => true,
-		T_USE             => true,
-		T_CLASS           => true,
-		T_TRAIT           => true,
-		T_INTERFACE       => true,
-		T_EXTENDS         => true,
-		T_IMPLEMENTS      => true,
-		T_NEW             => true,
-		T_FUNCTION        => true,
-		T_DOUBLE_COLON    => true,
-		T_OBJECT_OPERATOR => true,
-		T_INSTANCEOF      => true,
-		T_GOTO            => true,
-
+		\T_NAMESPACE       => true,
+		\T_USE             => true,
+		\T_CLASS           => true,
+		\T_TRAIT           => true,
+		\T_INTERFACE       => true,
+		\T_EXTENDS         => true,
+		\T_IMPLEMENTS      => true,
+		\T_NEW             => true,
+		\T_FUNCTION        => true,
+		\T_DOUBLE_COLON    => true,
+		\T_OBJECT_OPERATOR => true,
+		\T_INSTANCEOF      => true,
+		\T_GOTO            => true,
 	);
 
 	/**
@@ -88,7 +87,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	public function process_token( $stackPtr ) {
 		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
 			// Disallow excluding function groups for this sniff.
-			$this->exclude = '';
+			$this->exclude = array();
 
 			return parent::process_token( $stackPtr );
 
@@ -114,7 +113,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-		if ( false !== $next && T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code'] ) {
+		if ( false !== $next && \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code'] ) {
 			// Function call or declaration.
 			return;
 		}
@@ -126,15 +125,15 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( false !== $prev
-			&& T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
-			&& T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
+			&& \T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
+			&& \T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
 		) {
 			// Namespaced constant of the same name.
 			return;
 		}
 
 		if ( false !== $prev
-			&& T_CONST === $this->tokens[ $prev ]['code']
+			&& \T_CONST === $this->tokens[ $prev ]['code']
 			&& true === $this->is_class_constant( $prev )
 		) {
 			// Class constant of the same name.
@@ -151,14 +150,14 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$first_on_line = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
-		if ( false !== $first_on_line && T_USE === $this->tokens[ $first_on_line ]['code'] ) {
+		if ( false !== $first_on_line && \T_USE === $this->tokens[ $first_on_line ]['code'] ) {
 			$next_on_line = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $first_on_line + 1 ), null, true );
 			if ( false !== $next_on_line ) {
-				if ( ( T_STRING === $this->tokens[ $next_on_line ]['code']
+				if ( ( \T_STRING === $this->tokens[ $next_on_line ]['code']
 						&& 'const' === $this->tokens[ $next_on_line ]['content'] )
-					|| T_CONST === $this->tokens[ $next_on_line ]['code'] // Happens in some PHPCS versions.
+					|| \T_CONST === $this->tokens[ $next_on_line ]['code'] // Happens in some PHPCS versions.
 				) {
-					$has_ns_sep = $this->phpcsFile->findNext( T_NS_SEPARATOR, ( $next_on_line + 1 ), $stackPtr );
+					$has_ns_sep = $this->phpcsFile->findNext( \T_NS_SEPARATOR, ( $next_on_line + 1 ), $stackPtr );
 					if ( false !== $has_ns_sep ) {
 						// Namespaced const (group) use statement.
 						return;
@@ -218,4 +217,4 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-} // End class.
+}

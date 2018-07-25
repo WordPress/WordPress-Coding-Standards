@@ -37,6 +37,7 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		'some_file.inc'                              => 1,
 		'SomeFile.inc'                               => 1,
 		'some-File.inc'                              => 1,
+		'SomeView.inc'                               => 1,
 
 		// Class file names.
 		'my-class.inc'                               => 1,
@@ -55,12 +56,35 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		'ClassNonStrictClass.inc'                    => 1,
 
 		/*
+		 * In /FileNameUnitTests/PHPCSAnnotations.
+		 */
+
+		// Non-strict class names still have to comply with lowercase hyphenated.
+		'blanket-disable.inc'                        => 0,
+		'non-relevant-disable.inc'                   => 1,
+		'partial-file-disable.inc'                   => 1,
+		'rule-disable.inc'                           => 0,
+		'wordpress-disable.inc'                      => 0,
+
+		/*
 		 * In /FileNameUnitTests/TestFiles.
 		 */
 		'test-sample-phpunit.inc'                    => 0,
 		'test-sample-phpunit6.inc'                   => 0,
 		'test-sample-wpunit.inc'                     => 0,
 		'test-sample-custom-unit.inc'                => 0,
+		'test-sample-namespaced-declaration.1.inc'   => 0,
+		'test-sample-namespaced-declaration.2.inc'   => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-declaration.3.inc'   => 1, // Wrong namespace.
+		'test-sample-namespaced-declaration.4.inc'   => 1, // Non-namespaced vs namespaced.
+		'test-sample-global-namespace-extends.1.inc' => 0, // Prefixed user input.
+		'test-sample-global-namespace-extends.2.inc' => 1, // Non-namespaced vs namespaced.
+		'test-sample-extends-with-use.inc'           => 0,
+		'test-sample-namespaced-extends.1.inc'       => 0,
+		'test-sample-namespaced-extends.2.inc'       => 1, // Wrong namespace.
+		'test-sample-namespaced-extends.3.inc'       => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-extends.4.inc'       => 1, // Non-namespaced vs namespaced.
+		'test-sample-namespaced-extends.5.inc'       => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.
@@ -94,16 +118,28 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	 * @return string[]
 	 */
 	protected function getTestFiles( $testFileBase ) {
-		$sep        = DIRECTORY_SEPARATOR;
-		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', GLOB_BRACE );
+
+		// Work around for PHP 5.3/PHPCS 2.x.
+		if ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+			unset( $this->expected_results['SomeView.inc'] );
+		}
+
+		// Work around for PHPCS < 3.2.0. The disables will be diregarded.
+		if ( ! \defined( '\T_PHPCS_DISABLE' ) && ! \defined( '\T_PHPCS_ENABLE' ) ) {
+			$this->expected_results['blanket-disable.inc']   = 1;
+			$this->expected_results['rule-disable.inc']      = 1;
+			$this->expected_results['wordpress-disable.inc'] = 1;
+		}
+
+		$sep        = \DIRECTORY_SEPARATOR;
+		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', \GLOB_BRACE );
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
 		}
 
 		return array( $testFileBase . '.inc' );
-
-	} // End getTestFiles().
+	}
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -125,11 +161,24 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array();
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'SomeView.inc':
+			case 'some-view.inc':
+				$expected = array();
+				if ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
+					$expected[1] = 1; // Internal.NoCode warning on PHP 5.3 icw short open tags off.
+				}
 
+				return $expected;
+
+			default:
+				return array();
+		}
 	}
 
-} // End class.
+}

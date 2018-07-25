@@ -38,7 +38,7 @@ class DisallowInlineTabsSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_OPEN_TAG,
+			\T_OPEN_TAG,
 		);
 	}
 
@@ -55,9 +55,9 @@ class DisallowInlineTabsSniff extends Sniff {
 		}
 
 		$check_tokens = array(
-			T_WHITESPACE             => true,
-			T_DOC_COMMENT_WHITESPACE => true,
-			T_DOC_COMMENT_STRING     => true,
+			\T_WHITESPACE             => true,
+			\T_DOC_COMMENT_WHITESPACE => true,
+			\T_DOC_COMMENT_STRING     => true,
 		);
 
 		for ( $i = ( $stackPtr + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
@@ -99,7 +99,6 @@ class DisallowInlineTabsSniff extends Sniff {
 
 		// Ignore the rest of the file.
 		return ( $this->phpcsFile->numTokens + 1 );
+	}
 
-	} // End process().
-
-} // End class.
+}

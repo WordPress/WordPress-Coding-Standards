@@ -74,7 +74,7 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		// Check if the strict check is actually needed.
 		if ( false === $this->target_functions[ $matched_content ] ) {
-			if ( count( $parameters ) === 1 ) {
+			if ( \count( $parameters ) === 1 ) {
 				return;
 			}
 		}
@@ -101,19 +101,4 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-	/**
-	 * Process the function if no parameters were found.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
-	 *
-	 * @return void
-	 */
-	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {
-		$this->phpcsFile->addError( 'Missing arguments to %s.', $stackPtr, 'MissingArguments', array( $matched_content ) );
-	}
-
-} // End class.
+}

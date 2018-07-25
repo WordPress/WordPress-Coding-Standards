@@ -14,7 +14,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Disallow the changing of timezone.
  *
- * @link    http://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/
+ * @link    https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -22,32 +22,54 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
  *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 1.0.0  This sniff has been moved to the `WP` category.
+ *                    This file remains for now to prevent BC breaks.
  */
-class TimezoneChangeSniff extends AbstractFunctionRestrictionsSniff {
+class TimezoneChangeSniff extends \WordPress\Sniffs\WP\TimezoneChangeSniff {
 
 	/**
-	 * Groups of functions to restrict.
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * Example: groups => array(
-	 *  'lambda' => array(
-	 *      'type'      => 'error' | 'warning',
-	 *      'message'   => 'Use anonymous functions instead please!',
-	 *      'functions' => array( 'file_get_contents', 'create_function' ),
-	 *  )
-	 * )
+	 * @since 1.0.0
 	 *
-	 * @return array
+	 * @var array
 	 */
-	public function getGroups() {
-		return array(
-			'timezone_change' => array(
-				'type'      => 'error',
-				'message'   => 'Using %s() and similar isn\'t allowed, instead use WP internal timezone support.',
-				'functions' => array(
-					'date_default_timezone_set',
-				),
-			),
-		);
-	} // End getGroups().
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
-} // End class.
+	/**
+	 * Don't use.
+	 *
+	 * @deprecated 1.0.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void|int
+	 */
+	public function process_token( $stackPtr ) {
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.TimezoneChange" sniff has been renamed to "WordPress.WP.TimezoneChange". Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.TimezoneChange" sniff has been renamed to "WordPress.WP.TimezoneChange". Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
+
+		return parent::process_token( $stackPtr );
+	}
+
+}

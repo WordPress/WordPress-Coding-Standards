@@ -73,11 +73,11 @@ class ControlStructureSpacingSniff extends Sniff {
 	 * @var array
 	 */
 	private $ignore_extra_space_after_open_paren = array(
-		T_FUNCTION => true,
-		T_CLOSURE  => true,
-		T_DO       => true,
-		T_ELSE     => true,
-		T_TRY      => true,
+		\T_FUNCTION => true,
+		\T_CLOSURE  => true,
+		\T_DO       => true,
+		\T_ELSE     => true,
+		\T_TRY      => true,
 	);
 
 	/**
@@ -87,21 +87,20 @@ class ControlStructureSpacingSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_IF,
-			T_WHILE,
-			T_FOREACH,
-			T_FOR,
-			T_SWITCH,
-			T_DO,
-			T_ELSE,
-			T_ELSEIF,
-			T_FUNCTION,
-			T_CLOSURE,
-			T_USE,
-			T_TRY,
-			T_CATCH,
+			\T_IF,
+			\T_WHILE,
+			\T_FOREACH,
+			\T_FOR,
+			\T_SWITCH,
+			\T_DO,
+			\T_ELSE,
+			\T_ELSEIF,
+			\T_FUNCTION,
+			\T_CLOSURE,
+			\T_USE,
+			\T_TRY,
+			\T_CATCH,
 		);
-
 	}
 
 	/**
@@ -114,9 +113,9 @@ class ControlStructureSpacingSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		$this->spaces_before_closure_open_paren = (int) $this->spaces_before_closure_open_paren;
 
-		if ( isset( $this->tokens[ ( $stackPtr + 1 ) ] ) && T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code']
-			&& ! ( T_ELSE === $this->tokens[ $stackPtr ]['code'] && T_COLON === $this->tokens[ ( $stackPtr + 1 ) ]['code'] )
-			&& ! ( T_CLOSURE === $this->tokens[ $stackPtr ]['code']
+		if ( isset( $this->tokens[ ( $stackPtr + 1 ) ] ) && \T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code']
+			&& ! ( \T_ELSE === $this->tokens[ $stackPtr ]['code'] && \T_COLON === $this->tokens[ ( $stackPtr + 1 ) ]['code'] )
+			&& ! ( \T_CLOSURE === $this->tokens[ $stackPtr ]['code']
 				&& 0 >= $this->spaces_before_closure_open_paren )
 		) {
 			$error = 'Space after opening control structure is required';
@@ -129,10 +128,10 @@ class ControlStructureSpacingSniff extends Sniff {
 
 		if ( ! isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
 
-			if ( T_USE === $this->tokens[ $stackPtr ]['code'] && 'closure' === $this->get_use_type( $stackPtr ) ) {
-				$scopeOpener = $this->phpcsFile->findNext( T_OPEN_CURLY_BRACKET, ( $stackPtr + 1 ) );
+			if ( \T_USE === $this->tokens[ $stackPtr ]['code'] && 'closure' === $this->get_use_type( $stackPtr ) ) {
+				$scopeOpener = $this->phpcsFile->findNext( \T_OPEN_CURLY_BRACKET, ( $stackPtr + 1 ) );
 				$scopeCloser = $this->tokens[ $scopeOpener ]['scope_closer'];
-			} elseif ( T_WHILE !== $this->tokens[ $stackPtr ]['code'] ) {
+			} elseif ( \T_WHILE !== $this->tokens[ $stackPtr ]['code'] ) {
 				return;
 			}
 		} else {
@@ -141,11 +140,11 @@ class ControlStructureSpacingSniff extends Sniff {
 		}
 
 		// Alternative syntax.
-		if ( isset( $scopeOpener ) && T_COLON === $this->tokens[ $scopeOpener ]['code'] ) {
+		if ( isset( $scopeOpener ) && \T_COLON === $this->tokens[ $scopeOpener ]['code'] ) {
 
 			if ( 'required' === $this->space_before_colon ) {
 
-				if ( T_WHITESPACE !== $this->tokens[ ( $scopeOpener - 1 ) ]['code'] ) {
+				if ( \T_WHITESPACE !== $this->tokens[ ( $scopeOpener - 1 ) ]['code'] ) {
 					$error = 'Space between opening control structure and T_COLON is required';
 					$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceBetweenStructureColon' );
 
@@ -155,7 +154,7 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 			} elseif ( 'forbidden' === $this->space_before_colon ) {
 
-				if ( T_WHITESPACE === $this->tokens[ ( $scopeOpener - 1 ) ]['code'] ) {
+				if ( \T_WHITESPACE === $this->tokens[ ( $scopeOpener - 1 ) ]['code'] ) {
 					$error = 'Extra space between opening control structure and T_COLON found';
 					$fix   = $this->phpcsFile->addFixableError( $error, ( $scopeOpener - 1 ), 'SpaceBetweenStructureColon' );
 
@@ -169,13 +168,13 @@ class ControlStructureSpacingSniff extends Sniff {
 		$parenthesisOpener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		// If this is a function declaration.
-		if ( T_FUNCTION === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_FUNCTION === $this->tokens[ $stackPtr ]['code'] ) {
 
-			if ( T_STRING === $this->tokens[ $parenthesisOpener ]['code'] ) {
+			if ( \T_STRING === $this->tokens[ $parenthesisOpener ]['code'] ) {
 
 				$function_name_ptr = $parenthesisOpener;
 
-			} elseif ( T_BITWISE_AND === $this->tokens[ $parenthesisOpener ]['code'] ) {
+			} elseif ( \T_BITWISE_AND === $this->tokens[ $parenthesisOpener ]['code'] ) {
 
 				// This function returns by reference (function &function_name() {}).
 				$parenthesisOpener = $this->phpcsFile->findNext(
@@ -211,7 +210,7 @@ class ControlStructureSpacingSniff extends Sniff {
 					}
 				}
 			}
-		} elseif ( T_CLOSURE === $this->tokens[ $stackPtr ]['code'] ) {
+		} elseif ( \T_CLOSURE === $this->tokens[ $stackPtr ]['code'] ) {
 
 			// Check if there is a use () statement.
 			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_closer'] ) ) {
@@ -226,19 +225,17 @@ class ControlStructureSpacingSniff extends Sniff {
 				);
 
 				// If it is, we set that as the "scope opener".
-				if ( T_USE === $this->tokens[ $usePtr ]['code'] ) {
+				if ( \T_USE === $this->tokens[ $usePtr ]['code'] ) {
 					$scopeOpener = $usePtr;
 				}
 			}
 		}
 
-		if (
-			T_COLON !== $this->tokens[ $parenthesisOpener ]['code']
-			&& T_FUNCTION !== $this->tokens[ $stackPtr ]['code']
+		if ( \T_COLON !== $this->tokens[ $parenthesisOpener ]['code']
+			&& \T_FUNCTION !== $this->tokens[ $stackPtr ]['code']
 		) {
 
-			if (
-				T_CLOSURE === $this->tokens[ $stackPtr ]['code']
+			if ( \T_CLOSURE === $this->tokens[ $stackPtr ]['code']
 				&& 0 === $this->spaces_before_closure_open_paren
 			) {
 
@@ -253,7 +250,7 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 			} elseif (
 				(
-					T_CLOSURE !== $this->tokens[ $stackPtr ]['code']
+					\T_CLOSURE !== $this->tokens[ $stackPtr ]['code']
 					|| 1 === $this->spaces_before_closure_open_paren
 				)
 				&& ( $stackPtr + 1 ) === $parenthesisOpener
@@ -269,8 +266,7 @@ class ControlStructureSpacingSniff extends Sniff {
 			}
 		}
 
-		if (
-			T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code']
+		if ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code']
 			&& ' ' !== $this->tokens[ ( $stackPtr + 1 ) ]['content']
 		) {
 			// Checking this: if [*](...) {}.
@@ -287,8 +283,8 @@ class ControlStructureSpacingSniff extends Sniff {
 			}
 		}
 
-		if ( T_CLOSE_PARENTHESIS !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['code'] ) {
-			if ( T_WHITESPACE !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['code'] ) {
+		if ( \T_CLOSE_PARENTHESIS !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['code'] ) {
+			if ( \T_WHITESPACE !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['code'] ) {
 				// Checking this: $value = my_function([*]...).
 				$error = 'No space after opening parenthesis is prohibited';
 				$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceAfterOpenParenthesis' );
@@ -320,10 +316,10 @@ class ControlStructureSpacingSniff extends Sniff {
 
 			$parenthesisCloser = $this->tokens[ $parenthesisOpener ]['parenthesis_closer'];
 
-			if ( T_CLOSE_PARENTHESIS !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['code'] ) {
+			if ( \T_CLOSE_PARENTHESIS !== $this->tokens[ ( $parenthesisOpener + 1 ) ]['code'] ) {
 
 				// Checking this: if (...[*]) {}.
-				if ( T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser - 1 ) ]['code'] ) {
+				if ( \T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser - 1 ) ]['code'] ) {
 					$error = 'No space before closing parenthesis is prohibited';
 					$fix   = $this->phpcsFile->addFixableError( $error, $parenthesisCloser, 'NoSpaceBeforeCloseParenthesis' );
 
@@ -347,9 +343,12 @@ class ControlStructureSpacingSniff extends Sniff {
 					}
 				}
 
-				if (
-					T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
-					&& ( isset( $scopeOpener ) && T_COLON !== $this->tokens[ $scopeOpener ]['code'] )
+				if ( \T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
+					&& ! ( // Do NOT flag : immediately following ) for return types declarations.
+						\T_COLON === $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
+						&& in_array( $this->tokens[ $this->tokens[ $parenthesisCloser ]['parenthesis_owner'] ]['code'], array( \T_FUNCTION, \T_CLOSURE ), true )
+					)
+					&& ( isset( $scopeOpener ) && \T_COLON !== $this->tokens[ $scopeOpener ]['code'] )
 				) {
 					$error = 'Space between opening control structure and closing parenthesis is required';
 					$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'NoSpaceAfterCloseParenthesis' );
@@ -360,7 +359,10 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 			}
 
-			if ( isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
+			// Ignore this for function declarations. Handled by the OpeningFunctionBraceKernighanRitchie sniff.
+			if ( \T_FUNCTION !== $this->tokens[ $stackPtr ]['code']
+				&& \T_CLOSURE !== $this->tokens[ $stackPtr ]['code']
+				&& isset( $this->tokens[ $parenthesisOpener ]['parenthesis_owner'] )
 				&& ( isset( $scopeOpener )
 				&& $this->tokens[ $parenthesisCloser ]['line'] !== $this->tokens[ $scopeOpener ]['line'] )
 			) {
@@ -379,8 +381,7 @@ class ControlStructureSpacingSniff extends Sniff {
 				}
 				return;
 
-			} elseif (
-				T_WHITESPACE === $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
+			} elseif ( \T_WHITESPACE === $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
 				&& ' ' !== $this->tokens[ ( $parenthesisCloser + 1 ) ]['content']
 			) {
 
@@ -400,19 +401,19 @@ class ControlStructureSpacingSniff extends Sniff {
 		}
 
 		if ( false !== $this->blank_line_check && isset( $scopeOpener ) ) {
-			$firstContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
+			$firstContent = $this->phpcsFile->findNext( \T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
 
 			// We ignore spacing for some structures that tend to have their own rules.
 			$ignore = array(
-				T_FUNCTION             => true,
-				T_CLOSURE              => true,
-				T_CLASS                => true,
-				T_ANON_CLASS           => true,
-				T_INTERFACE            => true,
-				T_TRAIT                => true,
-				T_DOC_COMMENT_OPEN_TAG => true,
-				T_CLOSE_TAG            => true,
-				T_COMMENT              => true,
+				\T_FUNCTION             => true,
+				\T_CLOSURE              => true,
+				\T_CLASS                => true,
+				\T_ANON_CLASS           => true,
+				\T_INTERFACE            => true,
+				\T_TRAIT                => true,
+				\T_DOC_COMMENT_OPEN_TAG => true,
+				\T_CLOSE_TAG            => true,
+				\T_COMMENT              => true,
 			);
 
 			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
@@ -425,6 +426,9 @@ class ControlStructureSpacingSniff extends Sniff {
 					$this->phpcsFile->fixer->beginChangeset();
 
 					for ( $i = ( $scopeOpener + 1 ); $i < $firstContent; $i++ ) {
+						if ( $this->tokens[ $i ]['line'] === $this->tokens[ $firstContent ]['line'] ) {
+							break;
+						}
 						$this->phpcsFile->fixer->replaceToken( $i, '' );
 					}
 
@@ -434,7 +438,7 @@ class ControlStructureSpacingSniff extends Sniff {
 			}
 
 			if ( $firstContent !== $scopeCloser ) {
-				$lastContent = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
+				$lastContent = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
 
 				$lastNonEmptyContent = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $scopeCloser - 1 ), null, true );
 
@@ -448,7 +452,7 @@ class ControlStructureSpacingSniff extends Sniff {
 				) {
 					for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
 						if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
-							&& T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
+							&& \T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
 						) {
 							// TODO: Reporting error at empty line won't highlight it in IDE.
 							$error = 'Blank line found at end of control structure';
@@ -458,10 +462,22 @@ class ControlStructureSpacingSniff extends Sniff {
 								$this->phpcsFile->fixer->beginChangeset();
 
 								for ( $j = ( $lastContent + 1 ); $j < $scopeCloser; $j++ ) {
+									if ( $this->tokens[ $j ]['line'] === $this->tokens[ $scopeCloser ]['line'] ) {
+										break;
+									}
 									$this->phpcsFile->fixer->replaceToken( $j, '' );
 								}
 
-								$this->phpcsFile->fixer->addNewlineBefore( $scopeCloser );
+								/*
+								 * PHPCS annotations, like normal inline comments, are tokenized including
+								 * the new line at the end, so don't add any extra as it would cause a fixer
+								 * conflict.
+								 */
+								if ( \T_COMMENT !== $this->tokens[ $lastContent ]['code']
+									&& ! isset( $this->phpcsCommentTokens[ $this->tokens[ $lastContent ]['type'] ] ) ) {
+									$this->phpcsFile->fixer->addNewlineBefore( $j );
+								}
+
 								$this->phpcsFile->fixer->endChangeset();
 							}
 							break;
@@ -478,17 +494,19 @@ class ControlStructureSpacingSniff extends Sniff {
 
 		// {@internal This is just for the blank line check. Only whitespace should be considered,
 		// not "other" empty tokens.}}
-		$trailingContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $scopeCloser + 1 ), null, true );
+		$trailingContent = $this->phpcsFile->findNext( \T_WHITESPACE, ( $scopeCloser + 1 ), null, true );
 		if ( false === $trailingContent ) {
 			return;
 		}
 
-		if ( T_COMMENT === $this->tokens[ $trailingContent ]['code'] ) {
+		if ( \T_COMMENT === $this->tokens[ $trailingContent ]['code']
+			|| isset( $this->phpcsCommentTokens[ $this->tokens[ $trailingContent ]['type'] ] )
+		) {
 			// Special exception for code where the comment about
 			// an ELSE or ELSEIF is written between the control structures.
 			$nextCode = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
 
-			if ( T_ELSE === $this->tokens[ $nextCode ]['code'] || T_ELSEIF === $this->tokens[ $nextCode ]['code'] ) {
+			if ( \T_ELSE === $this->tokens[ $nextCode ]['code'] || \T_ELSEIF === $this->tokens[ $nextCode ]['code'] ) {
 				$trailingContent = $nextCode;
 			}
 
@@ -496,32 +514,32 @@ class ControlStructureSpacingSniff extends Sniff {
 			if ( $this->tokens[ $trailingContent ]['line'] === $this->tokens[ $scopeCloser ]['line'] ) {
 				if ( preg_match( '`^//[ ]?end`i', $this->tokens[ $trailingContent ]['content'], $matches ) > 0 ) {
 					$scopeCloser     = $trailingContent;
-					$trailingContent = $this->phpcsFile->findNext( T_WHITESPACE, ( $trailingContent + 1 ), null, true );
+					$trailingContent = $this->phpcsFile->findNext( \T_WHITESPACE, ( $trailingContent + 1 ), null, true );
 				}
 			}
 		}
 
-		if ( T_ELSE === $this->tokens[ $trailingContent ]['code'] && T_IF === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_ELSE === $this->tokens[ $trailingContent ]['code'] && \T_IF === $this->tokens[ $stackPtr ]['code'] ) {
 			// IF with ELSE.
 			return;
 		}
 
-		if ( T_WHILE === $this->tokens[ $trailingContent ]['code'] && T_DO === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_WHILE === $this->tokens[ $trailingContent ]['code'] && \T_DO === $this->tokens[ $stackPtr ]['code'] ) {
 			// DO with WHILE.
 			return;
 		}
 
-		if ( T_CLOSE_TAG === $this->tokens[ $trailingContent ]['code'] ) {
+		if ( \T_CLOSE_TAG === $this->tokens[ $trailingContent ]['code'] ) {
 			// At the end of the script or embedded code.
 			return;
 		}
 
 		if ( isset( $this->tokens[ $trailingContent ]['scope_condition'] )
-			&& T_CLOSE_CURLY_BRACKET === $this->tokens[ $trailingContent ]['code']
+			&& \T_CLOSE_CURLY_BRACKET === $this->tokens[ $trailingContent ]['code']
 		) {
 			// Another control structure's closing brace.
 			$owner = $this->tokens[ $trailingContent ]['scope_condition'];
-			if ( in_array( $this->tokens[ $owner ]['code'], array( T_FUNCTION, T_CLOSURE, T_CLASS, T_ANON_CLASS, T_INTERFACE, T_TRAIT ), true ) ) {
+			if ( \in_array( $this->tokens[ $owner ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ), true ) ) {
 				// The next content is the closing brace of a function, class, interface or trait
 				// so normal function/class rules apply and we can ignore it.
 				return;
@@ -542,14 +560,15 @@ class ControlStructureSpacingSniff extends Sniff {
 					}
 
 					// TODO: Instead a separate error should be triggered when content comes right after closing brace.
-					if ( T_COMMENT !== $this->tokens[ $scopeCloser ]['code'] ) {
+					if ( \T_COMMENT !== $this->tokens[ $scopeCloser ]['code']
+						&& isset( $this->phpcsCommentTokens[ $this->tokens[ $scopeCloser ]['type'] ] ) === false
+					) {
 						$this->phpcsFile->fixer->addNewlineBefore( $trailingContent );
 					}
 					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
+	}
 
-	} // End process_token().
-
-} // End class.
+}

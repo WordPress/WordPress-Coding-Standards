@@ -31,9 +31,13 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * Example: 'switch_to_blog,user_meta'
 	 *
-	 * @var string Comma-delimited group list.
+	 * @since 0.3.0
+	 * @since 1.0.0 This property now expects to be passed an array.
+	 *              Previously a comma-delimited string was expected.
+	 *
+	 * @var array
 	 */
-	public $exclude = '';
+	public $exclude = array();
 
 	/**
 	 * Groups of function data to check against.
@@ -118,7 +122,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return array(
-			T_STRING,
+			\T_STRING,
 		);
 	}
 
@@ -161,7 +165,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		// Create one "super-regex" to allow for initial filtering.
-		$all_items                = call_user_func_array( 'array_merge', $all_items );
+		$all_items                = \call_user_func_array( 'array_merge', $all_items );
 		$all_items                = implode( '|', array_unique( $all_items ) );
 		$this->prelim_check_regex = sprintf( $this->regex_pattern, $all_items );
 
@@ -195,8 +199,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 			return $this->check_for_matches( $stackPtr );
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Verify is the current token is a function call.
@@ -210,15 +213,17 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	public function is_targetted_token( $stackPtr ) {
 
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
 			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 			if ( false !== $prev ) {
 				// Skip sniffing if calling a same-named method, or on function definitions.
 				$skipped = array(
-					T_FUNCTION        => T_FUNCTION,
-					T_DOUBLE_COLON    => T_DOUBLE_COLON,
-					T_OBJECT_OPERATOR => T_OBJECT_OPERATOR,
+					\T_FUNCTION        => \T_FUNCTION,
+					\T_CLASS           => \T_CLASS,
+					\T_AS              => \T_AS, // Use declaration alias.
+					\T_DOUBLE_COLON    => \T_DOUBLE_COLON,
+					\T_OBJECT_OPERATOR => \T_OBJECT_OPERATOR,
 				);
 
 				if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
@@ -226,9 +231,9 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				}
 
 				// Skip namespaced functions, ie: \foo\bar() not \bar().
-				if ( T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
+				if ( \T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
 					$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
-					if ( false !== $pprev && T_STRING === $this->tokens[ $pprev ]['code'] ) {
+					if ( false !== $pprev && \T_STRING === $this->tokens[ $pprev ]['code'] ) {
 						return false;
 					}
 				}
@@ -238,8 +243,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return false;
-
-	} // End is_targetted_token().
+	}
 
 	/**
 	 * Verify if the current token is one of the targetted functions.
@@ -275,8 +279,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return min( $skip_to );
-
-	} // End check_for_matches().
+	}
 
 	/**
 	 * Process a matched token.
@@ -301,7 +304,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		);
 
 		return;
-	} // End process_matched_token().
+	}
 
 	/**
 	 * Prepare the function name for use in a regular expression.
@@ -316,11 +319,11 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @return string Regex escaped function name.
 	 */
 	protected function prepare_name_for_regex( $function ) {
-		$function = str_replace( array( '.*', '*' ), '#', $function ); // Replace wildcards with placeholder.
+		$function = str_replace( array( '.*', '*' ), '@@', $function ); // Replace wildcards with placeholder.
 		$function = preg_quote( $function, '`' );
-		$function = str_replace( '#', '.*', $function ); // Replace placeholder with regex wildcard.
+		$function = str_replace( '@@', '.*', $function ); // Replace placeholder with regex wildcard.
 
 		return $function;
 	}
 
-} // End class.
+}

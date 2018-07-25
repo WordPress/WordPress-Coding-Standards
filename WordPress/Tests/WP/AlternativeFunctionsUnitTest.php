@@ -28,7 +28,6 @@ class AlternativeFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -46,7 +45,7 @@ class AlternativeFunctionsUnitTest extends AbstractSniffUnitTest {
 
 			12 => 1,
 
-			14 => 2,
+			14 => 1,
 
 			16 => 1,
 			17 => 1,
@@ -56,8 +55,19 @@ class AlternativeFunctionsUnitTest extends AbstractSniffUnitTest {
 			21 => 1,
 			22 => 1,
 			23 => 1,
-		);
+			24 => 1,
+			25 => 1,
+			26 => 1,
+			27 => 1,
+			28 => 1,
 
+			40 => 1,
+
+			44 => 1,
+			46 => 1,
+			47 => 1,
+			49 => 1,
+		);
 	}
 
-} // End class.
+}

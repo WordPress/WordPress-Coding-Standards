@@ -58,4 +58,4 @@ class ArrayDeclarationSniff {
 	 */
 	public function process( File $phpcsFile, $stackPtr ) {}
 
-} // End class.
+}

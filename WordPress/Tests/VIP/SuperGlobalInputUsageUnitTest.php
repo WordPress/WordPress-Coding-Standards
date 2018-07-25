@@ -28,7 +28,6 @@ class SuperGlobalInputUsageUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -38,10 +37,11 @@ class SuperGlobalInputUsageUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
+			1  => 1,
 			3  => 1,
 			13 => 1,
 			15 => 1,
 		);
 	}
 
-} // End class.
+}

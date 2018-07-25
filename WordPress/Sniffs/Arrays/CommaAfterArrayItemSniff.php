@@ -38,8 +38,8 @@ class CommaAfterArrayItemSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
+			\T_ARRAY,
+			\T_OPEN_SHORT_ARRAY,
 		);
 	}
 
@@ -80,13 +80,13 @@ class CommaAfterArrayItemSniff extends Sniff {
 			return;
 		}
 
-		$array_item_count = count( $array_items );
+		$array_item_count = \count( $array_items );
 
 		// Note: $item_index is 1-based and the array items are split on the commas!
 		foreach ( $array_items as $item_index => $item ) {
 			$maybe_comma = ( $item['end'] + 1 );
 			$is_comma    = false;
-			if ( isset( $this->tokens[ $maybe_comma ] ) && T_COMMA === $this->tokens[ $maybe_comma ]['code'] ) {
+			if ( isset( $this->tokens[ $maybe_comma ] ) && \T_COMMA === $this->tokens[ $maybe_comma ]['code'] ) {
 				$is_comma = true;
 			}
 
@@ -162,13 +162,15 @@ class CommaAfterArrayItemSniff extends Sniff {
 				$spaces   = 0;
 				for ( $i = $item['end']; $i > $last_content; $i-- ) {
 
-					if ( T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
+					if ( \T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
 						if ( $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar ) {
 							$newlines++;
 						} else {
 							$spaces += $this->tokens[ $i ]['length'];
 						}
-					} elseif ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+					} elseif ( \T_COMMENT === $this->tokens[ $i ]['code']
+						|| isset( $this->phpcsCommentTokens[ $this->tokens[ $i ]['type'] ] )
+					) {
 						break;
 					}
 				}
@@ -196,10 +198,12 @@ class CommaAfterArrayItemSniff extends Sniff {
 					$this->phpcsFile->fixer->beginChangeset();
 					for ( $i = $item['end']; $i > $last_content; $i-- ) {
 
-						if ( T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
+						if ( \T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
 							$this->phpcsFile->fixer->replaceToken( $i, '' );
 
-						} elseif ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+						} elseif ( \T_COMMENT === $this->tokens[ $i ]['code']
+							|| isset( $this->phpcsCommentTokens[ $this->tokens[ $i ]['type'] ] )
+						) {
 							// We need to move the comma to before the comment.
 							$this->phpcsFile->fixer->addContent( $last_content, ',' );
 							$this->phpcsFile->fixer->replaceToken( $maybe_comma, '' );
@@ -227,14 +231,14 @@ class CommaAfterArrayItemSniff extends Sniff {
 			 */
 			$next_token = $this->tokens[ ( $maybe_comma + 1 ) ];
 
-			if ( T_WHITESPACE === $next_token['code'] ) {
+			if ( \T_WHITESPACE === $next_token['code'] ) {
 
 				if ( false === $single_line && $this->phpcsFile->eolChar === $next_token['content'] ) {
 					continue;
 				}
 
 				$next_non_whitespace = $this->phpcsFile->findNext(
-					T_WHITESPACE,
+					\T_WHITESPACE,
 					( $maybe_comma + 1 ),
 					$closer,
 					true
@@ -243,7 +247,8 @@ class CommaAfterArrayItemSniff extends Sniff {
 				if ( false === $next_non_whitespace
 					|| ( false === $single_line
 						&& $this->tokens[ $next_non_whitespace ]['line'] === $this->tokens[ $maybe_comma ]['line']
-						&& T_COMMENT === $this->tokens[ $next_non_whitespace ]['code'] )
+						&& ( \T_COMMENT === $this->tokens[ $next_non_whitespace ]['code']
+							|| isset( $this->phpcsCommentTokens[ $this->tokens[ $next_non_whitespace ]['type'] ] ) ) )
 				) {
 					continue;
 				}
@@ -283,4 +288,4 @@ class CommaAfterArrayItemSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

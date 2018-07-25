@@ -62,8 +62,8 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @var array
 	 */
 	private $targets = array(
-		T_ARRAY            => T_ARRAY,
-		T_OPEN_SHORT_ARRAY => T_OPEN_SHORT_ARRAY,
+		\T_ARRAY            => \T_ARRAY,
+		\T_OPEN_SHORT_ARRAY => \T_OPEN_SHORT_ARRAY,
 	);
 
 	/**
@@ -104,13 +104,13 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Long arrays only: Check for space between the array keyword and the open parenthesis.
 		 */
-		if ( T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
 
 			if ( ( $stackPtr + 1 ) !== $opener ) {
 				$error      = 'There must be no space between the "array" keyword and the opening parenthesis';
 				$error_code = 'SpaceAfterKeyword';
 
-				$nextNonWhitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), ( $opener + 1 ), true );
+				$nextNonWhitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), ( $opener + 1 ), true );
 				if ( $nextNonWhitespace !== $opener ) {
 					// Don't auto-fix: Something other than whitespace found between keyword and open parenthesis.
 					$this->phpcsFile->addError( $error, $stackPtr, $error_code );
@@ -134,7 +134,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check for empty arrays.
 		 */
-		$nextNonWhitespace = $this->phpcsFile->findNext( T_WHITESPACE, ( $opener + 1 ), ( $closer + 1 ), true );
+		$nextNonWhitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $opener + 1 ), ( $closer + 1 ), true );
 		if ( $nextNonWhitespace === $closer ) {
 
 			if ( ( $opener + 1 ) !== $closer ) {
@@ -183,7 +183,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check that associative arrays are always multi-line.
 		 */
-		$array_has_keys = $this->phpcsFile->findNext( T_DOUBLE_ARROW, $opener, $closer );
+		$array_has_keys = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $opener, $closer );
 		if ( false !== $array_has_keys ) {
 
 			$array_items = $this->get_function_call_parameters( $stackPtr );
@@ -191,7 +191,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 			if ( ( false === $this->allow_single_item_single_line_associative_arrays
 					&& ! empty( $array_items ) )
 				|| ( true === $this->allow_single_item_single_line_associative_arrays
-					&& count( $array_items ) > 1 )
+					&& \count( $array_items ) > 1 )
 			) {
 				/*
 				 * Make sure the double arrow is for *this* array, not for a nested one.
@@ -199,7 +199,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 				$array_has_keys = false; // Reset before doing more detailed check.
 				foreach ( $array_items as $item ) {
 					for ( $ptr = $item['start']; $ptr <= $item['end']; $ptr++ ) {
-						if ( T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
+						if ( \T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
 							$array_has_keys = true;
 							break 2;
 						}
@@ -251,7 +251,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 							}
 
 							if ( $item['start'] <= ( $first_non_empty - 1 )
-								&& T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
+								&& \T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
 							) {
 								// Remove whitespace which would otherwise becoming trailing
 								// (as it gives problems with the fixed file).
@@ -273,7 +273,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check that there is a single space after the array opener and before the array closer.
 		 */
-		if ( T_WHITESPACE !== $this->tokens[ ( $opener + 1 ) ]['code'] ) {
+		if ( \T_WHITESPACE !== $this->tokens[ ( $opener + 1 ) ]['code'] ) {
 
 			$fix = $this->phpcsFile->addFixableError(
 				'Missing space after array opener.',
@@ -290,7 +290,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 				'Expected 1 space after array opener, found %s.',
 				$opener,
 				'SpaceAfterArrayOpener',
-				array( strlen( $this->tokens[ ( $opener + 1 ) ]['content'] ) )
+				array( \strlen( $this->tokens[ ( $opener + 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
@@ -298,7 +298,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 			}
 		}
 
-		if ( T_WHITESPACE !== $this->tokens[ ( $closer - 1 ) ]['code'] ) {
+		if ( \T_WHITESPACE !== $this->tokens[ ( $closer - 1 ) ]['code'] ) {
 
 			$fix = $this->phpcsFile->addFixableError(
 				'Missing space before array closer.',
@@ -315,7 +315,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 				'Expected 1 space before array closer, found %s.',
 				$closer,
 				'SpaceBeforeArrayCloser',
-				array( strlen( $this->tokens[ ( $closer - 1 ) ]['content'] ) )
+				array( \strlen( $this->tokens[ ( $closer - 1 ) ]['content'] ) )
 			);
 
 			if ( true === $fix ) {
@@ -340,7 +340,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check that the closing bracket is on a new line.
 		 */
-		$last_content = $this->phpcsFile->findPrevious( T_WHITESPACE, ( $closer - 1 ), $opener, true );
+		$last_content = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $closer - 1 ), $opener, true );
 		if ( false !== $last_content
 			&& $this->tokens[ $last_content ]['line'] === $this->tokens[ $closer ]['line']
 		) {
@@ -353,7 +353,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 				$this->phpcsFile->fixer->beginChangeset();
 
 				if ( $last_content < ( $closer - 1 )
-					&& T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
+					&& \T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
 				) {
 					// Remove whitespace which would otherwise becoming trailing
 					// (as it gives problems with the fixed file).
@@ -376,16 +376,18 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 			// Find the line on which the item starts.
 			$first_content = $this->phpcsFile->findNext(
-				array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+				array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 				$item['start'],
 				$end_of_this_item,
 				true
 			);
 
 			// Ignore comments after array items if the next real content starts on a new line.
-			if ( T_COMMENT === $this->tokens[ $first_content ]['code'] ) {
+			if ( \T_COMMENT === $this->tokens[ $first_content ]['code']
+				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $first_content ]['type'] ] )
+			) {
 				$next = $this->phpcsFile->findNext(
-					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+					array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 					( $first_content + 1 ),
 					$end_of_this_item,
 					true
@@ -421,7 +423,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 					$this->phpcsFile->fixer->beginChangeset();
 
 					if ( $item['start'] <= ( $first_content - 1 )
-						&& T_WHITESPACE === $this->tokens[ ( $first_content - 1 ) ]['code']
+						&& \T_WHITESPACE === $this->tokens[ ( $first_content - 1 ) ]['code']
 					) {
 						// Remove whitespace which would otherwise becoming trailing
 						// (as it gives problems with the fixed file).
@@ -437,4 +439,4 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

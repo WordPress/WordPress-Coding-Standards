@@ -99,7 +99,6 @@ class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 			61 => 1,
 			62 => 1,
 		);
-
 	}
 
 	/**
@@ -109,7 +108,6 @@ class VariableRestrictionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

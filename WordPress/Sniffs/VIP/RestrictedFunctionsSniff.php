@@ -29,8 +29,24 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *                 WordPress_Sniffs_WP_AlternativeFunctionsSniff.
  *                 The check for `eval()` now defers to the upstream Squiz.PHP.Eval sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 1.0.0  This sniff has been deprecated.
+ *                    This file remains for now to prevent BC breaks.
  */
 class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+
+	/**
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
 
 	/**
 	 * Groups of functions to restrict.
@@ -214,15 +230,6 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect
-			'wp_redirect' => array(
-				'type'      => 'warning',
-				'message'   => '%s() found. Using wp_safe_redirect(), along with the allowed_redirect_hosts filter, can help avoid any chances of malicious redirects within code. It is also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
-				'functions' => array(
-					'wp_redirect',
-				),
-			),
-
 			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#mobile-detection
 			'wp_is_mobile' => array(
 				'type'      => 'error',
@@ -231,8 +238,38 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'wp_is_mobile',
 				),
 			),
-
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+	/**
+	 * Process the token and handle the deprecation notices.
+	 *
+	 * @since 1.0.0 Added to allow for throwing the deprecation notices.
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void|int
+	 */
+	public function process_token( $stackPtr ) {
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.RestrictedFunctions" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.VIP.RestrictedFunctions" sniff has been deprecated. Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
+
+		return parent::process_token( $stackPtr );
+	}
+
+}

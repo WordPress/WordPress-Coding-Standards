@@ -15,7 +15,7 @@ Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will b
 
 ## Branches
 
-Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
+Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
 
 To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
@@ -32,14 +32,24 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ## Whitelist comments
 
+> **Important**:
+> PHPCS 3.2.0 introduced new selective ignore annotations, which can be considered an improved version of the whitelist mechanism which WPCS contains.
+>
+> There is a [tentative intention to drop support for the WPCS native whitelist comments](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-340698249) in WPCS 2.0.0.
+> 
+> Considering that, the introduction of new whitelist comments is discouraged.
+>
+> The below information remains as guidance for exceptional cases and to aid in understanding the previous implementation.
+
 Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
+
 If the sniff you are writing is susceptible to this, please consider adding the ability to [whitelist lines of code](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
 
 To this end, the `WordPress\Sniff::has_whitelist_comment()` method was introduced.
 
 Example usage:
 ```php
-namespace WordPress\Sniffs\CSRF;
+namespace WordPress\Sniffs\Security;
 
 use WordPress\Sniff;
 
@@ -66,7 +76,7 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 ## Pre-requisites
 * WordPress-Coding-Standards
 * PHP_CodeSniffer 2.9.x or 3.x
-* PHPUnit 4.x, 5.x or 6.x
+* PHPUnit 4.x, 5.x, 6.x or 7.x
 
 The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
 
@@ -103,7 +113,7 @@ The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x
 
 * Make sure you have registered the directory in which you installed WPCS with PHPCS using;
     ```sh
-    phpcs --config-set installed_path path/to/WPCS
+    phpcs --config-set installed_paths path/to/WPCS
     ```
 * Navigate to the directory in which you installed WPCS.
 * To run the unit tests with PHPCS 3.x:
@@ -117,18 +127,19 @@ The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x
 
 Expected output:
 ```
-PHPUnit 4.8.19 by Sebastian Bergmann and contributors.
+PHPUnit 6.5.8 by Sebastian Bergmann and contributors.
 
-Runtime:        PHP 7.1.3 with Xdebug 2.5.1
-Configuration:  /WordPressCS/phpunit.xml
+Runtime:       PHP 7.2.7 with Xdebug 2.6.0
+Configuration: /WordPressCS/phpunit.xml
 
-..........................................................
+................................................................. 65 / 77 ( 84%)
+............                                                      77 / 77 (100%)
 
-Tests generated 556 unique error codes; 48 were fixable (8.63%)
+Tests generated 576 unique error codes; 51 were fixable (8.85%)
 
-Time: 24.08 seconds, Memory: 41.75Mb
+Time: 22.93 seconds, Memory: 40.00MB
 
-OK (58 tests, 0 assertions)
+OK (77 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
@@ -207,4 +218,4 @@ The `--sniffs=...` directive limits the output to the sniff you are testing.
 
 ## Code Standards for this project
 
-The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/bin/phpcs.xml`.
+The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/.phpcs.xml.dist`.

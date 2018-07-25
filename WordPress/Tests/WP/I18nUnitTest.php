@@ -134,6 +134,7 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					144 => 1,
 					153 => 1,
 					157 => 1,
+					178 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
@@ -157,10 +158,8 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
-	} // end getErrorList()
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -185,18 +184,18 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			case 'I18nUnitTest.2.inc':
 				return array(
-					9  => 1,
-					43 => 1,
-					49 => 1,
-					52 => 1,
-					74 => 1,
-					85 => 1,
+					9   => 1,
+					43  => 1,
+					49  => 1,
+					52  => 1,
+					74  => 1,
+					85  => 1,
+					108 => 1,
 				);
 
 			default:
 				return array();
-
 		}
 	}
 
-} // End class.
+}

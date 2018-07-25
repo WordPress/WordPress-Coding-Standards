@@ -57,4 +57,4 @@ class RestrictedClassesSniff extends AbstractClassRestrictionsSniff {
 		);
 	}
 
-} // End class.
+}

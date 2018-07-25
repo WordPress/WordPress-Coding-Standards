@@ -36,12 +36,13 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 
 		// Don't examine semi-colons for empty conditions in `for()` control structures.
 		if ( isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			$close_parenthesis = end( $tokens[ $stackPtr ]['nested_parenthesis'] );
+			$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
+			$close_parenthesis  = end( $nested_parenthesis );
 
 			if ( isset( $tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
 				$owner = $tokens[ $close_parenthesis ]['parenthesis_owner'];
 
-				if ( T_FOR === $tokens[ $owner ]['code'] ) {
+				if ( \T_FOR === $tokens[ $owner ]['code'] ) {
 					$previous = $phpcsFile->findPrevious(
 						Tokens::$emptyTokens,
 						( $stackPtr - 1 ),
@@ -51,7 +52,7 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 
 					if ( false !== $previous
 						&& ( $previous === $tokens[ $owner ]['parenthesis_opener']
-							|| T_SEMICOLON === $tokens[ $previous ]['code'] )
+							|| \T_SEMICOLON === $tokens[ $previous ]['code'] )
 					) {
 						return;
 					}
@@ -62,4 +63,4 @@ class SemicolonSpacingSniff extends PHPCS_Squiz_SemicolonSpacingSniff {
 		return parent::process( $phpcsFile, $stackPtr );
 	}
 
-} // End class.
+}

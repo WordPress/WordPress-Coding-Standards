@@ -73,7 +73,7 @@ get_previous_post_link(); // Error.
 get_next_post_link(); // Error.
 get_intermediate_image_sizes(); // Error.
 
-wp_redirect(); // Warning.
+
 wp_is_mobile(); // Error.
 
 setcookie( 'cookie[three]', 'cookiethree' ); // Warning.
@@ -82,3 +82,8 @@ get_user_meta(); // Error.
 update_user_meta(); // Error.
 delete_user_meta(); // Error.
 add_user_meta(); // Error.
+
+// @codingStandardsChangeSetting WordPress.VIP.RestrictedFunctions exclude switch_to_blog
+switch_to_blog( $blogid ); // Error.
+
+// @codingStandardsChangeSetting WordPress.VIP.RestrictedFunctions exclude false

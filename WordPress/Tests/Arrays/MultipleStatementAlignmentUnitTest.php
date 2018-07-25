@@ -189,4 +189,4 @@ class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest {
 		);
 	}
 
-} // End class.
+}

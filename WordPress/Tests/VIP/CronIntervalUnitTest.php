@@ -18,6 +18,9 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   1.0.0  The sniff has been deprecated. This unit test file now
+ *                 only tests that the deprecation warnings are correctly thrown
+ *                 and that the sniff falls through to the parent correctly.
  */
 class CronIntervalUnitTest extends AbstractSniffUnitTest {
 
@@ -27,19 +30,7 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
-			12  => 1,
-			17  => 1,
-			37  => 1,
-			43  => 1,
-			53  => 1,
-			56  => 1, // False positive.
-			67  => 1,
-			85  => 1,
-			108 => 1,
-			115 => 1,
-		);
-
+		return array();
 	}
 
 	/**
@@ -49,11 +40,9 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			39 => 1,
-			41 => 1,
-			76 => 1,
+			1 => 2,
+			4 => 1,
 		);
-
 	}
 
-} // End class.
+}

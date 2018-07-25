@@ -32,8 +32,8 @@ class DiscourageGotoSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_GOTO,
-			T_GOTO_LABEL,
+			\T_GOTO,
+			\T_GOTO_LABEL,
 		);
 	}
 
@@ -47,4 +47,4 @@ class DiscourageGotoSniff extends Sniff {
 		$this->phpcsFile->addWarning( 'Using the "goto" language construct is discouraged', $stackPtr, 'Found' );
 	}
 
-}//end class
+}

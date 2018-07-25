@@ -154,8 +154,8 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_VARIABLE,
-			T_STRING,
+			\T_VARIABLE,
+			\T_STRING,
 		);
 	}
 
@@ -184,7 +184,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 		$variable_found           = false;
 		$sql_wildcard_found       = false;
 		$total_placeholders       = 0;
-		$total_parameters         = count( $parameters );
+		$total_parameters         = \count( $parameters );
 		$valid_in_clauses         = array(
 			'uses_in'          => 0,
 			'implode_fill'     => 0,
@@ -199,7 +199,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			if ( ! isset( Tokens::$textStringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-				if ( T_VARIABLE === $this->tokens[ $i ]['code'] ) {
+				if ( \T_VARIABLE === $this->tokens[ $i ]['code'] ) {
 					if ( '$wpdb' !== $this->tokens[ $i ]['content'] ) {
 						$variable_found = true;
 					}
@@ -207,7 +207,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				}
 
 				// Detect a specific pattern for variable replacements in combination with `IN`.
-				if ( T_STRING === $this->tokens[ $i ]['code'] ) {
+				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
 					if ( 'sprintf' === strtolower( $this->tokens[ $i ]['content'] ) ) {
 						$sprintf_parameters = $this->get_function_call_parameters( $i );
@@ -218,7 +218,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 							$skip_to    = ( $last_param['end'] + 1 );
 
 							$valid_in_clauses['implode_fill']     += $this->analyse_sprintf( $sprintf_parameters );
-							$valid_in_clauses['adjustment_count'] += ( count( $sprintf_parameters ) - 1 );
+							$valid_in_clauses['adjustment_count'] += ( \count( $sprintf_parameters ) - 1 );
 						}
 						unset( $sprintf_parameters, $last_param );
 
@@ -248,7 +248,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 								++$valid_in_clauses['implode_fill'];
 
 								$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
-								if ( T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+								if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
 									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
 								) {
 									$skip_from = ( $i + 1 );
@@ -272,8 +272,8 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				$regex_quote = $this->get_regex_quote_snippet( $content, $this->tokens[ $i ]['content'] );
 			}
 
-			if ( T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code']
-				|| T_HEREDOC === $this->tokens[ $i ]['code']
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code']
+				|| \T_HEREDOC === $this->tokens[ $i ]['code']
 			) {
 				// Only interested in actual query text, so strip out variables.
 				$stripped_content = $this->strip_interpolated_variables( $content );
@@ -355,7 +355,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 							 * Don't throw `UnescapedLiteral`, `UnsupportedPlaceholder` or `QuotedPlaceholder`
 							 * for this part of the SQL query.
 							 */
-							$content = preg_replace( '`' . preg_quote( $match ) . '`', '', $content, 1 );
+							$content = preg_replace( '`' . preg_quote( $match, '`' ) . '`', '', $content, 1 );
 						}
 					}
 				}
@@ -503,14 +503,14 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			);
 
 			if ( false !== $next
-				&& ( T_ARRAY === $this->tokens[ $next ]['code']
-					|| T_OPEN_SHORT_ARRAY === $this->tokens[ $next ]['code'] )
+				&& ( \T_ARRAY === $this->tokens[ $next ]['code']
+					|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $next ]['code'] )
 			) {
 				$replacements = $this->get_function_call_parameters( $next );
 			}
 		}
 
-		$total_replacements  = count( $replacements );
+		$total_replacements  = \count( $replacements );
 		$total_placeholders -= $valid_in_clauses['adjustment_count'];
 
 		// Bow out when `IN` clauses have been used which appear to be correct.
@@ -594,7 +594,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				$sprintf_param['end'],
 				true
 			);
-			if ( T_STRING === $this->tokens[ $implode ]['code']
+			if ( \T_STRING === $this->tokens[ $implode ]['code']
 				&& 'implode' === strtolower( $this->tokens[ $implode ]['content'] )
 			) {
 				if ( $this->analyse_implode( $implode ) === true ) {
@@ -624,7 +624,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	protected function analyse_implode( $implode_token ) {
 		$implode_params = $this->get_function_call_parameters( $implode_token );
 
-		if ( empty( $implode_params ) || count( $implode_params ) !== 2 ) {
+		if ( empty( $implode_params ) || \count( $implode_params ) !== 2 ) {
 			return false;
 		}
 
@@ -643,7 +643,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			true
 		);
 
-		if ( T_STRING !== $this->tokens[ $array_fill ]['code']
+		if ( \T_STRING !== $this->tokens[ $array_fill ]['code']
 			|| 'array_fill' !== strtolower( $this->tokens[ $array_fill ]['content'] )
 		) {
 			return false;
@@ -651,7 +651,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		$array_fill_params = $this->get_function_call_parameters( $array_fill );
 
-		if ( empty( $array_fill_params ) || count( $array_fill_params ) !== 3 ) {
+		if ( empty( $array_fill_params ) || \count( $array_fill_params ) !== 3 ) {
 			return false;
 		}
 

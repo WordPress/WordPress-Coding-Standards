@@ -60,8 +60,7 @@ class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'phpinfo',
 				),
 			),
-
 		);
-	} // end getGroups()
+	}
 
-} // end class
+}
