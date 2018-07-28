@@ -46,11 +46,13 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ## Project history
 
- - In April 2009 original project from [Urban Giraffe](https://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was published.
- - In May 2011 the project was forked on GitHub by [Chris Adams](https://chrisadams.me.uk/).
+ - On 22nd April 2009, the original project from [Urban Giraffe](https://urbangiraffe.com/articles/wordpress-codesniffer-standard/) was packaged and published.
+ - In May 2011 the project was forked and [added](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commit/04fd547c691ca2baae3fa8e195a46b0c9dd671c5) to GitHub by [Chris Adams](https://chrisadams.me.uk/).
  - In April 2012 [XWP](https://xwp.co/) started to dedicate resources to develop and lead the creation of the sniffs and rulesets for `WordPress-Core`, `WordPress-VIP` (WordPress.com VIP), and `WordPress-Extra`.
+ - In May 2015, an initial documentation ruleset was [added](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commit/b1a4bf8232a22563ef66f8a529357275a49f47dc#diff-a17c358c3262a26e9228268eb0a7b8c8) as `WordPress-Docs`.
  - In 2015, [J.D. Grimes](https://github.com/JDGrimes) began significant contributions, along with maintenance from [Gary Jones](https://github.com/GaryJones).
- - In 2016, [Juliette Reinders Folmer](https://github.com/jrfnl) began contributing heavily, adding more commits in a year than anyone else in 5 years previous since the project's inception.
+ - In 2016, [Juliette Reinders Folmer](https://github.com/jrfnl) began contributing heavily, adding more commits in a year than anyone else in the five years since the project was added to GitHub.
+ - In July 2018, version [`1.0.0`](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/releases/tag/1.0.0) of the project was released.
 
 ## Installation
 
