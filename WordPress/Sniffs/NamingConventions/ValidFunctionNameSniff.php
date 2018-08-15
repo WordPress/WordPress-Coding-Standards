@@ -15,7 +15,7 @@ use PHP_CodeSniffer_File as File;
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
  *
- * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#naming-conventions
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
  *
  * @package WPCS\WordPressCodingStandards
  *
