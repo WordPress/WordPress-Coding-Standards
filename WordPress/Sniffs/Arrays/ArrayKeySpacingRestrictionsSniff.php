@@ -14,7 +14,7 @@ use WordPress\Sniff;
 /**
  * Check for proper spacing in array key references.
  *
- * @link    http://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
  *
  * @package WPCS\WordPressCodingStandards
  *

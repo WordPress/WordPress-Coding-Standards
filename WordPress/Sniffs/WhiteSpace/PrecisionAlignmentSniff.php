@@ -26,7 +26,7 @@ use WordPress\PHPCSHelper;
  *
  * As this may be intentional, this sniff explicitly does *NOT* contain a fixer.
  *
- * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#indentation
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
  *
  * @package WPCS\WordPressCodingStandards
  *
