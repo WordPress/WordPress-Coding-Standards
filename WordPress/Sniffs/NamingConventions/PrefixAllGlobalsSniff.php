@@ -368,11 +368,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			}
 
-			if ( empty( $item_name ) || $this->is_prefixed( $item_name ) === true ) {
+			if ( empty( $item_name ) || $this->is_prefixed( $stackPtr, $item_name ) === true ) {
 				return;
 			}
 
-			$this->phpcsFile->addError(
+			$recorded = $this->phpcsFile->addError(
 				self::ERROR_MSG,
 				$stackPtr,
 				$error_code,
@@ -381,6 +381,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					$item_name,
 				)
 			);
+
+			if ( true === $recorded ) {
+				$this->record_potential_prefix_metric( $stackPtr, $item_name );
+			}
 		}
 	}
 
@@ -467,7 +471,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$variable_name = $this->phpcsFile->getTokensAsString( $stackPtr, ( ( $next_non_empty - $stackPtr ) + 1 ) );
 
 		// Still here ? In that case, the variable name should be prefixed.
-		$this->phpcsFile->addWarning(
+		$recorded = $this->phpcsFile->addWarning(
 			$error,
 			$stackPtr,
 			'NonPrefixedVariableFound',
@@ -476,6 +480,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$variable_name,
 			)
 		);
+
+		if ( true === $recorded ) {
+			$this->record_potential_prefix_metric( $stackPtr, $variable_name );
+		}
 
 		// Skip over the variable part of the variable.
 		return ( $next_non_empty + 1 );
@@ -508,7 +516,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$variable_name = substr( $this->tokens[ $stackPtr ]['content'], 1 ); // Strip the dollar sign.
 
 		// Bow out early if we know for certain no prefix is needed.
-		if ( $this->variable_prefixed_or_whitelisted( $variable_name ) === true ) {
+		if ( $this->variable_prefixed_or_whitelisted( $stackPtr, $variable_name ) === true ) {
 			return;
 		}
 
@@ -530,7 +538,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Check whether a prefix is needed.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
-				&& $this->variable_prefixed_or_whitelisted( $variable_name ) === true
+				&& $this->variable_prefixed_or_whitelisted( $stackPtr, $variable_name ) === true
 			) {
 				return;
 			}
@@ -541,7 +549,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$exploded = explode( '$', $variable_name );
 				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
-					if ( $this->variable_prefixed_or_whitelisted( $first ) === true ) {
+					if ( $this->variable_prefixed_or_whitelisted( $array_key, $first ) === true ) {
 						return;
 					}
 				} else {
@@ -612,7 +620,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Still here ? In that case, the variable name should be prefixed.
-		$this->addMessage(
+		$recorded = $this->addMessage(
 			self::ERROR_MSG,
 			$stackPtr,
 			$is_error,
@@ -622,6 +630,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				'$' . $variable_name,
 			)
 		);
+
+		if ( true === $recorded ) {
+			$this->record_potential_prefix_metric( $stackPtr, $variable_name );
+		}
 	}
 
 	/**
@@ -659,7 +671,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( $this->is_prefixed( $raw_content ) === true ) {
+		if ( $this->is_prefixed( $parameters[1]['start'], $raw_content ) === true ) {
 			return;
 		} else {
 			// This may be a dynamic hook/constant name.
@@ -678,7 +690,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Try again with just the first token if it's a text string.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
-				&& $this->is_prefixed( $first_non_empty_content ) === true
+				&& $this->is_prefixed( $parameters[1]['start'], $first_non_empty_content ) === true
 			) {
 				return;
 			}
@@ -689,7 +701,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$exploded = explode( '$', $first_non_empty_content );
 				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
-					if ( $this->is_prefixed( $first ) === true ) {
+					if ( $this->is_prefixed( $parameters[1]['start'], $first ) === true ) {
 						return;
 					}
 				} else {
@@ -722,7 +734,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		$data[] = $raw_content;
 
-		$this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
+		$recorded = $this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
+
+		if ( true === $recorded ) {
+			$this->record_potential_prefix_metric( $stackPtr, $raw_content );
+		}
 	}
 
 	/**
@@ -733,15 +749,19 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @since 1.0.0  Does not require a word seperator anymore after a prefix.
 	 *               This allows for improved code style independent checking,
 	 *               i.e. allows for camelCase naming and the likes.
+	 * @since 1.0.1  - Added $stackPtr parameter.
+	 *               - The function now also records metrics about the prefixes encountered.
 	 *
-	 * @param string $name Name to check for a prefix.
+	 * @param int    $stackPtr The position of the token to record the metric against.
+	 * @param string $name     Name to check for a prefix.
 	 *
-	 * @return bool True when the name is the prefix or starts with the prefix.
+	 * @return bool True when the name is one of the prefixes or starts with an allowed prefix.
 	 *              False otherwise.
 	 */
-	private function is_prefixed( $name ) {
+	private function is_prefixed( $stackPtr, $name ) {
 		foreach ( $this->validated_prefixes as $prefix ) {
 			if ( stripos( $name, $prefix ) === 0 ) {
+				$this->phpcsFile->recordMetric( $stackPtr, 'Prefix all globals: allowed prefixes', $prefix );
 				return true;
 			}
 		}
@@ -757,17 +777,22 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * - WP native globals,
 	 * - variables which are already prefixed.
 	 *
-	 * @param string $name Variable name without the dollar sign.
+	 * @since 0.12.0
+	 * @since 1.0.1  Added $stackPtr parameter.
+	 *
+	 * @param int    $stackPtr The position of the token to record the metric against.
+	 * @param string $name     Variable name without the dollar sign.
+	 *
 	 * @return bool True if the variable name is whitelisted or already prefixed.
 	 *              False otherwise.
 	 */
-	private function variable_prefixed_or_whitelisted( $name ) {
+	private function variable_prefixed_or_whitelisted( $stackPtr, $name ) {
 		// Ignore superglobals and WP global variables.
 		if ( isset( $this->superglobals[ $name ] ) || isset( $this->wp_globals[ $name ] ) ) {
 			return true;
 		}
 
-		return $this->is_prefixed( $name );
+		return $this->is_prefixed( $stackPtr, $name );
 	}
 
 	/**
@@ -853,4 +878,21 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$this->validated_prefixes = $this->prefixes;
 	}
 
+	/**
+	 * Record the "potential prefix" metric.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param int    $stackPtr       The position of the token to record the metric against.
+	 * @param string $construct_name Name of the global construct to try and distill a potential prefix from.
+	 *
+	 * @return void
+	 */
+	private function record_potential_prefix_metric( $stackPtr, $construct_name ) {
+		if ( preg_match( '`^([A-Z]*[a-z0-9]*+)`', ltrim( $construct_name, '\$_' ), $matches ) > 0
+			&& isset( $matches[1] ) && '' !== $matches[1]
+		) {
+			$this->phpcsFile->recordMetric( $stackPtr, 'Prefix all globals: potential prefixes - start of non-prefixed construct', strtolower( $matches[1] ) );
+		}
+	}
 }
