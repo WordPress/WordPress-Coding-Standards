@@ -166,13 +166,13 @@ class NoSilencedErrorsSniff extends Sniff {
 		$this->custom_whitelist = array_map( 'strtolower', $this->custom_whitelist );
 
 		/*
-		 * Check if the error silencing if done for one of the whitelisted functions.
+		 * Check if the error silencing is done for one of the whitelisted functions.
 		 */
-		$nextNonEmpty = $this->phpcsFile->findNext( $this->empty_tokens, ( $stackPtr + 1 ), null, true, null, true );
-		if ( false !== $nextNonEmpty && \T_STRING === $this->tokens[ $nextNonEmpty ]['code'] ) {
-			$hasParenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $nextNonEmpty + 1 ), null, true, null, true );
-			if ( false !== $hasParenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $hasParenthesis ]['code'] ) {
-				$function_name = strtolower( $this->tokens[ $nextNonEmpty ]['content'] );
+		$next_non_empty = $this->phpcsFile->findNext( $this->empty_tokens, ( $stackPtr + 1 ), null, true, null, true );
+		if ( false !== $next_non_empty && \T_STRING === $this->tokens[ $next_non_empty ]['code'] ) {
+			$has_parenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
+			if ( false !== $has_parenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $has_parenthesis ]['code'] ) {
+				$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
 				if ( isset( $this->function_whitelist[ $function_name ] ) === true
 					|| in_array( $function_name, $this->custom_whitelist, true ) === true
 				) {
@@ -183,10 +183,10 @@ class NoSilencedErrorsSniff extends Sniff {
 		}
 
 		// Prepare the "Found" string to display.
-		$context_length = (int) $this->context_length;
-		$endOfStatement = $this->phpcsFile->findEndOfStatement( $stackPtr, T_COMMA );
-		if ( ( $endOfStatement - $stackPtr ) < $context_length ) {
-			$context_length = ( $endOfStatement - $stackPtr );
+		$context_length   = (int) $this->context_length;
+		$end_of_statement = $this->phpcsFile->findEndOfStatement( $stackPtr, \T_COMMA );
+		if ( ( $end_of_statement - $stackPtr ) < $context_length ) {
+			$context_length = ( $end_of_statement - $stackPtr );
 		}
 		$found = $this->phpcsFile->getTokensAsString( $stackPtr, $context_length );
 		$found = str_replace( array( "\t", "\n", "\r" ), ' ', $found ) . '...';
