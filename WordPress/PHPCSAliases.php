@@ -61,21 +61,23 @@ if ( ! \defined( 'WPCS_PHPCS_ALIASES_SET' ) ) {
 	 * @link https://github.com/squizlabs/PHP_CodeSniffer/issues/1564
 	 * @link https://github.com/squizlabs/PHP_CodeSniffer/issues/1591
 	 */
-	spl_autoload_register( function ( $class ) {
-		// Only try & load our own classes.
-		if ( stripos( $class, 'WordPress' ) !== 0 ) {
-			return;
-		}
+	spl_autoload_register(
+		function ( $class ) {
+			// Only try & load our own classes.
+			if ( stripos( $class, 'WordPress' ) !== 0 ) {
+				return;
+			}
 
-		// PHPCS handles the Test and Sniff classes without problem.
-		if ( stripos( $class, '\Tests\\' ) !== false || stripos( $class, '\Sniffs\\' ) !== false ) {
-			return;
-		}
+			// PHPCS handles the Test and Sniff classes without problem.
+			if ( stripos( $class, '\Tests\\' ) !== false || stripos( $class, '\Sniffs\\' ) !== false ) {
+				return;
+			}
 
-		$file = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . strtr( $class, '\\', DIRECTORY_SEPARATOR ) . '.php';
+			$file = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . strtr( $class, '\\', DIRECTORY_SEPARATOR ) . '.php';
 
-		if ( file_exists( $file ) ) {
-			include_once $file;
+			if ( file_exists( $file ) ) {
+				include_once $file;
+			}
 		}
-	} );
+	);
 }
