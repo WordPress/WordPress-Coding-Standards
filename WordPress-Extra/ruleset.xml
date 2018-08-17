@@ -22,7 +22,6 @@
 			<property name="allowMultiline" value="true"/>
 		</properties>
 	</rule>
-	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- Duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
 		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 -->

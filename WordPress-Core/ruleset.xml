@@ -442,6 +442,9 @@
 		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1691 -->
 	<rule ref="WordPress.WhiteSpace.SemicolonSpacing"/>
 
+	<!-- There should be no empty statements, i.e. lone semi-colons or open/close tags without content. -->
+	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
+
 	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
