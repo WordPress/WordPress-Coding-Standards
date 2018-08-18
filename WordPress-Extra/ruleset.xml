@@ -4,6 +4,8 @@
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
+	<rule ref="WordPress-Core"/>
+
 	<!-- Generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
@@ -84,8 +86,6 @@
 		<type>warning</type>
 		<message>Best practice suggestion: Declare only one trait in a file.</message>
 	</rule>
-
-	<rule ref="WordPress-Core"/>
 
 	<!-- Verify modifier keywords for declared methods and properties in classes.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1101 -->
@@ -176,6 +176,15 @@
 	<!-- Verify some regex best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1371 -->
 	<rule ref="WordPress.PHP.PregQuoteDelimiter"/>
+
+	<!-- The Core ruleset respects the whitelist. For `Extra` the sniff is stricter.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1450 -->
+	<rule ref="WordPress.PHP.NoSilencedErrors">
+		<properties>
+			<property name="use_default_whitelist" value="false"/>
+		</properties>
+	</rule>
+
 
 	<!--
 	#############################################################################
