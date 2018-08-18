@@ -51,6 +51,15 @@ class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
 			40 => 1,
 			44 => 1,
 			48 => 1,
+			58 => 2,
+			59 => 1,
+			63 => 1,
+			64 => 1,
+			65 => 1,
+			66 => 1,
+			68 => 1,
+			71 => 1,
+			78 => 1,
 		);
 	}
 

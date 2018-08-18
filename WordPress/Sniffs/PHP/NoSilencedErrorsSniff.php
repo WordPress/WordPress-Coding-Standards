@@ -36,6 +36,20 @@ class NoSilencedErrorsSniff extends Sniff {
 	public $context_length = 6;
 
 	/**
+	 * Whether or not the `$function_whitelist` should be used.
+	 *
+	 * Defaults to true.
+	 *
+	 * This property only affects whether the standard function whitelist is
+	 * used. The custom whitelist, if set, will always be respected.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @var bool
+	 */
+	public $use_default_whitelist = true;
+
+	/**
 	 * User defined whitelist.
 	 *
 	 * Allows users to pass a list of additional functions to whitelist
@@ -165,19 +179,22 @@ class NoSilencedErrorsSniff extends Sniff {
 		$this->custom_whitelist = $this->merge_custom_array( $this->custom_whitelist, array(), false );
 		$this->custom_whitelist = array_map( 'strtolower', $this->custom_whitelist );
 
-		/*
-		 * Check if the error silencing is done for one of the whitelisted functions.
-		 */
-		$next_non_empty = $this->phpcsFile->findNext( $this->empty_tokens, ( $stackPtr + 1 ), null, true, null, true );
-		if ( false !== $next_non_empty && \T_STRING === $this->tokens[ $next_non_empty ]['code'] ) {
-			$has_parenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
-			if ( false !== $has_parenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $has_parenthesis ]['code'] ) {
-				$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
-				if ( isset( $this->function_whitelist[ $function_name ] ) === true
-					|| in_array( $function_name, $this->custom_whitelist, true ) === true
-				) {
-					$this->phpcsFile->recordMetric( $stackPtr, 'Error silencing', 'whitelisted function call: ' . $function_name );
-					return;
+		if ( true === $this->use_default_whitelist || ! empty( $this->custom_whitelist ) ) {
+			/*
+			 * Check if the error silencing is done for one of the whitelisted functions.
+			 */
+			$next_non_empty = $this->phpcsFile->findNext( $this->empty_tokens, ( $stackPtr + 1 ), null, true, null, true );
+			if ( false !== $next_non_empty && \T_STRING === $this->tokens[ $next_non_empty ]['code'] ) {
+				$has_parenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
+				if ( false !== $has_parenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $has_parenthesis ]['code'] ) {
+					$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
+					if ( ( true === $this->use_default_whitelist
+						&& isset( $this->function_whitelist[ $function_name ] ) === true )
+						|| in_array( $function_name, $this->custom_whitelist, true ) === true
+					) {
+						$this->phpcsFile->recordMetric( $stackPtr, 'Error silencing', 'whitelisted function call: ' . $function_name );
+						return;
+					}
 				}
 			}
 		}
