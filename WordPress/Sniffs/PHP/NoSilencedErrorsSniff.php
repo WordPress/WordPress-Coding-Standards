@@ -199,8 +199,13 @@ class NoSilencedErrorsSniff extends Sniff {
 			}
 		}
 
+		$this->context_length = (int) $this->context_length;
+		$context_length       = $this->context_length;
+		if ( $this->context_length <= 0 ) {
+			$context_length = 2;
+		}
+
 		// Prepare the "Found" string to display.
-		$context_length   = (int) $this->context_length;
 		$end_of_statement = $this->phpcsFile->findEndOfStatement( $stackPtr, \T_COMMA );
 		if ( ( $end_of_statement - $stackPtr ) < $context_length ) {
 			$context_length = ( $end_of_statement - $stackPtr );
@@ -208,11 +213,18 @@ class NoSilencedErrorsSniff extends Sniff {
 		$found = $this->phpcsFile->getTokensAsString( $stackPtr, $context_length );
 		$found = str_replace( array( "\t", "\n", "\r" ), ' ', $found ) . '...';
 
+		$error_msg = 'Silencing errors is strongly discouraged. Use proper error checking instead.';
+		$data      = array();
+		if ( $this->context_length > 0 ) {
+			$error_msg .= ' Found: %s';
+			$data[]     = $found;
+		}
+
 		$this->phpcsFile->addWarning(
-			'Silencing errors is strongly discouraged. Use proper error checking instead. Found: %s',
+			$error_msg,
 			$stackPtr,
 			'Discouraged',
-			array( $found )
+			$data
 		);
 
 		if ( isset( $function_name ) ) {
