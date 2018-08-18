@@ -166,13 +166,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function register() {
 		$targets = array(
-			\T_FUNCTION  => \T_FUNCTION,
-			\T_CLASS     => \T_CLASS,
-			\T_INTERFACE => \T_INTERFACE,
-			\T_TRAIT     => \T_TRAIT,
-			\T_CONST     => \T_CONST,
-			\T_VARIABLE  => \T_VARIABLE,
-			\T_DOLLAR    => \T_DOLLAR, // Variable variables.
+			\T_FUNCTION   => \T_FUNCTION,
+			\T_CLASS      => \T_CLASS,
+			\T_INTERFACE  => \T_INTERFACE,
+			\T_TRAIT      => \T_TRAIT,
+			\T_CONST      => \T_CONST,
+			\T_VARIABLE   => \T_VARIABLE,
+			\T_DOLLAR     => \T_DOLLAR, // Variable variables.
+			\T_ANON_CLASS => \T_ANON_CLASS, // Only used for skipping over test classes.
 		);
 
 		// Add function call target for hook names and constants defined using define().
@@ -241,11 +242,20 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Ignore test classes.
-		if ( \T_CLASS === $this->tokens[ $stackPtr ]['code'] && true === $this->is_test_class( $stackPtr ) ) {
+		if ( ( \T_CLASS === $this->tokens[ $stackPtr ]['code']
+			|| \T_TRAIT === $this->tokens[ $stackPtr ]['code']
+			|| \T_ANON_CLASS === $this->tokens[ $stackPtr ]['code'] )
+			&& true === $this->is_test_class( $stackPtr )
+		) {
 			if ( $this->tokens[ $stackPtr ]['scope_condition'] === $stackPtr && isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
 				// Skip forward to end of test class.
 				return $this->tokens[ $stackPtr ]['scope_closer'];
 			}
+			return;
+		}
+
+		if ( \T_ANON_CLASS === $this->tokens[ $stackPtr ]['code'] ) {
+			// Token was only registered to allow skipping over test classes.
 			return;
 		}
 

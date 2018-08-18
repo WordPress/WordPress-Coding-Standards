@@ -383,4 +383,19 @@ const SCRIPT_DEBUG = $develop_src;
 do_action( 'test-this-hookname' ); // OK.
 apply_filters( 'myplugin\filtername', $var ); // OK.
 
+// Non-prefixed constant and action within a (nested) anonymous test class is fine.
+class Some_Test_Class extends NonTestClass { // Bad.
+	public function some_test_method() {
+		define( 'SOME_GLOBAL', '4.0.0' ); // Bad.
+
+		return new class extends \PHPUnit_Framework_TestCase {
+			public function testPass() {
+				define( 'SOME_GLOBAL', '4.0.0' ); // OK.
+
+				do_action( 'some-action', $something ); // OK.
+			}
+		};
+	}
+}
+
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
