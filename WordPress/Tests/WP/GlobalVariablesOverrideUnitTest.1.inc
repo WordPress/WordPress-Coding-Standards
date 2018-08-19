@@ -170,3 +170,30 @@ $test = new class extends PHPUnit_Framework_TestCase {
 		$cat_id = 50; // Ok.
 	}
 };
+
+// Verify skipping over nested scoped structures.
+function global_vars() {
+	global $pagenow;
+	$closure = function ( $pagenow ) { // OK, local to the closure.
+		$pagenow = 'something'; // OK, local to the closure.
+	};
+	
+	$pagenow = 'something else'; // Bad.
+
+	return $closure( $pagenow ); // OK, not an assignment.
+}
+
+// Verify skipping over rest of the function when live coding/parse error in nested scope structure.
+function global_vars() {
+	global $pagenow;
+
+	$closure = function ( $pagenow ) {
+		global $feeds;
+
+		$nested_closure_with_parse_error = function ( $feeds )
+
+		$feeds = 'something'; // Bad, but ignored because of the parse error in the closure.
+	};
+
+	$pagenow = 'something'; // Bad, should be picked up. Tests that skipping on parse error doesn't skip too far.
+}

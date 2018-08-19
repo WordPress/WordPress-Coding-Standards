@@ -29,6 +29,27 @@ use PHP_CodeSniffer_Tokens as Tokens;
 class GlobalVariablesOverrideSniff extends Sniff {
 
 	/**
+	 * Scoped object and function structures to skip over as
+	 * variables will have a different scope within those.
+	 *
+	 * {@internal Once the minimum PHPCS version goes up to PHPCS 3.1.0,
+	 * this array can be partially created in the register() method
+	 * using the upstream `Tokens::$ooScopeTokens` array.}}
+	 *
+	 * @since 1.1.0
+	 *
+	 * @var array
+	 */
+	private $skip_over = array(
+		\T_FUNCTION   => true,
+		\T_CLOSURE    => true,
+		\T_CLASS      => true,
+		\T_ANON_CLASS => true,
+		\T_INTERFACE  => true,
+		\T_TRAIT      => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.3.0
@@ -78,9 +99,17 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			return;
 		}
 
+		/*
+		 * Examine variables within a function scope based on a `global` statement in the
+		 * function.
+		 */
+		$in_function_scope = $this->phpcsFile->hasCondition( $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+
 		if ( \T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
 			return $this->process_variable_assignment( $stackPtr );
-		} elseif ( \T_GLOBAL === $token['code'] ) {
+		} elseif ( \T_GLOBAL === $token['code']
+			&& true === $in_function_scope
+		) {
 			return $this->process_global_statement( $stackPtr );
 		}
 	}
@@ -141,13 +170,12 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 * @return void
 	 */
 	protected function process_global_statement( $stackPtr ) {
-		$search = array(); // Array of globals to watch for.
+		/*
+		 * Collect the variables to watch for.
+		 */
+		$search = array();
 		$ptr    = ( $stackPtr + 1 );
-		while ( $ptr ) {
-			if ( ! isset( $this->tokens[ $ptr ] ) ) {
-				break;
-			}
-
+		while ( isset( $this->tokens[ $ptr ] ) ) {
 			$var = $this->tokens[ $ptr ];
 
 			// Halt the loop at end of statement.
@@ -169,68 +197,63 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			return;
 		}
 
-		// Only search from the end of the "global ...;" statement onwards.
-		$start        = ( $this->phpcsFile->findEndOfStatement( $stackPtr ) + 1 );
-		$end          = $this->phpcsFile->numTokens;
-		$global_scope = true;
-
-		// Is the global statement within a function call or closure ?
-		// If so, limit the token walking to the function scope.
-		$function_token = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
-		if ( false === $function_token ) {
-			$function_token = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
+		/*
+		 * Search for assignments to the imported global variables within the function scope.
+		 */
+		$function_cond = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
+		$closure_cond  = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
+		$scope_cond    = max( $function_cond, $closure_cond ); // If false, it will evaluate as zero, so this is fine.
+		if ( isset( $this->tokens[ $scope_cond ]['scope_closer'] ) === false ) {
+			// Live coding or parse error.
+			return;
 		}
 
-		if ( false !== $function_token ) {
-			if ( ! isset( $this->tokens[ $function_token ]['scope_closer'] ) ) {
-				// Live coding, unfinished function.
-				return;
-			}
-
-			$end          = $this->tokens[ $function_token ]['scope_closer'];
-			$global_scope = false;
-		}
-
-		// Check for assignments to collected global vars.
+		$start = $ptr;
+		$end   = $this->tokens[ $scope_cond ]['scope_closer'];
 		for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
-			// If the global statement was in the global scope, skip over functions, classes and the likes.
-			if ( true === $global_scope && \in_array( $this->tokens[ $ptr ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ), true ) ) {
+			// Skip over nested functions, classes and the likes.
+			if ( isset( $this->skip_over[ $this->tokens[ $ptr ]['code'] ] ) ) {
 				if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
-					// Live coding, skip the rest of the file.
-					return;
+					// Live coding or parse error.
+					break;
 				}
 
 				$ptr = $this->tokens[ $ptr ]['scope_closer'];
 				continue;
 			}
 
-			if ( \T_VARIABLE === $this->tokens[ $ptr ]['code']
-				&& \in_array( $this->tokens[ $ptr ]['content'], $search, true )
-			) {
-				// Don't throw false positives for static class properties.
-				$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
-				if ( false !== $previous && \T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
-					continue;
-				}
+			if ( \T_VARIABLE !== $this->tokens[ $ptr ]['code'] ) {
+				continue;
+			}
 
-				if ( true === $this->is_assignment( $ptr ) ) {
+			if ( \in_array( $this->tokens[ $ptr ]['content'], $search, true ) === false ) {
+				// Not one of the variables we're interested in.
+				continue;
+			}
+
+			// Don't throw false positives for static class properties.
+			$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
+			if ( false !== $previous && \T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
+				continue;
+			}
+
+			if ( true === $this->is_assignment( $ptr ) ) {
+				$this->maybe_add_error( $ptr );
+				continue;
+			}
+
+			// Check if this is a variable assignment within a `foreach()` declaration.
+			if ( isset( $this->tokens[ $ptr ]['nested_parenthesis'] ) ) {
+				$nested_parenthesis = $this->tokens[ $ptr ]['nested_parenthesis'];
+				$close_parenthesis  = end( $nested_parenthesis );
+				if ( isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
+					&& \T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+					&& ( false !== $previous
+						&& ( \T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
+						|| \T_AS === $this->tokens[ $previous ]['code'] ) )
+				) {
 					$this->maybe_add_error( $ptr );
-					continue;
-				}
-
-				// Check if this is a variable assignment within a `foreach()` declaration.
-				if ( isset( $this->tokens[ $ptr ]['nested_parenthesis'] ) ) {
-					$nested_parenthesis = $this->tokens[ $ptr ]['nested_parenthesis'];
-					$close_parenthesis  = end( $nested_parenthesis );
-					if ( isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
-						&& \T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
-						&& ( false !== $previous
-							&& ( \T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
-							|| \T_AS === $this->tokens[ $previous ]['code'] ) )
-					) {
-						$this->maybe_add_error( $ptr );
-					}
 				}
 			}
 		}
