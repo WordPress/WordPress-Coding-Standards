@@ -161,3 +161,12 @@ function acronymFunction() {
 			break;
 	}
 }
+
+// Anonymous test class.
+$test = new class extends PHPUnit_Framework_TestCase {
+
+	public function test_something() {
+		global $cat_id;
+		$cat_id = 50; // Ok.
+	}
+};

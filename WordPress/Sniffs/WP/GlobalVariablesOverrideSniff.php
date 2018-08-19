@@ -31,24 +31,51 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
+	 * @since 0.3.0
+	 * @since 1.1.0 Added class tokens for improved test classes skipping.
+	 *
 	 * @return array
 	 */
 	public function register() {
 		return array(
 			\T_GLOBAL,
 			\T_VARIABLE,
+
+			// Only used to skip over test classes.
+			\T_CLASS,
+			\T_TRAIT,
+			\T_ANON_CLASS,
 		);
 	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * @since 0.3.0
+	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
+
 		$token = $this->tokens[ $stackPtr ];
+
+		// Ignore variable overrides in test classes.
+		if ( \T_CLASS === $token['code'] || \T_TRAIT === $token['code'] || \T_ANON_CLASS === $token['code'] ) {
+
+			if ( true === $this->is_test_class( $stackPtr )
+				&& $token['scope_condition'] === $stackPtr
+				&& isset( $token['scope_closer'] )
+			) {
+				// Skip forward to end of test class.
+				return $token['scope_closer'];
+			}
+
+			// Otherwise ignore the tokens as they were only registered to enable skipping over test classes.
+			return;
+		}
 
 		if ( \T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
 			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
@@ -177,15 +204,18 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	}
 
 	/**
-	 * Add the error if there is no whitelist comment present and the assignment
-	 * is not done from within a test method.
+	 * Add the error if there is no whitelist comment present.
+	 *
+	 * @since 0.11.0
+	 * @since 1.1.0  - Visibility changed from public to protected.
+	 *               - Check for being in a test class moved to the process_token() method.
 	 *
 	 * @param int $stackPtr The position of the token to throw the error for.
 	 *
 	 * @return void
 	 */
-	public function maybe_add_error( $stackPtr ) {
-		if ( ! $this->is_token_in_test_method( $stackPtr ) && ! $this->has_whitelist_comment( 'override', $stackPtr ) ) {
+	protected function maybe_add_error( $stackPtr ) {
+		if ( $this->has_whitelist_comment( 'override', $stackPtr ) === false ) {
 			$this->phpcsFile->addError(
 				'Overriding WordPress globals is prohibited. Found assignment to %s',
 				$stackPtr,
