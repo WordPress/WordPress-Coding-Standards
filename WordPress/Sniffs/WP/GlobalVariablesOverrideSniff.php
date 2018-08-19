@@ -153,6 +153,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 		$token    = $this->tokens[ $stackPtr ];
 		$var_name = substr( $token['content'], 1 ); // Strip the dollar sign.
+		$data     = array();
 
 		// Determine the variable name for `$GLOBALS['array_key']`.
 		if ( 'GLOBALS' === $var_name ) {
@@ -186,6 +187,9 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				// Shouldn't happen, but just in case.
 				return;
 			}
+
+			// Set up the data for the error message.
+			$data[] = '$GLOBALS[\'' . $var_name . '\']';
 		}
 
 		/*
@@ -228,7 +232,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		}
 
 		// Still here ? In that case, the WP global variable is being tampered with.
-		$this->add_error( $stackPtr );
+		$this->add_error( $stackPtr, $data );
 	}
 
 	/**
@@ -359,16 +363,23 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param int $stackPtr The position of the token to throw the error for.
+	 * @param int   $stackPtr The position of the token to throw the error for.
+	 * @param array $data     Optional. Array containing one entry holding the
+	 *                        name of the variable being overruled.
+	 *                        Defaults to the 'content' of the $stackPtr token.
 	 *
 	 * @return void
 	 */
-	protected function add_error( $stackPtr ) {
+	protected function add_error( $stackPtr, $data = array() ) {
+		if ( empty( $data ) ) {
+			$data[] = $this->tokens[ $stackPtr ]['content'];
+		}
+
 		$this->phpcsFile->addError(
 			'Overriding WordPress globals is prohibited. Found assignment to %s',
 			$stackPtr,
 			'OverrideProhibited',
-			array( $this->tokens[ $stackPtr ]['content'] )
+			$data
 		);
 	}
 
