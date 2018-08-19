@@ -30,6 +30,22 @@ use PHP_CodeSniffer_Tokens as Tokens;
 class GlobalVariablesOverrideSniff extends Sniff {
 
 	/**
+	 * Whether to treat all files as if they were included from
+	 * a within function.
+	 *
+	 * This is mostly useful for projects containing views which are being
+	 * included from within a function in another file, like themes.
+	 *
+	 * Note: enabling this is discouraged as there is no guarantee that
+	 * the file will *never* be included from the global scope.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @var bool
+	 */
+	public $treat_files_as_scoped = false;
+
+	/**
 	 * Scoped object and function structures to skip over as
 	 * variables will have a different scope within those.
 	 *
@@ -110,13 +126,13 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 		if ( \T_VARIABLE === $token['code']
 			&& ( '$GLOBALS' === $token['content']
-				|| false === $in_function_scope )
+				|| ( false === $in_function_scope && false === $this->treat_files_as_scoped ) )
 		) {
 			return $this->process_variable_assignment( $stackPtr );
 		} elseif ( \T_GLOBAL === $token['code']
-			&& true === $in_function_scope
+			&& ( true === $in_function_scope || true === $this->treat_files_as_scoped )
 		) {
-			return $this->process_global_statement( $stackPtr );
+			return $this->process_global_statement( $stackPtr, $in_function_scope );
 		}
 	}
 
@@ -221,11 +237,12 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 *
 	 * @since 1.1.0 Logic was previously contained in the process_token() method.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param int  $stackPtr          The position of the current token in the stack.
+	 * @param bool $in_function_scope Whether the global statement is within a scoped function/closure.
 	 *
 	 * @return void
 	 */
-	protected function process_global_statement( $stackPtr ) {
+	protected function process_global_statement( $stackPtr, $in_function_scope ) {
 		/*
 		 * Collect the variables to watch for.
 		 */
@@ -254,18 +271,23 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		}
 
 		/*
-		 * Search for assignments to the imported global variables within the function scope.
+		 * Search for assignments to the imported global variables within the relevant scope.
 		 */
-		$function_cond = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
-		$closure_cond  = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-		$scope_cond    = max( $function_cond, $closure_cond ); // If false, it will evaluate as zero, so this is fine.
-		if ( isset( $this->tokens[ $scope_cond ]['scope_closer'] ) === false ) {
-			// Live coding or parse error.
-			return;
+		$start = $ptr;
+		if ( true === $in_function_scope ) {
+			$function_cond = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
+			$closure_cond  = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
+			$scope_cond    = max( $function_cond, $closure_cond ); // If false, it will evaluate as zero, so this is fine.
+			if ( isset( $this->tokens[ $scope_cond ]['scope_closer'] ) === false ) {
+				// Live coding or parse error.
+				return;
+			}
+			$end = $this->tokens[ $scope_cond ]['scope_closer'];
+		} else {
+			// Global statement in the global namespace with file is being treated as scoped.
+			$end = ( $this->phpcsFile->numTokens + 1 );
 		}
 
-		$start = $ptr;
-		$end   = $this->tokens[ $scope_cond ]['scope_closer'];
 		for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
 			// Skip over nested functions, classes and the likes.

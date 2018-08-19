@@ -73,6 +73,11 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					29 => 1,
 				);
 
+			case 'GlobalVariablesOverrideUnitTest.3.inc':
+				return array(
+					29 => 1,
+				);
+
 			default:
 				return array();
 		}
