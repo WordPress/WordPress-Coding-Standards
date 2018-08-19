@@ -96,6 +96,10 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 */
 	protected function process_variable_assignment( $stackPtr ) {
 
+		if ( $this->has_whitelist_comment( 'override', $stackPtr ) === true ) {
+			return;
+		}
+
 		$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		if ( false === $bracketPtr || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
@@ -122,7 +126,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		}
 
 		if ( true === $this->is_assignment( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
-			$this->maybe_add_error( $stackPtr );
+			$this->add_error( $stackPtr );
 		}
 	}
 
@@ -245,13 +249,26 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 */
 	protected function maybe_add_error( $stackPtr ) {
 		if ( $this->has_whitelist_comment( 'override', $stackPtr ) === false ) {
-			$this->phpcsFile->addError(
-				'Overriding WordPress globals is prohibited. Found assignment to %s',
-				$stackPtr,
-				'OverrideProhibited',
-				array( $this->tokens[ $stackPtr ]['content'] )
-			);
+			$this->add_error( $stackPtr );
 		}
+	}
+
+	/**
+	 * Add the error.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $stackPtr The position of the token to throw the error for.
+	 *
+	 * @return void
+	 */
+	protected function add_error( $stackPtr ) {
+		$this->phpcsFile->addError(
+			'Overriding WordPress globals is prohibited. Found assignment to %s',
+			$stackPtr,
+			'OverrideProhibited',
+			array( $this->tokens[ $stackPtr ]['content'] )
+		);
 	}
 
 }
