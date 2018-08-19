@@ -23,6 +23,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
+ * @since   1.1.0  The sniff now also detects variables being overriden in the global namespace.
  *
  * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
@@ -102,10 +103,15 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Examine variables within a function scope based on a `global` statement in the
 		 * function.
+		 * Examine variable not within a function scope and access to the `$GLOBALS`
+		 * variable based on the variable token.
 		 */
 		$in_function_scope = $this->phpcsFile->hasCondition( $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 
-		if ( \T_VARIABLE === $token['code'] && '$GLOBALS' === $token['content'] ) {
+		if ( \T_VARIABLE === $token['code']
+			&& ( '$GLOBALS' === $token['content']
+				|| false === $in_function_scope )
+		) {
 			return $this->process_variable_assignment( $stackPtr );
 		} elseif ( \T_GLOBAL === $token['code']
 			&& true === $in_function_scope
@@ -129,34 +135,84 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			return;
 		}
 
-		$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		$token    = $this->tokens[ $stackPtr ];
+		$var_name = substr( $token['content'], 1 ); // Strip the dollar sign.
 
-		if ( false === $bracketPtr || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
-			return;
-		}
+		// Determine the variable name for `$GLOBALS['array_key']`.
+		if ( 'GLOBALS' === $var_name ) {
+			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-		// Bow out if the array key contains a variable.
-		$has_variable = $this->phpcsFile->findNext( \T_VARIABLE, ( $bracketPtr + 1 ), $this->tokens[ $bracketPtr ]['bracket_closer'] );
-		if ( false !== $has_variable ) {
-			return;
-		}
+			if ( false === $bracketPtr || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
+				return;
+			}
 
-		// Retrieve the array key and avoid getting tripped up by some simple obfuscation.
-		$var_name = '';
-		$start    = ( $bracketPtr + 1 );
-		for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
-			if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
-				$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
+			// Retrieve the array key and avoid getting tripped up by some simple obfuscation.
+			$var_name = '';
+			$start    = ( $bracketPtr + 1 );
+			for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
+				/*
+				 * If the globals array key contains a variable, constant, function call
+				 * or interpolated variable, bow out.
+				 */
+				if ( \T_VARIABLE === $this->tokens[ $ptr ]['code']
+					|| \T_STRING === $this->tokens[ $ptr ]['code']
+					|| \T_DOUBLE_QUOTED_STRING === $this->tokens[ $ptr ]['code']
+				) {
+					return;
+				}
+
+				if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
+					$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
+				}
+			}
+
+			if ( '' === $var_name ) {
+				// Shouldn't happen, but just in case.
+				return;
 			}
 		}
 
-		if ( ! isset( $this->wp_globals[ $var_name ] ) ) {
+		/*
+		 * Is this one of the WP global variables ?
+		 */
+		if ( isset( $this->wp_globals[ $var_name ] ) === false ) {
 			return;
 		}
 
-		if ( true === $this->is_assignment( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
-			$this->add_error( $stackPtr );
+		/*
+		 * Check if the variable value is being changed.
+		 */
+		if ( false === $this->is_assignment( $stackPtr )
+			&& false === $this->is_foreach_as( $stackPtr )
+		) {
+			return;
 		}
+
+		/*
+		 * Function parameters with the same name as a WP global variable are fine,
+		 * including when they are being assigned a default value.
+		 */
+		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
+				if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
+					&& ( \T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
+						|| \T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
+				) {
+					return;
+				}
+			}
+			unset( $opener, $closer );
+		}
+
+		/*
+		 * Class property declarations with the same name as WP global variables are fine.
+		 */
+		if ( true === $this->is_class_property( $stackPtr ) ) {
+			return;
+		}
+
+		// Still here ? In that case, the WP global variable is being tampered with.
+		$this->add_error( $stackPtr );
 	}
 
 	/**

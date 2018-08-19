@@ -5,7 +5,7 @@ $GLOBALS['wpdb'] = 'test'; // Bad.
 global $wpdb;
 $wpdb = 'test'; // Bad.
 
-$post = get_post( 1 ); // Ok, $post has not been made global yet.
+$post = get_post( 1 ); // Bad.
 
 global $post;
 $post = get_post( 1 ); // Override ok.
@@ -55,7 +55,7 @@ add_filter( 'comments_open', function( $open, $post_id ) {
 	return 'page' === $page->post_type;
 }, 10, 2 );
 
-$page = 'test'; // Ok, check against cross-contaminiation from within a closure.
+$closure = function() { $page = 'test' }; // Ok, check against cross-contaminiation from within a closure.
 
 // Allow overriding globals in functions within unit test classes.
 // https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/300#issuecomment-158778606
@@ -98,7 +98,7 @@ class Test_Class_C extends NonTestClass {
 
 // Ok: overriding class property with same name as global variable.
 trait My_Class {
-	private static $page;
+	public static $page = 'something';
 
 	public function do_something() {
 		global $page;
@@ -197,3 +197,16 @@ function global_vars() {
 
 	$pagenow = 'something'; // Bad, should be picked up. Tests that skipping on parse error doesn't skip too far.
 }
+
+$GLOBALS[] = 'something';
+$GLOBALS[103] = 'something';
+
+class MyClass {
+	// All ok, class properties, not the global variables.
+	public $is_apache = true;
+	protected $l10n = array();
+	private $phpmailer = null;
+}
+
+// Test assigning to multiple variables at once.
+$is_NS4 = $is_opera = $is_safari = $GLOBALS['is_winIE'] = true; // Bad x 4.

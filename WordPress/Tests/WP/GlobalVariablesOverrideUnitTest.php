@@ -36,6 +36,7 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 				return array(
 					3   => 1,
 					6   => 1,
+					8   => 1,
 					16  => 1,
 					17  => 1,
 					18  => 1,
@@ -44,6 +45,7 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					36  => 1,
 					54  => 1,
 					95  => 1,
+					124 => 1,
 					128 => 1,
 					133 => 1,
 					139 => 1,
@@ -54,6 +56,21 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					146 => 1,
 					181 => 1,
 					198 => 1,
+					212 => 4,
+				);
+
+			case 'GlobalVariablesOverrideUnitTest.2.inc':
+				return array(
+					12 => 1,
+					13 => 1,
+					16 => 1,
+					17 => 1,
+					18 => 2,
+					19 => 1,
+					20 => 1,
+					23 => 1,
+					27 => 1,
+					29 => 1,
 				);
 
 			default:
