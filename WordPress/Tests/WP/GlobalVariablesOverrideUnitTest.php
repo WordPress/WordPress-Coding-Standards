@@ -26,29 +26,37 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
-		return array(
-			3   => 1,
-			6   => 1,
-			16  => 1,
-			17  => 1,
-			18  => 1,
-			25  => 1,
-			35  => 1,
-			36  => 1,
-			54  => 1,
-			95  => 1,
-			128 => 1,
-			133 => 1,
-			139 => 1,
-			140 => 1,
-			141 => 2,
-			142 => 1,
-			143 => 1,
-			146 => 1,
-		);
+	public function getErrorList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'GlobalVariablesOverrideUnitTest.1.inc':
+				return array(
+					3   => 1,
+					6   => 1,
+					16  => 1,
+					17  => 1,
+					18  => 1,
+					25  => 1,
+					35  => 1,
+					36  => 1,
+					54  => 1,
+					95  => 1,
+					128 => 1,
+					133 => 1,
+					139 => 1,
+					140 => 1,
+					141 => 2,
+					142 => 1,
+					143 => 1,
+					146 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**
