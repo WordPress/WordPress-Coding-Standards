@@ -104,3 +104,8 @@ class My_Soap extends somethingElse {
 }
 
 function __MyTemplateTags() {} // Bad x 2.
+
+// Verify that interfaces which extend multiple other interfaces do not throw unnecessary errors.
+interface MyInterface extends InterfaceA, InterfaceB {
+	function __MyTemplateTags(); // OK.
+}
