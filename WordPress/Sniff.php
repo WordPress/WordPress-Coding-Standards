@@ -1210,10 +1210,11 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Check if a token is used within a unit test.
 	 *
 	 * Unit test methods are identified as such:
-	 * - Method name starts with `test_`.
-	 * - Method is within a unit test class.
+	 * - Method is within a known unit test class;
+	 * - or Method is within a class/trait which extends a known unit test class.
 	 *
 	 * @since 0.11.0
+	 * @since 1.1.0  Supports anonymous test classes and improved handling of nested scopes.
 	 *
 	 * @param int $stackPtr The position of the token to be examined.
 	 *
@@ -1223,22 +1224,38 @@ abstract class Sniff implements PHPCS_Sniff {
 		// Is the token inside of a function definition ?
 		$functionToken = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 		if ( false === $functionToken ) {
+			// No conditions or no function condition.
 			return false;
 		}
 
-		// Is this a method inside of a class or a trait ?
-		$classToken = $this->phpcsFile->getCondition( $functionToken, \T_CLASS );
-		$traitToken = $this->phpcsFile->getCondition( $functionToken, \T_TRAIT );
-		if ( false === $classToken && false === $traitToken ) {
-			return false;
+		/*
+		 * Is this a method inside of a class or a trait ? If so, it is a test class/trait ?
+		 *
+		 * {@internal Once the minimum supported PHPCS version has gone up to 3.1.0, the
+		 * local array here can be replace with Tokens::$ooScopeTokens.}}
+		 */
+		$oo_tokens  = array(
+			\T_CLASS      => true,
+			\T_TRAIT      => true,
+			\T_ANON_CLASS => true,
+		);
+		$conditions = $this->tokens[ $stackPtr ]['conditions'];
+
+		foreach ( $conditions as $token => $condition ) {
+			if ( $token === $functionToken ) {
+				// Only examine the conditions the function is nested in, not those nested within the function.
+				break;
+			}
+
+			if ( isset( $oo_tokens[ $condition ] ) ) {
+				$is_test_class = $this->is_test_class( $token );
+				if ( true === $is_test_class ) {
+					return true;
+				}
+			}
 		}
 
-		$structureToken = $classToken;
-		if ( false !== $traitToken ) {
-			$structureToken = $traitToken;
-		}
-
-		return $this->is_test_class( $structureToken );
+		return false;
 	}
 
 	/**
