@@ -54,3 +54,15 @@
 	/*
 	* Provision some options
 	*/
+
+?>
+
+<script type="text/javascript">
+	/*
+	 * Multi-line javascript comment should not trigger this sniff.
+	 */
+	alert('OK');
+	  alert('bad');
+</script>
+
+<?php

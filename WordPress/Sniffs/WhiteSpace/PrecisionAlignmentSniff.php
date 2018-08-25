@@ -167,6 +167,15 @@ class PrecisionAlignmentSniff extends Sniff {
 						$whitespace = str_replace( $content, '', $this->tokens[ $i ]['content'] );
 						$spaces     = ( \strlen( $whitespace ) % $this->tab_width );
 					}
+
+					/*
+					 * Prevent triggering on multi-line /*-style inline javascript comments.
+					 * This may cause false negatives as there is no check for being in a
+					 * <script> tag, but that will be rare.
+					 */
+					if ( isset( $content[0] ) && '*' === $content[0] && 0 !== $spaces ) {
+						--$spaces;
+					}
 					break;
 			}
 

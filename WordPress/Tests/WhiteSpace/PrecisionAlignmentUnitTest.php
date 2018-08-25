@@ -111,6 +111,7 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 					31 => 1,
 					32 => 1,
 					39 => 1,
+					65 => 1,
 				);
 
 			case 'PrecisionAlignmentUnitTest.4.inc':
