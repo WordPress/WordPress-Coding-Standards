@@ -163,3 +163,18 @@ EOD
 
 if ( ( $_POST['foo'] ?? 'post' ) === 'post' ) {} // OK.
 if ( ( $_POST['foo'] <=> 'post' ) === 0 ) {} // OK.
+
+// Test whitespace independent isset/empty detection.
+function foobar() {
+	if ( ! isset  ($_GET['test']) ) {
+		return ;
+	}
+	echo sanitize_text_field( wp_unslash( $_GET['test'] ) ); // OK.
+}
+
+function barfoo() {
+	if ( empty  ($_GET['test']) ) {
+		return ;
+	}
+	echo sanitize_text_field( wp_unslash( $_GET['test'] ) ); // OK.
+}

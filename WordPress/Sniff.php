@@ -1505,7 +1505,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		end( $nested_parenthesis );
 		$open_parenthesis = key( $nested_parenthesis );
 
-		return \in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( \T_ISSET, \T_EMPTY ), true );
+		$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
+		return in_array( $this->tokens[ $previous_non_empty ]['code'], array( \T_ISSET, \T_EMPTY ), true );
 	}
 
 	/**
