@@ -390,6 +390,19 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
+	 * Token which when they preceed code indicate the value is safely casted.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @var array
+	 */
+	protected $safe_casts = array(
+		\T_INT_CAST    => true,
+		\T_DOUBLE_CAST => true,
+		\T_BOOL_CAST   => true,
+	);
+
+	/**
 	 * Functions that format strings.
 	 *
 	 * These functions are often used for formatting values just before output, and
@@ -1560,8 +1573,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			true
 		);
 
+		if ( false === $prev ) {
+			return false;
+		}
+
 		// Check if it is a safe cast.
-		return \in_array( $this->tokens[ $prev ]['code'], array( \T_INT_CAST, \T_DOUBLE_CAST, \T_BOOL_CAST ), true );
+		return isset( $this->safe_casts[ $this->tokens[ $prev ]['code'] ] );
 	}
 
 	/**
