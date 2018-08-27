@@ -121,6 +121,25 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'mt_rand',
 				),
 			),
+
+			'addslashes' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Use wp_slash() for improved handling of complex variables instead; or in the context of database queries: use prepared statements.',
+				'since'     => '3.6.0',
+				'functions' => array(
+					'addslashes',
+					'addcslashes',
+				),
+			),
+			'stripslashes' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Use wp_unslash() for improved handling of complex variables instead.',
+				'since'     => '3.6.0',
+				'functions' => array(
+					'stripslashes',
+					'stripcslashes',
+				),
+			),
 		);
 	}
 
