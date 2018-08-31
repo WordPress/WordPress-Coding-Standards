@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Core">
+	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
+
+	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+
+	<!-- Treat all files as UTF-8. -->
+	<config name="encoding" value="utf-8"/>
+
+	<!-- Default tab width for indentation fixes and such. -->
+	<arg name="tab-width" value="4"/>
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Single and Double Quotes.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#single-and-double-quotes
+	#############################################################################
+	-->
+	<!-- Covers rule: Use single and double quotes when appropriate.
+		 If you're not evaluating anything in the string, use single quotes. -->
+	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Rule: Text that goes into attributes should be run through esc_attr().
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/527 -->
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Indentation.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#indentation
+	#############################################################################
+	-->
+	<rule ref="WordPress.Arrays.ArrayIndentation"/>
+
+	<!-- Covers rule: Use real tabs and not spaces. -->
+	<rule ref="WordPress.WhiteSpace.PrecisionAlignment"/>
+
+	<!-- Generic array layout check. -->
+	<!-- Covers rule: For associative arrays, values should start on a new line.
+		 Also covers various single-line array whitespace issues. -->
+	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
+
+	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
+	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
+
+	<!-- Implied through the examples: align the assignment operator in a block of assignments. -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment">
+		<properties>
+			<property name="maxPadding" value="40"/>
+		</properties>
+	</rule>
+
+	<!-- Implied through the examples: align the double arrows. -->
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="maxColumn" value="60"/>
+		</properties>
+	</rule>
+
+	<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/632 -->
+
+	<!-- Rule: It's most convenient to use single-quoted strings for regular expressions.
+		 Already covered by Squiz.Strings.DoubleQuoteUsage -->
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Formatting SQL statements.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#formatting-sql-statements
+	#############################################################################
+	-->
+	<!-- Rule: Always capitalize the SQL parts of the statement like UPDATE or WHERE.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/639 -->
+
+	<!-- Rule: Functions that update the database should expect their parameters to lack
+		 SQL slash escaping when passed.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
+
+	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"! -->
+	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
+
+	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
+		 preferably by using $wpdb->prepare() -->
+	<rule ref="WordPress.DB.PreparedSQL"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Database Queries.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#database-queries
+	#############################################################################
+	-->
+	<!-- Covers rule: Avoid touching the database directly. -->
+	<rule ref="WordPress.DB.RestrictedFunctions"/>
+	<rule ref="WordPress.DB.RestrictedClasses"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Self-Explanatory Flag Values for Function Arguments.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#self-explanatory-flag-values-for-function-arguments
+	#############################################################################
+	-->
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Interpolation for Naming Dynamic Hooks.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#interpolation-for-naming-dynamic-hooks
+
+	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/751
+	#############################################################################
+	-->
+	<!-- Rule: Dynamic hooks should be named using interpolation rather than concatenation. -->
+
+	<!-- Rule: Variables used in hook tags should be wrapped in curly braces { and },
+		 with the complete outer tag name wrapped in double quotes. -->
+
+	<!-- Rule: Where possible, dynamic values in tag names should also be as succinct
+		 and to the point as possible. -->
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Ternary Operator.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#ternary-operator
+	#############################################################################
+	-->
+	<!-- Rule: Always have Ternaries test if the statement is true, not false.
+		 An exception would be using ! empty(), as testing for false here is generally more intuitive.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/643 -->
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Yoda Conditions.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#yoda-conditions
+	#############################################################################
+	-->
+	<!-- Covers rule: When doing logical comparisons, always put the variable on the right side,
+		 constants or literals on the left. -->
+	<rule ref="WordPress.PHP.YodaConditions"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Clever Code.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#clever-code
+	#############################################################################
+	-->
+	<!-- Rule: In general, readability is more important than cleverness or brevity.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+	<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
+	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+
+	<!-- Rule: In a switch statement... If a case contains a block, then falls through
+		 to the next block, this must be explicitly commented. -->
+	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
+
+	<!-- Rule: The goto statement must never be used. -->
+	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1664 -->
+	<rule ref="WordPress.PHP.DiscourageGoto"/>
+	<rule ref="WordPress.PHP.DiscourageGoto.Found">
+		<type>error</type>
+		<message>The "goto" language construct should not be used.</message>
+	</rule>
+
+	<!-- Rule: The eval() construct is very dangerous, and is impossible to secure. ... these must not be used. -->
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.Eval.Discouraged">
+		<type>error</type>
+		<message>eval() is a security risk so not allowed.</message>
+	</rule>
+
+	<!-- Rule: create_function() function, which internally performs an eval(),
+		 is deprecated in PHP 7.2. Both of these must not be used. -->
+	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - (No) Error Control Operator @.
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#error-control-operator
+	#############################################################################
+	-->
+	<rule ref="Generic.PHP.NoSilencedErrors"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Don't extract().
+	Ref: https://make.wordpress.org/core/handbook/coding-standards/php/#dont-extract
+	#############################################################################
+	-->
+	<rule ref="WordPress.PHP.DontExtract"/>
+
+
+	<!--
+	#############################################################################
+	Not in the handbook: Generic sniffs.
+	#############################################################################
+	-->
+
+	<!--
+	#############################################################################
+	Not in the coding standard handbook: WP specific sniffs.
+	Ref: https://make.wordpress.org/core/handbook/best-practices/internationalization/ (limited info)
+	Ref: https://developer.wordpress.org/plugins/internationalization/ (more extensive)
+	#############################################################################
+	-->
+	<!-- Check for correct usage of the WP i18n functions. -->
+	<rule ref="WordPress.WP.I18n"/>
+
+	<!-- Check for correct spelling of WordPress. -->
+	<rule ref="WordPress.WP.CapitalPDangit"/>
+
+</ruleset>
