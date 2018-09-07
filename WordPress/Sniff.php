@@ -2710,4 +2710,39 @@ abstract class Sniff implements PHPCS_Sniff {
 		return true;
 	}
 
+	/**
+	 * Determine if a variable is in the `as $key => $value` part of a foreach condition.
+	 *
+	 * @since 1.0.0
+	 * @since 1.1.0 Moved from the PrefixAllGlobals sniff to the Sniff base class.
+	 *
+	 * @param int $stackPtr Pointer to the variable.
+	 *
+	 * @return bool True if it is. False otherwise.
+	 */
+	protected function is_foreach_as( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$close_parenthesis  = end( $nested_parenthesis );
+		$open_parenthesis   = key( $nested_parenthesis );
+		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
+			return false;
+		}
+
+		if ( \T_FOREACH !== $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+			return false;
+		}
+
+		$as_ptr = $this->phpcsFile->findNext( \T_AS, ( $open_parenthesis + 1 ), $close_parenthesis );
+		if ( false === $as_ptr ) {
+			// Should never happen.
+			return false;
+		}
+
+		return ( $stackPtr > $as_ptr );
+	}
+
 }
