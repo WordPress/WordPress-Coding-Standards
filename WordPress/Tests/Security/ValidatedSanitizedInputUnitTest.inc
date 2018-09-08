@@ -178,3 +178,8 @@ function barfoo() {
 	}
 	echo sanitize_text_field( wp_unslash( $_GET['test'] ) ); // OK.
 }
+
+// Issue #1467.
+if ( isset( $_POST[ 'currentid' ] ) ){
+            $id = (int) $_POST[ "currentid" ]; // OK.
+}

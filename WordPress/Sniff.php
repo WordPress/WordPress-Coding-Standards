@@ -1824,6 +1824,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		}
 
+		$bare_array_key = $this->strip_quotes( $array_key );
+
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
 			if ( ! \in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
@@ -1841,8 +1843,9 @@ abstract class Sniff implements PHPCS_Sniff {
 				}
 
 				// If we're checking for a specific array key (ex: 'hello' in
-				// $_POST['hello']), that must match too.
-				if ( isset( $array_key ) && $this->get_array_access_key( $i ) !== $array_key ) {
+				// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
+				if ( isset( $array_key )
+					&& $this->strip_quotes( $this->get_array_access_key( $i ) ) !== $bare_array_key ) {
 					continue;
 				}
 
