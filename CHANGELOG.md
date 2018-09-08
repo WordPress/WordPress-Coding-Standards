@@ -34,9 +34,11 @@ _No documentation available about unreleased changes as of yet._
 - Minor efficiency improvement to the `Sniff::is_safe_casted()` method.
 - CI: Minor tweaks to the Travis script.
 - CI: Improved Composer scripts for use by WPCS developers.
+- Dev: Removed IDE specific files from `.gitignore`.
 - Readme: Improved the documentation about the project history and the badge display.
 
 ### Fixed
+- The `WordPress.Security.ValidatedSanitizedInput` sniff will now recognize array keys in superglobals independently of the string quote-style used for the array key.
 - The `WordPress.WhiteSpace.PrecisionAlignment` sniff will no longer throw false positives for DocBlocks for JavaScript functions within inline HTML.
 - `WordPress.WP.DeprecatedClasses`: The error codes for this sniff were unstable as they were based on the code being analysed instead of on fixed values.
 - Various bugfixes for the `WordPress.WP.GlobalVariablesOverride` sniff:
