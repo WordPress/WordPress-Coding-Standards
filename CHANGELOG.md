@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
-## [1.1.0] - 2018-09-05
+## [1.1.0] - 2018-09-10
 
 ### Added
 - New `WordPress.PHP.NoSilencedErrors` sniff. This sniff replaces the `Generic.PHP.NoSilencedErrors` sniff which was previously used and included in the `WordPress-Core` ruleset.
@@ -29,6 +29,7 @@ _No documentation available about unreleased changes as of yet._
 - Moved the `WordPress.CodeAnalysis.EmptyStatement` sniff from the `WordPress-Extra` to the `WordPress-Core` ruleset.
 - Moved the `Squiz.PHP.CommentedOutCode` sniff from the `WordPress-Docs` to the `WordPress-Extra` ruleset and lowered the threshold for determining whether or not a comment is commented out code from 45% to 40%.
 - The `WordPress.NamingConventions.PrefixAllGlobals` sniff now has improved support for recognizing whether or not (non-prefixed) globals are declared in the context of unit tests.
+- The `is_foreach_as()` method has been moved from the `GlobalVariablesOverrideSniff` class to the WordPress `Sniff` base class.
 - The `Sniff::is_token_in_test_method()` utility method now has improved support for recognizing test methods in anonymous classes.
 - Minor efficiency improvement to the `Sniff::is_safe_casted()` method.
 - CI: Minor tweaks to the Travis script.
@@ -36,7 +37,16 @@ _No documentation available about unreleased changes as of yet._
 - Readme: Improved the documentation about the project history and the badge display.
 
 ### Fixed
-- `DeprecatedClasses`: The errorcodes for this sniff were unstable as they were based on the code being analysed instead of on fixed values.
+- The `WordPress.WhiteSpace.PrecisionAlignment` sniff will no longer throw false positives for DocBlocks for JavaScript functions within inline HTML.
+- `WordPress.WP.DeprecatedClasses`: The error codes for this sniff were unstable as they were based on the code being analysed instead of on fixed values.
+- Various bugfixes for the `WordPress.WP.GlobalVariablesOverride` sniff:
+    - Previously, the sniff only checked variables in the global namespace when a `global` statement would be encountered. As of now, all variable assignments in the global namespace will be checked.
+    - Nested functions/closures/classes which don't import the global variable will now be skipped over when encountered within another function, preventing false positives.
+    - Parameters in function declarations will no longer throw false positives.
+    - The error message for assignments to a subkey of the `$GLOBALS` superglobal has been improved.
+    - Various efficiency improvements.
+- The `Sniff::is_in_isset_or_empty()` method presumed the WordPress coding style regarding code layout, which could lead to incorrect results (mostly underreporting).
+    This affected, amongst others, the `WordPress.Security.ValidatedSanitizedInput` sniff.
 - Broken links in the inline developer documentation.
 
 
