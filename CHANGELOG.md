@@ -8,6 +8,50 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [1.1.0] - 2018-09-10
+
+### Added
+- New `WordPress.PHP.NoSilencedErrors` sniff. This sniff replaces the `Generic.PHP.NoSilencedErrors` sniff which was previously used and included in the `WordPress-Core` ruleset.
+    The WordPress specific version of the sniff differs from the PHPCS version in that it:
+    * Allows the error control operator `@` if it preceeds a function call to a limited list of PHP functions for which no amount of error checking can prevent a PHP warning from being thrown.
+    * Allows for a used-defined list of (additional) function names to be passed to the sniff via the `custom_whitelist` property in a custom ruleset, for which - if the error control operator is detected in front of a function call to one of the functions in this whitelist - no warnings will be thrown.
+    * Displays a brief snippet of code in the `warning` message text to show the context in which the error control operator is being used. The length of the snippet (in tokens) can be customized via the `context_length` property.
+    * Contains a public `use_default_whitelist` property which can be set from a custom ruleset which regulates whether or not the standard whitelist of PHP functions should be used by the sniff.
+	    The user-defined whitelist will always be respected.
+	    By default, this property is set to `true` for the `WordPress-Core` ruleset and to `false` for the `WordPress-Extra` ruleset (which is stricter regarding these kind of best practices).
+- Metrics to the `WordPress.NamingConventions.PrefixAllGlobals` sniff to aid people in determining the most commonly used prefix in a legacy project.
+    For an example of how to use this feature, please see the detailed explanation in the [pull request](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1437).
+
+### Changed
+- The `PEAR.Functions.FunctionCallSignature` sniff, which is part of the `WordPress-Core` ruleset, used to allow multiple function call parameters per line in multi-line function calls. This will no longer be allowed.
+    As of this release, if a function call is multi-line, each parameter should start on a new line and an `error` will be thrown if the code being analysed does not comply with that rule.
+    The sniff behaviour for single-line function calls is not affected by this change.
+- Moved the `WordPress.CodeAnalysis.EmptyStatement` sniff from the `WordPress-Extra` to the `WordPress-Core` ruleset.
+- Moved the `Squiz.PHP.CommentedOutCode` sniff from the `WordPress-Docs` to the `WordPress-Extra` ruleset and lowered the threshold for determining whether or not a comment is commented out code from 45% to 40%.
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff now has improved support for recognizing whether or not (non-prefixed) globals are declared in the context of unit tests.
+- The `is_foreach_as()` method has been moved from the `GlobalVariablesOverrideSniff` class to the WordPress `Sniff` base class.
+- The `Sniff::is_token_in_test_method()` utility method now has improved support for recognizing test methods in anonymous classes.
+- Minor efficiency improvement to the `Sniff::is_safe_casted()` method.
+- CI: Minor tweaks to the Travis script.
+- CI: Improved Composer scripts for use by WPCS developers.
+- Dev: Removed IDE specific files from `.gitignore`.
+- Readme: Improved the documentation about the project history and the badge display.
+
+### Fixed
+- The `WordPress.Security.ValidatedSanitizedInput` sniff will now recognize array keys in superglobals independently of the string quote-style used for the array key.
+- The `WordPress.WhiteSpace.PrecisionAlignment` sniff will no longer throw false positives for DocBlocks for JavaScript functions within inline HTML.
+- `WordPress.WP.DeprecatedClasses`: The error codes for this sniff were unstable as they were based on the code being analysed instead of on fixed values.
+- Various bugfixes for the `WordPress.WP.GlobalVariablesOverride` sniff:
+    - Previously, the sniff only checked variables in the global namespace when a `global` statement would be encountered. As of now, all variable assignments in the global namespace will be checked.
+    - Nested functions/closures/classes which don't import the global variable will now be skipped over when encountered within another function, preventing false positives.
+    - Parameters in function declarations will no longer throw false positives.
+    - The error message for assignments to a subkey of the `$GLOBALS` superglobal has been improved.
+    - Various efficiency improvements.
+- The `Sniff::is_in_isset_or_empty()` method presumed the WordPress coding style regarding code layout, which could lead to incorrect results (mostly underreporting).
+    This affected, amongst others, the `WordPress.Security.ValidatedSanitizedInput` sniff.
+- Broken links in the inline developer documentation.
+
+
 ## [1.0.0] - 2018-07-25
 
 ### Important information about this release:
@@ -716,6 +760,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[1.1.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.14.1...1.0.0
 [0.14.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.14.0...0.14.1
 [0.14.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.13.1...0.14.0
