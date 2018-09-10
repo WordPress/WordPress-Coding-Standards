@@ -390,6 +390,19 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
+	 * Token which when they preceed code indicate the value is safely casted.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @var array
+	 */
+	protected $safe_casts = array(
+		\T_INT_CAST    => true,
+		\T_DOUBLE_CAST => true,
+		\T_BOOL_CAST   => true,
+	);
+
+	/**
 	 * Functions that format strings.
 	 *
 	 * These functions are often used for formatting values just before output, and
@@ -1210,10 +1223,11 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Check if a token is used within a unit test.
 	 *
 	 * Unit test methods are identified as such:
-	 * - Method name starts with `test_`.
-	 * - Method is within a unit test class.
+	 * - Method is within a known unit test class;
+	 * - or Method is within a class/trait which extends a known unit test class.
 	 *
 	 * @since 0.11.0
+	 * @since 1.1.0  Supports anonymous test classes and improved handling of nested scopes.
 	 *
 	 * @param int $stackPtr The position of the token to be examined.
 	 *
@@ -1223,22 +1237,38 @@ abstract class Sniff implements PHPCS_Sniff {
 		// Is the token inside of a function definition ?
 		$functionToken = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 		if ( false === $functionToken ) {
+			// No conditions or no function condition.
 			return false;
 		}
 
-		// Is this a method inside of a class or a trait ?
-		$classToken = $this->phpcsFile->getCondition( $functionToken, \T_CLASS );
-		$traitToken = $this->phpcsFile->getCondition( $functionToken, \T_TRAIT );
-		if ( false === $classToken && false === $traitToken ) {
-			return false;
+		/*
+		 * Is this a method inside of a class or a trait ? If so, it is a test class/trait ?
+		 *
+		 * {@internal Once the minimum supported PHPCS version has gone up to 3.1.0, the
+		 * local array here can be replace with Tokens::$ooScopeTokens.}}
+		 */
+		$oo_tokens  = array(
+			\T_CLASS      => true,
+			\T_TRAIT      => true,
+			\T_ANON_CLASS => true,
+		);
+		$conditions = $this->tokens[ $stackPtr ]['conditions'];
+
+		foreach ( $conditions as $token => $condition ) {
+			if ( $token === $functionToken ) {
+				// Only examine the conditions the function is nested in, not those nested within the function.
+				break;
+			}
+
+			if ( isset( $oo_tokens[ $condition ] ) ) {
+				$is_test_class = $this->is_test_class( $token );
+				if ( true === $is_test_class ) {
+					return true;
+				}
+			}
 		}
 
-		$structureToken = $classToken;
-		if ( false !== $traitToken ) {
-			$structureToken = $traitToken;
-		}
-
-		return $this->is_test_class( $structureToken );
+		return false;
 	}
 
 	/**
@@ -1488,7 +1518,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		end( $nested_parenthesis );
 		$open_parenthesis = key( $nested_parenthesis );
 
-		return \in_array( $this->tokens[ ( $open_parenthesis - 1 ) ]['code'], array( \T_ISSET, \T_EMPTY ), true );
+		$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
+		return in_array( $this->tokens[ $previous_non_empty ]['code'], array( \T_ISSET, \T_EMPTY ), true );
 	}
 
 	/**
@@ -1543,8 +1574,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			true
 		);
 
+		if ( false === $prev ) {
+			return false;
+		}
+
 		// Check if it is a safe cast.
-		return \in_array( $this->tokens[ $prev ]['code'], array( \T_INT_CAST, \T_DOUBLE_CAST, \T_BOOL_CAST ), true );
+		return isset( $this->safe_casts[ $this->tokens[ $prev ]['code'] ] );
 	}
 
 	/**
@@ -1789,6 +1824,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		}
 
+		$bare_array_key = $this->strip_quotes( $array_key );
+
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
 			if ( ! \in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
@@ -1806,8 +1843,9 @@ abstract class Sniff implements PHPCS_Sniff {
 				}
 
 				// If we're checking for a specific array key (ex: 'hello' in
-				// $_POST['hello']), that must match too.
-				if ( isset( $array_key ) && $this->get_array_access_key( $i ) !== $array_key ) {
+				// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
+				if ( isset( $array_key )
+					&& $this->strip_quotes( $this->get_array_access_key( $i ) ) !== $bare_array_key ) {
 					continue;
 				}
 
@@ -2674,6 +2712,41 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Determine if a variable is in the `as $key => $value` part of a foreach condition.
+	 *
+	 * @since 1.0.0
+	 * @since 1.1.0 Moved from the PrefixAllGlobals sniff to the Sniff base class.
+	 *
+	 * @param int $stackPtr Pointer to the variable.
+	 *
+	 * @return bool True if it is. False otherwise.
+	 */
+	protected function is_foreach_as( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		$close_parenthesis  = end( $nested_parenthesis );
+		$open_parenthesis   = key( $nested_parenthesis );
+		if ( ! isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ) ) {
+			return false;
+		}
+
+		if ( \T_FOREACH !== $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code'] ) {
+			return false;
+		}
+
+		$as_ptr = $this->phpcsFile->findNext( \T_AS, ( $open_parenthesis + 1 ), $close_parenthesis );
+		if ( false === $as_ptr ) {
+			// Should never happen.
+			return false;
+		}
+
+		return ( $stackPtr > $as_ptr );
 	}
 
 }

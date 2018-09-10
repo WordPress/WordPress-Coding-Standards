@@ -26,7 +26,7 @@ use WordPress\PHPCSHelper;
  *
  * As this may be intentional, this sniff explicitly does *NOT* contain a fixer.
  *
- * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#indentation
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -166,6 +166,15 @@ class PrecisionAlignmentSniff extends Sniff {
 						$content    = ltrim( $this->tokens[ $i ]['content'] );
 						$whitespace = str_replace( $content, '', $this->tokens[ $i ]['content'] );
 						$spaces     = ( \strlen( $whitespace ) % $this->tab_width );
+					}
+
+					/*
+					 * Prevent triggering on multi-line /*-style inline javascript comments.
+					 * This may cause false negatives as there is no check for being in a
+					 * <script> tag, but that will be rare.
+					 */
+					if ( isset( $content[0] ) && '*' === $content[0] && 0 !== $spaces ) {
+						--$spaces;
 					}
 					break;
 			}

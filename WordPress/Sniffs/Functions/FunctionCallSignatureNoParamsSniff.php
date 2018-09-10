@@ -15,7 +15,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Enforces no whitespace between the parenthesis of a function call without parameters.
  *
- * @link    https://make.wordpress.org/core/handbook/coding-standards/php/#space-usage
+ * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
  *
  * @package WPCS\WordPressCodingStandards
  *
