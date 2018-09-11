@@ -1,0 +1,49 @@
+<?php
+
+// OK.
+$a = (bool) $b;
+$a = (int) $b;
+$a = (float) $b;
+$a = (string) $b;
+$a = (array) $b;
+$a = (object) $b;
+
+// Error: Wrong form.
+$a = (bool) $b;
+$a = (int) $b;
+$a = (float) $b;
+$a = (float) $b;
+
+// Warning: Discouraged casts.
+$a = (unset) $b; // Warning.
+$a = (binary) $b; // Warning.
+$a = b"binary string"; // Warning. Currently false negative. Related to PHPCS bug report #1574.
+$a = b"binary $string"; // Warning.
+
+// Error: Mixed case.
+$a = (bool) $b;
+$a = (bool) $b; // + wrong form.
+$a = (int) $b;
+$a = (int) $b; // + wrong form.
+$a = (float) $b;
+$a = (float) $b; // + wrong form.
+$a = (float) $b; // + wrong form.
+$a = (string) $b;
+$a = (array) $b;
+$a = (object) $b;
+$a = (unset) $b; // + discouraged.
+$a = (binary) $b; // + discouraged.
+
+// Error: Uppercase.
+$a = (bool) $b;
+$a = (bool) $b; // + wrong form.
+$a = (int) $b;
+$a = (int) $b; // + wrong form.
+$a = (float) $b;
+$a = (float) $b; // + wrong form.
+$a = (float) $b; // + wrong form.
+$a = (string) $b;
+$a = (array) $b;
+$a = (object) $b;
+$a = (unset) $b; // + discouraged.
+$a = (binary) $b; // + discouraged.
