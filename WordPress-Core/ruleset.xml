@@ -233,6 +233,7 @@
 	<rule ref="Generic.Formatting.SpaceAfterCast"/>
 	<rule ref="Squiz.WhiteSpace.CastSpacing"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+	<rule ref="WordPress.PHP.TypeCasts"/>
 
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
