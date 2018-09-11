@@ -49,7 +49,8 @@
 	<rule ref="WordPress.WhiteSpace.PrecisionAlignment"/>
 
 	<!-- Generic array layout check. -->
-	<!-- Covers rule: For associative arrays, values should start on a new line.
+	<!-- Covers rule: For associative arrays, each item should start on a new line
+		 when the array contains more than one item.
 		 Also covers various single-line array whitespace issues. -->
 	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
 
@@ -107,7 +108,23 @@
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
 	-->
+	<!-- Covers rule: ... use elseif for conditionals. -->
 	<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: PHP - Multiline Function Calls.
+	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#multiline-function-calls
+	#############################################################################
+	-->
+	<!-- Rule: When splitting a function call over multiple lines, each parameter must be on a seperate line.
+		 Covered via PEAR.Functions.FunctionCallSignature in Space Usage section. -->
+
+	<!-- Rule: Single line inline comments can take up their own line. -->
+	<!-- Rule: Each parameter must take up no more than a single line. Multi-line parameter
+		 values must be assigned to a variable and then that variable should be passed to the function call.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1330 -->
 
 
 	<!--
@@ -267,11 +284,13 @@
 		 SQL slash escaping when passed.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
 
-	<!-- Rule: in $wpdb->prepare - only %s and %d are used as placeholders. Note that they are not "quoted"! -->
+	<!-- Rule: in $wpdb->prepare - %s is used for string placeholders and %d is used for integer
+		 placeholders. Note that they are not 'quoted'! -->
 	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
-	<!-- Covers rule: Escaping should be done as close to the time of the query as possible,
-		 preferably by using $wpdb->prepare() -->
+	<!-- Covers rule:  $wpdb->prepare()... The benefit of this is that we don't have to remember
+		 to manually use esc_sql(), and also that it is easy to see at a glance whether something
+		 has been escaped or not, because it happens right when the query happens. -->
 	<rule ref="WordPress.DB.PreparedSQL"/>
 
 
@@ -292,7 +311,7 @@
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
 	#############################################################################
 	-->
-	<!-- Covers rule: Use lowercase letters in variable, action, and function names.
+	<!-- Covers rule: Use lowercase letters in variable, action/filter, and function names.
 		 Separate words via underscores. -->
 	<rule ref="WordPress.NamingConventions.ValidFunctionName"/>
 	<rule ref="WordPress.NamingConventions.ValidHookName"/>
@@ -361,6 +380,8 @@
 		 constants or literals on the left. -->
 	<rule ref="WordPress.PHP.YodaConditions"/>
 
+	<!-- Rule: Yoda conditions for <, >, <= or >= are significantly more difficult to read
+		 and are best avoided. -->
 
 	<!--
 	#############################################################################
@@ -394,7 +415,7 @@
 	</rule>
 
 	<!-- Rule: create_function() function, which internally performs an eval(),
-		 is deprecated in PHP 7.2. Both of these must not be used. -->
+		 is deprecated in PHP 7.2. ... these must not be used. -->
 	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
 
 
@@ -404,6 +425,8 @@
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#error-control-operator
 	#############################################################################
 	-->
+	<!-- Covers rule: This operator is often used lazily instead of doing proper error checking.
+		 Its use is highly discouraged. -->
 	<rule ref="WordPress.PHP.NoSilencedErrors"/>
 
 
