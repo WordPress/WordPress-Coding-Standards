@@ -4,14 +4,18 @@ about: A reminder to take action when a WPCS dependency changes
 
 ---
 
-<!-- Please prefix the title the Issue with the dependency name and version when action should be taken e.g. PHPCS 3.3: ... -->
+<!-- PLEASE prefix the title the Issue with the dependency name and version when action should be taken e.g. PHPCS 3.3: ... -->
 
-## Dependency Version
-<!-- Please fill in the dependency name and version e.g.:
-When the PHPCS dependency is at least version 3.3.0, then take the actions below.
--->
-When the ... dependency is at least version ..., then take the actions below.
+## Rationale
 
-## Action checklist
+<!-- Why should this change be made WPCS? -->
+
+## References
+
+<!-- References, like a link to the changelog of the version which contains feature or the upstream issue which requested it -->
+ 
+ -  ...
+
+## Action Checklist
 
 - [ ] ...
