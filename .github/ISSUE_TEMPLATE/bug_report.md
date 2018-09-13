@@ -16,7 +16,7 @@ For bugs with fixers: How the code was fixed? How did you expect the code to be 
 ## Minimal Code Snippet
 <!-- Please provide example code that demonstrates the issue. Do NOT paste screenshots of code! -->
 
-```
+```php
 // Place your code sample here.
 ```
 
