@@ -28,8 +28,10 @@
 	},
 	"type"       : "phpcodesniffer-standard",
 	"scripts"    : {
-		"install-codestandards": "\"vendor/bin/phpcs\" --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility",
-		"post-install-cmd": "@install-codestandards",
-		"post-update-cmd" : "@install-codestandards"
+		"install-codestandards": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility",
+		"check-cs"             : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		"fix-cs"               : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+		"post-install-cmd"     : "@install-codestandards",
+		"post-update-cmd"      : "@install-codestandards"
 	}
 }
