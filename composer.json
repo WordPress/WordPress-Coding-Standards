@@ -1,37 +1,40 @@
 {
-	"name"       : "wp-coding-standards/wpcs",
+	"name": "wp-coding-standards/wpcs",
+	"type": "phpcodesniffer-standard",
 	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
-	"keywords"   : ["phpcs", "standards", "WordPress"],
-	"license"    : "MIT",
-	"authors"    : [
+	"keywords": [
+		"phpcs",
+		"standards",
+		"WordPress"
+	],
+	"license": "MIT",
+	"authors": [
 		{
-			"name"    : "Contributors",
+			"name": "Contributors",
 			"homepage": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/graphs/contributors"
-
 		}
 	],
-	"require"    : {
-		"php" : ">=5.3",
+	"require": {
+		"php": ">=5.3",
 		"squizlabs/php_codesniffer": "^2.9.0 || ^3.0.2"
 	},
-	"require-dev" : {
+	"require-dev": {
 		"phpcompatibility/php-compatibility": "*"
 	},
-	"suggest" : {
+	"suggest": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
 	},
-	"minimum-stability" : "RC",
-	"support"    : {
-		"issues": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues",
-		"wiki"  : "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki",
-		"source": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards"
+	"minimum-stability": "RC",
+	"scripts": {
+		"post-install-cmd": "@install-codestandards",
+		"post-update-cmd": "@install-codestandards",
+		"check-cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		"fix-cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+		"install-codestandards": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility"
 	},
-	"type"       : "phpcodesniffer-standard",
-	"scripts"    : {
-		"install-codestandards": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility",
-		"check-cs"             : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
-		"fix-cs"               : "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
-		"post-install-cmd"     : "@install-codestandards",
-		"post-update-cmd"      : "@install-codestandards"
+	"support": {
+		"issues": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues",
+		"wiki": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki",
+		"source": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards"
 	}
 }
