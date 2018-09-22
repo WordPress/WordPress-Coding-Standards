@@ -2369,12 +2369,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		if ( \T_NS_SEPARATOR === $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
+		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		if ( \T_NS_SEPARATOR === $this->tokens[ $nextToken ]['code'] ) {
 			// Not a namespace declaration, but use of, i.e. `namespace\someFunction();`.
 			return false;
 		}
 
-		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 		if ( \T_OPEN_CURLY_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
 			// Declaration for global namespace when using multiple namespaces in a file.
 			// I.e.: `namespace {}`.
@@ -2382,16 +2382,18 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Ok, this should be a namespace declaration, so get all the parts together.
-		$validTokens = array(
+		$acceptedTokens = array(
 			\T_STRING       => true,
 			\T_NS_SEPARATOR => true,
-			\T_WHITESPACE   => true,
 		);
+		$validTokens = $acceptedTokens + Tokens::$emptyTokens;
 
 		$namespaceName = '';
 		while ( isset( $validTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
-			$namespaceName .= trim( $this->tokens[ $nextToken ]['content'] );
-			$nextToken++;
+			if ( isset( $acceptedTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
+				$namespaceName .= trim( $this->tokens[ $nextToken ]['content'] );
+			}
+			++$nextToken;
 		}
 
 		return $namespaceName;
