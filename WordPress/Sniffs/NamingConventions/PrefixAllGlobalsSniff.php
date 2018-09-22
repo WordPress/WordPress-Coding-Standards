@@ -49,8 +49,9 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @var string[]
 	 */
 	protected $prefix_blacklist = array(
-		'wp' => true,
-		'_'  => true,
+		'wordpress' => true,
+		'wp'        => true,
+		'_'         => true,
 	);
 
 	/**
