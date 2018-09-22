@@ -314,7 +314,7 @@ define( '\OtherNameSpace\PLUGIN_FILE', __FILE__ ); // OK.
 define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
 define( '\PLUGIN_FILE', __FILE__ );
 
-namespace Testing {
+namespace TGMPA\Testing {
 	define( 'MY' . __NAMESPACE__, __FILE__ ); // Error, not actually namespaced.
 	define( 'MY\\' . __NAMESPACE__, __FILE__ ); // OK, even though strangely setup, the constant is in a namespace.
 }
