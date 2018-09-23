@@ -1182,7 +1182,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$regex = '#\b' . preg_quote( $comment, '#' ) . '\b#i';
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
-		// we need to here.
+		// we need to consider here.
 		$end_of_statement = $this->phpcsFile->findNext( array( \T_CLOSE_TAG, \T_SEMICOLON ), $stackPtr );
 
 		if ( false !== $end_of_statement ) {
@@ -1194,8 +1194,10 @@ abstract class Sniff implements PHPCS_Sniff {
 				$lastPtr = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 
-			if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-					|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
+			if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
+					&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
+					|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
+					&& T_PHPCS_SET !== $this->tokens[ $lastPtr ]['type'] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
@@ -1208,8 +1210,10 @@ abstract class Sniff implements PHPCS_Sniff {
 		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
 		$lastPtr     = $this->phpcsFile->findPrevious( \T_WHITESPACE, $end_of_line, null, true );
 
-		if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
+		if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
+				|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
+				&& T_PHPCS_SET !== $this->tokens[ $lastPtr ]['type'] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {
