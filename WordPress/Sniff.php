@@ -2015,8 +2015,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer, it
 	 * will detect whether the array has values or is empty.
 	 *
-	 * @link https://github.com/wimg/PHPCompatibility/issues/120
-	 * @link https://github.com/wimg/PHPCompatibility/issues/152
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/120
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/152
 	 *
 	 * @since 0.11.0
 	 *
@@ -2082,9 +2082,9 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
 	 * it will return the number of values in the array.
 	 *
-	 * @link https://github.com/wimg/PHPCompatibility/issues/111
-	 * @link https://github.com/wimg/PHPCompatibility/issues/114
-	 * @link https://github.com/wimg/PHPCompatibility/issues/151
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/111
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/114
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/151
 	 *
 	 * @since 0.11.0
 	 *

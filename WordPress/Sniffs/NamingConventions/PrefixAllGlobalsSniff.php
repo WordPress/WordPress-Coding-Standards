@@ -328,7 +328,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							break;
 
 						case 'T_TRAIT':
-							// phpcs:ignore PHPCompatibility.PHP.NewFunctions.trait_existsFound
+							// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.trait_existsFound
 							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native trait.
 								return;

@@ -48,14 +48,16 @@
 
 	<!-- Check for PHP cross-version compatibility. -->
 	<!--
-	To enable this, the PHPCompatibility standard needs
+	To enable this, the PHPCompatibilityWP standard needs
 	to be installed.
 	See the readme for installation instructions:
-	https://github.com/wimg/PHPCompatibility
+	https://github.com/PHPCompatibility/PHPCompatibilityWP
+	For more information, also see:
+	https://github.com/PHPCompatibility/PHPCompatibility
 	-->
 	<!--
 	<config name="testVersion" value="5.2-"/>
-	<rule ref="PHPCompatibility"/>
+	<rule ref="PHPCompatibilityWP"/>
 	-->
 
 	<!--

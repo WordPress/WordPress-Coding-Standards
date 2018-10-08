@@ -539,7 +539,7 @@ You are also encouraged to check the file history of any WPCS classes you extend
 - Ability to use a whitelist comment for tax queries for the `WordPress.VIP.SlowDBQuery` sniff.
 - Instructions on how to use WPCS with Atom and SublimeLinter to the Readme.
 - Reference to the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki) to the Readme.
-- Recommendation to also use the [PHPCompatibility](https://github.com/wimg/PHPCompatibility) ruleset to the Readme.
+- Recommendation to also use the [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) ruleset to the Readme.
 
 ### Changed
 - The minimum required PHP_CodeSniffer version to 2.6.0.
