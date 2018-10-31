@@ -20,6 +20,7 @@ php:
     - 7.0
     - 7.1
     - 7.2
+    - 7.3
     - nightly
 
 env:
@@ -53,6 +54,10 @@ matrix:
   allow_failures:
     # Allow failures for unstable builds.
     - php: nightly
+    - php: 7.3
+      env: PHPCS_BRANCH="3.1.0"
+    - php: 7.3
+      env: PHPCS_BRANCH="2.9.0"
 
 before_install:
     # Speed up build time by disabling Xdebug.
