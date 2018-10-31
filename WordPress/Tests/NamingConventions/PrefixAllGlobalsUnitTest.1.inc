@@ -398,4 +398,12 @@ class Some_Test_Class extends NonTestClass { // Bad.
 	}
 }
 
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes wordpress,somethingelse
+// The above line adds an issue to line 1 about a blacklisted prefix.
+function wordpress_do_something() {} // Bad.
+function somethingelse_do_something() {} // OK.
+
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes my_wordpress_plugin
+apply_filters( 'my_wordpress_plugin_filtername', $var ); // OK.
+
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
