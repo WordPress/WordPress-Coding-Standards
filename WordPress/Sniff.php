@@ -1960,7 +1960,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			'T_ANON_CLASS' => true,
 			'T_TRAIT'      => true,
 		);
-		if ( true === $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+		if ( false !== $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
 			return 'trait';
 		}
 
@@ -2459,7 +2459,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			'T_INTERFACE'  => true,
 		);
 
-		return $this->valid_direct_scope( $stackPtr, $valid_scopes );
+		return is_int( $this->valid_direct_scope( $stackPtr, $valid_scopes ) );
 	}
 
 	/**
@@ -2483,10 +2483,20 @@ abstract class Sniff implements PHPCS_Sniff {
 			'T_TRAIT'      => true,
 		);
 
-		if ( $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+		$scopePtr = $this->valid_direct_scope( $stackPtr, $valid_scopes );
+		if ( false !== $scopePtr ) {
 			// Make sure it's not a method parameter.
 			if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				return true;
+			} else {
+				$parenthesis  = array_keys( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+				$deepest_open = array_pop( $parenthesis );
+				if ( $deepest_open < $scopePtr
+					|| isset( $this->tokens[ $deepest_open ]['parenthesis_owner'] ) === false
+					|| T_FUNCTION !== $this->tokens[ $this->tokens[ $deepest_open ]['parenthesis_owner'] ]['code']
+				) {
+					return true;
+				}
 			}
 		}
 
@@ -2507,7 +2517,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                            to allow for newer token types.
 	 *                            Value is irrelevant.
 	 *
-	 * @return bool
+	 * @return int|bool StackPtr to the scope if valid, false otherwise.
 	 */
 	protected function valid_direct_scope( $stackPtr, array $valid_scopes ) {
 		if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
@@ -2524,7 +2534,11 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		return isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] );
+		if ( isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] ) ) {
+			return $ptr;
+		}
+
+		return false;
 	}
 
 	/**
