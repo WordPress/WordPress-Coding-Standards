@@ -20,6 +20,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   1.2.0  Now also checks whether namespaces are prefixed.
  *
  * @uses    \WordPress\Sniff::$custom_test_class_whitelist
  */
@@ -64,6 +65,20 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @var string[]
 	 */
 	private $validated_prefixes = array();
+
+	/**
+	 * Target namespace prefixes after validation with regex indicator.
+	 *
+	 * All prefixes are lowercased for case-insensitive compare.
+	 * If the prefix doesn't already contain a namespace separator, but does contain
+	 * non-word characters, these will have been replaced with regex syntax to allow
+	 * for namespace separators and the `is_regex` indicator will have been set to `true`.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @var array
+	 */
+	private $validated_namespace_prefixes = array();
 
 	/**
 	 * Cache of previously set prefixes.
@@ -167,6 +182,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function register() {
 		$targets = array(
+			\T_NAMESPACE  => \T_NAMESPACE,
 			\T_FUNCTION   => \T_FUNCTION,
 			\T_CLASS      => \T_CLASS,
 			\T_INTERFACE  => \T_INTERFACE,
@@ -273,6 +289,46 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		} elseif ( \T_VARIABLE === $this->tokens[ $stackPtr ]['code'] ) {
 
 			return $this->process_variable_assignment( $stackPtr );
+
+		} elseif ( \T_NAMESPACE === $this->tokens[ $stackPtr ]['code'] ) {
+			$namespace_name = $this->get_declared_namespace_name( $stackPtr );
+
+			if ( false === $namespace_name || '' === $namespace_name || '\\' === $namespace_name ) {
+				return;
+			}
+
+			foreach ( $this->validated_namespace_prefixes as $key => $prefix_info ) {
+				if ( false === $prefix_info['is_regex'] ) {
+					if ( stripos( $namespace_name, $prefix_info['prefix'] ) === 0 ) {
+						$this->phpcsFile->recordMetric( $stackPtr, 'Prefix all globals: allowed prefixes', $key );
+						return;
+					}
+				} else {
+					// Ok, so this prefix should be used as a regex.
+					$regex = '`^' . $prefix_info['prefix'] . '`i';
+					if ( preg_match( $regex, $namespace_name ) > 0 ) {
+						$this->phpcsFile->recordMetric( $stackPtr, 'Prefix all globals: allowed prefixes', $key );
+						return;
+					}
+				}
+			}
+
+			// Still here ? In that case, we have a non-prefixed namespace name.
+			$recorded = $this->phpcsFile->addError(
+				self::ERROR_MSG,
+				$stackPtr,
+				'NonPrefixedNamespaceFound',
+				array(
+					'Namespaces declared',
+					$namespace_name,
+				)
+			);
+
+			if ( true === $recorded ) {
+				$this->record_potential_prefix_metric( $stackPtr, $namespace_name );
+			}
+
+			return;
 
 		} else {
 
@@ -824,6 +880,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$this->previous_prefixes = $this->prefixes;
 
 		// Validate the passed prefix(es).
+		$ns_prefixes = array();
 		foreach ( $this->prefixes as $key => $prefix ) {
 			$prefixLC = strtolower( $prefix );
 
@@ -839,9 +896,9 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Validate the prefix against characters allowed for function, class, constant names etc.
-			if ( preg_match( '`^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$`', $prefix ) !== 1 ) {
+			if ( preg_match( '`^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\\\\]*$`', $prefix ) !== 1 ) {
 				$this->phpcsFile->addWarning(
-					'The "%s" prefix is not a valid function/class/variable/constant prefix in PHP.',
+					'The "%s" prefix is not a valid namespace/function/class/variable/constant prefix in PHP.',
 					0,
 					'InvalidPrefixPassed',
 					array( $prefix )
@@ -851,10 +908,26 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Lowercase the prefix to allow for direct compare.
 			$this->prefixes[ $key ] = $prefixLC;
+
+			/*
+			 * Replace non-word characters in the prefix with a regex snippet, but only if the
+			 * string doesn't already contain namespace separators.
+			 */
+			$is_regex = false;
+			if ( strpos( $prefix, '\\' ) === false && preg_match( '`[_\W]`', $prefix ) > 0 ) {
+				$prefix   = preg_replace( '`([_\W])`', '[\\\\\\\\$1]', $prefixLC );
+				$is_regex = true;
+			}
+
+			$ns_prefixes[ $prefixLC ] = array(
+				'prefix'   => $prefix,
+				'is_regex' => $is_regex,
+			);
 		}
 
-		// Set the validated prefixes cache.
-		$this->validated_prefixes = $this->prefixes;
+		// Set the validated prefixes caches.
+		$this->validated_prefixes           = $this->prefixes;
+		$this->validated_namespace_prefixes = $ns_prefixes;
 	}
 
 	/**
