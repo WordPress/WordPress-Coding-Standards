@@ -135,3 +135,10 @@ function is_windows() {
 if ( $something == ( false !== ( $test_is_windows = getenv( 'WP_CLI_TEST_IS_WINDOWS' ) ) ? (bool) $test_is_windows : 0 === stripos( PHP_OS, 'WIN' ) ) ) {} // Bad.
 
 if ( ( false !== ( $test_is_windows = getenv( 'WP_CLI_TEST_IS_WINDOWS' ) ) ? (bool) $test_is_windows : 0 === stripos( PHP_OS, 'WIN' ) ) === $something ) {} // OK.
+
+// Test with binary casts.
+if ( (binary) $binary === b"binary $foo" ) { // Bad x 1.
+	echo 'True';
+} elseif ( b"binary $foo" === (binary) $binary ) { // Good.
+	echo 'False';
+}

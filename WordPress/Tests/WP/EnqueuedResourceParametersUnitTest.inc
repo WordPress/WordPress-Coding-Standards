@@ -49,3 +49,9 @@ wp_enqueue_script( 'someScript-js' ); // OK.
 
 wp_register_style( 'someScript-js' ); // OK.
 wp_enqueue_style( 'someScript-js' ); // OK.
+
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (bool) 1, true ); // OK.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (bool) 0, true ); // Error - 0, false or NULL are not allowed.
+
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (binary) 123, true ); // OK.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), b'0', true ); // Error - 0, false or NULL are not allowed.

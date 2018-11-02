@@ -17,7 +17,7 @@ $a = (real) $b;
 // Warning: Discouraged casts.
 $a = (unset) $b; // Warning.
 $a = (binary) $b; // Warning.
-$a = b"binary string"; // Warning. Currently false negative. Related to PHPCS bug report #1574.
+$a = b"binary string"; // Warning.
 $a = b"binary $string"; // Warning.
 
 // Error: Mixed case.
