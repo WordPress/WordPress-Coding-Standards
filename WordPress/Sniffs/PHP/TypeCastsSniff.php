@@ -49,7 +49,7 @@ class TypeCastsSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 
 		$token_code  = $this->tokens[ $stackPtr ]['code'];
-		$typecast    = $this->tokens[ $stackPtr ]['content'];
+		$typecast    = str_replace( ' ', '', $this->tokens[ $stackPtr ]['content'] );
 		$typecast_lc = strtolower( $typecast );
 
 		$this->phpcsFile->recordMetric( $stackPtr, 'Typecast encountered', $typecast );

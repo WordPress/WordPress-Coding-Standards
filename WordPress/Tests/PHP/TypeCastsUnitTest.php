@@ -56,6 +56,10 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 			47 => 1,
 			48 => 1,
 			49 => 1,
+			60 => 1,
+			61 => 1,
+			62 => 1,
+			63 => 1,
 		);
 	}
 
@@ -74,6 +78,8 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 			35 => 1,
 			48 => 1,
 			49 => 1,
+			64 => 1,
+			65 => 1,
 		);
 	}
 }

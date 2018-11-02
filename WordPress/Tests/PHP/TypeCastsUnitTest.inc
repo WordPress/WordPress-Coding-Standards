@@ -47,3 +47,19 @@ $a = (ARRAY) $b;
 $a = (OBJECT) $b;
 $a = (UNSET) $b; // + discouraged.
 $a = (BINARY) $b; // + discouraged.
+
+// Test recognition with whitespace within the cast.
+// OK.
+$a = (  bool  ) $b;
+$a = ( int ) $b;
+$a = ( float) $b;
+$a = (string ) $b;
+$a = (          array) $b;
+$a = (object      ) $b;
+
+$a = (     boolean          ) $b; // Error.
+$a = (  integer) $b; // Error.
+$a = (double ) $b; // Error.
+$a = ( real ) $b; // Error.
+$a = (  unset ) $b; // Warning.
+$a = ( binary ) $b; // Warning.
