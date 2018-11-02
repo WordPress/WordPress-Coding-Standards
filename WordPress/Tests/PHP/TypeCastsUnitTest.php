@@ -10,6 +10,7 @@
 namespace WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the TypeCasts sniff.
@@ -67,7 +68,7 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 		return array(
 			18 => 1,
 			19 => 1,
-			// 20 => 1,
+			20 => ( version_compare( PHPCSHelper::get_version(), '3.4.0', '<' ) === true ? 0 : 1 ),
 			21 => 1,
 			34 => 1,
 			35 => 1,
