@@ -880,6 +880,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$this->previous_prefixes = $this->prefixes;
 
 		// Validate the passed prefix(es).
+		$prefixes    = array();
 		$ns_prefixes = array();
 		foreach ( $this->prefixes as $key => $prefix ) {
 			$prefixLC = strtolower( $prefix );
@@ -891,7 +892,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					'ForbiddenPrefixPassed',
 					array( $prefix )
 				);
-				unset( $this->prefixes[ $key ] );
 				continue;
 			}
 
@@ -903,11 +903,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					'InvalidPrefixPassed',
 					array( $prefix )
 				);
-				continue;
 			}
 
 			// Lowercase the prefix to allow for direct compare.
-			$this->prefixes[ $key ] = $prefixLC;
+			$prefixes[ $key ] = $prefixLC;
 
 			/*
 			 * Replace non-word characters in the prefix with a regex snippet, but only if the
@@ -926,7 +925,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Set the validated prefixes caches.
-		$this->validated_prefixes           = $this->prefixes;
+		$this->validated_prefixes           = $prefixes;
 		$this->validated_namespace_prefixes = $ns_prefixes;
 	}
 

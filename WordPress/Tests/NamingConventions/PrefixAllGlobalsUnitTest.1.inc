@@ -406,4 +406,7 @@ function somethingelse_do_something() {} // OK.
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes my_wordpress_plugin
 apply_filters( 'my_wordpress_plugin_filtername', $var ); // OK.
 
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes test-this
+do_action( 'Test-THIS-hookname' ); // OK.
+
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
