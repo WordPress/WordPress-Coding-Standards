@@ -2390,7 +2390,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			\T_STRING       => true,
 			\T_NS_SEPARATOR => true,
 		);
-		$validTokens = $acceptedTokens + Tokens::$emptyTokens;
+		$validTokens    = $acceptedTokens + Tokens::$emptyTokens;
 
 		$namespaceName = '';
 		while ( isset( $validTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
@@ -2493,7 +2493,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				$deepest_open = array_pop( $parenthesis );
 				if ( $deepest_open < $scopePtr
 					|| isset( $this->tokens[ $deepest_open ]['parenthesis_owner'] ) === false
-					|| T_FUNCTION !== $this->tokens[ $this->tokens[ $deepest_open ]['parenthesis_owner'] ]['code']
+					|| \T_FUNCTION !== $this->tokens[ $this->tokens[ $deepest_open ]['parenthesis_owner'] ]['code']
 				) {
 					return true;
 				}
