@@ -63,7 +63,7 @@ class Debug_Bar {
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain debug-bar-constants
 
 /**
- * Text domain which should be fixed, docblock format with PHP doc tags.
+ * Text domain which should be fixed, docblock format with PHP doc tags and tab aligned.
  *
  * @package     WordPress\Plugins\Debug Bar Constants
  * @author      Juliette Reinders Folmer <wpplugins_nospam@adviesenzo.nl>
@@ -74,16 +74,16 @@ class Debug_Bar {
  * @license     http://creativecommons.org/licenses/GPL/2.0/ GNU General Public License, version 2 or higher
  *
  * @wordpress-plugin
- * Plugin Name: Debug Bar Constants
- * Plugin URI:  https://wordpress.org/plugins/debug-bar-constants/
- * Description: Debug Bar Constants adds new panels to Debug Bar that display all the defined constants for the current request. Requires "Debug Bar" plugin.
- * Version:     2.0.0
- * Author:      Juliette Reinders Folmer
- * Author URI:  http://www.adviesenzo.nl/
- * Depends:     Debug Bar
- * Text Domain: debug-bar-constants
- * Domain Path: /languages
- * Copyright:   2013-2018 Juliette Reinders Folmer
+ * Plugin Name	:	Debug Bar Constants
+ * Plugin URI	:	https://wordpress.org/plugins/debug-bar-constants/
+ * Description	:	Debug Bar Constants adds new panels to Debug Bar that display all the defined constants for the current request. Requires "Debug Bar" plugin.
+ * Version		:	2.0.0
+ * Author		:	Juliette Reinders Folmer
+ * Author URI	:	http://www.adviesenzo.nl/
+ * Depends		:	Debug Bar
+ * Text Domain	:	debug-bar-constants
+ * Domain Path	:	/languages
+ * Copyright	:	2013-2018 Juliette Reinders Folmer
  */
 
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain a2-optimized

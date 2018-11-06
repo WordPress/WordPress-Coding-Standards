@@ -649,11 +649,13 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 					);
 
 					if ( true === $fix ) {
-						$replacement = str_replace(
-							$text_domain_found,
-							$this->new_text_domain,
-							$this->tokens[ $text_domain_ptr ]['content']
-						);
+						if ( isset( $this->tokens[ $text_domain_ptr ]['orig_content'] ) ) {
+							$replacement = $this->tokens[ $text_domain_ptr ]['orig_content'];
+						} else {
+							$replacement = $this->tokens[ $text_domain_ptr ]['content'];
+						}
+
+						$replacement = str_replace( $text_domain_found, $this->new_text_domain, $replacement );
 
 						$this->phpcsFile->fixer->replaceToken( $text_domain_ptr, $replacement );
 					}
@@ -670,7 +672,12 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 				);
 
 				if ( true === $fix ) {
-					$replacement = $this->tokens[ $last_header_ptr ]['content'];
+					if ( isset( $this->tokens[ $last_header_ptr ]['orig_content'] ) ) {
+						$replacement = $this->tokens[ $last_header_ptr ]['orig_content'];
+					} else {
+						$replacement = $this->tokens[ $last_header_ptr ]['content'];
+					}
+
 					$replacement = str_replace( $last_header_matches[1], 'Text Domain', $replacement );
 					$replacement = str_replace( $last_header_matches[2], $this->new_text_domain, $replacement );
 
