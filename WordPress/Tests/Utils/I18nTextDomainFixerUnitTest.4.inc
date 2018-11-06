@@ -11,7 +11,7 @@
  */
 
 /*
- * Correct text-domain, no replacement needed.
+ * Correct text domain, no replacement needed.
  */
 load_textdomain( 'something-else', '/path/to/file.mo' );
 load_plugin_textdomain( 'something-else', false, '/languages/' );
@@ -74,7 +74,7 @@ _e( $text, 'default' );
 is_textdomain_loaded( 'some-other-plugin' );
 
 /*
- * Incorrect text-domain, should be replaced.
+ * Incorrect text domain, should be replaced.
  */
 load_textdomain( 'text-domain', '/path/to/file.mo' );
 load_plugin_textdomain( 'text-domain', false, '/languages/' );
@@ -122,7 +122,7 @@ _get_path_to_translation_from_lang_dir( 'text-domain' );
 _get_path_to_translation( 'other-text-domain', true );
 
 /*
- * Missing text-domain, should be added.
+ * Missing text domain, should be added.
  */
 load_textdomain();
 load_plugin_textdomain( /* everything missing, but has a comment */ );
@@ -167,7 +167,7 @@ _get_path_to_translation_from_lang_dir();
 _get_path_to_translation();
 
 /*
- * Missing text-domain and preceeding args, only throw warning.
+ * Missing text domain and preceeding args, only throw warning.
  */
 __();
 _e(   /* comment */  );

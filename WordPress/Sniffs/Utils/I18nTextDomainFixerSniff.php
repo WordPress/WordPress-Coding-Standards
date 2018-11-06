@@ -117,7 +117,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Whether a valid new text-domain was found.
+	 * Whether a valid new text domain was found.
 	 *
 	 * @since 1.2.0
 	 *
@@ -126,7 +126,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	private $is_valid = false;
 
 	/**
-	 * The new text-domain as validated.
+	 * The new text domain as validated.
 	 *
 	 * @since 1.2.0
 	 *
@@ -323,7 +323,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 				return ( $this->phpcsFile->numTokens + 1 );
 			}
 
-			// If the text-domain passed both validations, it should be considered valid.
+			// If the text domain passed both validations, it should be considered valid.
 			$this->is_valid = true;
 
 		} elseif ( false === $this->is_valid ) {
@@ -445,7 +445,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		$old_domain = $this->strip_quotes( $this->tokens[ $domain_token ]['content'] );
 
 		if ( ! \in_array( $old_domain, $this->old_text_domain, true ) ) {
-			// Not a text-domain targetted for replacement, ignore.
+			// Not a text domain targetted for replacement, ignore.
 			return;
 		}
 
@@ -478,7 +478,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		$target_param = $this->target_functions[ $matched_content ];
 
 		if ( 1 !== $target_param ) {
-			// Only process the no param case as fixable if the text-domain is expected to be the first parameter.
+			// Only process the no param case as fixable if the text domain is expected to be the first parameter.
 			$this->phpcsFile->addWarning( 'Missing $domain arg and preceding argument(s)', $stackPtr, 'MissingArgs' );
 			return;
 		}
