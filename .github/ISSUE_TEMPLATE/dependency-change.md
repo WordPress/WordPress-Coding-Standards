@@ -8,11 +8,11 @@ about: A reminder to take action when a WPCS dependency changes
 
 ## Rationale
 
-<!-- Why should this change be made WPCS? -->
+<!-- Why should this change be made in WPCS? -->
 
 ## References
 
-<!-- References, like a link to the changelog of the version which contains feature or the upstream issue which requested it -->
+<!-- References, like a link to the changelog of the version which contains a feature or the upstream issue which requested it -->
  
  -  ...
 

@@ -9,8 +9,6 @@ about: Create a report to help us improve
 Please provide a clear and concise description of what the bug is.
 
 What did you expect to happen? What actually happened?
-
-For bugs with fixers: How the code was fixed? How did you expect the code to be fixed?
 -->
 
 ## Minimal Code Snippet
@@ -20,11 +18,15 @@ For bugs with fixers: How the code was fixed? How did you expect the code to be 
 // Place your code sample here.
 ```
 
+For bugs with fixers: How was the code fixed? How did you expect the code to be fixed?
+
 ## Error Code
 <!--
 The error code for the sniff that is (or should be) being triggered (you
 can see the sniff error codes by running `phpcs` with the `-s` flag).
 e.g. `WordPress.PHP.NoSilencedErrors.Discouraged`
+
+You can leave this section empty if you are reporting a false negative.
 -->
 
 ## Environment

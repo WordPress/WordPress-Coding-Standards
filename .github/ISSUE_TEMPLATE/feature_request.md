@@ -15,5 +15,5 @@ Any (sniff) feature request/suggestion should be accompanied by code samples of 
 And preferably also code samples of code which shouldn't be flagged.
 -->
 
-## Additional context
+## Additional context (optional)
 <!-- Add any other context or screenshots about the feature request here. -->
