@@ -195,5 +195,13 @@ esc_attr_x(
 translate();
 translate_with_gettext_context( $text);
 
+/*
+ * Additional deprecated functions.
+ */
+_nc( $single, $plural ); // Warning.
+__ngettext( $singular, $plural, $number ); // Error.
+__ngettext_noop( $singular, $plural, 'other-text-domain' ); // Error.
+translate_with_context( $text, 'third-text-domain' ); // Error.
+
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain false
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain false

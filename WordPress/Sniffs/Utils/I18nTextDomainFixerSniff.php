@@ -91,6 +91,10 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		'_nx_noop'                               => 4,
 		'translate_nooped_plural'                => 3,
 		'_c'                                     => 2, // Deprecated.
+		'_nc'                                    => 4, // Deprecated.
+		'__ngettext'                             => 4, // Deprecated.
+		'__ngettext_noop'                        => 3, // Deprecated.
+		'translate_with_context'                 => 2, // Deprecated.
 
 		'esc_html__'                             => 2,
 		'esc_html_e'                             => 2,
