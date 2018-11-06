@@ -14,8 +14,6 @@ use WordPress\AbstractVariableRestrictionsSniff;
 /**
  * Restricts usage of some variables in VIP context.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/
- *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
@@ -56,7 +54,7 @@ class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 	 */
 	public function getGroups() {
 		return array(
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#working-with-wp_users-and-user_meta
+			// @link https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#wp_users-and-user_meta
 			'user_meta' => array(
 				'type'        => 'error',
 				'message'     => 'Usage of users/usermeta tables is highly discouraged in VIP context, For storing user additional user metadata, you should look at User Attributes.',
@@ -66,7 +64,7 @@ class RestrictedVariablesSniff extends AbstractVariableRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#caching-constraints
+			// @link https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#caching-constraints
 			'cache_constraints' => array(
 				'type'          => 'warning',
 				'message'       => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',

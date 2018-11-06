@@ -14,7 +14,7 @@ use WordPress\AbstractFunctionParameterSniff;
 /**
  * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.
  *
- * @link    https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#using-in_array-without-strict-parameter
  *
  * @package WPCS\WordPressCodingStandards
  *

@@ -14,7 +14,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Disallow Filesystem writes.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#filesystem-operations
  *
  * @package WPCS\WordPressCodingStandards
  *

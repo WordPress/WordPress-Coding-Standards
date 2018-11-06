@@ -15,7 +15,7 @@ use WordPress\Sniff;
  * Discourages the use of the session variable.
  * Creating a session writes a file to the server and is unreliable in a multi-server environment.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
+ * @link https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#session-start-and-other-session-functions
  *
  * @package WPCS\WordPressCodingStandards
  *

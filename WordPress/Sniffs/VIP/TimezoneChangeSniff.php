@@ -14,7 +14,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Disallow the changing of timezone.
  *
- * @link    https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#manipulating-the-timezone-server-side
  *
  * @package WPCS\WordPressCodingStandards
  *

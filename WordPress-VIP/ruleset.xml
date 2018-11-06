@@ -1,73 +1,50 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress VIP">
-	<description>Deprecated WordPress.com VIP Coding Standards, use the official VIP coding standards instead, these can be found at https://github.com/Automattic/VIP-Coding-Standards</description>
+	<description>Deprecated WordPress.com VIP Coding Standards. Use the official VIP coding standards instead which can be found at https://github.com/Automattic/VIP-Coding-Standards</description>
+
+	<!-- For info on WPCOM requirements: https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/ -->
+	<!-- For info on VIP-Go requirements: https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/ -->
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
 	<rule ref="WordPress-Core"/>
 
-	<!-- Covers:
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#removing-the-admin-bar
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#filesystem-writes
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#order-by-rand
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#uncached-functions
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#flush_rewrite_rules
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#session_start-and-other-session-related-functions
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#functions-that-use-joins-taxonomy-relation-queries-cat-tax-queries-subselects-or-api-calls
-		 https://vip.wordpress.com/documentation/code-review-what-we-look-for/#querying-on-meta_value
-	-->
 	<rule ref="WordPress.VIP"/>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#validation-sanitization-and-escaping -->
-	<!-- https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/ -->
 	<rule ref="WordPress.Security.EscapeOutput"/>
 	<rule ref="WordPress.Security.NonceVerification"/>
 
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69 -->
 	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-instead-of -->
 	<rule ref="WordPress.PHP.StrictComparisons"/>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
 		<properties>
 			<property name="maxPercentage" value="45"/>
 		</properties>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#eval-and-create_function -->
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#serializing-data -->
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#encoding-values-used-when-creating-a-url-or-passed-to-add_query_arg -->
-	<!-- https://github.com/Automattic/vip-scanner/blob/master/vip-scanner/checks/ForbiddenPHPFunctionsCheck.php -->
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
 		<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/633#issuecomment-266634811 -->
 		<properties>
 			<property name="exclude" type="array" value="obfuscation"/>
 		</properties>
 	</rule>
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration">
 		<type>error</type>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#commented-out-code-debug-code-or-output -->
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
 	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log">
 		<type>error</type>
 	</rule>
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#settings-alteration -->
 	<rule ref="WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure">
 		<type>error</type>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter -->
 	<rule ref="WordPress.PHP.StrictInArray"/>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_parse_url-instead-of-parse_url -->
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_json_encode-over-json_encode -->
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#filesystem-writes -->
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls -->
 	<rule ref="WordPress.WP.AlternativeFunctions"/>
 	<!-- VIP recommends other functions -->
 	<rule ref="WordPress.WP.AlternativeFunctions.curl">
@@ -77,11 +54,8 @@
 		<message>%s() is highly discouraged, please use vip_safe_wp_remote_get() instead.</message>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-theme-constants -->
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries -->
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration -->
 	<rule ref="WordPress.DB.DirectDatabaseQuery"/>
 	<rule ref="WordPress.DB.DirectDatabaseQuery.SchemaChange">
 		<type>error</type>
@@ -92,27 +66,21 @@
 		<message>Usage of a direct database call without caching is prohibited on the VIP platform. Use wp_cache_get / wp_cache_set or wp_cache_delete.</message>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload -->
 	<rule ref="WordPress.DB.SlowDBQuery"/>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#using-__file__-for-page-registration -->
 	<rule ref="WordPress.Security.PluginMenuSlug"/>
 	<rule ref="WordPress.Security.PluginMenuSlug.Using__FILE__">
 		<type>error</type>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#cron-schedules-less-than-15-minutes-or-expensive-events -->
 	<rule ref="WordPress.WP.CronInterval"/>
 	<rule ref="WordPress.WP.CronInterval.CronSchedulesInterval">
 		<type>error</type>
 		<message>Scheduling crons at %s sec ( less than %s minutes ) is prohibited.</message>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/code-review-what-we-look-for/#manipulating-the-timezone-server-side -->
-	<!-- https://vip.wordpress.com/documentation/use-current_time-not-date_default_timezone_set/ -->
 	<rule ref="WordPress.WP.TimezoneChange"/>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#no-limit-queries -->
 	<rule ref="WordPress.WP.PostsPerPage"/>
 	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_posts_per_page">
 		<type>error</type>
@@ -121,7 +89,6 @@
 		<type>error</type>
 	</rule>
 
-	<!-- https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#use-wp_safe_redirect-instead-of-wp_redirect -->
 	<rule ref="WordPress.Security.SafeRedirect"/>
 
 	<!--
