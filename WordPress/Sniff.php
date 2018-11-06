@@ -1197,7 +1197,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
 					&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
 					|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
-					&& T_PHPCS_SET !== $this->tokens[ $lastPtr ]['type'] ) )
+					&& 'T_PHPCS_SET' !== $this->tokens[ $lastPtr ]['type'] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
@@ -1213,7 +1213,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
 				&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
 				|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
-				&& T_PHPCS_SET !== $this->tokens[ $lastPtr ]['type'] ) )
+				&& 'T_PHPCS_SET' !== $this->tokens[ $lastPtr ]['type'] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {
