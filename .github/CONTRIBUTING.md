@@ -2,6 +2,8 @@ Hi, thank you for your interest in contributing to the WordPress Coding Standard
 
 # Reporting Bugs
 
+Please search the repo to see if your issue has been reported already and if so, comment in that issue instead of opening a new one.
+
 Before reporting a bug, you should check what sniff an error is coming from.
 Running `phpcs` with the `-s` flag will show the name of the sniff with each error.
 
