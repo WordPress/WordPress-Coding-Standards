@@ -150,7 +150,7 @@ EOD
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
 __( "String default text domain.", "my-slug" ); // Ok.
 __( "String default text domain.", "default" ); // Ok.
-__( "String default text domain.", 'something' ); // Bad, text-domain mismatch.
+__( "String default text domain.", 'something' ); // Bad, text domain mismatch.
 __( 'String default text domain.' ); // Warning, use default.
 
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain default

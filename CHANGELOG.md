@@ -276,8 +276,8 @@ If you are a maintainer of an external standard based on WPCS and any of your cu
 - The `WordPress.VIP.CronInterval` sniff now allows for customizing the minimum allowed cron interval by [setting a property in a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#vip-croninterval-minimum-interval).
 - The `WordPress.VIP.RestrictedFunctions` sniff used to prohibit the use of certain WP native functions, recommending the use of `wpcom_vip_get_term_link()`, `wpcom_vip_get_term_by()` and `wpcom_vip_get_category_by_slug()` instead, as the WP native functions were not being cached. As the results of the relevant WP native functions are cached as of WP 4.8, the advice has now been reversed i.e. use the WP native functions instead of `wpcom...` functions.
 - The `WordPress.VIP.PostsPerPage` sniff now allows for customizing the `post_per_page` limit for which the sniff will trigger by [setting a property in a custom ruleset](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#vip-postsperpage-post-limit).
-- The `WordPress.WP.I18n` sniff will now allow and actively encourage omitting the text-domain in I18n function calls if the text-domain passed via the `text_domain` property is `default`, i.e. the domain used by Core.
-    When `default` is one of several text-domains passed via the `text_domain` property, the error thrown when the domain is missing has been downgraded to a `warning`.
+- The `WordPress.WP.I18n` sniff will now allow and actively encourage omitting the text domain in I18n function calls if the text domain passed via the `text_domain` property is `default`, i.e. the domain used by Core.
+    When `default` is one of several text domains passed via the `text_domain` property, the error thrown when the domain is missing has been downgraded to a `warning`.
 - The `WordPress.XSS.EscapeOutput` sniff now has a separate error code `OutputNotEscapedShortEcho` and the error message texts have been updated.
 - Moved `Squiz.PHP.Eval` from the `WordPress-Extra` and `WordPress-VIP` to the `WordPress-Core` ruleset.
 - Removed two sniffs from the `WordPress-VIP` ruleset which were already included via the `WordPress-Core` ruleset.
@@ -526,7 +526,7 @@ You are also encouraged to check the file history of any WPCS classes you extend
 ## [0.10.0] - 2016-08-29
 
 ### Added
-- `WordPress.WP.I18n` sniff to the `WordPress-Core` ruleset to flag dynamic translatable strings and textdomains.
+- `WordPress.WP.I18n` sniff to the `WordPress-Core` ruleset to flag dynamic translatable strings and text domains.
 - `WordPress.PHP.DisallowAlternativePHPTags` sniff to the `WordPress-Core` ruleset to flag - and fix - ASP and `<script>` PHP open tags.
 - `WordPress.Classes.ClassOpeningStatement` sniff to the `WordPress-Core` ruleset to flag - and fix - class opening brace placement.
 - `WordPress.NamingConventions.ValidHookName` sniff to the `WordPress-Core` ruleset to flag filter and action hooks which don't comply with the guideline of lowercase letters and underscores. For maintaining backward-compatibility of hook names an `additionalWordDelimiters` property can be added via a custom ruleset.
