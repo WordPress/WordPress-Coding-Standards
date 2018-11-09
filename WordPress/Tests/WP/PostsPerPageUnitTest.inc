@@ -2,7 +2,7 @@
 
 $args = array(
 	'posts_per_page' => 999, // Bad.
-	'posts_per_page' => -1, // OK.
+	'posts_per_page' => -1, // Bad.
 	'posts_per_page' => 1, // OK.
 	'posts_per_page' => '1', // OK.
 );
@@ -13,7 +13,8 @@ _query_posts( 'numberposts=999' ); // Bad.
 $query_args['posts_per_page'] = 999; // Bad.
 $query_args['posts_per_page'] = 1; // OK.
 $query_args['posts_per_page'] = '1'; // OK.
-$query_args['numberposts'] = '-1'; // OK.
+$query_args['posts_per_page'] = '-1'; // Bad.
+$query_args['numberposts'] = '-1'; // Bad.
 
 $query_args['my_posts_per_page'] = -1; // OK.
 
