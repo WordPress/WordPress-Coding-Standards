@@ -41,13 +41,16 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array(
 			4  => 1,
+			5  => 1,
 			10 => 1,
 			11 => 1,
 			13 => 1,
-			22 => 1,
+			16 => 1,
+			17 => 1,
 			23 => 1,
 			24 => 1,
-			29 => 1,
+			25 => 1,
+			30 => 1,
 		);
 	}
 
