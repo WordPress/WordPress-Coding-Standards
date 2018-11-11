@@ -16,8 +16,8 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * Comprehensive I18n text domain fixer tool.
  *
  * This sniff can:
- * - Add missing `text-domain`s.
- * - Replace `text-domain`s based on an array of `old` values to a `new` value.
+ * - Add missing text domains.
+ * - Replace text domains based on an array of `old` values to a `new` value.
  *
  * Note: Without a user-defined configuration in a custom ruleset, this sniff will be ignored.
  *
@@ -303,7 +303,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 
 			if ( 'default' === $this->new_text_domain ) {
 				$this->phpcsFile->addWarning(
-					'The "default" text-domain is reserved for WordPress core use and should not be used by plugins or themes',
+					'The "default" text domain is reserved for WordPress core use and should not be used by plugins or themes',
 					0,
 					'ReservedNewDomain',
 					array( $this->new_text_domain )
@@ -314,7 +314,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 
 			if ( preg_match( '`^[a-z0-9-]+$`', $this->new_text_domain ) !== 1 ) {
 				$this->phpcsFile->addWarning(
-					'The text-domain should be a simple lowercase text string with words separated by dashes. "%s" appears invalid',
+					'The text domain should be a simple lowercase text string with words separated by dashes. "%s" appears invalid',
 					0,
 					'InvalidNewDomain',
 					array( $this->new_text_domain )

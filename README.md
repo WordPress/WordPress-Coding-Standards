@@ -279,11 +279,11 @@ This sniff category contains some tools which, generally speaking, will only be 
 The sniffs in this category are disabled by default and can only be activated by adding some properties for each sniff via a custom ruleset.
 
 At this moment, WPCS offer the following tools:
-* `WordPress.Utils.I18nTextDomainFixer` - This sniff can replace the text-domain used in a code-base.
-    The sniff will fix the text-domains in both I18n function calls as well as in a plugin/theme header.
+* `WordPress.Utils.I18nTextDomainFixer` - This sniff can replace the text domain used in a code-base.
+    The sniff will fix the text domains in both I18n function calls as well as in a plugin/theme header.
     Passing the following properties will activate the sniff:
-    - `old_text_domain`: an array with one or more (old) text-domain names which need to be replaced;
-    - `new_text_domain`: the correct (new) text-domain as a string.
+    - `old_text_domain`: an array with one or more (old) text domain names which need to be replaced;
+    - `new_text_domain`: the correct (new) text domain as a string.
 
 
 ## Contributing
