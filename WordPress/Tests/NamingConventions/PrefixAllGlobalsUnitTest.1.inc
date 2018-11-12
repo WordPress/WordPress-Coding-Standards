@@ -409,4 +409,19 @@ apply_filters( 'my_wordpress_plugin_filtername', $var ); // OK.
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes test-this
 do_action( 'Test-THIS-hookname' ); // OK.
 
+// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes acronym,tgmpa
+// Issue #1495 - throw the error on the line with the non-prefixed name.
+$acronym = apply_filters(
+	'content-types-post-types', // Bad.
+	[
+		PostType\Post::NAME => PostType\Post::class,
+	]
+);
+
+define(
+	/* comment */
+	'SOME_GLOBAL', // Bad.
+	[ 1, 2, 3 ]
+);
+
 // @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
