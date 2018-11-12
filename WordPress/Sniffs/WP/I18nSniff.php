@@ -23,7 +23,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.10.0
  * @since   0.11.0 - Now also checks for translators comments.
- *                 - Now has the ability to handle text-domain set via the command-line
+ *                 - Now has the ability to handle text domain set via the command-line
  *                   as a comma-delimited list.
  *                   `phpcs --runtime-set text_domain my-slug,default`
  * @since   0.13.0 Class name changed: this class is now namespaced.
@@ -483,7 +483,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 				if ( true === $this->text_domain_is_default && 'default' === $stripped_content ) {
 					$fixable    = false;
-					$error      = 'No need to supply the text domain when the only accepted text-domain is "default".';
+					$error      = 'No need to supply the text domain when the only accepted text domain is "default".';
 					$error_code = 'SuperfluousDefaultTextDomain';
 
 					if ( $tokens[0]['token_index'] === $stack_ptr ) {

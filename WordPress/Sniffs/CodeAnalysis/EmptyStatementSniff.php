@@ -72,6 +72,17 @@ class EmptyStatementSniff extends Sniff {
 					return;
 				}
 
+				if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+					$nested      = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+					$last_closer = array_pop( $nested );
+					if ( isset( $this->tokens[ $last_closer ]['parenthesis_owner'] )
+						&& \T_FOR === $this->tokens[ $this->tokens[ $last_closer ]['parenthesis_owner'] ]['code']
+					) {
+						// Empty for() condition.
+						return;
+					}
+				}
+
 				$fix = $this->phpcsFile->addFixableWarning(
 					'Empty PHP statement detected: superfluous semi-colon.',
 					$stackPtr,

@@ -14,7 +14,7 @@ use WordPress\AbstractArrayAssignmentRestrictionsSniff;
 /**
  * Flag potentially slow queries.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#uncached-pageload
+ * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#uncached-pageload
  *
  * @package WPCS\WordPressCodingStandards
  *

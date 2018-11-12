@@ -14,7 +14,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Discourages the use of session functions.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#session_start-and-other-session-related-functions
+ * @link https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#session-start-and-other-session-functions
  *
  * @package WPCS\WordPressCodingStandards
  *

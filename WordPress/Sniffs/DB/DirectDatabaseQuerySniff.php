@@ -15,8 +15,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Flag Database direct queries.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#direct-database-queries
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#database-alteration
+ * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
  *
  * @package WPCS\WordPressCodingStandards
  *

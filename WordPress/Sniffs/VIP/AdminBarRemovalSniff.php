@@ -15,7 +15,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
 /**
  * Discourages removal of the admin bar.
  *
- * @link    https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#removing-the-admin-bar
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#removing-the-admin-bar
  *
  * @package WPCS\WordPressCodingStandards
  *

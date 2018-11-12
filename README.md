@@ -37,6 +37,7 @@
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
     + [Travis CI](#travis-ci)
 * [Fixing errors or whitelisting them](#fixing-errors-or-whitelisting-them)
+    + [Tools shipped with WPCS](#tools-shipped-with-wpcs)
 * [Contributing](#contributing)
 * [License](#license)
 
@@ -136,7 +137,7 @@ You can use the following as standard names when invoking `phpcs` to select snif
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
 
-**Notes:** This WPCS package contains the sniffs for another ruleset, `WordPress-VIP`. This ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/code-review-what-we-look-for/), but this is no longer used or recommended by the WordPress.com VIP team or their clients, since they prefer to use their [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead.
+**Notes:** This WPCS package contains the sniffs for another ruleset, `WordPress-VIP`. This ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/), but this is no longer used or recommended by the WordPress.com VIP team or their clients, since they prefer to use their [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead.
 
 Before WPCS `1.0.0`, the WordPress-VIP ruleset was included as part of the complete `WordPress` ruleset. **As of `1.0.0` the `WordPress-VIP` ruleset is not part of the WordPress ruleset, and it is deprecated**. The remaining `WordPress-VIP` sniffs may still be referenced in custom rulesets, so to maintain some backwards compatibility, they will remain in WPCS until `2.0.0`. See [#1309](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1309) for more information.
 
@@ -268,6 +269,21 @@ More examples and advice about integrating PHPCS in your Travis build tests can 
 ## Fixing errors or whitelisting them
 
 You can find information on how to deal with some of the more frequent issues in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki).
+
+### Tools shipped with WPCS
+
+Since version 1.2.0, WPCS has a special sniff category `Utils`.
+
+This sniff category contains some tools which, generally speaking, will only be needed to be run once over a codebase and for which the fixers can be considered _risky_, i.e. very careful review by a developer is needed before accepting the fixes made by these sniffs.
+
+The sniffs in this category are disabled by default and can only be activated by adding some properties for each sniff via a custom ruleset.
+
+At this moment, WPCS offer the following tools:
+* `WordPress.Utils.I18nTextDomainFixer` - This sniff can replace the text domain used in a code-base.
+    The sniff will fix the text domains in both I18n function calls as well as in a plugin/theme header.
+    Passing the following properties will activate the sniff:
+    - `old_text_domain`: an array with one or more (old) text domain names which need to be replaced;
+    - `new_text_domain`: the correct (new) text domain as a string.
 
 
 ## Contributing

@@ -63,7 +63,8 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function getGroups() {
 		return array(
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#switch_to_blog
+			// @link WordPress.com: https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#switch_to_blog
+			// @link VIP Go: https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#switch_to_blog
 			'switch_to_blog' => array(
 				'type'      => 'error',
 				'message'   => '%s() is not something you should ever need to do in a VIP theme context. Instead use an API (XML-RPC, REST) to interact with other sites if needed.',
@@ -136,7 +137,8 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#remote-calls
+			// @link WordPress.com: https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#remote-calls
+			// @link VIP Go: https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#remote-calls
 			'wp_remote_get' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is highly discouraged, please use vip_safe_wp_remote_get() instead.',
@@ -145,7 +147,8 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#custom-roles
+			// @link WordPress.com: https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#custom-roles
+			// @link VIP Go: https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#custom-roles
 			'custom_role' => array(
 				'type'      => 'error',
 				'message'   => 'Use wpcom_vip_add_role() instead of %s()',
@@ -154,7 +157,8 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#caching-constraints
+			// @link WordPress.com: https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#custom-roles
+			// @link VIP Go: https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#cache-constraints
 			'cookies' => array(
 				'type'      => 'warning',
 				'message'   => 'Due to using Batcache, server side based client related logic will not work, use JS instead.',
@@ -163,7 +167,7 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#working-with-wp_users-and-user_meta
+			// @link WordPress.com: https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#wp_users-and-user_meta
 			'user_meta' => array(
 				'type'      => 'error',
 				'message'   => '%s() usage is highly discouraged, check VIP documentation on "Working with wp_users"',
@@ -230,7 +234,8 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			// @link https://vip.wordpress.com/documentation/vip/code-review-what-we-look-for/#mobile-detection
+			// @link WordPress.com: https://lobby.vip.wordpress.com/wordpress-com-documentation/code-review-what-we-look-for/#mobile-detection
+			// @link VIP Go: https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#mobile-detection
 			'wp_is_mobile' => array(
 				'type'      => 'error',
 				'message'   => '%s() found. When targeting mobile visitors, jetpack_is_mobile() should be used instead of wp_is_mobile. It is more robust and works better with full page caching.',

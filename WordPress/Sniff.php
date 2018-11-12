@@ -1182,7 +1182,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$regex = '#\b' . preg_quote( $comment, '#' ) . '\b#i';
 
 		// There is a findEndOfStatement() method, but it considers more tokens than
-		// we need to here.
+		// we need to consider here.
 		$end_of_statement = $this->phpcsFile->findNext( array( \T_CLOSE_TAG, \T_SEMICOLON ), $stackPtr );
 
 		if ( false !== $end_of_statement ) {
@@ -1194,8 +1194,10 @@ abstract class Sniff implements PHPCS_Sniff {
 				$lastPtr = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 
-			if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-					|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
+			if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
+					&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
+					|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
+					&& 'T_PHPCS_SET' !== $this->tokens[ $lastPtr ]['type'] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
@@ -1208,8 +1210,10 @@ abstract class Sniff implements PHPCS_Sniff {
 		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
 		$lastPtr     = $this->phpcsFile->findPrevious( \T_WHITESPACE, $end_of_line, null, true );
 
-		if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] ) )
+		if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
+				|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
+				&& 'T_PHPCS_SET' !== $this->tokens[ $lastPtr ]['type'] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {
@@ -1956,7 +1960,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			'T_ANON_CLASS' => true,
 			'T_TRAIT'      => true,
 		);
-		if ( true === $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+		if ( false !== $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
 			return 'trait';
 		}
 
@@ -2015,8 +2019,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer, it
 	 * will detect whether the array has values or is empty.
 	 *
-	 * @link https://github.com/wimg/PHPCompatibility/issues/120
-	 * @link https://github.com/wimg/PHPCompatibility/issues/152
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/120
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/152
 	 *
 	 * @since 0.11.0
 	 *
@@ -2082,9 +2086,9 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
 	 * it will return the number of values in the array.
 	 *
-	 * @link https://github.com/wimg/PHPCompatibility/issues/111
-	 * @link https://github.com/wimg/PHPCompatibility/issues/114
-	 * @link https://github.com/wimg/PHPCompatibility/issues/151
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/111
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/114
+	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/151
 	 *
 	 * @since 0.11.0
 	 *
@@ -2369,12 +2373,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		if ( \T_NS_SEPARATOR === $this->tokens[ ( $stackPtr + 1 ) ]['code'] ) {
+		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+		if ( \T_NS_SEPARATOR === $this->tokens[ $nextToken ]['code'] ) {
 			// Not a namespace declaration, but use of, i.e. `namespace\someFunction();`.
 			return false;
 		}
 
-		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
 		if ( \T_OPEN_CURLY_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
 			// Declaration for global namespace when using multiple namespaces in a file.
 			// I.e.: `namespace {}`.
@@ -2382,16 +2386,18 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Ok, this should be a namespace declaration, so get all the parts together.
-		$validTokens = array(
+		$acceptedTokens = array(
 			\T_STRING       => true,
 			\T_NS_SEPARATOR => true,
-			\T_WHITESPACE   => true,
 		);
+		$validTokens = $acceptedTokens + Tokens::$emptyTokens;
 
 		$namespaceName = '';
 		while ( isset( $validTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
-			$namespaceName .= trim( $this->tokens[ $nextToken ]['content'] );
-			$nextToken++;
+			if ( isset( $acceptedTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
+				$namespaceName .= trim( $this->tokens[ $nextToken ]['content'] );
+			}
+			++$nextToken;
 		}
 
 		return $namespaceName;
@@ -2453,7 +2459,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			'T_INTERFACE'  => true,
 		);
 
-		return $this->valid_direct_scope( $stackPtr, $valid_scopes );
+		return is_int( $this->valid_direct_scope( $stackPtr, $valid_scopes ) );
 	}
 
 	/**
@@ -2477,10 +2483,20 @@ abstract class Sniff implements PHPCS_Sniff {
 			'T_TRAIT'      => true,
 		);
 
-		if ( $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
+		$scopePtr = $this->valid_direct_scope( $stackPtr, $valid_scopes );
+		if ( false !== $scopePtr ) {
 			// Make sure it's not a method parameter.
 			if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				return true;
+			} else {
+				$parenthesis  = array_keys( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+				$deepest_open = array_pop( $parenthesis );
+				if ( $deepest_open < $scopePtr
+					|| isset( $this->tokens[ $deepest_open ]['parenthesis_owner'] ) === false
+					|| T_FUNCTION !== $this->tokens[ $this->tokens[ $deepest_open ]['parenthesis_owner'] ]['code']
+				) {
+					return true;
+				}
 			}
 		}
 
@@ -2501,7 +2517,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                            to allow for newer token types.
 	 *                            Value is irrelevant.
 	 *
-	 * @return bool
+	 * @return int|bool StackPtr to the scope if valid, false otherwise.
 	 */
 	protected function valid_direct_scope( $stackPtr, array $valid_scopes ) {
 		if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
@@ -2518,7 +2534,11 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		return isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] );
+		if ( isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] ) ) {
+			return $ptr;
+		}
+
+		return false;
 	}
 
 	/**

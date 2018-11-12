@@ -27,10 +27,10 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList( $testFile = 'ValidHookNameUnitTest.inc' ) {
+	public function getErrorList( $testFile = 'ValidHookNameUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
-			case 'ValidHookNameUnitTest.inc':
+			case 'ValidHookNameUnitTest.1.inc':
 				return array(
 					14 => 1,
 					15 => 1,
@@ -70,8 +70,8 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					81 => 1,
 				);
 
-			case 'ValidHookNameUnitTest.1.inc':
 			case 'ValidHookNameUnitTest.2.inc':
+			case 'ValidHookNameUnitTest.3.inc':
 			default:
 				return array();
 		}
@@ -83,10 +83,10 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = 'ValidHookNameUnitTest.inc' ) {
+	public function getWarningList( $testFile = 'ValidHookNameUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
-			case 'ValidHookNameUnitTest.inc':
+			case 'ValidHookNameUnitTest.1.inc':
 				return array(
 					8  => 1,
 					9  => 1,
@@ -97,8 +97,8 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					77 => 1,
 				);
 
-			case 'ValidHookNameUnitTest.1.inc':
 			case 'ValidHookNameUnitTest.2.inc':
+			case 'ValidHookNameUnitTest.3.inc':
 				return array(
 					12 => 1,
 					13 => 1,
