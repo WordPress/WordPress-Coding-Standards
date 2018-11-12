@@ -8,6 +8,56 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [1.2.0] - 2018-11-12
+
+### Added
+- New `WordPress.PHP.TypeCasts` sniff to the `WordPress-Core` ruleset.
+    This new sniff checks that PHP type casts are:
+    * lowercase;
+    * short form, i.e. `(bool)` not `(boolean)`;
+    * normalized, i.e. `(float)` not `(real)`.
+   Additionally, the new sniff discourages the use of the `(unset)` and `(binary)` type casts.
+- New `WordPress.Utils.I18nTextDomainFixer` sniff which can compehensively replace/add `text-domain`s in a plugin or theme.
+    Important notes:
+    - This sniff is disabled by default and intended as a utility tool.
+    - The sniff will fix the text domains in all I18n function calls as well as in a plugin/theme `Text Domain:` header.
+    - Passing the following properties will activate the sniff:
+        - `old_text_domain`: an array with one or more (old) text domains which need to be replaced;
+        - `new_text_domain`: the correct (new) text domain as a string.
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff will now also verify that namespace names use a valid prefix.
+    * The sniff allows for underscores and (other) non-word characters in a passed prefix to be converted to namespace separators when used in a namespace name.
+        In other words, if a prefix of `my_plugin` is passed as a value to the `prefixes` property, a namespace name of both `My\Plugin` as well as `My_Plugin\\`, will be accepted automatically.
+    * Passing a prefix property value containing namespace separators will now also be allowed and will no longer trigger a warning.
+- `WordPress` to the prefix blacklist for the `WordPress.NamingConventions.PrefixAllGlobals` sniff.
+    While the prefix cannot be `WordPress`, a prefix can still _start with_ or _contain_ `WordPress`.
+- Additional unit tests covering a change in the tokenizer which will be included in the upcoming `PHP_CodeSniffer` 3.4.0 release.
+- A variety of issue templates for use on GitHub.
+
+### Changed
+- The `Sniff::valid_direct_scope()` method will now return the `$stackPtr` to the valid scope if a valid direct scope has been detected. Previously, it would return `true`.
+- Minor hardening and efficiency improvements to the `WordPress.NamingConventions.PrefixAllGlobals` sniff.
+- The inline documentation of the `WordPress-Core` ruleset has been updated to be in line again with [the handbook](https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/).
+- The inline links to documentation about the VIP requirements have been updated.
+- Updated the [custom ruleset example](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/phpcs.xml.dist.sample) to recommend using `PHPCompatibilityWP` rather than `PHPCompatibility`.
+- All sniffs are now also being tested against PHP 7.3 for consistent sniff results.
+    Note: PHP 7.3 is only supported in combination with PHPCS 3.3.1 or higher as `PHP_CodeSniffer` itself has an incompatibility in earlier versions.
+- Minor grammar fixes in text strings and documentation.
+- Minor consistency improvement for the unit test case files.
+- Minor tweaks to the `composer.json` file.
+- Updated the PHPCompatibility `dev` dependency.
+
+### Removed
+- The `WordPress.WhiteSpace.CastStructureSpacing.NoSpaceAfterCloseParenthesis` error code as an error for the same issue was already being thrown by an included upstream sniff.
+
+### Fixed
+- The `WordPress.CodeAnalysis.EmptyStatement` would throw a false positive for an empty condition in a `for()` statement.
+- The `Sniff::is_class_property()` method could, in certain circumstances, incorrectly recognize parameters in a method declaration as class properties. It would also, incorrectly, fail to recognize class properties when the object they are declared in, was nested in parentheses.
+    This affected, amongst others, the `GlobalVariablesOverride` sniff.
+- The `Sniff::get_declared_namespace_name()` method could get confused over whitespace and comments within a namespace name, which could lead to incorrect results (mostly underreporting).
+    This affected, amongst others, the `GlobalVariablesOverride` sniff.
+    The return value of the method will now no longer contain any whitespace or comments encountered.
+- The `Sniff::has_whitelist_comment()` method would sometimes incorrectly regard `// phpcs:set` comments as whitelist comments.
+
 ## [1.1.0] - 2018-09-10
 
 ### Added
@@ -760,6 +810,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[1.2.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.14.1...1.0.0
 [0.14.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.14.0...0.14.1
