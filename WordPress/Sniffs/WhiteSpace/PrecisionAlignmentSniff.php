@@ -91,7 +91,7 @@ class PrecisionAlignmentSniff extends Sniff {
 		}
 
 		// Handle any custom ignore tokens received from a ruleset.
-		$this->ignoreAlignmentTokens = $this->merge_custom_array( $this->ignoreAlignmentTokens );
+		$ignoreAlignmentTokens = $this->merge_custom_array( $this->ignoreAlignmentTokens );
 
 		$check_tokens  = array(
 			'T_WHITESPACE'             => true,
@@ -109,9 +109,9 @@ class PrecisionAlignmentSniff extends Sniff {
 				|| ( isset( $this->tokens[ ( $i + 1 ) ] )
 					&& \T_WHITESPACE === $this->tokens[ ( $i + 1 ) ]['code'] )
 				|| $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar
-				|| isset( $this->ignoreAlignmentTokens[ $this->tokens[ $i ]['type'] ] )
+				|| isset( $ignoreAlignmentTokens[ $this->tokens[ $i ]['type'] ] )
 				|| ( isset( $this->tokens[ ( $i + 1 ) ] )
-					&& isset( $this->ignoreAlignmentTokens[ $this->tokens[ ( $i + 1 ) ]['type'] ] ) )
+					&& isset( $ignoreAlignmentTokens[ $this->tokens[ ( $i + 1 ) ]['type'] ] ) )
 			) {
 				continue;
 			}

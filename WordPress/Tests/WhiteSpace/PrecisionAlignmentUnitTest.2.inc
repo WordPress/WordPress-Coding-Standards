@@ -19,24 +19,24 @@
 	/**
 	 * OK: Doc comments are indented with tabs and one space.
 	 *
-	  * @var string  <= Bad.
+	  * @var string  <= Bad, but not reported as token type is whitelisted.
 	 * @access private
 	 */
 
 	/*
 	 * OK: Multi-line comments are indented with tabs and one space.
 	 *
-	   * <= Bad.
+	   * <= Bad, but not reported as token type is whitelisted
 	 */
 
-	 function exampleFunctionD() {} // Bad: [tab][space].
-	  function exampleFunctionE() {} // Bad: [tab][space][space].
-	   function exampleFunctionF() {} // Bad: [tab][space][space][space].
+	 function exampleFunctionD() {} // Bad, but not reported as token type is whitelisted.
+	  function exampleFunctionE() {} // Bad, but not reported as token type is whitelisted.
+	   function exampleFunctionF() {} // Bad, but not reported as token type is whitelisted.
 
 ?>
 
 	<p>
-	  Bad: Some text with precision alignment.
+	  Bad: Some text with precision alignment, but not reported as token type is whitelisted.
 	</p>
 
 <?php
