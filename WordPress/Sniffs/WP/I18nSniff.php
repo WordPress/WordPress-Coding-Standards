@@ -38,6 +38,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 	 * and adjusted for better precision and updated specs.
 	 */
 	const SPRINTF_PLACEHOLDER_REGEX = '/(?:
+		(?<!->|::)                 # Don\'t match an object method.
 		(?<!%)                     # Don\'t match a literal % (%%).
 		(
 			%                          # Start of placeholder.
@@ -62,6 +63,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 	 * "Unordered" means there's no position specifier: '%s', not '%2$s'.
 	 */
 	const UNORDERED_SPRINTF_PLACEHOLDER_REGEX = '/(?:
+		(?<!->|::)                 # Don\'t match an object method.
 		(?<!%)                     # Don\'t match a literal % (%%).
 		%                          # Start of placeholder.
 		[+-]?                      # Optional sign specifier.
