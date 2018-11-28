@@ -285,3 +285,7 @@ echo  // phpcs:ignore WP.Secur1ty.EscapeOutput -- WPCS: XSS ok. (sniff name mang
 echo esc_html( $something ),
 	$something_else,
 	esc_html( $something_more ); // phpcs:ignore WP.Secur1ty.EscapeOutput -- WPCS: XSS ok. (sniff name mangled on purpose).
+
+echo get_the_title(); // Bad.
+echo wp_kses_post( get_the_title() ); // Ok.
+echo esc_html( get_the_title() ); // Ok.

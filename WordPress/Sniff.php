@@ -231,7 +231,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'get_the_ID'                => true,
 		'get_the_post_thumbnail'    => true,
 		'get_the_term_list'         => true,
-		'get_the_title'             => true,
 		'next_comments_link'        => true,
 		'next_image_link'           => true,
 		'next_post_link'            => true,
