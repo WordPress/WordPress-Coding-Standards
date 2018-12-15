@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed.

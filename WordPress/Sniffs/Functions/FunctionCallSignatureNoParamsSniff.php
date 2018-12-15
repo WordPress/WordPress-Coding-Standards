@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Functions;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Enforces no whitespace between the parenthesis of a function call without parameters.

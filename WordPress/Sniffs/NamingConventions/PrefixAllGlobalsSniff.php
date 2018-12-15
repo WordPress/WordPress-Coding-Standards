@@ -11,7 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\PHPCSHelper;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.

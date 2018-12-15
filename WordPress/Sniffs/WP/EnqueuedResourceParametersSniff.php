@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * This checks the enqueued 4th and 5th parameters to make sure the version and in_footer are set.

@@ -9,9 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use PHP_CodeSniffer_Standards_AbstractVariableSniff as PHPCS_AbstractVariableSniff;
-use PHP_CodeSniffer_File as File;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use WordPressCS\WordPress\Sniff;
 
 /**

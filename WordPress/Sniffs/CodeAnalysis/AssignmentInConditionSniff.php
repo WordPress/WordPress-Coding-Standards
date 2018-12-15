@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Detects variable assignments being made within conditions.

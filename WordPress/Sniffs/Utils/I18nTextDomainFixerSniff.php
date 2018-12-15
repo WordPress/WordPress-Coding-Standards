@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Utils;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Comprehensive I18n text domain fixer tool.

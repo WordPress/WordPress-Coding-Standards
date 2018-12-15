@@ -11,7 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use WordPressCS\WordPress\PHPCSHelper;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Enforces WordPress array indentation for multi-line arrays.

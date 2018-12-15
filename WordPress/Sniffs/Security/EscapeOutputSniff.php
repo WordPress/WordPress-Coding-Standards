@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Security;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Verifies that all outputted strings are escaped.

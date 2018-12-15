@@ -9,9 +9,9 @@
 
 namespace WordPressCS\WordPress;
 
-use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
-use PHP_CodeSniffer_File as File;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use WordPressCS\WordPress\PHPCSHelper;
 
 /**

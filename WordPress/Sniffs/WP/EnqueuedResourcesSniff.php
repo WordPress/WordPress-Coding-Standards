@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.

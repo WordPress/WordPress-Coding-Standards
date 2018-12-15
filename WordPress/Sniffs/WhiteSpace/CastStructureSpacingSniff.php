@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Ensure cast statements don't contain whitespace, but *are* surrounded by whitespace, based upon Squiz code.

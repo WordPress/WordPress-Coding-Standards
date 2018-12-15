@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Verify operator spacing, uses the Squiz sniff, but additionally also sniffs for the `!` (boolean not) operator.
