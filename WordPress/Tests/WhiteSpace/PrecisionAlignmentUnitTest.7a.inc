@@ -1,4 +1,4 @@
-@codingStandardsChangeSetting WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens T_COMMENT,T_FUNCTION
+phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[] T_COMMENT,T_FUNCTION
 
 <?php
 /**

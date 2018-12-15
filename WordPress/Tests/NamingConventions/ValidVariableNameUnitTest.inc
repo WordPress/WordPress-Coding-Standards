@@ -129,11 +129,11 @@ echo "This is $PHP_SELF with $HTTP_RAW_POST_DATA"; // Ok.
 /*
  * Unit test whitelisting.
  */
-// @codingStandardsChangeSetting WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist varName,DOMProperty
+// phpcs:set WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist[] varName,DOMProperty
 echo MyClass::$varName; // Ok, whitelisted.
 echo $this->DOMProperty; // Ok, whitelisted.
 echo $object->varName;  // Ok, whitelisted.
-// @codingStandardsChangeSetting WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist false
+// phpcs:set WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist[]
 
 echo $object->varName;  // Bad, no longer whitelisted.
 

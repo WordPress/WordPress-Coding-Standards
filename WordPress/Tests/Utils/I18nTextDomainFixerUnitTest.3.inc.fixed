@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain something-else
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] something-else
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain php-compatibility-checker
 
 /*
@@ -8,7 +8,7 @@ Description: Make sure your plugins and themes are compatible with newer PHP ver
 Text Domain: php-compatibility-checker
 */
 
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain bbpress
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] bbpress
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain something-else
 
 /**
@@ -34,7 +34,7 @@ Text Domain: php-compatibility-checker
  * License:     GPLv2 or later (license.txt)
  */
 
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain debug-bar
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] debug-bar
 
 /*
  Plugin Name: Text domain which should be fixed, multi-line comment, minimal headers.
@@ -60,7 +60,7 @@ class Debug_Bar {
 	const VERSION = '0.9.1-alpha';
 }
 
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain debug-bar-constants
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] debug-bar-constants
 
 /**
  * Text domain which should be fixed, docblock format with PHP doc tags and tab aligned.
@@ -86,7 +86,7 @@ class Debug_Bar {
  * Copyright	:	2013-2018 Juliette Reinders Folmer
  */
 
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain a2-optimized
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] a2-optimized
 
 //  Plugin Name: Text domain which should be fixed, multi-line //-style comment.
 //  Plugin URI: https://wordpress.org/plugins/a2-optimized/
@@ -117,5 +117,5 @@ class Debug_Bar {
 //  Version: 2.0.1
 //  Text Domain: something-else
 
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain false
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

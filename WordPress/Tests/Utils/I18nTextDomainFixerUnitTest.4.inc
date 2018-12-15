@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain text-domain,other-text-domain,third-text-domain
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] text-domain,other-text-domain,third-text-domain
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain something-else
 
 /*
@@ -203,5 +203,5 @@ __ngettext( $singular, $plural, $number ); // Error.
 __ngettext_noop( $singular, $plural, 'other-text-domain' ); // Error.
 translate_with_context( $text, 'third-text-domain' ); // Error.
 
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain false
+// phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

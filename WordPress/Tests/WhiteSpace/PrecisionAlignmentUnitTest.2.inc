@@ -1,4 +1,4 @@
-@codingStandardsChangeSetting WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens T_COMMENT,T_DOC_COMMENT_WHITESPACE,T_INLINE_HTML,T_FUNCTION
+phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[] T_COMMENT,T_DOC_COMMENT_WHITESPACE,T_INLINE_HTML,T_FUNCTION
 
 <?php
 
@@ -41,4 +41,4 @@
 
 <?php
 
-// @codingStandardsChangeSetting WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens T_NONE
+// phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[]

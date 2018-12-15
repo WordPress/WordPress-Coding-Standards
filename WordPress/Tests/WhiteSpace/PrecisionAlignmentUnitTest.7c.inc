@@ -14,4 +14,4 @@
 	  function exampleFunctionE() {} // Bad, but not reported as token type is (still) whitelisted.
 	   function exampleFunctionF() {} // Bad, but not reported as token type is (still) whitelisted.
 
-// @codingStandardsChangeSetting WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens T_NONE
+// phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[]

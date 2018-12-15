@@ -108,7 +108,7 @@ trait My_Class {
 }
 
 // Test adding additional test classes to the whitelist.
-// @codingStandardsChangeSetting WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist My_TestClass
+// phpcs:set WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist[] My_TestClass
 class Test_Class_D extends My_TestClass {
 
 	public function test_something() {
@@ -116,7 +116,7 @@ class Test_Class_D extends My_TestClass {
 		$tabs = 50; // Ok.
 	}
 }
-// @codingStandardsChangeSetting WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist false
+// phpcs:set WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist[]
 
 // Test detecting within and skipping over anonymous classes.
 global $year;

@@ -39,11 +39,11 @@ if ( @ftp_fget($conn_id, $handle, $remote_file, FTP_ASCII, 0 ) ) { // Bad.
 }
 @ftp_close($conn_id); // Bad.
 
-// @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors custom_whitelist fgetcsv,hex2bin
+// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[] fgetcsv,hex2bin
 while ( ( $csvdata = @fgetcsv( $handle, 2000, $separator ) ) !== false ) {}
 echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );
-// @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors custom_whitelist false
+// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[]
 
 $decoded = @hex2bin( $data ); // Bad.
 
@@ -73,10 +73,10 @@ $files1 = @ & scandir($dir); // Bad.
 /*
  * Custom whitelist will be respected even when `use_default_whitelist` is set to false.
  */
-// @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors custom_whitelist fgetcsv,hex2bin
+// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[] fgetcsv,hex2bin
 while ( ( $csvdata = @fgetcsv( $handle, 2000, $separator ) ) !== false ) {}
 echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );
-// @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors custom_whitelist false
+// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[]
 
 // phpcs:set WordPress.PHP.NoSilencedErrors use_default_whitelist true
