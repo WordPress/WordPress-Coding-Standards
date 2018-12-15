@@ -163,8 +163,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * Prepare the punctuation regular expression.
 	 *
 	 * Merges the existing regular expression with potentially provided extra word delimiters to allow.
-	 * This is done 'late' and for each found token as otherwise inline `@codingStandardsChangeSetting`
-	 * directives would be ignored.
+	 * This is done 'late' and for each found token as otherwise inline `phpcs:set` directives
+	 * would be ignored.
 	 *
 	 * @return string
 	 */
