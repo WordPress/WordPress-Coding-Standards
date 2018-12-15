@@ -117,16 +117,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	);
 
 	/**
-	 * Custom list of properties which can have mixed case.
-	 *
-	 * @since 0.10.0
-	 * @deprecated 0.11.0 Use $customPropertiesWhitelist instead.
-	 *
-	 * @var string|string[]
-	 */
-	public $customVariablesWhitelist = array();
-
-	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
@@ -303,25 +293,9 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @return void
 	 */
 	protected function mergeWhiteList( File $phpcs_file ) {
-		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties']
-			|| $this->customVariablesWhitelist !== $this->addedCustomProperties['variables']
-		) {
+		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties'] ) {
 			// Fix property potentially passed as comma-delimited string.
 			$customProperties = Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
-
-			if ( ! empty( $this->customVariablesWhitelist ) ) {
-				$customProperties = Sniff::merge_custom_array(
-					$this->customVariablesWhitelist,
-					$customProperties,
-					false
-				);
-
-				$phpcs_file->addWarning(
-					'The customVariablesWhitelist property is deprecated in favor of customPropertiesWhitelist.',
-					0,
-					'DeprecatedCustomVariablesWhitelist'
-				);
-			}
 
 			$this->whitelisted_mixed_case_member_var_names = Sniff::merge_custom_array(
 				$customProperties,
@@ -329,7 +303,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			);
 
 			$this->addedCustomProperties['properties'] = $this->customPropertiesWhitelist;
-			$this->addedCustomProperties['variables']  = $this->customVariablesWhitelist;
 		}
 	}
 
