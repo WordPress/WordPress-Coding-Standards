@@ -474,7 +474,7 @@ class ControlStructureSpacingSniff extends Sniff {
 								 * conflict.
 								 */
 								if ( \T_COMMENT !== $this->tokens[ $lastContent ]['code']
-									&& ! isset( $this->phpcsCommentTokens[ $this->tokens[ $lastContent ]['type'] ] ) ) {
+									&& ! isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastContent ]['code'] ] ) ) {
 									$this->phpcsFile->fixer->addNewlineBefore( $j );
 								}
 
@@ -500,7 +500,7 @@ class ControlStructureSpacingSniff extends Sniff {
 		}
 
 		if ( \T_COMMENT === $this->tokens[ $trailingContent ]['code']
-			|| isset( $this->phpcsCommentTokens[ $this->tokens[ $trailingContent ]['type'] ] )
+			|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $trailingContent ]['code'] ] )
 		) {
 			// Special exception for code where the comment about
 			// an ELSE or ELSEIF is written between the control structures.
@@ -561,7 +561,7 @@ class ControlStructureSpacingSniff extends Sniff {
 
 					// TODO: Instead a separate error should be triggered when content comes right after closing brace.
 					if ( \T_COMMENT !== $this->tokens[ $scopeCloser ]['code']
-						&& isset( $this->phpcsCommentTokens[ $this->tokens[ $scopeCloser ]['type'] ] ) === false
+						&& isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $scopeCloser ]['code'] ] ) === false
 					) {
 						$this->phpcsFile->fixer->addNewlineBefore( $trailingContent );
 					}

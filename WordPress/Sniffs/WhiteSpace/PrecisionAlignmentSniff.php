@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
 use WordPressCS\WordPress\Sniff;
 use WordPressCS\WordPress\PHPCSHelper;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Warn on line indentation ending with spaces for precision alignment.
@@ -96,18 +97,18 @@ class PrecisionAlignmentSniff extends Sniff {
 		$ignoreAlignmentTokens = $this->merge_custom_array( $this->ignoreAlignmentTokens );
 
 		$check_tokens  = array(
-			'T_WHITESPACE'             => true,
-			'T_INLINE_HTML'            => true,
-			'T_DOC_COMMENT_WHITESPACE' => true,
-			'T_COMMENT'                => true,
+			\T_WHITESPACE             => true,
+			\T_INLINE_HTML            => true,
+			\T_DOC_COMMENT_WHITESPACE => true,
+			\T_COMMENT                => true,
 		);
-		$check_tokens += $this->phpcsCommentTokens;
+		$check_tokens += Tokens::$phpcsCommentTokens;
 
 		for ( $i = 0; $i < $this->phpcsFile->numTokens; $i++ ) {
 
 			if ( 1 !== $this->tokens[ $i ]['column'] ) {
 				continue;
-			} elseif ( isset( $check_tokens[ $this->tokens[ $i ]['type'] ] ) === false
+			} elseif ( isset( $check_tokens[ $this->tokens[ $i ]['code'] ] ) === false
 				|| ( isset( $this->tokens[ ( $i + 1 ) ] )
 					&& \T_WHITESPACE === $this->tokens[ ( $i + 1 ) ]['code'] )
 				|| $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar
