@@ -9,7 +9,7 @@
 [![Last Commit to Unstable](https://img.shields.io/github/last-commit/WordPress-Coding-Standards/WordPress-Coding-Standards/develop.svg)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commits/develop)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Tested on PHP 5.3 to nightly](https://img.shields.io/badge/tested%20on-PHP%205.3%20|%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+[![Tested on PHP 5.4 to nightly](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 [![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/LICENSE)
 [![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
@@ -59,8 +59,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.3 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
-As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
+The WordPress Coding Standards require PHP 5.4 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **3.3.1** or higher.
 
 ### Composer
 
@@ -75,7 +74,7 @@ Running this command will:
 3. Register WordPress standards in PHP_CodeSniffer configuration.
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
 
-For the convenience of using `phpcs` as a global command, you may want to add the path to the `wpcs/vendor/scripts` (PHPCS 2.x) and/or `wpcs/vendor/bin` (PHPCS 3.x) directories to a `PATH` environment variable for your operating system.
+For the convenience of using `phpcs` as a global command, you may want to add the path to the `wpcs/vendor/bin` directory to a `PATH` environment variable for your operating system.
 
 #### Installing WPCS as a dependency
 
@@ -113,13 +112,10 @@ cd ~/projects
 git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
 git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 cd phpcs
-#PHPCS 2.x
-./scripts/phpcs --config-set installed_paths ../wpcs
-#PHPCS 3.x
 ./bin/phpcs --config-set installed_paths ../wpcs
 ```
 
-And then add the `~/projects/phpcs/scripts` (PHPCS 2.x) or `~/projects/phpcs/bin` (PHPCS 3.x) directory to your `PATH` environment variable via your `.bashrc`.
+And then add the `~/projects/phpcs/bin` directory to your `PATH` environment variable via your `.bashrc`.
 
 You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
