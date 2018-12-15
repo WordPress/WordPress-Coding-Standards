@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**

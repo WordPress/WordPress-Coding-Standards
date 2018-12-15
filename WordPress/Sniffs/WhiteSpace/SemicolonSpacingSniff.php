@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WhiteSpace;
+namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
 use Squiz_Sniffs_WhiteSpace_SemicolonSpacingSniff as PHPCS_Squiz_SemicolonSpacingSniff;
 use PHP_CodeSniffer_File as File;

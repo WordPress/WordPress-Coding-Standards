@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.

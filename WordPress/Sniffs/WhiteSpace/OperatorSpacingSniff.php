@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WhiteSpace;
+namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
 use Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
 use PHP_CodeSniffer_Tokens as Tokens;

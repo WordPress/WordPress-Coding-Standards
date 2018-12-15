@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\NamingConventions;
+namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use WordPress\AbstractFunctionParameterSniff;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\PHPCSHelper;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**

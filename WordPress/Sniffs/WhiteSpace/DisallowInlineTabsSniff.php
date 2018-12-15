@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WhiteSpace;
+namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use WordPress\Sniff;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\Sniff;
+use WordPressCS\WordPress\PHPCSHelper;
 
 /**
  * Enforces using spaces for mid-line alignment.

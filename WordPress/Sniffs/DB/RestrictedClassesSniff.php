@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\DB;
+namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPress\AbstractClassRestrictionsSniff;
+use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
 
 /**
  * Verifies that no database related PHP classes are used.

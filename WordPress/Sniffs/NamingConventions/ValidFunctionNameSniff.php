@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\NamingConventions;
+namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff as PHPCS_PEAR_ValidFunctionNameSniff;
 use PHP_CodeSniffer_File as File;

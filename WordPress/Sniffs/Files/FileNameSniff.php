@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Files;
+namespace WordPressCS\WordPress\Sniffs\Files;
 
-use WordPress\Sniff;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Ensures filenames do not contain underscores.

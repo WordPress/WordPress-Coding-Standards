@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Check for proper spacing in array key references.

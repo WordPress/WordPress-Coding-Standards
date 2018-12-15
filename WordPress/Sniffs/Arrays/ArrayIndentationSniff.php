@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\Sniff;
+use WordPressCS\WordPress\PHPCSHelper;
 use PHP_CodeSniffer_Tokens as Tokens;
 
 /**

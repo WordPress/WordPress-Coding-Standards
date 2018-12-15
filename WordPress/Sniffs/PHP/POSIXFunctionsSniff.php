@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Perl compatible regular expressions (PCRE, preg_ functions) should be used in preference

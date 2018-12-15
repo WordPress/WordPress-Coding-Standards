@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Security;
+namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Warn about __FILE__ for page registration.

@@ -64,9 +64,11 @@ if ( ! \defined( 'WPCS_PHPCS_ALIASES_SET' ) ) {
 	spl_autoload_register(
 		function ( $class ) {
 			// Only try & load our own classes.
-			if ( stripos( $class, 'WordPress' ) !== 0 ) {
+			if ( stripos( $class, 'WordPressCS' ) !== 0 ) {
 				return;
 			}
+
+			$class = str_replace( 'WordPressCS\\', '', $class );
 
 			// PHPCS handles the Test and Sniff classes without problem.
 			if ( stripos( $class, '\Tests\\' ) !== false || stripos( $class, '\Sniffs\\' ) !== false ) {

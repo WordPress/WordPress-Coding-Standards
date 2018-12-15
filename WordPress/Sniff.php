@@ -7,12 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer_File as File;
 use PHP_CodeSniffer_Tokens as Tokens;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\PHPCSHelper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.

@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Discourages the use of various native PHP functions and suggests alternatives.
