@@ -70,7 +70,7 @@ $array = [
         => 'h',
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact false
 $array = [
     'a'        => 'b',
 ];
@@ -95,7 +95,7 @@ $array = [
     'g'
               => 'h',
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact true
 
 
 /*
@@ -107,17 +107,17 @@ $array = [
     'ccc'
         => 'd',
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
 $array = [
     'a'
         => 'b', // Bad.
     'ccc'
         => 'd', // Bad.
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact false
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
 // Test combined ignore new lines false + exact false.
 $array = [
     'a'     => 'b',
@@ -147,14 +147,14 @@ $array = [
     'g'
               => 'h', // Bad.
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
 
 
 /*
  * Test with maxColumn value set.
  */
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 12
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment maxColumn 12
 $array = [
     'a'   => 'b',
     'ccc' => 'd',
@@ -177,10 +177,10 @@ $array = [
     'ee'           => 'f', // Bad.
     'gggggggggg'   => 'h', // Bad - too much space before.
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact false
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 12
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment maxColumn 12
 // Test combined maxColumn value set + exact false.
 $array = [
     'a' => 'b',
@@ -220,12 +220,12 @@ $array = [
     'ee'       => 'f', // Bad.
     'gggggggggg' => 'h',
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact false
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 12
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact false
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment maxColumn 12
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment ignoreNewlines false
 // Test combined maxColumn value set + exact false + ignore new lines false.
 $array = [
     'a'    => 'b',
@@ -267,9 +267,9 @@ $array = [
     'kkkkkkkkkkkk'
                  => 'l', // Bad.
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment exact true
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment exact true
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment maxColumn 1000
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment ignoreNewlines true
 
 
 /*
@@ -330,7 +330,7 @@ $deprecated_functions = [
     ),
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems never
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems never
 
 // OK - alignments to the expected column.
 $deprecated_functions = [
@@ -381,24 +381,24 @@ $deprecated_functions = [
                     string', // Bad.
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems sometimes
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems sometimes
 // Test invalid property value error.
 $array = [
     'a' => 'b',
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems =103
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems =103
 // Test invalid property value error.
 $array = [
     'a' => 'b',
 ];
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems !50
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems !50
 // Test invalid property value error.
 $array = [
     'a' => 'b',
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems <25
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems <25
 
 // OK - alignments to the expected column.
 $deprecated_functions = [
@@ -462,7 +462,7 @@ $deprecated_functions = [
                     string', // Bad - no space.
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems <=50%
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems <=50%
 // Test with value 50 and test validation for incorrectly passed % sign.
 
 $deprecated_functions = [
@@ -523,7 +523,7 @@ $deprecated_functions = [
                     string', // Bad - no space.
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems !=100
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems !=100
 
 $deprecated_functions = [
     'single1' => 'something', // Bad.
@@ -571,4 +571,4 @@ $deprecated_functions = [
                     string', // Bad.
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.MultipleStatementAlignment alignMultilineItems always
+// phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems always

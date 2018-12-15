@@ -81,7 +81,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	return $schedules;
 } ); // Warning: time undetermined.
 
-// @codingStandardsChangeSetting WordPress.WP.CronInterval min_interval 600
+// phpcs:set WordPress.WP.CronInterval min_interval 600
 add_filter( 'cron_schedules', function ( $schedules ) {
 	$schedules['every_2_mins'] = array(
 		'interval' => 2 * 60,
@@ -104,7 +104,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	return $schedules;
 } ); // OK: > 10 min.
 
-// @codingStandardsChangeSetting WordPress.WP.CronInterval min_interval 1800
+// phpcs:set WordPress.WP.CronInterval min_interval 1800
 add_filter( 'cron_schedules', function ( $schedules ) {
 	$schedules['every_2_mins'] = array(
 		'interval' => 2 * 60,
@@ -127,7 +127,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	return $schedules;
 } ); // Ok: > 30 min.
 
-// @codingStandardsChangeSetting WordPress.WP.CronInterval min_interval 900
+// phpcs:set WordPress.WP.CronInterval min_interval 900
 
 
 add_filter( 'cron_schedules', function ( $schedules ) {

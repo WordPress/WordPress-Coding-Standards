@@ -1,6 +1,6 @@
 <?php
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain text-domain,other-text-domain,third-text-domain
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain something-else
+// phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain something-else
 
 /*
  * The test cases in this file have a variety of whitespace for indentation and around
@@ -204,4 +204,4 @@ __ngettext_noop( $singular, $plural, 'other-text-domain' ); // Error.
 translate_with_context( $text, 'third-text-domain' ); // Error.
 
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain false
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain false
+// phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

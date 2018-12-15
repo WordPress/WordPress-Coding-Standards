@@ -1,6 +1,6 @@
 <?php
 
-// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
+// phpcs:set WordPress.WP.I18n check_translator_comments false
 
 __( 'string' ); // OK - no text domain known, so not checked.
 __( 'string', 'something' ); // OK - no text domain known, so not checked.
@@ -178,4 +178,4 @@ $test = __( '%1$s %2$s', 'my-slug' ); // OK(ish), placeholder order may change d
 $test = __( '   %s    ', 'my-slug' ); // Bad, no translatable content.
 
 // @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
-// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
+// phpcs:set WordPress.WP.I18n check_translator_comments true

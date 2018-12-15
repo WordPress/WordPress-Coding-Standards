@@ -52,7 +52,7 @@ $unserialized = @unserialize( $str );
 /*
  * ... and test the same principle again, but now without using the whitelist.
  */
-// @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors use_default_whitelist false
+// phpcs:set WordPress.PHP.NoSilencedErrors use_default_whitelist false
 
 // File extension.
 if ( @&file_exists( $filename ) && @ /*comment*/ is_readable( $filename ) ) { // Bad x2.
@@ -79,4 +79,4 @@ echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );
 // @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors custom_whitelist false
 
-// @codingStandardsChangeSetting WordPress.PHP.NoSilencedErrors use_default_whitelist true
+// phpcs:set WordPress.PHP.NoSilencedErrors use_default_whitelist true

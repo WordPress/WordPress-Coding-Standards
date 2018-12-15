@@ -1,6 +1,6 @@
 <?php
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain something-else
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain php-compatibility-checker
+// phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain php-compatibility-checker
 
 /*
 Plugin Name: Correct text domain, multi-line comment, minimal headers.
@@ -9,7 +9,7 @@ Text Domain: php-compatibility-checker
 */
 
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain bbpress
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain something-else
+// phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain something-else
 
 /**
  * Not the plugin header.
@@ -116,4 +116,4 @@ class Debug_Bar {
 //  Version: 2.0.1
 
 // @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain false
-// @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain false
+// phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false
