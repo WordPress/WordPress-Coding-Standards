@@ -89,7 +89,7 @@ N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source`
 If you already have PHPUnit installed on your system: Congrats, you're all set.
 
 If not, you can navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies.
-Alternatively, you can [install PHPUnit](https://phpunit.de/manual/5.7/en/installation.html) as a PHAR file.
+Alternatively, you can [install PHPUnit](https://phpunit.readthedocs.io/en/7.4/installation.html) as a PHAR file.
 
 ## Before running the unit tests
 
@@ -111,37 +111,30 @@ The easiest way to do this is to add a `phpunit.xml` file to the root of your WP
 
 ## Running the unit tests
 
-The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x. This has some implications for running the unit tests.
-
 * Make sure you have registered the directory in which you installed WPCS with PHPCS using;
     ```sh
     phpcs --config-set installed_paths path/to/WPCS
     ```
 * Navigate to the directory in which you installed WPCS.
-* To run the unit tests with PHPCS 3.x:
+* To run the unit tests:
     ```sh
-    phpunit --bootstrap="./Test/phpcs3-bootstrap.php" --filter WordPress /path/to/PHP_CodeSniffer/tests/AllTests.php
-    ```
-* To run the unit tests with PHPCS 2.x:
-    ```sh
-    phpunit --bootstrap="./Test/phpcs2-bootstrap.php" --filter WordPress ./Test/AllTests.php
+    phpunit --filter WordPress --bootstrap="/path/to/PHP_CodeSniffer/tests/bootstrap.php" /path/to/PHP_CodeSniffer/tests/AllTests.php
     ```
 
 Expected output:
 ```
-PHPUnit 6.5.8 by Sebastian Bergmann and contributors.
+PHPUnit 7.5.0 by Sebastian Bergmann and contributors.
 
-Runtime:       PHP 7.2.7 with Xdebug 2.6.0
+Runtime:       PHP 7.2.13
 Configuration: /WordPressCS/phpunit.xml
 
-................................................................. 65 / 77 ( 84%)
-............                                                      77 / 77 (100%)
+............................................................      60 / 60 (100%)
 
-Tests generated 576 unique error codes; 51 were fixable (8.85%)
+156 sniff test files generated 490 unique error codes; 59 were fixable (12.04%)
 
-Time: 22.93 seconds, Memory: 40.00MB
+Time: 18.02 seconds, Memory: 22.00MB
 
-OK (77 tests, 0 assertions)
+OK (60 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
