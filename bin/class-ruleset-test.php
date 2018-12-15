@@ -72,11 +72,11 @@ class Ruleset_Test {
 		$d = new self();
 		$e = apply_filter( 'filter_name', $d, $c );
 
-		if ( $a == $b ) { // WPCS: loose comparison OK.
-			$f = isset( $_GET['nonce'] ) ? 1 : 2; // WPCS: CSRF ok, input var ok.
+		if ( $a == $b ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			$f = isset( $_GET['nonce'] ) ? 1 : 2; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 
-		// @codingStandardsIgnoreLine
+		// phpcs:ignore Squiz.PHP.Eval,WordPress.PHP.NoSilencedErrors
 		$g = @eval( 'return true;' );
 
 		switch ( $param_a ) {
@@ -100,13 +100,13 @@ class Ruleset_Test {
 		for ( ; $i < 100; $i++ ) {
 			while ( $j-- ) {
 				if ( 17 === $j ) {
-					// @codingStandardsIgnoreLine
+					// phpcs:ignore WordPress.PHP.DiscourageGoto.Found
 					goto end;
 				}
 			}
 		}
 
-		// @codingStandardsIgnoreLine
+		// phpcs:ignore WordPress.PHP.DiscourageGoto.Found
 		end:
 		echo 'This is a goto - it needs to be here to prevent parse errors';
 	}

@@ -178,7 +178,7 @@ class CronIntervalSniff extends Sniff {
 
 					// If all digits and operators, eval!
 					if ( preg_match( '#^[\s\d+*/-]+$#', $value ) > 0 ) {
-						$interval = eval( "return ( $value );" ); // @codingStandardsIgnoreLine - No harm here.
+						$interval = eval( "return ( $value );" ); // phpcs:ignore Squiz.PHP.Eval -- No harm here.
 						break;
 					}
 
