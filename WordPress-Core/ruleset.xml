@@ -398,10 +398,7 @@
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
 	<!-- Rule: The goto statement must never be used. -->
-	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1664 -->
-	<rule ref="WordPress.PHP.DiscourageGoto"/>
-	<rule ref="WordPress.PHP.DiscourageGoto.Found">
+	<rule ref="Generic.PHP.DiscourageGoto">
 		<type>error</type>
 		<message>The "goto" language construct should not be used.</message>
 	</rule>
