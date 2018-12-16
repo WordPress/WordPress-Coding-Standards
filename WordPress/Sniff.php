@@ -943,10 +943,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Merge a pre-set array with a ruleset provided array or inline provided string.
+	 * Merge a pre-set array with a ruleset provided array.
 	 *
-	 * - Will correctly handle custom array properties which were set without
-	 *   the `type="array"` indicator.
 	 * - By default flips custom lists to allow for using `isset()` instead
 	 *   of `in_array()`.
 	 * - When `$flip` is true:
@@ -961,14 +959,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * which extends an upstream sniff can also use it.}}
 	 *
 	 * @since 0.11.0
+	 * @since 2.0.0  No longer supports custom array properties which were incorrectly
+	 *               passed as a string.
 	 *
-	 * @param array|string $custom Custom list as provided via a ruleset.
-	 *                             Can be either a comma-delimited string or
-	 *                             an array of values.
-	 * @param array        $base   Optional. Base list. Defaults to an empty array.
-	 *                             Expects `value => true` format when `$flip` is true.
-	 * @param bool         $flip   Optional. Whether or not to flip the custom list.
-	 *                             Defaults to true.
+	 * @param array $custom Custom list as provided via a ruleset.
+	 * @param array $base   Optional. Base list. Defaults to an empty array.
+	 *                      Expects `value => true` format when `$flip` is true.
+	 * @param bool  $flip   Optional. Whether or not to flip the custom list.
+	 *                      Defaults to true.
 	 * @return array
 	 */
 	public static function merge_custom_array( $custom, $base = array(), $flip = true ) {
@@ -976,17 +974,9 @@ abstract class Sniff implements PHPCS_Sniff {
 			$base = array_filter( $base );
 		}
 
-		if ( empty( $custom ) || ( ! \is_array( $custom ) && ! \is_string( $custom ) ) ) {
+		if ( empty( $custom ) || ! \is_array( $custom ) ) {
 			return $base;
 		}
-
-		// Allow for a comma delimited list.
-		if ( \is_string( $custom ) ) {
-			$custom = explode( ',', $custom );
-		}
-
-		// Always trim whitespace from the values.
-		$custom = array_filter( array_map( 'trim', $custom ) );
 
 		if ( true === $flip ) {
 			$custom = array_fill_keys( $custom, false );

@@ -192,7 +192,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		// Allow overruling the text_domain set in a ruleset via the command line.
 		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
-			$this->text_domain = $cl_text_domain;
+			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $cl_text_domain ) ) );
 		}
 
 		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
