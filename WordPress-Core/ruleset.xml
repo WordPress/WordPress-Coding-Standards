@@ -456,10 +456,7 @@
 	<rule ref="Generic.Files.EndFileNewline"/>
 
 	<!-- No whitespace should come before semicolons. -->
-	<!-- Extends upstream sniff. Should defer to upstream version once minimum PHPCS requirement
-		 has gone up to version containing bugfix.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1691 -->
-	<rule ref="WordPress.WhiteSpace.SemicolonSpacing"/>
+	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
 	<!-- There should be no empty statements, i.e. lone semi-colons or open/close tags without content. -->
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
