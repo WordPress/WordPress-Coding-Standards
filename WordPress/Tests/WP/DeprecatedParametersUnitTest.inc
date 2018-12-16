@@ -60,7 +60,7 @@ wp_title_rss( 'deprecated' );
 wp_upload_bits( '', 'deprecated' );
 xfn_check( '', '', 'deprecated' );
 
-// All will give an WARNING as they have been deprecated after WP 4.5.
+// All will give an WARNING as they have been deprecated after WP 4.7.
 
 get_category_parents( '', '', '', '', array( 'deprecated') );
 unregister_setting( '', '', '', 'deprecated' );
