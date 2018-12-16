@@ -121,7 +121,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	private $is_valid = false;
 
@@ -139,7 +139,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	private $header_found = false;
 
