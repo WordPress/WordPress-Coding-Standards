@@ -8,6 +8,22 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [1.2.1] - 2018-12-18
+
+Note: This will be the last release supporting PHP_CodeSniffer 2.x.
+
+### Changed
+- The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `4.7`.
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff will now report the error for hook names and constant names declared with `define()` on the line containing the parameter for the hook/constant name. Previously, it would report the error on the line containing the function call.
+- Various minor housekeeping fixes to inline documentation, rulesets, code.
+
+### Removed
+- `comment_author_email_link()`, `comment_author_email()`, `comment_author_IP()`, `comment_author_link()`, `comment_author_rss()`, `comment_author_url_link()`, `comment_author_url()`, `comment_author()`, `comment_date()`, `comment_excerpt()`, `comment_form_title()`, `comment_form()`, `comment_id_fields()`, `comment_ID()`, `comment_reply_link()`, `comment_text_rss()`, `comment_text()`, `comment_time()`, `comment_type()`, `comments_link()`, `comments_number()`, `comments_popup_link()`, `comments_popup_script()`, `comments_rss_link()`, `delete_get_calendar_cache()`, `edit_bookmark_link()`, `edit_comment_link()`, `edit_post_link()`, `edit_tag_link()`, `get_footer()`, `get_header()`, `get_sidebar()`, `get_the_title()`, `next_comments_link()`, `next_image_link()`, `next_post_link()`, `next_posts_link()`, `permalink_anchor()`, `posts_nav_link()`, `previous_comments_link()`, `previous_image_link()`, `previous_post_link()`, `previous_posts_link()`, `sticky_class()`, `the_attachment_link()`, `the_author_link()`, `the_author_meta()`, `the_author_posts_link()`, `the_author_posts()`, `the_category_rss()`, `the_category()`, `the_content_rss()`, `the_content()`, `the_date_xml()`, `the_excerpt_rss()`, `the_excerpt()`, `the_feed_link()`, `the_ID()`, `the_meta()`, `the_modified_author()`, `the_modified_date()`, `the_modified_time()`, `the_permalink()`, `the_post_thumbnail()`, `the_search_query()`, `the_shortlink()`, `the_tags()`, `the_taxonomies()`, `the_terms()`, `the_time()`, `the_title_rss()`, `the_title()`, `wp_enqueue_script()`, `wp_meta()`, `wp_shortlink_header()` and `wp_shortlink_wp_head()` from the list of auto-escaped functions `Sniff::$autoEscapedFunctions`. This affects the `WordPress.Security.EscapeOutput` sniff.
+
+### Fixed
+- The `WordPress.WhiteSpace.PrecisionAlignment` sniff would loose the value of a custom set `ignoreAlignmentTokens` property when scanning more than one file.
+
+
 ## [1.2.0] - 2018-11-12
 
 ### Added
@@ -810,6 +826,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[1.2.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/0.14.1...1.0.0
