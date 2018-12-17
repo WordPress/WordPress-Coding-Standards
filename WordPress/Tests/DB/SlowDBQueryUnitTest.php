@@ -44,7 +44,9 @@ class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 			16 => 1,
 			19 => 2,
 			30 => 1,
+			31 => 1, // Whitelist comment deprecation warning.
 			32 => 1, // Whitelist comment deprecation warning.
+			35 => 1, // Whitelist comment deprecation warning.
 		);
 	}
 

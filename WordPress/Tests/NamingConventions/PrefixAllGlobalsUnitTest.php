@@ -99,6 +99,11 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
 					1   => 3, // 3 x warning for potentially incorrect prefix passed.
+					201 => 1, // Whitelist comment deprecation warning.
+					208 => 1, // Whitelist comment deprecation warning.
+					212 => 1, // Whitelist comment deprecation warning.
+					215 => 1, // Whitelist comment deprecation warning.
+					216 => 1, // Whitelist comment deprecation warning.
 					249 => 1,
 					250 => 1,
 					253 => 1,
