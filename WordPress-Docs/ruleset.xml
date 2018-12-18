@@ -61,6 +61,8 @@
 		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital"/>
 		<!-- Excluded to allow param documentation for arrays  -->
 		<exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName"/>
+		<!-- It is too early for PHP7 features to be required -->
+		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
 		<!-- WP doesn't require type hints -->
 		<exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
 
@@ -81,9 +83,6 @@
 		<exclude name="Squiz.Commenting.VariableComment.TagNotAllowed"/>
 		<!-- WP prefers @since first -->
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
-
-		<!-- It is too early for PHP7 features to be required -->
-		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
 	</rule>
 
 	<rule ref="Generic.Commenting">
@@ -105,8 +104,6 @@
 		<exclude name="Generic.Commenting.DocComment.ContentBeforeClose"/>
 
 		<!-- WP allows @todo's in comments -->
-		<exclude name="Generic.Commenting.Todo.CommentFound"/>
-		<!-- WP allows @todo's in comments -->
-		<exclude name="Generic.Commenting.Todo.TaskFound"/>
+		<exclude name="Generic.Commenting.Todo"/>
 	</rule>
 </ruleset>

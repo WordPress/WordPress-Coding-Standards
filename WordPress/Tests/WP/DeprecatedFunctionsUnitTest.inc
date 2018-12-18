@@ -315,14 +315,14 @@ get_comments_popup_template();
 get_currentuserinfo();
 is_comments_popup();
 use function popuplinks as something_else; // Related to issue #1306.
-
-/*
- * Warning.
- */
 /* ============ WP 4.6 ============ */
 post_form_autocomplete_off();
 wp_embed_handler_googlevideo();
 wp_get_sites();
+
+/*
+ * Warning.
+ */
 /* ============ WP 4.7 ============ */
 _sort_nav_menu_items();
 _usort_terms_by_ID();

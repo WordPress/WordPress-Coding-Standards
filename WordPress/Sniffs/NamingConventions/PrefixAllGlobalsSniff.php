@@ -801,7 +801,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		$data[] = $raw_content;
 
-		$recorded = $this->addMessage( self::ERROR_MSG, $parameters[1]['start'], $is_error, $error_code, $data );
+		$recorded = $this->addMessage( self::ERROR_MSG, $first_non_empty, $is_error, $error_code, $data );
 
 		if ( true === $recorded ) {
 			$this->record_potential_prefix_metric( $stackPtr, $raw_content );
