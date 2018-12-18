@@ -6,17 +6,7 @@
 
 	<rule ref="WordPress-Core"/>
 	<rule ref="WordPress-Docs"/>
-	<rule ref="WordPress-Extra">
-		<!-- Even though the VIP sniffs are not included in Extra, this will remove them from the scan. -->
-		<exclude name="WordPress.VIP"/>
-	</rule>
-
-	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
-		<!-- From "VIP": The obfuscation group is excluded as there are plenty of legitimate uses for the base64 functions. -->
-		<properties>
-			<property name="exclude" type="array" value="obfuscation"/>
-		</properties>
-	</rule>
+	<rule ref="WordPress-Extra"/>
 
 	<!--
 	#############################################################################

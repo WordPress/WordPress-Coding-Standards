@@ -9,7 +9,6 @@
  * Currently covered - based on the rulesets as of July 24 2018:
  * - Every WPCS native sniff is triggered.
  * - Every WPCS + PHPCS sniff within the Core ruleset is triggered.
- * - Every WPCS + PHPCS sniff within the VIP ruleset is triggered.
  *
  * @package WPCS\WordPressCodingStandards
  */

@@ -111,6 +111,6 @@ $bad = array( 'key1' => 'value1', 'key2' => 'value2' ); // Bad.
 // @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true
 
 $foo = array(
-	'meta_key'   => 'foo', // phpcs:ignore WordPress.VIP.SlowDBQuery.slow_db_query_meta_key
-	'meta_value' => 'bar', // phpcs:ignore WordPress.VIP.SlowDBQuery.slow_db_query_meta_value
+	'meta_key'   => 'foo', // phpcs:ignore Standard.Category.SniffName.ErrorCode
+	'meta_value' => 'bar', // phpcs:ignore Standard.Category.SniffName.ErrorCode
 );
