@@ -41,32 +41,6 @@ class NonceVerificationSniff extends Sniff {
 	);
 
 	/**
-	 * Superglobals to give an error for when not accompanied by an nonce check.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed visibility from public to protected.
-	 *
-	 * @deprecated 0.12.0 Replaced by $superglobals property.
-	 *
-	 * @var array
-	 */
-	protected $errorForSuperGlobals = array();
-
-	/**
-	 * Superglobals to give a warning for when not accompanied by an nonce check.
-	 *
-	 * If the variable is also in the error list, that takes precedence.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed visibility from public to protected.
-	 *
-	 * @deprecated 0.12.0 Replaced by $superglobals property.
-	 *
-	 * @var array
-	 */
-	protected $warnForSuperGlobals = array();
-
-	/**
 	 * Custom list of functions which verify nonces.
 	 *
 	 * @since 0.5.0

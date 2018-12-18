@@ -49,17 +49,6 @@ class EscapeOutputSniff extends Sniff {
 	public $customAutoEscapedFunctions = array();
 
 	/**
-	 * Custom list of functions which escape values for output.
-	 *
-	 * @since      0.3.0
-	 * @deprecated 0.5.0 Use $customEscapingFunctions instead.
-	 * @see        \WordPress\Sniffs\Security\EscapeOutputSniff::$customEscapingFunctions
-	 *
-	 * @var string|string[]
-	 */
-	public $customSanitizingFunctions = array();
-
-	/**
 	 * Custom list of functions which print output incorporating the passed values.
 	 *
 	 * @since 0.4.0
@@ -493,32 +482,15 @@ class EscapeOutputSniff extends Sniff {
 	 * @return void
 	 */
 	protected function mergeFunctionLists() {
-		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape']
-			|| $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
-		) {
+		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape'] ) {
 			$customEscapeFunctions = $this->merge_custom_array( $this->customEscapingFunctions, array(), false );
-
-			if ( ! empty( $this->customSanitizingFunctions ) ) {
-				$customEscapeFunctions = $this->merge_custom_array(
-					$this->customSanitizingFunctions,
-					$customEscapeFunctions,
-					false
-				);
-
-				$this->phpcsFile->addWarning(
-					'The customSanitizingFunctions property is deprecated in favor of customEscapingFunctions.',
-					0,
-					'DeprecatedCustomSanitizingFunctions'
-				);
-			}
 
 			$this->escapingFunctions = $this->merge_custom_array(
 				$customEscapeFunctions,
 				$this->escapingFunctions
 			);
 
-			$this->addedCustomFunctions['escape']   = $this->customEscapingFunctions;
-			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
+			$this->addedCustomFunctions['escape'] = $this->customEscapingFunctions;
 		}
 
 		if ( $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] ) {
