@@ -155,12 +155,17 @@ class NonceVerificationSniff extends Sniff {
 			return;
 		}
 
+		$error_code = 'Missing';
+		if ( false === $this->superglobals[ $instance['content'] ] ) {
+			$error_code = 'Recommended';
+		}
+
 		// If we're still here, no nonce-verification function was found.
 		$this->addMessage(
 			'Processing form data without nonce verification.',
 			$stackPtr,
 			$this->superglobals[ $instance['content'] ],
-			'NoNonceVerification'
+			$error_code
 		);
 	}
 
