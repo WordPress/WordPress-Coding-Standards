@@ -2327,41 +2327,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a content string contains a specific html open tag.
-	 *
-	 * @since 0.11.0
-	 * @since 0.13.0 No longer allows for the PHP 5.2 bug for which the function was
-	 *               originally created.
-	 * @since 0.13.0 The $stackPtr parameter is now optional. Either that or the
-	 *               $content parameter has to be passed.
-	 * @deprecated 1.0.0 This method is only used by deprecated sniffs.
-	 *
-	 * @param string $tag_name The name of the HTML tag without brackets. So if
-	 *                         searching for '<span...', this would be 'span'.
-	 * @param int    $stackPtr Optional. The position of the current token in the
-	 *                         token stack.
-	 *                         This parameter needs to be passed if no $content is
-	 *                         passed.
-	 * @param string $content  Optionally, the current content string, might be a
-	 *                         substring of the original string.
-	 *                         Defaults to `false` to distinguish between a passed
-	 *                         empty string and not passing the $content string.
-	 *
-	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
-	 */
-	public function has_html_open_tag( $tag_name, $stackPtr = null, $content = false ) {
-		if ( false === $content && isset( $stackPtr ) ) {
-			$content = $this->tokens[ $stackPtr ]['content'];
-		}
-
-		if ( ! empty( $content ) && false !== strpos( $content, '<' . $tag_name ) ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check whether a T_CONST token is a class constant declaration.
 	 *
 	 * @since 0.14.0
