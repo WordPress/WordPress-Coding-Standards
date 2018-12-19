@@ -18,10 +18,7 @@
 	-->
 	<!-- Covers rule: Use single and double quotes when appropriate.
 		 If you're not evaluating anything in the string, use single quotes. -->
-	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
-	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
-		<severity>0</severity>
-	</rule>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
 
 	<!-- Rule: Text that goes into attributes should be run through esc_attr().
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/527 -->
@@ -408,7 +405,6 @@
 	</rule>
 
 	<!-- Rule: The eval() construct is very dangerous, and is impossible to secure. ... these must not be used. -->
-	<rule ref="Squiz.PHP.Eval"/>
 	<rule ref="Squiz.PHP.Eval.Discouraged">
 		<type>error</type>
 		<message>eval() is a security risk so not allowed.</message>
