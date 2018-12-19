@@ -794,9 +794,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			$data       = array( 'Global constants defined' );
 			$error_code = 'NonPrefixedConstantFound';
+			if ( false === $is_error ) {
+				$error_code = 'VariableConstantNameFound';
+			}
 		} else {
 			$data       = array( 'Hook names invoked' );
 			$error_code = 'NonPrefixedHooknameFound';
+			if ( false === $is_error ) {
+				$error_code = 'DynamicHooknameFound';
+			}
 		}
 
 		$data[] = $raw_content;
