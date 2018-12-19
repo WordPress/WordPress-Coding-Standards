@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Core">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Core" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>

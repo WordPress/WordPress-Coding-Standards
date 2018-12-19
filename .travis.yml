@@ -85,8 +85,8 @@ script:
     - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1; fi
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
-    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
-    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./phpcs.xml.dist.sample; fi
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml; fi
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample; fi
     # Check the code-style consistency of the xml files.
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml"); fi
