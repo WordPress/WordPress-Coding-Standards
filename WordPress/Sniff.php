@@ -96,7 +96,10 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Example usage:
 	 * <rule ref="WordPress.[Subset].[Sniffname]">
 	 *  <properties>
-	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *   <property name="custom_test_class_whitelist" type="array">
+	 *     <element value="My_Plugin_First_Test_Class"/>
+	 *     <element value="My_Plugin_Second_Test_Class"/>
+	 *   </property>
 	 *  </properties>
 	 * </rule>
 	 *

@@ -36,7 +36,11 @@
 			<property name="exact" value="false"/>
 			<property name="indent" value="4"/>
 			<property name="tabIndent" value="true"/>
-			<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML"/>
+			<property name="ignoreIndentationTokens" type="array">
+				<element value="T_HEREDOC"/>
+				<element value="T_NOWDOC"/>
+				<element value="T_INLINE_HTML"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="WordPress.Arrays.ArrayIndentation"/>

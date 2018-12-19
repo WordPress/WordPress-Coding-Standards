@@ -50,8 +50,10 @@ class PrecisionAlignmentSniff extends Sniff {
 	 *
 	 * <rule ref="WordPress.WhiteSpace.PrecisionAlignment">
 	 *    <properties>
-	 *        <property name="ignoreAlignmentTokens" type="array"
-	 *             value="T_COMMENT,T_INLINE_HTML"/>
+	 *        <property name="ignoreAlignmentTokens" type="array">
+	 *            <element value="T_COMMENT"/>
+	 *            <element value="T_INLINE_HTML"/>
+	 *        </property>
 	 *    </properties>
 	 * </rule>
 	 *
