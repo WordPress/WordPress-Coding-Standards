@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Utils;
+namespace WordPressCS\WordPress\Tests\Utils;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 

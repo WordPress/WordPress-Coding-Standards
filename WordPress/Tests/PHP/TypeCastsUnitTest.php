@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\PHP;
+namespace WordPressCS\WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the TypeCasts sniff.

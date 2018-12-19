@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WhiteSpace;
+namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the PrecisionAlignment sniff.

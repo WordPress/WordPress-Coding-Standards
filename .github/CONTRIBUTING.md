@@ -51,9 +51,9 @@ To this end, the `WordPress\Sniff::has_whitelist_comment()` method was introduce
 
 Example usage:
 ```php
-namespace WordPress\Sniffs\Security;
+namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPress\Sniff;
+use WordPressCS\WordPress\Sniff;
 
 class NonceVerificationSniff extends Sniff {
 
@@ -77,7 +77,7 @@ When you introduce a new whitelist comment, please don't forget to update the [w
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 2.9.x or 3.x
+* PHP_CodeSniffer 3.3.1 or higher
 * PHPUnit 4.x, 5.x, 6.x or 7.x
 
 The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
@@ -154,7 +154,7 @@ Lets take a look at what's inside `POSIXFunctionsUnitTest.php`:
 
 ```php
 ...
-namespace WordPress\Tests\PHP;
+namespace WordPressCS\WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
