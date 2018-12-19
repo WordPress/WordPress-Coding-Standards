@@ -9,7 +9,6 @@
 /phpunit.xml.dist export-ignore
 /.github export-ignore
 /bin export-ignore
-/Test export-ignore
 /WordPress/Tests export-ignore
 
 #

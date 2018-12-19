@@ -65,7 +65,7 @@ script:
     # Lint the PHP files against parse errors.
     - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
-    - phpunit --filter WordPress $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+    - phpunit --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
     # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
     # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
     # For the first run, the exit code will be 1 (= all fixable errors fixed).

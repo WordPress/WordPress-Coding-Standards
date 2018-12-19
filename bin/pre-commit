@@ -11,4 +11,4 @@ fi
 
 find . \( -name '*.php' \) -exec php -lf {} \;
 
-PHPCS_DIR=$phpcs_root phpunit --bootstrap="./Test/phpcs3-bootstrap.php" --filter WordPress "$phpcs_root/tests/AllTests.php"
+PHPCS_DIR=$phpcs_root phpunit --filter WordPress --bootstrap="$phpcs_root/tests/bootstrap.php" "$phpcs_root/tests/AllTests.php"
