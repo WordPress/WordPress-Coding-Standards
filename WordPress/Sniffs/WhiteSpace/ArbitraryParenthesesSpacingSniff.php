@@ -77,11 +77,6 @@ class ArbitraryParenthesesSpacingSniff extends Sniff {
 		$this->ignoreTokens[ \T_LIST ]                 = \T_LIST;
 		$this->ignoreTokens[ \T_DECLARE ]              = \T_DECLARE;
 
-		// The below two tokens have been added to the Tokens::$functionNameTokens array in PHPCS 3.1.0,
-		// so they can be removed once the minimum PHPCS requirement of WPCS has gone up.
-		$this->ignoreTokens[ \T_SELF ]   = \T_SELF;
-		$this->ignoreTokens[ \T_STATIC ] = \T_STATIC;
-
 		// Language constructs where the use of parentheses should be discouraged instead.
 		$this->ignoreTokens[ \T_THROW ]      = \T_THROW;
 		$this->ignoreTokens[ \T_YIELD ]      = \T_YIELD;

@@ -28,27 +28,7 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 	private $tab_width = 4;
 
 	/**
-	 * Get a list of CLI values to set before the file is tested.
-	 *
-	 * Used by PHPCS 2.x.
-	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
-	 * @return array
-	 */
-	public function getCliValues( $testFile ) {
-		// Tab width setting is only needed for the file with the function calls.
-		if ( 'I18nTextDomainFixerUnitTest.4.inc' === $testFile ) {
-			return array( '--tab-width=' . $this->tab_width );
-		}
-
-		return array();
-	}
-
-	/**
 	 * Set CLI values before the file is tested.
-	 *
-	 * Used by PHPCS 3.x.
 	 *
 	 * @param string                  $testFile The name of the file being tested.
 	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.

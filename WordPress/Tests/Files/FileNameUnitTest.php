@@ -119,18 +119,6 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	protected function getTestFiles( $testFileBase ) {
 
-		// Work around for PHP 5.3/PHPCS 2.x.
-		if ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
-			unset( $this->expected_results['SomeView.inc'] );
-		}
-
-		// Work around for PHPCS < 3.2.0. The disables will be diregarded.
-		if ( ! \defined( '\T_PHPCS_DISABLE' ) && ! \defined( '\T_PHPCS_ENABLE' ) ) {
-			$this->expected_results['blanket-disable.inc']   = 1;
-			$this->expected_results['rule-disable.inc']      = 1;
-			$this->expected_results['wordpress-disable.inc'] = 1;
-		}
-
 		$sep        = \DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', \GLOB_BRACE );
 
@@ -161,24 +149,10 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = '' ) {
-		switch ( $testFile ) {
-			case 'SomeView.inc':
-			case 'some-view.inc':
-				$expected = array();
-				if ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
-					$expected[1] = 1; // Internal.NoCode warning on PHP 5.3 icw short open tags off.
-				}
-
-				return $expected;
-
-			default:
-				return array();
-		}
+	public function getWarningList() {
+		return array();
 	}
 
 }
