@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes acronym,tgmpa
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
 
 /*
  * OK - not in the global namespace.
@@ -17,4 +17,4 @@ trait T_Example {}
 // Issue #1056.
 define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

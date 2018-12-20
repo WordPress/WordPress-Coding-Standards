@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes acronym,tgmpa
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
 
 namespace Acronym\Tests;
 
@@ -21,4 +21,4 @@ $acronym_test = new class extends \PHPUnit_Framework_TestCase {
 	}
 };
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

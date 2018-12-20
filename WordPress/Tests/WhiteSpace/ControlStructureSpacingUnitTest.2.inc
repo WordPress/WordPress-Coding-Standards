@@ -1,7 +1,7 @@
 <?php
 
 // Test correct handling of PHPCS annotations.
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
 if ( $foo ) {
 	if ( $bar ) {
 
@@ -18,4 +18,4 @@ if ( $foo ) {
 
 
 }
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false

@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayIndentation tabIndent false
+// phpcs:set WordPress.Arrays.ArrayIndentation tabIndent false
 $ok = array(
     'value',
     123,
@@ -429,4 +429,4 @@ $my_array = [
     'something_else',
 ];
 
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayIndentation tabIndent true
+// phpcs:set WordPress.Arrays.ArrayIndentation tabIndent true

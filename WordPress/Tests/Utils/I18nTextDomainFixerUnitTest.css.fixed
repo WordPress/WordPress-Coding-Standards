@@ -1,5 +1,5 @@
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain twentyeleven */
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain twentyten */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] twentyeleven */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain twentyten */
 
 /*
 Theme Name: Correct text domain.
@@ -14,8 +14,8 @@ Tags: blog, two-columns, custom-header, custom-background, threaded-comments, st
 Text Domain: twentyten
 */
 
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain _s */
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain something-else */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] _s */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain something-else */
 
 /*!
 Theme Name: Text domain which should be fixed and checking that consecutive comments don't get mixed up.
@@ -78,7 +78,7 @@ html {
 	-webkit-text-size-adjust: 100%; /* 2 */
 }
 
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain twentyseventeen */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain twentyseventeen */
 
 /*
 Theme Name: Missing text domain.
@@ -160,5 +160,5 @@ Text Domain: twentyseventeen
  * Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
  */
 
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer old_text_domain false */
-/* @codingStandardsChangeSetting WordPress.Utils.I18nTextDomainFixer new_text_domain false */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false */

@@ -6,7 +6,7 @@
  * For this file, none of the variables overrides should throw errors, for the sister-file they all should.
  */
 
-// @codingStandardsChangeSetting WordPress.WP.GlobalVariablesOverride treat_files_as_scoped true
+// phpcs:set WordPress.WP.GlobalVariablesOverride treat_files_as_scoped true
 
 // Overrides in the global namespace should be detected no matter what. No need for a `global` statement.
 $pagenow = 'abc'; // OK.
@@ -28,4 +28,4 @@ $domain['subkey'] = 'something else'; // OK.
 
 $GLOBALS['domain']['subkey'] = 'something else'; // Still bad.
 
-// @codingStandardsChangeSetting WordPress.WP.GlobalVariablesOverride treat_files_as_scoped false
+// phpcs:set WordPress.WP.GlobalVariablesOverride treat_files_as_scoped false

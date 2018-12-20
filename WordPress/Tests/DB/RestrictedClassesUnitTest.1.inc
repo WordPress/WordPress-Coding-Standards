@@ -45,21 +45,21 @@ $db9 = new \My\DBlayer;
  * Test exclude property.
  */
 // Exclude one group:
-// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude test
+// phpcs:set WordPress.DB.RestrictedClasses exclude[] test
 $db9 = new \My\DBlayer; // Ok - within excluded group.
 
 echo mysqli::$affected_rows; // Error.
 class YourMysqliA extends \mysqli {} // Error.
 
 // Exclude all groups:
-// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude test,mysql
+// phpcs:set WordPress.DB.RestrictedClasses exclude[] test,mysql
 $db9 = new \My\DBlayer; // Ok - within excluded group.
 
 echo mysqli::$affected_rows; // Ok - within excluded group.
 class YourMysqliB extends \mysqli {} // Ok - within excluded group.
 
 // Reset group exclusions.
-// @codingStandardsChangeSetting WordPress.DB.RestrictedClasses exclude false
+// phpcs:set WordPress.DB.RestrictedClasses exclude[]
 $db9 = new \My\DBlayer; // Error.
 
 echo mysqli::$affected_rows; // Error.

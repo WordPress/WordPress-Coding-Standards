@@ -28,17 +28,17 @@ srand(); // Warning.
 mt_srand(); // Warning.
 wp_rand(); // OK.
 
-// @codingStandardsChangeSetting WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
 parse_url( 'http://example.com/' ); // OK.
-// @codingStandardsChangeSetting WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
 
 strip_tags( $something, '<iframe>' ); // OK.
 
-// @codingStandardsChangeSetting WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
 parse_url($url, PHP_URL_QUERY); // OK.
-// @codingStandardsChangeSetting WordPress.WP.AlternativeFunctions minimum_supported_version 4.7
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.7
 parse_url($url, PHP_URL_SCHEME); // Warning.
-// @codingStandardsChangeSetting WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
 
 file_get_contents( $local_file, true ); // OK.
 file_get_contents( $url, false ); // Warning.

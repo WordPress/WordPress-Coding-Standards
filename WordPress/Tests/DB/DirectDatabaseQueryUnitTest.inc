@@ -119,9 +119,9 @@ $b = function () {
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheGetFunctions my_cacheget
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheSetFunctions my_cacheset,my_other_cacheset
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions my_cachedel
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[] my_cacheget
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheset,my_other_cacheset
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] my_cachedel
 function cache_customA() {
 	global $wpdb;
 
@@ -149,8 +149,8 @@ function cache_customC() {
 	my_cachedel( 'key', 'group' );
 }
 
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheSetFunctions my_cacheset
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions false
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheset
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[]
 
 function cache_customD() {
 	global $wpdb;
@@ -179,8 +179,8 @@ function cache_customF() {
 	my_cachedel( 'key', 'group' );
 }
 
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheGetFunctions false
-// @codingStandardsChangeSetting WordPress.DB.DirectDatabaseQuery customCacheSetFunctions false
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[]
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[]
 
 function cache_customG() {
 	global $wpdb;
