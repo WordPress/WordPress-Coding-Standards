@@ -384,7 +384,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 			// Ignore comments after array items if the next real content starts on a new line.
 			if ( \T_COMMENT === $this->tokens[ $first_content ]['code']
-				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $first_content ]['type'] ] )
+				|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $first_content ]['code'] ] )
 			) {
 				$next = $this->phpcsFile->findNext(
 					array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
