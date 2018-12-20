@@ -1145,26 +1145,14 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		/*
-		 * Is this a method inside of a class or a trait ? If so, it is a test class/trait ?
-		 *
-		 * {@internal Once the minimum supported PHPCS version has gone up to 3.1.0, the
-		 * local array here can be replace with Tokens::$ooScopeTokens.}}
-		 */
-		$oo_tokens  = array(
-			\T_CLASS      => true,
-			\T_TRAIT      => true,
-			\T_ANON_CLASS => true,
-		);
 		$conditions = $this->tokens[ $stackPtr ]['conditions'];
-
 		foreach ( $conditions as $token => $condition ) {
 			if ( $token === $functionToken ) {
 				// Only examine the conditions the function is nested in, not those nested within the function.
 				break;
 			}
 
-			if ( isset( $oo_tokens[ $condition ] ) ) {
+			if ( isset( Tokens::$ooScopeTokens[ $condition ] ) ) {
 				$is_test_class = $this->is_test_class( $token );
 				if ( true === $is_test_class ) {
 					return true;
@@ -1192,9 +1180,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected function is_test_class( $stackPtr ) {
 
-		if ( ! isset( $this->tokens[ $stackPtr ] )
-			|| \in_array( $this->tokens[ $stackPtr ]['type'], array( 'T_CLASS', 'T_ANON_CLASS', 'T_TRAIT' ), true ) === false
-		) {
+		if ( isset( $this->tokens[ $stackPtr ], Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) === false ) {
 			return false;
 		}
 

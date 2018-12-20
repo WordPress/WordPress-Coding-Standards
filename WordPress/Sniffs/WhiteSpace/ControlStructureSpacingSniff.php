@@ -404,17 +404,14 @@ class ControlStructureSpacingSniff extends Sniff {
 			$firstContent = $this->phpcsFile->findNext( \T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
 
 			// We ignore spacing for some structures that tend to have their own rules.
-			$ignore = array(
+			$ignore  = array(
 				\T_FUNCTION             => true,
 				\T_CLOSURE              => true,
-				\T_CLASS                => true,
-				\T_ANON_CLASS           => true,
-				\T_INTERFACE            => true,
-				\T_TRAIT                => true,
 				\T_DOC_COMMENT_OPEN_TAG => true,
 				\T_CLOSE_TAG            => true,
 				\T_COMMENT              => true,
 			);
+			$ignore += Tokens::$ooScopeTokens;
 
 			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
 				&& $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
