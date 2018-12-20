@@ -5,9 +5,6 @@
 
 	<autoload>./../WordPress/PHPCSAliases.php</autoload>
 
-	<!-- Treat all files as UTF-8. -->
-	<config name="encoding" value="utf-8"/>
-
 	<!-- Default tab width for indentation fixes and such. -->
 	<arg name="tab-width" value="4"/>
 
