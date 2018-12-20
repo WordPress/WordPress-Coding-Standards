@@ -97,16 +97,11 @@ N.B.: _If you used Composer to install the WordPress Coding Standards, you can s
 
 For the unit tests to work, you need to make sure PHPUnit can find your `PHP_CodeSniffer` install.
 
-The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Make sure to adjust the path to reflect your local setup.
+The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Copy the existing `phpunit.xml.dist` file and add the below `<env>` directive within the `<php>` section. Make sure to adjust the path to reflect your local setup.
 ```xml
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
-	beStrictAboutTestsThatDoNotTestAnything="false"
-	backupGlobals="true">
 	<php>
 		<env name="PHPCS_DIR" value="/path/to/PHP_CodeSniffer/"/>
 	</php>
-</phpunit>
 ```
 
 ## Running the unit tests
@@ -119,6 +114,9 @@ The easiest way to do this is to add a `phpunit.xml` file to the root of your WP
 * To run the unit tests:
     ```sh
     phpunit --filter WordPress --bootstrap="/path/to/PHP_CodeSniffer/tests/bootstrap.php" /path/to/PHP_CodeSniffer/tests/AllTests.php
+
+    # Or if you've installed WPCS with Composer:
+    composer run-tests
     ```
 
 Expected output:
