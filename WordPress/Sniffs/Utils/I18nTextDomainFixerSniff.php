@@ -272,12 +272,6 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		if ( \T_COMMENT === $this->tokens[ $stackPtr ]['code']
-			&& strpos( $this->tokens[ $stackPtr ]['content'], '@codingStandardsChangeSetting' ) !== false
-		) {
-			return;
-		}
-
 		// Check if the old/new properties are correctly set. If not, bow out.
 		if ( ! is_string( $this->new_text_domain )
 			|| '' === $this->new_text_domain

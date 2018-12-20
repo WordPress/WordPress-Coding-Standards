@@ -947,8 +947,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * - Will correctly handle custom array properties which were set without
 	 *   the `type="array"` indicator.
-	 *   This also allows for making these custom array properties testable using
-	 *   a `@codingStandardsChangeSetting` comment in the unit tests.
 	 * - By default flips custom lists to allow for using `isset()` instead
 	 *   of `in_array()`.
 	 * - When `$flip` is true:
@@ -1094,8 +1092,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				$lastPtr = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 
-			if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-					&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
+			if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
 					|| ( isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] )
 					&& \T_PHPCS_SET !== $this->tokens[ $lastPtr ]['code'] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
@@ -1110,8 +1107,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
 		$lastPtr     = $this->phpcsFile->findPrevious( \T_WHITESPACE, $end_of_line, null, true );
 
-		if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-				&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
+		if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
 				|| ( isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] )
 				&& \T_PHPCS_SET !== $this->tokens[ $lastPtr ]['code'] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
