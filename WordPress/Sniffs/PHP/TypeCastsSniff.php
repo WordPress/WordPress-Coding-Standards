@@ -36,7 +36,10 @@ class TypeCastsSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return Tokens::$castTokens;
+		$targets = Tokens::$castTokens;
+		unset( $targets[ \T_ARRAY_CAST ], $targets[ \T_OBJECT_CAST ] );
+
+		return $targets;
 	}
 
 	/**
@@ -121,33 +124,6 @@ class TypeCastsSniff extends Sniff {
 					array( $typecast )
 				);
 				break;
-		}
-
-		/*
-		 * {@internal Once the minimum PHPCS version has gone up to PHPCS 3.3.0+, the lowercase
-		 * check below can be removed in favour of adding the `Generic.PHP.LowerCaseType` sniff
-		 * to the ruleset.
-		 * Note: the `register()` function also needs adjusting in that case to only register the
-		 * targetted type casts above and the metrics recording should probably be adjusted as well.
-		 * The above mentioned Generic sniff records metrics about the case of typecasts, so we
-		 * don't need to worry about those no longer being recorded. They will be, just slightly
-		 * differently.}}
-		 */
-		if ( $typecast_lc !== $typecast ) {
-			$data = array(
-				$typecast_lc,
-				$typecast,
-			);
-
-			$fix = $this->phpcsFile->addFixableError(
-				'PHP type casts must be lowercase; expected "%s" but found "%s"',
-				$stackPtr,
-				'NonLowercaseFound',
-				$data
-			);
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( $stackPtr, $typecast_lc );
-			}
 		}
 	}
 

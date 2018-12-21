@@ -248,6 +248,8 @@
 	<rule ref="Squiz.WhiteSpace.CastSpacing"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.TypeCasts"/>
+	<!-- N.B.: This sniff also checks the case of (parameter/return) type declarations, not just type casts. -->
+	<rule ref="Generic.PHP.LowerCaseType"/>
 
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
