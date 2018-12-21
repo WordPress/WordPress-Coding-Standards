@@ -238,8 +238,6 @@
 			<property name="allowMultipleArguments" value="false"/>
 		</properties>
 	</rule>
-	<!-- Related to issue #970 / https://github.com/squizlabs/PHP_CodeSniffer/issues/1512 -->
-	<rule ref="WordPress.Functions.FunctionCallSignatureNoParams"/>
 
 	<rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
 
