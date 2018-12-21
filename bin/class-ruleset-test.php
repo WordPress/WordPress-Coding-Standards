@@ -100,13 +100,13 @@ class Ruleset_Test {
 		for ( ; $i < 100; $i++ ) {
 			while ( $j-- ) {
 				if ( 17 === $j ) {
-					// phpcs:ignore WordPress.PHP.DiscourageGoto.Found
+					// phpcs:ignore Generic.PHP.DiscourageGoto.Found
 					goto end;
 				}
 			}
 		}
 
-		// phpcs:ignore WordPress.PHP.DiscourageGoto.Found
+		// phpcs:ignore Generic.PHP.DiscourageGoto.Found
 		end:
 		echo 'This is a goto - it needs to be here to prevent parse errors';
 	}
