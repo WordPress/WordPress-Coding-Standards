@@ -88,7 +88,14 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			126 => 1, // Whitelist comment deprecation warning.
+			127 => 1, // Whitelist comment deprecation warning.
+			128 => 1, // Whitelist comment deprecation warning.
+			241 => 1, // Whitelist comment deprecation warning.
+			243 => 1, // Whitelist comment deprecation warning.
+			250 => 1, // Whitelist comment deprecation warning.
+		);
 	}
 
 }

@@ -37,40 +37,9 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 > **Important**:
 > PHPCS 3.2.0 introduced new selective ignore annotations, which can be considered an improved version of the whitelist mechanism which WPCS contains.
 >
-> There is a [tentative intention to drop support for the WPCS native whitelist comments](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-340698249) in WPCS 2.0.0.
-> 
-> Considering that, the introduction of new whitelist comments is discouraged.
+> Support for the WPCS native whitelist comments has been deprecated in WPCS 2.0.0 and will be removed in WPCS 3.0.0.
 >
-> The below information remains as guidance for exceptional cases and to aid in understanding the previous implementation.
-
-Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
-
-If the sniff you are writing is susceptible to this, please consider adding the ability to [whitelist lines of code](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
-
-To this end, the `WordPress\Sniff::has_whitelist_comment()` method was introduced.
-
-Example usage:
-```php
-namespace WordPressCS\WordPress\Sniffs\Security;
-
-use WordPressCS\WordPress\Sniff;
-
-class NonceVerificationSniff extends Sniff {
-
-	public function process_token( $stackPtr ) {
-
-		// Check something.
-		
-		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
-			return;
-		}
-		
-		$this->phpcsFile->addError( ... );
-	}
-}
-```
-
-When you introduce a new whitelist comment, please don't forget to update the [whitelisting code wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) with the relevant details once your PR has been merged into the `develop` branch.
+> With that in mind, (new) sniffs should not introduce new WPCS native whitelist comments.
 
 
 # Unit Testing

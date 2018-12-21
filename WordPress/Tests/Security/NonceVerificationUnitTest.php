@@ -55,7 +55,9 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			88 => 1, // Whitelist comment deprecation warning.
+		);
 	}
 
 }

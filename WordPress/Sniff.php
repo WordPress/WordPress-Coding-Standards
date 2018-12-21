@@ -1064,6 +1064,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.4.0
 	 * @since 0.14.0 Whitelist comments at the end of the statement are now also accepted.
 	 *
+	 * @deprecated 2.0.0 Use the PHPCS native `phpcs:ignore` annotations instead.
+	 *
 	 * @param string  $comment  Comment to find.
 	 * @param integer $stackPtr The position of the current token in the stack passed
 	 *                          in $tokens.
@@ -1076,6 +1078,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( true === PHPCSHelper::ignore_annotations( $this->phpcsFile ) ) {
 			return false;
 		}
+
+		static $thrown_notices = array();
+
+		$deprecation_notice = 'Using the WPCS native whitelist comments is deprecated. Please use the PHPCS native "phpcs:ignore Standard.Category.SniffName.ErrorCode" annotations instead. Found: %s';
+		$deprecation_code   = 'DeprecatedWhitelistCommentFound';
+		$filename           = $this->phpcsFile->getFileName();
 
 		$regex = '#\b' . preg_quote( $comment, '#' ) . '\b#i';
 
@@ -1098,6 +1106,19 @@ abstract class Sniff implements PHPCS_Sniff {
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
+				if ( isset( $thrown_notices[ $filename ][ $lastPtr ] ) === false
+					&& isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] ) === false
+				) {
+					$this->phpcsFile->addWarning(
+						$deprecation_notice,
+						$lastPtr,
+						$deprecation_code,
+						array( $this->tokens[ $lastPtr ]['content'] )
+					);
+
+					$thrown_notices[ $filename ][ $lastPtr ] = true;
+				}
+
 				return true;
 			}
 		}
@@ -1113,6 +1134,19 @@ abstract class Sniff implements PHPCS_Sniff {
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {
+			if ( isset( $thrown_notices[ $filename ][ $lastPtr ] ) === false
+				&& isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] ) === false
+			) {
+				$this->phpcsFile->addWarning(
+					$deprecation_notice,
+					$lastPtr,
+					$deprecation_code,
+					array( $this->tokens[ $lastPtr ]['content'] )
+				);
+
+				$thrown_notices[ $filename ][ $lastPtr ] = true;
+			}
+
 			return true;
 		}
 
