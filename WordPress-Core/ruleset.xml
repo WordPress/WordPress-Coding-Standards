@@ -258,11 +258,9 @@
 	<!-- Rule: Similarly, there should be no space before the colon on return type declarations. -->
 
 	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside of them. -->
-	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1701 -->
-	<rule ref="WordPress.WhiteSpace.ArbitraryParenthesesSpacing">
+	<rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">
 		<properties>
-			<property name="spacingInside" value="1"/>
+			<property name="spacing" value="1"/>
 			<property name="ignoreNewlines" value="true"/>
 		</properties>
 	</rule>
