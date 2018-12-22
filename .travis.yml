@@ -55,7 +55,7 @@ before_install:
     - |
       if [[ "$SNIFF" == "1" ]]; then
           composer install --dev --no-suggest
-          # The post-install-cmd script takes care of the installed_paths.
+          # The `dev` required DealerDirect Composer plugin takes care of the installed_paths.
       else
           # The above require already does the install.
           $(pwd)/vendor/bin/phpcs --config-set installed_paths $(pwd)
