@@ -26,6 +26,7 @@
 	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
 		<properties>
 			<property name="alignMultilineItems" value="!=100"/>
+			<property name="exact" value="false" phpcs-only="true"/>
 		</properties>
 	</rule>
 
