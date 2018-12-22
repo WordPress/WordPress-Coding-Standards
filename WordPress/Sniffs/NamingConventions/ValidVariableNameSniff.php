@@ -23,6 +23,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * @since   0.9.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   2.0.0  Defers to the upstream `$phpReservedVars` property.
  *
  * Last synced with base class June 2018 at commit 78ddbae97cac078f09928bf89e3ab9e53ad2ace0.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
@@ -30,29 +31,6 @@ use WordPressCS\WordPress\Sniff;
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-364282100
  */
 class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
-
-	/**
-	 * PHP Reserved Vars.
-	 *
-	 * @since 0.9.0
-	 * @since 0.11.0 Changed visibility from public to protected.
-	 *
-	 * @var array
-	 */
-	protected $php_reserved_vars = array(
-		'_SERVER'              => true,
-		'_GET'                 => true,
-		'_POST'                => true,
-		'_REQUEST'             => true,
-		'_SESSION'             => true,
-		'_ENV'                 => true,
-		'_COOKIE'              => true,
-		'_FILES'               => true,
-		'GLOBALS'              => true,
-		'http_response_header' => true,
-		'HTTP_RAW_POST_DATA'   => true,
-		'php_errormsg'         => true,
-	);
 
 	/**
 	 * Mixed-case variables used by WordPress.
@@ -131,7 +109,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
 		// If it's a php reserved var, then its ok.
-		if ( isset( $this->php_reserved_vars[ $var_name ] ) ) {
+		if ( isset( $this->phpReservedVars[ $var_name ] ) ) {
 			return;
 		}
 
@@ -254,7 +232,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
-				if ( isset( $this->php_reserved_vars[ $var_name ] ) ) {
+				if ( isset( $this->phpReservedVars[ $var_name ] ) ) {
 					continue;
 				}
 
