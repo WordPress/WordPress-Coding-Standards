@@ -73,7 +73,7 @@
 	<!-- Verify modifier keywords for declared methods and properties in classes.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="Squiz.Scope.MethodScope"/>
-	<rule ref="Squiz.Scope.MemberVarScope"/>
+	<rule ref="PSR2.Classes.PropertyDeclaration"/>
 	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
 	<rule ref="PSR2.Methods.MethodDeclaration"/>
 	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
