@@ -153,7 +153,13 @@ The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) sni
 
 The [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) ruleset is based on PHPCompatibility, but specifically crafted to prevent false positives for projects which expect to run within the context of WordPress, i.e. core, plugins and themes.
 
-Install either as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
+Install either as a separate ruleset and run it separately against your code or add it to your custom ruleset, like so:
+```xml
+<config name="testVersion" value="5.2-"/>
+<rule ref="PHPCompatibilityWP">
+    <include-pattern>*\.php$</include-pattern>
+</rule>
+```
 
 Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-` to support the same PHP versions as WordPress Core supports.
 
