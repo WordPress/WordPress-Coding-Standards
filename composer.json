@@ -19,6 +19,7 @@
 		"squizlabs/php_codesniffer": "^3.3.1"
 	},
 	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
 		"phpcompatibility/php-compatibility": "^9.0",
 		"phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
 	},
@@ -27,12 +28,18 @@
 	},
 	"minimum-stability": "RC",
 	"scripts": {
-		"post-install-cmd": "@install-codestandards",
-		"post-update-cmd": "@install-codestandards",
-		"check-cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
-		"fix-cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
-		"install-codestandards": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility",
-		"run-tests": "@php ./vendor/phpunit/phpunit/phpunit --filter WordPress --bootstrap=\"./vendor/squizlabs/php_codesniffer/tests/bootstrap.php\" ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+		"check-cs": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+		],
+		"fix-cs": [
+			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
+		],
+		"install-codestandards": [
+			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+		],
+		"run-tests": [
+			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress --bootstrap=\"./vendor/squizlabs/php_codesniffer/tests/bootstrap.php\" ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+		]
 	},
 	"support": {
 		"issues": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues",
