@@ -3,8 +3,6 @@
 
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
-	<autoload>./../WordPress/PHPCSAliases.php</autoload>
-
 	<!-- Default tab width for indentation fixes and such. -->
 	<arg name="tab-width" value="4"/>
 
