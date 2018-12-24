@@ -18,14 +18,14 @@ use PHP_CodeSniffer\Util\Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.4.0  This class now extends WordPress_Sniff.
- * @since   0.12.0 The $wp_globals property has been moved to the WordPress_Sniff.
+ * @since   0.4.0  This class now extends the WordPressCS native `Sniff` class.
+ * @since   0.12.0 The $wp_globals property has been moved to the `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
  * @since   1.1.0  The sniff now also detects variables being overriden in the global namespace.
  *
- * @uses    \WordPress\Sniff::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
  */
 class GlobalVariablesOverrideSniff extends Sniff {
 

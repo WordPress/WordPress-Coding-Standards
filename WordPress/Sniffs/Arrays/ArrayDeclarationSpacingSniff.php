@@ -27,14 +27,13 @@ use PHP_CodeSniffer\Util\Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.11.0 - The WordPress specific additional checks have now been split off
- *                 from the WordPress_Sniffs_Arrays_ArrayDeclaration sniff into
- *                 this sniff.
+ *                   from the `WordPress.Arrays.ArrayDeclaration` sniff into this sniff.
  *                 - Added sniffing & fixing for associative arrays.
  * @since   0.12.0 Decoupled this sniff from the upstream sniff completely.
- *                 This sniff now extends the `WordPress_Sniff` instead.
- * @since   0.13.0 Added the last remaining checks from the `ArrayDeclaration` sniff
- *                 which were not covered elsewhere. The `ArrayDeclaration` sniff has
- *                 now been deprecated.
+ *                 This sniff now extends the WordPressCS native `Sniff` class instead.
+ * @since   0.13.0 Added the last remaining checks from the `WordPress.Arrays.ArrayDeclaration`
+ *                 sniff which were not covered elsewhere.
+ *                 The `WordPress.Arrays.ArrayDeclaration` sniff has now been deprecated.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   0.14.0 Single item associative arrays are now by default exempt from the
  *                 "must be multi-line" rule. This behaviour can be changed using the

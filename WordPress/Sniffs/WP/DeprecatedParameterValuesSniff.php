@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * @since   1.0.0
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 
