@@ -102,7 +102,7 @@ class PreparedSQLSniff extends Sniff {
 	 */
 	public function register() {
 
-		$this->ignored_tokens = $this->ignored_tokens + Tokens::$emptyTokens;
+		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		return array(
 			\T_VARIABLE,

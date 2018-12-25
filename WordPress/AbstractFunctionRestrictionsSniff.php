@@ -302,8 +302,6 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
-
-		return;
 	}
 
 	/**

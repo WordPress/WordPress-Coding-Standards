@@ -10,7 +10,6 @@
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Verifies the correct usage of type cast keywords.
