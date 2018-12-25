@@ -151,7 +151,7 @@ class PreparedSQLSniff extends Sniff {
 					$this->phpcsFile->addError(
 						'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
 						$this->i,
-						'NotPrepared',
+						'InterpolatedNotPrepared',
 						array(
 							$bad_variable,
 							$this->tokens[ $this->i ]['content'],
