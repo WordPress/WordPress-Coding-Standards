@@ -27,7 +27,7 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		$errors = array(
+		return array(
 			2   => 1,
 			5   => 1,
 			8   => 1,
@@ -74,8 +74,6 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 			145 => 1,
 			160 => 1,
 		);
-
-		return $errors;
 	}
 
 	/**

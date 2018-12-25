@@ -114,7 +114,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList( $phpcs_file );
+		$this->mergeWhiteList();
 
 		// Likewise if it is a mixed-case var used by WordPress core.
 		if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
@@ -203,7 +203,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList( $phpcs_file );
+		$this->mergeWhiteList();
 
 		$error_data = array( $var_name );
 		if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
@@ -228,7 +228,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
 
 			// Merge any custom variables with the defaults.
-			$this->mergeWhiteList( $phpcs_file );
+			$this->mergeWhiteList();
 
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
@@ -265,12 +265,11 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * if we haven't already.
 	 *
 	 * @since 0.10.0
-	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
+	 * @since 2.0.0  Removed unused $phpcs_file parameter.
 	 *
 	 * @return void
 	 */
-	protected function mergeWhiteList( File $phpcs_file ) {
+	protected function mergeWhiteList() {
 		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties'] ) {
 			// Fix property potentially passed as comma-delimited string.
 			$customProperties = Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );

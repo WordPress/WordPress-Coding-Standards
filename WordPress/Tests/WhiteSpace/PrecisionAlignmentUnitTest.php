@@ -84,7 +84,7 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 				);
 
 			case 'PrecisionAlignmentUnitTest.5.inc':
-				$warnings = array(
+				return array(
 					9  => 1,
 					14 => 1,
 					19 => 1,
@@ -97,8 +97,6 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 					56 => 1,
 					58 => 1,
 				);
-
-				return $warnings;
 
 			case 'PrecisionAlignmentUnitTest.6.inc':
 				return array(
