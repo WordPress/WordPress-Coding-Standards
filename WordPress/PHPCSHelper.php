@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\File;
 
 /**
@@ -33,7 +34,7 @@ class PHPCSHelper {
 	 * @return string
 	 */
 	public static function get_version() {
-		return \PHP_CodeSniffer\Config::VERSION;
+		return Config::VERSION;
 	}
 
 	/**
@@ -50,7 +51,7 @@ class PHPCSHelper {
 	 *                           This will not write the config data to the config file.
 	 */
 	public static function set_config_data( $key, $value, $temp = false ) {
-		\PHP_CodeSniffer\Config::setConfigData( $key, $value, $temp );
+		Config::setConfigData( $key, $value, $temp );
 	}
 
 	/**
@@ -63,7 +64,7 @@ class PHPCSHelper {
 	 * @return string|null
 	 */
 	public static function get_config_data( $key ) {
-		return \PHP_CodeSniffer\Config::getConfigData( $key );
+		return Config::getConfigData( $key );
 	}
 
 	/**
@@ -98,7 +99,7 @@ class PHPCSHelper {
 		if ( isset( $phpcsFile, $phpcsFile->config->annotations ) ) {
 			return ! $phpcsFile->config->annotations;
 		} else {
-			$annotations = \PHP_CodeSniffer\Config::getConfigData( 'annotations' );
+			$annotations = Config::getConfigData( 'annotations' );
 			if ( isset( $annotations ) ) {
 				return ! $annotations;
 			}
