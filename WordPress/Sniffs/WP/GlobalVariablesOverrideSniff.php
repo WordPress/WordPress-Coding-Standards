@@ -373,7 +373,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		$this->phpcsFile->addError(
 			'Overriding WordPress globals is prohibited. Found assignment to %s',
 			$stackPtr,
-			'OverrideProhibited',
+			'Prohibited',
 			$data
 		);
 	}
