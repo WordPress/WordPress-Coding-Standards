@@ -241,11 +241,14 @@
 
 	<!-- Rule: Perform logical comparisons, like so: if ( ! $foo ) { -->
 
-	<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
+	<!-- Covers rule: Type casts must be lowercase. Always prefer the short form
+		 of type casts, (int) instead of (integer) and (bool) rather than (boolean).
+		 For float casts use (float). -->
 	<rule ref="Generic.Formatting.SpaceAfterCast"/>
 	<rule ref="Squiz.WhiteSpace.CastSpacing"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.TypeCasts"/>
+	<rule ref="PSR12.Keywords.ShortFormTypeKeywords"/>
 	<!-- N.B.: This sniff also checks the case of (parameter/return) type declarations, not just type casts. -->
 	<rule ref="Generic.PHP.LowerCaseType"/>
 

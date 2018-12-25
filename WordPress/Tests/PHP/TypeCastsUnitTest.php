@@ -28,14 +28,10 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			12 => 1,
-			13 => 1,
-			14 => 1,
-			15 => 1,
-			32 => 1,
-			33 => 1,
-			34 => 1,
-			35 => 1,
+			10 => 1,
+			11 => 1,
+			26 => 1,
+			27 => 1,
 		);
 	}
 
@@ -46,12 +42,12 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			18 => 1,
-			19 => 1,
-			20 => ( version_compare( PHPCSHelper::get_version(), '3.4.0', '<' ) === true ? 0 : 1 ),
-			21 => 1,
-			36 => 1,
-			37 => 1,
+			14 => 1,
+			15 => 1,
+			16 => ( version_compare( PHPCSHelper::get_version(), '3.4.0', '<' ) === true ? 0 : 1 ),
+			17 => 1,
+			28 => 1,
+			29 => 1,
 		);
 	}
 }

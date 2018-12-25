@@ -16,8 +16,6 @@ use PHP_CodeSniffer\Util\Tokens;
  * Verifies the correct usage of type cast keywords.
  *
  * Type casts should be:
- * - lowercase;
- * - short form, i.e. (bool) not (boolean);
  * - normalized, i.e. (float) not (real).
  *
  * Additionally, the use of the (unset) and (binary) casts is discouraged.
@@ -27,6 +25,8 @@ use PHP_CodeSniffer\Util\Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   1.2.0
+ * @since   2.0.0 No longer checks that type casts are lowercase or short form.
+ *                Relevant PHPCS native sniffs have been included in the rulesets instead.
  */
 class TypeCastsSniff extends Sniff {
 
@@ -36,10 +36,12 @@ class TypeCastsSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$targets = Tokens::$castTokens;
-		unset( $targets[ \T_ARRAY_CAST ], $targets[ \T_OBJECT_CAST ] );
-
-		return $targets;
+		return array(
+			\T_DOUBLE_CAST,
+			\T_UNSET_CAST,
+			\T_STRING_CAST,
+			\T_BINARY_CAST,
+		);
 	}
 
 	/**
@@ -55,39 +57,7 @@ class TypeCastsSniff extends Sniff {
 		$typecast    = str_replace( ' ', '', $this->tokens[ $stackPtr ]['content'] );
 		$typecast_lc = strtolower( $typecast );
 
-		$this->phpcsFile->recordMetric( $stackPtr, 'Typecast encountered', $typecast );
-
 		switch ( $token_code ) {
-			case \T_BOOL_CAST:
-				if ( '(bool)' !== $typecast_lc ) {
-					$fix = $this->phpcsFile->addFixableError(
-						'Short form type keywords must be used; expected "(bool)" but found "%s"',
-						$stackPtr,
-						'LongBoolFound',
-						array( $typecast )
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->replaceToken( $stackPtr, '(bool)' );
-					}
-				}
-				break;
-
-			case \T_INT_CAST:
-				if ( '(int)' !== $typecast_lc ) {
-					$fix = $this->phpcsFile->addFixableError(
-						'Short form type keywords must be used; expected "(int)" but found "%s"',
-						$stackPtr,
-						'LongIntFound',
-						array( $typecast )
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->replaceToken( $stackPtr, '(int)' );
-					}
-				}
-				break;
-
 			case \T_DOUBLE_CAST:
 				if ( '(float)' !== $typecast_lc ) {
 					$fix = $this->phpcsFile->addFixableError(
