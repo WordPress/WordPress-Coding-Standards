@@ -54,6 +54,7 @@ class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
 	public function register() {
 		$tokens                   = parent::register();
 		$tokens[ \T_BOOLEAN_NOT ] = \T_BOOLEAN_NOT;
+		$tokens[ \T_INSTANCEOF ]  = \T_INSTANCEOF;
 		$logical_operators        = Tokens::$booleanOperators;
 
 		// Using array union to auto-dedup.
