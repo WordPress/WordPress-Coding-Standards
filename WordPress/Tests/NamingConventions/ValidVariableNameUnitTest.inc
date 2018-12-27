@@ -167,3 +167,22 @@ echo ClassName
 		$var_name2
 			// More sillyness.
 			['test'];
+
+class MultiVarDeclarations {
+	public $multiVar1, $multiVar2, // Bad x 2.
+		$multiVar3, // Bad.
+		// Some comment.
+		$multiVar4, // Bad.
+		$multiVar5 = false, // Bad.
+		$multiVar6 = 123, // Bad.
+		$multi_var7 = 'string'; // Ok.
+		
+	public function testMultiGlobalAndStatic() {
+		global $multiGlobal1, $multi_global2, // Bad x 1.
+			$multiGlobal3; // Bad.
+
+		static $multiStatic1, $multi_static2 = false, // Bad x 1.
+			// Comment.
+			$multiStatic3 = ''; // Bad.
+	}
+}
