@@ -109,3 +109,17 @@ function __MyTemplateTags() {} // Bad x 2.
 interface MyInterface extends InterfaceA, InterfaceB {
 	function __MyTemplateTags(); // OK.
 }
+
+class Nested {
+    public function get_anonymous_class() {
+        return new class() {
+            public function nestedFunction() {}
+            protected function __something() {}
+        };
+    }
+}
+
+abstract class My_Class {
+    public function my_Class() {}
+    public function _MY_CLASS() {}
+}
