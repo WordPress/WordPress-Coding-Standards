@@ -31,29 +31,6 @@ use PHP_CodeSniffer\Files\File;
 class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 
 	/**
-	 * Additional double underscore prefixed methods specific to certain PHP native extensions.
-	 *
-	 * Currently only handles the SoapClient Extension.
-	 *
-	 * @link http://php.net/manual/en/class.soapclient.php
-	 *
-	 * @var array <string method name> => <string class name>
-	 */
-	private $methodsDoubleUnderscore = array(
-		'doRequest'              => 'SoapClient',
-		'getFunctions'           => 'SoapClient',
-		'getLastRequest'         => 'SoapClient',
-		'getLastRequestHeaders'  => 'SoapClient',
-		'getLastResponse'        => 'SoapClient',
-		'getLastResponseHeaders' => 'SoapClient',
-		'getTypes'               => 'SoapClient',
-		'setCookie'              => 'SoapClient',
-		'setLocation'            => 'SoapClient',
-		'setSoapHeaders'         => 'SoapClient',
-		'soapCall'               => 'SoapClient',
-	);
-
-	/**
 	 * Processes the tokens outside the scope.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
@@ -163,7 +140,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		// Is this a magic method ? I.e. is it prefixed with "__" ?
 		if ( 0 === strpos( $methodName, '__' ) ) {
 			$magicPart = substr( $methodNameLc, 2 );
-			if ( isset( $this->magicMethods[ $magicPart ] ) || isset( $this->methodsDoubleUnderscore[ $magicPart ] ) ) {
+			if ( isset( $this->magicMethods[ $magicPart ] ) ) {
 				return;
 			}
 
