@@ -49,16 +49,22 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 * PHP_CodeSniffer 3.3.1 or higher
 * PHPUnit 4.x, 5.x, 6.x or 7.x
 
-The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
+The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test suite for unit testing the sniffs.
 
-Presuming you have installed PHP_CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
+Presuming you have installed `PHP_CodeSniffer` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
 
-N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
+> N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
+> Other than that, you're all set already as Composer will have installed PHPUnit for you.
 
 If you already have PHPUnit installed on your system: Congrats, you're all set.
 
-If not, you can navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies.
-Alternatively, you can [install PHPUnit](https://phpunit.readthedocs.io/en/7.4/installation.html) as a PHAR file.
+## Installing PHPUnit
+
+N.B.: _If you used Composer to install the WordPress Coding Standards, you can skip this step._
+
+You can either navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies or you can [install PHPUnit](https://phpunit.readthedocs.io/en/7.4/installation.html) as a PHAR file.
+
+You may want to add the directory where PHPUnit is installed to a `PATH` environment variable for your operating system to make the command available everywhere on your system.
 
 ## Before running the unit tests
 
@@ -66,7 +72,8 @@ N.B.: _If you used Composer to install the WordPress Coding Standards, you can s
 
 For the unit tests to work, you need to make sure PHPUnit can find your `PHP_CodeSniffer` install.
 
-The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Copy the existing `phpunit.xml.dist` file and add the below `<env>` directive within the `<php>` section. Make sure to adjust the path to reflect your local setup.
+The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file.
+Copy the existing `phpunit.xml.dist` file and add the below `<env>` directive within the `<php>` section. Make sure to adjust the path to reflect your local setup.
 ```xml
 	<php>
 		<env name="PHPCS_DIR" value="/path/to/PHP_CodeSniffer/"/>
@@ -75,7 +82,7 @@ The easiest way to do this is to add a `phpunit.xml` file to the root of your WP
 
 ## Running the unit tests
 
-* Make sure you have registered the directory in which you installed WPCS with PHPCS using;
+* If you didn't install WPCS using Composer, make sure you have registered the directory in which you installed WPCS with PHPCS using:
     ```sh
     phpcs --config-set installed_paths path/to/WPCS
     ```
@@ -95,13 +102,13 @@ PHPUnit 7.5.0 by Sebastian Bergmann and contributors.
 Runtime:       PHP 7.2.13
 Configuration: /WordPressCS/phpunit.xml
 
-............................................................      60 / 60 (100%)
+........................................................          56 / 56 (100%)
 
-156 sniff test files generated 490 unique error codes; 59 were fixable (12.04%)
+152 sniff test files generated 487 unique error codes; 52 were fixable (10.68%)
 
-Time: 18.02 seconds, Memory: 22.00MB
+Time: 21.36 seconds, Memory: 22.00MB
 
-OK (60 tests, 0 assertions)
+OK (56 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
