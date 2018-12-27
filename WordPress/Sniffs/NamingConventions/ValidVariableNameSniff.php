@@ -28,8 +28,8 @@ use WordPressCS\WordPress\Sniff;
  *
  * Last synced with base class June 2018 at commit 78ddbae97cac078f09928bf89e3ab9e53ad2ace0.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
- * One change from upstream deferred till later (PHPCS 3.3.0+):
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-364282100
+ *
+ * @uses PHP_CodeSniffer\Sniffs\AbstractVariableSniff::$phpReservedVars
  */
 class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
@@ -92,7 +92,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 */
 	protected $addedCustomProperties = array(
 		'properties' => null,
-		'variables'  => null,
 	);
 
 	/**
