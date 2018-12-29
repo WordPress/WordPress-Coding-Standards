@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer\Standards\PEAR\Sniffs\NamingConventions\ValidFunctionNameSniff as PHPCS_PEAR_ValidFunctionNameSniff;
 use PHP_CodeSniffer\Files\File;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
@@ -21,6 +22,8 @@ use PHP_CodeSniffer\Files\File;
  *
  * @since   0.1.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   2.0.0  The `get_name_suggestion()` method has been moved to the
+ *                 WordPress native `Sniff` base class as `get_snake_case_name_suggestion()`.
  *
  * Last synced with parent class December 2018 up to commit ee167761d7756273b8ad0ad68bf3db1f2c211bb8.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
@@ -71,7 +74,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
-				$this->get_name_suggestion( $functionName ),
+				Sniff::get_snake_case_name_suggestion( $functionName ),
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
@@ -155,24 +158,10 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			$errorData = array(
 				$methodName,
 				$className,
-				$this->get_name_suggestion( $methodName ),
+				Sniff::get_snake_case_name_suggestion( $methodName ),
 			);
 			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
-	}
-
-	/**
-	 * Transform the existing function/method name to one which complies with the naming conventions.
-	 *
-	 * @param string $name The function/method name.
-	 * @return string
-	 */
-	protected function get_name_suggestion( $name ) {
-		$suggested = preg_replace( '/([A-Z])/', '_$1', $name );
-		$suggested = strtolower( $suggested );
-		$suggested = str_replace( '__', '_', $suggested );
-		$suggested = trim( $suggested, '_' );
-		return $suggested;
 	}
 
 }

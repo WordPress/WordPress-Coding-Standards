@@ -23,12 +23,13 @@ use WordPressCS\WordPress\Sniff;
  *
  * @since   0.9.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   2.0.0  Defers to the upstream `$phpReservedVars` property.
+ * @since   2.0.0  - Defers to the upstream `$phpReservedVars` property.
+ *                 - Now offers name suggestions for variables in violation.
  *
  * Last synced with base class June 2018 at commit 78ddbae97cac078f09928bf89e3ab9e53ad2ace0.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
- * One change from upstream deferred till later (PHPCS 3.3.0+):
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1048#issuecomment-364282100
+ *
+ * @uses PHP_CodeSniffer\Sniffs\AbstractVariableSniff::$phpReservedVars
  */
 class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
@@ -91,7 +92,6 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 */
 	protected $addedCustomProperties = array(
 		'properties' => null,
-		'variables'  => null,
 	);
 
 	/**
@@ -139,9 +139,12 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 					}
 
 					if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $obj_var_name ] ) && self::isSnakeCase( $obj_var_name ) === false ) {
-						$error = 'Object property "%s" is not in valid snake_case format';
-						$data  = array( $original_var_name );
-						$phpcs_file->addError( $error, $var, 'NotSnakeCaseMemberVar', $data );
+						$error = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
+						$data  = array(
+							$original_var_name,
+							Sniff::get_snake_case_name_suggestion( $original_var_name ),
+						);
+						$phpcs_file->addError( $error, $var, 'UsedPropertyNotSnakeCase', $data );
 					}
 				}
 			}
@@ -165,15 +168,18 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 		if ( self::isSnakeCase( $var_name ) === false ) {
 			if ( $in_class && ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) ) {
-				$error      = 'Object property "%s" is not in valid snake_case format';
-				$error_name = 'NotSnakeCaseMemberVar';
+				$error      = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
+				$error_name = 'UsedPropertyNotSnakeCase';
 			} elseif ( ! $in_class ) {
-				$error      = 'Variable "%s" is not in valid snake_case format';
-				$error_name = 'NotSnakeCase';
+				$error      = 'Variable "$%s" is not in valid snake_case format, try "$%s"';
+				$error_name = 'VariableNotSnakeCase';
 			}
 
 			if ( isset( $error, $error_name ) ) {
-				$data = array( $original_var_name );
+				$data = array(
+					$original_var_name,
+					Sniff::get_snake_case_name_suggestion( $original_var_name ),
+				);
 				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
 			}
 		}
@@ -205,10 +211,13 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		// Merge any custom variables with the defaults.
 		$this->mergeWhiteList();
 
-		$error_data = array( $var_name );
 		if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
-			$error = 'Member variable "%s" is not in valid snake_case format.';
-			$phpcs_file->addError( $error, $stack_ptr, 'MemberNotSnakeCase', $error_data );
+			$error = 'Member variable "$%s" is not in valid snake_case format, try "$%s"';
+			$data  = array(
+				$var_name,
+				Sniff::get_snake_case_name_suggestion( $var_name ),
+			);
+			$phpcs_file->addError( $error, $stack_ptr, 'PropertyNotSnakeCase', $data );
 		}
 	}
 
@@ -242,9 +251,12 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				}
 
 				if ( false === self::isSnakeCase( $var_name ) ) {
-					$error = 'Variable "%s" is not in valid snake_case format';
-					$data  = array( $var_name );
-					$phpcs_file->addError( $error, $stack_ptr, 'StringNotSnakeCase', $data );
+					$error = 'Variable "$%s" is not in valid snake_case format, try "$%s"';
+					$data  = array(
+						$var_name,
+						Sniff::get_snake_case_name_suggestion( $var_name ),
+					);
+					$phpcs_file->addError( $error, $stack_ptr, 'InterpolatedVariableNotSnakeCase', $data );
 				}
 			}
 		}
