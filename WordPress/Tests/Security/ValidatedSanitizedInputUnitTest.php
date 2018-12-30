@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Security;
+namespace WordPressCS\WordPress\Tests\Security;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -63,7 +63,9 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			76 => 1, // Whitelist comment deprecation warning.
+		);
 	}
 
 }

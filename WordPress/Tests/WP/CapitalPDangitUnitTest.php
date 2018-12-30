@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -59,6 +59,7 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 			101 => 1,
 			139 => 1,
 			146 => 0, // False negative.
+			167 => 1, // Whitelist comment deprecation warning.
 			173 => 1,
 			181 => 1,
 		);

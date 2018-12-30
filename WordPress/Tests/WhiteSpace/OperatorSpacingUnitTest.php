@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WhiteSpace;
+namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -42,6 +42,7 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 			49 => 2,
 			50 => 2,
 			51 => 2,
+			69 => 2,
 		);
 	}
 

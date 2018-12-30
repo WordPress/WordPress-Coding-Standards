@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\DB;
+namespace WordPressCS\WordPress\Tests\DB;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -57,7 +57,12 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			11 => 1, // Whitelist comment deprecation warning.
+			12 => 1, // Whitelist comment deprecation warning.
+			97 => 1, // Whitelist comment deprecation warning.
+			99 => 1, // Whitelist comment deprecation warning.
+		);
 	}
 
 }

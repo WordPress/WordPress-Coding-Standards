@@ -1,7 +1,8 @@
-@codingStandardsChangeSetting WordPress.Files.FileName custom_test_class_whitelist Some\Name\TestSample
+<!-- Annotation has to be on the second line as errors are thrown on line 1 and errors on annotation lines are ignored. -->
+phpcs:set WordPress.Files.FileName custom_test_class_whitelist[] Some\Name\TestSample
 <?php
 
 namespace Some\Other;
 
 class TestSample {}
-/* @codingStandardsChangeSetting WordPress.Files.FileName custom_test_class_whitelist false */
+/* phpcs:set WordPress.Files.FileName custom_test_class_whitelist[] */

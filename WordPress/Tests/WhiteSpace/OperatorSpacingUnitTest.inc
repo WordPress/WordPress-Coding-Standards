@@ -64,3 +64,7 @@ if ( $a === $b
 
 if ( $a === $b or
 	$b === $c ) {}
+
+// Instanceof
+if ( MyClass    instanceof    SomeOtherClass ) {}
+if ( MyClass instanceof SomeOtherClass ) {}

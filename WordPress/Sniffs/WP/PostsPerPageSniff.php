@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractArrayAssignmentRestrictionsSniff;
+use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 
 /**
  * Flag returning high or infinite posts_per_page.

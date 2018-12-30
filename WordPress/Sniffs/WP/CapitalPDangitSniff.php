@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Capital P Dangit!
@@ -76,19 +76,6 @@ class CapitalPDangitSniff extends Sniff {
 	);
 
 	/**
-	 * Class-like structure tokens to listen for.
-	 *
-	 * Using proper spelling in class, interface and trait names does not conflict with the naming conventions.
-	 *
-	 * @var array
-	 */
-	private $class_tokens = array(
-		\T_CLASS     => \T_CLASS,
-		\T_INTERFACE => \T_INTERFACE,
-		\T_TRAIT     => \T_TRAIT,
-	);
-
-	/**
 	 * Combined text string and comment tokens array.
 	 *
 	 * This property is set in the register() method and used for lookups.
@@ -108,7 +95,7 @@ class CapitalPDangitSniff extends Sniff {
 		// Union the arrays - keeps the array keys.
 		$this->text_and_comment_tokens = ( $this->text_string_tokens + $this->comment_text_tokens );
 
-		$targets = ( $this->text_and_comment_tokens + $this->class_tokens );
+		$targets = ( $this->text_and_comment_tokens + Tokens::$ooScopeTokens );
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
 		$targets[ \T_ARRAY ]            = \T_ARRAY;
@@ -149,7 +136,7 @@ class CapitalPDangitSniff extends Sniff {
 		 * Deal with misspellings in class/interface/trait names.
 		 * These are not auto-fixable, but need the attention of a developer.
 		 */
-		if ( isset( $this->class_tokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
+		if ( isset( Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
 			$classname = $this->phpcsFile->getDeclarationName( $stackPtr );
 			if ( empty( $classname ) ) {
 				return;

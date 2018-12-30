@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Warns about overwriting WordPress native global variables.
@@ -18,14 +18,14 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.4.0  This class now extends WordPress_Sniff.
- * @since   0.12.0 The $wp_globals property has been moved to the WordPress_Sniff.
+ * @since   0.4.0  This class now extends the WordPressCS native `Sniff` class.
+ * @since   0.12.0 The $wp_globals property has been moved to the `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
  * @since   1.1.0  The sniff now also detects variables being overriden in the global namespace.
  *
- * @uses    \WordPress\Sniff::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
  */
 class GlobalVariablesOverrideSniff extends Sniff {
 
@@ -49,21 +49,13 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 * Scoped object and function structures to skip over as
 	 * variables will have a different scope within those.
 	 *
-	 * {@internal Once the minimum PHPCS version goes up to PHPCS 3.1.0,
-	 * this array can be partially created in the register() method
-	 * using the upstream `Tokens::$ooScopeTokens` array.}}
-	 *
 	 * @since 1.1.0
 	 *
 	 * @var array
 	 */
 	private $skip_over = array(
-		\T_FUNCTION   => true,
-		\T_CLOSURE    => true,
-		\T_CLASS      => true,
-		\T_ANON_CLASS => true,
-		\T_INTERFACE  => true,
-		\T_TRAIT      => true,
+		\T_FUNCTION => true,
+		\T_CLOSURE  => true,
 	);
 
 	/**
@@ -75,15 +67,18 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
+		// Add the OO scope tokens to the $skip_over property.
+		$this->skip_over += Tokens::$ooScopeTokens;
+
+		$targets = array(
 			\T_GLOBAL,
 			\T_VARIABLE,
-
-			// Only used to skip over test classes.
-			\T_CLASS,
-			\T_TRAIT,
-			\T_ANON_CLASS,
 		);
+
+		// Only used to skip over test classes.
+		$targets += Tokens::$ooScopeTokens;
+
+		return $targets;
 	}
 
 	/**
@@ -102,7 +97,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		// Ignore variable overrides in test classes.
-		if ( \T_CLASS === $token['code'] || \T_TRAIT === $token['code'] || \T_ANON_CLASS === $token['code'] ) {
+		if ( isset( Tokens::$ooScopeTokens[ $token['code'] ] ) ) {
 
 			if ( true === $this->is_test_class( $stackPtr )
 				&& $token['scope_condition'] === $stackPtr
@@ -378,7 +373,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		$this->phpcsFile->addError(
 			'Overriding WordPress globals is prohibited. Found assignment to %s',
 			$stackPtr,
-			'OverrideProhibited',
+			'Prohibited',
 			$data
 		);
 	}

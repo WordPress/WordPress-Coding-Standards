@@ -1,11 +1,7 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Core">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Core" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
-
-	<autoload>./../WordPress/PHPCSAliases.php</autoload>
-
-	<!-- Treat all files as UTF-8. -->
-	<config name="encoding" value="utf-8"/>
 
 	<!-- Default tab width for indentation fixes and such. -->
 	<arg name="tab-width" value="4"/>
@@ -18,10 +14,7 @@
 	-->
 	<!-- Covers rule: Use single and double quotes when appropriate.
 		 If you're not evaluating anything in the string, use single quotes. -->
-	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
-	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
-		<severity>0</severity>
-	</rule>
+	<rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
 
 	<!-- Rule: Text that goes into attributes should be run through esc_attr().
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/527 -->
@@ -39,7 +32,11 @@
 			<property name="exact" value="false"/>
 			<property name="indent" value="4"/>
 			<property name="tabIndent" value="true"/>
-			<property name="ignoreIndentationTokens" type="array" value="T_HEREDOC,T_NOWDOC,T_INLINE_HTML"/>
+			<property name="ignoreIndentationTokens" type="array">
+				<element value="T_HEREDOC"/>
+				<element value="T_NOWDOC"/>
+				<element value="T_INLINE_HTML"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="WordPress.Arrays.ArrayIndentation"/>
@@ -239,18 +236,21 @@
 			<property name="allowMultipleArguments" value="false"/>
 		</properties>
 	</rule>
-	<!-- Related to issue #970 / https://github.com/squizlabs/PHP_CodeSniffer/issues/1512 -->
-	<rule ref="WordPress.Functions.FunctionCallSignatureNoParams"/>
 
 	<rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
 
 	<!-- Rule: Perform logical comparisons, like so: if ( ! $foo ) { -->
 
-	<!-- Covers rule: When type casting, do it like so: $foo = (boolean) $bar; -->
+	<!-- Covers rule: Type casts must be lowercase. Always prefer the short form
+		 of type casts, (int) instead of (integer) and (bool) rather than (boolean).
+		 For float casts use (float). -->
 	<rule ref="Generic.Formatting.SpaceAfterCast"/>
 	<rule ref="Squiz.WhiteSpace.CastSpacing"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
 	<rule ref="WordPress.PHP.TypeCasts"/>
+	<rule ref="PSR12.Keywords.ShortFormTypeKeywords"/>
+	<!-- N.B.: This sniff also checks the case of (parameter/return) type declarations, not just type casts. -->
+	<rule ref="Generic.PHP.LowerCaseType"/>
 
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
@@ -261,11 +261,9 @@
 	<!-- Rule: Similarly, there should be no space before the colon on return type declarations. -->
 
 	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside of them. -->
-	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1701 -->
-	<rule ref="WordPress.WhiteSpace.ArbitraryParenthesesSpacing">
+	<rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">
 		<properties>
-			<property name="spacingInside" value="1"/>
+			<property name="spacing" value="1"/>
 			<property name="ignoreNewlines" value="true"/>
 		</properties>
 	</rule>
@@ -399,16 +397,12 @@
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
 	<!-- Rule: The goto statement must never be used. -->
-	<!-- Duplicate of upstream. Should defer to upstream version once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1664 -->
-	<rule ref="WordPress.PHP.DiscourageGoto"/>
-	<rule ref="WordPress.PHP.DiscourageGoto.Found">
+	<rule ref="Generic.PHP.DiscourageGoto">
 		<type>error</type>
 		<message>The "goto" language construct should not be used.</message>
 	</rule>
 
 	<!-- Rule: The eval() construct is very dangerous, and is impossible to secure. ... these must not be used. -->
-	<rule ref="Squiz.PHP.Eval"/>
 	<rule ref="Squiz.PHP.Eval.Discouraged">
 		<type>error</type>
 		<message>eval() is a security risk so not allowed.</message>
@@ -458,10 +452,7 @@
 	<rule ref="Generic.Files.EndFileNewline"/>
 
 	<!-- No whitespace should come before semicolons. -->
-	<!-- Extends upstream sniff. Should defer to upstream version once minimum PHPCS requirement
-		 has gone up to version containing bugfix.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1691 -->
-	<rule ref="WordPress.WhiteSpace.SemicolonSpacing"/>
+	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
 	<!-- There should be no empty statements, i.e. lone semi-colons or open/close tags without content. -->
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>

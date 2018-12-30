@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Restricts usage of some classes.
@@ -79,7 +79,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * {@internal Unlike in the `WordPress_AbstractFunctionRestrictionsSniff`,
+	 * {@internal Unlike in the `AbstractFunctionRestrictionsSniff`,
 	 *            we can't do a preliminary check on classes as at this point
 	 *            we don't know the class name yet.}}
 	 *

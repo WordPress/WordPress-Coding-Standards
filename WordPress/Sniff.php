@@ -7,12 +7,12 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
-use PHP_CodeSniffer_Sniff as PHPCS_Sniff;
-use PHP_CodeSniffer_File as File;
-use PHP_CodeSniffer_Tokens as Tokens;
-use WordPress\PHPCSHelper;
+use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\PHPCSHelper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -96,7 +96,10 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Example usage:
 	 * <rule ref="WordPress.[Subset].[Sniffname]">
 	 *  <properties>
-	 *   <property name="custom_test_class_whitelist" type="array" value="My_Plugin_First_Test_Class,My_Plugin_Second_Test_Class"/>
+	 *   <property name="custom_test_class_whitelist" type="array">
+	 *     <element value="My_Plugin_First_Test_Class"/>
+	 *     <element value="My_Plugin_Second_Test_Class"/>
+	 *   </property>
 	 *  </properties>
 	 * </rule>
 	 *
@@ -213,7 +216,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'the_author'                => true,
 		'the_date'                  => true,
 		'the_title_attribute'       => true,
-		'vip_powered_wpcom'         => true,
 		'walk_nav_menu_tree'        => true,
 		'wp_dropdown_categories'    => true,
 		'wp_dropdown_users'         => true,
@@ -498,7 +500,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.3.0
 	 * @since 0.11.0 Changed visibility from public to protected.
 	 * @since 0.12.0 Renamed from `$globals` to `$wp_globals` to be more descriptive.
-	 * @since 0.12.0 Moved from WordPress_Sniffs_Variables_GlobalVariablesSniff to WordPress_Sniff
+	 * @since 0.12.0 Moved here from the WordPress.Variables.GlobalVariables sniff.
 	 *
 	 * @var array
 	 */
@@ -780,32 +782,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * The token "type" values for the PHPCS 3.2+ whitelist comments.
-	 *
-	 * PHPCS cross-version compatibility layer to allow sniffs to
-	 * allow for the new PHPCS annotation comments without breaking in older
-	 * PHPCS versions.
-	 *
-	 * @internal Can be replaced with using the PHPCS native Token::$phpcsCommentTokens
-	 *           array once the minimum WPCS requirement for PHPCS has gone up
-	 *           to PHPCS 3.2.3.
-	 *           Note: The PHPCS native property uses the constants/ token "code",
-	 *           so code referring to this property will need to be adjusted when
-	 *           the property is removed.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var array
-	 */
-	protected $phpcsCommentTokens = array(
-		'T_PHPCS_ENABLE'      => true,
-		'T_PHPCS_DISABLE'     => true,
-		'T_PHPCS_SET'         => true,
-		'T_PHPCS_IGNORE'      => true,
-		'T_PHPCS_IGNORE_FILE' => true,
-	);
-
-	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
@@ -967,12 +943,27 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Merge a pre-set array with a ruleset provided array or inline provided string.
+	 * Transform the name of a PHP construct (function, variable etc) to one in snake_case.
 	 *
-	 * - Will correctly handle custom array properties which were set without
-	 *   the `type="array"` indicator.
-	 *   This also allows for making these custom array properties testable using
-	 *   a `@codingStandardsChangeSetting` comment in the unit tests.
+	 * @since 2.0.0 Moved from the `WordPress.NamingConventions.ValidFunctionName` sniff
+	 *              to this class, renamed from `get_name_suggestion` and made static
+	 *              so it can also be used by classes which don't extend this class.
+	 *
+	 * @param string $name The construct name.
+	 *
+	 * @return string
+	 */
+	public static function get_snake_case_name_suggestion( $name ) {
+		$suggested = preg_replace( '`([A-Z])`', '_$1', $name );
+		$suggested = strtolower( $suggested );
+		$suggested = str_replace( '__', '_', $suggested );
+		$suggested = trim( $suggested, '_' );
+		return $suggested;
+	}
+
+	/**
+	 * Merge a pre-set array with a ruleset provided array.
+	 *
 	 * - By default flips custom lists to allow for using `isset()` instead
 	 *   of `in_array()`.
 	 * - When `$flip` is true:
@@ -983,18 +974,18 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *     before merging/returning to allow for resetting to the base array.
 	 *
 	 * {@internal Function is static as it doesn't use any of the properties or others
-	 * methods anyway and this way the `WordPress_Sniffs_NamingConventions_ValidVariableNameSniff`
+	 * methods anyway and this way the `WordPress.NamingConventions.ValidVariableName` sniff
 	 * which extends an upstream sniff can also use it.}}
 	 *
 	 * @since 0.11.0
+	 * @since 2.0.0  No longer supports custom array properties which were incorrectly
+	 *               passed as a string.
 	 *
-	 * @param array|string $custom Custom list as provided via a ruleset.
-	 *                             Can be either a comma-delimited string or
-	 *                             an array of values.
-	 * @param array        $base   Optional. Base list. Defaults to an empty array.
-	 *                             Expects `value => true` format when `$flip` is true.
-	 * @param bool         $flip   Optional. Whether or not to flip the custom list.
-	 *                             Defaults to true.
+	 * @param array $custom Custom list as provided via a ruleset.
+	 * @param array $base   Optional. Base list. Defaults to an empty array.
+	 *                      Expects `value => true` format when `$flip` is true.
+	 * @param bool  $flip   Optional. Whether or not to flip the custom list.
+	 *                      Defaults to true.
 	 * @return array
 	 */
 	public static function merge_custom_array( $custom, $base = array(), $flip = true ) {
@@ -1002,17 +993,9 @@ abstract class Sniff implements PHPCS_Sniff {
 			$base = array_filter( $base );
 		}
 
-		if ( empty( $custom ) || ( ! \is_array( $custom ) && ! \is_string( $custom ) ) ) {
+		if ( empty( $custom ) || ! \is_array( $custom ) ) {
 			return $base;
 		}
-
-		// Allow for a comma delimited list.
-		if ( \is_string( $custom ) ) {
-			$custom = explode( ',', $custom );
-		}
-
-		// Always trim whitespace from the values.
-		$custom = array_filter( array_map( 'trim', $custom ) );
 
 		if ( true === $flip ) {
 			$custom = array_fill_keys( $custom, false );
@@ -1090,6 +1073,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.4.0
 	 * @since 0.14.0 Whitelist comments at the end of the statement are now also accepted.
 	 *
+	 * @deprecated 2.0.0 Use the PHPCS native `phpcs:ignore` annotations instead.
+	 *
 	 * @param string  $comment  Comment to find.
 	 * @param integer $stackPtr The position of the current token in the stack passed
 	 *                          in $tokens.
@@ -1102,6 +1087,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( true === PHPCSHelper::ignore_annotations( $this->phpcsFile ) ) {
 			return false;
 		}
+
+		static $thrown_notices = array();
+
+		$deprecation_notice = 'Using the WPCS native whitelist comments is deprecated. Please use the PHPCS native "phpcs:ignore Standard.Category.SniffName.ErrorCode" annotations instead. Found: %s';
+		$deprecation_code   = 'DeprecatedWhitelistCommentFound';
+		$filename           = $this->phpcsFile->getFileName();
 
 		$regex = '#\b' . preg_quote( $comment, '#' ) . '\b#i';
 
@@ -1118,13 +1109,25 @@ abstract class Sniff implements PHPCS_Sniff {
 				$lastPtr = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $end_of_statement - 1 ), null, true );
 			}
 
-			if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-					&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
-					|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
-					&& 'T_PHPCS_SET' !== $this->tokens[ $lastPtr ]['type'] ) )
+			if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
+					|| ( isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] )
+					&& \T_PHPCS_SET !== $this->tokens[ $lastPtr ]['code'] ) )
 				&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $end_of_statement ]['line']
 				&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 			) {
+				if ( isset( $thrown_notices[ $filename ][ $lastPtr ] ) === false
+					&& isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] ) === false
+				) {
+					$this->phpcsFile->addWarning(
+						$deprecation_notice,
+						$lastPtr,
+						$deprecation_code,
+						array( $this->tokens[ $lastPtr ]['content'] )
+					);
+
+					$thrown_notices[ $filename ][ $lastPtr ] = true;
+				}
+
 				return true;
 			}
 		}
@@ -1134,13 +1137,25 @@ abstract class Sniff implements PHPCS_Sniff {
 		$end_of_line = $this->get_last_ptr_on_line( $stackPtr );
 		$lastPtr     = $this->phpcsFile->findPrevious( \T_WHITESPACE, $end_of_line, null, true );
 
-		if ( ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
-				&& strpos( $this->tokens[ $lastPtr ]['content'], '@codingStandardsChangeSetting' ) === false )
-				|| ( isset( $this->phpcsCommentTokens[ $this->tokens[ $lastPtr ]['type'] ] )
-				&& 'T_PHPCS_SET' !== $this->tokens[ $lastPtr ]['type'] ) )
+		if ( ( \T_COMMENT === $this->tokens[ $lastPtr ]['code']
+				|| ( isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] )
+				&& \T_PHPCS_SET !== $this->tokens[ $lastPtr ]['code'] ) )
 			&& $this->tokens[ $lastPtr ]['line'] === $this->tokens[ $stackPtr ]['line']
 			&& preg_match( $regex, $this->tokens[ $lastPtr ]['content'] ) === 1
 		) {
+			if ( isset( $thrown_notices[ $filename ][ $lastPtr ] ) === false
+				&& isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastPtr ]['code'] ] ) === false
+			) {
+				$this->phpcsFile->addWarning(
+					$deprecation_notice,
+					$lastPtr,
+					$deprecation_code,
+					array( $this->tokens[ $lastPtr ]['content'] )
+				);
+
+				$thrown_notices[ $filename ][ $lastPtr ] = true;
+			}
+
 			return true;
 		}
 
@@ -1169,26 +1184,14 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		/*
-		 * Is this a method inside of a class or a trait ? If so, it is a test class/trait ?
-		 *
-		 * {@internal Once the minimum supported PHPCS version has gone up to 3.1.0, the
-		 * local array here can be replace with Tokens::$ooScopeTokens.}}
-		 */
-		$oo_tokens  = array(
-			\T_CLASS      => true,
-			\T_TRAIT      => true,
-			\T_ANON_CLASS => true,
-		);
 		$conditions = $this->tokens[ $stackPtr ]['conditions'];
-
 		foreach ( $conditions as $token => $condition ) {
 			if ( $token === $functionToken ) {
 				// Only examine the conditions the function is nested in, not those nested within the function.
 				break;
 			}
 
-			if ( isset( $oo_tokens[ $condition ] ) ) {
+			if ( isset( Tokens::$ooScopeTokens[ $condition ] ) ) {
 				$is_test_class = $this->is_test_class( $token );
 				if ( true === $is_test_class ) {
 					return true;
@@ -1216,9 +1219,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected function is_test_class( $stackPtr ) {
 
-		if ( ! isset( $this->tokens[ $stackPtr ] )
-			|| \in_array( $this->tokens[ $stackPtr ]['type'], array( 'T_CLASS', 'T_ANON_CLASS', 'T_TRAIT' ), true ) === false
-		) {
+		if ( isset( $this->tokens[ $stackPtr ], Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) === false ) {
 			return false;
 		}
 
@@ -1754,6 +1755,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$bare_array_key = $this->strip_quotes( $array_key );
 
+		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
 			if ( ! \in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
@@ -2213,7 +2215,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Determine the namespace name an arbitrary token lives in.
 	 *
 	 * @since 0.10.0
-	 * @since 0.12.0 Moved from the WordPress_AbstractClassRestrictionsSniff to this sniff.
+	 * @since 0.12.0 Moved from the `AbstractClassRestrictionsSniff` to this class.
 	 *
 	 * @param int $stackPtr The token position for which to determine the namespace.
 	 *
@@ -2279,7 +2281,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * i.e. MyProject\Sub\Level which will be returned together as one string.
 	 *
 	 * @since 0.12.0 A lesser variant of this method previously existed in the
-	 *               WordPress_AbstractClassRestrictionsSniff.
+	 *               `AbstractClassRestrictionsSniff` class.
 	 *
 	 * @param int|bool $stackPtr The position of a T_NAMESPACE token.
 	 *
@@ -2325,41 +2327,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return $namespaceName;
-	}
-
-	/**
-	 * Check if a content string contains a specific html open tag.
-	 *
-	 * @since 0.11.0
-	 * @since 0.13.0 No longer allows for the PHP 5.2 bug for which the function was
-	 *               originally created.
-	 * @since 0.13.0 The $stackPtr parameter is now optional. Either that or the
-	 *               $content parameter has to be passed.
-	 * @deprecated 1.0.0 This method is only used by deprecated sniffs.
-	 *
-	 * @param string $tag_name The name of the HTML tag without brackets. So if
-	 *                         searching for '<span...', this would be 'span'.
-	 * @param int    $stackPtr Optional. The position of the current token in the
-	 *                         token stack.
-	 *                         This parameter needs to be passed if no $content is
-	 *                         passed.
-	 * @param string $content  Optionally, the current content string, might be a
-	 *                         substring of the original string.
-	 *                         Defaults to `false` to distinguish between a passed
-	 *                         empty string and not passing the $content string.
-	 *
-	 * @return bool True if the string contains an <tag_name> open tag, false otherwise.
-	 */
-	public function has_html_open_tag( $tag_name, $stackPtr = null, $content = false ) {
-		if ( false === $content && isset( $stackPtr ) ) {
-			$content = $this->tokens[ $stackPtr ]['content'];
-		}
-
-		if ( ! empty( $content ) && false !== strpos( $content, '<' . $tag_name ) ) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**

@@ -3,14 +3,14 @@
 /*
  * Bad: invalid prefix passed
  */
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes wp
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wp
 function wp_do_something() {}
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes ^%&
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ^%&
 function ^%&_do_something() {}
 
 // Now let's set the real prefixes we want to test for.
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes acronym,tgmpa
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
 
 /*
  * Bad - not prefixed.
@@ -181,7 +181,7 @@ class Example extends WP_UnitTestCase {
 	function do_something() {}
 }
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist My_TestClass
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist[] My_TestClass
 class Test_Class_D extends My_TestClass {
 
 	const SOME_CONSTANT = 'value';
@@ -190,7 +190,7 @@ class Test_Class_D extends My_TestClass {
 
 	function do_something() {}
 }
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist false
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist[]
 
 
 /*
@@ -379,7 +379,7 @@ define( 'FORCE_SSL_ADMIN', true );
 const SCRIPT_DEBUG = $develop_src;
 
 // Allow for hook name prefixes with less conventional separators.
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes test-this,myplugin\
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] test-this,myplugin\
 do_action( 'test-this-hookname' ); // OK.
 apply_filters( 'myplugin\filtername', $var ); // OK.
 
@@ -398,18 +398,18 @@ class Some_Test_Class extends NonTestClass { // Bad.
 	}
 }
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes wordpress,somethingelse
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wordpress,somethingelse
 // The above line adds an issue to line 1 about a blacklisted prefix.
 function wordpress_do_something() {} // Bad.
 function somethingelse_do_something() {} // OK.
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes my_wordpress_plugin
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] my_wordpress_plugin
 apply_filters( 'my_wordpress_plugin_filtername', $var ); // OK.
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes test-this
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] test-this
 do_action( 'Test-THIS-hookname' ); // OK.
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes acronym,tgmpa
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
 // Issue #1495 - throw the error on the line with the non-prefixed name.
 $acronym = apply_filters(
 	'content-types-post-types', // Bad.
@@ -424,4 +424,4 @@ define(
 	[ 1, 2, 3 ]
 );
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

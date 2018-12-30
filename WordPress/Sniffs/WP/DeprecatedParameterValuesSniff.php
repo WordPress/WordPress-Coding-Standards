@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   1.0.0
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 

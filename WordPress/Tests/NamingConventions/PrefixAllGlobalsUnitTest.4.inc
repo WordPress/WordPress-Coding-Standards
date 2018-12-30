@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes acronym,tgmpa,test_this,test\that
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa,test_this,test\that
 
 namespace TGMPA;
 
@@ -21,10 +21,10 @@ use namespace\DEF; // Not our target.
 namespace\cname::method(); // Not our target.
 $acronym_result = namespace \ blah \ mine();  // Not our target.
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes wordpress
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wordpress
 namespace wordpress\myplugin;
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes wordpress\myplugin
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wordpress\myplugin
 namespace wordpress\myplugin;
 
-// @codingStandardsChangeSetting WordPress.NamingConventions.PrefixAllGlobals prefixes false
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

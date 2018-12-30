@@ -19,16 +19,16 @@ error_reporting(); // Error.
  * Test exclude property.
  */
 // Exclude one group:
-// @codingStandardsChangeSetting WordPress.PHP.DevelopmentFunctions exclude error_log
+// phpcs:set WordPress.PHP.DevelopmentFunctions exclude[] error_log
 trigger_error(); // Ok - within excluded group.
 phpinfo(); // Error.
 
 // Exclude all groups:
-// @codingStandardsChangeSetting WordPress.PHP.DevelopmentFunctions exclude error_log,prevent_path_disclosure
+// phpcs:set WordPress.PHP.DevelopmentFunctions exclude[] error_log,prevent_path_disclosure
 trigger_error(); // Ok - within excluded group.
 phpinfo(); // Ok - within excluded group.
 
 // Reset group exclusions.
-// @codingStandardsChangeSetting WordPress.PHP.DevelopmentFunctions exclude false
+// phpcs:set WordPress.PHP.DevelopmentFunctions exclude[]
 trigger_error(); // Error.
 phpinfo(); // Error.

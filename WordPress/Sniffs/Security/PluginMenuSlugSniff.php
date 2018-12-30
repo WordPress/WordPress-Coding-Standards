@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Security;
+namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Warn about __FILE__ for page registration.
@@ -19,7 +19,8 @@ use WordPress\AbstractFunctionParameterSniff;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.11.0 Refactored to extend the new WordPress_AbstractFunctionParameterSniff.
+ * @since   0.11.0 Refactored to extend the new WordPressCS native
+ *                 `AbstractFunctionParameterSniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  */

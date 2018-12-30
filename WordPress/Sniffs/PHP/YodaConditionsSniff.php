@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Enforces Yoda conditional statements.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class YodaConditionsSniff extends Sniff {

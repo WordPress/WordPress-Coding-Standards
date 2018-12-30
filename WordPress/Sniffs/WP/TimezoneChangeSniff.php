@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Disallow the changing of timezone.
@@ -19,8 +19,8 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.11.0 Extends the WordPress_AbstractFunctionRestrictionsSniff instead of the
- *                 Generic_Sniffs_PHP_ForbiddenFunctionsSniff.
+ * @since   0.11.0 Extends the WordPressCS native `AbstractFunctionRestrictionsSniff`
+ *                 class instead of the upstream `Generic.PHP.ForbiddenFunctions` sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
  */

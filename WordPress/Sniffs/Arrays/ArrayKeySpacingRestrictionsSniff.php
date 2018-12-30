@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Check for proper spacing in array key references.
@@ -20,7 +20,7 @@ use WordPress\Sniff;
  *
  * @since   0.3.0
  * @since   0.7.0  This sniff now has the ability to fix a number of the issues it flags.
- * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class ArrayKeySpacingRestrictionsSniff extends Sniff {

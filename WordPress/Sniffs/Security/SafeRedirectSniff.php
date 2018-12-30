@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Security;
+namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Encourages use of wp_safe_redirect() to avoid open redirect vulnerabilities.

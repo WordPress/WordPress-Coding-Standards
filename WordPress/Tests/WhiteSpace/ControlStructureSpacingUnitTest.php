@@ -7,10 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WhiteSpace;
+namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the ControlStructureSpacing sniff.
@@ -21,33 +20,6 @@ use WordPress\PHPCSHelper;
  * @since   0.13.0     Class name changed: this class is now namespaced.
  */
 class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
-
-	/**
-	 * Get a list of all test files to check.
-	 *
-	 * @param string $testFileBase The base path that the unit tests files will have.
-	 *
-	 * @return string[]
-	 */
-	protected function getTestFiles( $testFileBase ) {
-
-		$testFiles = parent::getTestFiles( $testFileBase );
-
-		/*
-		 * Testing whether the PHPCS annotations are properly handled is only useful on
-		 * PHPCS versions which support the PHPCS annotations.
-		 * Prior to PHPCS 3.2.0 they would be treated the same as ordinary comments
-		 * for the purposes of this sniff.
-		 */
-		if ( version_compare( PHPCSHelper::get_version(), '3.2.0', '<' ) === true ) {
-			$key = array_search( $testFileBase . '2.inc', $testFiles, true );
-			if ( false !== $key ) {
-				unset( $testFiles[ $key ] );
-			}
-		}
-
-		return $testFiles;
-	}
 
 	/**
 	 * Returns the lines where errors should occur.

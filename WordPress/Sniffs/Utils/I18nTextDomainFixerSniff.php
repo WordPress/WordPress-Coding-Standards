@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Utils;
+namespace WordPressCS\WordPress\Sniffs\Utils;
 
-use WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Comprehensive I18n text domain fixer tool.
@@ -272,12 +272,6 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		if ( \T_COMMENT === $this->tokens[ $stackPtr ]['code']
-			&& strpos( $this->tokens[ $stackPtr ]['content'], '@codingStandardsChangeSetting' ) !== false
-		) {
-			return;
-		}
-
 		// Check if the old/new properties are correctly set. If not, bow out.
 		if ( ! is_string( $this->new_text_domain )
 			|| '' === $this->new_text_domain

@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Discourages the use of various functions and suggests (WordPress) alternatives.
@@ -21,7 +21,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  * @since   1.0.0  - Takes the minimum supported WP version into account.
  *                 - Takes exceptions based on passed parameters into account.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 

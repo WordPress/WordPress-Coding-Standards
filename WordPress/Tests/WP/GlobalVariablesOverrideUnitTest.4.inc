@@ -1,6 +1,6 @@
 <?php
 
-// @codingStandardsChangeSetting WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist My\NameSp\TestClass
+// phpcs:set WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist[] My\NameSp\TestClass
 
 namespace My \ /* comment */ NameSp;
 
@@ -11,4 +11,4 @@ class Test_Class_D extends TestClass {
 		$tabs = 50; // Ok.
 	}
 }
-// @codingStandardsChangeSetting WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist false
+// phpcs:set WordPress.WP.GlobalVariablesOverride custom_test_class_whitelist[]

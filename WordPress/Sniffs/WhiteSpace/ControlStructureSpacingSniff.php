@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WhiteSpace;
+namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Enforces spacing around logical operators and assignments, based upon Squiz code.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.1.0
  * @since   2013-06-11 This sniff no longer supports JS.
  * @since   0.3.0      This sniff now has the ability to fix most errors it flags.
- * @since   0.7.0      This class now extends WordPress_Sniff.
+ * @since   0.7.0      This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0     Class name changed: this class is now namespaced.
  *
  * Last synced with base class 2017-01-15 at commit b024ad84656c37ef5733c6998ebc1e60957b2277.
@@ -404,17 +404,14 @@ class ControlStructureSpacingSniff extends Sniff {
 			$firstContent = $this->phpcsFile->findNext( \T_WHITESPACE, ( $scopeOpener + 1 ), null, true );
 
 			// We ignore spacing for some structures that tend to have their own rules.
-			$ignore = array(
+			$ignore  = array(
 				\T_FUNCTION             => true,
 				\T_CLOSURE              => true,
-				\T_CLASS                => true,
-				\T_ANON_CLASS           => true,
-				\T_INTERFACE            => true,
-				\T_TRAIT                => true,
 				\T_DOC_COMMENT_OPEN_TAG => true,
 				\T_CLOSE_TAG            => true,
 				\T_COMMENT              => true,
 			);
+			$ignore += Tokens::$ooScopeTokens;
 
 			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
 				&& $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
@@ -474,7 +471,7 @@ class ControlStructureSpacingSniff extends Sniff {
 								 * conflict.
 								 */
 								if ( \T_COMMENT !== $this->tokens[ $lastContent ]['code']
-									&& ! isset( $this->phpcsCommentTokens[ $this->tokens[ $lastContent ]['type'] ] ) ) {
+									&& ! isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $lastContent ]['code'] ] ) ) {
 									$this->phpcsFile->fixer->addNewlineBefore( $j );
 								}
 
@@ -500,7 +497,7 @@ class ControlStructureSpacingSniff extends Sniff {
 		}
 
 		if ( \T_COMMENT === $this->tokens[ $trailingContent ]['code']
-			|| isset( $this->phpcsCommentTokens[ $this->tokens[ $trailingContent ]['type'] ] )
+			|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $trailingContent ]['code'] ] )
 		) {
 			// Special exception for code where the comment about
 			// an ELSE or ELSEIF is written between the control structures.
@@ -561,7 +558,7 @@ class ControlStructureSpacingSniff extends Sniff {
 
 					// TODO: Instead a separate error should be triggered when content comes right after closing brace.
 					if ( \T_COMMENT !== $this->tokens[ $scopeCloser ]['code']
-						&& isset( $this->phpcsCommentTokens[ $this->tokens[ $scopeCloser ]['type'] ] ) === false
+						&& isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $scopeCloser ]['code'] ] ) === false
 					) {
 						$this->phpcsFile->fixer->addNewlineBefore( $trailingContent );
 					}

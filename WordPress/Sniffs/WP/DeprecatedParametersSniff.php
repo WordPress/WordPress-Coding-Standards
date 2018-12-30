@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Check for usage of deprecated parameters in WP functions and suggest alternative based on the parameter passed.
@@ -28,7 +28,7 @@ use WordPress\AbstractFunctionParameterSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 

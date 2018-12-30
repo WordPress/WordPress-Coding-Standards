@@ -9,7 +9,7 @@
 [![Last Commit to Unstable](https://img.shields.io/github/last-commit/WordPress-Coding-Standards/WordPress-Coding-Standards/develop.svg)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commits/develop)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Tested on PHP 5.3 to nightly](https://img.shields.io/badge/tested%20on-PHP%205.3%20|%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
+[![Tested on PHP 5.4 to nightly](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%20nightly-green.svg?maxAge=2419200)](https://travis-ci.org/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 [![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/blob/develop/LICENSE)
 [![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
@@ -59,8 +59,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/P
 
 ### Requirements
 
-The WordPress Coding Standards require PHP 5.3 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **2.9.0** or higher.
-As of version 0.13.0, the WordPress Coding Standards are compatible with PHPCS 3.0.2+. In that case, the minimum PHP requirement is PHP 5.4.
+The WordPress Coding Standards require PHP 5.4 or higher and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) version **3.3.1** or higher.
 
 ### Composer
 
@@ -75,7 +74,7 @@ Running this command will:
 3. Register WordPress standards in PHP_CodeSniffer configuration.
 4. Make `phpcs` command available from `wpcs/vendor/bin`.
 
-For the convenience of using `phpcs` as a global command, you may want to add the path to the `wpcs/vendor/scripts` (PHPCS 2.x) and/or `wpcs/vendor/bin` (PHPCS 3.x) directories to a `PATH` environment variable for your operating system.
+For the convenience of using `phpcs` as a global command, you may want to add the path to the `wpcs/vendor/bin` directory to a `PATH` environment variable for your operating system.
 
 #### Installing WPCS as a dependency
 
@@ -113,13 +112,10 @@ cd ~/projects
 git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
 git clone -b master https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 cd phpcs
-#PHPCS 2.x
-./scripts/phpcs --config-set installed_paths ../wpcs
-#PHPCS 3.x
 ./bin/phpcs --config-set installed_paths ../wpcs
 ```
 
-And then add the `~/projects/phpcs/scripts` (PHPCS 2.x) or `~/projects/phpcs/bin` (PHPCS 3.x) directory to your `PATH` environment variable via your `.bashrc`.
+And then add the `~/projects/phpcs/bin` directory to your `PATH` environment variable via your `.bashrc`.
 
 You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
@@ -127,7 +123,7 @@ You should then see `WordPress-Core` et al listed when you run `phpcs -i`.
 
 ### Standards subsets
 
-The project encompasses a super-set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks. Some of them might be unnecessary for your environment, for example, those specific to WordPress.com VIP coding requirements.
+The project encompasses a super-set of the sniffs that the WordPress community may need. If you use the `WordPress` standard you will get all the checks.
 
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
@@ -137,17 +133,16 @@ You can use the following as standard names when invoking `phpcs` to select snif
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
 
-**Notes:** This WPCS package contains the sniffs for another ruleset, `WordPress-VIP`. This ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/), but this is no longer used or recommended by the WordPress.com VIP team or their clients, since they prefer to use their [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead.
-
-Before WPCS `1.0.0`, the WordPress-VIP ruleset was included as part of the complete `WordPress` ruleset. **As of `1.0.0` the `WordPress-VIP` ruleset is not part of the WordPress ruleset, and it is deprecated**. The remaining `WordPress-VIP` sniffs may still be referenced in custom rulesets, so to maintain some backwards compatibility, they will remain in WPCS until `2.0.0`. See [#1309](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1309) for more information.
+**Note:** The WPCS package used to include a `WordPress-VIP` ruleset and associated sniffs, prior to WPCS 2.0.0.
+The `WordPress-VIP` ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/), but has been superseded. It is recommended to use the [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead for checking code against the VIP platform requirements.
 
 ### Using a custom ruleset
 
-If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `phpcs.xml` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
+If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file. When you name this file either `.phpcs.xml`, `phpcs.xml`, `.phpcs.xml.dist` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` arg. For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also provided [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and [fully annotated example](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
-The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `phpcs.xml` file.
+The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `.phpcs.xml.dist` file.
 
 You can find a complete list of all the properties you can change in the [wiki](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties).
 
@@ -158,7 +153,13 @@ The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) sni
 
 The [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) ruleset is based on PHPCompatibility, but specifically crafted to prevent false positives for projects which expect to run within the context of WordPress, i.e. core, plugins and themes.
 
-Install either as a separate ruleset and either run it separately against your code or add it to your custom ruleset.
+Install either as a separate ruleset and run it separately against your code or add it to your custom ruleset, like so:
+```xml
+<config name="testVersion" value="5.2-"/>
+<rule ref="PHPCompatibilityWP">
+    <include-pattern>*\.php$</include-pattern>
+</rule>
+```
 
 Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `5.2-` to support the same PHP versions as WordPress Core supports.
 

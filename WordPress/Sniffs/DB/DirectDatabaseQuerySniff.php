@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\DB;
+namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Flag Database direct queries.
@@ -21,7 +21,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * @since   0.3.0
  * @since   0.6.0  Removed the add_unique_message() function as it is no longer needed.
- * @since   0.11.0 This class now extends WordPress_Sniff.
+ * @since   0.11.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
  */

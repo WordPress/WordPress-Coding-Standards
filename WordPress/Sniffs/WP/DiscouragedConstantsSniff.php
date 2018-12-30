@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionParameterSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Warns against usage of discouraged WP CONSTANTS and recommends alternatives.
@@ -173,7 +173,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		$this->phpcsFile->addWarning(
 			'Found usage of constant "%s". Use %s instead.',
 			$stackPtr,
-			'UsageFound',
+			$this->string_to_errorcode( $content . 'UsageFound' ),
 			array(
 				$content,
 				$this->discouraged_constants[ $content ],
@@ -208,7 +208,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			$this->phpcsFile->addWarning(
 				'Found declaration of constant "%s". Use %s instead.',
 				$stackPtr,
-				'DeclarationFound',
+				$this->string_to_errorcode( $raw_content . 'DeclarationFound' ),
 				array(
 					$raw_content,
 					$this->discouraged_constants[ $raw_content ],

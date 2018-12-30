@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Restricts usage of some functions.
@@ -20,9 +20,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.3.0
  * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
  *                 Moved the file and renamed the class from
- *                 `WordPress_Sniffs_Functions_FunctionRestrictionsSniff` to
- *                 `WordPress_AbstractFunctionRestrictionsSniff`.
- * @since   0.11.0 Extends the WordPress_Sniff class.
+ *                 `\WordPressCS\WordPress\Sniffs\Functions\FunctionRestrictionsSniff` to
+ *                 `\WordPressCS\WordPress\AbstractFunctionRestrictionsSniff`.
+ * @since   0.11.0 Extends the WordPressCS native `Sniff` class.
  */
 abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
@@ -302,8 +302,6 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
-
-		return;
 	}
 
 	/**

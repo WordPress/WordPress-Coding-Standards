@@ -7,17 +7,14 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Verifies the correct usage of type cast keywords.
  *
  * Type casts should be:
- * - lowercase;
- * - short form, i.e. (bool) not (boolean);
  * - normalized, i.e. (float) not (real).
  *
  * Additionally, the use of the (unset) and (binary) casts is discouraged.
@@ -27,6 +24,8 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   1.2.0
+ * @since   2.0.0 No longer checks that type casts are lowercase or short form.
+ *                Relevant PHPCS native sniffs have been included in the rulesets instead.
  */
 class TypeCastsSniff extends Sniff {
 
@@ -36,7 +35,12 @@ class TypeCastsSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return Tokens::$castTokens;
+		return array(
+			\T_DOUBLE_CAST,
+			\T_UNSET_CAST,
+			\T_STRING_CAST,
+			\T_BINARY_CAST,
+		);
 	}
 
 	/**
@@ -52,39 +56,7 @@ class TypeCastsSniff extends Sniff {
 		$typecast    = str_replace( ' ', '', $this->tokens[ $stackPtr ]['content'] );
 		$typecast_lc = strtolower( $typecast );
 
-		$this->phpcsFile->recordMetric( $stackPtr, 'Typecast encountered', $typecast );
-
 		switch ( $token_code ) {
-			case \T_BOOL_CAST:
-				if ( '(bool)' !== $typecast_lc ) {
-					$fix = $this->phpcsFile->addFixableError(
-						'Short form type keywords must be used; expected "(bool)" but found "%s"',
-						$stackPtr,
-						'LongBoolFound',
-						array( $typecast )
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->replaceToken( $stackPtr, '(bool)' );
-					}
-				}
-				break;
-
-			case \T_INT_CAST:
-				if ( '(int)' !== $typecast_lc ) {
-					$fix = $this->phpcsFile->addFixableError(
-						'Short form type keywords must be used; expected "(int)" but found "%s"',
-						$stackPtr,
-						'LongIntFound',
-						array( $typecast )
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->replaceToken( $stackPtr, '(int)' );
-					}
-				}
-				break;
-
 			case \T_DOUBLE_CAST:
 				if ( '(float)' !== $typecast_lc ) {
 					$fix = $this->phpcsFile->addFixableError(
@@ -121,33 +93,6 @@ class TypeCastsSniff extends Sniff {
 					array( $typecast )
 				);
 				break;
-		}
-
-		/*
-		 * {@internal Once the minimum PHPCS version has gone up to PHPCS 3.3.0+, the lowercase
-		 * check below can be removed in favour of adding the `Generic.PHP.LowerCaseType` sniff
-		 * to the ruleset.
-		 * Note: the `register()` function also needs adjusting in that case to only register the
-		 * targetted type casts above and the metrics recording should probably be adjusted as well.
-		 * The above mentioned Generic sniff records metrics about the case of typecasts, so we
-		 * don't need to worry about those no longer being recorded. They will be, just slightly
-		 * differently.}}
-		 */
-		if ( $typecast_lc !== $typecast ) {
-			$data = array(
-				$typecast_lc,
-				$typecast,
-			);
-
-			$fix = $this->phpcsFile->addFixableError(
-				'PHP type casts must be lowercase; expected "%s" but found "%s"',
-				$stackPtr,
-				'NonLowercaseFound',
-				$data
-			);
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( $stackPtr, $typecast_lc );
-			}
 		}
 	}
 

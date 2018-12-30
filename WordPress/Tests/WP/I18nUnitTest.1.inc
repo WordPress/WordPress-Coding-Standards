@@ -1,11 +1,11 @@
 <?php
 
-// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments false
+// phpcs:set WordPress.WP.I18n check_translator_comments false
 
 __( 'string' ); // OK - no text domain known, so not checked.
 __( 'string', 'something' ); // OK - no text domain known, so not checked.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
+// phpcs:set WordPress.WP.I18n text_domain[] my-slug
 
 __( 'string' ); // Bad - no text domain passed.
 __( 'string', 'something' ); // Bad - text domain mismatch.
@@ -147,20 +147,20 @@ really.
 EOD
 , 'my-slug' ); // OK.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug,default
+// phpcs:set WordPress.WP.I18n text_domain[] my-slug,default
 __( "String default text domain.", "my-slug" ); // Ok.
 __( "String default text domain.", "default" ); // Ok.
 __( "String default text domain.", 'something' ); // Bad, text domain mismatch.
 __( 'String default text domain.' ); // Warning, use default.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain default
+// phpcs:set WordPress.WP.I18n text_domain[] default
 __( 'String default text domain.', 'my-slug' ); // Bad because text_domain is only 'default'.
 __( 'String default text domain.', 'default' ); // Warning, text domain can be omitted.
 __( 'String default text domain.', /* Explicitly set for reason. */ 'default' ); // Warning, text domain can be omitted (not auto-fixable).
 __( 'String default text domain.' ); // Ok because default domain is 'default' and it matches one of the supplied configured text domains.
 
 // Issue #1266.
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
+// phpcs:set WordPress.WP.I18n text_domain[] my-slug
 $mo->translate( $string ); // OK, not a function, but a method call.
 Something\esc_html_e( $string ); // OK, not the WP function, but namespaced function call.
 
@@ -177,5 +177,5 @@ $offset_or_tz = _x( '0', 'default GMT offset or timezone string', 'my-slug' );
 $test = __( '%1$s %2$s', 'my-slug' ); // OK(ish), placeholder order may change depending on language.
 $test = __( '   %s    ', 'my-slug' ); // Bad, no translatable content.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
-// @codingStandardsChangeSetting WordPress.WP.I18n check_translator_comments true
+// phpcs:set WordPress.WP.I18n text_domain[]
+// phpcs:set WordPress.WP.I18n check_translator_comments true

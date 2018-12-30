@@ -7,10 +7,11 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WhiteSpace;
+namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use WordPress\Sniff;
-use WordPress\PHPCSHelper;
+use WordPressCS\WordPress\Sniff;
+use WordPressCS\WordPress\PHPCSHelper;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Warn on line indentation ending with spaces for precision alignment.
@@ -50,8 +51,10 @@ class PrecisionAlignmentSniff extends Sniff {
 	 *
 	 * <rule ref="WordPress.WhiteSpace.PrecisionAlignment">
 	 *    <properties>
-	 *        <property name="ignoreAlignmentTokens" type="array"
-	 *             value="T_COMMENT,T_INLINE_HTML"/>
+	 *        <property name="ignoreAlignmentTokens" type="array">
+	 *            <element value="T_COMMENT"/>
+	 *            <element value="T_INLINE_HTML"/>
+	 *        </property>
 	 *    </properties>
 	 * </rule>
 	 *
@@ -94,18 +97,18 @@ class PrecisionAlignmentSniff extends Sniff {
 		$ignoreAlignmentTokens = $this->merge_custom_array( $this->ignoreAlignmentTokens );
 
 		$check_tokens  = array(
-			'T_WHITESPACE'             => true,
-			'T_INLINE_HTML'            => true,
-			'T_DOC_COMMENT_WHITESPACE' => true,
-			'T_COMMENT'                => true,
+			\T_WHITESPACE             => true,
+			\T_INLINE_HTML            => true,
+			\T_DOC_COMMENT_WHITESPACE => true,
+			\T_COMMENT                => true,
 		);
-		$check_tokens += $this->phpcsCommentTokens;
+		$check_tokens += Tokens::$phpcsCommentTokens;
 
 		for ( $i = 0; $i < $this->phpcsFile->numTokens; $i++ ) {
 
 			if ( 1 !== $this->tokens[ $i ]['column'] ) {
 				continue;
-			} elseif ( isset( $check_tokens[ $this->tokens[ $i ]['type'] ] ) === false
+			} elseif ( isset( $check_tokens[ $this->tokens[ $i ]['code'] ] ) === false
 				|| ( isset( $this->tokens[ ( $i + 1 ) ] )
 					&& \T_WHITESPACE === $this->tokens[ ( $i + 1 ) ]['code'] )
 				|| $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar

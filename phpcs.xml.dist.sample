@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Example Project">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Example Project" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
 	<description>A custom set of rules to check for a WPized WordPress project</description>
 
 	<!-- Exclude WP Core folders and files from being checked. -->
@@ -73,13 +74,18 @@
 
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="my-textdomain,library-textdomain"/>
+			<property name="text_domain" type="array">
+				<element value="my-textdomain"/>
+				<element value="library-textdomain"/>
+			</property>
 		</properties>
 	</rule>
 
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
-			<property name="prefixes" type="array" value="my_prefix"/>
+			<property name="prefixes" type="array">
+				<element value="my_prefix"/>
+			</property>
 		</properties>
 	</rule>
 

@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Enforces WordPress array spacing format.
@@ -27,14 +27,13 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.11.0 - The WordPress specific additional checks have now been split off
- *                 from the WordPress_Sniffs_Arrays_ArrayDeclaration sniff into
- *                 this sniff.
+ *                   from the `WordPress.Arrays.ArrayDeclaration` sniff into this sniff.
  *                 - Added sniffing & fixing for associative arrays.
  * @since   0.12.0 Decoupled this sniff from the upstream sniff completely.
- *                 This sniff now extends the `WordPress_Sniff` instead.
- * @since   0.13.0 Added the last remaining checks from the `ArrayDeclaration` sniff
- *                 which were not covered elsewhere. The `ArrayDeclaration` sniff has
- *                 now been deprecated.
+ *                 This sniff now extends the WordPressCS native `Sniff` class instead.
+ * @since   0.13.0 Added the last remaining checks from the `WordPress.Arrays.ArrayDeclaration`
+ *                 sniff which were not covered elsewhere.
+ *                 The `WordPress.Arrays.ArrayDeclaration` sniff has now been deprecated.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   0.14.0 Single item associative arrays are now by default exempt from the
  *                 "must be multi-line" rule. This behaviour can be changed using the
@@ -383,12 +382,31 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 			);
 
 			// Ignore comments after array items if the next real content starts on a new line.
-			if ( \T_COMMENT === $this->tokens[ $first_content ]['code']
-				|| isset( $this->phpcsCommentTokens[ $this->tokens[ $first_content ]['type'] ] )
+			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_last_item ]['line']
+				&& ( \T_COMMENT === $this->tokens[ $first_content ]['code']
+				|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $first_content ]['code'] ] ) )
 			) {
+				$end_of_comment = $first_content;
+
+				// Find the end of (multi-line) /* */- style trailing comments.
+				if ( substr( ltrim( $this->tokens[ $end_of_comment ]['content'] ), 0, 2 ) === '/*' ) {
+					while ( ( \T_COMMENT === $this->tokens[ $end_of_comment ]['code']
+						|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $end_of_comment ]['code'] ] ) )
+						&& substr( rtrim( $this->tokens[ $end_of_comment ]['content'] ), -2 ) !== '*/'
+						&& ( $end_of_comment + 1 ) < $end_of_this_item
+					) {
+						$end_of_comment++;
+					}
+
+					if ( $this->tokens[ $end_of_comment ]['line'] !== $this->tokens[ $end_of_last_item ]['line'] ) {
+						// Multi-line trailing comment.
+						$end_of_last_item = $end_of_comment;
+					}
+				}
+
 				$next = $this->phpcsFile->findNext(
 					array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
-					( $first_content + 1 ),
+					( $end_of_comment + 1 ),
 					$end_of_this_item,
 					true
 				);
@@ -422,7 +440,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 					$this->phpcsFile->fixer->beginChangeset();
 
-					if ( $item['start'] <= ( $first_content - 1 )
+					if ( ( $end_of_last_item + 1 ) <= ( $first_content - 1 )
 						&& \T_WHITESPACE === $this->tokens[ ( $first_content - 1 ) ]['code']
 					) {
 						// Remove whitespace which would otherwise becoming trailing

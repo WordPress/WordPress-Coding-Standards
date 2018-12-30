@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\NamingConventions;
+namespace WordPressCS\WordPress\Tests\NamingConventions;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -44,6 +44,8 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 			88  => 2,
 			89  => 2,
 			106 => 2,
+			116 => 1,
+			117 => 1,
 		);
 	}
 

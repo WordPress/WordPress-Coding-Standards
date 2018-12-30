@@ -7,10 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Security;
+namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Verifies that all outputted strings are escaped.
@@ -20,9 +20,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   2013-06-11
- * @since   0.4.0  This class now extends WordPress_Sniff.
+ * @since   0.4.0  This class now extends the WordPressCS native `Sniff` class.
  * @since   0.5.0  The various function list properties which used to be contained in this class
- *                 have been moved to the WordPress_Sniff parent class.
+ *                 have been moved to the WordPressCS native `Sniff` parent class.
  * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
  *                 echo tags `<?=`.
  * @since   0.13.0 Class name changed: this class is now namespaced.
@@ -47,17 +47,6 @@ class EscapeOutputSniff extends Sniff {
 	 * @var string|string[]
 	 */
 	public $customAutoEscapedFunctions = array();
-
-	/**
-	 * Custom list of functions which escape values for output.
-	 *
-	 * @since      0.3.0
-	 * @deprecated 0.5.0 Use $customEscapingFunctions instead.
-	 * @see        \WordPress\Sniffs\Security\EscapeOutputSniff::$customEscapingFunctions
-	 *
-	 * @var string|string[]
-	 */
-	public $customSanitizingFunctions = array();
 
 	/**
 	 * Custom list of functions which print output incorporating the passed values.
@@ -180,27 +169,13 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	public function register() {
 
-		$tokens = array(
+		return array(
 			\T_ECHO,
 			\T_PRINT,
 			\T_EXIT,
 			\T_STRING,
 			\T_OPEN_TAG_WITH_ECHO,
 		);
-
-		/*
-		 * Check whether short open echo tags are disabled and if so, register the
-		 * T_INLINE_HTML token which is how short open tags are being handled in that case.
-		 *
-		 * In PHP < 5.4, support for short open echo tags depended on whether the
-		 * `short_open_tag` ini directive was set to `true`.
-		 * For PHP >= 5.4, the `short_open_tag` no longer affects the short open
-		 * echo tags and these are now always enabled.
-		 */
-		if ( \PHP_VERSION_ID < 50400 && false === (bool) ini_get( 'short_open_tag' ) ) {
-			$tokens[] = \T_INLINE_HTML;
-		}
-		return $tokens;
 	}
 
 	/**
@@ -237,24 +212,6 @@ class EscapeOutputSniff extends Sniff {
 				$end_of_statement = ( $first_param['end'] + 1 );
 				unset( $first_param );
 			}
-		} elseif ( \T_INLINE_HTML === $this->tokens[ $stackPtr ]['code'] ) {
-			// Skip if no PHP short_open_tag is found in the string.
-			if ( false === strpos( $this->tokens[ $stackPtr ]['content'], '<?=' ) ) {
-				return;
-			}
-
-			// Report on what is very likely a PHP short open echo tag outputting a variable.
-			if ( preg_match( '`\<\?\=[\s]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?:(?:->\S+|\[[^\]]+\]))*)[\s]*;?[\s]*\?\>`', $this->tokens[ $stackPtr ]['content'], $matches ) > 0 ) {
-				$this->phpcsFile->addError(
-					"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
-					$stackPtr,
-					'OutputNotEscapedShortEcho',
-					array( $matches[1] )
-				);
-				return;
-			}
-
-			return;
 		}
 
 		// Checking for the ignore comment, ex: //xss ok.
@@ -493,32 +450,15 @@ class EscapeOutputSniff extends Sniff {
 	 * @return void
 	 */
 	protected function mergeFunctionLists() {
-		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape']
-			|| $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize']
-		) {
+		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape'] ) {
 			$customEscapeFunctions = $this->merge_custom_array( $this->customEscapingFunctions, array(), false );
-
-			if ( ! empty( $this->customSanitizingFunctions ) ) {
-				$customEscapeFunctions = $this->merge_custom_array(
-					$this->customSanitizingFunctions,
-					$customEscapeFunctions,
-					false
-				);
-
-				$this->phpcsFile->addWarning(
-					'The customSanitizingFunctions property is deprecated in favor of customEscapingFunctions.',
-					0,
-					'DeprecatedCustomSanitizingFunctions'
-				);
-			}
 
 			$this->escapingFunctions = $this->merge_custom_array(
 				$customEscapeFunctions,
 				$this->escapingFunctions
 			);
 
-			$this->addedCustomFunctions['escape']   = $this->customEscapingFunctions;
-			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
+			$this->addedCustomFunctions['escape'] = $this->customEscapingFunctions;
 		}
 
 		if ( $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] ) {

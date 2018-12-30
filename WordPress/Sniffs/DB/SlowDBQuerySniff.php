@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\DB;
+namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPress\AbstractArrayAssignmentRestrictionsSniff;
+use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 
 /**
  * Flag potentially slow queries.
@@ -61,21 +61,7 @@ class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
 
 		if ( $this->has_whitelist_comment( 'slow query', $stackPtr ) ) {
 			return;
-		}
-
-		if ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
-			/*
-			 * Only throw the warning about a deprecated comment when the sniff would otherwise
-			 * have been triggered on the array key.
-			 */
-			if ( \in_array( $this->tokens[ $stackPtr ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-				$this->phpcsFile->addWarning(
-					'The "tax_query" whitelist comment is deprecated in favor of the "slow query" whitelist comment.',
-					$stackPtr,
-					'DeprecatedWhitelistFlagFound'
-				);
-			}
-
+		} elseif ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
 			return;
 		}
 

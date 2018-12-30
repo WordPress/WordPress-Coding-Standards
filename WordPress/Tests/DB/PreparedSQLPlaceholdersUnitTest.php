@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\DB;
+namespace WordPressCS\WordPress\Tests\DB;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -85,7 +85,9 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			57  => 1,
 			58  => 1,
 			61  => 1,
+			62  => 1, // Whitelist comment deprecation warning.
 			66  => 1,
+			68  => 1, // Whitelist comment deprecation warning.
 			126 => 1,
 			139 => 1,
 			160 => 2,

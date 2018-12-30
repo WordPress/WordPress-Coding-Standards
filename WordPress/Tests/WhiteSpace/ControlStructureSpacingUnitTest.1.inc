@@ -45,7 +45,7 @@ endif;
 if ( false ) :
 else :
 endif;
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
 $a = function($arg){}; // Bad.
 $a = function ( $arg ) {
 	// Ok.
@@ -74,7 +74,7 @@ function testA()
 
 function &return_by_ref() {} // Ok.
 
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 0
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 0
 
 $a = function() {}; // Ok.
 $a = function( $arg ) {}; // Ok.
@@ -84,7 +84,7 @@ $a = function () {}; // Bad.
 $closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
 $closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Bad.
 
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
 
 $closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
 
@@ -100,7 +100,7 @@ $closureWithArgsAndVars = function ( $arg1, $arg2 )  use ( $var1, $var2 ) {}; //
 // Namespaces.
 use Foo\Admin;
 
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren -1
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren -1
 
 $a = function( $arg ) {}; // Ok.
 $a = function ( $arg ) {}; // Ok.
@@ -139,12 +139,12 @@ try{ // Bad.
 }
 
 // Upstream bug PEAR #20248.
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
 // Bad.
 if ( $one ) {
 
 }
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
 
 // Upstream bug PEAR #20247.
 do {
@@ -152,7 +152,7 @@ do {
 } while ($blah); // Bad.
 
 // Upstream bug GH #782
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
 if ( $foo ) {
 
 
@@ -173,7 +173,7 @@ if ( $foo ) {
 
 
 }
-// @codingStandardsChangeSetting WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
 
 // Check for too many spaces as long as the next non-blank token is on the same line.
 function test( $blah   ) {} // Bad.

@@ -7,9 +7,10 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
-use PHP_CodeSniffer_File as File;
+use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * PHPCSHelper
@@ -33,13 +34,7 @@ class PHPCSHelper {
 	 * @return string
 	 */
 	public static function get_version() {
-		if ( \defined( '\PHP_CodeSniffer\Config::VERSION' ) ) {
-			// PHPCS 3.x.
-			return \PHP_CodeSniffer\Config::VERSION;
-		} else {
-			// PHPCS 2.x.
-			return \PHP_CodeSniffer::VERSION;
-		}
+		return Config::VERSION;
 	}
 
 	/**
@@ -56,13 +51,7 @@ class PHPCSHelper {
 	 *                           This will not write the config data to the config file.
 	 */
 	public static function set_config_data( $key, $value, $temp = false ) {
-		if ( method_exists( '\PHP_CodeSniffer\Config', 'setConfigData' ) ) {
-			// PHPCS 3.x.
-			\PHP_CodeSniffer\Config::setConfigData( $key, $value, $temp );
-		} else {
-			// PHPCS 2.x.
-			\PHP_CodeSniffer::setConfigData( $key, $value, $temp );
-		}
+		Config::setConfigData( $key, $value, $temp );
 	}
 
 	/**
@@ -75,13 +64,7 @@ class PHPCSHelper {
 	 * @return string|null
 	 */
 	public static function get_config_data( $key ) {
-		if ( method_exists( '\PHP_CodeSniffer\Config', 'getConfigData' ) ) {
-			// PHPCS 3.x.
-			return \PHP_CodeSniffer\Config::getConfigData( $key );
-		} else {
-			// PHPCS 2.x.
-			return \PHP_CodeSniffer::getConfigData( $key );
-		}
+		return Config::getConfigData( $key );
 	}
 
 	/**
@@ -96,17 +79,8 @@ class PHPCSHelper {
 	public static function get_tab_width( File $phpcsFile ) {
 		$tab_width = 4;
 
-		if ( class_exists( '\PHP_CodeSniffer\Config' ) ) {
-			// PHPCS 3.x.
-			if ( isset( $phpcsFile->config->tabWidth ) && $phpcsFile->config->tabWidth > 0 ) {
-				$tab_width = $phpcsFile->config->tabWidth;
-			}
-		} else {
-			// PHPCS 2.x.
-			$cli_values = $phpcsFile->phpcs->cli->getCommandLineValues();
-			if ( isset( $cli_values['tabWidth'] ) && $cli_values['tabWidth'] > 0 ) {
-				$tab_width = $cli_values['tabWidth'];
-			}
+		if ( isset( $phpcsFile->config->tabWidth ) && $phpcsFile->config->tabWidth > 0 ) {
+			$tab_width = $phpcsFile->config->tabWidth;
 		}
 
 		return $tab_width;
@@ -122,20 +96,14 @@ class PHPCSHelper {
 	 * @return bool True if annotations should be ignored, false otherwise.
 	 */
 	public static function ignore_annotations( File $phpcsFile = null ) {
-		if ( class_exists( '\PHP_CodeSniffer\Config' ) ) {
-			// PHPCS 3.x.
-			if ( isset( $phpcsFile, $phpcsFile->config->annotations ) ) {
-				return ! $phpcsFile->config->annotations;
-			} else {
-				$annotations = \PHP_CodeSniffer\Config::getConfigData( 'annotations' );
-				if ( isset( $annotations ) ) {
-					return ! $annotations;
-				}
+		if ( isset( $phpcsFile, $phpcsFile->config->annotations ) ) {
+			return ! $phpcsFile->config->annotations;
+		} else {
+			$annotations = Config::getConfigData( 'annotations' );
+			if ( isset( $annotations ) ) {
+				return ! $annotations;
 			}
 		}
-
-		// PHPCS 2.x does not support `--ignore-annotations`.
-		return false;
 	}
 
 }

@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractClassRestrictionsSniff;
+use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
 
 /**
  * Restricts the use of deprecated WordPress classes and suggests alternatives.
@@ -28,7 +28,7 @@ use WordPress\AbstractClassRestrictionsSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
  */
 class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 

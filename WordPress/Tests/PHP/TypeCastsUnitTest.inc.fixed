@@ -1,16 +1,12 @@
 <?php
 
 // OK.
-$a = (bool) $b;
-$a = (int) $b;
 $a = (float) $b;
 $a = (string) $b;
 $a = (array) $b;
 $a = (object) $b;
 
 // Error: Wrong form.
-$a = (bool) $b;
-$a = (int) $b;
 $a = (float) $b;
 $a = (float) $b;
 
@@ -20,45 +16,13 @@ $a = (binary) $b; // Warning.
 $a = b"binary string"; // Warning.
 $a = b"binary $string"; // Warning.
 
-// Error: Mixed case.
-$a = (bool) $b;
-$a = (bool) $b; // + wrong form.
-$a = (int) $b;
-$a = (int) $b; // + wrong form.
-$a = (float) $b;
-$a = (float) $b; // + wrong form.
-$a = (float) $b; // + wrong form.
-$a = (string) $b;
-$a = (array) $b;
-$a = (object) $b;
-$a = (unset) $b; // + discouraged.
-$a = (binary) $b; // + discouraged.
-
-// Error: Uppercase.
-$a = (bool) $b;
-$a = (bool) $b; // + wrong form.
-$a = (int) $b;
-$a = (int) $b; // + wrong form.
-$a = (float) $b;
-$a = (float) $b; // + wrong form.
-$a = (float) $b; // + wrong form.
-$a = (string) $b;
-$a = (array) $b;
-$a = (object) $b;
-$a = (unset) $b; // + discouraged.
-$a = (binary) $b; // + discouraged.
-
 // Test recognition with whitespace within the cast.
 // OK.
-$a = (  bool  ) $b;
-$a = ( int ) $b;
 $a = ( float) $b;
 $a = (string ) $b;
 $a = (          array) $b;
 $a = (object      ) $b;
 
-$a = (bool) $b; // Error.
-$a = (int) $b; // Error.
 $a = (float) $b; // Error.
 $a = (float) $b; // Error.
 $a = (  unset ) $b; // Warning.

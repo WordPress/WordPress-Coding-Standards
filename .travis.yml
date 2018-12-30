@@ -26,10 +26,8 @@ php:
 env:
   # `master` is now 3.x.
   - PHPCS_BRANCH="dev-master" LINT=1
-  # Lowest supported release in the 3.x series with which WPCS is compatible (and which can run the unit tests).
-  - PHPCS_BRANCH="3.1.0"
-  # Lowest tagged release in the 2.x series with which WPCS is compatible.
-  - PHPCS_BRANCH="2.9.0"
+  # Lowest supported release in the 3.x series with which WPCS is compatible.
+  - PHPCS_BRANCH="3.3.1"
 
 matrix:
   fast_finish: true
@@ -42,22 +40,9 @@ matrix:
           packages:
             - libxml2-utils
 
-    # Test PHP 5.3 only against PHPCS 2.x as PHPCS 3.x has a minimum requirement of PHP 5.4.
-    - php: 5.3
-      env: PHPCS_BRANCH="2.9.*" LINT=1
-      dist: precise
-    # Test PHP 5.3 with short_open_tags set to On (is Off by default)
-    - php: 5.3
-      env: PHPCS_BRANCH="2.9.0" SHORT_OPEN_TAGS=true
-      dist: precise
-
   allow_failures:
     # Allow failures for unstable builds.
     - php: nightly
-    - php: 7.3
-      env: PHPCS_BRANCH="3.1.0"
-    - php: 7.3
-      env: PHPCS_BRANCH="2.9.0"
 
 before_install:
     # Speed up build time by disabling Xdebug.
@@ -66,36 +51,21 @@ before_install:
     - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
     - export XMLLINT_INDENT="	"
     - export PHPUNIT_DIR=/tmp/phpunit
-    - |
-      if [[ ${PHPCS_BRANCH:0:2} == "2." ]]; then
-          # --prefer-source is needed to ensure that the PHPCS unit test suite is available in PHPCS 2.9.
-          composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --prefer-source --update-no-dev --no-suggest --no-scripts
-      else
-          composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --update-no-dev --no-suggest --no-scripts
-      fi
+    - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --update-no-dev --no-suggest --no-scripts
     - |
       if [[ "$SNIFF" == "1" ]]; then
           composer install --dev --no-suggest
-          # The post-install-cmd script takes care of the installed_paths.
+          # The `dev` required DealerDirect Composer plugin takes care of the installed_paths.
       else
           # The above require already does the install.
           $(pwd)/vendor/bin/phpcs --config-set installed_paths $(pwd)
       fi
-    # Download PHPUnit 5.x for builds on PHP 7 and nightly as the PHPCS
-    # test suite is currently not compatible with PHPUnit 6.x.
-    # Fixed at a very specific PHPUnit version.
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." ]]; then wget -P $PHPUNIT_DIR https://phar.phpunit.de/phpunit-5.7.17.phar && chmod +x $PHPUNIT_DIR/phpunit-5.7.17.phar; fi
-    # Selectively adjust the ini values for the build image to test ini value dependent sniff features.
-    - if [[ "$SHORT_OPEN_TAGS" == "true" ]]; then echo "short_open_tag = On" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
 script:
     # Lint the PHP files against parse errors.
     - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then phpunit --filter WordPress $(pwd)/Test/AllTests.php; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then phpunit --filter WordPress $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} == "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar --filter WordPress $(pwd)/Test/AllTests.php; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} != "5." && ${PHPCS_BRANCH:0:2} != "2." ]]; then php $PHPUNIT_DIR/phpunit-5.7.17.phar  --filter WordPress $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php; fi
+    - phpunit --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
     # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
     # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
     # For the first run, the exit code will be 1 (= all fixable errors fixed).
@@ -108,7 +78,6 @@ script:
     - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-Core; fi
     - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-Docs; fi
     - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-Extra; fi
-    - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress-VIP; fi
     - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then $(pwd)/vendor/bin/phpcs -s ./bin/class-ruleset-test.php --standard=WordPress; fi
     # WordPress Coding Standards.
     # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
@@ -116,14 +85,13 @@ script:
     - if [[ "$SNIFF" == "1" ]]; then $(pwd)/vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1; fi
     # Validate the xml files.
     # @link http://xmlsoft.org/xmllint.html
-    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./*/ruleset.xml; fi
-    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout ./phpcs.xml.dist.sample; fi
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml; fi
+    - if [[ "$SNIFF" == "1" ]]; then xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample; fi
     # Check the code-style consistency of the xml files.
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml"); fi
-    - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./WordPress-VIP/ruleset.xml <(xmllint --format "./WordPress-VIP/ruleset.xml"); fi
     - if [[ "$SNIFF" == "1" ]]; then diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample"); fi
     # Validate the composer.json file.
     # @link https://getcomposer.org/doc/03-cli.md#validate

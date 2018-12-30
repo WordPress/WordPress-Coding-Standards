@@ -7,9 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\NamingConventions;
+namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
@@ -24,7 +24,7 @@ use WordPress\AbstractFunctionParameterSniff;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
- * @since   0.11.0 Extends the WordPress_AbstractFunctionParameterSniff class.
+ * @since   0.11.0 Extends the WordPressCS native `AbstractFunctionParameterSniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class ValidHookNameSniff extends AbstractFunctionParameterSniff {
@@ -163,8 +163,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * Prepare the punctuation regular expression.
 	 *
 	 * Merges the existing regular expression with potentially provided extra word delimiters to allow.
-	 * This is done 'late' and for each found token as otherwise inline `@codingStandardsChangeSetting`
-	 * directives would be ignored.
+	 * This is done 'late' and for each found token as otherwise inline `phpcs:set` directives
+	 * would be ignored.
 	 *
 	 * @return string
 	 */

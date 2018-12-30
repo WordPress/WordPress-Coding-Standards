@@ -129,9 +129,9 @@ $b = function () {
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customNonceVerificationFunctions my_nonce_check
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customSanitizingFunctions sanitize_pc,sanitize_twitter
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customUnslashingSanitizingFunctions do_something
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] my_nonce_check
+// phpcs:set WordPress.Security.NonceVerification customSanitizingFunctions[] sanitize_pc,sanitize_twitter
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[] do_something
 
 function foo_6() {
 
@@ -140,8 +140,8 @@ function foo_6() {
 	my_nonce_check( do_something( $_POST['tweet'] ) ); // OK.
 }
 
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customSanitizingFunctions sanitize_pc
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customUnslashingSanitizingFunctions false
+// phpcs:set WordPress.Security.NonceVerification customSanitizingFunctions[] sanitize_pc
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[]
 
 function foo_7() {
 
@@ -151,8 +151,8 @@ function foo_7() {
 	my_nonce_check( sanitize_twitter( $_POST['tweet'] ) ); // OK.
 }
 
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customNonceVerificationFunctions false
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customSanitizingFunctions false
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
+// phpcs:set WordPress.Security.NonceVerification customSanitizingFunctions[]
 
 function foo_8() {
 

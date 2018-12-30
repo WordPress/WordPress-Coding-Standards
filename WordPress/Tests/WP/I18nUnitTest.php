@@ -7,10 +7,9 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the I18n sniff.
@@ -23,27 +22,7 @@ use WordPress\PHPCSHelper;
 class I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Get a list of CLI values to set before the file is tested.
-	 *
-	 * Used by PHPCS 2.x.
-	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
-	 * @return array
-	 */
-	public function getCliValues( $testFile ) {
-		// Test overruling the text domain from the command line for one test file.
-		if ( 'I18nUnitTest.3.inc' === $testFile ) {
-			PHPCSHelper::set_config_data( 'text_domain', 'something', true );
-		}
-
-		return array();
-	}
-
-	/**
 	 * Set CLI values before the file is tested.
-	 *
-	 * Used by PHPCS 3.x.
 	 *
 	 * @param string                  $testFile The name of the file being tested.
 	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.

@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\NamingConventions;
+namespace WordPressCS\WordPress\Tests\NamingConventions;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -27,7 +27,7 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		$errors = array(
+		return array(
 			2   => 1,
 			5   => 1,
 			8   => 1,
@@ -73,9 +73,16 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 			138 => 1,
 			145 => 1,
 			160 => 1,
+			172 => 2,
+			173 => 1,
+			175 => 1,
+			176 => 1,
+			177 => 1,
+			181 => 1,
+			182 => 1,
+			184 => 1,
+			186 => 1,
 		);
-
-		return $errors;
 	}
 
 	/**

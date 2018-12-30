@@ -129,11 +129,11 @@ echo "This is $PHP_SELF with $HTTP_RAW_POST_DATA"; // Ok.
 /*
  * Unit test whitelisting.
  */
-// @codingStandardsChangeSetting WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist varName,DOMProperty
+// phpcs:set WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist[] varName,DOMProperty
 echo MyClass::$varName; // Ok, whitelisted.
 echo $this->DOMProperty; // Ok, whitelisted.
 echo $object->varName;  // Ok, whitelisted.
-// @codingStandardsChangeSetting WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist false
+// phpcs:set WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist[]
 
 echo $object->varName;  // Bad, no longer whitelisted.
 
@@ -167,3 +167,22 @@ echo ClassName
 		$var_name2
 			// More sillyness.
 			['test'];
+
+class MultiVarDeclarations {
+	public $multiVar1, $multiVar2, // Bad x 2.
+		$multiVar3, // Bad.
+		// Some comment.
+		$multiVar4, // Bad.
+		$multiVar5 = false, // Bad.
+		$multiVar6 = 123, // Bad.
+		$multi_var7 = 'string'; // Ok.
+		
+	public function testMultiGlobalAndStatic() {
+		global $multiGlobal1, $multi_global2, // Bad x 1.
+			$multiGlobal3; // Bad.
+
+		static $multiStatic1, $multi_static2 = false, // Bad x 1.
+			// Comment.
+			$multiStatic3 = ''; // Bad.
+	}
+}

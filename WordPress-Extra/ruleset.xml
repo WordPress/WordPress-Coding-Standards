@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Extra">
-	<description>Best practices beyond core WordPress Coding Standards</description>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Extra" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
 
-	<autoload>./../WordPress/PHPCSAliases.php</autoload>
+	<description>Best practices beyond core WordPress Coding Standards</description>
 
 	<rule ref="WordPress-Core"/>
 
@@ -26,7 +25,9 @@
 	</rule>
 
 	<!-- Duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 -->
+		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594
+		 Note: the "assignment in ternary" part of the sniff is currently not yet covered in
+		 the upstream version. This needs to be pulled first before we can defer to upstream. -->
 	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition"/>
 
 	<!-- More generic PHP best practices.
@@ -42,13 +43,6 @@
 
 	<!-- And yet more best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1143 -->
-	<rule ref="PEAR.Files.IncludingFile"/>
-	<rule ref="PEAR.Files.IncludingFile.UseInclude">
-		<severity>0</severity>
-	</rule>
-	<rule ref="PEAR.Files.IncludingFile.UseIncludeOnce">
-		<severity>0</severity>
-	</rule>
 	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
 		<type>warning</type>
 	</rule>
@@ -62,40 +56,24 @@
 	<!-- Check correct spacing of language constructs. This also ensures that the
 	     above rule for not using brackets with require is fixed correctly.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1153 -->
-	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
+	<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Hook callbacks may not use all params -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
 
 	<!-- Encourage having only one class/interface/trait per file. -->
-	<!-- Once the minimum WPCS PHPCS requirement has gone up to PHPCS 3.1.0, these three sniffs can be
-	     replaced by the more comprehensive Generic.Files.OneObjectStructurePerFile sniff. -->
-	<rule ref="Generic.Files.OneClassPerFile"/>
-	<rule ref="Generic.Files.OneClassPerFile.MultipleFound">
+	<rule ref="Generic.Files.OneObjectStructurePerFile">
 		<type>warning</type>
-		<message>Best practice suggestion: Declare only one class in a file.</message>
-	</rule>
-	<rule ref="Generic.Files.OneInterfacePerFile"/>
-	<rule ref="Generic.Files.OneInterfacePerFile.MultipleFound">
-		<type>warning</type>
-		<message>Best practice suggestion: Declare only one interface in a file.</message>
-	</rule>
-	<rule ref="Generic.Files.OneTraitPerFile"/>
-	<rule ref="Generic.Files.OneTraitPerFile.MultipleFound">
-		<type>warning</type>
-		<message>Best practice suggestion: Declare only one trait in a file.</message>
+		<message>Best practice suggestion: Declare only one class/interface/trait in a file.</message>
 	</rule>
 
 	<!-- Verify modifier keywords for declared methods and properties in classes.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="Squiz.Scope.MethodScope"/>
-	<rule ref="Squiz.Scope.MemberVarScope"/>
+	<rule ref="PSR2.Classes.PropertyDeclaration"/>
 	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
 	<rule ref="PSR2.Methods.MethodDeclaration"/>
-	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
-		<type>warning</type>
-	</rule>
 
 	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
 	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
@@ -164,7 +142,14 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals"/>
 
 	<!-- Check that object instantiations always have braces & are not assigned by reference.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919 -->
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919
+		 Note: there is a similar upstream sniff `PSR12.Classes.ClassInstantiation`, however
+		 that sniff:
+		 - does not cover JS files;
+		 - does not demand parentheses for PHP anonymous classes;
+		 - does not check the whitespace between the class name and the parentheses;
+		 - does not check for PHP new by reference.
+		 For those reasons, the WPCS version should remain. -->
 	<rule ref="WordPress.Classes.ClassInstantiation"/>
 
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1157 -->
