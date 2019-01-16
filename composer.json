@@ -24,7 +24,7 @@
 		"phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
 	},
 	"suggest": {
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
 	},
 	"minimum-stability": "RC",
 	"scripts": {
