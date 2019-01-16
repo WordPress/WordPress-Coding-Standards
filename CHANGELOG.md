@@ -8,6 +8,30 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [2.0.0] - 2019-01-16
+
+### Important information about this release:
+
+WordPressCS 2.0.0 contains breaking changes, both for people using custom rulesets as well as for sniff developers who maintain a custom PHPCS standard based on WordPressCS.
+
+Support for `PHP_CodeSniffer` 2.x has been dropped, the new minimum `PHP_CodeSniffer` version is 3.3.1.
+Also, all previously deprecated sniffs, properties and methods have been removed.
+
+Please read the complete changelog carefully before you upgrade.
+
+If you are a maintainer of an external standard based on WordPressCS and any of your custom sniffs are based on or extend WPCS sniffs, please read the [Developers Upgrade Guide to WordPressCS 2.0.0](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Upgrade-Guide-to-WordPressCS-2.0.0-for-Developers-of-external-standards).
+
+### Changes since 2.0.0-RC1
+
+#### Fixed
+
+- `WordPress-Extra`: Reverted back to including the `Squiz.WhiteSpace.LanguageConstructSpacing` sniff instead of the new `Generic.WhiteSpace.LanguageConstructSpacing` sniff as the new sniff is not (yet) available when the PEAR install of PHPCS is used.
+
+### Changes since 1.2.1
+For a full list of changes from the 1.2.1 version, please review the following changelog:
+* https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/releases/tag/2.0.0-RC1
+
+
 ## [2.0.0-RC1] - 2018-12-31
 
 ### Important information about this release:
@@ -71,7 +95,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 ### Deprecated
 - The use of the [WordPressCS native whitelist comments](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors), which were introduced in WPCS 0.4.0, have been deprecated and support will be removed in WPCS 3.0.0.
     The WordPressCS native whitelist comments will continue to work for now, but a deprecation warning will be thrown when they are encountered.
-    You are encouraged to upgrade our whitelist comment to use the [PHPCS native selective ignore annotations}(https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/3.2.0) as introduced in `PHP_CodeSniffer` 3.2.0, as soon as possible.
+    You are encouraged to upgrade our whitelist comment to use the [PHPCS native selective ignore annotations](https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/3.2.0) as introduced in `PHP_CodeSniffer` 3.2.0, as soon as possible.
 
 ### Removed
 - Support for PHP 5.3. PHP 5.4 is the minimum requirement for `PHP_CodeSniffer` 3.x.
@@ -970,6 +994,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[2.0.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2.0.0-RC1...2.0.0
 [2.0.0-RC1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.2.1...2.0.0-RC1
 [1.2.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.1.0...1.2.0
