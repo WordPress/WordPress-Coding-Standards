@@ -34,9 +34,6 @@
 		"fix-cs": [
 			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
 		],
-		"install-codestandards": [
-			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
-		],
 		"run-tests": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress --bootstrap=\"./vendor/squizlabs/php_codesniffer/tests/bootstrap.php\" ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
 		]
