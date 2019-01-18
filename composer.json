@@ -29,16 +29,16 @@
 	"minimum-stability": "RC",
 	"scripts": {
 		"check-cs": [
-			"@php vendor/bin/phpcs"
+			"@php ./vendor/bin/phpcs"
 		],
 		"fix-cs": [
-			"@php vendor/bin/phpcbf"
+			"@php ./vendor/bin/phpcbf"
 		],
 		"install-codestandards": [
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
 		],
 		"run-tests": [
-			"@php vendor/bin/phpunit --filter WordPress vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+			"@php ./vendor/bin/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
 		]
 	},
 	"support": {
