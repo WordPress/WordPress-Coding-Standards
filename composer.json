@@ -38,7 +38,7 @@
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
 		],
 		"run-tests": [
-			"@php ./vendor/bin/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+			"@php ./vendor/bin/phpunit --filter WordPress --bootstrap ./vendor/squizlabs/php_codesniffer/tests/bootstrap.php ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
 		]
 	},
 	"support": {
