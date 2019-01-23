@@ -188,3 +188,24 @@ if ( isset( $_POST[ 'currentid' ] ) ){
 if ( isset ( $_POST['thisisnotget'] ) ) {
 	$get = (int) $_GET['thisisnotget']; // Bad.
 }
+
+// Recognize PHP native array_key_exists() as validation function.
+if ( array_key_exists( 'my_field1', $_POST ) ) {
+	$id = (int) $_POST['my_field1']; // OK.
+}
+
+if ( \array_key_exists( 'my_field2', $_POST ) ) {
+	$id = (int) $_POST['my_field2']; // OK.
+}
+
+if ( \Some\ClassName\array_key_exists( 'my_field3', $_POST ) ) {
+	$id = (int) $_POST['my_field3']; // Bad.
+}
+
+if ( $obj->array_key_exists( 'my_field4', $_POST ) ) {
+	$id = (int) $_POST['my_field4']; // Bad.
+}
+
+if ( ClassName::array_key_exists( 'my_field5', $_POST ) ) {
+	$id = (int) $_POST['my_field5']; // Bad.
+}
