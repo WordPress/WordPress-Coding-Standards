@@ -1772,6 +1772,10 @@ abstract class Sniff implements PHPCS_Sniff {
 					continue;
 				}
 
+				if ( $this->tokens[ $stackPtr ]['content'] !== $this->tokens[ $i ]['content'] ) {
+					continue;
+				}
+
 				// If we're checking for a specific array key (ex: 'hello' in
 				// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
 				if ( isset( $array_key )

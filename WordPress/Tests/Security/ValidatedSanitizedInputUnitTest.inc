@@ -85,7 +85,7 @@ echo array_map( array( $obj, 'sanitize_text_field' ), wp_unslash( $_GET['test'] 
 $foo = (int) $_POST['foo6']; // Bad.
 
 // Non-assignment checks are OK.
-if ( 'bar' === $_POST['foo'] ) {} // Ok.
+if ( isset( $_POST['foo'] ) && 'bar' === $_POST['foo'] ) {} // Ok.
 if ( $_GET['test'] != 'a' ) {} // Ok.
 if ( 'bar' === do_something( wp_unslash( $_POST['foo'] ) ) ) {} // Bad.
 
@@ -182,4 +182,9 @@ function barfoo() {
 // Issue #1467.
 if ( isset( $_POST[ 'currentid' ] ) ){
             $id = (int) $_POST[ "currentid" ]; // OK.
+}
+
+// Only recognize validation if the correct superglobal is examined.
+if ( isset ( $_POST['thisisnotget'] ) ) {
+	$get = (int) $_GET['thisisnotget']; // Bad.
 }
