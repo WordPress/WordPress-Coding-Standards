@@ -174,6 +174,18 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
+	 * List of all PHP native functions.
+	 *
+	 * Using this list rather than a call to `function_exists()` prevents
+	 * false negatives from user-defined functions when those would be
+	 * autoloaded via a Composer autoload files directives.
+	 *
+	 * @var array
+	 */
+	private $built_in_functions;
+
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.12.0
@@ -181,6 +193,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @return array
 	 */
 	public function register() {
+		// Get a list of all PHP native functions.
+		$all_functions            = get_defined_functions();
+		$this->built_in_functions = array_flip( $all_functions['internal'] );
+
+		// Set the sniff targets.
 		$targets  = array(
 			\T_NAMESPACE => \T_NAMESPACE,
 			\T_FUNCTION  => \T_FUNCTION,
@@ -345,7 +362,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 
 					$item_name = $this->phpcsFile->getDeclarationName( $stackPtr );
-					if ( function_exists( '\\' . $item_name ) ) {
+					if ( isset( $this->built_in_functions[ $item_name ] ) ) {
 						// Backfill for PHP native function.
 						return;
 					}
