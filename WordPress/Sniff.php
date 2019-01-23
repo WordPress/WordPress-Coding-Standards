@@ -1428,9 +1428,11 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a token is inside of an isset() or empty() statement.
+	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
 	 *
 	 * @since 0.5.0
+	 * @since 2.0.1 Now checks for the token being used as the array parameter
+	 *              in function calls to array_key_exists() as well.
 	 *
 	 * @param int $stackPtr The index of the token in the stack.
 	 *
@@ -1448,7 +1450,42 @@ abstract class Sniff implements PHPCS_Sniff {
 		$open_parenthesis = key( $nested_parenthesis );
 
 		$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
-		return in_array( $this->tokens[ $previous_non_empty ]['code'], array( \T_ISSET, \T_EMPTY ), true );
+		if ( false === $previous_non_empty ) {
+			return false;
+		}
+
+		$previous_code = $this->tokens[ $previous_non_empty ]['code'];
+		if ( \T_ISSET === $previous_code || \T_EMPTY === $previous_code ) {
+			return true;
+		}
+
+		if ( \T_STRING === $previous_code && 'array_key_exists' === $this->tokens[ $previous_non_empty ]['content'] ) {
+			$before_function = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $previous_non_empty - 1 ), null, true, null, true );
+
+			if ( false !== $before_function ) {
+				if ( \T_OBJECT_OPERATOR === $this->tokens[ $before_function ]['code']
+					|| \T_DOUBLE_COLON === $this->tokens[ $before_function ]['code']
+				) {
+					// Method call.
+					return false;
+				}
+
+				if ( \T_NS_SEPARATOR === $this->tokens[ $before_function ]['code'] ) {
+					$before_before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $before_function - 1 ), null, true, null, true );
+					if ( false !== $before_before && \T_STRING === $this->tokens[ $before_before ]['code'] ) {
+						// Namespaced function call.
+						return false;
+					}
+				}
+			}
+
+			$second_param = $this->get_function_call_parameter( $previous_non_empty, 2 );
+			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
