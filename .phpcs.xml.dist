@@ -7,18 +7,18 @@
 
 	<arg value="sp"/>
 	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="parallel" value="8"/>
 
 	<exclude-pattern>/bin/class-ruleset-test.php</exclude-pattern>
 	<!-- Exclude Composer vendor directory. -->
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
-	<rule ref="WordPress-Extra">
+	<rule ref="WordPress">
 		<exclude name="WordPress.Files.FileName"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
 		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
 	</rule>
-
-	<rule ref="WordPress-Docs"/>
 
 	<!-- Enforce PSR1 compatible namespaces. -->
 	<rule ref="PSR1.Classes.ClassDeclaration"/>
