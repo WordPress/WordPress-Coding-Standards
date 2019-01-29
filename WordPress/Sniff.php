@@ -770,6 +770,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var string[]
 	 */
 	protected $test_class_whitelist = array(
+		'WP_UnitTestCase_Base'                       => true,
 		'WP_UnitTestCase'                            => true,
 		'WP_Ajax_UnitTestCase'                       => true,
 		'WP_Canonical_UnitTestCase'                  => true,
