@@ -1428,9 +1428,11 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a token is inside of an isset() or empty() statement.
+	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
 	 *
 	 * @since 0.5.0
+	 * @since 2.0.1 Now checks for the token being used as the array parameter
+	 *              in function calls to array_key_exists() as well.
 	 *
 	 * @param int $stackPtr The index of the token in the stack.
 	 *
@@ -1448,7 +1450,42 @@ abstract class Sniff implements PHPCS_Sniff {
 		$open_parenthesis = key( $nested_parenthesis );
 
 		$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
-		return in_array( $this->tokens[ $previous_non_empty ]['code'], array( \T_ISSET, \T_EMPTY ), true );
+		if ( false === $previous_non_empty ) {
+			return false;
+		}
+
+		$previous_code = $this->tokens[ $previous_non_empty ]['code'];
+		if ( \T_ISSET === $previous_code || \T_EMPTY === $previous_code ) {
+			return true;
+		}
+
+		if ( \T_STRING === $previous_code && 'array_key_exists' === $this->tokens[ $previous_non_empty ]['content'] ) {
+			$before_function = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $previous_non_empty - 1 ), null, true, null, true );
+
+			if ( false !== $before_function ) {
+				if ( \T_OBJECT_OPERATOR === $this->tokens[ $before_function ]['code']
+					|| \T_DOUBLE_COLON === $this->tokens[ $before_function ]['code']
+				) {
+					// Method call.
+					return false;
+				}
+
+				if ( \T_NS_SEPARATOR === $this->tokens[ $before_function ]['code'] ) {
+					$before_before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $before_function - 1 ), null, true, null, true );
+					if ( false !== $before_before && \T_STRING === $this->tokens[ $before_before ]['code'] ) {
+						// Namespaced function call.
+						return false;
+					}
+				}
+			}
+
+			$second_param = $this->get_function_call_parameter( $previous_non_empty, 2 );
+			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -1666,7 +1703,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if the existence of a variable is validated with isset() or empty().
+	 * Check if the existence of a variable is validated with isset(), empty() or array_key_exists().
 	 *
 	 * When $in_condition_only is false, (which is the default), this is considered
 	 * valid:
@@ -1689,6 +1726,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * ```
 	 *
 	 * @since 0.5.0
+	 * @since 2.0.1 Now recognizes array_key_exists() as a validation function.
 	 *
 	 * @param int    $stackPtr          The index of this token in the stack.
 	 * @param string $array_key         An array key to check for ("bar" in $foo['bar']).
@@ -1754,36 +1792,94 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		$bare_array_key = $this->strip_quotes( $array_key );
+		$targets        = array(
+			\T_ISSET  => 'construct',
+			\T_EMPTY  => 'construct',
+			\T_UNSET  => 'construct',
+			\T_STRING => 'function_call',
+		);
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
-			if ( ! \in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
+			if ( isset( $targets[ $this->tokens[ $i ]['code'] ] ) === false ) {
 				continue;
 			}
 
-			$issetOpener = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, $i );
-			$issetCloser = $this->tokens[ $issetOpener ]['parenthesis_closer'];
+			switch ( $targets[ $this->tokens[ $i ]['code'] ] ) {
+				case 'construct':
+					$issetOpener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
+					if ( false === $issetOpener || \T_OPEN_PARENTHESIS !== $this->tokens[ $issetOpener ]['code'] ) {
+						// Parse error or live coding.
+						continue 2;
+					}
 
-			// Look for this variable. We purposely stomp $i from the parent loop.
-			for ( $i = ( $issetOpener + 1 ); $i < $issetCloser; $i++ ) {
+					$issetCloser = $this->tokens[ $issetOpener ]['parenthesis_closer'];
 
-				if ( \T_VARIABLE !== $this->tokens[ $i ]['code'] ) {
-					continue;
-				}
+					// Look for this variable. We purposely stomp $i from the parent loop.
+					for ( $i = ( $issetOpener + 1 ); $i < $issetCloser; $i++ ) {
 
-				if ( $this->tokens[ $stackPtr ]['content'] !== $this->tokens[ $i ]['content'] ) {
-					continue;
-				}
+						if ( \T_VARIABLE !== $this->tokens[ $i ]['code'] ) {
+							continue;
+						}
 
-				// If we're checking for a specific array key (ex: 'hello' in
-				// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
-				if ( isset( $array_key )
-					&& $this->strip_quotes( $this->get_array_access_key( $i ) ) !== $bare_array_key ) {
-					continue;
-				}
+						if ( $this->tokens[ $stackPtr ]['content'] !== $this->tokens[ $i ]['content'] ) {
+							continue;
+						}
 
-				return true;
+						// If we're checking for a specific array key (ex: 'hello' in
+						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
+						if ( isset( $array_key )
+							&& $this->strip_quotes( $this->get_array_access_key( $i ) ) !== $bare_array_key ) {
+							continue;
+						}
+
+						return true;
+					}
+
+					break;
+
+				case 'function_call':
+					// Only check calls to array_key_exists().
+					if ( 'array_key_exists' !== $this->tokens[ $i ]['content'] ) {
+						continue 2;
+					}
+
+					$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
+					if ( false === $next_non_empty || \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code'] ) {
+						// Not a function call.
+						continue 2;
+					}
+
+					$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $i - 1 ), null, true, null, true );
+					if ( false !== $previous_non_empty ) {
+						if ( \T_OBJECT_OPERATOR === $this->tokens[ $previous_non_empty ]['code']
+							|| \T_DOUBLE_COLON === $this->tokens[ $previous_non_empty ]['code']
+						) {
+							// Method call.
+							continue 2;
+						}
+
+						if ( \T_NS_SEPARATOR === $this->tokens[ $previous_non_empty ]['code'] ) {
+							$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $previous_non_empty - 1 ), null, true, null, true );
+							if ( false !== $pprev && \T_STRING === $this->tokens[ $pprev ]['code'] ) {
+								// Namespaced function call.
+								continue 2;
+							}
+						}
+					}
+
+					$params = $this->get_function_call_parameters( $i );
+					if ( $params[2]['raw'] !== $this->tokens[ $stackPtr ]['content'] ) {
+						continue 2;
+					}
+
+					if ( isset( $array_key )
+						&& $this->strip_quotes( $params[1]['raw'] ) !== $bare_array_key ) {
+						continue 2;
+					}
+
+					return true;
 			}
 		}
 
