@@ -21,6 +21,7 @@ php:
     - 7.1
     - 7.2
     - 7.3
+    - "7.4snapshot"
     - nightly
 
 env:
@@ -42,6 +43,7 @@ matrix:
 
   allow_failures:
     # Allow failures for unstable builds.
+    - php: "7.4snapshot"
     - php: nightly
 
 before_install:
