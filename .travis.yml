@@ -21,7 +21,7 @@ php:
     - 7.1
     - 7.2
     - 7.3
-    - nightly
+    - "7.4snapshot"
 
 env:
   # `master` is now 3.x.
@@ -42,7 +42,7 @@ matrix:
 
   allow_failures:
     # Allow failures for unstable builds.
-    - php: nightly
+    - php: "7.4snapshot"
 
 before_install:
     # Speed up build time by disabling Xdebug.
@@ -60,12 +60,20 @@ before_install:
           # The above require already does the install.
           $(pwd)/vendor/bin/phpcs --config-set installed_paths $(pwd)
       fi
+    # Download PHPUnit 7.x for builds on PHP >= 7.2 as the PHPCS
+    # test suite is currently not compatible with PHPUnit 8.x.
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then wget -P $PHPUNIT_DIR https://phar.phpunit.de/phpunit-7.phar && chmod +x $PHPUNIT_DIR/phpunit-7.phar; fi
 
 script:
     # Lint the PHP files against parse errors.
     - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
     # Run the unit tests.
-    - phpunit --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+    - |
+      if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then
+        php $PHPUNIT_DIR/phpunit-7.phar --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+      else
+        phpunit --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
+      fi
     # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
     # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
     # For the first run, the exit code will be 1 (= all fixable errors fixed).
