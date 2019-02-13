@@ -30,3 +30,9 @@ $head = <<<'EOD'
 <link rel="stylesheet" href="http://someurl/somefile.css">
 <script src="http://someurl/somefile.js"></script>
 EOD;
+
+?>
+
+jQuery( document ).ready( function() {
+	$('link[rel="stylesheet"]:not([data-inprogress])').forEach(StyleFix.link);
+});

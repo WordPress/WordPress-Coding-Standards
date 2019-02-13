@@ -44,7 +44,7 @@ class EnqueuedResourcesSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( preg_match( '#rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $token['content'] ) > 0 ) {
+		if ( preg_match( '# rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $token['content'] ) > 0 ) {
 			$this->phpcsFile->addError(
 				'Stylesheets must be registered/enqueued via wp_enqueue_style',
 				$stackPtr,
