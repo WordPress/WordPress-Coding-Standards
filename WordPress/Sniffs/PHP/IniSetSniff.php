@@ -135,14 +135,14 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		$ini_set_function = $this->tokens[ $stackPtr ];
 		$option_name      = $this->strip_quotes( $parameters[1]['raw'] );
 		$option_value     = $this->strip_quotes( $parameters[2]['raw'] );
-		if ( array_key_exists( $option_name, $this->whitelisted_options ) ) {
+		if ( isset( $this->whitelisted_options[ $option_name ] ) ) {
 			$whitelisted_option = $this->whitelisted_options[ $option_name ];
 			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( $option_value, $whitelisted_option['valid_values'], true ) ) {
 				return;
 			}
 		}
 
-		if ( array_key_exists( $option_name, $this->blacklisted_options ) ) {
+		if ( isset( $this->blacklisted_options[ $option_name ] ) ) {
 			$blacklisted_option = $this->blacklisted_options[ $option_name ];
 			if ( ! isset( $blacklisted_option['invalid_values'] ) || in_array( $option_value, $blacklisted_option['invalid_values'], true ) ) {
 				$this->phpcsFile->addError(
