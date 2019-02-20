@@ -12,7 +12,7 @@ namespace WordPressCS\WordPress\Tests\PHP;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the DontExtract sniff.
+ * Unit test class for the IniSet sniff.
  *
  * @package WPCS\WordPressCodingStandards
  *
