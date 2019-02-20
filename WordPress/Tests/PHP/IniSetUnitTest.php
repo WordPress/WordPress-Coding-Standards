@@ -29,8 +29,6 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			12 => 1,
-			13 => 1,
 			14 => 1,
 			15 => 1,
 			16 => 1,
@@ -43,7 +41,11 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 			23 => 1,
 			24 => 1,
 			25 => 1,
-			32 => 1,
+			26 => 1,
+			27 => 1,
+			28 => 1,
+			29 => 1,
+			36 => 1,
 		);
 	}
 
@@ -54,10 +56,10 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			27 => 1,
-			28 => 1,
-			29 => 1,
+			31 => 1,
+			32 => 1,
 			33 => 1,
+			37 => 1,
 		);
 	}
 
