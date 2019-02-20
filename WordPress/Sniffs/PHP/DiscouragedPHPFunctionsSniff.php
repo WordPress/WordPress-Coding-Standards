@@ -59,7 +59,6 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => '%s() found. Changing configuration at runtime is rarely necessary.',
 				'functions' => array(
 					'error_reporting',
-					'ini_alter',
 					'ini_restore',
 					'apache_setenv',
 					'putenv',

@@ -14,7 +14,7 @@ rawurlencode(); // Ok.
 
 dl(); // Warning.
 error_reporting(); // Warning.
-ini_alter(); // Warning.
+
 ini_restore(); // Warning.
 magic_quotes_runtime(); // Warning.
 set_magic_quotes_runtime(); // Warning.

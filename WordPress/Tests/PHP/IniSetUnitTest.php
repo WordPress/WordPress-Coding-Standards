@@ -43,6 +43,7 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 			23 => 1,
 			24 => 1,
 			25 => 1,
+			31 => 1,
 		);
 	}
 
@@ -55,6 +56,7 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 		return array(
 			27 => 1,
 			28 => 1,
+			32 => 1,
 		);
 	}
 

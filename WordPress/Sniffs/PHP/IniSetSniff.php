@@ -32,7 +32,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 *     );
 	 */
 	protected $target_functions = array(
-		'ini_set' => array(),
+		'ini_set'   => array(),
+		'ini_alter' => array(),
 	);
 
 	/**
@@ -168,6 +169,5 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 				$parameters[2]['raw'],
 			)
 		);
-		return;
 	}
 }
