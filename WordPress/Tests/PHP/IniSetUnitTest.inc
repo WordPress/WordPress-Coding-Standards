@@ -26,6 +26,7 @@ ini_set('memory_limit', -1); // Error.
 
 ini_set('report_memleaks', true); // Warning.
 ini_set('short_open_tag', 1230); // Warning.
+ini_set($test, 1230); // Warning.
 
 ini_alter('auto_detect_line_endings', true); // Ok.
 ini_alter('display_errors', false); // Error.
