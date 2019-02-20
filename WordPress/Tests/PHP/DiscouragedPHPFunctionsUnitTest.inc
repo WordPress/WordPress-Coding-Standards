@@ -16,7 +16,6 @@ dl(); // Warning.
 error_reporting(); // Warning.
 ini_alter(); // Warning.
 ini_restore(); // Warning.
-ini_set(); // Warning.
 magic_quotes_runtime(); // Warning.
 set_magic_quotes_runtime(); // Warning.
 apache_setenv(); // Warning.

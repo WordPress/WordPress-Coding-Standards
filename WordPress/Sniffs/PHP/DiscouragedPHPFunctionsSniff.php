@@ -61,7 +61,6 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'error_reporting',
 					'ini_alter',
 					'ini_restore',
-					'ini_set',
 					'apache_setenv',
 					'putenv',
 					'set_include_path',
