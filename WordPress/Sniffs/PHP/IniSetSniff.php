@@ -10,7 +10,6 @@
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use \PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Checks use of ini_set function with a blacklist for errors.
@@ -148,7 +147,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
-					'Blacklisted',
+					$this->string_to_errorcode( $option_name . '_Blacklisted' ),
 					array(
 						$ini_set_function['content'],
 						$parameters[1]['raw'],
@@ -159,6 +158,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 		}
+
 		$this->phpcsFile->addWarning(
 			'%s(%s, %s) found. Changing configuration values at runtime is rarely necessary.',
 			$stackPtr,
