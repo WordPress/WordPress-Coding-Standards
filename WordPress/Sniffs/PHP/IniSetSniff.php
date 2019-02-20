@@ -48,15 +48,15 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 *     );
 	 */
 	protected $whitelisted_options = array(
-		'auto_detect_line_endings'=>array(),
-		'highlight.bg'=>array(),
-		'highlight.comment'=>array(),
-		'highlight.default'=>array(),
-		'highlight.html'=>array(),
-		'highlight.keyword'=>array(),
-		'highlight.string'=>array(),
-		'short_open_tag'=>array(
-			'valid_values'=>array('true', '1', 'On')
+		'auto_detect_line_endings' => array(),
+		'highlight.bg'             => array(),
+		'highlight.comment'        => array(),
+		'highlight.default'        => array(),
+		'highlight.html'           => array(),
+		'highlight.keyword'        => array(),
+		'highlight.string'         => array(),
+		'short_open_tag'           => array(
+			'valid_values' => array( 'true', '1', 'On' ),
 		),
 	);
 
@@ -74,45 +74,45 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 *     );
 	 */
 	protected $blacklisted_options = array(
-		'max_execution_time'=>array(
-			'message'=>'Use `set_time_limit()` instead.'
+		'max_execution_time' => array(
+			'message' => 'Use `set_time_limit()` instead.',
 		),
-		'short_open_tag'=>array(
-			'invalid_values'=>array('false', '0', 'Off'),
-			'message'=>'Turning off short_open_tag is prohibited as it might possibily break other plugins.',
+		'short_open_tag' => array(
+			'invalid_values' => array( 'false', '0', 'Off' ),
+			'message'        => 'Turning off short_open_tag is prohibited as it might possibily break other plugins.',
 		),
-		'bcmath.scale'=>array(
-			'message'=>'Use `bcscale()` instead.'
+		'bcmath.scale' => array(
+			'message' => 'Use `bcscale()` instead.',
 		),
-		'display_errors'=>array(
-			'message'=>'Use `WP_DEBUG_DISPLAY` instead.'
+		'display_errors' => array(
+			'message' => 'Use `WP_DEBUG_DISPLAY` instead.',
 		),
-		'error_reporting'=>array(
-			'message'=>'Use `WP_DEBUG` instead.'
+		'error_reporting' => array(
+			'message' => 'Use `WP_DEBUG` instead.',
 		),
-		'filter.default'=>array(
-			'message'=>'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).'
+		'filter.default' => array(
+			'message' => 'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).',
 		),
-		'filter.default_flags'=>array(
-			'message'=>'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).'
+		'filter.default_flags' => array(
+			'message' => 'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).',
 		),
-		'iconv.input_encoding'=>array(
-			'message'=>'PHP < 5.6 only - use `iconv_set_encoding()` instead.'
+		'iconv.input_encoding' => array(
+			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
 		),
-		'iconv.internal_encoding'=>array(
-			'message'=>'PHP < 5.6 only - use `iconv_set_encoding()` instead.'
+		'iconv.internal_encoding' => array(
+			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
 		),
-		'iconv.output_encoding'=>array(
-			'message'=>'PHP < 5.6 only - use `iconv_set_encoding()` instead.'
+		'iconv.output_encoding' => array(
+			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
 		),
-		'ignore_user_abort'=>array(
-			'message'=>'Use `ignore_user_abort()` instead.'
+		'ignore_user_abort' => array(
+			'message' => 'Use `ignore_user_abort()` instead.',
 		),
-		'log_errors'=>array(
-			'message'=>'Use `WP_DEBUG_LOG` instead.'
+		'log_errors' => array(
+			'message' => 'Use `WP_DEBUG_LOG` instead.',
 		),
-		'memory_limit'=>array(
-			'message'=>'Use `wp_raise_memory_limit()` or hook into the filters in that function.'
+		'memory_limit' => array(
+			'message' => 'Use `wp_raise_memory_limit()` or hook into the filters in that function.',
 		),
 	);
 
@@ -130,20 +130,20 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @return void
 	 */
-	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ){
+	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		$ini_set_function = $this->tokens[ $stackPtr ];
-		$option_name = $this->strip_quotes($parameters[1]['raw']);
-		$option_value = $this->strip_quotes($parameters[2]['raw']);
-		if(array_key_exists($option_name, $this->whitelisted_options)){
-			$whitelisted_option = $this->whitelisted_options[$option_name];
-			if(!isset($whitelisted_option['valid_values']) || in_array($option_value, $whitelisted_option['valid_values'], true) ){
+		$option_name      = $this->strip_quotes( $parameters[1]['raw'] );
+		$option_value     = $this->strip_quotes( $parameters[2]['raw'] );
+		if ( array_key_exists( $option_name, $this->whitelisted_options ) ) {
+			$whitelisted_option = $this->whitelisted_options[ $option_name ];
+			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( $option_value, $whitelisted_option['valid_values'], true ) ) {
 				return;
 			}
 		}
 
-		if(array_key_exists($option_name, $this->blacklisted_options)){
-			$blacklisted_option = $this->blacklisted_options[$option_name];
-			if(!isset($blacklisted_option['invalid_values']) || in_array($option_value, $blacklisted_option['invalid_values'], true) ){
+		if ( array_key_exists( $option_name, $this->blacklisted_options ) ) {
+			$blacklisted_option = $this->blacklisted_options[ $option_name ];
+			if ( ! isset( $blacklisted_option['invalid_values'] ) || in_array( $option_value, $blacklisted_option['invalid_values'], true ) ) {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
@@ -152,7 +152,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 						$ini_set_function['content'],
 						$parameters[1]['raw'],
 						$parameters[2]['raw'],
-						$blacklisted_option['message']
+						$blacklisted_option['message'],
 					)
 				);
 				return;
@@ -165,7 +165,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			array(
 				$ini_set_function['content'],
 				$parameters[1]['raw'],
-				$parameters[2]['raw']
+				$parameters[2]['raw'],
 			)
 		);
 		return;
