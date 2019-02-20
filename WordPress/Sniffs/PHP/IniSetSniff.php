@@ -20,14 +20,14 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   x.x.x
+ * @since 2.1.0
  */
 class IniSetSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Array of functions that must be checked.
 	 *
-	 * @since x.x.x
+	 * @since 2.1.0
 	 *
 	 * @var array Multidimensional array with parameter details.
 	 *     $target_functions = array(
@@ -42,7 +42,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Array of PHP configuration options that are allowed to be manipulated.
 	 *
-	 * @since x.x.x
+	 * @since 2.1.0
 	 *
 	 * @var array Multidimensional array with parameter details.
 	 *     $whitelisted_options = array(
@@ -67,7 +67,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Array of PHP configuration options that are not allowed to be manipulated.
 	 *
-	 * @since x.x.x
+	 * @since 2.1.0
 	 *
 	 * @var array Multidimensional array with parameter details.
 	 *     $blacklisted_options = array(
@@ -125,7 +125,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * is found in the blacklist. Warns as 'risky' when the option is not
 	 * found in the whitelist.
 	 *
-	 * @since x.x.x
+	 * @since 2.1.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.
