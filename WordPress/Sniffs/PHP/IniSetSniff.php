@@ -12,7 +12,11 @@ namespace WordPressCS\WordPress\Sniffs\PHP;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
- * Checks use of ini_set function with a blacklist for errors.
+ * Detect use of the `ini_set()` function.
+ *
+ * - Won't throw notices for "safe" ini directives as listed in the whitelist.
+ * - Throws errors for ini directives listed in the blacklist.
+ * - A warning will be thrown in all other cases.
  *
  * @package WPCS\WordPressCodingStandards
  *
@@ -21,7 +25,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 class IniSetSniff extends AbstractFunctionParameterSniff {
 
 	/**
-	 * Array of functions that must be checked
+	 * Array of functions that must be checked.
 	 *
 	 * @since x.x.x
 	 *
@@ -36,7 +40,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Array of options that are allowed to be manipulated
+	 * Array of PHP configuration options that are allowed to be manipulated.
 	 *
 	 * @since x.x.x
 	 *
@@ -61,7 +65,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Array of options that are not allowed to be manipulated
+	 * Array of PHP configuration options that are not allowed to be manipulated.
 	 *
 	 * @since x.x.x
 	 *
@@ -79,7 +83,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		),
 		'short_open_tag' => array(
 			'invalid_values' => array( 'false', '0', 'Off' ),
-			'message'        => 'Turning off short_open_tag is prohibited as it might possibily break other plugins.',
+			'message'        => 'Turning off short_open_tag is prohibited as it can break other plugins.',
 		),
 		'bcmath.scale' => array(
 			'message' => 'Use `bcscale()` instead.',
@@ -91,7 +95,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'message' => 'Use `WP_DEBUG` instead.',
 		),
 		'filter.default' => array(
-			'message' => 'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).',
+			'message' => 'Changing the option value can break other plugins. Use the filter flag constants when calling the Filter functions instead.',
 		),
 		'filter.default_flags' => array(
 			'message' => 'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).',
@@ -149,7 +153,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 					$stackPtr,
 					$this->string_to_errorcode( $option_name . '_Blacklisted' ),
 					array(
-						$ini_set_function['content'],
+						$matched_content,
 						$parameters[1]['raw'],
 						$parameters[2]['raw'],
 						$blacklisted_option['message'],
@@ -164,7 +168,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			$stackPtr,
 			'Risky',
 			array(
-				$ini_set_function['content'],
+				$matched_content,
 				$parameters[1]['raw'],
 				$parameters[2]['raw'],
 			)
