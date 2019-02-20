@@ -50,3 +50,4 @@ file_get_contents(MYABSPATH . 'plugin-file.json'); // Warning.
 file_get_contents( MUPLUGINDIR . 'some-file.xml' ); // OK.
 file_get_contents( plugin_dir_path( __FILE__ ) . 'subfolder/*.conf' ); // OK.
 file_get_contents(WP_Upload_Dir()['path'] . 'subdir/file.inc'); // OK.
+file_get_contents( 'php://input' ); // OK.
