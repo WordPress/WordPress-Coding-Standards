@@ -121,9 +121,10 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Process the parameter of a matched function. Errors if an option
-	 * is found in the blacklist. Warns as 'risky' when the option is not
-	 * found in the whitelist.
+	 * Process the parameter of a matched function.
+	 *
+	 * Errors if an option is found in the blacklist. Warns as
+	 * 'risky' when the option is not found in the whitelist.
 	 *
 	 * @since 2.1.0
 	 *
@@ -135,9 +136,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$ini_set_function = $this->tokens[ $stackPtr ];
-		$option_name      = $this->strip_quotes( $parameters[1]['raw'] );
-		$option_value     = $this->strip_quotes( $parameters[2]['raw'] );
+		$option_name  = $this->strip_quotes( $parameters[1]['raw'] );
+		$option_value = $this->strip_quotes( $parameters[2]['raw'] );
 		if ( isset( $this->whitelisted_options[ $option_name ] ) ) {
 			$whitelisted_option = $this->whitelisted_options[ $option_name ];
 			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( $option_value, $whitelisted_option['valid_values'], true ) ) {

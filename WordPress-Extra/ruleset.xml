@@ -113,6 +113,10 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->
 	<rule ref="WordPress.PHP.StrictComparisons"/>
 
+	<!-- Detect incorrect or risky use of the `ini_set()` function.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1447 -->
+	<rule ref="WordPress.PHP.IniSet"/>
+
 	<!-- Check that in_array() and array_search() use strict comparisons.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/399
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
