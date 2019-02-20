@@ -202,7 +202,13 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					return;
 				}
 
-				unset( $params );
+				$raw_stripped = $this->strip_quotes( $params[1]['raw'] );
+				if ( 'php://input' === $raw_stripped ) {
+					// This is not a file, but the read-only raw data stream from the request body.
+					return;
+				}
+
+				unset( $params, $raw_stripped );
 
 				break;
 		}
