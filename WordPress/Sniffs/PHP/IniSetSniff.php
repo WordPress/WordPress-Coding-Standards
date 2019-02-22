@@ -91,7 +91,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'message' => 'Changing the option value can break other plugins. Use the filter flag constants when calling the Filter functions instead.',
 		),
 		'filter.default_flags' => array(
-			'message' => 'Use the filter flag constants when calling the functions instead (as you will possibly break other plugins if you change this).',
+			'message' => 'Changing the option value can break other plugins. Use the filter flag constants when calling the Filter functions instead.',
 		),
 		'iconv.input_encoding' => array(
 			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
