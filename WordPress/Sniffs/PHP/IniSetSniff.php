@@ -78,13 +78,6 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 *     );
 	 */
 	protected $blacklisted_options = array(
-		'max_execution_time' => array(
-			'message' => 'Use `set_time_limit()` instead.',
-		),
-		'short_open_tag' => array(
-			'invalid_values' => array( 'false', '0', 'Off' ),
-			'message'        => 'Turning off short_open_tag is prohibited as it can break other plugins.',
-		),
 		'bcmath.scale' => array(
 			'message' => 'Use `bcscale()` instead.',
 		),
@@ -115,8 +108,15 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		'log_errors' => array(
 			'message' => 'Use `WP_DEBUG_LOG` instead.',
 		),
+		'max_execution_time' => array(
+			'message' => 'Use `set_time_limit()` instead.',
+		),
 		'memory_limit' => array(
 			'message' => 'Use `wp_raise_memory_limit()` or hook into the filters in that function.',
+		),
+		'short_open_tag' => array(
+			'invalid_values' => array( 'false', '0', 'Off' ),
+			'message'        => 'Turning off short_open_tag is prohibited as it can break other plugins.',
 		),
 	);
 
