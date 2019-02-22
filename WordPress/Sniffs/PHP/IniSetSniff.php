@@ -164,7 +164,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$this->phpcsFile->addWarning(
-			'%s(%s, %s) found. Changing configuration values at runtime is rarely necessary.',
+			'%s(%s, %s) found. Changing configuration values at runtime is strongly discouraged.',
 			$stackPtr,
 			'Risky',
 			array(
