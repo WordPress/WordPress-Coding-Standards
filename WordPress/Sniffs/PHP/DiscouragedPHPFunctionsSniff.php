@@ -56,12 +56,10 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'runtime_configuration' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Changing configuration at runtime is rarely necessary.',
+				'message'   => '%s() found. Changing configuration values at runtime is strongly discouraged.',
 				'functions' => array(
 					'error_reporting',
-					'ini_alter',
 					'ini_restore',
-					'ini_set',
 					'apache_setenv',
 					'putenv',
 					'set_include_path',
