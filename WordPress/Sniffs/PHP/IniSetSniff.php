@@ -60,7 +60,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		'highlight.keyword'        => array(),
 		'highlight.string'         => array(),
 		'short_open_tag'           => array(
-			'valid_values' => array( 'true', '1', 'On' ),
+			'valid_values' => array( 'true', '1', 'on' ),
 		),
 	);
 
@@ -115,7 +115,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'message' => 'Use `wp_raise_memory_limit()` or hook into the filters in that function.',
 		),
 		'short_open_tag' => array(
-			'invalid_values' => array( 'false', '0', 'Off' ),
+			'invalid_values' => array( 'false', '0', 'off' ),
 			'message'        => 'Turning off short_open_tag is prohibited as it can break other plugins.',
 		),
 	);
@@ -140,14 +140,14 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		$option_value = $this->strip_quotes( $parameters[2]['raw'] );
 		if ( isset( $this->whitelisted_options[ $option_name ] ) ) {
 			$whitelisted_option = $this->whitelisted_options[ $option_name ];
-			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( $option_value, $whitelisted_option['valid_values'], true ) ) {
+			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( strtolower( $option_value ), $whitelisted_option['valid_values'], true ) ) {
 				return;
 			}
 		}
 
 		if ( isset( $this->blacklisted_options[ $option_name ] ) ) {
 			$blacklisted_option = $this->blacklisted_options[ $option_name ];
-			if ( ! isset( $blacklisted_option['invalid_values'] ) || in_array( $option_value, $blacklisted_option['invalid_values'], true ) ) {
+			if ( ! isset( $blacklisted_option['invalid_values'] ) || in_array( strtolower( $option_value ), $blacklisted_option['invalid_values'], true ) ) {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
