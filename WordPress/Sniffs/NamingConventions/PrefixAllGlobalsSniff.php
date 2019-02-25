@@ -367,7 +367,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 						return;
 					}
 
-					$error_text = 'Functions declared';
+					$error_text = 'Functions declared in the global namespace';
 					$error_code = 'NonPrefixedFunctionFound';
 					break;
 
@@ -555,7 +555,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$stackPtr,
 			'NonPrefixedVariableFound',
 			array(
-				'Variables defined',
+				'Global variables defined',
 				$variable_name,
 			)
 		);
@@ -705,7 +705,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$is_error,
 			'NonPrefixedVariableFound',
 			array(
-				'Variables defined',
+				'Global variables defined',
 				'$' . $variable_name,
 			)
 		);
