@@ -119,6 +119,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	protected $whitelisted_core_hooks = array(
 		'widget_title'   => true,
 		'add_meta_boxes' => true,
+		'the_content'    => true,
 	);
 
 	/**

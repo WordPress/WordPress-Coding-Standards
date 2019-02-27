@@ -425,3 +425,6 @@ define(
 );
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
+
+// OK: Additional core whitlisted prefixes
+$text = apply_filters( 'the_content', $text );
