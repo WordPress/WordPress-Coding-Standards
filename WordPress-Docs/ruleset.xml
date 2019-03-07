@@ -71,6 +71,8 @@
 		<exclude name="Squiz.Commenting.InlineComment.DocBlock"/>
 		<!-- Excluded to allow /* translators: ... */ comments -->
 		<exclude name="Squiz.Commenting.InlineComment.NotCapital"/>
+		<!-- WP handbook doesn't clarify one way or another, so ignore -->
+		<exclude name="Squiz.Commenting.InlineComment.SpacingAfter"/>
 
 		<!-- Not in Inline Docs standard, and a code smell -->
 		<exclude name="Squiz.Commenting.LongConditionClosingComment"/>
