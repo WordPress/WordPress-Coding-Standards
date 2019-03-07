@@ -273,6 +273,10 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				unset( $first_param );
 
 				break;
+
+			case 'curl_version':
+				// Curl version doesn't actually create a connection.
+				return;
 		}
 
 		if ( ! isset( $this->groups[ $group_name ]['since'] ) ) {
