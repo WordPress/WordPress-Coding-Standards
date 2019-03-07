@@ -66,3 +66,5 @@ $output_stream = fopen( 'php://fd/3', 'w' ); // OK.
 $fp = fopen("php://temp/maxmemory:$fiveMBs", 'r+'); // OK.
 readfile( 'php://filter/resource=http://www.example.com' ); // Warning.
 file_put_contents("php://filter/write=string.rot13/resource=example.txt","Hello World"); // Warning.
+
+curl_version(); // OK.
