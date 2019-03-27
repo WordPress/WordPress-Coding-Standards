@@ -392,6 +392,11 @@
 	<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
+	<!-- Rule: Unless absolutely necessary, loose comparisons should not be used,
+		 as their behaviour can be misleading. -->
+	<rule ref="WordPress.PHP.StrictComparisons"/>
+	<rule ref="WordPress.PHP.StrictInArray"/>
+
 	<!-- Rule: Assignments must not be placed in placed in conditionals.
 		 Note: sniff is a duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
 		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594
