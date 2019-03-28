@@ -1907,22 +1907,14 @@ abstract class Sniff implements PHPCS_Sniff {
 						continue 2;
 					}
 
-					$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $i - 1 ), null, true, null, true );
-					if ( false !== $previous_non_empty ) {
-						if ( \T_OBJECT_OPERATOR === $this->tokens[ $previous_non_empty ]['code']
-							|| \T_DOUBLE_COLON === $this->tokens[ $previous_non_empty ]['code']
-						) {
-							// Method call.
-							continue 2;
-						}
+					if ( $this->is_class_object_call( $i ) === true ) {
+						// Method call.
+						continue 2;
+					}
 
-						if ( \T_NS_SEPARATOR === $this->tokens[ $previous_non_empty ]['code'] ) {
-							$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $previous_non_empty - 1 ), null, true, null, true );
-							if ( false !== $pprev && \T_STRING === $this->tokens[ $pprev ]['code'] ) {
-								// Namespaced function call.
-								continue 2;
-							}
-						}
+					if ( $this->is_token_namespaced( $i ) === true ) {
+						// Namespaced function call.
+						continue 2;
 					}
 
 					$params = $this->get_function_call_parameters( $i );
