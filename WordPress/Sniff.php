@@ -1544,6 +1544,75 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
+	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int   $stackPtr        The index of the token in the stack.
+	 * @param array $valid_functions List of valid function names.
+	 *                               Note: The keys to this array should be the function names
+	 *                               in lowercase. Values are irrelevant.
+	 * @param bool  $global          Optional. Whether to make sure that the function call is
+	 *                               to a global function. If `false`, methods and namespaced
+	 *                               function calls will also be allowed.
+	 *                               Defaults to `true`.
+	 * @param bool  $allow_nested    Optional. Whether to allow for nested function calls within the
+	 *                               call to this function.
+	 *                               I.e. when checking whether a token is within a function call
+	 *                               to `strtolower()`, whether to accept `strtolower( trim( $var ) )`
+	 *                               or only `strtolower( $var )`.
+	 *                               Defaults to `false`.
+	 *
+	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
+	 */
+	protected function is_in_function_call( $stackPtr, $valid_functions, $global = true, $allow_nested = false ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		if ( false === $allow_nested ) {
+			$nested_parenthesis = array_reverse( $nested_parenthesis, true );
+		}
+
+		foreach ( $nested_parenthesis as $open => $close ) {
+
+			$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true, null, true );
+			if ( false === $prev_non_empty || \T_STRING !== $this->tokens[ $prev_non_empty ]['code'] ) {
+				continue;
+			}
+
+			if ( isset( $valid_functions[ strtolower( $this->tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
+				if ( false === $allow_nested ) {
+					// Function call encountered, but not to one of the allowed functions.
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( false === $global ) {
+				return $prev_non_empty;
+			}
+
+			/*
+			 * Now, make sure it is a global function.
+			 */
+			if ( $this->is_class_object_call( $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			if ( $this->is_token_namespaced( $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			return $prev_non_empty;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check if something is only being sanitized.
 	 *
 	 * @since 0.5.0
