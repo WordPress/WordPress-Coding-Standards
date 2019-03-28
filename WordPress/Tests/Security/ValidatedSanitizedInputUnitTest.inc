@@ -209,3 +209,5 @@ if ( $obj->array_key_exists( 'my_field4', $_POST ) ) {
 if ( ClassName::array_key_exists( 'my_field5', $_POST ) ) {
 	$id = (int) $_POST['my_field5']; // Bad.
 }
+
+echo sanitize_text_field (wp_unslash ($_GET['test'])); // OK.
