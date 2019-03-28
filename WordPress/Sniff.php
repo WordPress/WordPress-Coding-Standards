@@ -1460,16 +1460,9 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		if ( \T_STRING === $previous_code && 'array_key_exists' === $this->tokens[ $previous_non_empty ]['content'] ) {
-			if ( $this->is_class_object_call( $previous_non_empty ) === true ) {
-				return false;
-			}
-
-			if ( $this->is_token_namespaced( $previous_non_empty ) === true ) {
-				return false;
-			}
-
-			$second_param = $this->get_function_call_parameter( $previous_non_empty, 2 );
+		$functionPtr = $this->is_in_function_call( $stackPtr, array( 'array_key_exists' => true ) );
+		if ( false !== $functionPtr ) {
+			$second_param = $this->get_function_call_parameter( $functionPtr, 2 );
 			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
 				return true;
 			}
