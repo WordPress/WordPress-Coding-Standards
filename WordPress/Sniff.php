@@ -1572,46 +1572,47 @@ abstract class Sniff implements PHPCS_Sniff {
 			if ( $require_unslash ) {
 				$this->add_unslash_error( $stackPtr );
 			}
+
 			return false;
 		}
 
 		// Get the function that it's in.
 		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-		$function_closer    = end( $nested_parenthesis );
-		$function_opener    = key( $nested_parenthesis );
-		$function           = $this->tokens[ ( $function_opener - 1 ) ];
+		$nested_openers     = array_keys( $nested_parenthesis );
+		$function_opener    = array_pop( $nested_openers );
+		$functionPtr        = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $function_opener - 1 ), null, true, null, true );
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
-		if ( \T_UNSET === $function['code'] ) {
+		if ( \T_UNSET === $this->tokens[ $functionPtr ]['code'] ) {
 			return true;
 		}
 
-		// If this isn't a call to a function, it sure isn't sanitizing function.
-		if ( \T_STRING !== $function['code'] ) {
+		// If this isn't a call to a function, it sure isn't a sanitizing function.
+		if ( \T_STRING !== $this->tokens[ $functionPtr ]['code'] ) {
 			if ( $require_unslash ) {
 				$this->add_unslash_error( $stackPtr );
 			}
+
 			return false;
 		}
 
-		$functionName = $function['content'];
+		$functionName = $this->tokens[ $functionPtr ]['content'];
 
 		// Check if wp_unslash() is being used.
 		if ( 'wp_unslash' === $functionName ) {
 
 			$is_unslashed    = true;
-			$function_closer = prev( $nested_parenthesis );
+			$function_opener = array_pop( $nested_openers );
 
 			// If there is no other function being used, this value is unsanitized.
-			if ( ! $function_closer ) {
+			if ( ! isset( $function_opener ) ) {
 				return false;
 			}
 
-			$function_opener = key( $nested_parenthesis );
-			$functionName    = $this->tokens[ ( $function_opener - 1 ) ]['content'];
+			$functionPtr  = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $function_opener - 1 ), null, true, null, true );
+			$functionName = $this->tokens[ $functionPtr ]['content'];
 
 		} else {
-
 			$is_unslashed = false;
 		}
 
@@ -1619,7 +1620,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( 'array_map' === $functionName ) {
 
 			// Get the first parameter.
-			$callback = $this->get_function_call_parameter( ( $function_opener - 1 ), 1 );
+			$callback = $this->get_function_call_parameter( $functionPtr, 1 );
 
 			if ( ! empty( $callback ) ) {
 				/*
