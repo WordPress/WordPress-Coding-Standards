@@ -312,9 +312,40 @@ abstract class Sniff implements PHPCS_Sniff {
 		'doubleval'    => true,
 		'floatval'     => true,
 		'intval'       => true,
-		'is_array'     => true,
 		'sanitize_key' => true,
 		'sizeof'       => true,
+	);
+
+	/**
+	 * List of PHP native functions to test the type of a variable.
+	 *
+	 * Using these functions is safe in combination with superglobals without
+	 * unslashing or sanitization.
+	 *
+	 * They should, however, not be regarded as unslashing or sanitization functions.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array
+	 */
+	protected $typeTestFunctions = array(
+		'is_array'     => true,
+		'is_bool'      => true,
+		'is_callable'  => true,
+		'is_countable' => true,
+		'is_double'    => true,
+		'is_float'     => true,
+		'is_int'       => true,
+		'is_integer'   => true,
+		'is_iterable'  => true,
+		'is_long'      => true,
+		'is_null'      => true,
+		'is_numeric'   => true,
+		'is_object'    => true,
+		'is_real'      => true,
+		'is_resource'  => true,
+		'is_scalar'    => true,
+		'is_string'    => true,
 	);
 
 	/**
@@ -1372,12 +1403,17 @@ abstract class Sniff implements PHPCS_Sniff {
 			}
 		}
 
-		$in_isset = $this->is_in_isset_or_empty( $stackPtr );
+		$allow_nonce_after = false;
+		if ( $this->is_in_isset_or_empty( $stackPtr )
+			|| $this->is_in_type_test( $stackPtr )
+		) {
+			$allow_nonce_after = true;
+		}
 
-		// We allow for isset( $_POST['var'] ) checks to come before the nonce check.
-		// If this is inside an isset(), check after it as well, all the way to the
-		// end of the scope.
-		if ( $in_isset ) {
+		// We allow for certain actions, such as an isset() check to come before the nonce check.
+		// If this superglobal is inside such a check, look for the nonce after it as well,
+		// all the way to the end of the scope.
+		if ( true === $allow_nonce_after ) {
 			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $tokens[ $start ]['scope_closer'];
 		}
 
@@ -1393,7 +1429,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				// If we have already found an nonce check in this scope, we just
 				// need to check whether it comes before this token. It is OK if the
 				// check is after the token though, if this was only a isset() check.
-				return ( $in_isset || $last['nonce_check'] < $stackPtr );
+				return ( true === $allow_nonce_after || $last['nonce_check'] < $stackPtr );
 			} elseif ( $end <= $last['end'] ) {
 				// If not, we can still go ahead and return false if we've already
 				// checked to the end of the search area.
@@ -1622,6 +1658,24 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if a token is inside of an is_...() statement.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is being type tested.
+	 */
+	protected function is_in_type_test( $stackPtr ) {
+		/*
+		 * Casting the potential integer stack pointer return value to boolean here is fine.
+		 * The return can never be `0` as there will always be a PHP open tag before the
+		 * function call.
+		 */
+		return (bool) $this->is_in_function_call( $stackPtr, $this->typeTestFunctions );
 	}
 
 	/**
