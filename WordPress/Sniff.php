@@ -309,10 +309,13 @@ abstract class Sniff implements PHPCS_Sniff {
 	protected $unslashingSanitizingFunctions = array(
 		'absint'       => true,
 		'boolval'      => true,
+		'count'        => true,
+		'doubleval'    => true,
 		'floatval'     => true,
 		'intval'       => true,
 		'is_array'     => true,
 		'sanitize_key' => true,
+		'sizeof'       => true,
 	);
 
 	/**
