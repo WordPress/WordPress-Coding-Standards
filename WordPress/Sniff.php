@@ -2726,10 +2726,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		if ( false !== $prev
-			&& \T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
-			&& \T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
-		) {
+		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
 			// Namespaced constant of the same name.
 			return false;
 		}
