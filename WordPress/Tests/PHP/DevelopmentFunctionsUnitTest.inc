@@ -32,3 +32,8 @@ phpinfo(); // Ok - within excluded group.
 // phpcs:set WordPress.PHP.DevelopmentFunctions exclude[]
 trigger_error(); // Error.
 phpinfo(); // Error.
+
+Wrapper_Class::var_dump(); // OK, not the native PHP function.
+$wrapper ->var_dump(); // OK, not the native PHP function.
+namespace\var_dump(); // OK as long as the file is namespaced.
+MyNamespace\var_dump(); // OK, namespaced function.
