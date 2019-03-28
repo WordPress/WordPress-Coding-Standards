@@ -1490,6 +1490,71 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
+	 * Check if a particular token is a (static or non-static) call to a class method or property.
+	 *
+	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
+	 * a global function!
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	protected function is_class_object_call( $stackPtr ) {
+		$before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+
+		if ( false === $before ) {
+			return false;
+		}
+
+		if ( \T_OBJECT_OPERATOR !== $this->tokens[ $before ]['code']
+			&& \T_DOUBLE_COLON !== $this->tokens[ $before ]['code']
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace.
+	 *
+	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
+	 * with `namespace\`.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	protected function is_token_namespaced( $stackPtr ) {
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+
+		if ( false === $prev ) {
+			return false;
+		}
+
+		if ( \T_NS_SEPARATOR !== $this->tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		$before_prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+		if ( false === $before_prev ) {
+			return false;
+		}
+
+		if ( \T_STRING !== $this->tokens[ $before_prev ]['code']
+			&& \T_NAMESPACE !== $this->tokens[ $before_prev ]['code']
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Check if something is only being sanitized.
 	 *
 	 * @since 0.5.0
