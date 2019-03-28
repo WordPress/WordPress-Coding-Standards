@@ -211,3 +211,8 @@ if ( ClassName::array_key_exists( 'my_field5', $_POST ) ) {
 }
 
 echo sanitize_text_field (wp_unslash ($_GET['test'])); // OK.
+
+if ( isset( $_GET['unslash_check'] ) ) {
+	$clean = sanitize_text_field( WP_Faker::wp_unslash( $_GET['unslash_check'] ) ); // Bad x1 - unslash.
+	$clean = WP_Faker\sanitize_text_field( wp_unslash( $_GET['unslash_check'] ) ); // Bad x1 - sanitize.
+}

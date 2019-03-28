@@ -1703,9 +1703,16 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		// If this isn't a call to a function, it sure isn't a sanitizing function.
-		if ( \T_STRING !== $this->tokens[ $functionPtr ]['code'] ) {
-			if ( $require_unslash ) {
+		$valid_functions               = $this->sanitizingFunctions;
+		$valid_functions              += $this->unslashingSanitizingFunctions;
+		$valid_functions['wp_unslash'] = true;
+		$valid_functions['array_map']  = true;
+
+		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
+
+		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
+		if ( false === $functionPtr ) {
+			if ( true === $require_unslash ) {
 				$this->add_unslash_error( $stackPtr );
 			}
 
@@ -1717,15 +1724,17 @@ abstract class Sniff implements PHPCS_Sniff {
 		// Check if wp_unslash() is being used.
 		if ( 'wp_unslash' === $functionName ) {
 
-			$is_unslashed    = true;
-			$function_opener = array_pop( $nested_openers );
+			$is_unslashed = true;
 
-			// If there is no other function being used, this value is unsanitized.
-			if ( ! isset( $function_opener ) ) {
+			unset( $valid_functions['wp_unslash'] );
+			$higherFunctionPtr = $this->is_in_function_call( $functionPtr, $valid_functions );
+
+			// If there is no other valid function being used, this value is unsanitized.
+			if ( false === $higherFunctionPtr ) {
 				return false;
 			}
 
-			$functionPtr  = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $function_opener - 1 ), null, true, null, true );
+			$functionPtr  = $higherFunctionPtr;
 			$functionName = $this->tokens[ $functionPtr ]['content'];
 
 		} else {
