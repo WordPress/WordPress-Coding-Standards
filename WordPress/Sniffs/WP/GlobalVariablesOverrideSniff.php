@@ -310,8 +310,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Don't throw false positives for static class properties.
-			$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
-			if ( false !== $previous && \T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
+			if ( $this->is_class_object_call( $ptr ) === true ) {
 				continue;
 			}
 

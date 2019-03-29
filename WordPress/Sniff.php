@@ -1461,23 +1461,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		if ( \T_STRING === $previous_code && 'array_key_exists' === $this->tokens[ $previous_non_empty ]['content'] ) {
-			$before_function = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $previous_non_empty - 1 ), null, true, null, true );
+			if ( $this->is_class_object_call( $previous_non_empty ) === true ) {
+				return false;
+			}
 
-			if ( false !== $before_function ) {
-				if ( \T_OBJECT_OPERATOR === $this->tokens[ $before_function ]['code']
-					|| \T_DOUBLE_COLON === $this->tokens[ $before_function ]['code']
-				) {
-					// Method call.
-					return false;
-				}
-
-				if ( \T_NS_SEPARATOR === $this->tokens[ $before_function ]['code'] ) {
-					$before_before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $before_function - 1 ), null, true, null, true );
-					if ( false !== $before_before && \T_STRING === $this->tokens[ $before_before ]['code'] ) {
-						// Namespaced function call.
-						return false;
-					}
-				}
+			if ( $this->is_token_namespaced( $previous_non_empty ) === true ) {
+				return false;
 			}
 
 			$second_param = $this->get_function_call_parameter( $previous_non_empty, 2 );
@@ -1487,6 +1476,71 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if a particular token is a (static or non-static) call to a class method or property.
+	 *
+	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
+	 * a global function!
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	protected function is_class_object_call( $stackPtr ) {
+		$before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+
+		if ( false === $before ) {
+			return false;
+		}
+
+		if ( \T_OBJECT_OPERATOR !== $this->tokens[ $before ]['code']
+			&& \T_DOUBLE_COLON !== $this->tokens[ $before ]['code']
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace.
+	 *
+	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
+	 * with `namespace\`.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	protected function is_token_namespaced( $stackPtr ) {
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+
+		if ( false === $prev ) {
+			return false;
+		}
+
+		if ( \T_NS_SEPARATOR !== $this->tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		$before_prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+		if ( false === $before_prev ) {
+			return false;
+		}
+
+		if ( \T_STRING !== $this->tokens[ $before_prev ]['code']
+			&& \T_NAMESPACE !== $this->tokens[ $before_prev ]['code']
+		) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -1853,22 +1907,14 @@ abstract class Sniff implements PHPCS_Sniff {
 						continue 2;
 					}
 
-					$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $i - 1 ), null, true, null, true );
-					if ( false !== $previous_non_empty ) {
-						if ( \T_OBJECT_OPERATOR === $this->tokens[ $previous_non_empty ]['code']
-							|| \T_DOUBLE_COLON === $this->tokens[ $previous_non_empty ]['code']
-						) {
-							// Method call.
-							continue 2;
-						}
+					if ( $this->is_class_object_call( $i ) === true ) {
+						// Method call.
+						continue 2;
+					}
 
-						if ( \T_NS_SEPARATOR === $this->tokens[ $previous_non_empty ]['code'] ) {
-							$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $previous_non_empty - 1 ), null, true, null, true );
-							if ( false !== $pprev && \T_STRING === $this->tokens[ $pprev ]['code'] ) {
-								// Namespaced function call.
-								continue 2;
-							}
-						}
+					if ( $this->is_token_namespaced( $i ) === true ) {
+						// Namespaced function call.
+						continue 2;
 					}
 
 					$params = $this->get_function_call_parameters( $i );
@@ -2680,10 +2726,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		if ( false !== $prev
-			&& \T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
-			&& \T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
-		) {
+		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
 			// Namespaced constant of the same name.
 			return false;
 		}
