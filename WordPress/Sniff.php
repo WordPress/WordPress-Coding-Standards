@@ -1815,11 +1815,65 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
+	 * Get the index keys of an array variable.
+	 *
+	 * E.g., "bar" and "baz" in $foo['bar']['baz'].
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int  $stackPtr The index of the variable token in the stack.
+	 * @param bool $all      Whether to get all keys or only the first.
+	 *                       Defaults to `true`(= all).
+	 *
+	 * @return array An array of index keys whose value is being accessed.
+	 *               or an empty array if this is not array access.
+	 */
+	protected function get_array_access_keys( $stackPtr, $all = true ) {
+
+		$keys = array();
+
+		if ( \T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
+			return $keys;
+		}
+
+		$current = $stackPtr;
+
+		do {
+			// Find the next non-empty token.
+			$open_bracket = $this->phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				( $current + 1 ),
+				null,
+				true
+			);
+
+			// If it isn't a bracket, this isn't an array-access.
+			if ( false === $open_bracket
+				|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
+				|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
+			) {
+				break;
+			}
+
+			$key = $this->phpcsFile->getTokensAsString(
+				( $open_bracket + 1 ),
+				( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
+			);
+
+			$keys[]  = trim( $key );
+			$current = $this->tokens[ $open_bracket ]['bracket_closer'];
+		} while ( isset( $this->tokens[ $current ] ) && true === $all );
+
+		return $keys;
+	}
+
+	/**
 	 * Get the index key of an array variable.
 	 *
 	 * E.g., "bar" in $foo['bar'].
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Now uses get_array_access_keys() under the hood.
 	 *
 	 * @param int $stackPtr The index of the token in the stack.
 	 *
@@ -1827,25 +1881,13 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected function get_array_access_key( $stackPtr ) {
 
-		// Find the next non-empty token.
-		$open_bracket = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			( $stackPtr + 1 ),
-			null,
-			true
-		);
+		$keys = $this->get_array_access_keys( $stackPtr, false );
 
-		// If it isn't a bracket, this isn't an array-access.
-		if ( false === $open_bracket || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code'] ) {
-			return false;
+		if ( isset( $keys[0] ) ) {
+			return $keys[0];
 		}
 
-		$key = $this->phpcsFile->getTokensAsString(
-			( $open_bracket + 1 ),
-			( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
-		);
-
-		return trim( $key );
+		return false;
 	}
 
 	/**
