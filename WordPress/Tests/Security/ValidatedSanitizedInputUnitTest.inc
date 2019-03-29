@@ -230,3 +230,30 @@ function test_allow_array_key_exists_alias() {
 	if ( key_exists( 'my_field1', $_POST ) ) {
 	$id = (int) $_POST['my_field1']; // OK.
 }
+
+function test_correct_multi_level_array_validation() {
+	if ( isset( $_POST['toplevel']['sublevel'] ) ) {
+		$id = (int) $_POST['toplevel']; // OK, if a subkey exists, the top level key *must* also exist.
+		$id = (int) $_POST['toplevel']['sublevel']; // OK.
+		$id = (int) $_POST['toplevel']['sublevel']['subsub']; // Bad x1 - validate, this sub has not been validated.
+	}
+
+	if ( array_key_exists( 'bar', $_POST['foo'] ) ) {
+		$id = (int) $_POST['bar']; // Bad x 1 - validate.
+		$id = (int) $_POST['foo']; // OK.
+		$id = (int) $_POST['foo']['bar']; // OK.
+		$id = (int) $_POST['foo']['bar']['baz']; // Bad x 1 - validate.
+	}
+}
+
+function test_correct_multi_level_array_validation_key_order() {
+	if ( isset( $_POST['toplevel']['sublevel'] ) ) {
+		$id = (int) $_POST['sublevel']['toplevel']; // Bad x 1 - validate - key order is wrong.
+	}
+}
+
+function test_invalid_array_key_exists_call() {
+	if ( array_key_exists( 'bar' ) ) {
+		$id = (int) $_POST['bar']; // Bad x 1 - validate.
+	}
+}

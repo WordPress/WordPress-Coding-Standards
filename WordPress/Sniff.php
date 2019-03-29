@@ -1916,17 +1916,20 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.5.0
 	 * @since 2.1.0 Now recognizes array_key_exists() and key_exists() as validation functions.
+	 * @since 2.1.0 Stricter check on whether the correct variable and the correct
+	 *              array keys are being validated.
 	 *
-	 * @param int    $stackPtr          The index of this token in the stack.
-	 * @param string $array_key         An array key to check for ("bar" in $foo['bar']).
-	 * @param bool   $in_condition_only Whether to require that this use of the
-	 *                                  variable occur within the scope of the
-	 *                                  validating condition, or just in the same
-	 *                                  scope as it (default).
+	 * @param int          $stackPtr          The index of this token in the stack.
+	 * @param array|string $array_keys        An array key to check for ("bar" in $foo['bar'])
+	 *                                        or an array of keys for multi-level array access.
+	 * @param bool         $in_condition_only Whether to require that this use of the
+	 *                                        variable occur within the scope of the
+	 *                                        validating condition, or just in the same
+	 *                                        scope as it (default).
 	 *
 	 * @return bool Whether the var is validated.
 	 */
-	protected function is_validated( $stackPtr, $array_key = null, $in_condition_only = false ) {
+	protected function is_validated( $stackPtr, $array_keys = array(), $in_condition_only = false ) {
 
 		if ( $in_condition_only ) {
 			/*
@@ -1977,11 +1980,14 @@ abstract class Sniff implements PHPCS_Sniff {
 			}
 
 			$scope_end = $stackPtr;
-
 		}
 
-		$bare_array_key = $this->strip_quotes( $array_key );
-		$targets        = array(
+		if ( ! empty( $array_keys ) && ! is_array( $array_keys ) ) {
+			$array_keys = (array) $array_keys;
+		}
+
+		$bare_array_keys = array_map( array( $this, 'strip_quotes' ), $array_keys );
+		$targets         = array(
 			\T_ISSET  => 'construct',
 			\T_EMPTY  => 'construct',
 			\T_UNSET  => 'construct',
@@ -2016,11 +2022,15 @@ abstract class Sniff implements PHPCS_Sniff {
 							continue;
 						}
 
-						// If we're checking for a specific array key (ex: 'hello' in
+						// If we're checking for specific array keys (ex: 'hello' in
 						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
-						if ( isset( $array_key )
-							&& $this->strip_quotes( $this->get_array_access_key( $i ) ) !== $bare_array_key ) {
-							continue;
+						if ( ! empty( $bare_array_keys ) ) {
+							$found_keys = $this->get_array_access_keys( $i );
+							$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+							$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
+							if ( ! empty( $diff ) ) {
+								continue;
+							}
 						}
 
 						return true;
@@ -2053,12 +2063,45 @@ abstract class Sniff implements PHPCS_Sniff {
 					}
 
 					$params = $this->get_function_call_parameters( $i );
-					if ( $params[2]['raw'] !== $this->tokens[ $stackPtr ]['content'] ) {
+					if ( count( $params ) < 2 ) {
 						continue 2;
 					}
 
-					if ( isset( $array_key )
-						&& $this->strip_quotes( $params[1]['raw'] ) !== $bare_array_key ) {
+					$param2_first_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, $params[2]['start'], ( $params[2]['end'] + 1 ), true );
+					if ( false === $param2_first_token
+						|| \T_VARIABLE !== $this->tokens[ $param2_first_token ]['code']
+						|| $this->tokens[ $param2_first_token ]['content'] !== $this->tokens[ $stackPtr ]['content']
+					) {
+						continue 2;
+					}
+
+					if ( ! empty( $bare_array_keys ) ) {
+						// Prevent the original array from being altered.
+						$bare_keys = $bare_array_keys;
+						$last_key  = array_pop( $bare_keys );
+
+						/*
+						 * For multi-level array access, the complete set of keys could be split between
+						 * the first and the second parameter, but could also be completely in the second
+						 * parameter, so we need to check both options.
+						 */
+
+						$found_keys = $this->get_array_access_keys( $param2_first_token );
+						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+
+						// First try matching the complete set against the second parameter.
+						$diff = array_diff_assoc( $bare_array_keys, $found_keys );
+						if ( empty( $diff ) ) {
+							return true;
+						}
+
+						// If that failed, try getting an exact match for the subset against the
+						// second parameter and the last key against the first.
+						if ( $bare_keys === $found_keys && $this->strip_quotes( $params[1]['raw'] ) === $last_key ) {
+							return true;
+						}
+
+						// Didn't find the correct array keys.
 						continue 2;
 					}
 
