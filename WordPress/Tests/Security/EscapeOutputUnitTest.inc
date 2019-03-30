@@ -289,3 +289,6 @@ echo esc_html( $something ),
 echo get_the_title(); // Bad.
 echo wp_kses_post( get_the_title() ); // Ok.
 echo esc_html( get_the_title() ); // Ok.
+
+echo implode( '<br>', map_deep( $items, 'esc_html' ) ); // Ok.
+echo implode( '<br>', map_deep( $items, 'foo' ) ); // Bad.
