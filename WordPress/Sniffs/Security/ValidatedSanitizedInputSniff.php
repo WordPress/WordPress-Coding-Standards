@@ -129,12 +129,12 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
-		$error_data = array( $this->tokens[ $stackPtr ]['content'] );
+		$error_data = array( $this->tokens[ $stackPtr ]['content'] . '[' . implode( '][', $array_keys ) . ']' );
 
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_keys, $this->check_validation_in_scope_only ) ) {
 			$this->phpcsFile->addError(
-				'Detected usage of a non-validated input variable: %s',
+				'Detected usage of a possibly undefined superglobal array index: %s. Use isset() or empty() to check the index exists before using it',
 				$stackPtr,
 				'InputNotValidated',
 				$error_data
