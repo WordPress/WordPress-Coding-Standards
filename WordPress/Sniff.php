@@ -2229,12 +2229,24 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Also recognizes `switch ( $var )`.
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Added the $include_coalesce parameter.
 	 *
-	 * @param int $stackPtr The index of this token in the stack.
+	 * @param int  $stackPtr         The index of this token in the stack.
+	 * @param bool $include_coalesce Optional. Whether or not to regard the null
+	 *                               coalesce operator - ?? - as a comparison operator.
+	 *                               Defaults to true.
+	 *                               Null coalesce is a special comparison operator in this
+	 *                               sense as it doesn't compare a variable to whatever is
+	 *                               on the other side of the comparison operator.
 	 *
 	 * @return bool Whether this is a comparison.
 	 */
-	protected function is_comparison( $stackPtr ) {
+	protected function is_comparison( $stackPtr, $include_coalesce = true ) {
+
+		$comparisonTokens = Tokens::$comparisonTokens;
+		if ( false === $include_coalesce ) {
+			unset( $comparisonTokens[ \T_COALESCE ] );
+		}
 
 		// We first check if this is a switch statement (switch ( $var )).
 		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
@@ -2258,7 +2270,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			true
 		);
 
-		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
+		if ( isset( $comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -2281,7 +2293,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			);
 		}
 
-		if ( false !== $next_token && isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+		if ( false !== $next_token && isset( $comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
 			return true;
 		}
 
