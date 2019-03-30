@@ -1321,7 +1321,9 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
-		if ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code'] ) {
+		if ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code']
+			&& isset( $this->tokens[ $next_non_empty ]['bracket_closer'] )
+		) {
 			return $this->is_assignment( $this->tokens[ $next_non_empty ]['bracket_closer'] );
 		}
 
