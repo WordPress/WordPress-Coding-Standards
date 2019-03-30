@@ -252,7 +252,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected $sanitizingFunctions = array(
 		'_wp_handle_upload'          => true,
-		'array_key_exists'           => true,
 		'esc_url_raw'                => true,
 		'filter_input'               => true,
 		'filter_var'                 => true,
@@ -1437,8 +1436,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
 	 *
 	 * @since 0.5.0
-	 * @since 2.0.1 Now checks for the token being used as the array parameter
-	 *              in function calls to array_key_exists() as well.
+	 * @since 2.1.0 Now checks for the token being used as the array parameter
+	 *              in function calls to array_key_exists() and key_exists() as well.
 	 *
 	 * @param int $stackPtr The index of the token in the stack.
 	 *
@@ -1465,7 +1464,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		$functionPtr = $this->is_in_function_call( $stackPtr, array( 'array_key_exists' => true ) );
+		$valid_functions = array(
+			'array_key_exists' => true,
+			'key_exists'       => true, // Alias.
+		);
+
+		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
 		if ( false !== $functionPtr ) {
 			$second_param = $this->get_function_call_parameter( $functionPtr, 2 );
 			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
@@ -1845,7 +1849,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if the existence of a variable is validated with isset(), empty() or array_key_exists().
+	 * Check if the existence of a variable is validated with isset(), empty(), array_key_exists()
+	 * or key_exists().
 	 *
 	 * When $in_condition_only is false, (which is the default), this is considered
 	 * valid:
@@ -1868,7 +1873,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * ```
 	 *
 	 * @since 0.5.0
-	 * @since 2.0.1 Now recognizes array_key_exists() as a validation function.
+	 * @since 2.1.0 Now recognizes array_key_exists() and key_exists() as validation functions.
 	 *
 	 * @param int    $stackPtr          The index of this token in the stack.
 	 * @param string $array_key         An array key to check for ("bar" in $foo['bar']).
@@ -1982,8 +1987,10 @@ abstract class Sniff implements PHPCS_Sniff {
 					break;
 
 				case 'function_call':
-					// Only check calls to array_key_exists().
-					if ( 'array_key_exists' !== $this->tokens[ $i ]['content'] ) {
+					// Only check calls to array_key_exists() and key_exists().
+					if ( 'array_key_exists' !== $this->tokens[ $i ]['content']
+						&& 'key_exists' !== $this->tokens[ $i ]['content']
+					) {
 						continue 2;
 					}
 
