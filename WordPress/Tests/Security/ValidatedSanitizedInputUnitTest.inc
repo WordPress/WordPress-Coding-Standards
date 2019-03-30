@@ -267,3 +267,12 @@ function test_ignoring_is_type_function_calls() {
 	if ( array_key_exists( 'null', $_GET ) && ! is_null( $_GET['null'] ) ) {} // OK.
 	if ( array_key_exists( 'null', $_POST ) && $_POST['null'] !== null ) {} // OK.
 }
+
+function test_additional_array_walking_functions() {
+	if ( ! isset( $_GET['test'] ) ) {
+		return;
+	}
+
+	$sane = map_deep( wp_unslash( $_GET['test'] ), 'sanitize_text_field' ); // Ok.
+	$sane = map_deep( wp_unslash( $_GET['test'] ), 'foo' ); // Bad.
+}

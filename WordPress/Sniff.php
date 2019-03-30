@@ -362,6 +362,25 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
+	 * List of array functions which apply a callback to the array.
+	 *
+	 * These are often used for sanitization/escaping an array variable.
+	 *
+	 * Note: functions which alter the array by reference are not listed here on purpose.
+	 * These cannot easily be used for sanitization as they can't be combined with unslashing.
+	 * Similarly, they cannot be used for late escaping as the return value is a boolean, not
+	 * the altered array.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array <string function name> => <int parameter position of the callback parameter>
+	 */
+	protected $arrayWalkingFunctions = array(
+		'array_map' => 1,
+		'map_deep'  => 2,
+	);
+
+	/**
 	 * Functions that format strings.
 	 *
 	 * These functions are often used for formatting values just before output, and
@@ -1778,8 +1797,8 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$valid_functions               = $this->sanitizingFunctions;
 		$valid_functions              += $this->unslashingSanitizingFunctions;
+		$valid_functions              += $this->arrayWalkingFunctions;
 		$valid_functions['wp_unslash'] = true;
-		$valid_functions['array_map']  = true;
 
 		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
 
@@ -1814,11 +1833,11 @@ abstract class Sniff implements PHPCS_Sniff {
 			$is_unslashed = false;
 		}
 
-		// Arrays might be sanitized via array_map().
-		if ( 'array_map' === $functionName ) {
+		// Arrays might be sanitized via an array walking function using a callback.
+		if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
 
-			// Get the first parameter.
-			$callback = $this->get_function_call_parameter( $functionPtr, 1 );
+			// Get the callback parameter.
+			$callback = $this->get_function_call_parameter( $functionPtr, $this->arrayWalkingFunctions[ $functionName ] );
 
 			if ( ! empty( $callback ) ) {
 				/*
