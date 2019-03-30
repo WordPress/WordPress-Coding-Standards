@@ -133,8 +133,12 @@ class ValidatedSanitizedInputSniff extends Sniff {
 
 		// Check for validation first.
 		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {
-			$this->phpcsFile->addError( 'Detected usage of a non-validated input variable: %s', $stackPtr, 'InputNotValidated', $error_data );
-			// return; // Should we just return and not look for sanitizing functions ?
+			$this->phpcsFile->addError(
+				'Detected usage of a non-validated input variable: %s',
+				$stackPtr,
+				'InputNotValidated',
+				$error_data
+			);
 		}
 
 		if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
@@ -150,7 +154,12 @@ class ValidatedSanitizedInputSniff extends Sniff {
 
 		// Now look for sanitizing functions.
 		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
-			$this->phpcsFile->addError( 'Detected usage of a non-sanitized input variable: %s', $stackPtr, 'InputNotSanitized', $error_data );
+			$this->phpcsFile->addError(
+				'Detected usage of a non-sanitized input variable: %s',
+				$stackPtr,
+				'InputNotSanitized',
+				$error_data
+			);
 		}
 	}
 
