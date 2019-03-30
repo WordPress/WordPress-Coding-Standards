@@ -276,3 +276,16 @@ function test_additional_array_walking_functions() {
 	$sane = map_deep( wp_unslash( $_GET['test'] ), 'sanitize_text_field' ); // Ok.
 	$sane = map_deep( wp_unslash( $_GET['test'] ), 'foo' ); // Bad.
 }
+
+function test_recognize_array_comparison_functions_as_such() {
+	if ( ! isset( $_POST['form_fields'] ) ) {
+		return;
+	}
+
+	if ( isset( $_REQUEST['plugin_status'] ) && in_array( $_REQUEST['plugin_status'], array( 'install', 'update', 'activate' ), true ) ) {} // OK.
+	if ( isset( $_REQUEST['plugin_state'] ) && in_array( $_REQUEST['plugin_state'], $states, true ) ) {} // OK.
+	if ( in_array( 'my_form_hidden_field_value', $_POST['form_fields'], true ) ) {} // OK.
+	if ( array_search( $_POST['form_fields'], 'my_form_hidden_field_value' ) ) {} // OK.
+	if ( array_keys( $_POST['form_fields'], 'my_form_hidden_field_value', true ) ) {} // OK.
+	if ( array_keys( $_POST['form_fields'] ) ) {} // Bad x2.
+}

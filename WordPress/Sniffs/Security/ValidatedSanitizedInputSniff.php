@@ -155,6 +155,11 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
+		// If this is a comparison using the array comparison functions, sanitization isn't needed.
+		if ( $this->is_in_array_comparison( $stackPtr ) ) {
+			return;
+		}
+
 		$this->mergeFunctionLists();
 
 		// Now look for sanitizing functions.

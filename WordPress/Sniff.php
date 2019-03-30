@@ -256,7 +256,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'filter_input'               => true,
 		'filter_var'                 => true,
 		'hash_equals'                => true,
-		'in_array'                   => true,
 		'is_email'                   => true,
 		'number_format'              => true,
 		'sanitize_bookmark_field'    => true,
@@ -378,6 +377,22 @@ abstract class Sniff implements PHPCS_Sniff {
 	protected $arrayWalkingFunctions = array(
 		'array_map' => 1,
 		'map_deep'  => 2,
+	);
+
+	/**
+	 * Array functions to compare a $needle to a predefined set of values.
+	 *
+	 * If the value is set to an integer, the function needs to have at least that
+	 * many parameters for it to be considered as a comparison.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array <string function name> => <true|int>
+	 */
+	protected $arrayCompareFunctions = array(
+		'in_array'     => true,
+		'array_search' => true,
+		'array_keys'   => 2,
 	);
 
 	/**
@@ -2257,6 +2272,34 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		if ( false !== $next_token && isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a token is inside of an array-value comparison function.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is (part of) a parameter to an
+	 *              array-value comparison function.
+	 */
+	protected function is_in_array_comparison( $stackPtr ) {
+		$function_ptr = $this->is_in_function_call( $stackPtr, $this->arrayCompareFunctions, true, true );
+		if ( false === $function_ptr ) {
+			return false;
+		}
+
+		$function_name = $this->tokens[ $function_ptr ]['content'];
+		if ( true === $this->arrayCompareFunctions[ $function_name ] ) {
+			return true;
+		}
+
+		if ( $this->get_function_call_parameter_count( $function_ptr ) >= $this->arrayCompareFunctions[ $function_name ] ) {
 			return true;
 		}
 
