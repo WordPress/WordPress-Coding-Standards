@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Security;
 
 use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
@@ -131,8 +132,37 @@ class ValidatedSanitizedInputSniff extends Sniff {
 
 		$error_data = array( $this->tokens[ $stackPtr ]['content'] . '[' . implode( '][', $array_keys ) . ']' );
 
-		// Check for validation first.
-		if ( ! $this->is_validated( $stackPtr, $array_keys, $this->check_validation_in_scope_only ) ) {
+		/*
+		 * Check for validation first.
+		 */
+		$validated = false;
+
+		for ( $i = ( $stackPtr + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
+			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+				continue;
+			}
+
+			if ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $i ]['code']
+				&& isset( $this->tokens[ $i ]['bracket_closer'] )
+			) {
+				// Skip over array keys.
+				$i = $this->tokens[ $i ]['bracket_closer'];
+				continue;
+			}
+
+			if ( \T_COALESCE === $this->tokens[ $i ]['code'] ) {
+				$validated = true;
+			}
+
+			// Anything else means this is not a validation coalesce.
+			break;
+		}
+
+		if ( false === $validated ) {
+			$validated = $this->is_validated( $stackPtr, $array_keys, $this->check_validation_in_scope_only );
+		}
+
+		if ( false === $validated ) {
 			$this->phpcsFile->addError(
 				'Detected usage of a possibly undefined superglobal array index: %s. Use isset() or empty() to check the index exists before using it',
 				$stackPtr,
