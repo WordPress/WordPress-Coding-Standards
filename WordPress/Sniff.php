@@ -2097,10 +2097,12 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$bare_array_keys = array_map( array( $this, 'strip_quotes' ), $array_keys );
 		$targets         = array(
-			\T_ISSET  => 'construct',
-			\T_EMPTY  => 'construct',
-			\T_UNSET  => 'construct',
-			\T_STRING => 'function_call',
+			\T_ISSET          => 'construct',
+			\T_EMPTY          => 'construct',
+			\T_UNSET          => 'construct',
+			\T_STRING         => 'function_call',
+			\T_COALESCE       => 'coalesce',
+			\T_COALESCE_EQUAL => 'coalesce',
 		);
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
@@ -2214,6 +2216,40 @@ abstract class Sniff implements PHPCS_Sniff {
 						continue 2;
 					}
 
+					return true;
+
+				case 'coalesce':
+					$prev = $i;
+					do {
+						$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+						// Skip over array keys, like $_GET['key']['subkey'].
+						if ( \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $prev ]['code'] ) {
+							$prev = $this->tokens[ $prev ]['bracket_opener'];
+							continue;
+						}
+
+						break;
+					} while ( $prev >= ( $scope_start + 1 ) );
+
+					// We should now have reached the variable.
+					if ( \T_VARIABLE !== $this->tokens[ $prev ]['code'] ) {
+						continue 2;
+					}
+
+					if ( $this->tokens[ $prev ]['content'] !== $this->tokens[ $stackPtr ]['content'] ) {
+						continue 2;
+					}
+
+					if ( ! empty( $bare_array_keys ) ) {
+						$found_keys = $this->get_array_access_keys( $prev );
+						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
+						if ( ! empty( $diff ) ) {
+							continue 2;
+						}
+					}
+
+					// Right variable, correct key.
 					return true;
 			}
 		}
