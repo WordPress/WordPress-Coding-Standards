@@ -1539,6 +1539,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	/**
 	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
 	 *
+	 * This is useful, for instance, when trying to determine the context a variable is used in.
+	 *
+	 * For example: this function could be used to determine if the variable `$foo` is used
+	 * in a global function call to the function `is_foo()`.
+	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
+	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
+	 * the following code `is_bar( $foo, 'some_other_param' )`.
+	 *
 	 * @since 2.1.0
 	 *
 	 * @param int   $stackPtr        The index of the token in the stack.
@@ -1546,8 +1554,10 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                               Note: The keys to this array should be the function names
 	 *                               in lowercase. Values are irrelevant.
 	 * @param bool  $global          Optional. Whether to make sure that the function call is
-	 *                               to a global function. If `false`, methods and namespaced
-	 *                               function calls will also be allowed.
+	 *                               to a global function. If `false`, calls to methods, be it static
+	 *                               `Class::method()` or via an object `$obj->method()`, and
+	 *                               namespaced function calls, like `MyNS\function_name()` will
+	 *                               also be accepted.
 	 *                               Defaults to `true`.
 	 * @param bool  $allow_nested    Optional. Whether to allow for nested function calls within the
 	 *                               call to this function.
