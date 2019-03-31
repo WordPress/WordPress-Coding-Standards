@@ -1984,7 +1984,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		);
 
 		// This might be an opening square bracket in the case of arrays ($var['a']).
-		while ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
+		while ( false !== $next_token && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
 
 			$next_token = $this->phpcsFile->findNext(
 				Tokens::$emptyTokens,
@@ -1994,7 +1994,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			);
 		}
 
-		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+		if ( false !== $next_token && isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
 			return true;
 		}
 
