@@ -189,3 +189,23 @@ function fix_false_negatives_namespaced_function_same_name() {
 	WP_Faker\SecurityBypass\wp_verify_nonce( 'something' );
 	do_something( $_POST['abc'] ); // Bad.
 }
+
+function skip_over_nested_constructs_1() {
+	$b = function () {
+		check_ajax_referer( 'something' ); // Nonce check is not in the same function scope.
+	};
+
+	do_something( $_POST['abc'] ); // Bad.
+}
+
+function skip_over_nested_constructs_2() {
+	if ( $_POST['abc'] === 'test' ) { // Bad.
+		return;
+	}
+
+	$b = new class() {
+		public function named() {
+			check_ajax_referer( 'something' ); // Nonce check is not in the same function scope.
+		}
+	};
+}

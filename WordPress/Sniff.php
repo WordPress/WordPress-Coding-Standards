@@ -1468,6 +1468,16 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Loop through the tokens looking for nonce verification functions.
 		for ( $i = $start; $i < $end; $i++ ) {
+			// Skip over nested closed scope constructs.
+			if ( \T_FUNCTION === $tokens[ $i ]['code']
+				|| \T_CLOSURE === $tokens[ $i ]['code']
+				|| isset( Tokens::$ooScopeTokens[ $tokens[ $i ]['code'] ] )
+			) {
+				if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
+					$i = $tokens[ $i ]['scope_closer'];
+				}
+				continue;
+			}
 
 			// If this isn't a function name, skip it.
 			if ( \T_STRING !== $tokens[ $i ]['code'] ) {
