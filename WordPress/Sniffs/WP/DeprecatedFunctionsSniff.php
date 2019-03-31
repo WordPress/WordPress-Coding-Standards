@@ -579,6 +579,11 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'wp_die()',
 			'version' => '3.0.0',
 		),
+		// Verified version & alternative.
+		'install_blog_defaults' => array(
+			'alt'     => 'wp_install_defaults',
+			'version' => '3.0.0',
+		),
 		'is_main_blog' => array(
 			'alt'     => 'is_main_site()',
 			'version' => '3.0.0',
@@ -1329,6 +1334,16 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_ajax_press_this_save_post' => array(
 			'alt'     => '',
 			'version' => '4.9.0',
+		),
+
+		// WP 5.1.0.
+		'insert_blog' => array(
+			'alt'     => 'wp_insert_site()',
+			'version' => '5.1.0',
+		),
+		'install_blog' => array(
+			'alt'     => '',
+			'version' => '5.1.0',
 		),
 	);
 
