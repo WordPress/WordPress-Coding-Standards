@@ -1462,16 +1462,9 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		if ( \T_STRING === $previous_code && 'array_key_exists' === $this->tokens[ $previous_non_empty ]['content'] ) {
-			if ( $this->is_class_object_call( $previous_non_empty ) === true ) {
-				return false;
-			}
-
-			if ( $this->is_token_namespaced( $previous_non_empty ) === true ) {
-				return false;
-			}
-
-			$second_param = $this->get_function_call_parameter( $previous_non_empty, 2 );
+		$functionPtr = $this->is_in_function_call( $stackPtr, array( 'array_key_exists' => true ) );
+		if ( false !== $functionPtr ) {
+			$second_param = $this->get_function_call_parameter( $functionPtr, 2 );
 			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
 				return true;
 			}
@@ -1543,6 +1536,85 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
+	 *
+	 * This is useful, for instance, when trying to determine the context a variable is used in.
+	 *
+	 * For example: this function could be used to determine if the variable `$foo` is used
+	 * in a global function call to the function `is_foo()`.
+	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
+	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
+	 * the following code `is_bar( $foo, 'some_other_param' )`.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int   $stackPtr        The index of the token in the stack.
+	 * @param array $valid_functions List of valid function names.
+	 *                               Note: The keys to this array should be the function names
+	 *                               in lowercase. Values are irrelevant.
+	 * @param bool  $global          Optional. Whether to make sure that the function call is
+	 *                               to a global function. If `false`, calls to methods, be it static
+	 *                               `Class::method()` or via an object `$obj->method()`, and
+	 *                               namespaced function calls, like `MyNS\function_name()` will
+	 *                               also be accepted.
+	 *                               Defaults to `true`.
+	 * @param bool  $allow_nested    Optional. Whether to allow for nested function calls within the
+	 *                               call to this function.
+	 *                               I.e. when checking whether a token is within a function call
+	 *                               to `strtolower()`, whether to accept `strtolower( trim( $var ) )`
+	 *                               or only `strtolower( $var )`.
+	 *                               Defaults to `false`.
+	 *
+	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
+	 */
+	protected function is_in_function_call( $stackPtr, $valid_functions, $global = true, $allow_nested = false ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		if ( false === $allow_nested ) {
+			$nested_parenthesis = array_reverse( $nested_parenthesis, true );
+		}
+
+		foreach ( $nested_parenthesis as $open => $close ) {
+
+			$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true, null, true );
+			if ( false === $prev_non_empty || \T_STRING !== $this->tokens[ $prev_non_empty ]['code'] ) {
+				continue;
+			}
+
+			if ( isset( $valid_functions[ strtolower( $this->tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
+				if ( false === $allow_nested ) {
+					// Function call encountered, but not to one of the allowed functions.
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( false === $global ) {
+				return $prev_non_empty;
+			}
+
+			/*
+			 * Now, make sure it is a global function.
+			 */
+			if ( $this->is_class_object_call( $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			if ( $this->is_token_namespaced( $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			return $prev_non_empty;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1643,9 +1715,16 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		// If this isn't a call to a function, it sure isn't a sanitizing function.
-		if ( \T_STRING !== $this->tokens[ $functionPtr ]['code'] ) {
-			if ( $require_unslash ) {
+		$valid_functions               = $this->sanitizingFunctions;
+		$valid_functions              += $this->unslashingSanitizingFunctions;
+		$valid_functions['wp_unslash'] = true;
+		$valid_functions['array_map']  = true;
+
+		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
+
+		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
+		if ( false === $functionPtr ) {
+			if ( true === $require_unslash ) {
 				$this->add_unslash_error( $stackPtr );
 			}
 
@@ -1657,15 +1736,17 @@ abstract class Sniff implements PHPCS_Sniff {
 		// Check if wp_unslash() is being used.
 		if ( 'wp_unslash' === $functionName ) {
 
-			$is_unslashed    = true;
-			$function_opener = array_pop( $nested_openers );
+			$is_unslashed = true;
 
-			// If there is no other function being used, this value is unsanitized.
-			if ( ! isset( $function_opener ) ) {
+			unset( $valid_functions['wp_unslash'] );
+			$higherFunctionPtr = $this->is_in_function_call( $functionPtr, $valid_functions );
+
+			// If there is no other valid function being used, this value is unsanitized.
+			if ( false === $higherFunctionPtr ) {
 				return false;
 			}
 
-			$functionPtr  = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $function_opener - 1 ), null, true, null, true );
+			$functionPtr  = $higherFunctionPtr;
 			$functionName = $this->tokens[ $functionPtr ]['content'];
 
 		} else {

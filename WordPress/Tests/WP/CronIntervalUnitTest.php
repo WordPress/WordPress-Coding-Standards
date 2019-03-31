@@ -45,7 +45,6 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 			41  => 1,
 			43  => 1,
 			53  => 1,
-			56  => 1, // False positive.
 			67  => 1,
 			76  => 1,
 			85  => 1,
