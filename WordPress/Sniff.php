@@ -1440,6 +1440,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		$allow_nonce_after = false;
 		if ( $this->is_in_isset_or_empty( $stackPtr )
 			|| $this->is_in_type_test( $stackPtr )
+			|| $this->is_comparison( $stackPtr )
+			|| $this->is_in_array_comparison( $stackPtr )
 		) {
 			$allow_nonce_after = true;
 		}

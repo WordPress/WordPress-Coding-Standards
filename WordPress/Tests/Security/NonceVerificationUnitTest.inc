@@ -209,3 +209,40 @@ function skip_over_nested_constructs_2() {
 		}
 	};
 }
+
+// Issue #1506
+function allow_for_compare_before_noncecheck() {
+	if (
+		'newsletter_sign_up' === $_POST['action'] && // OK.
+		wp_verify_nonce( $_POST['newsletter_nonce'] )
+	) {}
+}
+
+// Issue #1114
+function allow_for_nonce_check_within_switch() {
+	if ( ! isset( $_REQUEST['action'] ) ) {
+		return;
+	}
+
+	switch ( $_REQUEST['action'] ) { // OK.
+		case 'foo':
+			check_admin_referer( 'foo' );
+			break;
+		case 'bar':
+			check_admin_referer( 'bar' );
+			break;
+	}
+}
+
+function allow_for_array_compare_before_noncecheck() {
+	if ( array_search( array( 'subscribe', 'unsubscribe', $_POST['action'], true ) // OK.
+		&& wp_verify_nonce( $_POST['newsletter_nonce'] )
+	) {}
+}
+
+function allow_for_array_comparison_in_condition() {
+	if ( in_array( $_GET['action'], $valid_actions, true ) ) { // OK.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
