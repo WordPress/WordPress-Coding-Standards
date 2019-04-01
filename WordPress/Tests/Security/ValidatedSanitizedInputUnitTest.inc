@@ -216,3 +216,12 @@ if ( isset( $_GET['unslash_check'] ) ) {
 	$clean = sanitize_text_field( WP_Faker::wp_unslash( $_GET['unslash_check'] ) ); // Bad x1 - unslash.
 	$clean = WP_Faker\sanitize_text_field( wp_unslash( $_GET['unslash_check'] ) ); // Bad x1 - sanitize.
 }
+
+function test_more_safe_functions() {
+	if ( ! isset( $_GET['test'] ) ) {
+		return;
+	}
+
+	$float = doubleval( $_GET['test'] ); // OK.
+	$count = count( $_GET['test'] ); // Issue #1659; OK.
+}
