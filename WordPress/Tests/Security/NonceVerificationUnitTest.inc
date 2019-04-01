@@ -17,7 +17,7 @@ function ajax_process() {
 }
 add_action( 'wp_ajax_process', 'ajax_process' );
 
-// It's also OK to check with isset() before the the nonce check.
+// It's also OK to check with isset() before the nonce check.
 function foo() {
 	if ( ! isset( $_POST['test'] ) || ! wp_verify_nonce( 'some_action' ) ) {
 		exit;
@@ -159,4 +159,22 @@ function foo_8() {
 	do_something( $_POST['foo'] ); // Bad.
 	sanitize_pc( $_POST['bar'] ); // Bad.
 	my_nonce_check( sanitize_twitter( $_POST['tweet'] ) ); // Bad.
+}
+
+/*
+ * Using a superglobal in a is_...() function is OK as long as a nonce check is done
+ * before the variable is *really* used.
+ */
+function test_whitelisting_use_in_type_test_functions() {
+	if ( ! is_numeric ( $_POST['foo'] ) ) { // OK.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function test_incorrect_use_in_type_test_functions() {
+	if ( ! is_numeric ( $_POST['foo'] ) ) { // Bad.
+		return;
+	}
 }

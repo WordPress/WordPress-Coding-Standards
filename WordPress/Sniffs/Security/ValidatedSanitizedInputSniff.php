@@ -145,6 +145,11 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
+		// If this variable is being tested with one of the `is_..()` functions, sanitization isn't needed.
+		if ( $this->is_in_type_test( $stackPtr ) ) {
+			return;
+		}
+
 		// If this is a comparison ('a' == $_POST['foo']), sanitization isn't needed.
 		if ( $this->is_comparison( $stackPtr ) ) {
 			return;

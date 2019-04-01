@@ -257,3 +257,13 @@ function test_invalid_array_key_exists_call() {
 		$id = (int) $_POST['bar']; // Bad x 1 - validate.
 	}
 }
+
+function test_ignoring_is_type_function_calls() {
+	// Usage within variable type tests does not need unslashing or sanitization.
+	if ( isset( $_POST[ $key ] ) && is_numeric( $_POST[ $key ] ) ) {} // OK.
+	if ( isset($_POST['plugin']) && is_string( $_POST['plugin'] ) ) {} // OK.
+
+	if ( ! is_null( $_GET['not_set'] ) ) {} // Bad x1 - missing validation.
+	if ( array_key_exists( 'null', $_GET ) && ! is_null( $_GET['null'] ) ) {} // OK.
+	if ( array_key_exists( 'null', $_POST ) && $_POST['null'] !== null ) {} // OK.
+}
