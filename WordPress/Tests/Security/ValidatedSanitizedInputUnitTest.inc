@@ -225,3 +225,8 @@ function test_more_safe_functions() {
 	$float = doubleval( $_GET['test'] ); // OK.
 	$count = count( $_GET['test'] ); // Issue #1659; OK.
 }
+
+function test_allow_array_key_exists_alias() {
+	if ( key_exists( 'my_field1', $_POST ) ) {
+	$id = (int) $_POST['my_field1']; // OK.
+}
