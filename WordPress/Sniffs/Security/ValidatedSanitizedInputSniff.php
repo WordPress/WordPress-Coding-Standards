@@ -123,16 +123,16 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
-		$array_key = $this->get_array_access_key( $stackPtr );
+		$array_keys = $this->get_array_access_keys( $stackPtr );
 
-		if ( empty( $array_key ) ) {
+		if ( empty( $array_keys ) ) {
 			return;
 		}
 
 		$error_data = array( $this->tokens[ $stackPtr ]['content'] );
 
 		// Check for validation first.
-		if ( ! $this->is_validated( $stackPtr, $array_key, $this->check_validation_in_scope_only ) ) {
+		if ( ! $this->is_validated( $stackPtr, $array_keys, $this->check_validation_in_scope_only ) ) {
 			$this->phpcsFile->addError(
 				'Detected usage of a non-validated input variable: %s',
 				$stackPtr,
