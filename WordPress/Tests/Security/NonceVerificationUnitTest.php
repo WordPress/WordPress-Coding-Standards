@@ -49,6 +49,8 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			177 => 1,
 			185 => 1,
 			190 => 1,
+			198 => 1,
+			202 => 1,
 		);
 	}
 
