@@ -178,3 +178,14 @@ function test_incorrect_use_in_type_test_functions() {
 		return;
 	}
 }
+
+function fix_false_negatives_userland_method_same_name() {
+	WP_Faker::check_ajax_referer( 'something' );
+	$faker->check_admin_referer( 'something' );
+	do_something( $_POST['abc'] ); // Bad.
+}
+
+function fix_false_negatives_namespaced_function_same_name() {
+	WP_Faker\SecurityBypass\wp_verify_nonce( 'something' );
+	do_something( $_POST['abc'] ); // Bad.
+}

@@ -1457,6 +1457,17 @@ abstract class Sniff implements PHPCS_Sniff {
 
 			// If this is one of the nonce verification functions, we can bail out.
 			if ( isset( $this->nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
+				/*
+				 * Now, make sure it is a call to a global function.
+				 */
+				if ( $this->is_class_object_call( $i ) === true ) {
+					continue;
+				}
+
+				if ( $this->is_token_namespaced( $i ) === true ) {
+					continue;
+				}
+
 				$last['nonce_check'] = $i;
 				return true;
 			}
