@@ -246,3 +246,21 @@ function allow_for_array_comparison_in_condition() {
 		foo();
 	}
 }
+
+# Issue #572.
+function allow_for_unslash_before_noncecheck_but_demand_noncecheck() {
+	$var = wp_unslash( $_POST['foo'] ); // Bad.
+	echo $var;
+}
+
+function allow_for_unslash_before_noncecheck() {
+	$var = stripslashes_from_strings_only( $_POST['foo'] ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}
+
+function allow_for_unslash_in_sanitization() {
+	$var = sanitize_text_field( wp_unslash( $_POST['foo'] ) ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}
