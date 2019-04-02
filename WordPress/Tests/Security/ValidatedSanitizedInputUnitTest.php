@@ -54,6 +54,7 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			138 => 1,
 			150 => 2,
 			160 => 2,
+			164 => 2,
 			189 => 1,
 			202 => 1,
 			206 => 1,
@@ -68,6 +69,16 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			266 => 1,
 			277 => 1,
 			290 => 2,
+			300 => 1,
+			305 => 2,
+			306 => 2,
+			307 => 2,
+			309 => 2,
+			310 => 2,
+			311 => 2,
+			315 => 2,
+			317 => 1,
+			323 => 1,
 		);
 	}
 

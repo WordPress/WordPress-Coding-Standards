@@ -161,7 +161,7 @@ some string {$_POST[some_var]} {$_GET['evil']}
 EOD
 ); // Bad x2.
 
-if ( ( $_POST['foo'] ?? 'post' ) === 'post' ) {} // OK.
+if ( ( $_POST['foo'] ?? 'post' ) === 'post' ) {} // Bad x2 - unslash, sanitize - more complex compares are not handled.
 if ( ( $_POST['foo'] <=> 'post' ) === 0 ) {} // OK.
 
 // Test whitespace independent isset/empty detection.
@@ -288,4 +288,37 @@ function test_recognize_array_comparison_functions_as_such() {
 	if ( array_search( $_POST['form_fields'], 'my_form_hidden_field_value' ) ) {} // OK.
 	if ( array_keys( $_POST['form_fields'], 'my_form_hidden_field_value', true ) ) {} // OK.
 	if ( array_keys( $_POST['form_fields'] ) ) {} // Bad x2.
+}
+
+/*
+ * Test recognition of validation via null coalesce, while still checking the var for sanitization.
+ */
+function test_null_coalesce_1() {
+	$var = sanitize_text_field( wp_unslash( $_POST['foo'] ?? '' ) ); // OK.
+	$var = sanitize_text_field( wp_unslash( $_POST['fool'] ?? $_POST['secondary'] ?? '' ) ); // OK.
+	$var = sanitize_text_field( wp_unslash( $_POST['bar']['sub'] ?? '' ) ); // OK.
+	$var = sanitize_text_field( $_POST['foobar'] ?? '' ); // Bad x1 - unslash.
+}
+
+// The below two sets should give the same errors.
+function test_null_coalesce_2() {
+	$var = $_POST['foo'] ?? ''; // Bad x2 - sanitize + unslash.
+	$var = $_POST['bar']['sub'] ?? ''; // Bad x2 - sanitize + unslash.
+	$var = ( $_POST['foobar']['sub'] ?? '' ); // Bad x2 - sanitize + unslash.
+
+	$var = isset( $_POST['_foo'] ) ? $_POST['_foo'] : ''; // Bad x2 - sanitize + unslash.
+	$var = isset( $_POST['_bar']['_sub'] ) ? $_POST['_bar']['_sub'] : ''; // Bad x2 - sanitize + unslash.
+	$var = ( isset( $_POST['_foobar']['_sub'] ) ? $_POST['_foobar']['_sub'] : '' ); // Bad x2 - sanitize + unslash.
+}
+
+function test_null_coalesce_validation() {
+	$_POST['key'] = $_POST['key'] ?? 'default'; // OK, assignment & Bad x2 - unslash, sanitize.
+	$key            = sanitize_text_field( wp_unslash( $_POST['key'] ) ); // OK, validated via null coalesce.
+	$another_key    = sanitize_text_field( wp_unslash( $_POST['another_key'] ) ); // Bad, not validated, different key.
+}
+
+function test_null_coalesce_equals_validation() {
+	$_POST['key'] ??= 'default'; // OK, assignment.
+	$key            = sanitize_text_field( wp_unslash( $_POST['key'] ) ); // OK, validated via null coalesce equals.
+	$another_key    = sanitize_text_field( wp_unslash( $_POST['another_key'] ) ); // Bad, not validated, different key.
 }

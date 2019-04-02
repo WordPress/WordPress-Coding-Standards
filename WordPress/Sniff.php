@@ -2099,10 +2099,12 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$bare_array_keys = array_map( array( $this, 'strip_quotes' ), $array_keys );
 		$targets         = array(
-			\T_ISSET  => 'construct',
-			\T_EMPTY  => 'construct',
-			\T_UNSET  => 'construct',
-			\T_STRING => 'function_call',
+			\T_ISSET          => 'construct',
+			\T_EMPTY          => 'construct',
+			\T_UNSET          => 'construct',
+			\T_STRING         => 'function_call',
+			\T_COALESCE       => 'coalesce',
+			\T_COALESCE_EQUAL => 'coalesce',
 		);
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
@@ -2217,6 +2219,40 @@ abstract class Sniff implements PHPCS_Sniff {
 					}
 
 					return true;
+
+				case 'coalesce':
+					$prev = $i;
+					do {
+						$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+						// Skip over array keys, like $_GET['key']['subkey'].
+						if ( \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $prev ]['code'] ) {
+							$prev = $this->tokens[ $prev ]['bracket_opener'];
+							continue;
+						}
+
+						break;
+					} while ( $prev >= ( $scope_start + 1 ) );
+
+					// We should now have reached the variable.
+					if ( \T_VARIABLE !== $this->tokens[ $prev ]['code'] ) {
+						continue 2;
+					}
+
+					if ( $this->tokens[ $prev ]['content'] !== $this->tokens[ $stackPtr ]['content'] ) {
+						continue 2;
+					}
+
+					if ( ! empty( $bare_array_keys ) ) {
+						$found_keys = $this->get_array_access_keys( $prev );
+						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
+						if ( ! empty( $diff ) ) {
+							continue 2;
+						}
+					}
+
+					// Right variable, correct key.
+					return true;
 			}
 		}
 
@@ -2231,12 +2267,24 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Also recognizes `switch ( $var )`.
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Added the $include_coalesce parameter.
 	 *
-	 * @param int $stackPtr The index of this token in the stack.
+	 * @param int  $stackPtr         The index of this token in the stack.
+	 * @param bool $include_coalesce Optional. Whether or not to regard the null
+	 *                               coalesce operator - ?? - as a comparison operator.
+	 *                               Defaults to true.
+	 *                               Null coalesce is a special comparison operator in this
+	 *                               sense as it doesn't compare a variable to whatever is
+	 *                               on the other side of the comparison operator.
 	 *
 	 * @return bool Whether this is a comparison.
 	 */
-	protected function is_comparison( $stackPtr ) {
+	protected function is_comparison( $stackPtr, $include_coalesce = true ) {
+
+		$comparisonTokens = Tokens::$comparisonTokens;
+		if ( false === $include_coalesce ) {
+			unset( $comparisonTokens[ \T_COALESCE ] );
+		}
 
 		// We first check if this is a switch statement (switch ( $var )).
 		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
@@ -2260,7 +2308,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			true
 		);
 
-		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
+		if ( isset( $comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -2283,7 +2331,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			);
 		}
 
-		if ( false !== $next_token && isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+		if ( false !== $next_token && isset( $comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
 			return true;
 		}
 
