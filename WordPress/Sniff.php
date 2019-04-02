@@ -316,6 +316,19 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
+	 * Functions which unslash the data passed to them.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array
+	 */
+	protected $unslashingFunctions = array(
+		'stripslashes_deep'              => true,
+		'stripslashes_from_strings_only' => true,
+		'wp_unslash'                     => true,
+	);
+
+	/**
 	 * List of PHP native functions to test the type of a variable.
 	 *
 	 * Using these functions is safe in combination with superglobals without
@@ -1801,8 +1814,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.5.0
 	 *
 	 * @param int  $stackPtr        The index of the token in the stack.
-	 * @param bool $require_unslash Whether to give an error if wp_unslash() isn't
-	 *                              used on the variable before sanitization.
+	 * @param bool $require_unslash Whether to give an error if no unslashing function
+	 *                              is used on the variable before sanitization.
 	 *
 	 * @return bool Whether the token being sanitized.
 	 */
@@ -1833,10 +1846,10 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		$valid_functions               = $this->sanitizingFunctions;
-		$valid_functions              += $this->unslashingSanitizingFunctions;
-		$valid_functions              += $this->arrayWalkingFunctions;
-		$valid_functions['wp_unslash'] = true;
+		$valid_functions  = $this->sanitizingFunctions;
+		$valid_functions += $this->unslashingSanitizingFunctions;
+		$valid_functions += $this->unslashingFunctions;
+		$valid_functions += $this->arrayWalkingFunctions;
 
 		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
 
@@ -1851,12 +1864,15 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$functionName = $this->tokens[ $functionPtr ]['content'];
 
-		// Check if wp_unslash() is being used.
-		if ( 'wp_unslash' === $functionName ) {
+		// Check if an unslashing function is being used.
+		if ( isset( $this->unslashingFunctions[ $functionName ] ) ) {
 
 			$is_unslashed = true;
 
-			unset( $valid_functions['wp_unslash'] );
+			// Remove the unslashing functions.
+			$valid_functions = array_diff_key( $valid_functions, $this->unslashingFunctions );
+
+			// Check is any of the remaining (sanitizing) functions is used.
 			$higherFunctionPtr = $this->is_in_function_call( $functionPtr, $valid_functions );
 
 			// If there is no other valid function being used, this value is unsanitized.
@@ -1909,7 +1925,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Add an error for missing use of wp_unslash().
+	 * Add an error for missing use of unslashing.
 	 *
 	 * @since 0.5.0
 	 *
@@ -1918,7 +1934,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	public function add_unslash_error( $stackPtr ) {
 
 		$this->phpcsFile->addError(
-			'Missing wp_unslash() before sanitization.',
+			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
 			$stackPtr,
 			'MissingUnslash',
 			array( $this->tokens[ $stackPtr ]['content'] )

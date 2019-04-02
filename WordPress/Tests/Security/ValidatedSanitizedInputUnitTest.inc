@@ -322,3 +322,12 @@ function test_null_coalesce_equals_validation() {
 	$key            = sanitize_text_field( wp_unslash( $_POST['key'] ) ); // OK, validated via null coalesce equals.
 	$another_key    = sanitize_text_field( wp_unslash( $_POST['another_key'] ) ); // Bad, not validated, different key.
 }
+
+function test_using_different_unslashing_functions() {
+	if ( ! isset( $_GET['test'] ) ) {
+		return;
+	}
+
+	$sane = sanitize_text_field(stripslashes_deep($_GET['test'])); // Ok.
+	$sane = sanitize_text_field( stripslashes_from_strings_only( $_GET['test'] ) ); // OK.
+}
