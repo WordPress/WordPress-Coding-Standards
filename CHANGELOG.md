@@ -15,7 +15,8 @@ _No documentation available about unreleased changes as of yet._
     This sniff will detect calls to `ini_set()` and `ini_alter()` and warn against their use as changing configuration values at runtime leads to an unpredictable runtime environment, which can result in conflicts between core/plugins/themes.
     - The sniff will not throw notices about a very limited set of "safe" ini directives.
     - For a number of ini directives for which there are alternative, non-conflicting ways to achieve the same available, the sniff will throw an `error` and advise using the alternative.
-- `doubleval()`, `count()` and `sizeof()` to the list of functions which unslash and sanitize `Sniff::$unslashingSanitizingFunctions`.
+- `doubleval()`, `count()` and `sizeof()` to `Sniff::$unslashingSanitizingFunctions` property.
+    While `count()` and its alias `sizeof()`, don't actually unslash or sanitize, the output of these functions is safe to use without unslashing or sanitizing.
     This affects the `WordPress.Security.ValidatedSanitizedInput` and the `WordPress.Security.NonceVerification` sniffs.
 - The new WP 5.1 `WP_UnitTestCase_Base` class to the `Sniff::$test_class_whitelist` property.
 - New `Sniff::get_array_access_keys()` utility method to retrieve all array keys for a variable using multi-level array access.
