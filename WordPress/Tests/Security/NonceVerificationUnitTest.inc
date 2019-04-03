@@ -264,3 +264,14 @@ function allow_for_unslash_in_sanitization() {
 	wp_verify_nonce( $var );
 	echo $var;
 }
+
+function dont_allow_bypass_nonce_via_sanitization() {
+	$var = sanitize_text_field( $_POST['foo'] ); // Bad.
+	echo $var;
+}
+
+function dont_allow_bypass_nonce_via_sanitization() {
+	$var = sanitize_text_field( $_POST['foo'] ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}

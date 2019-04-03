@@ -1456,6 +1456,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			|| $this->is_comparison( $stackPtr )
 			|| $this->is_in_array_comparison( $stackPtr )
 			|| $this->is_in_function_call( $stackPtr, $this->unslashingFunctions ) !== false
+			|| $this->is_only_sanitized( $stackPtr )
 		) {
 			$allow_nonce_after = true;
 		}
