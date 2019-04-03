@@ -8,6 +8,81 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [2.1.0] - 2019-04-08
+
+### Added
+- New `WordPress.PHP.IniSet` sniff to the `WordPress-Extra` ruleset.
+    This sniff will detect calls to `ini_set()` and `ini_alter()` and warn against their use as changing configuration values at runtime leads to an unpredictable runtime environment, which can result in conflicts between core/plugins/themes.
+    - The sniff will not throw notices about a very limited set of "safe" ini directives.
+    - For a number of ini directives for which there are alternative, non-conflicting ways to achieve the same available, the sniff will throw an `error` and advise using the alternative.
+- `doubleval()`, `count()` and `sizeof()` to the list of functions which unslash and sanitize `Sniff::$unslashingSanitizingFunctions`.
+    This affects the `WordPress.Security.ValidatedSanitizedInput` and the `WordPress.Security.NonceVerification` sniffs.
+- The new WP 5.1 `WP_UnitTestCase_Base` class to the `Sniff::$test_class_whitelist` property.
+- New `Sniff::get_array_access_keys()` utility method to retrieve all array keys for a variable using multi-level array access.
+- New `Sniff::is_class_object_call()`, `Sniff::is_token_namespaced()` utility methods.
+    These should help make the checking of whether or not a function call is a global function, method call or a namespaced function call more consistent.
+	This also implements allowing for the [namespace keyword being used as an operator](https://www.php.net/manual/en/language.namespaces.nsconstants.php#example-258).
+- New `Sniff::is_in_function_call()` utility method to facilitate checking whether a token is (part of) a parameter passed to a specific (set of) function(s).
+- New `Sniff::is_in_type_test()` utility method to determine if a variable is being type tested, along with a `Sniff::$typeTestFunctions` property containing the names of the functions this applies to.
+- New `Sniff::is_in_array_comparison()` utility method to determine if a variable is (part of) a parameter in an array-value comparison, along with a `Sniff::$arrayCompareFunctions` property containing the names of the relevant functions.
+- New `Sniff::$arrayWalkingFunctions` property containing the names of array functions which apply a callback to the array, but don't change the array by reference.
+- New `Sniff::$unslashingFunctions` property containing the names of functions which unslash data passed to them and return the unslashed result.
+
+### Changed
+- Moved the `WordPress.PHP.StrictComparisons`, `WordPress.PHP.StrictInArray` and the `WordPress.CodeAnalysis.AssignmentInCondition` sniff from the `WordPress-Extra` to the `WordPress-Core` ruleset.
+- The `Squiz.Commenting.InlineComment.SpacingAfter` error is no longer included in the `WordPress-Docs` ruleset.
+- The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `4.8`.
+- The `WordPress.WP.DeprecatedFunctions` sniff will now detect functions deprecated in WP 5.1.
+- The `WordPress.Security.NonceVerification` sniff now allows for variable type testing, comparisons, unslashing and sanitization before the nonce check. A nonce check within the same scope, however, is still required.
+- The `WordPress.Security.ValidatedSanitizedInput` sniff now allows for using a superglobal in an array-value comparison without sanitization, same as when the superglobal is used in a scalar value comparison.
+- `WordPress.NamingConventions.PrefixAllGlobals`: some of the error messages have been made more explicit.
+- The error messages for the `WordPress.Security.ValidatedSanitizedInput` sniff will now contain information on the index keys accessed.
+- The error message for the `WordPress.Security.ValidatedSanitizedInput.InputNotValidated` has been reworded to make it more obvious what the actual issue being reported is.
+- The error message for the `WordPress.Security.ValidatedSanitizedInput.MissingUnslash` has been reworded.
+- The `Sniff::is_comparison()` method now has a new `$include_coalesce` parameter to allow for toggling whether the null coalesce operator should be seen as a comparison operator. Defaults to `true`.
+- All sniffs are now also being tested against PHP 7.4 (unstable) for consistent sniff results.
+- The recommended version of the suggested DealerDirect PHPCS Composer plugin is now `^0.5.0`.
+- Various minor code tweaks and clean up.
+
+### Removed
+- `ini_set` and `ini_alter` from the list of functions detected by the `WordPress.PHP.DiscouragedFunctions` sniff.
+    These are now covered via the new `WordPress.PHP.IniSet` sniff.
+- `in_array()` and `array_key_exists()` from the list of `Sniff::$sanitizingFunctions`. These are now handled differently.
+
+### Fixed
+- The `WordPress.NamingConventions.PrefixAllGlobals` sniff would underreport when global functions would be autoloaded via a Composer autoload `files` configuration.
+- The `WordPress.Security.EscapeOutput` sniff will now recognize `map_deep()` for escaping the values in an array via a callback to an output escaping function. This should prevent false positives.
+- The `WordPress.Security.NonceVerification` sniff will no longer inadvertently allow for a variable to be sanitized without a nonce check within the same scope.
+- The `WordPress.Security.ValidatedSanitizedInput` sniff will no longer throw errors when a variable is only being type tested.
+- The `WordPress.Security.ValidatedSanitizedInput` sniff will now correctly recognize the null coalesce (PHP 7.0) and null coalesce equal (PHP 7.4) operators and will now throw errors for missing unslashing and sanitization where relevant.
+- The `WordPress.WP.AlternativeFunctions` sniff will no longer recommend using the WP_FileSystem when PHP native input streams, like `php://input`, or the PHP input stream constants are being read or written to.
+- The `WordPress.WP.AlternativeFunctions` sniff will no longer report on usage of the `curl_version()` function.
+- The `WordPress.WP.CronInterval` sniff now has improved function recognition which should lower the chance of false positives.
+- The `WordPress.WP.EnqueuedResources` sniff will no longer throw false positives for inline jQuery code trying to access a stylesheet link tag.
+- Various bugfixes for the `Sniff::has_nonce_check()` method:
+    - The method will no longer incorrectly identify methods/namespaced functions mirroring the name of WP native nonce verification functions as if they were the global functions.
+        This will prevent some false negatives.
+    - The method will now skip over nested closed scopes, such as closures and anonymous classes. This should prevent some false negatives for nonce verification being done while not in the correct scope.
+
+    These fixes affect the `WordPress.Security.NonceVerification` sniff.
+- The `Sniff::is_in_isset_or_empty()` method now also checks for usage of `array_key_exist()` and `key_exists()` and will regard these as correct ways to validate a variable.
+    This should prevent false positives for the `WordPress.Security.ValidatedSanitizedInput` and the `WordPress.Security.NonceVerification` sniffs.
+- Various bugfixes for the `Sniff::is_sanitized()` method:
+    - The method presumed the WordPress coding style regarding code layout, which could lead to false positives.
+    - The method will no longer incorrectly identify methods/namespaced functions mirroring the name of WP/PHP native unslashing/sanitization functions as if they were the global functions.
+        This will prevent some false negatives.
+    - The method will now recognize `map_deep()` for sanitizing an array via a callback to a sanitization function. This should prevent false positives.
+    - The method will now recognize `stripslashes_deep()` and `stripslashes_from_strings_only()` as valid unslashing functions. This should prevent false positives.
+    All these fixes affect both the `WordPress.Security.ValidatedSanitizedInput` and the `WordPress.Security.NonceVerification` sniff.
+- Various bugfixes for the `Sniff::is_validated()` method:
+    - The method did not verify correctly whether a variable being validated was the same variable as later used which could lead to false negatives.
+    - The method did not verify correctly whether a variable being validated had the same array index keys as the variable as later used which could lead to both false negatives as well as false positives.
+    - The method now also checks for usage of `array_key_exist()` and `key_exists()` and will regard these as correct ways to validate a variable. This should prevent some false positives.
+    - The methods will now recognize the null coalesce and the null coalesce equal operators as ways to validate a variable. This prevents some false positives.
+    The results from the `WordPress.Security.ValidatedSanitizedInput` sniff should be more accurate because of these fixes.
+- A potential "Undefined index" notice from the `Sniff::is_assignment()` method.
+
+
 ## [2.0.0] - 2019-01-16
 
 ### Important information about this release:
@@ -994,6 +1069,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[2.1.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2.0.0-RC1...2.0.0
 [2.0.0-RC1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.2.1...2.0.0-RC1
 [1.2.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.2.0...1.2.1
