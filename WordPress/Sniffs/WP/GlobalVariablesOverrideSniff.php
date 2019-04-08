@@ -310,8 +310,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Don't throw false positives for static class properties.
-			$previous = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $ptr - 1 ), null, true, null, true );
-			if ( false !== $previous && \T_DOUBLE_COLON === $this->tokens[ $previous ]['code'] ) {
+			if ( $this->is_class_object_call( $ptr ) === true ) {
 				continue;
 			}
 
@@ -321,17 +320,8 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Check if this is a variable assignment within a `foreach()` declaration.
-			if ( isset( $this->tokens[ $ptr ]['nested_parenthesis'] ) ) {
-				$nested_parenthesis = $this->tokens[ $ptr ]['nested_parenthesis'];
-				$close_parenthesis  = end( $nested_parenthesis );
-				if ( isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
-					&& \T_FOREACH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
-					&& ( false !== $previous
-						&& ( \T_DOUBLE_ARROW === $this->tokens[ $previous ]['code']
-						|| \T_AS === $this->tokens[ $previous ]['code'] ) )
-				) {
-					$this->maybe_add_error( $ptr );
-				}
+			if ( $this->is_foreach_as( $ptr ) === true ) {
+				$this->maybe_add_error( $ptr );
 			}
 		}
 	}

@@ -28,7 +28,7 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 
-		$errors = array_fill( 8, 314, 1 );
+		$errors = array_fill( 8, 322, 1 );
 
 		// Unset the lines related to version comments.
 		unset(
@@ -45,22 +45,23 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$errors[80],
 			$errors[118],
 			$errors[125],
-			$errors[161],
-			$errors[174],
-			$errors[178],
-			$errors[210],
-			$errors[233],
-			$errors[251],
-			$errors[255],
-			$errors[262],
-			$errors[274],
-			$errors[281],
-			$errors[285],
-			$errors[290],
-			$errors[295],
-			$errors[303],
-			$errors[310],
-			$errors[318]
+			$errors[162],
+			$errors[175],
+			$errors[179],
+			$errors[211],
+			$errors[234],
+			$errors[252],
+			$errors[256],
+			$errors[263],
+			$errors[275],
+			$errors[282],
+			$errors[286],
+			$errors[291],
+			$errors[296],
+			$errors[304],
+			$errors[311],
+			$errors[319],
+			$errors[323]
 		);
 
 		return $errors;
@@ -73,10 +74,10 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 
-		$warnings = array_fill( 326, 14, 1 );
+		$warnings = array_fill( 335, 9, 1 );
 
 		// Unset the lines related to version comments.
-		unset( $warnings[326], $warnings[333], $warnings[335] );
+		unset( $warnings[336], $warnings[341] );
 
 		return $warnings;
 	}

@@ -382,20 +382,32 @@ class EscapeOutputSniff extends Sniff {
 
 				if ( false !== $function_opener ) {
 
-					if ( 'array_map' === $functionName ) {
+					if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
 
-						// Get the first parameter (name of function being used on the array).
-						$mapped_function = $this->phpcsFile->findNext(
-							Tokens::$emptyTokens,
-							( $function_opener + 1 ),
-							$this->tokens[ $function_opener ]['parenthesis_closer'],
-							true
+						// Get the callback parameter.
+						$callback = $this->get_function_call_parameter(
+							$ptr,
+							$this->arrayWalkingFunctions[ $functionName ]
 						);
 
-						// If we're able to resolve the function name, do so.
-						if ( $mapped_function && \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code'] ) {
-							$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
-							$ptr          = $mapped_function;
+						if ( ! empty( $callback ) ) {
+							/*
+							 * If this is a function callback (not a method callback array) and we're able
+							 * to resolve the function name, do so.
+							 */
+							$mapped_function = $this->phpcsFile->findNext(
+								Tokens::$emptyTokens,
+								$callback['start'],
+								( $callback['end'] + 1 ),
+								true
+							);
+
+							if ( false !== $mapped_function
+								&& \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code']
+							) {
+								$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
+								$ptr          = $mapped_function;
+							}
 						}
 					}
 

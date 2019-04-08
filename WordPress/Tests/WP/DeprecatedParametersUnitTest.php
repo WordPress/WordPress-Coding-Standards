@@ -27,7 +27,7 @@ class DeprecatedParametersUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		$errors = array_fill( 28, 34, 1 );
+		$errors = array_fill( 28, 35, 1 );
 
 		$errors[22] = 1;
 		$errors[23] = 1;
@@ -47,7 +47,6 @@ class DeprecatedParametersUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			65 => 1,
 			66 => 1,
 		);
 	}

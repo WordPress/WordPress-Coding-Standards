@@ -24,12 +24,6 @@
 		</properties>
 	</rule>
 
-	<!-- Duplicate of upstream. Can be removed once minimum PHPCS requirement has gone up.
-		 https://github.com/squizlabs/PHP_CodeSniffer/pull/1594
-		 Note: the "assignment in ternary" part of the sniff is currently not yet covered in
-		 the upstream version. This needs to be pulled first before we can defer to upstream. -->
-	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition"/>
-
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.NonExecutableCode"/>
@@ -109,14 +103,9 @@
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/26 -->
 	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
-	<!-- Encourage the use of strict ( === and !== ) comparisons.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/242 -->
-	<rule ref="WordPress.PHP.StrictComparisons"/>
-
-	<!-- Check that in_array() and array_search() use strict comparisons.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/399
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/503 -->
-	<rule ref="WordPress.PHP.StrictInArray"/>
+	<!-- Detect incorrect or risky use of the `ini_set()` function.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1447 -->
+	<rule ref="WordPress.PHP.IniSet"/>
 
 	<!-- Check enqueue and register styles and scripts to have version and in_footer parameters explicitly set.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146 -->

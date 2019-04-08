@@ -48,6 +48,7 @@ the_author( 'deprecated', 'deprecated' );
 the_author_posts_link( 'deprecated' );
 trackback_rdf( 'deprecated' );
 trackback_url( 'deprecated' );
+unregister_setting( '', '', '', 'deprecated' );
 update_blog_option( '', '', '', 'deprecated' );
 update_user_status( '', '', '', 'deprecated' );
 wp_get_http_headers( '', 'deprecated' );
@@ -60,7 +61,6 @@ wp_title_rss( 'deprecated' );
 wp_upload_bits( '', 'deprecated' );
 xfn_check( '', '', 'deprecated' );
 
-// All will give an WARNING as they have been deprecated after WP 4.7.
+// All will give an WARNING as they have been deprecated after WP 4.8.
 
 get_category_parents( '', '', '', '', array( 'deprecated') );
-unregister_setting( '', '', '', 'deprecated' );

@@ -82,7 +82,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_supported_version = '4.7';
+	public $minimum_supported_version = '4.8';
 
 	/**
 	 * Custom list of classes which test classes can extend.
@@ -252,12 +252,10 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected $sanitizingFunctions = array(
 		'_wp_handle_upload'          => true,
-		'array_key_exists'           => true,
 		'esc_url_raw'                => true,
 		'filter_input'               => true,
 		'filter_var'                 => true,
 		'hash_equals'                => true,
-		'in_array'                   => true,
 		'is_email'                   => true,
 		'number_format'              => true,
 		'sanitize_bookmark_field'    => true,
@@ -309,10 +307,57 @@ abstract class Sniff implements PHPCS_Sniff {
 	protected $unslashingSanitizingFunctions = array(
 		'absint'       => true,
 		'boolval'      => true,
+		'count'        => true,
+		'doubleval'    => true,
 		'floatval'     => true,
 		'intval'       => true,
-		'is_array'     => true,
 		'sanitize_key' => true,
+		'sizeof'       => true,
+	);
+
+	/**
+	 * Functions which unslash the data passed to them.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array
+	 */
+	protected $unslashingFunctions = array(
+		'stripslashes_deep'              => true,
+		'stripslashes_from_strings_only' => true,
+		'wp_unslash'                     => true,
+	);
+
+	/**
+	 * List of PHP native functions to test the type of a variable.
+	 *
+	 * Using these functions is safe in combination with superglobals without
+	 * unslashing or sanitization.
+	 *
+	 * They should, however, not be regarded as unslashing or sanitization functions.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array
+	 */
+	protected $typeTestFunctions = array(
+		'is_array'     => true,
+		'is_bool'      => true,
+		'is_callable'  => true,
+		'is_countable' => true,
+		'is_double'    => true,
+		'is_float'     => true,
+		'is_int'       => true,
+		'is_integer'   => true,
+		'is_iterable'  => true,
+		'is_long'      => true,
+		'is_null'      => true,
+		'is_numeric'   => true,
+		'is_object'    => true,
+		'is_real'      => true,
+		'is_resource'  => true,
+		'is_scalar'    => true,
+		'is_string'    => true,
 	);
 
 	/**
@@ -326,6 +371,41 @@ abstract class Sniff implements PHPCS_Sniff {
 		\T_INT_CAST    => true,
 		\T_DOUBLE_CAST => true,
 		\T_BOOL_CAST   => true,
+	);
+
+	/**
+	 * List of array functions which apply a callback to the array.
+	 *
+	 * These are often used for sanitization/escaping an array variable.
+	 *
+	 * Note: functions which alter the array by reference are not listed here on purpose.
+	 * These cannot easily be used for sanitization as they can't be combined with unslashing.
+	 * Similarly, they cannot be used for late escaping as the return value is a boolean, not
+	 * the altered array.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array <string function name> => <int parameter position of the callback parameter>
+	 */
+	protected $arrayWalkingFunctions = array(
+		'array_map' => 1,
+		'map_deep'  => 2,
+	);
+
+	/**
+	 * Array functions to compare a $needle to a predefined set of values.
+	 *
+	 * If the value is set to an integer, the function needs to have at least that
+	 * many parameters for it to be considered as a comparison.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var array <string function name> => <true|int>
+	 */
+	protected $arrayCompareFunctions = array(
+		'in_array'     => true,
+		'array_search' => true,
+		'array_keys'   => 2,
 	);
 
 	/**
@@ -770,6 +850,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var string[]
 	 */
 	protected $test_class_whitelist = array(
+		'WP_UnitTestCase_Base'                       => true,
 		'WP_UnitTestCase'                            => true,
 		'WP_Ajax_UnitTestCase'                       => true,
 		'WP_Canonical_UnitTestCase'                  => true,
@@ -1320,7 +1401,9 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
-		if ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code'] ) {
+		if ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code']
+			&& isset( $this->tokens[ $next_non_empty ]['bracket_closer'] )
+		) {
 			return $this->is_assignment( $this->tokens[ $next_non_empty ]['bracket_closer'] );
 		}
 
@@ -1367,12 +1450,21 @@ abstract class Sniff implements PHPCS_Sniff {
 			}
 		}
 
-		$in_isset = $this->is_in_isset_or_empty( $stackPtr );
+		$allow_nonce_after = false;
+		if ( $this->is_in_isset_or_empty( $stackPtr )
+			|| $this->is_in_type_test( $stackPtr )
+			|| $this->is_comparison( $stackPtr )
+			|| $this->is_in_array_comparison( $stackPtr )
+			|| $this->is_in_function_call( $stackPtr, $this->unslashingFunctions ) !== false
+			|| $this->is_only_sanitized( $stackPtr )
+		) {
+			$allow_nonce_after = true;
+		}
 
-		// We allow for isset( $_POST['var'] ) checks to come before the nonce check.
-		// If this is inside an isset(), check after it as well, all the way to the
-		// end of the scope.
-		if ( $in_isset ) {
+		// We allow for certain actions, such as an isset() check to come before the nonce check.
+		// If this superglobal is inside such a check, look for the nonce after it as well,
+		// all the way to the end of the scope.
+		if ( true === $allow_nonce_after ) {
 			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $tokens[ $start ]['scope_closer'];
 		}
 
@@ -1388,7 +1480,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				// If we have already found an nonce check in this scope, we just
 				// need to check whether it comes before this token. It is OK if the
 				// check is after the token though, if this was only a isset() check.
-				return ( $in_isset || $last['nonce_check'] < $stackPtr );
+				return ( true === $allow_nonce_after || $last['nonce_check'] < $stackPtr );
 			} elseif ( $end <= $last['end'] ) {
 				// If not, we can still go ahead and return false if we've already
 				// checked to the end of the search area.
@@ -1408,6 +1500,16 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Loop through the tokens looking for nonce verification functions.
 		for ( $i = $start; $i < $end; $i++ ) {
+			// Skip over nested closed scope constructs.
+			if ( \T_FUNCTION === $tokens[ $i ]['code']
+				|| \T_CLOSURE === $tokens[ $i ]['code']
+				|| isset( Tokens::$ooScopeTokens[ $tokens[ $i ]['code'] ] )
+			) {
+				if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
+					$i = $tokens[ $i ]['scope_closer'];
+				}
+				continue;
+			}
 
 			// If this isn't a function name, skip it.
 			if ( \T_STRING !== $tokens[ $i ]['code'] ) {
@@ -1416,6 +1518,17 @@ abstract class Sniff implements PHPCS_Sniff {
 
 			// If this is one of the nonce verification functions, we can bail out.
 			if ( isset( $this->nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
+				/*
+				 * Now, make sure it is a call to a global function.
+				 */
+				if ( $this->is_class_object_call( $i ) === true ) {
+					continue;
+				}
+
+				if ( $this->is_token_namespaced( $i ) === true ) {
+					continue;
+				}
+
 				$last['nonce_check'] = $i;
 				return true;
 			}
@@ -1428,9 +1541,11 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a token is inside of an isset() or empty() statement.
+	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Now checks for the token being used as the array parameter
+	 *              in function calls to array_key_exists() and key_exists() as well.
 	 *
 	 * @param int $stackPtr The index of the token in the stack.
 	 *
@@ -1448,7 +1563,191 @@ abstract class Sniff implements PHPCS_Sniff {
 		$open_parenthesis = key( $nested_parenthesis );
 
 		$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
-		return in_array( $this->tokens[ $previous_non_empty ]['code'], array( \T_ISSET, \T_EMPTY ), true );
+		if ( false === $previous_non_empty ) {
+			return false;
+		}
+
+		$previous_code = $this->tokens[ $previous_non_empty ]['code'];
+		if ( \T_ISSET === $previous_code || \T_EMPTY === $previous_code ) {
+			return true;
+		}
+
+		$valid_functions = array(
+			'array_key_exists' => true,
+			'key_exists'       => true, // Alias.
+		);
+
+		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
+		if ( false !== $functionPtr ) {
+			$second_param = $this->get_function_call_parameter( $functionPtr, 2 );
+			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a particular token is a (static or non-static) call to a class method or property.
+	 *
+	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
+	 * a global function!
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	protected function is_class_object_call( $stackPtr ) {
+		$before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+
+		if ( false === $before ) {
+			return false;
+		}
+
+		if ( \T_OBJECT_OPERATOR !== $this->tokens[ $before ]['code']
+			&& \T_DOUBLE_COLON !== $this->tokens[ $before ]['code']
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace.
+	 *
+	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
+	 * with `namespace\`.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	protected function is_token_namespaced( $stackPtr ) {
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
+
+		if ( false === $prev ) {
+			return false;
+		}
+
+		if ( \T_NS_SEPARATOR !== $this->tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		$before_prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+		if ( false === $before_prev ) {
+			return false;
+		}
+
+		if ( \T_STRING !== $this->tokens[ $before_prev ]['code']
+			&& \T_NAMESPACE !== $this->tokens[ $before_prev ]['code']
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
+	 *
+	 * This is useful, for instance, when trying to determine the context a variable is used in.
+	 *
+	 * For example: this function could be used to determine if the variable `$foo` is used
+	 * in a global function call to the function `is_foo()`.
+	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
+	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
+	 * the following code `is_bar( $foo, 'some_other_param' )`.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int   $stackPtr        The index of the token in the stack.
+	 * @param array $valid_functions List of valid function names.
+	 *                               Note: The keys to this array should be the function names
+	 *                               in lowercase. Values are irrelevant.
+	 * @param bool  $global          Optional. Whether to make sure that the function call is
+	 *                               to a global function. If `false`, calls to methods, be it static
+	 *                               `Class::method()` or via an object `$obj->method()`, and
+	 *                               namespaced function calls, like `MyNS\function_name()` will
+	 *                               also be accepted.
+	 *                               Defaults to `true`.
+	 * @param bool  $allow_nested    Optional. Whether to allow for nested function calls within the
+	 *                               call to this function.
+	 *                               I.e. when checking whether a token is within a function call
+	 *                               to `strtolower()`, whether to accept `strtolower( trim( $var ) )`
+	 *                               or only `strtolower( $var )`.
+	 *                               Defaults to `false`.
+	 *
+	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
+	 */
+	protected function is_in_function_call( $stackPtr, $valid_functions, $global = true, $allow_nested = false ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
+		if ( false === $allow_nested ) {
+			$nested_parenthesis = array_reverse( $nested_parenthesis, true );
+		}
+
+		foreach ( $nested_parenthesis as $open => $close ) {
+
+			$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true, null, true );
+			if ( false === $prev_non_empty || \T_STRING !== $this->tokens[ $prev_non_empty ]['code'] ) {
+				continue;
+			}
+
+			if ( isset( $valid_functions[ strtolower( $this->tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
+				if ( false === $allow_nested ) {
+					// Function call encountered, but not to one of the allowed functions.
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( false === $global ) {
+				return $prev_non_empty;
+			}
+
+			/*
+			 * Now, make sure it is a global function.
+			 */
+			if ( $this->is_class_object_call( $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			if ( $this->is_token_namespaced( $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			return $prev_non_empty;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a token is inside of an is_...() statement.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is being type tested.
+	 */
+	protected function is_in_type_test( $stackPtr ) {
+		/*
+		 * Casting the potential integer stack pointer return value to boolean here is fine.
+		 * The return can never be `0` as there will always be a PHP open tag before the
+		 * function call.
+		 */
+		return (bool) $this->is_in_function_call( $stackPtr, $this->typeTestFunctions );
 	}
 
 	/**
@@ -1517,8 +1816,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.5.0
 	 *
 	 * @param int  $stackPtr        The index of the token in the stack.
-	 * @param bool $require_unslash Whether to give an error if wp_unslash() isn't
-	 *                              used on the variable before sanitization.
+	 * @param bool $require_unslash Whether to give an error if no unslashing function
+	 *                              is used on the variable before sanitization.
 	 *
 	 * @return bool Whether the token being sanitized.
 	 */
@@ -1534,54 +1833,67 @@ abstract class Sniff implements PHPCS_Sniff {
 			if ( $require_unslash ) {
 				$this->add_unslash_error( $stackPtr );
 			}
+
 			return false;
 		}
 
 		// Get the function that it's in.
 		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-		$function_closer    = end( $nested_parenthesis );
-		$function_opener    = key( $nested_parenthesis );
-		$function           = $this->tokens[ ( $function_opener - 1 ) ];
+		$nested_openers     = array_keys( $nested_parenthesis );
+		$function_opener    = array_pop( $nested_openers );
+		$functionPtr        = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $function_opener - 1 ), null, true, null, true );
 
 		// If it is just being unset, the value isn't used at all, so it's safe.
-		if ( \T_UNSET === $function['code'] ) {
+		if ( \T_UNSET === $this->tokens[ $functionPtr ]['code'] ) {
 			return true;
 		}
 
-		// If this isn't a call to a function, it sure isn't sanitizing function.
-		if ( \T_STRING !== $function['code'] ) {
-			if ( $require_unslash ) {
+		$valid_functions  = $this->sanitizingFunctions;
+		$valid_functions += $this->unslashingSanitizingFunctions;
+		$valid_functions += $this->unslashingFunctions;
+		$valid_functions += $this->arrayWalkingFunctions;
+
+		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
+
+		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
+		if ( false === $functionPtr ) {
+			if ( true === $require_unslash ) {
 				$this->add_unslash_error( $stackPtr );
 			}
+
 			return false;
 		}
 
-		$functionName = $function['content'];
+		$functionName = $this->tokens[ $functionPtr ]['content'];
 
-		// Check if wp_unslash() is being used.
-		if ( 'wp_unslash' === $functionName ) {
+		// Check if an unslashing function is being used.
+		if ( isset( $this->unslashingFunctions[ $functionName ] ) ) {
 
-			$is_unslashed    = true;
-			$function_closer = prev( $nested_parenthesis );
+			$is_unslashed = true;
 
-			// If there is no other function being used, this value is unsanitized.
-			if ( ! $function_closer ) {
+			// Remove the unslashing functions.
+			$valid_functions = array_diff_key( $valid_functions, $this->unslashingFunctions );
+
+			// Check is any of the remaining (sanitizing) functions is used.
+			$higherFunctionPtr = $this->is_in_function_call( $functionPtr, $valid_functions );
+
+			// If there is no other valid function being used, this value is unsanitized.
+			if ( false === $higherFunctionPtr ) {
 				return false;
 			}
 
-			$function_opener = key( $nested_parenthesis );
-			$functionName    = $this->tokens[ ( $function_opener - 1 ) ]['content'];
+			$functionPtr  = $higherFunctionPtr;
+			$functionName = $this->tokens[ $functionPtr ]['content'];
 
 		} else {
-
 			$is_unslashed = false;
 		}
 
-		// Arrays might be sanitized via array_map().
-		if ( 'array_map' === $functionName ) {
+		// Arrays might be sanitized via an array walking function using a callback.
+		if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
 
-			// Get the first parameter.
-			$callback = $this->get_function_call_parameter( ( $function_opener - 1 ), 1 );
+			// Get the callback parameter.
+			$callback = $this->get_function_call_parameter( $functionPtr, $this->arrayWalkingFunctions[ $functionName ] );
 
 			if ( ! empty( $callback ) ) {
 				/*
@@ -1615,7 +1927,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Add an error for missing use of wp_unslash().
+	 * Add an error for missing use of unslashing.
 	 *
 	 * @since 0.5.0
 	 *
@@ -1624,11 +1936,64 @@ abstract class Sniff implements PHPCS_Sniff {
 	public function add_unslash_error( $stackPtr ) {
 
 		$this->phpcsFile->addError(
-			'Missing wp_unslash() before sanitization.',
+			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
 			$stackPtr,
 			'MissingUnslash',
 			array( $this->tokens[ $stackPtr ]['content'] )
 		);
+	}
+
+	/**
+	 * Get the index keys of an array variable.
+	 *
+	 * E.g., "bar" and "baz" in $foo['bar']['baz'].
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int  $stackPtr The index of the variable token in the stack.
+	 * @param bool $all      Whether to get all keys or only the first.
+	 *                       Defaults to `true`(= all).
+	 *
+	 * @return array An array of index keys whose value is being accessed.
+	 *               or an empty array if this is not array access.
+	 */
+	protected function get_array_access_keys( $stackPtr, $all = true ) {
+
+		$keys = array();
+
+		if ( \T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
+			return $keys;
+		}
+
+		$current = $stackPtr;
+
+		do {
+			// Find the next non-empty token.
+			$open_bracket = $this->phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				( $current + 1 ),
+				null,
+				true
+			);
+
+			// If it isn't a bracket, this isn't an array-access.
+			if ( false === $open_bracket
+				|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
+				|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
+			) {
+				break;
+			}
+
+			$key = $this->phpcsFile->getTokensAsString(
+				( $open_bracket + 1 ),
+				( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
+			);
+
+			$keys[]  = trim( $key );
+			$current = $this->tokens[ $open_bracket ]['bracket_closer'];
+		} while ( isset( $this->tokens[ $current ] ) && true === $all );
+
+		return $keys;
 	}
 
 	/**
@@ -1637,6 +2002,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * E.g., "bar" in $foo['bar'].
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Now uses get_array_access_keys() under the hood.
 	 *
 	 * @param int $stackPtr The index of the token in the stack.
 	 *
@@ -1644,29 +2010,18 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected function get_array_access_key( $stackPtr ) {
 
-		// Find the next non-empty token.
-		$open_bracket = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			( $stackPtr + 1 ),
-			null,
-			true
-		);
+		$keys = $this->get_array_access_keys( $stackPtr, false );
 
-		// If it isn't a bracket, this isn't an array-access.
-		if ( false === $open_bracket || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code'] ) {
-			return false;
+		if ( isset( $keys[0] ) ) {
+			return $keys[0];
 		}
 
-		$key = $this->phpcsFile->getTokensAsString(
-			( $open_bracket + 1 ),
-			( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
-		);
-
-		return trim( $key );
+		return false;
 	}
 
 	/**
-	 * Check if the existence of a variable is validated with isset() or empty().
+	 * Check if the existence of a variable is validated with isset(), empty(), array_key_exists()
+	 * or key_exists().
 	 *
 	 * When $in_condition_only is false, (which is the default), this is considered
 	 * valid:
@@ -1689,17 +2044,21 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * ```
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Now recognizes array_key_exists() and key_exists() as validation functions.
+	 * @since 2.1.0 Stricter check on whether the correct variable and the correct
+	 *              array keys are being validated.
 	 *
-	 * @param int    $stackPtr          The index of this token in the stack.
-	 * @param string $array_key         An array key to check for ("bar" in $foo['bar']).
-	 * @param bool   $in_condition_only Whether to require that this use of the
-	 *                                  variable occur within the scope of the
-	 *                                  validating condition, or just in the same
-	 *                                  scope as it (default).
+	 * @param int          $stackPtr          The index of this token in the stack.
+	 * @param array|string $array_keys        An array key to check for ("bar" in $foo['bar'])
+	 *                                        or an array of keys for multi-level array access.
+	 * @param bool         $in_condition_only Whether to require that this use of the
+	 *                                        variable occur within the scope of the
+	 *                                        validating condition, or just in the same
+	 *                                        scope as it (default).
 	 *
 	 * @return bool Whether the var is validated.
 	 */
-	protected function is_validated( $stackPtr, $array_key = null, $in_condition_only = false ) {
+	protected function is_validated( $stackPtr, $array_keys = array(), $in_condition_only = false ) {
 
 		if ( $in_condition_only ) {
 			/*
@@ -1750,36 +2109,168 @@ abstract class Sniff implements PHPCS_Sniff {
 			}
 
 			$scope_end = $stackPtr;
-
 		}
 
-		$bare_array_key = $this->strip_quotes( $array_key );
+		if ( ! empty( $array_keys ) && ! is_array( $array_keys ) ) {
+			$array_keys = (array) $array_keys;
+		}
+
+		$bare_array_keys = array_map( array( $this, 'strip_quotes' ), $array_keys );
+		$targets         = array(
+			\T_ISSET          => 'construct',
+			\T_EMPTY          => 'construct',
+			\T_UNSET          => 'construct',
+			\T_STRING         => 'function_call',
+			\T_COALESCE       => 'coalesce',
+			\T_COALESCE_EQUAL => 'coalesce',
+		);
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
-			if ( ! \in_array( $this->tokens[ $i ]['code'], array( \T_ISSET, \T_EMPTY, \T_UNSET ), true ) ) {
+			if ( isset( $targets[ $this->tokens[ $i ]['code'] ] ) === false ) {
 				continue;
 			}
 
-			$issetOpener = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, $i );
-			$issetCloser = $this->tokens[ $issetOpener ]['parenthesis_closer'];
+			switch ( $targets[ $this->tokens[ $i ]['code'] ] ) {
+				case 'construct':
+					$issetOpener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
+					if ( false === $issetOpener || \T_OPEN_PARENTHESIS !== $this->tokens[ $issetOpener ]['code'] ) {
+						// Parse error or live coding.
+						continue 2;
+					}
 
-			// Look for this variable. We purposely stomp $i from the parent loop.
-			for ( $i = ( $issetOpener + 1 ); $i < $issetCloser; $i++ ) {
+					$issetCloser = $this->tokens[ $issetOpener ]['parenthesis_closer'];
 
-				if ( \T_VARIABLE !== $this->tokens[ $i ]['code'] ) {
-					continue;
-				}
+					// Look for this variable. We purposely stomp $i from the parent loop.
+					for ( $i = ( $issetOpener + 1 ); $i < $issetCloser; $i++ ) {
 
-				// If we're checking for a specific array key (ex: 'hello' in
-				// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
-				if ( isset( $array_key )
-					&& $this->strip_quotes( $this->get_array_access_key( $i ) ) !== $bare_array_key ) {
-					continue;
-				}
+						if ( \T_VARIABLE !== $this->tokens[ $i ]['code'] ) {
+							continue;
+						}
 
-				return true;
+						if ( $this->tokens[ $stackPtr ]['content'] !== $this->tokens[ $i ]['content'] ) {
+							continue;
+						}
+
+						// If we're checking for specific array keys (ex: 'hello' in
+						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
+						if ( ! empty( $bare_array_keys ) ) {
+							$found_keys = $this->get_array_access_keys( $i );
+							$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+							$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
+							if ( ! empty( $diff ) ) {
+								continue;
+							}
+						}
+
+						return true;
+					}
+
+					break;
+
+				case 'function_call':
+					// Only check calls to array_key_exists() and key_exists().
+					if ( 'array_key_exists' !== $this->tokens[ $i ]['content']
+						&& 'key_exists' !== $this->tokens[ $i ]['content']
+					) {
+						continue 2;
+					}
+
+					$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
+					if ( false === $next_non_empty || \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code'] ) {
+						// Not a function call.
+						continue 2;
+					}
+
+					if ( $this->is_class_object_call( $i ) === true ) {
+						// Method call.
+						continue 2;
+					}
+
+					if ( $this->is_token_namespaced( $i ) === true ) {
+						// Namespaced function call.
+						continue 2;
+					}
+
+					$params = $this->get_function_call_parameters( $i );
+					if ( count( $params ) < 2 ) {
+						continue 2;
+					}
+
+					$param2_first_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, $params[2]['start'], ( $params[2]['end'] + 1 ), true );
+					if ( false === $param2_first_token
+						|| \T_VARIABLE !== $this->tokens[ $param2_first_token ]['code']
+						|| $this->tokens[ $param2_first_token ]['content'] !== $this->tokens[ $stackPtr ]['content']
+					) {
+						continue 2;
+					}
+
+					if ( ! empty( $bare_array_keys ) ) {
+						// Prevent the original array from being altered.
+						$bare_keys = $bare_array_keys;
+						$last_key  = array_pop( $bare_keys );
+
+						/*
+						 * For multi-level array access, the complete set of keys could be split between
+						 * the first and the second parameter, but could also be completely in the second
+						 * parameter, so we need to check both options.
+						 */
+
+						$found_keys = $this->get_array_access_keys( $param2_first_token );
+						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+
+						// First try matching the complete set against the second parameter.
+						$diff = array_diff_assoc( $bare_array_keys, $found_keys );
+						if ( empty( $diff ) ) {
+							return true;
+						}
+
+						// If that failed, try getting an exact match for the subset against the
+						// second parameter and the last key against the first.
+						if ( $bare_keys === $found_keys && $this->strip_quotes( $params[1]['raw'] ) === $last_key ) {
+							return true;
+						}
+
+						// Didn't find the correct array keys.
+						continue 2;
+					}
+
+					return true;
+
+				case 'coalesce':
+					$prev = $i;
+					do {
+						$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+						// Skip over array keys, like $_GET['key']['subkey'].
+						if ( \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $prev ]['code'] ) {
+							$prev = $this->tokens[ $prev ]['bracket_opener'];
+							continue;
+						}
+
+						break;
+					} while ( $prev >= ( $scope_start + 1 ) );
+
+					// We should now have reached the variable.
+					if ( \T_VARIABLE !== $this->tokens[ $prev ]['code'] ) {
+						continue 2;
+					}
+
+					if ( $this->tokens[ $prev ]['content'] !== $this->tokens[ $stackPtr ]['content'] ) {
+						continue 2;
+					}
+
+					if ( ! empty( $bare_array_keys ) ) {
+						$found_keys = $this->get_array_access_keys( $prev );
+						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
+						if ( ! empty( $diff ) ) {
+							continue 2;
+						}
+					}
+
+					// Right variable, correct key.
+					return true;
 			}
 		}
 
@@ -1794,12 +2285,24 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Also recognizes `switch ( $var )`.
 	 *
 	 * @since 0.5.0
+	 * @since 2.1.0 Added the $include_coalesce parameter.
 	 *
-	 * @param int $stackPtr The index of this token in the stack.
+	 * @param int  $stackPtr         The index of this token in the stack.
+	 * @param bool $include_coalesce Optional. Whether or not to regard the null
+	 *                               coalesce operator - ?? - as a comparison operator.
+	 *                               Defaults to true.
+	 *                               Null coalesce is a special comparison operator in this
+	 *                               sense as it doesn't compare a variable to whatever is
+	 *                               on the other side of the comparison operator.
 	 *
 	 * @return bool Whether this is a comparison.
 	 */
-	protected function is_comparison( $stackPtr ) {
+	protected function is_comparison( $stackPtr, $include_coalesce = true ) {
+
+		$comparisonTokens = Tokens::$comparisonTokens;
+		if ( false === $include_coalesce ) {
+			unset( $comparisonTokens[ \T_COALESCE ] );
+		}
 
 		// We first check if this is a switch statement (switch ( $var )).
 		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
@@ -1823,7 +2326,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			true
 		);
 
-		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
+		if ( isset( $comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -1836,7 +2339,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		);
 
 		// This might be an opening square bracket in the case of arrays ($var['a']).
-		while ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
+		while ( false !== $next_token && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
 
 			$next_token = $this->phpcsFile->findNext(
 				Tokens::$emptyTokens,
@@ -1846,7 +2349,35 @@ abstract class Sniff implements PHPCS_Sniff {
 			);
 		}
 
-		if ( isset( Tokens::$comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+		if ( false !== $next_token && isset( $comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a token is inside of an array-value comparison function.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int $stackPtr The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is (part of) a parameter to an
+	 *              array-value comparison function.
+	 */
+	protected function is_in_array_comparison( $stackPtr ) {
+		$function_ptr = $this->is_in_function_call( $stackPtr, $this->arrayCompareFunctions, true, true );
+		if ( false === $function_ptr ) {
+			return false;
+		}
+
+		$function_name = $this->tokens[ $function_ptr ]['content'];
+		if ( true === $this->arrayCompareFunctions[ $function_name ] ) {
+			return true;
+		}
+
+		if ( $this->get_function_call_parameter_count( $function_ptr ) >= $this->arrayCompareFunctions[ $function_name ] ) {
 			return true;
 		}
 
@@ -2578,10 +3109,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		if ( false !== $prev
-			&& \T_NS_SEPARATOR === $this->tokens[ $prev ]['code']
-			&& \T_STRING === $this->tokens[ ( $prev - 1 ) ]['code']
-		) {
+		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
 			// Namespaced constant of the same name.
 			return false;
 		}

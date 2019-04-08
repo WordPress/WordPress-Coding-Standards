@@ -71,6 +71,8 @@
 		<exclude name="Squiz.Commenting.InlineComment.DocBlock"/>
 		<!-- Excluded to allow /* translators: ... */ comments -->
 		<exclude name="Squiz.Commenting.InlineComment.NotCapital"/>
+		<!-- WP handbook doesn't clarify one way or another, so ignore -->
+		<exclude name="Squiz.Commenting.InlineComment.SpacingAfter"/>
 
 		<!-- Not in Inline Docs standard, and a code smell -->
 		<exclude name="Squiz.Commenting.LongConditionClosingComment"/>
@@ -86,7 +88,7 @@
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
 	</rule>
 
-	<rule ref="Generic.Commenting">
+	<rule ref="Generic.Commenting.DocComment">
 		<!-- WP has different alignment of tag values -->
 		<exclude name="Generic.Commenting.DocComment.TagValueIndent"/>
 		<!-- WP has a different prefered order of tags -->
@@ -103,8 +105,5 @@
 		<exclude name="Generic.Commenting.DocComment.SpacingBeforeShort"/>
 		<!-- Exclude to allow duplicate hooks to be documented -->
 		<exclude name="Generic.Commenting.DocComment.ContentBeforeClose"/>
-
-		<!-- WP allows @todo's in comments -->
-		<exclude name="Generic.Commenting.Todo"/>
 	</rule>
 </ruleset>

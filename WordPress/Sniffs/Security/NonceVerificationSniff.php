@@ -121,10 +121,6 @@ class NonceVerificationSniff extends Sniff {
 
 		$this->mergeFunctionLists();
 
-		if ( $this->is_only_sanitized( $stackPtr ) ) {
-			return;
-		}
-
 		if ( $this->has_nonce_check( $stackPtr ) ) {
 			return;
 		}
