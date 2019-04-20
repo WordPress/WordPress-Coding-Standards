@@ -638,6 +638,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'compress_css'                     => true,
 		'compress_scripts'                 => true,
 		'concatenate_scripts'              => true,
+		'current_blog'                     => true,
 		'current_screen'                   => true,
 		'current_site'                     => true,
 		'current_user'                     => true,
