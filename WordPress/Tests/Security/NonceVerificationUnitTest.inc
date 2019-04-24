@@ -247,7 +247,7 @@ function allow_for_array_comparison_in_condition() {
 	}
 }
 
-# Issue #572.
+// Issue #572.
 function allow_for_unslash_before_noncecheck_but_demand_noncecheck() {
 	$var = wp_unslash( $_POST['foo'] ); // Bad.
 	echo $var;
@@ -275,3 +275,29 @@ function dont_allow_bypass_nonce_via_sanitization() {
 	wp_verify_nonce( $var );
 	echo $var;
 }
+
+// Issue #1694
+function function_containing_nested_class() {
+	if ( !class_exists( 'Nested_Class' ) ) {
+		class Nested_Class extends Something {
+			public function method_in_nested_class() {
+				if ( isset( $_POST['my_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' ) ) {
+					if ( isset( $_POST['hello'] ) ) {
+						echo 'world';
+					}
+				}
+			}
+		}
+	}
+}
+
+function function_containing_nested_closure() {
+	$closure = function() {
+		if ( isset( $_POST['my_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' ) ) {
+			if ( isset( $_POST['hello'] ) ) {
+				echo 'world';
+			}
+		}
+	};
+}
+

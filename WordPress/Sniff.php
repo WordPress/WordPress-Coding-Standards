@@ -1441,13 +1441,15 @@ abstract class Sniff implements PHPCS_Sniff {
 		$tokens = $this->phpcsFile->getTokens();
 
 		// If we're in a function, only look inside of it.
-		$f = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
-		if ( false !== $f ) {
-			$start = $tokens[ $f ]['scope_opener'];
-		} else {
-			$f = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-			if ( false !== $f ) {
-				$start = $tokens[ $f ]['scope_opener'];
+		// Once PHPCS 3.5.0 comes out this should be changed to the new Conditions::GetLastCondition() method.
+		if ( isset( $tokens[ $stackPtr ]['conditions'] ) === true ) {
+			$conditions = $tokens[ $stackPtr ]['conditions'];
+			$conditions = array_reverse( $conditions, true );
+			foreach ( $conditions as $tokenPtr => $condition ) {
+				if ( \T_FUNCTION === $condition || \T_CLOSURE === $condition ) {
+					$start = $tokens[ $tokenPtr ]['scope_opener'];
+					break;
+				}
 			}
 		}
 
