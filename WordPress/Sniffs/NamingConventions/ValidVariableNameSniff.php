@@ -50,8 +50,8 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		'is_winIE'          => true,
 		'PHP_SELF'          => true,
 		'post_ID'           => true,
-		'user_ID'           => true,
 		'tag_ID'            => true,
+		'user_ID'           => true,
 	);
 
 	/**

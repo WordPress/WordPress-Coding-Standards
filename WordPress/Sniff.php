@@ -741,6 +741,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'table_prefix'                     => true,
 		'tabs'                             => true,
 		'tag'                              => true,
+		'tag_ID'                           => true,
 		'targets'                          => true,
 		'tax'                              => true,
 		'taxnow'                           => true,
