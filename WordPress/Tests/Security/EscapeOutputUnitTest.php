@@ -79,6 +79,7 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			264 => 1,
 			266 => 1,
 			289 => 1,
+			294 => 1,
 		);
 	}
 

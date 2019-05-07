@@ -52,7 +52,7 @@ add_filter( 'cron_schedules' ); // Ignore, no callback parameter.
 
 add_filter( 'cron_schedules', [ 'Foo', 'my_add_quicklier' ] ); // Error: 5 min.
 
-// Ignore, not our function. Currently gives false positive, will be fixed later when function call detection utility functions are added.
+// Ignore, not our function.
 My_Custom::add_filter( 'cron_schedules', [ 'Foo', 'my_add_quicklier' ] );
 
 // Deal correctly with the WP time constants.
@@ -139,3 +139,8 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	);
 	return $schedules;
 } ); // Error: 9 min.
+
+Custom::add_filter( 'cron_schedules', array( $class, $method ) ); // OK, not the WP function.
+add_filter( 'some_hook', array( $place, 'cron_schedules' ) ); // OK, not the hook we're looking for.
+add_filter( function() { return get_hook_name('cron_schedules'); }(), array( $class, $method ) ); // OK, nested in another function call.
+

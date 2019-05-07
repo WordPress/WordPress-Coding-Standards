@@ -42,7 +42,7 @@ define( 'My\STYLESHEETPATH', 'something' );
 if ( defined( 'STYLESHEETPATH' ) ) { // Ok.
 	// Do something unrelated.
 }
-
+echo namespace\STYLESHEETPATH; // "Magic" namespace operator.
 
 /*
  * These are all bad.

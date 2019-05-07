@@ -56,6 +56,15 @@ class CronIntervalSniff extends Sniff {
 	);
 
 	/**
+	 * Function within which the hook should be found.
+	 *
+	 * @var array
+	 */
+	protected $valid_functions = array(
+		'add_filter' => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -82,13 +91,18 @@ class CronIntervalSniff extends Sniff {
 		}
 
 		// If within add_filter.
-		$functionPtr = $this->phpcsFile->findPrevious( \T_STRING, key( $token['nested_parenthesis'] ) );
-		if ( false === $functionPtr || 'add_filter' !== $this->tokens[ $functionPtr ]['content'] ) {
+		$functionPtr = $this->is_in_function_call( $stackPtr, $this->valid_functions );
+		if ( false === $functionPtr ) {
 			return;
 		}
 
 		$callback = $this->get_function_call_parameter( $functionPtr, 2 );
 		if ( false === $callback ) {
+			return;
+		}
+
+		if ( $stackPtr >= $callback['start'] ) {
+			// "cron_schedules" found in the second parameter, not the first.
 			return;
 		}
 
