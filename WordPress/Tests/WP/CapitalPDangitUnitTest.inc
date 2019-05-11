@@ -180,3 +180,11 @@ wordpress.pot
 $text = <<<'EOD'
 This is an explanation about word-press.
 EOD;
+
+// Issue 1698 - ignore constant declarations.
+define( 'WORDPRESS_SOMETHING', 'wordpress' ); // OK.
+class TestMe {
+	public const MY_CONST = 123,
+		ANOTHER => array( 'a' => 'b' ),
+		WORDPRESS_SOMETHING = 'wordpress'; // OK (complex declaration to make sure start of statement is detected correctly).
+}
