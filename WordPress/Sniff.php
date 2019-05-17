@@ -861,6 +861,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		'WP_XMLRPC_UnitTestCase'                     => true,
 		'PHPUnit_Framework_TestCase'                 => true,
 		'PHPUnit\Framework\TestCase'                 => true,
+		// PHPUnit native TestCase class when imported via use statement.
+		'TestCase'                                   => true,
 	);
 
 	/**
