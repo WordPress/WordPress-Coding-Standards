@@ -1367,7 +1367,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
+	 * @param string $group_name      The name of the group which was matched. Will
 	 *                                always be 'deprecated_functions'.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *

@@ -48,7 +48,8 @@ class EmptyStatementSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return int Integer stack pointer to skip the rest of the file.
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 

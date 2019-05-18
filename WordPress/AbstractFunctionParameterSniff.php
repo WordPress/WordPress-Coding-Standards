@@ -60,7 +60,7 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
@@ -83,7 +83,7 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * This method has to be made concrete in child classes.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
@@ -99,7 +99,7 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * were parameters are expected, but none found.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
