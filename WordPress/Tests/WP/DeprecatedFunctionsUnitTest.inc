@@ -327,12 +327,12 @@ _usort_terms_by_name();
 get_paged_template();
 wp_get_network();
 wp_kses_js_entities();
+/* ============ WP 4.8 ============ */
+wp_dashboard_plugins_output();
 
 /*
  * Warning.
  */
-/* ============ WP 4.8 ============ */
-wp_dashboard_plugins_output();
 /* ============ WP 4.9 ============ */
 get_shortcut_link();
 is_user_option_local();
