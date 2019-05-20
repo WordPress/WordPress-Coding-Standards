@@ -14,6 +14,7 @@ _No documentation available about unreleased changes as of yet._
 ### Changed
 - The `WordPress.WP.CapitalPDangit` will now ignore misspelled instances of `WordPress` within constant declarations.
     This covers both constants declared using `defined()` as well as constants declared using the `const` keyword.
+- The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `4.9`.
 
 ### Removed
 - `paginate_comments_links()` from the list of auto-escaped functions `Sniff::$autoEscapedFunctions`.
