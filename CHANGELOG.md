@@ -8,6 +8,27 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+
+## [2.1.1] - 2019-05-21
+
+### Changed
+- The `WordPress.WP.CapitalPDangit` will now ignore misspelled instances of `WordPress` within constant declarations.
+    This covers both constants declared using `defined()` as well as constants declared using the `const` keyword.
+- The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `4.9`.
+
+### Removed
+- `paginate_comments_links()` from the list of auto-escaped functions `Sniff::$autoEscapedFunctions`.
+    This affects the `WordPress.Security.EscapeOutput` sniff.
+
+### Fixed
+- The `$current_blog` and `$tag_ID` variables have been added to the list of WordPress global variables.
+    This fixes some false positives from the `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.WP.GlobalVariablesOverride` sniffs.
+- The generic `TestCase` class name has been added to the `$test_class_whitelist`.
+    This fixes some false positives from the `WordPress.NamingConventions.FileName`, `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.WP.GlobalVariablesOverride` sniffs.
+- The `WordPress.NamingConventions.ValidVariableName` sniff will now correctly recognize `$tag_ID` as a WordPress native, mixed-case variable.
+- The `WordPress.Security.NonceVerification` sniff will now correctly recognize nonce verification within a nested closure or anonymous class.
+
+
 ## [2.1.0] - 2019-04-08
 
 ### Added
@@ -1070,6 +1091,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/master...HEAD
+[2.1.1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/2.0.0-RC1...2.0.0
 [2.0.0-RC1]: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/compare/1.2.1...2.0.0-RC1

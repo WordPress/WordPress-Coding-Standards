@@ -82,7 +82,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_supported_version = '4.8';
+	public $minimum_supported_version = '4.9';
 
 	/**
 	 * Custom list of classes which test classes can extend.
@@ -202,7 +202,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'get_the_ID'                => true,
 		'get_the_post_thumbnail'    => true,
 		'get_the_term_list'         => true,
-		'paginate_comments_links'   => true,
 		'post_type_archive_title'   => true,
 		'readonly'                  => true,
 		'selected'                  => true,
@@ -638,6 +637,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'compress_css'                     => true,
 		'compress_scripts'                 => true,
 		'concatenate_scripts'              => true,
+		'current_blog'                     => true,
 		'current_screen'                   => true,
 		'current_site'                     => true,
 		'current_user'                     => true,
@@ -740,6 +740,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'table_prefix'                     => true,
 		'tabs'                             => true,
 		'tag'                              => true,
+		'tag_ID'                           => true,
 		'targets'                          => true,
 		'tax'                              => true,
 		'taxnow'                           => true,
@@ -860,6 +861,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		'WP_XMLRPC_UnitTestCase'                     => true,
 		'PHPUnit_Framework_TestCase'                 => true,
 		'PHPUnit\Framework\TestCase'                 => true,
+		// PHPUnit native TestCase class when imported via use statement.
+		'TestCase'                                   => true,
 	);
 
 	/**
@@ -1440,13 +1443,15 @@ abstract class Sniff implements PHPCS_Sniff {
 		$tokens = $this->phpcsFile->getTokens();
 
 		// If we're in a function, only look inside of it.
-		$f = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
-		if ( false !== $f ) {
-			$start = $tokens[ $f ]['scope_opener'];
-		} else {
-			$f = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-			if ( false !== $f ) {
-				$start = $tokens[ $f ]['scope_opener'];
+		// Once PHPCS 3.5.0 comes out this should be changed to the new Conditions::GetLastCondition() method.
+		if ( isset( $tokens[ $stackPtr ]['conditions'] ) === true ) {
+			$conditions = $tokens[ $stackPtr ]['conditions'];
+			$conditions = array_reverse( $conditions, true );
+			foreach ( $conditions as $tokenPtr => $condition ) {
+				if ( \T_FUNCTION === $condition || \T_CLOSURE === $condition ) {
+					$start = $tokens[ $tokenPtr ]['scope_opener'];
+					break;
+				}
 			}
 		}
 

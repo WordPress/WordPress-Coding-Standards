@@ -188,6 +188,24 @@ class CapitalPDangitSniff extends Sniff {
 			}
 		}
 
+		// Ignore constant declarations via define().
+		if ( $this->is_in_function_call( $stackPtr, array( 'define' => true ), true, true ) ) {
+			return;
+		}
+
+		// Ignore constant declarations using the const keyword.
+		$stop_points = array(
+			\T_CONST,
+			\T_SEMICOLON,
+			\T_OPEN_TAG,
+			\T_CLOSE_TAG,
+			\T_OPEN_CURLY_BRACKET,
+		);
+		$maybe_const = $this->phpcsFile->findPrevious( $stop_points, ( $stackPtr - 1 ) );
+		if ( false !== $maybe_const && \T_CONST === $this->tokens[ $maybe_const ]['code'] ) {
+			return;
+		}
+
 		$content = $this->tokens[ $stackPtr ]['content'];
 
 		if ( preg_match_all( self::WP_REGEX, $content, $matches, ( \PREG_PATTERN_ORDER | \PREG_OFFSET_CAPTURE ) ) > 0 ) {
