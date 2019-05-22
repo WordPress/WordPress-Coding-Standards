@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
@@ -108,39 +109,60 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
+			// Skip past potential variable array access: $var['Key'].
+			if ( \T_VARIABLE === $this->tokens[ $i ]['code'] ) {
+				do {
+					$open_bracket = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+					if ( false === $open_bracket
+						|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
+						|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
+					) {
+						continue 2;
+					}
 
-				/*
-				 * Here be dragons - a double quoted string can contain extrapolated variables
-				 * which don't have to comply with these rules.
-				 */
-				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
-					$transform       = $this->transform_complex_string( $string, $regex );
-					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
-					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
-				} else {
-					$transform       = $this->transform( $string, $regex );
-					$case_transform  = $this->transform( $string, $regex, 'case' );
-					$punct_transform = $this->transform( $string, $regex, 'punctuation' );
-				}
+					$i = $this->tokens[ $open_bracket ]['bracket_closer'];
 
-				if ( $string === $transform ) {
-					continue;
-				}
+				} while ( isset( $this->tokens[ $i ] ) && $i <= $parameters[1]['end'] );
 
-				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
-					$expected[ $i ] = '"' . $transform . '"';
-				} else {
-					$expected[ $i ] = '\'' . $transform . '\'';
-				}
+				continue;
+			}
 
-				if ( $string !== $case_transform ) {
-					$case_errors++;
-				}
-				if ( $string !== $punct_transform ) {
-					$underscores++;
-				}
+			// Skip past non-string tokens.
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
+				continue;
+			}
+
+			$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
+
+			/*
+			 * Here be dragons - a double quoted string can contain extrapolated variables
+			 * which don't have to comply with these rules.
+			 */
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				$transform       = $this->transform_complex_string( $string, $regex );
+				$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
+				$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
+			} else {
+				$transform       = $this->transform( $string, $regex );
+				$case_transform  = $this->transform( $string, $regex, 'case' );
+				$punct_transform = $this->transform( $string, $regex, 'punctuation' );
+			}
+
+			if ( $string === $transform ) {
+				continue;
+			}
+
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				$expected[ $i ] = '"' . $transform . '"';
+			} else {
+				$expected[ $i ] = '\'' . $transform . '\'';
+			}
+
+			if ( $string !== $case_transform ) {
+				$case_errors++;
+			}
+			if ( $string !== $punct_transform ) {
+				$underscores++;
 			}
 		}
 
