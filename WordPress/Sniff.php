@@ -282,11 +282,13 @@ abstract class Sniff implements PHPCS_Sniff {
 		'wp_handle_upload'           => true,
 		'wp_kses_allowed_html'       => true,
 		'wp_kses_data'               => true,
+		'wp_kses_no_null'            => true,
 		'wp_kses_post'               => true,
 		'wp_kses'                    => true,
 		'wp_parse_id_list'           => true,
 		'wp_redirect'                => true,
 		'wp_safe_redirect'           => true,
+		'wp_sanitize_redirect'       => true,
 		'wp_strip_all_tags'          => true,
 	);
 
