@@ -287,6 +287,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'wp_parse_id_list'           => true,
 		'wp_redirect'                => true,
 		'wp_safe_redirect'           => true,
+		'wp_sanitize_redirect'       => true,
 		'wp_strip_all_tags'          => true,
 	);
 

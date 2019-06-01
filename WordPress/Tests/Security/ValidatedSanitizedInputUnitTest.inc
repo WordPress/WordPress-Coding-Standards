@@ -331,3 +331,5 @@ function test_using_different_unslashing_functions() {
 	$sane = sanitize_text_field(stripslashes_deep($_GET['test'])); // Ok.
 	$sane = sanitize_text_field( stripslashes_from_strings_only( $_GET['test'] ) ); // OK.
 }
+
+echo wp_sanitize_redirect( wp_unslash( $_GET['test'] ) ); // OK.
