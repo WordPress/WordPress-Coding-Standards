@@ -211,7 +211,6 @@ if ( ClassName::array_key_exists( 'my_field5', $_POST ) ) {
 }
 
 echo sanitize_text_field (wp_unslash ($_GET['test'])); // OK.
-echo wp_sanitize_redirect( wp_unslash( $_GET['test'] ) ); // OK.
 
 if ( isset( $_GET['unslash_check'] ) ) {
 	$clean = sanitize_text_field( WP_Faker::wp_unslash( $_GET['unslash_check'] ) ); // Bad x1 - unslash.
@@ -332,3 +331,5 @@ function test_using_different_unslashing_functions() {
 	$sane = sanitize_text_field(stripslashes_deep($_GET['test'])); // Ok.
 	$sane = sanitize_text_field( stripslashes_from_strings_only( $_GET['test'] ) ); // OK.
 }
+
+echo wp_sanitize_redirect( wp_unslash( $_GET['test'] ) ); // OK.
