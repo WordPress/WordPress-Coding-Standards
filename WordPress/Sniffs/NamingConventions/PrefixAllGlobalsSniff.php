@@ -164,6 +164,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'ADMIN_COOKIE_PATH'    => true,
 		'PLUGINS_COOKIE_PATH'  => true,
 		'COOKIE_DOMAIN'        => true,
+		'RECOVERY_MODE_COOKIE' => true,
 		'FORCE_SSL_ADMIN'      => true,
 		'FORCE_SSL_LOGIN'      => true,
 		'AUTOSAVE_INTERVAL'    => true,
