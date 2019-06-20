@@ -1,0 +1,31 @@
+<documentation title="Cast Structure Spacing">
+    <standard>
+    <![CDATA[
+    Surround type casts with spaces.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: space after typecast.">
+        <![CDATA[
+$a = (int) '420';
+        ]]>
+        </code>
+		<code title="Invalid: no space after typecast.">
+        <![CDATA[
+$a = (int)'420';
+        ]]>
+        </code>
+	</code_comparison>
+	<code_comparison>
+        <code title="Invalid: spaces within typecast.">
+        <![CDATA[
+$a = ( int ) '420';
+        ]]>
+        </code>
+		<code title="Invalid: no space after and spaces within typecast.">
+        <![CDATA[
+$a = ( int )'420';
+        ]]>
+        </code>
+	</code_comparison>
+</documentation>
