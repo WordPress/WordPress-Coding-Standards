@@ -1,0 +1,45 @@
+<documentation title="Strict In Array Syntax">
+    <standard>
+    <![CDATA[
+    Strict in array syntax must be used.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: strict in array syntax.">
+        <![CDATA[
+in_array( 1, [ '1', 1, true ], <em>true</em> );
+]]>
+        </code>
+        <code title="Invalid: non-strict in array syntax.">
+        <![CDATA[
+in_array( 1, [ '1', 1, true ]<em></em> );
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: strict array search.">
+        <![CDATA[
+array_search( 1, $array, <em>true</em> );
+]]>
+        </code>
+        <code title="Invalid: non-strict array search.">
+        <![CDATA[
+array_search( 1, $array <em></em> );
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: strict array keys search.">
+        <![CDATA[
+array_keys( $arr, 'my_key', <em>true</em> );
+]]>
+        </code>
+        <code title="Invalid: non-strict array keys search.">
+        <![CDATA[
+array_keys( $arr, 'my_key' <em></em> );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
