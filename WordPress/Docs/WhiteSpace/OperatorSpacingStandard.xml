@@ -1,0 +1,36 @@
+<documentation title="Operator Spacing">
+    <standard>
+    <![CDATA[
+    Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: one space before and after the operator.">
+        <![CDATA[
+if ( $a === $b && $b === $c ) {}
+if ( ! $var ) {}
+        ]]>
+        </code>
+		<code title="Valid: multiline is okay, too.">
+        <![CDATA[
+if ( $a === $b
+	&& $b === $c
+) {}
+        ]]>
+        </code>
+	</code_comparison>
+	<code_comparison>
+		<code title="Invalid: too little space.">
+		<![CDATA[
+if ( $a===$b &&$b ===$c ) {}
+if ( !$var ) {}
+		]]>
+		</code>
+		<code title="Invalid: too much space.">
+		<![CDATA[
+if ( $a === $b   &&   $b ===$c ) {}
+if (  ! $var  ) {}
+		]]>
+		</code>
+	</code_comparison>
+</documentation>
