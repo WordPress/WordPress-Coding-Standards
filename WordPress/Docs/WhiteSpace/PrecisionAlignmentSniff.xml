@@ -1,0 +1,42 @@
+<documentation title="Precision Alignment Sniff">
+    <standard>
+    <![CDATA[
+    Warn on line indentation ending with spaces for precision alignment.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: only tabstops used for indentation.">
+        <![CDATA[
+	function exampleFunctionD() {}
+        ]]>
+        </code>
+		<code title="Valid: the four spaces will be replaced by a tab by the upstream sniff.">
+        <![CDATA[
+	    function exampleFunctionD() {}
+        ]]>
+        </code>
+		<code title="Invalid: precision alignment of 3 spaces.">
+		<![CDATA[
+   function exampleFunctionF() {}
+		]]>
+		</code>
+		<code title="Valid: multi-line comments are indented with tabs and one space.">
+        <![CDATA[
+/*
+ * Lorem Ipsum.
+ *
+ * @access private
+ */
+        ]]>
+        </code>
+		<code title="Invalid: precision alignment of 2 spaces.">
+        <![CDATA[
+/*
+ * Lorem Ipsum.
+ *
+  * @access private
+ */
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
