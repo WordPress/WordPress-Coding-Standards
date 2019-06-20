@@ -1,0 +1,53 @@
+<documentation title="Prefix all Globals">
+    <standard>
+    <![CDATA[
+      All globals must be prefixed with a theme/plugin specific term. These prefixes must be distinct and unique to the plugin/theme, in order to prevent potential conflicts with other plugins and themes.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Using the prefix ECPT_">
+        <![CDATA[
+define( 'ECPT_VERSION', '1.0' );
+        ]]>
+        </code>
+        <code title="Using a generic prefix of PLUGIN_">
+        <![CDATA[
+define( 'PLUGIN_VERSION', '1.0' );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      Using any prefixes designated for WordPress are not permitted, even if WordPress has not used the define. This includes all defines such as _() (underscores), __() double underscores, wp_, and wordpress_
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Using the prefix MYCOOLPLUGIN_">
+        <![CDATA[
+define( 'MYCOOLPLUGIN_EXTRA_DEBUG', true );
+        ]]>
+        </code>
+        <code title="Using a two-letter prefix MP_">
+        <![CDATA[
+define( 'WP_EXTRA_DEBUG', false );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      Two-letter prefixes should be avoided as many plugins and themes share the same intials.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Using the distinct prefix MYPLUGIN_">
+        <![CDATA[
+define( 'MYPLUGIN_DEFINE', true );
+        ]]>
+        </code>
+        <code title="Using a two-letter prefix MP_">
+        <![CDATA[
+define( 'MP_DEFINE', false );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
