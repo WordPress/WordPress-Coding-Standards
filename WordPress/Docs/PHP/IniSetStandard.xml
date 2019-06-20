@@ -1,0 +1,36 @@
+<documentation title="Detect incorrect use of the `ini_set()` function.">
+    <standard>
+    <![CDATA[
+      Using ini_set() for alternating PHP settings, as well as other functions with ability to change configuration at runtime of your scripts is discouraged. Changing runtime configuration might break other plugins and themes.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="ini_set() for a possibly breaking setting">
+        <![CDATA[
+ini_set('short_open_tag', 'off');
+        ]]>
+        </code>
+        <code title="ini_set() for a possibly breaking setting">
+        <![CDATA[
+// ini_set should not be used.
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      For some configuration values there are WordPress functions. These are preferred.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="ini_set() to alter memory limits.">
+        <![CDATA[
+ini_set('memory_limit', '256M');
+        ]]>
+        </code>
+        <code title="WordPress functional alternative">
+        <![CDATA[
+wp_raise_memory_limit();
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
