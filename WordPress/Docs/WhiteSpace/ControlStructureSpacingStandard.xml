@@ -1,0 +1,36 @@
+<documentation title="Control Structure Spacing">
+    <standard>
+    <![CDATA[
+    Use spaces around logical operators and assignments.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: space after opening control structure.">
+        <![CDATA[
+while ( have_posts() ) {}
+        ]]>
+        </code>
+		<code title="Invalid: no space after opening control structure.">
+        <![CDATA[
+while( have_posts() ) {}
+        ]]>
+        </code>
+	</code_comparison>
+	<code_comparison>
+        <code title="Valid: space after closing bracket.">
+        <![CDATA[
+if ( $a === $b ) {
+	// ...
+}
+        ]]>
+        </code>
+		<code title="Invalid: newline after closing bracket.">
+        <![CDATA[
+if ( $a === $b )
+{
+	// ...
+}
+        ]]>
+        </code>
+	</code_comparison>
+</documentation>
