@@ -49,7 +49,7 @@ function _edit_post();
     </code_comparison>
     <standard>
     <![CDATA[
-      Two-letter prefixes should be avoided as many plugins and themes share the same intials.
+      Two-letter prefixes should be avoided as many plugins and themes share the same initials.
     ]]>
     </standard>
     <code_comparison>
