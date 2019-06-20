@@ -1,0 +1,96 @@
+<documentation title="Comma After Array Item">
+    <standard>
+    <![CDATA[
+    Enforces a comma after each array item and the spacing around it.
+    ]]>
+    </standard>
+    <code_comparison>
+       <code title="Valid: Items inline, comma not needed.">
+        <![CDATA[
+$arr = <em>[</em> 'a', 'b', 'c' <em>]</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Items inline, comma not needed.">
+        <![CDATA[
+$arr = <em>[</em> 'a', 'b', 'c', <em>]</em>;
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Comma after item on their own line.">
+        <![CDATA[
+$arr = <em>[</em>
+    'a',
+    'b',
+    'c',
+<em>]</em>;
+        ]]>
+        </code>
+
+        <code title="Invalid: Missing comma after item on their own line.">
+        <![CDATA[
+$arr = <em>[</em>
+    'a',
+    'b',
+    'c'
+<em>]</em>;
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Comma after item on their own line (associative array).">
+        <![CDATA[
+$arr = <em>[</em>
+    1 => 'value',
+    2 => <em>[</em> 1 <em>]</em>,
+    3 => 'c',
+<em>]</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Missing comma after item on their own line (associative array)">
+        <![CDATA[
+$arr = <em>[</em>
+    1 => 'value',
+    2 => <em>[</em> 1 <em>]</em>,
+    3 => 'c'
+<em>]</em>;
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: No spacing before comma.">
+     <![CDATA[
+$arr = <em>[</em>
+    1 => 'value',
+    2 => <em>[</em> 1 <em>]</em>,
+    3 => 'c',
+<em>]</em>;
+    ]]>
+        </code>
+        <code title="Invalid: Spacing before comma.">
+     <![CDATA[
+$arr = <em>[</em>
+    1 => 'value'  ,
+    2 => <em>[</em> 1 <em>]</em>,
+    3 => 'c'       , /* Comment. */
+<em>]</em>;
+    ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Single spacing after comma.">
+     <![CDATA[
+$arr = <em>[</em> 'a', 'b', 'c' <em>]</em>;
+    ]]>
+        </code>
+        <code title="Invalid: Multiple or no spacing after comma.">
+     <![CDATA[
+$arr = <em>[</em> 'a','b',    'c' <em>]</em>;
+    ]]>
+        </code>
+    </code_comparison>
+</documentation>
