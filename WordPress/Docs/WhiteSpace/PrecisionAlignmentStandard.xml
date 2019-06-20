@@ -7,36 +7,25 @@
     <code_comparison>
         <code title="Valid: only tabstops used for indentation.">
         <![CDATA[
-	function exampleFunctionD() {}
+[tab]$var = true;
         ]]>
         </code>
-		<code title="Valid: the four spaces will be replaced by a tab by the upstream sniff.">
+		<code title="Invalid: precision alignment of 2 spaces.">
+		<![CDATA[
+[space][space]$var = true;
+		]]>
+		</code>
+	</code_comparison>
+	<code_comparison>
+		<code title="Valid: four spaces will be replaced by the upstream sniff.">
         <![CDATA[
-	    function exampleFunctionD() {}
+[tab][space][space][space][space]$var = true;
         ]]>
         </code>
 		<code title="Invalid: precision alignment of 3 spaces.">
 		<![CDATA[
-   function exampleFunctionF() {}
+[tab][space][space][space]$var = true;
 		]]>
 		</code>
-		<code title="Valid: multi-line comments are indented with tabs and one space.">
-        <![CDATA[
-/*
- * Lorem Ipsum.
- *
- * @access private
- */
-        ]]>
-        </code>
-		<code title="Invalid: precision alignment of 2 spaces.">
-        <![CDATA[
-/*
- * Lorem Ipsum.
- *
-  * @access private
- */
-        ]]>
-        </code>
     </code_comparison>
 </documentation>
