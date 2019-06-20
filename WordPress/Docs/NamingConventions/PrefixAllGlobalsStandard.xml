@@ -1,4 +1,4 @@
-<documentation title="Prefix all Globals">
+<documentation title="Prefix All Globals">
     <standard>
     <![CDATA[
       All globals must be prefixed with a theme/plugin specific term. These prefixes must be distinct and unique to the plugin/theme, in order to prevent potential conflicts with other plugins and themes.
@@ -22,14 +22,14 @@ define( 'PLUGIN_VERSION', '1.0' );
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using the prefix MYCOOLPLUGIN_">
+        <code title="Valid: Using the prefix mycoolplugin_">
         <![CDATA[
-define( 'MYCOOLPLUGIN_EXTRA_DEBUG', true );
+function mycoolplugin_save_post();
         ]]>
         </code>
-        <code title="Invalid: Using a two-letter prefix MP_">
+        <code title="Invalid: Using a WordPress reserved prefix wp_">
         <![CDATA[
-define( 'WP_EXTRA_DEBUG', false );
+function wp_save_post();
         ]]>
         </code>
     </code_comparison>
@@ -39,14 +39,14 @@ define( 'WP_EXTRA_DEBUG', false );
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using the distinct prefix MYPLUGIN_">
+        <code title="Valid: Using the distinct prefix MyPlugin">
         <![CDATA[
-define( 'MYPLUGIN_DEFINE', true );
+class MyPluginIsCool {}
         ]]>
         </code>
-        <code title="Invalid: Using a two-letter prefix MP_">
+        <code title="Invalid: Using a two-letter prefix MP">
         <![CDATA[
-define( 'MP_DEFINE', false );
+class MP {}
         ]]>
         </code>
     </code_comparison>
