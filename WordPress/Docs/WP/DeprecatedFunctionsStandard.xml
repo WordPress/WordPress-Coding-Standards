@@ -1,0 +1,19 @@
+<documentation title="Deprecated Functions">
+    <standard>
+    <![CDATA[
+    Please refrain from using deprecated WordPress functions. 
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: not using deprecated functions.">
+        <![CDATA[
+$sites = get_sites();
+        ]]>
+        </code>
+        <code title="Invalid: use of deprecated functions.">
+        <![CDATA[
+$sites = wp_get_sites(); // Deprecated WP 4.6
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

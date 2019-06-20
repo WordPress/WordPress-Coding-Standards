@@ -1,0 +1,19 @@
+<documentation title="Deprecated Parameter Values">
+    <standard>
+    <![CDATA[
+    Please refrain from using deprecated WordPress Parameter Values. 
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: not using deprecated values.">
+        <![CDATA[
+bloginfo( 'url' );
+        ]]>
+        </code>
+        <code title="Invalid: use of deprecated values.">
+        <![CDATA[
+bloginfo ( 'home' ); // Deprecated WP 2.2
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

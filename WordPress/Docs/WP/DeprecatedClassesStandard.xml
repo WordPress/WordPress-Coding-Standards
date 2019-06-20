@@ -1,0 +1,19 @@
+<documentation title="Deprecated Class">
+    <standard>
+    <![CDATA[
+    Please refrain from using deprecated WordPress classes. 
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: not using deprecated class.">
+        <![CDATA[
+$a = new WP_User_Query();
+        ]]>
+        </code>
+        <code title="Invalid: use of deprecated class.">
+        <![CDATA[
+$a = new WP_User_Search(); // Deprecated WP 3.1
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

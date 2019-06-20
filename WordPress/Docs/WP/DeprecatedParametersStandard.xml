@@ -1,0 +1,19 @@
+<documentation title="Deprecated Parameters">
+    <standard>
+    <![CDATA[
+    Please refrain from using deprecated WordPress Parameters. 
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: not using deprecated parameters.">
+        <![CDATA[
+get_the_author();
+        ]]>
+        </code>
+        <code title="Invalid: use of deprecated parameters.">
+        <![CDATA[
+get_the_author( <em>$string</em> ); // Deprecated WP 2.1
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
