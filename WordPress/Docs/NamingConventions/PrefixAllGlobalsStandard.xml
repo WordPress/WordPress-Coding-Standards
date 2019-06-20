@@ -1,7 +1,7 @@
 <documentation title="Prefix All Globals">
     <standard>
     <![CDATA[
-      All globals must be prefixed with a theme/plugin specific term. These prefixes must be distinct and unique to the plugin/theme, in order to prevent potential conflicts with other plugins and themes.
+      All globals terms (classes, defines, functions, and namespaces) must be prefixed with a theme/plugin specific term. These prefixes must be distinct and unique to the plugin/theme, in order to prevent potential conflicts with other plugins and themes.
     ]]>
     </standard>
     <code_comparison>
