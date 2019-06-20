@@ -1,0 +1,26 @@
+<documentation title="Yoda Conditional Statements">
+    <standard>
+    <![CDATA[
+      When doing logical comparisons involving variables, the variable must be placed on the right side. All constants, literals, and function calls must be placed on the left side. If neither side is a variable, the order is unimportant. 
+      
+For more information:
+https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#yoda-conditions
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="The variable $the_force is placed on the right">
+        <![CDATA[
+if ( true === $the_force ) {
+    $victorious = you_will( $be );
+}
+        ]]>
+        </code>
+        <code title="The variable $the_force has been placed on the left">
+        <![CDATA[
+if ( $the_force === false ) {
+    $victorious = you_will_not( $be );
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
