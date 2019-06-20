@@ -20,7 +20,7 @@ while( have_posts() ) {}
         <code title="Valid: space after closing bracket.">
         <![CDATA[
 if ( $a === $b ) {
-	// ...
+  // ...
 }
         ]]>
         </code>
@@ -28,7 +28,7 @@ if ( $a === $b ) {
         <![CDATA[
 if ( $a === $b )
 {
-	// ...
+  // ...
 }
         ]]>
         </code>
