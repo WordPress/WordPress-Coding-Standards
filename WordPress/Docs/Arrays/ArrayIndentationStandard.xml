@@ -1,0 +1,52 @@
+<documentation title="Array Indentation">
+    <standard>
+    <![CDATA[
+      The array closing bracket and indentation should line up with the start of the content on the line containing the array opener.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Closing bracket lined up correctly">
+        <![CDATA[
+$args = array(
+    'post_id' => 22,
+<em>);</em>
+        ]]>
+        </code>
+        <code title="Invalid: Closing bracket lined up incorrectly">
+        <![CDATA[
+$args = array(
+            'post_id' => 22,
+        <em>);</em>
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      Keys in each array and nested array should be indented by a 4-space tab for each level of nested array, so that the array visually matches its structure.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Correctly indented array">
+        <![CDATA[
+$args = array(
+    'post_id'       => 22,
+    'comment_count' => array(
+        <em>'value'   => 25,
+        'compare' => '>=',</em>
+    ),
+);
+        ]]>
+        </code>
+        <code title="Invalid: Indented incorrectly; harder to read.">
+        <![CDATA[
+$args = array(
+    'post_id'       => 22,
+    'comment_count' => array(
+    <em>'value'   => 25,
+    'compare' => '>=',</em>
+    ),
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
