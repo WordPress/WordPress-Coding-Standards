@@ -7,7 +7,7 @@
     <code_comparison>
         <code title="ini_set() for a possibly breaking setting">
         <![CDATA[
-ini_set('short_open_tag', 'off');
+ini_set( 'short_open_tag', 'off' );
         ]]>
         </code>
         <code title="ini_set() for a possibly breaking setting">
@@ -24,7 +24,7 @@ ini_set('short_open_tag', 'off');
     <code_comparison>
         <code title="ini_set() to alter memory limits.">
         <![CDATA[
-ini_set('memory_limit', '256M');
+ini_set( 'memory_limit', '256M' );
         ]]>
         </code>
         <code title="WordPress functional alternative">
