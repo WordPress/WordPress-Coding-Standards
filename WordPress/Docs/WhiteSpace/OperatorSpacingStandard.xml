@@ -11,26 +11,26 @@ if ( $a === $b && $b === $c ) {}
 if ( ! $var ) {}
         ]]>
         </code>
-		<code title="Valid: multiline is okay, too.">
+        <code title="Valid: multiline is okay, too.">
         <![CDATA[
 if ( $a === $b
-	&& $b === $c
+    && $b === $c
 ) {}
         ]]>
         </code>
-	</code_comparison>
-	<code_comparison>
-		<code title="Invalid: too little space.">
-		<![CDATA[
+    </code_comparison>
+    <code_comparison>
+        <code title="Invalid: too little space.">
+        <![CDATA[
 if ( $a===$b &&$b ===$c ) {}
 if ( !$var ) {}
-		]]>
-		</code>
-		<code title="Invalid: too much space.">
-		<![CDATA[
+        ]]>
+        </code>
+        <code title="Invalid: too much space.">
+        <![CDATA[
 if ( $a === $b   &&   $b ===$c ) {}
 if (  ! $var  ) {}
-		]]>
-		</code>
-	</code_comparison>
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
