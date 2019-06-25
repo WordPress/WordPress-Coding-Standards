@@ -17,14 +17,14 @@ while( have_posts() ) {}
         </code>
 	</code_comparison>
 	<code_comparison>
-        <code title="Valid: space after closing bracket.">
+        <code title="Valid: space after closing parenthesis.">
         <![CDATA[
 if ( $a === $b ) {
   // ...
 }
         ]]>
         </code>
-		<code title="Invalid: newline after closing bracket.">
+		<code title="Invalid: newline after closing parenthesis.">
         <![CDATA[
 if ( $a === $b )
 {
