@@ -13,7 +13,7 @@ $a = array(
 );
         ]]>
         </code>
-		<code title="Invalid: tabs used for inline alignment.">
+        <code title="Invalid: tabs used for inline alignment.">
         <![CDATA[
 $a = array(
   'lorem'[tab]=> 'ipsum',
@@ -21,5 +21,5 @@ $a = array(
 );
         ]]>
         </code>
-	</code_comparison>
+    </code_comparison>
 </documentation>
