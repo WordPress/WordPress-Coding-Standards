@@ -5,14 +5,14 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="ini_set() for a possibly breaking setting">
+        <code title="Valid: ini_set() for a possibly breaking setting.">
         <![CDATA[
-ini_set( 'short_open_tag', 'off' );
+// ini_set() should not be used.
         ]]>
         </code>
-        <code title="ini_set() for a possibly breaking setting">
+        <code title="Invalid: ini_set() for a possibly breaking setting.">
         <![CDATA[
-// ini_set should not be used.
+ini_set( 'short_open_tag', 'off' );
         ]]>
         </code>
     </code_comparison>
@@ -22,14 +22,14 @@ ini_set( 'short_open_tag', 'off' );
     ]]>
     </standard>
     <code_comparison>
-        <code title="ini_set() to alter memory limits.">
-        <![CDATA[
-ini_set( 'memory_limit', '256M' );
-        ]]>
-        </code>
-        <code title="WordPress functional alternative">
+        <code title="Valid: WordPress functional alternative.">
         <![CDATA[
 wp_raise_memory_limit();
+        ]]>
+        </code>
+        <code title="Invalid: ini_set() to alter memory limits.">
+        <![CDATA[
+ini_set( 'memory_limit', '256M' );
         ]]>
         </code>
     </code_comparison>
