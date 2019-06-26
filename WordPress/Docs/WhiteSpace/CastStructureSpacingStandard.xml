@@ -12,7 +12,7 @@ $a = (int) '420';
         </code>
         <code title="Invalid: space after typecast.">
         <![CDATA[
-$a = (string)420;
+$a = (int)'420';
         ]]>
         </code>
     </code_comparison>
