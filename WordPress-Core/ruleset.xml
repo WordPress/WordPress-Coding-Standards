@@ -17,7 +17,7 @@
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
 
 	<!-- Rule: Text that goes into attributes should be run through esc_attr().
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/527 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/527 -->
 
 
 	<!--
@@ -121,7 +121,7 @@
 	<!-- Rule: Single line inline comments can take up their own line. -->
 	<!-- Rule: Each parameter must take up no more than a single line. Multi-line parameter
 		 values must be assigned to a variable and then that variable should be passed to the function call.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1330 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1330 -->
 
 
 	<!--
@@ -135,7 +135,7 @@
 	<rule ref="WordPress.PHP.POSIXFunctions"/>
 
 	<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/632 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/632 -->
 
 	<!-- Rule: It's most convenient to use single-quoted strings for regular expressions.
 		 Already covered by Squiz.Strings.DoubleQuoteUsage -->
@@ -276,11 +276,11 @@
 	#############################################################################
 	-->
 	<!-- Rule: Always capitalize the SQL parts of the statement like UPDATE or WHERE.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/639 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/639 -->
 
 	<!-- Rule: Functions that update the database should expect their parameters to lack
 		 SQL slash escaping when passed.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/640 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/640 -->
 
 	<!-- Rule: in $wpdb->prepare - %s is used for string placeholders and %d is used for integer
 		 placeholders. Note that they are not 'quoted'! -->
@@ -325,10 +325,10 @@
 		 Hyphens should separate words. -->
 	<!-- Covers rule: Class file names should be based on the class name with "class-"
 		 prepended and the underscores in the class name replaced with hyphens.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/642 -->
 	<!-- Covers rule: Files containing template tags in wp-includes should have "-template"
 		 appended to the end of the name.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/642 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/642 -->
 	<rule ref="WordPress.Files.FileName"/>
 
 
@@ -345,7 +345,7 @@
 	Handbook: PHP - Interpolation for Naming Dynamic Hooks.
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#interpolation-for-naming-dynamic-hooks
 
-	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/751
+	https://github.com/WordPress/WordPress-Coding-Standards/issues/751
 	#############################################################################
 	-->
 	<!-- Rule: Dynamic hooks should be named using interpolation rather than concatenation. -->
@@ -365,7 +365,7 @@
 	-->
 	<!-- Rule: Always have Ternaries test if the statement is true, not false.
 		 An exception would be using ! empty(), as testing for false here is generally more intuitive.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/643 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/643 -->
 
 
 	<!--
@@ -388,7 +388,7 @@
 	#############################################################################
 	-->
 	<!-- Rule: In general, readability is more important than cleverness or brevity.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
