@@ -17,6 +17,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.14.0
+ * @since   2.2.0  New group `date` added.
  */
 class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -40,6 +41,13 @@ class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => '%s() is deprecated as of PHP 7.2, please use full fledged functions or anonymous functions instead.',
 				'functions' => array(
 					'create_function',
+				),
+			),
+			'date' => array(
+				'type'      => 'error',
+				'message'   => '%s() is affected by runtime timezone changes which can cause date/time to be incorrectly displayed. Use gmdate() instead.',
+				'functions' => array(
+					'date',
 				),
 			),
 		);
