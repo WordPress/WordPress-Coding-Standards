@@ -708,6 +708,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'PHP_SELF'                         => true,
 		'phpmailer'                        => true,
 		'plugin_page'                      => true,
+		'plugin'                           => true,
 		'plugins'                          => true,
 		'post'                             => true,
 		'post_default_category'            => true,
