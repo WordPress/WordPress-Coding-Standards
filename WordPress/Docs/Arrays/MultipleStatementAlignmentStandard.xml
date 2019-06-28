@@ -1,0 +1,29 @@
+<documentation title="Multiple Statement Alignment">
+    <standard>
+    <![CDATA[
+      There should be one space on either side of a double arrow operator used to assign a value to a key. In the case of a block of related assignments, more space may be inserted to promote readability.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Double arrow operators aligned">
+        <![CDATA[
+$args = array(
+    'cat'      <em>=></em> 22,
+    'year'     <em>=></em> $current_year,
+    'monthnum' <em>=></em> $current_month,
+    'order'    <em>=></em> 'ASC',
+);
+        ]]>
+        </code>
+        <code title="Invalid: Not aligned; harder to read">
+        <![CDATA[
+$args = array(
+    'cat' <em>=></em> 22,
+    'year' <em>=></em> $current_year,
+    'monthnum' <em>=></em> $current_month,
+    'order' <em>=></em> 'ASC',
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
