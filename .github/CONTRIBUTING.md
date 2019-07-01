@@ -30,7 +30,7 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
 Only make a property `public` if that is the intended behaviour.
 
-When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
+When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 
 ## Whitelist comments
 
@@ -51,7 +51,7 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test suite for unit testing the sniffs.
 
-Presuming you have installed `PHP_CodeSniffer` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
+Presuming you have installed `PHP_CodeSniffer` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
 
 > N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
 > Other than that, you're all set already as Composer will have installed PHPUnit for you.

@@ -39,7 +39,7 @@ function global_vars() {
 }
 
 // Test against cross-contamination of global detection.
-// https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/486
+// https://github.com/WordPress/WordPress-Coding-Standards/issues/486
 function local_var_only() {
 	$pagenow = 'test'; // Ok, function scope.
 }
@@ -58,7 +58,7 @@ add_filter( 'comments_open', function( $open, $post_id ) {
 $closure = function() { $page = 'test' }; // Ok, check against cross-contaminiation from within a closure.
 
 // Allow overriding globals in functions within unit test classes.
-// https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/300#issuecomment-158778606
+// https://github.com/WordPress/WordPress-Coding-Standards/issues/300#issuecomment-158778606
 trait WP_UnitTestCase {
 
 	public function test_something() {
@@ -177,7 +177,7 @@ function global_vars() {
 	$closure = function ( $pagenow ) { // OK, local to the closure.
 		$pagenow = 'something'; // OK, local to the closure.
 	};
-	
+
 	$pagenow = 'something else'; // Bad.
 
 	return $closure( $pagenow ); // OK, not an assignment.

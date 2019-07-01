@@ -53,7 +53,7 @@ jobs:
             - libxml2-utils
       script:
         # WordPress Coding Standards.
-        # @link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+        # @link https://github.com/WordPress/WordPress-Coding-Standards
         # @link http://pear.php.net/package/PHP_CodeSniffer/
         - $(pwd)/vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1
 
