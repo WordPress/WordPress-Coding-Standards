@@ -7,7 +7,7 @@
     <code_comparison>
         <code title="Valid: one space before and after the operator.">
         <![CDATA[
-if ( $a === $b && $b === $c ) {}
+if ( $a<em> === </em>$b<em> && </em>$b<em> === </em>$c ) {}
 if ( ! $var ) {}
         ]]>
         </code>
