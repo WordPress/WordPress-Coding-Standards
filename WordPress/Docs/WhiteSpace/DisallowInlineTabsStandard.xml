@@ -8,16 +8,16 @@
         <code title="Valid: spaces used for inline alignment.">
         <![CDATA[
 $a = array(
-    'lorem'[space]=> 'ipsum',
-    'dol'[space][space][space]=> 'or',
+    'a'<em>[space]</em>=> 'lor',
+    'b'<em>[space][space][space]</em>=> 'em',
 );
         ]]>
         </code>
         <code title="Invalid: tabs used for inline alignment.">
         <![CDATA[
 $a = array(
-    'lorem'[tab]=> 'ipsum',
-    'dol'[tab]=> 'or',
+    'a'<em>[tab]</em>=> 'lor',
+    'b'<em>[tab]</em>=> 'em',
 );
         ]]>
         </code>
