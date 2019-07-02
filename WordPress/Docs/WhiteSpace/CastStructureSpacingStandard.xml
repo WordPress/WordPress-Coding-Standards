@@ -5,7 +5,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: space after typecast.">
+        <code title="Valid: space before typecast.">
         <![CDATA[
 $a =<em> </em>(int) '420';
         ]]>
