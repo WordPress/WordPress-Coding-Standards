@@ -1,7 +1,7 @@
 <documentation title="Operator Spacing">
     <standard>
     <![CDATA[
-    Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators.
+    Always put a space after commas, and on both sides of logical, comparison, string and assignment operators.
     ]]>
     </standard>
     <code_comparison>
