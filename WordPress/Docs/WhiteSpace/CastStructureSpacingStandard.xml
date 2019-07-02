@@ -1,7 +1,7 @@
 <documentation title="Cast Structure Spacing">
     <standard>
     <![CDATA[
-    Surround type casts with spaces.
+    A type cast should be preceded by whitespace.
     ]]>
     </standard>
     <code_comparison>
