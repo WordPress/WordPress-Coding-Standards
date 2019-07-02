@@ -14,7 +14,7 @@ if ( ! $var ) {}
         <code title="Valid: multiline is okay, too.">
         <![CDATA[
 if ( $a === $b<em>
-    && $b === $c
+    && </em>$b === $c
 ) {}
         ]]>
         </code>
