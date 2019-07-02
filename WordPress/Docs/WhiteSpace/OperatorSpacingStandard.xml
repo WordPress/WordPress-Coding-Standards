@@ -29,7 +29,7 @@ if ( !$var ) {}
         <code title="Invalid: too much space.">
         <![CDATA[
 if ( $a === $b<em>   &&   </em>$b<em> ===      </em>$c ) {}
-if (  ! $var  ) {}
+if (<em>  ! </em>$var ) {}
         ]]>
         </code>
     </code_comparison>
