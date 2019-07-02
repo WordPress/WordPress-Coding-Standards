@@ -10,7 +10,7 @@
 $a = (int) '420';
         ]]>
         </code>
-        <code title="Invalid: space after typecast.">
+        <code title="Invalid: no space before typecast.">
         <![CDATA[
 $a = (int)'420';
         ]]>
