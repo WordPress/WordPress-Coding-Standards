@@ -7,24 +7,24 @@
     <code_comparison>
         <code title="Valid: only tabstops used for indentation.">
         <![CDATA[
-[tab]$var = true;
+<em>[tab]</em>$var = true;
         ]]>
         </code>
         <code title="Invalid: precision alignment of 2 spaces.">
         <![CDATA[
-[space][space]$var = true;
+<em>[space][space]</em>$var = true;
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: four spaces counts as a tab, the replacement of these will be handled by another sniff.">
         <![CDATA[
-[tab][space][space][space][space]$var = true;
+<em>[tab][space][space][space][space]</em>$var = true;
         ]]>
         </code>
         <code title="Invalid: precision alignment of 3 spaces.">
         <![CDATA[
-[tab][space][space][space]$var = true;
+<em>[tab][space][space][space]</em>$var = true;
         ]]>
         </code>
     </code_comparison>
