@@ -10,22 +10,22 @@
 [tab]$var = true;
         ]]>
         </code>
-		<code title="Invalid: precision alignment of 2 spaces.">
-		<![CDATA[
+        <code title="Invalid: precision alignment of 2 spaces.">
+        <![CDATA[
 [space][space]$var = true;
-		]]>
-		</code>
-	</code_comparison>
-	<code_comparison>
-		<code title="Valid: four spaces will be replaced by the upstream sniff.">
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: four spaces will be replaced by the upstream sniff.">
         <![CDATA[
 [tab][space][space][space][space]$var = true;
         ]]>
         </code>
-		<code title="Invalid: precision alignment of 3 spaces.">
-		<![CDATA[
+        <code title="Invalid: precision alignment of 3 spaces.">
+        <![CDATA[
 [tab][space][space][space]$var = true;
-		]]>
-		</code>
+        ]]>
+        </code>
     </code_comparison>
 </documentation>
