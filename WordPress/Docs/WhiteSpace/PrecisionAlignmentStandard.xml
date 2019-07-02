@@ -17,7 +17,7 @@
         </code>
     </code_comparison>
     <code_comparison>
-        <code title="Valid: four spaces will be replaced by the upstream sniff.">
+        <code title="Valid: four spaces counts as a tab, the replacement of these will be handled by another sniff.">
         <![CDATA[
 [tab][space][space][space][space]$var = true;
         ]]>
