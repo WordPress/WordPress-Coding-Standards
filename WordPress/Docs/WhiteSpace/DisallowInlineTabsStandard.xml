@@ -16,7 +16,7 @@ $a = array(
         <code title="Invalid: tabs used for inline alignment.">
         <![CDATA[
 $a = array(
-    'a'<em>[tab]</em>=> 'lor',
+    'abc'<em>[tab]</em>=> 'lor',
     'b'<em>[tab]</em>=> 'em',
 );
         ]]>
