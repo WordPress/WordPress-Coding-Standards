@@ -24,7 +24,7 @@ if (<em> !</em>$var ) {}
         </code>
     </code_comparison>
     <code_comparison>
-        <code title="Valid: multiline is okay, too.">
+        <code title="Valid: a new line instead of a space is okay too.">
         <![CDATA[
 if ( $a === $b<em>
     && </em>$b === $c
