@@ -8,7 +8,7 @@
         <code title="Valid: spaces used for inline alignment.">
         <![CDATA[
 $a = array(
-    'a'<em>[space]</em>=> 'lor',
+    'abc'<em>[space]</em>=> 'lor',
     'b'<em>[space][space][space]</em>=> 'em',
 );
         ]]>
