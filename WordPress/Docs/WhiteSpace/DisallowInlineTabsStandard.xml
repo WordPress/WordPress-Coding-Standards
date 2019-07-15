@@ -1,7 +1,7 @@
 <documentation title="Disallow Inline Tabs">
     <standard>
     <![CDATA[
-    Use spaces for inline alignments.
+    Use spaces for inline alignment.
     ]]>
     </standard>
     <code_comparison>
