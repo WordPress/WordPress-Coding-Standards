@@ -31,7 +31,7 @@ if ( $a === $b<em>
 ) {}
         ]]>
         </code>
-		<code title="Invalid: too much space after operator on new line.">
+        <code title="Invalid: too much space after operator on new line.">
         <![CDATA[
 if ( $a === $b<em>
     &&     </em>$b === $c
