@@ -933,6 +933,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					array( $prefix )
 				);
 				continue;
+			} elseif ( ! function_exists( 'iconv_strlen' ) && strlen( $prefix, $this->phpcsFile->config->encoding ) < self::MIN_PREFIX_LENGTH ) {
+				$this->phpcsFile->addError(
+					'The "%s" prefix is too short. Short prefixes are not unique enough and may cause name collisions with other code.',
+					0,
+					'ShortPrefixPassed',
+					array( $prefix )
+				);
+				continue;
 			}
 
 			// Validate the prefix against characters allowed for function, class, constant names etc.
