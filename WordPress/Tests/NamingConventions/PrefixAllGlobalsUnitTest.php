@@ -32,7 +32,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
-					1   => 2, // 1 x error for blacklisted prefix passed.
+					1   => 8, // 2 x error for blacklisted prefix passed. 4 x error for short prefixes. 2 x no prefix.
 					10  => 1,
 					18  => 1,
 					21  => 1,

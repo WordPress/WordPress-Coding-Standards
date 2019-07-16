@@ -425,3 +425,28 @@ define(
 );
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
+
+/*
+ * Bad: Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/1733.
+ * 
+ * Short prefixes are not allowed. The errors are triggered
+ * on LINE 1 for the unit-test, because it's the phpcs:set command that is
+ * wrong, not the implementing code.
+ */
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] a
+function a_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] aa
+function aa_do_something(){}
+
+// The following line mimicks an empty prefix value.
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
+function aa_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊
+function 😊_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
+function 😊😊_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
