@@ -367,6 +367,8 @@
 		 An exception would be using ! empty(), as testing for false here is generally more intuitive.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/643 -->
 
+	<!-- Rule: The short ternary operator must not be used. -->
+	<rule ref="WordPress.PHP.DisallowShortTernary"/>
 
 	<!--
 	#############################################################################
