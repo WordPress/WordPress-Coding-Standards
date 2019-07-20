@@ -101,6 +101,16 @@
 
 	<!--
 	#############################################################################
+	Handbook: PHP - Declaring Arrays.
+	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#declaring-arrays
+	#############################################################################
+	-->
+	<!-- Covers rule: Arrays must be declared using long array syntax. -->
+	<rule ref="Generic.Arrays.DisallowShortArraySyntax"/>
+
+
+	<!--
+	#############################################################################
 	Handbook: PHP - Use elseif, not else if.
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
