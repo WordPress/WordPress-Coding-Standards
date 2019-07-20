@@ -68,3 +68,14 @@ if ( $a === $b or
 // Instanceof
 if ( MyClass    instanceof    SomeOtherClass ) {}
 if ( MyClass instanceof SomeOtherClass ) {}
+
+// Insteadof
+class Foo {
+    use A, B {
+        A::Talk insteadof B; // OK.
+        B::smallTalk     insteadof       A;
+        A::bigTalk
+			insteadof
+			B; // OK.
+    }
+}

@@ -43,6 +43,7 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 			50 => 2,
 			51 => 2,
 			69 => 2,
+			76 => 2,
 		);
 	}
 
