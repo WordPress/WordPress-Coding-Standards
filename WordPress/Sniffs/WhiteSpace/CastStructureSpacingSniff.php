@@ -24,6 +24,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.11.0 The error level for all errors thrown by this sniff has been raised from warning to error.
  * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   2.2.0  Added exception for whitespace between spread operator and cast.
  */
 class CastStructureSpacingSniff extends Sniff {
 
@@ -45,7 +46,9 @@ class CastStructureSpacingSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( \T_WHITESPACE !== $this->tokens[ ( $stackPtr - 1 ) ]['code'] ) {
+		if ( \T_WHITESPACE !== $this->tokens[ ( $stackPtr - 1 ) ]['code']
+			&& \T_ELLIPSIS !== $this->tokens[ ( $stackPtr - 1 ) ]['code']
+		) {
 			$error = 'No space before opening casting parenthesis is prohibited';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 			if ( true === $fix ) {
