@@ -46,6 +46,21 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	public $treat_files_as_scoped = false;
 
 	/**
+	 * Whitelist select variables from the Sniff::$wp_globals array.
+	 *
+	 * A few select variables in WP Core are _intended_ to be overwritten
+	 * by themes/plugins. This sniff should not throw an error for those.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var array
+	 */
+	protected $override_allowed = array(
+		'content_width'     => true,
+		'wp_cockneyreplace' => true,
+	);
+
+	/**
 	 * Scoped object and function structures to skip over as
 	 * variables will have a different scope within those.
 	 *
@@ -195,6 +210,13 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		}
 
 		/*
+		 * Is this one of the WP global variables which are allowed to be overwritten ?
+		 */
+		if ( isset( $this->override_allowed[ $var_name ] ) === true ) {
+			return;
+		}
+
+		/*
 		 * Check if the variable value is being changed.
 		 */
 		if ( false === $this->is_assignment( $stackPtr )
@@ -256,7 +278,10 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			if ( \T_VARIABLE === $var['code'] ) {
-				if ( isset( $this->wp_globals[ substr( $var['content'], 1 ) ] ) ) {
+				$var_name = substr( $var['content'], 1 );
+				if ( isset( $this->wp_globals[ $var_name ] )
+					&& isset( $this->override_allowed[ $var_name ] ) === false
+				) {
 					$search[] = $var['content'];
 				}
 			}

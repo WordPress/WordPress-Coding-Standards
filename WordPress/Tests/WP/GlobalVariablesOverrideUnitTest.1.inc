@@ -210,3 +210,16 @@ class MyClass {
 
 // Test assigning to multiple variables at once.
 $is_NS4 = $is_opera = $is_safari = $GLOBALS['is_winIE'] = true; // Bad x 4.
+
+// Issue #1043.
+function globals_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'acronym_content_width', 640 );
+}
+
+function global_content_width() {
+	global $content_width;
+
+	$content_width = apply_filters( 'acronym_content_width', 640 );
+}
+
+$content_width = 1000;
