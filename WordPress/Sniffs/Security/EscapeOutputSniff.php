@@ -443,6 +443,15 @@ class EscapeOutputSniff extends Sniff {
 				$ptr     = $i;
 			}
 
+			// Make the error message a little more informative for array access variables.
+			if ( \T_VARIABLE === $this->tokens[ $ptr ]['code'] ) {
+				$array_keys = $this->get_array_access_keys( $ptr );
+
+				if ( ! empty( $array_keys ) ) {
+					$content .= '[' . implode( '][', $array_keys ) . ']';
+				}
+			}
+
 			$this->phpcsFile->addError(
 				"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 				$ptr,
