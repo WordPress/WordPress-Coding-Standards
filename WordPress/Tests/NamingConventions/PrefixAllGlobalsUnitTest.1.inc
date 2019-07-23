@@ -424,4 +424,9 @@ define(
 	[ 1, 2, 3 ]
 );
 
+// Issue #1043.
+function acronym_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'acronym_content_width', 640 );
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
