@@ -168,6 +168,11 @@
 	</rule>
 
 
+	<!-- Prevent some typical mistakes people make accidentally.
+	     https://github.com/WordPress/WordPress-Coding-Standards/pull/1777 -->
+	<rule ref="WordPress.CodeAnalysis.EscapedNotTranslated"/>
+
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.
