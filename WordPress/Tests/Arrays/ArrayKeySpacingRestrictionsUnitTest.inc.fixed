@@ -29,3 +29,11 @@ $arr[0]; // Good.
 $arr[0]; // Bad.
 $arr[-1]; // Good.
 $arr[-1]; // Bad.
+
+// Space size check.
+bar( $arr['test'] ); // Bad.
+bar( $arr[ $test ] ); // Bad x 2.
+$arr[ FooClass::FOO_KEY ]; // Bad x 2.
+
+$a = $arr[ /*comment*/ 'key' ]; // Bad x 2.
+$a = $arr[ /*comment*/ 'key' ]; // Bad x 2.
