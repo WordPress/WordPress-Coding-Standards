@@ -20,3 +20,5 @@ $unset2 = (unset) $unset; // Ok.
 
 $float1 = (float )$float; // Bad; n.b. spacing within the cast is dealt with by an upstream sniff.
 $float2 = (float) $float; // Ok.
+
+function_call( ...(array) $mixed ); // OK.
