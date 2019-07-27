@@ -2757,6 +2757,58 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
+	 * Find the list opener & closer based on a T_LIST or T_OPEN_SHORT_ARRAY token.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The stack pointer to the array token.
+	 *
+	 * @return array|bool Array with two keys `opener`, `closer` or false if
+	 *                    not a (short) list token or if either or these
+	 *                    could not be determined.
+	 */
+	protected function find_list_open_close( $stackPtr ) {
+		/*
+		 * Determine the list opener & closer.
+		 */
+		if ( \T_LIST === $this->tokens[ $stackPtr ]['code'] ) {
+			// PHPCS 3.5.0.
+			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
+				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
+
+			} else {
+				// PHPCS < 3.5.0.
+				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+				if ( false !== $next_non_empty
+					&& \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
+				) {
+					$opener = $next_non_empty;
+				}
+			}
+
+			if ( isset( $opener, $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
+				$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+			}
+		}
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& $this->is_short_list( $stackPtr ) === true
+		) {
+			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+		}
+
+		if ( isset( $opener, $closer ) ) {
+			return array(
+				'opener' => $opener,
+				'closer' => $closer,
+			);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Determine the namespace name an arbitrary token lives in.
 	 *
 	 * @since 0.10.0
