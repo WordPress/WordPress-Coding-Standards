@@ -82,10 +82,32 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'SpacesAroundArrayKeys' );
 			if ( true === $fix ) {
 				if ( $spaced1 ) {
+					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
+
+					for ( $i = ( $stackPtr + 2 ); $i < $token['bracket_closer']; $i++ ) {
+						if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
+							break;
+						}
+
+						$this->phpcsFile->fixer->replaceToken( $i, '' );
+					}
+
+					$this->phpcsFile->fixer->endChangeset();
 				}
 				if ( $spaced2 ) {
+					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $token['bracket_closer'] - 1 ), '' );
+
+					for ( $i = ( $token['bracket_closer'] - 2 ); $i > $stackPtr; $i-- ) {
+						if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
+							break;
+						}
+
+						$this->phpcsFile->fixer->replaceToken( $i, '' );
+					}
+
+					$this->phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
