@@ -3315,4 +3315,71 @@ abstract class Sniff implements PHPCS_Sniff {
 		return $this->is_short_list( $parentOpen );
 	}
 
+	/**
+	 * Get a list of the token pointers to the variables being assigned to in a list statement.
+	 *
+	 * @internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int   $stackPtr        The position of the T_LIST or T_OPEN_SHORT_ARRAY
+	 *                               token in the stack.
+	 * @param array $list_open_close Optional. Array containing the token pointers to
+	 *                               the list opener and closer.
+	 *
+	 * @return array Array with the stack pointers to the variables or an empty
+	 *               array when not a (short) list.
+	 */
+	protected function get_list_variables( $stackPtr, $list_open_close = array() ) {
+		if ( \T_LIST !== $this->tokens[ $stackPtr ]['code']
+			&& \T_OPEN_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+		) {
+			return array();
+		}
+
+		if ( empty( $list_open_close ) ) {
+			$list_open_close = $this->find_list_open_close( $stackPtr );
+			if ( false === $list_open_close ) {
+				// Not a (short) list.
+				return array();
+			}
+		}
+
+		$var_pointers = array();
+		$current      = $list_open_close['opener'];
+		$closer       = $list_open_close['closer'];
+		$last         = false;
+		do {
+			++$current;
+			$next_comma = $this->phpcsFile->findNext( \T_COMMA, $current, $closer );
+			if ( false === $next_comma ) {
+				$next_comma = $closer;
+				$last       = true;
+			}
+
+			// Skip over the "key" part in keyed lists.
+			$arrow = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $current, $next_comma );
+			if ( false !== $arrow ) {
+				$current = ( $arrow + 1 );
+			}
+
+			/*
+			 * Each list item can only have one variable to which an assignment is being made.
+			 * This can be an array with a (variable) index, but that doesn't matter, we're only
+			 * concerned with the actual variable.
+			 */
+			$var = $this->phpcsFile->findNext( \T_VARIABLE, $current, $next_comma );
+			if ( false !== $var ) {
+				// Not an empty list item.
+				$var_pointers[] = $var;
+			}
+
+			$current = $next_comma;
+
+		} while ( false === $last );
+
+		return $var_pointers;
+	}
+
 }
