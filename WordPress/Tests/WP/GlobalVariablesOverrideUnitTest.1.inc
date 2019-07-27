@@ -223,3 +223,20 @@ function global_content_width() {
 }
 
 $content_width = 1000;
+
+// Issue #1743: detect var override via list construct.
+function acronym_prepare_items() {
+	global $wp_query, $post_mime_types, $avail_post_mime_types, $mode;
+	list( $post_mime_types, $avail_post_mime_types ) = get_an_array(); // Bad x 2.
+	[ $post_mime_types, $avail_post_mime_types ]     = get_an_array(); // PHP 7.1 short list syntax, bad x 2.
+
+	// Keyed list. Keys are not assignments.
+	list( (string) $wp_query => $GLOBALS['mode']["B"], (string) $c => $mode["D"] ) = $e->getIndexable(); // Bad x 2.
+	[ $mode => $not_global ] = $bar; // OK.
+}
+
+// Nested list.
+list( $active_signup, list( $s => $typenow, $GLOBALS['status'], ), $ignore ) = $array; // Bad x 3.
+
+// List with array assignments.
+[ $path[ $type ], , ] = $array; // Bad x 1.
