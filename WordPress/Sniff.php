@@ -3202,4 +3202,68 @@ abstract class Sniff implements PHPCS_Sniff {
 		return ( $stackPtr > $as_ptr );
 	}
 
+	/**
+	 * Determine whether a T_OPEN/CLOSE_SHORT_ARRAY token is a short list() construct.
+	 *
+	 * @internal This function will be introduced in PHPCS upstream in version 3.5.0
+	 * and can be removed from WPCS once WPCS raises the minimum version.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The position of the array bracket token.
+	 *
+	 * @return bool True if the token passed is the open/close bracket of a short list.
+	 *              False if the token is a short array bracket or not
+	 *              a T_OPEN/CLOSE_SHORT_ARRAY token.
+	 */
+	protected function is_short_list( $stackPtr ) {
+		// Is this one of the tokens this function handles ?
+		if ( \T_OPEN_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+			&& \T_CLOSE_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+		) {
+			return false;
+		}
+
+		switch ( $this->tokens[ $stackPtr ]['code'] ) {
+			case \T_OPEN_SHORT_ARRAY:
+				$opener = $stackPtr;
+				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+				break;
+
+			case \T_CLOSE_SHORT_ARRAY:
+				$opener = $this->tokens[ $stackPtr ]['bracket_opener'];
+				$closer = $stackPtr;
+				break;
+		}
+
+		$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $closer + 1 ), null, true, null, true );
+		if ( false !== $nextNonEmpty && \T_EQUAL === $this->tokens[ $nextNonEmpty ]['code'] ) {
+			return true;
+		}
+
+		// Check for short list in foreach, i.e. `foreach($array as [$a, $b])`.
+		if ( $this->is_foreach_as( $stackPtr ) === true ) {
+			return true;
+		}
+
+		// Maybe this is a short list syntax nested inside another short list syntax ?
+		$parentOpen = $opener;
+		do {
+			$parentOpen = $this->phpcsFile->findPrevious(
+				\T_OPEN_SHORT_ARRAY,
+				( $parentOpen - 1 ),
+				null,
+				false,
+				null,
+				true
+			);
+
+			if ( false === $parentOpen ) {
+				return false;
+			}
+		} while ( $this->tokens[ $parentOpen ]['bracket_closer'] < $opener );
+
+		return $this->is_short_list( $parentOpen );
+	}
+
 }
