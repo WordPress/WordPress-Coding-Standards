@@ -107,3 +107,29 @@ $bad = [
 	end */
 	'key4' => 'value4'
 ];
+
+/*
+ * Issue #1692: Test distinguishing between short array and short list.
+ *
+ * Note: these short lists should all contain "violations" against the array
+ * declaration sniff if they would be recognized as short array to make sure
+ * they are correctly recognized as short lists.
+ */
+// Empty list, not allowed since PHP 7.0, but not our concern.
+[  ] = $array; // OK.
+[, ,] = $array; // OK.
+
+[$var1, $var2] = $array; // OK.
+
+// Keyed list.
+[$foo => $bar] = $bar; // OK.
+['enabled' => $enabled, 'compression' => $compression] = [ 'enabled' => true, 'compression' => 'gzip' ]; // Bad x 1 - only for the short array, not the short list.
+
+// Nested short lists.
+[$var1, , [$var2, $var3,], $var4] = $array; // OK.
+[ 'o' => [[ $one, $two, $three ], [ 'what' => $what ]] ] = $x; // OK.
+
+// Destructuring - multiline.
+[
+	'prop1' => $prop1, 'prop2' => $prop2, // OK.
+] = $some_var;

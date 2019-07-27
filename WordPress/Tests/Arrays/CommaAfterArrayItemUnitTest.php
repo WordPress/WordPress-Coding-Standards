@@ -74,6 +74,7 @@ class CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
 			184 => 2,
 			185 => 2,
 			190 => 1,
+			203 => 1,
 		);
 	}
 

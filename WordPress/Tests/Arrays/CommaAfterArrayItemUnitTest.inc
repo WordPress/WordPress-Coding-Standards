@@ -190,3 +190,23 @@ $bad = array(
          'second'
          // phpcs:enable Standard.Category.Sniff
         );
+
+/*
+ * Issue #1692: Test distinguishing between short array and short list.
+ */
+// Empty list, not allowed since PHP 7.0, but not our concern.
+[,,] = $array; // OK.
+
+[$var1, $var2,] = $array; // OK.
+
+// Keyed list.
+['enabled' => $enabled, 'compression' => $compression,] = [ 'enabled' => true, 'compression' => 'gzip', ]; // Bad x 1 - only for the short array, not the short list.
+
+// Nested short lists.
+[$var1, , [$var2, $var3,], $var4,] = $array; // OK.
+
+// Destructuring - multiline.
+[
+	'prop1' => $prop1,
+	'prop2' => $prop2
+] = $some_var;
