@@ -2740,10 +2740,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		} else {
 			// Short array syntax.
 			$opener = $stackPtr;
-
-			if ( isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
-				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
-			}
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
 		}
 
 		if ( isset( $opener, $closer ) ) {
