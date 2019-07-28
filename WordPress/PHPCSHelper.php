@@ -98,12 +98,14 @@ class PHPCSHelper {
 	public static function ignore_annotations( File $phpcsFile = null ) {
 		if ( isset( $phpcsFile, $phpcsFile->config->annotations ) ) {
 			return ! $phpcsFile->config->annotations;
-		} else {
-			$annotations = Config::getConfigData( 'annotations' );
-			if ( isset( $annotations ) ) {
-				return ! $annotations;
-			}
 		}
+
+		$annotations = Config::getConfigData( 'annotations' );
+		if ( isset( $annotations ) ) {
+			return ! $annotations;
+		}
+
+		return false;
 	}
 
 }
