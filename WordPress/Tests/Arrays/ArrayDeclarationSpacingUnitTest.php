@@ -93,6 +93,7 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					91  => 1,
 					92  => 1,
 					104 => 1,
+					126 => 1,
 				);
 
 			default:

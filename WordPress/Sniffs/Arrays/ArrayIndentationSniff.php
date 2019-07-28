@@ -92,6 +92,13 @@ class ArrayIndentationSniff extends Sniff {
 			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
 		}
 
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& $this->is_short_list( $stackPtr )
+		) {
+			// Short list, not short array.
+			return;
+		}
+
 		/*
 		 * Determine the array opener & closer.
 		 */

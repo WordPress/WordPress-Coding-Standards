@@ -87,6 +87,14 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& $this->is_short_list( $stackPtr )
+		) {
+			// Short list, not short array.
+			return;
+		}
+
 		/*
 		 * Determine the array opener & closer.
 		 */
