@@ -55,7 +55,7 @@ class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 	 * @since 2.2.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *

@@ -31,7 +31,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 	/**
 	 * Whether to treat all files as if they were included from
-	 * a within function.
+	 * within a function.
 	 *
 	 * This is mostly useful for projects containing views which are being
 	 * included from within a function in another file, like themes.

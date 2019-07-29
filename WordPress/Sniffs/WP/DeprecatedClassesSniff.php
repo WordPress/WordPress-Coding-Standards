@@ -71,8 +71,8 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
-	 *                                always be 'deprecated_functions'.
+	 * @param string $group_name      The name of the group which was matched. Will
+	 *                                always be 'deprecated_classes'.
 	 * @param string $matched_content The token content (class name) which was matched.
 	 *
 	 * @return void
