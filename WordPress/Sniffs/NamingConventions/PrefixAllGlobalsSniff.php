@@ -21,6 +21,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.2.0  Now also checks whether namespaces are prefixed.
+ * @since   2.2.0  Now also checks variables assigned via the list() construct.
  *
  * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
  */
@@ -200,11 +201,13 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		// Set the sniff targets.
 		$targets  = array(
-			\T_NAMESPACE => \T_NAMESPACE,
-			\T_FUNCTION  => \T_FUNCTION,
-			\T_CONST     => \T_CONST,
-			\T_VARIABLE  => \T_VARIABLE,
-			\T_DOLLAR    => \T_DOLLAR, // Variable variables.
+			\T_NAMESPACE        => \T_NAMESPACE,
+			\T_FUNCTION         => \T_FUNCTION,
+			\T_CONST            => \T_CONST,
+			\T_VARIABLE         => \T_VARIABLE,
+			\T_DOLLAR           => \T_DOLLAR, // Variable variables.
+			\T_LIST             => \T_LIST,
+			\T_OPEN_SHORT_ARRAY => \T_OPEN_SHORT_ARRAY,
 		);
 		$targets += Tokens::$ooScopeTokens; // T_ANON_CLASS is only used for skipping over test classes.
 
@@ -302,6 +305,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		} elseif ( \T_VARIABLE === $this->tokens[ $stackPtr ]['code'] ) {
 
 			return $this->process_variable_assignment( $stackPtr );
+
+		} elseif ( \T_LIST === $this->tokens[ $stackPtr ]['code']
+			|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+		) {
+			return $this->process_list_assignment( $stackPtr );
 
 		} elseif ( \T_NAMESPACE === $this->tokens[ $stackPtr ]['code'] ) {
 			$namespace_name = $this->get_declared_namespace_name( $stackPtr );
@@ -573,20 +581,24 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Check that defined global variables are prefixed.
 	 *
 	 * @since 0.12.0
+	 * @since 2.2.0  Added $in_list parameter.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param int  $stackPtr The position of the current token in the stack.
+	 * @param bool $in_list  Whether or not this is a variable in a list assignment.
+	 *                       Defaults to false.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	protected function process_variable_assignment( $stackPtr ) {
+	protected function process_variable_assignment( $stackPtr, $in_list = false ) {
 		/*
 		 * We're only concerned with variables which are being defined.
 		 * `is_assigment()` will not recognize property assignments, which is good in this case.
 		 * However it will also not recognize $b in `foreach( $a as $b )` as an assignment, so
 		 * we need a separate check for that.
 		 */
-		if ( false === $this->is_assignment( $stackPtr )
+		if ( false === $in_list
+			&& false === $this->is_assignment( $stackPtr )
 			&& false === $this->is_foreach_as( $stackPtr )
 		) {
 			return;
@@ -642,7 +654,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 		} else {
 			// Function parameters do not need to be prefixed.
-			if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			if ( false === $in_list && isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 				foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
 					if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
 						&& ( \T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
@@ -655,7 +667,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Properties in a class do not need to be prefixed.
-			if ( true === $this->is_class_property( $stackPtr ) ) {
+			if ( false === $in_list && true === $this->is_class_property( $stackPtr ) ) {
 				return;
 			}
 
@@ -714,6 +726,35 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		if ( true === $recorded ) {
 			$this->record_potential_prefix_metric( $stackPtr, $variable_name );
 		}
+	}
+
+	/**
+	 * Check that global variables declared via a list construct are prefixed.
+	 *
+	 * @internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	protected function process_list_assignment( $stackPtr ) {
+		$list_open_close = $this->find_list_open_close( $stackPtr );
+		if ( false === $list_open_close ) {
+			// Short array, not short list.
+			return;
+		}
+
+		$var_pointers = $this->get_list_variables( $stackPtr, $list_open_close );
+		foreach ( $var_pointers as $ptr ) {
+			$this->process_variable_assignment( $ptr, true );
+		}
+
+		// No need to re-examine these variables.
+		return $list_open_close['closer'];
 	}
 
 	/**

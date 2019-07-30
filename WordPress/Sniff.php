@@ -2740,10 +2740,59 @@ abstract class Sniff implements PHPCS_Sniff {
 		} else {
 			// Short array syntax.
 			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+		}
 
-			if ( isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
-				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+		if ( isset( $opener, $closer ) ) {
+			return array(
+				'opener' => $opener,
+				'closer' => $closer,
+			);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the list opener & closer based on a T_LIST or T_OPEN_SHORT_ARRAY token.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The stack pointer to the array token.
+	 *
+	 * @return array|bool Array with two keys `opener`, `closer` or false if
+	 *                    not a (short) list token or if either or these
+	 *                    could not be determined.
+	 */
+	protected function find_list_open_close( $stackPtr ) {
+		/*
+		 * Determine the list opener & closer.
+		 */
+		if ( \T_LIST === $this->tokens[ $stackPtr ]['code'] ) {
+			// PHPCS 3.5.0.
+			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
+				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
+
+			} else {
+				// PHPCS < 3.5.0.
+				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+				if ( false !== $next_non_empty
+					&& \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
+				) {
+					$opener = $next_non_empty;
+				}
 			}
+
+			if ( isset( $opener, $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
+				$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+			}
+		}
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& $this->is_short_list( $stackPtr ) === true
+		) {
+			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
 		}
 
 		if ( isset( $opener, $closer ) ) {
@@ -3264,6 +3313,73 @@ abstract class Sniff implements PHPCS_Sniff {
 		} while ( $this->tokens[ $parentOpen ]['bracket_closer'] < $opener );
 
 		return $this->is_short_list( $parentOpen );
+	}
+
+	/**
+	 * Get a list of the token pointers to the variables being assigned to in a list statement.
+	 *
+	 * @internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int   $stackPtr        The position of the T_LIST or T_OPEN_SHORT_ARRAY
+	 *                               token in the stack.
+	 * @param array $list_open_close Optional. Array containing the token pointers to
+	 *                               the list opener and closer.
+	 *
+	 * @return array Array with the stack pointers to the variables or an empty
+	 *               array when not a (short) list.
+	 */
+	protected function get_list_variables( $stackPtr, $list_open_close = array() ) {
+		if ( \T_LIST !== $this->tokens[ $stackPtr ]['code']
+			&& \T_OPEN_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+		) {
+			return array();
+		}
+
+		if ( empty( $list_open_close ) ) {
+			$list_open_close = $this->find_list_open_close( $stackPtr );
+			if ( false === $list_open_close ) {
+				// Not a (short) list.
+				return array();
+			}
+		}
+
+		$var_pointers = array();
+		$current      = $list_open_close['opener'];
+		$closer       = $list_open_close['closer'];
+		$last         = false;
+		do {
+			++$current;
+			$next_comma = $this->phpcsFile->findNext( \T_COMMA, $current, $closer );
+			if ( false === $next_comma ) {
+				$next_comma = $closer;
+				$last       = true;
+			}
+
+			// Skip over the "key" part in keyed lists.
+			$arrow = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $current, $next_comma );
+			if ( false !== $arrow ) {
+				$current = ( $arrow + 1 );
+			}
+
+			/*
+			 * Each list item can only have one variable to which an assignment is being made.
+			 * This can be an array with a (variable) index, but that doesn't matter, we're only
+			 * concerned with the actual variable.
+			 */
+			$var = $this->phpcsFile->findNext( \T_VARIABLE, $current, $next_comma );
+			if ( false !== $var ) {
+				// Not an empty list item.
+				$var_pointers[] = $var;
+			}
+
+			$current = $next_comma;
+
+		} while ( false === $last );
+
+		return $var_pointers;
 	}
 
 }
