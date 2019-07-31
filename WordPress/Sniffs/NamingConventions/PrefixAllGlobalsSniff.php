@@ -35,6 +35,17 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	const ERROR_MSG = '%s by a theme/plugin should start with the theme/plugin prefix. Found: "%s".';
 
 	/**
+	 * Minimal number of characters the prefix needs in order to be valid.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1733 Issue 1733.
+	 *
+	 * @var int
+	 */
+	const MIN_PREFIX_LENGTH = 3;
+
+	/**
 	 * Target prefixes.
 	 *
 	 * @since 0.12.0
@@ -950,6 +961,21 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					'The "%s" prefix is not allowed.',
 					0,
 					'ForbiddenPrefixPassed',
+					array( $prefix )
+				);
+				continue;
+			}
+
+			$prefix_length = strlen( $prefix );
+			if ( function_exists( 'iconv_strlen' ) ) {
+				$prefix_length = iconv_strlen( $prefix, $this->phpcsFile->config->encoding );
+			}
+
+			if ( $prefix_length < self::MIN_PREFIX_LENGTH ) {
+				$this->phpcsFile->addError(
+					'The "%s" prefix is too short. Short prefixes are not unique enough and may cause name collisions with other code.',
+					0,
+					'ShortPrefixPassed',
 					array( $prefix )
 				);
 				continue;
