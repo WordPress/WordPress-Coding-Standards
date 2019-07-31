@@ -65,6 +65,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'wordpress' => true,
 		'wp'        => true,
 		'_'         => true,
+		'php'       => true, // See #1728, the 'php' prefix is reserved by PHP itself.
 	);
 
 	/**
