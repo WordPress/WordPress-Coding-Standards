@@ -149,6 +149,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'filter_input'         => true,
 		'filter_var'           => true,
 		'floatval'             => true,
+		'highlight_string'     => true,
 		'intval'               => true,
 		'json_encode'          => true,
 		'like_escape'          => true,
