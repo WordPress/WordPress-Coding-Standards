@@ -372,6 +372,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		\T_INT_CAST    => true,
 		\T_DOUBLE_CAST => true,
 		\T_BOOL_CAST   => true,
+		\T_UNSET_CAST  => true,
 	);
 
 	/**
