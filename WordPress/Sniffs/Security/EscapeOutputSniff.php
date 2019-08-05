@@ -125,20 +125,6 @@ class EscapeOutputSniff extends Sniff {
 	);
 
 	/**
-	 * List of names of the cast tokens which can be considered as a safe escaping method.
-	 *
-	 * @since 0.12.0
-	 *
-	 * @var array
-	 */
-	private $safe_cast_tokens = array(
-		'T_INT_CAST'    => true, // (int)
-		'T_DOUBLE_CAST' => true, // (float)
-		'T_BOOL_CAST'   => true, // (bool)
-		'T_UNSET_CAST'  => true, // (unset)
-	);
-
-	/**
 	 * List of tokens which can be considered as a safe when directly part of the output.
 	 *
 	 * @since 0.12.0
@@ -367,7 +353,7 @@ class EscapeOutputSniff extends Sniff {
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( isset( $this->safe_cast_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
+			if ( isset( $this->safe_casts[ $this->tokens[ $i ]['code'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
