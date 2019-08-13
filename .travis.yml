@@ -74,6 +74,11 @@ jobs:
         # @link https://getcomposer.org/doc/03-cli.md#validate
         - composer validate --no-check-all --strict
 
+        # Check that the sniffs available are feature complete.
+        # For now, just check that all sniffs have unit tests.
+        # At a later stage the documentation check can be activated.
+        - composer check-complete
+
     #### RULESET STAGE ####
     # Make sure the rulesets don't throw unexpected errors or warnings.
     # This check needs to be run against a high PHP version to prevent triggering the syntax error check.

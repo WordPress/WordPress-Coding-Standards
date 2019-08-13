@@ -21,7 +21,8 @@
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.5 || ^0.6",
 		"phpcompatibility/php-compatibility": "^9.0",
-		"phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+		"phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0",
+		"phpcsstandards/phpcsdevtools": "^1.0"
 	},
 	"suggest": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.6 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically."
@@ -39,6 +40,12 @@
 		],
 		"run-tests": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress --bootstrap=\"./vendor/squizlabs/php_codesniffer/tests/bootstrap.php\" ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+		],
+		"check-complete": [
+			"@php ./vendor/phpcsstandards/phpcsdevtools/bin/phpcs-check-feature-completeness -q ./WordPress"
+		],
+		"check-complete-strict": [
+			"@php ./vendor/phpcsstandards/phpcsdevtools/bin/phpcs-check-feature-completeness ./WordPress"
 		]
 	},
 	"support": {
