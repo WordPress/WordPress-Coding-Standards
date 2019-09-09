@@ -125,7 +125,7 @@
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#multiline-function-calls
 	#############################################################################
 	-->
-	<!-- Rule: When splitting a function call over multiple lines, each parameter must be on a seperate line.
+	<!-- Rule: When splitting a function call over multiple lines, each parameter must be on a separate line.
 		 Covered via PEAR.Functions.FunctionCallSignature in Space Usage section. -->
 
 	<!-- Rule: Single line inline comments can take up their own line. -->
