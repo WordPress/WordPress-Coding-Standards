@@ -63,6 +63,7 @@ class AlternativeFunctionsUnitTest extends AbstractSniffUnitTest {
 			49 => 1,
 			67 => 1,
 			68 => 1,
+			73 => 1,
 		);
 	}
 
