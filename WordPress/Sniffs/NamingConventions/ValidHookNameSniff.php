@@ -65,7 +65,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	protected $punctuation_regex = '`[^\w%s]`';
 
 	/**
-	 * Groups of function to restrict.
+	 * Groups of functions to restrict.
 	 *
 	 * @since 0.11.0
 	 *

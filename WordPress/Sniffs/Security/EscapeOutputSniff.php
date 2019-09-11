@@ -125,7 +125,7 @@ class EscapeOutputSniff extends Sniff {
 	);
 
 	/**
-	 * List of tokens which can be considered as a safe when directly part of the output.
+	 * List of tokens which can be considered as safe when directly part of the output.
 	 *
 	 * @since 0.12.0
 	 *

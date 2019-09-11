@@ -40,7 +40,7 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	protected $target_functions = array();
 
 	/**
-	 * Groups of function to restrict.
+	 * Groups of functions to restrict.
 	 *
 	 * @return array
 	 */
