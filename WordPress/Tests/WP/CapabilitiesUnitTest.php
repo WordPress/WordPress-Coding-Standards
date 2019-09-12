@@ -17,6 +17,8 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\WP\CapabilitiesSniff
  */
 final class CapabilitiesUnitTest extends AbstractSniffUnitTest {
 

@@ -18,6 +18,8 @@ use PHPCSUtils\BackCompat\Helper;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   1.2.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\Utils\I18nTextDomainFixerSniff
  */
 final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 

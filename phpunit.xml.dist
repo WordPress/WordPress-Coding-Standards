@@ -5,12 +5,31 @@
 	backupGlobals="true"
 	bootstrap="./Tests/bootstrap.php"
 	beStrictAboutTestsThatDoNotTestAnything="false"
-	colors="true">
+	colors="true"
+	forceCoversAnnotation="true">
 
 	<testsuites>
 		<testsuite name="WordPress">
 			<directory suffix="UnitTest.php">./WordPress/Tests/</directory>
 		</testsuite>
 	</testsuites>
+
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="false">
+			<file>./WordPress/Sniff.php</file>
+			<file>./WordPress/PHPCSHelper.php</file>
+			<file>./WordPress/AbstractArrayAssignmentRestrictionsSniff.php</file>
+			<file>./WordPress/AbstractClassRestrictionsSniff.php</file>
+			<file>./WordPress/AbstractFunctionParameterSniff.php</file>
+			<file>./WordPress/AbstractFunctionRestrictionsSniff.php</file>
+			<directory>./WordPress/Sniffs/</directory>
+			<directory>./WordPress/Helpers/</directory>
+		</whitelist>
+	</filter>
+
+	<logging>
+		<log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+		<log type="coverage-clover" target="build/logs/clover.xml"/>
+	</logging>
 
 </phpunit>

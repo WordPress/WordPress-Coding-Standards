@@ -17,6 +17,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.14.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\CodeAnalysis\AssignmentInTernaryConditionSniff
  */
 final class AssignmentInTernaryConditionUnitTest extends AbstractSniffUnitTest {
 

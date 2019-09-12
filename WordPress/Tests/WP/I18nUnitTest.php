@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\WP\I18nSniff
  */
 final class I18nUnitTest extends AbstractSniffUnitTest {
 

@@ -20,6 +20,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\WP\GlobalVariablesOverrideSniff
  */
 final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 

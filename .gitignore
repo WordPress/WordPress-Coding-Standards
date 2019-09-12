@@ -1,5 +1,6 @@
-vendor
+vendor/
 composer.lock
+build/
 phpunit.xml
 phpcs.xml
 .phpcs.xml

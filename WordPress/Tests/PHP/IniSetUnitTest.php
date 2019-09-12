@@ -17,6 +17,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @package WPCS\WordPressCodingStandards
  *
  * @since 2.1.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\IniSetSniff
  */
 final class IniSetUnitTest extends AbstractSniffUnitTest {
 
