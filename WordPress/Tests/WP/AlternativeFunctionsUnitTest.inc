@@ -68,3 +68,6 @@ readfile( 'php://filter/resource=http://www.example.com' ); // Warning.
 file_put_contents("php://filter/write=string.rot13/resource=example.txt","Hello World"); // Warning.
 
 curl_version(); // OK.
+
+// Safeguard that additional logic uses case-insensitive function name check.
+Strip_Tags( $something ); // Warning.
