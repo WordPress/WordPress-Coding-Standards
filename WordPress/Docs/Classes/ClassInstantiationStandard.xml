@@ -1,0 +1,53 @@
+<documentation title="Class Instantiation">
+    <standard>
+    <![CDATA[
+    Instantiation of an object should be done with parenthesis.  
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: with parenthesis.">
+        <![CDATA[
+$a = new Foobar<em>()</em>;
+        ]]>
+        </code>
+        <code title="Invalid: without parenthesis.">
+        <![CDATA[
+$a = new Foobar;
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Don't use spaces between object name and open parenthesis when instantiating new object.  
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: no spaces between object name and parenthesis.">
+        <![CDATA[
+$a = new Foobar();
+        ]]>
+        </code>
+        <code title="Invalid: spaces between object name and parenthesis.">
+        <![CDATA[
+$a = new Foobar<em> </em>();
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Object instantiation by reference is not supported by PHP anymore.  
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: object instantiation without reference.">
+        <![CDATA[
+$a = new Foobar();
+        ]]>
+        </code>
+        <code title="Invalid: object instantiation by reference.">
+        <![CDATA[
+$a = <em>&</em> new Foobar();
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
