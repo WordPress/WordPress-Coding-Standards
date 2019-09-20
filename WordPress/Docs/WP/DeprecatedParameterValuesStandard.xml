@@ -1,18 +1,18 @@
-<documentation title="Deprecated Parameter Values">
+<documentation title="Deprecated Function Parameter Values">
     <standard>
     <![CDATA[
-    Please refrain from using deprecated WordPress Parameter Values. 
+    Please refrain from using deprecated WordPress function parameter values.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: not using deprecated values.">
+        <code title="Valid: passing a valid function parameter value.">
         <![CDATA[
-bloginfo( 'url' );
+bloginfo( <em>'url'</em> );
         ]]>
         </code>
-        <code title="Invalid: use of deprecated values.">
+        <code title="Invalid: passing a deprecated function parameter value.">
         <![CDATA[
-bloginfo ( 'home' ); // Deprecated WP 2.2
+bloginfo ( <em>'home'</em> ); // Deprecated WP 2.2.0.
         ]]>
         </code>
     </code_comparison>
