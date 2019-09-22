@@ -7,7 +7,8 @@
     <code_comparison>
         <code title="Valid: long ternary.">
         <![CDATA[
-$height = ! empty( $data['height'] ) <em>?</em> $data['height'] <em>:</em> 0;
+$height = ! empty( $data['height'] ) <em>?</em>
+    $data['height'] <em>:</em> 0;
         ]]>
         </code>
         <code title="Invalid: short ternary.">
