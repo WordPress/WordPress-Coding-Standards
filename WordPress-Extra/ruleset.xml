@@ -56,12 +56,6 @@
 	<!-- https://github.com/WordPress/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
 
-	<!-- Encourage having only one class/interface/trait per file. -->
-	<rule ref="Generic.Files.OneObjectStructurePerFile">
-		<type>warning</type>
-		<message>Best practice suggestion: Declare only one class/interface/trait in a file.</message>
-	</rule>
-
 	<!-- Verify modifier keywords for declared methods and properties in classes.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="Squiz.Scope.MethodScope"/>
