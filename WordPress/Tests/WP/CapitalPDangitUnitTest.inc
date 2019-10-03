@@ -188,3 +188,6 @@ class TestMe {
 		ANOTHER => array( 'a' => 'b' ),
 		WORDPRESS_SOMETHING = 'wordpress'; // OK (complex declaration to make sure start of statement is detected correctly).
 }
+
+// Allow "test" domain.
+$value = function_call( 'git.wordpress.test' );
