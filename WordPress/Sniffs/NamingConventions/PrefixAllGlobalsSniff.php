@@ -21,7 +21,8 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.2.0  Now also checks whether namespaces are prefixed.
- * @since   2.2.0  Now also checks variables assigned via the list() construct.
+ * @since   2.2.0  - Now also checks variables assigned via the list() construct.
+ *                 - Now also ignores global functions which are marked as @deprecated.
  *
  * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
  */
@@ -379,6 +380,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				case 'T_FUNCTION':
 					// Methods in a class do not need to be prefixed.
 					if ( $this->phpcsFile->hasCondition( $stackPtr, Tokens::$ooScopeTokens ) === true ) {
+						return;
+					}
+
+					if ( $this->is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
+						/*
+						 * Deprecated functions don't have to comply with the naming conventions,
+						 * otherwise functions deprecated in favour of a function with a compliant
+						 * name would still trigger an error.
+						 */
 						return;
 					}
 
