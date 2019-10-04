@@ -471,11 +471,20 @@ function acronym_lists_in_function_scope() {
 	list( $foo['key'], $foo[ $c ] ) = $array; // OK. Variable array key should be ignored.
 }
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
+// Issue #1797 - Ignore non-prefixed deprecated functions.
+/**
+ * Function description.
+ *
+ * @since 1.2.3
+ * @deprecated 2.3.4
+ *
+ * @return void
+ */
+function deprecated_function() {}
 
 /*
  * Bad: Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/1733.
- * 
+ *
  * Short prefixes are not allowed. The errors are triggered
  * on LINE 1 for the unit-test, because it's the phpcs:set command that is
  * wrong, not the implementing code.
