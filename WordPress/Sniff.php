@@ -3385,4 +3385,38 @@ abstract class Sniff implements PHPCS_Sniff {
 		return $var_pointers;
 	}
 
+	/**
+	 * Check whether a function has been marked as deprecated via a @deprecated tag
+	 * in the function docblock.
+	 *
+	 * {@internal This method is static to allow the ValidFunctionName class to use it.}}
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The position of a T_FUNCTION
+	 *                                               token in the stack.
+	 *
+	 * @return bool
+	 */
+	public static function is_function_deprecated( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$find   = Tokens::$methodPrefixes;
+		$find[] = \T_WHITESPACE;
+
+		$comment_end = $phpcsFile->findPrevious( $find, ( $stackPtr - 1 ), null, true );
+		if ( \T_DOC_COMMENT_CLOSE_TAG !== $tokens[ $comment_end ]['code'] ) {
+			// Function doesn't have a doc comment or is using the wrong type of comment.
+			return false;
+		}
+
+		$comment_start = $tokens[ $comment_end ]['comment_opener'];
+		foreach ( $tokens[ $comment_start ]['comment_tags'] as $tag ) {
+			if ( '@deprecated' === $tokens[ $tag ]['content'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
