@@ -123,3 +123,25 @@ abstract class My_Class {
     public function my_Class() {}
     public function _MY_CLASS() {}
 }
+
+/**
+ * Function description.
+ *
+ * @since 1.2.3
+ * @deprecated 2.3.4
+ *
+ * @return void
+ */
+function __deprecatedFunction() {}
+
+class Deprecated {
+	/**
+	 * Function description.
+	 *
+	 * @since 1.2.3
+	 * @deprecated 2.3.4
+	 *
+	 * @return void
+	 */
+	public static function __deprecatedMethod() {}
+}

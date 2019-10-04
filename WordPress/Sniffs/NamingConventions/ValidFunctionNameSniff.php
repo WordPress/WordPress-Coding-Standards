@@ -24,6 +24,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   2.0.0  The `get_name_suggestion()` method has been moved to the
  *                 WordPress native `Sniff` base class as `get_snake_case_name_suggestion()`.
+ * @since   2.2.0  Will now ignore functions and methods which are marked as @deprecated.
  *
  * Last synced with parent class December 2018 up to commit ee167761d7756273b8ad0ad68bf3db1f2c211bb8.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
@@ -43,6 +44,16 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 	 * @return void
 	 */
 	protected function processTokenOutsideScope( File $phpcsFile, $stackPtr ) {
+
+		if ( Sniff::is_function_deprecated( $phpcsFile, $stackPtr ) === true ) {
+			/*
+			 * Deprecated functions don't have to comply with the naming conventions,
+			 * otherwise functions deprecated in favour of a function with a compliant
+			 * name would still trigger an error.
+			 */
+			return;
+		}
+
 		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
 
 		if ( ! isset( $functionName ) ) {
@@ -51,7 +62,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		}
 
 		if ( '' === ltrim( $functionName, '_' ) ) {
-			// Ignore special functions.
+			// Ignore special functions, like __().
 			return;
 		}
 
@@ -99,6 +110,15 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		end( $conditions );
 		$deepestScope = key( $conditions );
 		if ( $deepestScope !== $currScope ) {
+			return;
+		}
+
+		if ( Sniff::is_function_deprecated( $phpcsFile, $stackPtr ) === true ) {
+			/*
+			 * Deprecated functions don't have to comply with the naming conventions,
+			 * otherwise functions deprecated in favour of a function with a compliant
+			 * name would still trigger an error.
+			 */
 			return;
 		}
 
