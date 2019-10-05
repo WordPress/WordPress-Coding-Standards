@@ -519,4 +519,8 @@
 	<!-- Check for correct spelling of WordPress. -->
 	<rule ref="WordPress.WP.CapitalPDangit"/>
 
+	<!-- Use the appropriate DateTime functions.
+		 See: https://github.com/WordPress/WordPress-Coding-Standards/issues/1713 -->
+	<rule ref="WordPress.DateTime.RestrictedFunctions"/>
+
 </ruleset>
