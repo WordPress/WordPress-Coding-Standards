@@ -48,6 +48,20 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			'alt'     => 'WP_User_Query',
 			'version' => '3.1.0',
 		),
+
+		// WP 4.9.0.
+		'Customize_New_Menu_Section' => array(
+			'version' => '4.9.0',
+		),
+		'WP_Customize_New_Menu_Control' => array(
+			'version' => '4.9.0',
+		),
+
+		// WP 5.3.0.
+		'Services_JSON' => array(
+			'alt'     => 'The PHP native JSON extension',
+			'version' => '5.3.0',
+		),
 	);
 
 

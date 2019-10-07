@@ -17,3 +17,6 @@ $a = (new WP_User_Search())->query();
 /*
  * Warning.
  */
+class Prefix_Menu_section extends Customize_New_Menu_Section {}
+WP_Customize_New_Menu_Control::foo();
+$json = new Services_JSON;

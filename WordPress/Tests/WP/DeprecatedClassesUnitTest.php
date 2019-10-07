@@ -36,7 +36,7 @@ class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array_fill( 20, 3, 1 );
 	}
 
 }
