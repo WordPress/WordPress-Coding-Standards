@@ -1,17 +1,33 @@
 <documentation title="Multiple Statement Alignment">
     <standard>
     <![CDATA[
-      There should be one space on either side of a double arrow operator used to assign a value to a key. In the case of a block of related assignments, more space may be inserted to promote readability.
+      When declaring arrays, there should be one space on either side of a double arrow operator used to assign a value to a key.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: correct spacing between the key and value.">
+        <![CDATA[
+$args( 'cat'<em> => </em>22, 'year'<em> => </em>$current_year );
+        ]]>
+        </code>
+        <code title="Invalid: No or incorrect spacing between the key and value.">
+        <![CDATA[
+$args( 'cat'<em>=></em>22, 'year'<em>=> </em>$current_year );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      In the case of a block of related assignments, more space may be inserted to promote readability.
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Double arrow operators aligned">
         <![CDATA[
 $args = array(
-    'cat'      <em>=></em> 22,
-    'year'     <em>=></em> $current_year,
-    'monthnum' <em>=></em> $current_month,
-    'order'    <em>=></em> 'ASC',
+    'cat'<em>      => </em>22,
+    'year'<em>     => </em>$current_year,
+    'monthnum'<em> => </em>$current_month,
 );
         ]]>
         </code>
@@ -21,7 +37,6 @@ $args = array(
     'cat' <em>=></em> 22,
     'year' <em>=></em> $current_year,
     'monthnum' <em>=></em> $current_month,
-    'order' <em>=></em> 'ASC',
 );
         ]]>
         </code>
