@@ -82,4 +82,35 @@ $args = array(
         ]]>
         </code>
     </code_comparison>
+    <standard>
+    <![CDATA[
+      With heredoc and nowdoc, all text inside the opening and closing tag is ignored. The opening tag and comma after the closing tag should be indented according to normal multi-line array indentation.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Opening tag and comma after closing tag are indented correctly">
+        <![CDATA[
+$text = array(
+    <<<EOD
+    start of phrase
+    concatented additional phrase
+    more text
+EOD
+    ,
+);
+        ]]>
+        </code>
+        <code title="Invalid: Opening tag is aligned incorrectly to match the closing tag. The comma does not align correctly with the array indentation.">
+        <![CDATA[
+$text = array(
+<em><<<EOD</em>
+    start of phrase
+    concatented additional phrase
+    more text
+EOD
+<em>,</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
