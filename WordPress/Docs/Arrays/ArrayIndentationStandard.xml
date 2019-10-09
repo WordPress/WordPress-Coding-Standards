@@ -22,7 +22,7 @@ $args = array(
     </code_comparison>
     <standard>
     <![CDATA[
-      Keys in each array and nested array should be indented by a 4-space tab for each level of nested array, so that the array visually matches its structure.
+      In multi-line arrays, array items should be indented by a 4-space tab for each level of nested array, so that the array visually matches its structure.
     ]]>
     </standard>
     <code_comparison>
@@ -34,6 +34,10 @@ $args = array(
         <em>'value'   => 25,
         'compare' => '>=',</em>
     ),
+    'post_type' => array(
+        'post',
+        'page',
+    ),
 );
         ]]>
         </code>
@@ -44,6 +48,10 @@ $args = array(
     'comment_count' => array(
     <em>'value'   => 25,
     'compare' => '>=',</em>
+    ),
+    'post_type' => array(
+    <em>'post',
+    'page',</em>
     ),
 );
         ]]>
