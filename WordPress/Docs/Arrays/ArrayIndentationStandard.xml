@@ -49,4 +49,29 @@ $args = array(
         ]]>
         </code>
     </code_comparison>
+    <standard>
+    <![CDATA[
+      Multiline array items should indent at least as much as the first line of the array item.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Subsequent lines are indented correctly.">
+        <![CDATA[
+$args = array(
+    'phrase' => 'start of phrase'
+        . 'concatented additional phrase'
+        . 'more text',
+);
+        ]]>
+        </code>
+        <code title="Invalid: Subsequent items are indented to the same level as the key.">
+        <![CDATA[
+$args = array(
+    'phrase' => 'start of phrase'
+    . 'concatented additional phrase'
+    . 'more text',
+);
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
