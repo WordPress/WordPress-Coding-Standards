@@ -1,7 +1,7 @@
 <documentation title="Array Indentation">
     <standard>
     <![CDATA[
-      The array closing bracket and indentation should line up with the start of the content on the line containing the array opener.
+      The array closing bracket indentation should line up with the start of the content on the line containing the array opener.
     ]]>
     </standard>
     <code_comparison>
@@ -15,7 +15,7 @@ $args = array(
         <code title="Invalid: Closing bracket lined up incorrectly">
         <![CDATA[
 $args = array(
-            'post_id' => 22,
+    'post_id' => 22,
         <em>);</em>
         ]]>
         </code>
