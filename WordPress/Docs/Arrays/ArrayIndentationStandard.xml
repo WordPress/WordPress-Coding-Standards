@@ -59,7 +59,8 @@ $args = array(
     </code_comparison>
     <standard>
     <![CDATA[
-      Multiline array items should indent at least as much as the first line of the array item.
+    Subsequent lines in multiline array items should be indented at least as much as the first line of the array item.
+For heredocs/nowdocs, this does not apply to the content of the heredoc/nowdoc or the closer, but it does apply to the comma separating the item from the next.
     ]]>
     </standard>
     <code_comparison>
@@ -72,23 +73,18 @@ $args = array(
 );
         ]]>
         </code>
-        <code title="Invalid: Subsequent items are indented to the same level as the key.">
+        <code title="Invalid: Subsequent items are indented before the first line item.">
         <![CDATA[
 $args = array(
     'phrase' => 'start of phrase'
-    . 'concatented additional phrase'
-    . 'more text',
+. 'concatented additional phrase'
+. 'more text',
 );
         ]]>
         </code>
     </code_comparison>
-    <standard>
-    <![CDATA[
-      With heredoc and nowdoc, all text inside the opening and closing tag is ignored. The opening tag and comma after the closing tag should be indented according to normal multi-line array indentation.
-    ]]>
-    </standard>
     <code_comparison>
-        <code title="Valid: Opening tag and comma after closing tag are indented correctly">
+        <code title="Valid: Opener and comma after closer are indented correctly">
         <![CDATA[
 $text = array(
     <<<EOD
@@ -100,7 +96,7 @@ EOD
 );
         ]]>
         </code>
-        <code title="Invalid: Opening tag is aligned incorrectly to match the closing tag. The comma does not align correctly with the array indentation.">
+        <code title="Invalid: Opener is aligned incorrectly to match the closer. The comma does not align correctly with the array indentation.">
         <![CDATA[
 $text = array(
 <em><<<EOD</em>
