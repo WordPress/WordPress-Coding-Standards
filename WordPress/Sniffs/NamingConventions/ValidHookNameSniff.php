@@ -73,6 +73,13 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function getGroups() {
 		$this->target_functions = $this->hookInvokeFunctions;
+
+		// No need to examine the names of deprecated hooks.
+		unset(
+			$this->target_functions['do_action_deprecated'],
+			$this->target_functions['apply_filters_deprecated']
+		);
+
 		return parent::getGroups();
 	}
 
@@ -89,14 +96,6 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		// Ignore deprecated hook names.
-		if ( strpos( $matched_content, '_deprecated' ) > 0 ) {
-			return;
-		}
-
-		if ( ! isset( $parameters[1] ) ) {
-			return;
-		}
 
 		$regex = $this->prepare_regex();
 
