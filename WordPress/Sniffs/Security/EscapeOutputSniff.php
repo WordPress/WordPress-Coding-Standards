@@ -198,6 +198,20 @@ class EscapeOutputSniff extends Sniff {
 				$end_of_statement = ( $first_param['end'] + 1 );
 				unset( $first_param );
 			}
+
+			/*
+			 * If the first param to `_deprecated_file()` follows the typical `basename( __FILE__ )`
+			 * pattern, it doesn't need to be escaped.
+			 */
+			if ( '_deprecated_file' === $function ) {
+				$first_param = $this->get_function_call_parameter( $stackPtr, 1 );
+
+				// Quick check. This disregards comments.
+				if ( preg_match( '`^basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
+					$stackPtr = ( $first_param['end'] + 2 );
+				}
+				unset( $first_param );
+			}
 		}
 
 		// Checking for the ignore comment, ex: //xss ok.
