@@ -341,3 +341,7 @@ wp_ajax_press_this_save_post();
 /* ============ WP 5.1 ============ */
 insert_blog();
 install_blog();
+/* ============ WP 5.3 ============ */
+_wp_json_prepare_data();
+_wp_privacy_requests_screen_options();
+update_user_status();
