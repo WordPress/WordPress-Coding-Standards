@@ -145,7 +145,6 @@
 	<rule ref="WordPress.Security.PluginMenuSlug"/>
 	<rule ref="WordPress.WP.CronInterval"/>
 	<rule ref="WordPress.WP.PostsPerPage"/>
-	<rule ref="WordPress.WP.TimezoneChange"/>
 
 	<!-- Verify some regex best practices.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1371 -->
