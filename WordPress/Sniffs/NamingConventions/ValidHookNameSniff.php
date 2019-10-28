@@ -105,6 +105,11 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		$expected    = array();
 
 		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+			// Skip past comment tokens.
+			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) !== false ) {
+				continue;
+			}
+
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
@@ -165,18 +170,25 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			}
 		}
 
+		$first_non_empty = $this->phpcsFile->findNext(
+			Tokens::$emptyTokens,
+			$parameters[1]['start'],
+			( $parameters[1]['end'] + 1 ),
+			true
+		);
+
 		$data = array(
-			implode( '', $expected ),
-			implode( '', $content ),
+			trim( implode( '', $expected ) ),
+			trim( implode( '', $content ) ),
 		);
 
 		if ( $case_errors > 0 ) {
 			$error = 'Hook names should be lowercase. Expected: %s, but found: %s.';
-			$this->phpcsFile->addError( $error, $stackPtr, 'NotLowercase', $data );
+			$this->phpcsFile->addError( $error, $first_non_empty, 'NotLowercase', $data );
 		}
 		if ( $underscores > 0 ) {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
-			$this->phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
+			$this->phpcsFile->addWarning( $error, $first_non_empty, 'UseUnderscores', $data );
 		}
 	}
 
