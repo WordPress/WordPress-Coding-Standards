@@ -39,7 +39,7 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					28 => 1,
 					29 => 1,
 					30 => 1,
-					32 => 1,
+					33 => 1,
 					53 => 1,
 					54 => 1,
 					55 => 1,
@@ -96,6 +96,7 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					68 => 1,
 					72 => 1,
 					77 => 1,
+					95 => 1,
 				);
 
 			case 'ValidHookNameUnitTest.2.inc':

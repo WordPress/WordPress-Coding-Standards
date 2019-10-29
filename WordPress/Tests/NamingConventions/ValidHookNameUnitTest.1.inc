@@ -88,3 +88,9 @@ apply_filters_deprecated( "admin_Head_$Post->ID admin_Head_$Post->ID" ); // Ok.
 do_action( 'prefix_block_' . $block['blockName'] ); // Ok.
 do_action( 'prefix_block_' . $block  [  'blockName'  ] . '_More_hookname' ); // Error - use lowercase (second part of the hook name).
 do_action( "prefix_block_{$block['blockName']}" ); // Ok.
+
+// Don't include comments in the suggestion.
+do_action(
+	// phpcs:ignore Stnd.Cat.Sniff -- For reasons.
+	'prefix_hook-name' /* comment */
+);
