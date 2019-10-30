@@ -241,7 +241,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @return array
 	 */
 	public function getGroups() {
-		$this->target_functions           = $this->hookInvokeFunctions;
+		$this->target_functions = $this->hookInvokeFunctions;
+		unset(
+			$this->target_functions['do_action_deprecated'],
+			$this->target_functions['apply_filters_deprecated']
+		);
+
 		$this->target_functions['define'] = true;
 
 		return parent::getGroups();
@@ -792,11 +797,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-
-		// Ignore deprecated hook names.
-		if ( strpos( $matched_content, '_deprecated' ) > 0 ) {
-			return;
-		}
 
 		// No matter whether it is a constant definition or a hook call, both use the first parameter.
 		if ( ! isset( $parameters[1] ) ) {
