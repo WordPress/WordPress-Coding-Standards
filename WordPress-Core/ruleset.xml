@@ -523,4 +523,7 @@
 		 See: https://github.com/WordPress/WordPress-Coding-Standards/issues/1713 -->
 	<rule ref="WordPress.DateTime.RestrictedFunctions"/>
 
+	<!-- Don't use current_time() to retrieve a timestamp. -->
+	<rule ref="WordPress.DateTime.CurrentTimeTimestamp"/>
+
 </ruleset>
