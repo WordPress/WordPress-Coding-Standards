@@ -1,0 +1,41 @@
+<documentation title="Capital P Dangit">
+    <standard>
+    <![CDATA[
+The correct spelling of `WordPress` should be used in text strings, comments and object names.
+
+When part of an identifier or a URL, WordPress does not have to be capitalized.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: WordPress is correctly capitalized.">
+        <![CDATA[
+class <em>WordPress</em>Example {
+
+        /**
+         * This function is about <em>WordPress</em>.
+         */
+        public function explain() {
+                $is_wordpress_awesome = true;
+                echo 'This is an explanation 
+                      about <em>WordPress</em>.';
+        }
+}
+        ]]>
+        </code>
+        <code title="Invalid: WordPress is not correctly capitalized.">
+        <![CDATA[
+class <em>WordpressExample</em> {
+
+        /**
+         * This function is about <em>Wordpress</em>.
+         */
+        public function explain() {
+                $is_wordpress_awesome = true;
+                echo 'This is an explanation 
+                      about <em>wordpress</em>.';
+        }
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
