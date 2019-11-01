@@ -16,7 +16,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   X.X.X
+ * @since   2.2.0
  */
 class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
 
