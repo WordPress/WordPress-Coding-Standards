@@ -28,7 +28,7 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 
-		$errors = array_fill( 8, 324, 1 );
+		$errors = array_fill( 8, 329, 1 );
 
 		// Unset the lines related to version comments.
 		unset(
@@ -62,7 +62,8 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$errors[311],
 			$errors[319],
 			$errors[323],
-			$errors[330]
+			$errors[330],
+			$errors[332]
 		);
 
 		return $errors;
@@ -75,10 +76,10 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 
-		$warnings = array_fill( 337, 11, 1 );
+		$warnings = array_fill( 342, 6, 1 );
 
 		// Unset the lines related to version comments.
-		unset( $warnings[341], $warnings[344] );
+		unset( $warnings[344] );
 
 		return $warnings;
 	}
