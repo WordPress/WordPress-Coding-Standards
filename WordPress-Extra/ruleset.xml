@@ -130,6 +130,9 @@
 	<!-- Verify that everything in the global namespace is prefixed. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals"/>
 
+	<!-- Validates post type slugs for valid characters, length and reserved keywords. -->
+	<rule ref="WordPress.NamingConventions.ValidPostTypeSlug"/>
+
 	<!-- Check that object instantiations always have braces & are not assigned by reference.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/919
 		 Note: there is a similar upstream sniff `PSR12.Classes.ClassInstantiation`, however
