@@ -12,7 +12,7 @@
         </code>
         <code title="Invalid: ini_set() for a possibly breaking setting.">
         <![CDATA[
-ini_set( 'short_open_tag', 'off' );
+ini_set( <em>'short_open_tag'</em>, 'off' );
         ]]>
         </code>
     </code_comparison>
@@ -24,12 +24,12 @@ ini_set( 'short_open_tag', 'off' );
     <code_comparison>
         <code title="Valid: WordPress functional alternative.">
         <![CDATA[
-wp_raise_memory_limit();
+<em>wp_raise_memory_limit();</em>
         ]]>
         </code>
         <code title="Invalid: ini_set() to alter memory limits.">
         <![CDATA[
-ini_set( 'memory_limit', '256M' );
+ini_set( <em>'memory_limit'</em>, '256M' );
         ]]>
         </code>
     </code_comparison>
