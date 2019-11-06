@@ -1,0 +1,19 @@
+<documentation title="Safe Redirect">
+    <standard>
+    <![CDATA[
+    Safe redirects must be used.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Safe redirect.">
+        <![CDATA[
+wp_safe_redirect( $location );
+]]>
+        </code>
+        <code title="Invalid: Unsafe redirect.">
+        <![CDATA[
+wp_redirect( $location );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
