@@ -1,7 +1,7 @@
-<documentation title="Detect incorrect use of the `ini_set()` function.">
+<documentation title="Detect use of `ini_set()`">
     <standard>
     <![CDATA[
-      Using ini_set() for alternating PHP settings, as well as other functions with ability to change configuration at runtime of your scripts is discouraged. Changing runtime configuration might break other plugins and themes.
+      Using ini_set() and similar functions for altering PHP settings at runtime is discouraged. Changing runtime configuration might break other plugins and themes, and even WordPress itself.
     ]]>
     </standard>
     <code_comparison>
@@ -18,7 +18,7 @@ ini_set( <em>'short_open_tag'</em>, 'off' );
     </code_comparison>
     <standard>
     <![CDATA[
-      For some configuration values there are WordPress functions. These are preferred.
+      For some configuration values there are alternative ways available - either via WordPress native functionality of via standard PHP - to achieve the same without the risk of breaking interoperability. These alternatives are preferred.
     ]]>
     </standard>
     <code_comparison>
