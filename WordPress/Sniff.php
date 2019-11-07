@@ -954,14 +954,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param string $message   The message.
-	 * @param int    $stackPtr  The position of the token the message relates to.
-	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
-	 *                          Defaults to true (error).
-	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
-	 * @param array  $data      Optional input for the data replacements.
-	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
-	 *                          the PHPCS default severity level.
+	 * @param string $message  The message.
+	 * @param int    $stackPtr The position of the token the message relates to.
+	 * @param bool   $is_error Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                         Defaults to true (error).
+	 * @param string $code     Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data     Optional input for the data replacements.
+	 * @param int    $severity Optional. Severity level. Defaults to 0 which will translate to
+	 *                         the PHPCS default severity level.
 	 * @return bool
 	 */
 	protected function addMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0 ) {
@@ -973,14 +973,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param string $message   The message.
-	 * @param int    $stackPtr  The position of the token the message relates to.
-	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
-	 *                          Defaults to true (error).
-	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
-	 * @param array  $data      Optional input for the data replacements.
-	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
-	 *                          the PHPCS default severity level.
+	 * @param string $message  The message.
+	 * @param int    $stackPtr The position of the token the message relates to.
+	 * @param bool   $is_error Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                         Defaults to true (error).
+	 * @param string $code     Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data     Optional input for the data replacements.
+	 * @param int    $severity Optional. Severity level. Defaults to 0 which will translate to
+	 *                         the PHPCS default severity level.
 	 * @return bool
 	 */
 	protected function addFixableMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0 ) {
@@ -992,15 +992,15 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param string $message   The message.
-	 * @param int    $stackPtr  The position of the token the message relates to.
-	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
-	 *                          Defaults to true (error).
-	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
-	 * @param array  $data      Optional input for the data replacements.
-	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
-	 *                          the PHPCS default severity level.
-	 * @param bool   $fixable   Optional. Whether this is a fixable error. Defaults to false.
+	 * @param string $message  The message.
+	 * @param int    $stackPtr The position of the token the message relates to.
+	 * @param bool   $is_error Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                         Defaults to true (error).
+	 * @param string $code     Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data     Optional input for the data replacements.
+	 * @param int    $severity Optional. Severity level. Defaults to 0 which will translate to
+	 *                         the PHPCS default severity level.
+	 * @param bool   $fixable  Optional. Whether this is a fixable error. Defaults to false.
 	 * @return bool
 	 */
 	private function throwMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0, $fixable = false ) {
@@ -2931,7 +2931,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.14.0
 	 *
-	 * @param int $stackPtr  The position in the stack of the T_CONST token to verify.
+	 * @param int $stackPtr The position in the stack of the T_CONST token to verify.
 	 *
 	 * @return bool
 	 */
@@ -2955,7 +2955,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.14.0
 	 *
-	 * @param int $stackPtr  The position in the stack of the T_VARIABLE token to verify.
+	 * @param int $stackPtr The position in the stack of the T_VARIABLE token to verify.
 	 *
 	 * @return bool
 	 */
@@ -3044,8 +3044,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * {@internal This method should probably be refactored.}}
 	 *
-	 * @param int   $stackPtr        The index of the $wpdb variable.
-	 * @param array $target_methods  Array of methods. Key(s) should be method name.
+	 * @param int   $stackPtr       The index of the $wpdb variable.
+	 * @param array $target_methods Array of methods. Key(s) should be method name.
 	 *
 	 * @return bool Whether this is a $wpdb method call.
 	 */
