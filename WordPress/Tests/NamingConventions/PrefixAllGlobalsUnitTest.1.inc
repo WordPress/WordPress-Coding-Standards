@@ -424,4 +424,85 @@ define(
 	[ 1, 2, 3 ]
 );
 
+// Issue #1043.
+function acronym_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'acronym_content_width', 640 );
+}
+
+/*
+ * Issue #1774: detect variables being set via the list() construct.
+ */
+// Empty list, not allowed since PHP 7.0, but not our concern.
+list() = $array; // OK.
+list(, ,) = $array; // OK.
+
+// Ordinary list.
+list( $var1, , $var2 )               = $array; // Bad x 2.
+list( $acronym_var1, $acronym_var2 ) = $array; // OK.
+
+// Short list.
+[ $var1, $var2 ]                 = $array; // Bad x 2.
+[ $acronym_var1, $acronym_var2 ] = $array; // OK.
+
+// Keyed list. Keys are not assignments.
+list((string)$a => $store["B"], (string)$c => $store["D"]) = $e->getIndexable(); // Bad x 2.
+[$foo => $GLOBALS['bar']] = $bar; // Bad x 1.
+
+// Nested list.
+list( $var1, , list( $var2, $var3, ), $var4 ) = $array; // Bad x 4.
+
+// List with array assignments.
+list( $foo['key'], $foo[ $bar ] ) = $array; // Bad x 2. Variable array key should be ignored.
+
+function acronym_lists_in_function_scope() {
+	global $store, $c;
+
+	list( $var1, , $var2 ) = $array; // OK.
+	[ $var1, $var2 ]       = $array; // OK.
+
+	// Keyed list. Keys are not assignments.
+	list((string)$a => $store["B"], (string)$c => $store["D"]) = $e->getIndexable(); // Bad x 2.
+	[$foo => $GLOBALS['bar']] = $bar; // Bad x 1.
+
+	// Nested list.
+	list( $var1, , list( $c, $var3, ), $var4 ) = $array; // Bad x 1 - $c.
+
+	// List with array assignments.
+	list( $foo['key'], $foo[ $c ] ) = $array; // OK. Variable array key should be ignored.
+}
+
+// Issue #1797 - Ignore non-prefixed deprecated functions.
+/**
+ * Function description.
+ *
+ * @since 1.2.3
+ * @deprecated 2.3.4
+ *
+ * @return void
+ */
+function deprecated_function() {}
+
+/*
+ * Bad: Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/1733.
+ *
+ * Short prefixes are not allowed. The errors are triggered
+ * on LINE 1 for the unit-test, because it's the phpcs:set command that is
+ * wrong, not the implementing code.
+ */
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] a
+function a_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] aa
+function aa_do_something(){}
+
+// The following line mimicks an empty prefix value.
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
+function aa_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊
+function 😊_do_something(){}
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
+function 😊😊_do_something(){}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

@@ -3,7 +3,7 @@
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -82,7 +82,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_supported_version = '4.9';
+	public $minimum_supported_version = '5.0';
 
 	/**
 	 * Custom list of classes which test classes can extend.
@@ -149,12 +149,14 @@ abstract class Sniff implements PHPCS_Sniff {
 		'filter_input'         => true,
 		'filter_var'           => true,
 		'floatval'             => true,
+		'highlight_string'     => true,
 		'intval'               => true,
 		'json_encode'          => true,
 		'like_escape'          => true,
 		'number_format'        => true,
 		'rawurlencode'         => true,
 		'sanitize_html_class'  => true,
+		'sanitize_key'         => true,
 		'sanitize_user_field'  => true,
 		'tag_escape'           => true,
 		'urlencode_deep'       => true,
@@ -287,6 +289,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'wp_parse_id_list'           => true,
 		'wp_redirect'                => true,
 		'wp_safe_redirect'           => true,
+		'wp_sanitize_redirect'       => true,
 		'wp_strip_all_tags'          => true,
 	);
 
@@ -370,6 +373,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		\T_INT_CAST    => true,
 		\T_DOUBLE_CAST => true,
 		\T_BOOL_CAST   => true,
+		\T_UNSET_CAST  => true,
 	);
 
 	/**
@@ -637,6 +641,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'compress_css'                     => true,
 		'compress_scripts'                 => true,
 		'concatenate_scripts'              => true,
+		'content_width'                    => true,
 		'current_blog'                     => true,
 		'current_screen'                   => true,
 		'current_site'                     => true,
@@ -685,9 +690,11 @@ abstract class Sniff implements PHPCS_Sniff {
 		'mode'                             => true,
 		'monthnum'                         => true,
 		'more'                             => true,
+		'mu_plugin'                        => true,
 		'multipage'                        => true,
 		'names'                            => true,
 		'nav_menu_selected_id'             => true,
+		'network_plugin'                   => true,
 		'new_whitelist_options'            => true,
 		'numpages'                         => true,
 		'one_theme_location_no_menus'      => true,
@@ -707,6 +714,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'PHP_SELF'                         => true,
 		'phpmailer'                        => true,
 		'plugin_page'                      => true,
+		'plugin'                           => true,
 		'plugins'                          => true,
 		'post'                             => true,
 		'post_default_category'            => true,
@@ -946,14 +954,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param string $message   The message.
-	 * @param int    $stackPtr  The position of the token the message relates to.
-	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
-	 *                          Defaults to true (error).
-	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
-	 * @param array  $data      Optional input for the data replacements.
-	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
-	 *                          the PHPCS default severity level.
+	 * @param string $message  The message.
+	 * @param int    $stackPtr The position of the token the message relates to.
+	 * @param bool   $is_error Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                         Defaults to true (error).
+	 * @param string $code     Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data     Optional input for the data replacements.
+	 * @param int    $severity Optional. Severity level. Defaults to 0 which will translate to
+	 *                         the PHPCS default severity level.
 	 * @return bool
 	 */
 	protected function addMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0 ) {
@@ -965,14 +973,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param string $message   The message.
-	 * @param int    $stackPtr  The position of the token the message relates to.
-	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
-	 *                          Defaults to true (error).
-	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
-	 * @param array  $data      Optional input for the data replacements.
-	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
-	 *                          the PHPCS default severity level.
+	 * @param string $message  The message.
+	 * @param int    $stackPtr The position of the token the message relates to.
+	 * @param bool   $is_error Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                         Defaults to true (error).
+	 * @param string $code     Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data     Optional input for the data replacements.
+	 * @param int    $severity Optional. Severity level. Defaults to 0 which will translate to
+	 *                         the PHPCS default severity level.
 	 * @return bool
 	 */
 	protected function addFixableMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0 ) {
@@ -984,15 +992,15 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @param string $message   The message.
-	 * @param int    $stackPtr  The position of the token the message relates to.
-	 * @param bool   $is_error  Optional. Whether to report the message as an 'error' or 'warning'.
-	 *                          Defaults to true (error).
-	 * @param string $code      Optional error code for the message. Defaults to 'Found'.
-	 * @param array  $data      Optional input for the data replacements.
-	 * @param int    $severity  Optional. Severity level. Defaults to 0 which will translate to
-	 *                          the PHPCS default severity level.
-	 * @param bool   $fixable   Optional. Whether this is a fixable error. Defaults to false.
+	 * @param string $message  The message.
+	 * @param int    $stackPtr The position of the token the message relates to.
+	 * @param bool   $is_error Optional. Whether to report the message as an 'error' or 'warning'.
+	 *                         Defaults to true (error).
+	 * @param string $code     Optional error code for the message. Defaults to 'Found'.
+	 * @param array  $data     Optional input for the data replacements.
+	 * @param int    $severity Optional. Severity level. Defaults to 0 which will translate to
+	 *                         the PHPCS default severity level.
+	 * @param bool   $fixable  Optional. Whether this is a fixable error. Defaults to false.
 	 * @return bool
 	 */
 	private function throwMessage( $message, $stackPtr, $is_error = true, $code = 'Found', $data = array(), $severity = 0, $fixable = false ) {
@@ -1334,6 +1342,10 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// Does the class/trait extend one of the whitelisted test classes ?
 		$extendedClassName = $this->phpcsFile->findExtendedClassName( $stackPtr );
+		if ( false === $extendedClassName ) {
+			return false;
+		}
+
 		if ( '\\' === $extendedClassName[0] ) {
 			if ( isset( $whitelist[ substr( $extendedClassName, 1 ) ] ) ) {
 				return true;
@@ -1476,8 +1488,8 @@ abstract class Sniff implements PHPCS_Sniff {
 		// Check if we've looked here before.
 		$filename = $this->phpcsFile->getFilename();
 
-		if (
-			$filename === $last['file']
+		if ( is_array( $last )
+			&& $filename === $last['file']
 			&& $start === $last['start']
 		) {
 
@@ -2731,10 +2743,59 @@ abstract class Sniff implements PHPCS_Sniff {
 		} else {
 			// Short array syntax.
 			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+		}
 
-			if ( isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
-				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+		if ( isset( $opener, $closer ) ) {
+			return array(
+				'opener' => $opener,
+				'closer' => $closer,
+			);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the list opener & closer based on a T_LIST or T_OPEN_SHORT_ARRAY token.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The stack pointer to the array token.
+	 *
+	 * @return array|bool Array with two keys `opener`, `closer` or false if
+	 *                    not a (short) list token or if either or these
+	 *                    could not be determined.
+	 */
+	protected function find_list_open_close( $stackPtr ) {
+		/*
+		 * Determine the list opener & closer.
+		 */
+		if ( \T_LIST === $this->tokens[ $stackPtr ]['code'] ) {
+			// PHPCS 3.5.0.
+			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
+				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
+
+			} else {
+				// PHPCS < 3.5.0.
+				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+				if ( false !== $next_non_empty
+					&& \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
+				) {
+					$opener = $next_non_empty;
+				}
 			}
+
+			if ( isset( $opener, $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
+				$closer = $this->tokens[ $opener ]['parenthesis_closer'];
+			}
+		}
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& $this->is_short_list( $stackPtr ) === true
+		) {
+			$opener = $stackPtr;
+			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
 		}
 
 		if ( isset( $opener, $closer ) ) {
@@ -2870,7 +2931,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.14.0
 	 *
-	 * @param int $stackPtr  The position in the stack of the T_CONST token to verify.
+	 * @param int $stackPtr The position in the stack of the T_CONST token to verify.
 	 *
 	 * @return bool
 	 */
@@ -2894,7 +2955,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @since 0.14.0
 	 *
-	 * @param int $stackPtr  The position in the stack of the T_VARIABLE token to verify.
+	 * @param int $stackPtr The position in the stack of the T_VARIABLE token to verify.
 	 *
 	 * @return bool
 	 */
@@ -2983,8 +3044,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * {@internal This method should probably be refactored.}}
 	 *
-	 * @param int   $stackPtr        The index of the $wpdb variable.
-	 * @param array $target_methods  Array of methods. Key(s) should be method name.
+	 * @param int   $stackPtr       The index of the $wpdb variable.
+	 * @param array $target_methods Array of methods. Key(s) should be method name.
 	 *
 	 * @return bool Whether this is a $wpdb method call.
 	 */
@@ -3193,4 +3254,169 @@ abstract class Sniff implements PHPCS_Sniff {
 		return ( $stackPtr > $as_ptr );
 	}
 
+	/**
+	 * Determine whether a T_OPEN/CLOSE_SHORT_ARRAY token is a short list() construct.
+	 *
+	 * @internal This function will be introduced in PHPCS upstream in version 3.5.0
+	 * and can be removed from WPCS once WPCS raises the minimum version.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The position of the array bracket token.
+	 *
+	 * @return bool True if the token passed is the open/close bracket of a short list.
+	 *              False if the token is a short array bracket or not
+	 *              a T_OPEN/CLOSE_SHORT_ARRAY token.
+	 */
+	protected function is_short_list( $stackPtr ) {
+		// Is this one of the tokens this function handles ?
+		if ( \T_OPEN_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+			&& \T_CLOSE_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+		) {
+			return false;
+		}
+
+		switch ( $this->tokens[ $stackPtr ]['code'] ) {
+			case \T_OPEN_SHORT_ARRAY:
+				$opener = $stackPtr;
+				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
+				break;
+
+			case \T_CLOSE_SHORT_ARRAY:
+				$opener = $this->tokens[ $stackPtr ]['bracket_opener'];
+				$closer = $stackPtr;
+				break;
+		}
+
+		$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $closer + 1 ), null, true, null, true );
+		if ( false !== $nextNonEmpty && \T_EQUAL === $this->tokens[ $nextNonEmpty ]['code'] ) {
+			return true;
+		}
+
+		// Check for short list in foreach, i.e. `foreach($array as [$a, $b])`.
+		if ( $this->is_foreach_as( $stackPtr ) === true ) {
+			return true;
+		}
+
+		// Maybe this is a short list syntax nested inside another short list syntax ?
+		$parentOpen = $opener;
+		do {
+			$parentOpen = $this->phpcsFile->findPrevious(
+				\T_OPEN_SHORT_ARRAY,
+				( $parentOpen - 1 ),
+				null,
+				false,
+				null,
+				true
+			);
+
+			if ( false === $parentOpen ) {
+				return false;
+			}
+		} while ( $this->tokens[ $parentOpen ]['bracket_closer'] < $opener );
+
+		return $this->is_short_list( $parentOpen );
+	}
+
+	/**
+	 * Get a list of the token pointers to the variables being assigned to in a list statement.
+	 *
+	 * @internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int   $stackPtr        The position of the T_LIST or T_OPEN_SHORT_ARRAY
+	 *                               token in the stack.
+	 * @param array $list_open_close Optional. Array containing the token pointers to
+	 *                               the list opener and closer.
+	 *
+	 * @return array Array with the stack pointers to the variables or an empty
+	 *               array when not a (short) list.
+	 */
+	protected function get_list_variables( $stackPtr, $list_open_close = array() ) {
+		if ( \T_LIST !== $this->tokens[ $stackPtr ]['code']
+			&& \T_OPEN_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
+		) {
+			return array();
+		}
+
+		if ( empty( $list_open_close ) ) {
+			$list_open_close = $this->find_list_open_close( $stackPtr );
+			if ( false === $list_open_close ) {
+				// Not a (short) list.
+				return array();
+			}
+		}
+
+		$var_pointers = array();
+		$current      = $list_open_close['opener'];
+		$closer       = $list_open_close['closer'];
+		$last         = false;
+		do {
+			++$current;
+			$next_comma = $this->phpcsFile->findNext( \T_COMMA, $current, $closer );
+			if ( false === $next_comma ) {
+				$next_comma = $closer;
+				$last       = true;
+			}
+
+			// Skip over the "key" part in keyed lists.
+			$arrow = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $current, $next_comma );
+			if ( false !== $arrow ) {
+				$current = ( $arrow + 1 );
+			}
+
+			/*
+			 * Each list item can only have one variable to which an assignment is being made.
+			 * This can be an array with a (variable) index, but that doesn't matter, we're only
+			 * concerned with the actual variable.
+			 */
+			$var = $this->phpcsFile->findNext( \T_VARIABLE, $current, $next_comma );
+			if ( false !== $var ) {
+				// Not an empty list item.
+				$var_pointers[] = $var;
+			}
+
+			$current = $next_comma;
+
+		} while ( false === $last );
+
+		return $var_pointers;
+	}
+
+	/**
+	 * Check whether a function has been marked as deprecated via a @deprecated tag
+	 * in the function docblock.
+	 *
+	 * {@internal This method is static to allow the ValidFunctionName class to use it.}}
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The position of a T_FUNCTION
+	 *                                               token in the stack.
+	 *
+	 * @return bool
+	 */
+	public static function is_function_deprecated( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$find   = Tokens::$methodPrefixes;
+		$find[] = \T_WHITESPACE;
+
+		$comment_end = $phpcsFile->findPrevious( $find, ( $stackPtr - 1 ), null, true );
+		if ( \T_DOC_COMMENT_CLOSE_TAG !== $tokens[ $comment_end ]['code'] ) {
+			// Function doesn't have a doc comment or is using the wrong type of comment.
+			return false;
+		}
+
+		$comment_start = $tokens[ $comment_end ]['comment_opener'];
+		foreach ( $tokens[ $comment_start ]['comment_tags'] as $tag ) {
+			if ( '@deprecated' === $tokens[ $tag ]['content'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

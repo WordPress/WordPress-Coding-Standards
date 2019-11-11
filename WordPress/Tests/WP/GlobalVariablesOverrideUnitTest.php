@@ -3,7 +3,7 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -56,6 +56,11 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					181 => 1,
 					198 => 1,
 					212 => 4,
+					230 => 2,
+					231 => 2,
+					234 => 2,
+					239 => 3,
+					242 => 1,
 				);
 
 			case 'GlobalVariablesOverrideUnitTest.2.inc':

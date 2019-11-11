@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -48,6 +48,20 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			'alt'     => 'WP_User_Query',
 			'version' => '3.1.0',
 		),
+
+		// WP 4.9.0.
+		'Customize_New_Menu_Section' => array(
+			'version' => '4.9.0',
+		),
+		'WP_Customize_New_Menu_Control' => array(
+			'version' => '4.9.0',
+		),
+
+		// WP 5.3.0.
+		'Services_JSON' => array(
+			'alt'     => 'The PHP native JSON extension',
+			'version' => '5.3.0',
+		),
 	);
 
 
@@ -71,8 +85,8 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
-	 *                                always be 'deprecated_functions'.
+	 * @param string $group_name      The name of the group which was matched. Will
+	 *                                always be 'deprecated_classes'.
 	 * @param string $matched_content The token content (class name) which was matched.
 	 *
 	 * @return void

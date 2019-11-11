@@ -3,7 +3,7 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -74,6 +74,7 @@ class CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
 			184 => 2,
 			185 => 2,
 			190 => 1,
+			203 => 1,
 		);
 	}
 

@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -125,21 +125,7 @@ class EscapeOutputSniff extends Sniff {
 	);
 
 	/**
-	 * List of names of the cast tokens which can be considered as a safe escaping method.
-	 *
-	 * @since 0.12.0
-	 *
-	 * @var array
-	 */
-	private $safe_cast_tokens = array(
-		'T_INT_CAST'    => true, // (int)
-		'T_DOUBLE_CAST' => true, // (float)
-		'T_BOOL_CAST'   => true, // (bool)
-		'T_UNSET_CAST'  => true, // (unset)
-	);
-
-	/**
-	 * List of tokens which can be considered as a safe when directly part of the output.
+	 * List of tokens which can be considered as safe when directly part of the output.
 	 *
 	 * @since 0.12.0
 	 *
@@ -210,6 +196,20 @@ class EscapeOutputSniff extends Sniff {
 			if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
 				$first_param      = $this->get_function_call_parameter( $stackPtr, 1 );
 				$end_of_statement = ( $first_param['end'] + 1 );
+				unset( $first_param );
+			}
+
+			/*
+			 * If the first param to `_deprecated_file()` follows the typical `basename( __FILE__ )`
+			 * pattern, it doesn't need to be escaped.
+			 */
+			if ( '_deprecated_file' === $function ) {
+				$first_param = $this->get_function_call_parameter( $stackPtr, 1 );
+
+				// Quick check. This disregards comments.
+				if ( preg_match( '`^basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
+					$stackPtr = ( $first_param['end'] + 2 );
+				}
 				unset( $first_param );
 			}
 		}
@@ -367,7 +367,7 @@ class EscapeOutputSniff extends Sniff {
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( isset( $this->safe_cast_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
+			if ( isset( $this->safe_casts[ $this->tokens[ $i ]['code'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
@@ -441,6 +441,15 @@ class EscapeOutputSniff extends Sniff {
 			} else {
 				$content = $this->tokens[ $i ]['content'];
 				$ptr     = $i;
+			}
+
+			// Make the error message a little more informative for array access variables.
+			if ( \T_VARIABLE === $this->tokens[ $ptr ]['code'] ) {
+				$array_keys = $this->get_array_access_keys( $ptr );
+
+				if ( ! empty( $array_keys ) ) {
+					$content .= '[' . implode( '][', $array_keys ) . ']';
+				}
 			}
 
 			$this->phpcsFile->addError(

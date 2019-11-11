@@ -3,7 +3,7 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -32,7 +32,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
-					1   => 2, // 1 x error for blacklisted prefix passed.
+					1   => 8, // 2 x error for blacklisted prefix passed. 4 x error for short prefixes. 2 x no prefix.
 					10  => 1,
 					18  => 1,
 					21  => 1,
@@ -70,6 +70,15 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					403 => 1,
 					415 => 1,
 					423 => 1,
+					440 => 2,
+					444 => 2,
+					448 => 2,
+					449 => 1,
+					452 => 4,
+					455 => 2,
+					464 => 2,
+					465 => 1,
+					468 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.4.inc':

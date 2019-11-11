@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -354,7 +354,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 * @since 1.2.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
@@ -462,7 +462,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 * @since 1.2.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
 	 * @return void
@@ -532,7 +532,8 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_comments( $stackPtr ) {
 		if ( true === $this->header_found && ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {

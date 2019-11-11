@@ -6,7 +6,7 @@
 	<rule ref="WordPress-Core"/>
 
 	<!-- Generic PHP best practices.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
 	<rule ref="Generic.Functions.CallTimePassByReference"/>
@@ -25,18 +25,18 @@
 	</rule>
 
 	<!-- More generic PHP best practices.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/607 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.NonExecutableCode"/>
 	<rule ref="Squiz.Operators.IncrementDecrementUsage"/>
 	<rule ref="Squiz.Operators.ValidLogicalOperators"/>
 	<rule ref="Squiz.Functions.FunctionDuplicateArgument"/>
 
 	<!-- And even more generic PHP best practices.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/809 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
 	<!-- And yet more best practices.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1143 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1143 -->
 	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
 		<type>warning</type>
 	</rule>
@@ -49,11 +49,11 @@
 
 	<!-- Check correct spacing of language constructs. This also ensures that the
 	     above rule for not using brackets with require is fixed correctly.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1153 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1153 -->
 	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Hook callbacks may not use all params -->
-	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
+	<!-- https://github.com/WordPress/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
 	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
 
 	<!-- Encourage having only one class/interface/trait per file. -->
@@ -63,7 +63,7 @@
 	</rule>
 
 	<!-- Verify modifier keywords for declared methods and properties in classes.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1101 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="Squiz.Scope.MethodScope"/>
 	<rule ref="PSR2.Classes.PropertyDeclaration"/>
 	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
@@ -78,11 +78,11 @@
 	<rule ref="WordPress.Security.EscapeOutput"/>
 
 	<!-- Encourage use of wp_safe_redirect() to avoid open redirect vulnerabilities.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1264 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1264 -->
 	<rule ref="WordPress.Security.SafeRedirect"/>
 
 	<!-- Verify that a nonce check is done before using values in superglobals.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/73 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/73 -->
 	<rule ref="WordPress.Security.NonceVerification"/>
 
 	<rule ref="WordPress.PHP.DevelopmentFunctions"/>
@@ -96,27 +96,27 @@
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
 	<!-- Scripts & style should be enqueued.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/35 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
 
 	<!-- Warn against overriding WP global variables.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/26 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/26 -->
 	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
 	<!-- Detect incorrect or risky use of the `ini_set()` function.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1447 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1447 -->
 	<rule ref="WordPress.PHP.IniSet"/>
 
 	<!-- Check enqueue and register styles and scripts to have version and in_footer parameters explicitly set.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1146 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1146 -->
 	<rule ref="WordPress.WP.EnqueuedResourceParameters"/>
 
 	<!-- Discourage use of the backtick operator (execution of shell commands).
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/646 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/646 -->
 	<rule ref="Generic.PHP.BacktickOperator"/>
 
 	<!-- Check for PHP Parse errors.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/522 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/522 -->
 	<rule ref="Generic.PHP.Syntax"/>
 
 	<!-- Make the translators comment check which is included in core stricter. -->
@@ -130,8 +130,11 @@
 	<!-- Verify that everything in the global namespace is prefixed. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals"/>
 
+	<!-- Validates post type slugs for valid characters, length and reserved keywords. -->
+	<rule ref="WordPress.NamingConventions.ValidPostTypeSlug"/>
+
 	<!-- Check that object instantiations always have braces & are not assigned by reference.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/919
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/919
 		 Note: there is a similar upstream sniff `PSR12.Classes.ClassInstantiation`, however
 		 that sniff:
 		 - does not cover JS files;
@@ -141,18 +144,17 @@
 		 For those reasons, the WPCS version should remain. -->
 	<rule ref="WordPress.Classes.ClassInstantiation"/>
 
-	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1157 -->
+	<!-- https://github.com/WordPress/WordPress-Coding-Standards/issues/1157 -->
 	<rule ref="WordPress.Security.PluginMenuSlug"/>
 	<rule ref="WordPress.WP.CronInterval"/>
 	<rule ref="WordPress.WP.PostsPerPage"/>
-	<rule ref="WordPress.WP.TimezoneChange"/>
 
 	<!-- Verify some regex best practices.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1371 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1371 -->
 	<rule ref="WordPress.PHP.PregQuoteDelimiter"/>
 
 	<!-- The Core ruleset respects the whitelist. For `Extra` the sniff is stricter.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1450 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1450 -->
 	<rule ref="WordPress.PHP.NoSilencedErrors">
 		<properties>
 			<property name="use_default_whitelist" value="false"/>
@@ -160,12 +162,17 @@
 	</rule>
 
 	<!-- Commented out code should not be committed.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1463 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1463 -->
 	<rule ref="Squiz.PHP.CommentedOutCode">
 		<properties>
 			<property name="maxPercentage" value="40"/>
 		</properties>
 	</rule>
+
+
+	<!-- Prevent some typical mistakes people make accidentally.
+	     https://github.com/WordPress/WordPress-Coding-Standards/pull/1777 -->
+	<rule ref="WordPress.CodeAnalysis.EscapedNotTranslated"/>
 
 
 	<!--

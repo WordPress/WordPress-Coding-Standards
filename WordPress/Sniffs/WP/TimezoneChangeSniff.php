@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Sniffs\DateTime\RestrictedFunctionsSniff;
 
 /**
  * Disallow the changing of timezone.
@@ -23,32 +23,66 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *                 class instead of the upstream `Generic.PHP.ForbiddenFunctions` sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
+ *
+ * @deprecated 2.2.0 Use the `WordPress.DateTime.RestrictedFunctions` sniff instead.
+ *                   This `WordPress.WP.TimezoneChange` sniff will be removed in WPCS 3.0.0.
  */
-class TimezoneChangeSniff extends AbstractFunctionRestrictionsSniff {
+class TimezoneChangeSniff extends RestrictedFunctionsSniff {
 
 	/**
-	 * Groups of functions to restrict.
+	 * Keep track of whether the warnings have been thrown to prevent
+	 * the messages being thrown for every token triggering the sniff.
 	 *
-	 * Example: groups => array(
-	 *  'lambda' => array(
-	 *      'type'      => 'error' | 'warning',
-	 *      'message'   => 'Use anonymous functions instead please!',
-	 *      'functions' => array( 'file_get_contents', 'create_function' ),
-	 *  )
-	 * )
+	 * @since 2.2.0
+	 *
+	 * @var array
+	 */
+	private $thrown = array(
+		'DeprecatedSniff'                 => false,
+		'FoundPropertyForDeprecatedSniff' => false,
+	);
+
+	/**
+	 * Don't use.
+	 *
+	 * @deprecated 2.2.0
 	 *
 	 * @return array
 	 */
 	public function getGroups() {
-		return array(
-			'timezone_change' => array(
-				'type'      => 'error',
-				'message'   => 'Using %s() and similar isn\'t allowed, instead use WP internal timezone support.',
-				'functions' => array(
-					'date_default_timezone_set',
-				),
-			),
-		);
+		$groups = parent::getGroups();
+		return array( 'timezone_change' => $groups['timezone_change'] );
 	}
 
+	/**
+	 * Don't use.
+	 *
+	 * @since      2.2.0 Added to allow for throwing the deprecation notices.
+	 * @deprecated 2.2.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void|int
+	 */
+	public function process_token( $stackPtr ) {
+		if ( false === $this->thrown['DeprecatedSniff'] ) {
+			$this->thrown['DeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.WP.TimezoneChange" sniff has been deprecated. Use the "WordPress.DateTime.RestrictedFunctions" sniff instead. Please update your custom ruleset.',
+				0,
+				'DeprecatedSniff'
+			);
+		}
+
+		if ( ! empty( $this->exclude )
+			&& false === $this->thrown['FoundPropertyForDeprecatedSniff']
+		) {
+			$this->thrown['FoundPropertyForDeprecatedSniff'] = $this->phpcsFile->addWarning(
+				'The "WordPress.WP.TimezoneChange" sniff has been deprecated. Use the "WordPress.DateTime.RestrictedFunctions" sniff instead. "exclude" property setting found. Please update your custom ruleset.',
+				0,
+				'FoundPropertyForDeprecatedSniff'
+			);
+		}
+
+		return parent::process_token( $stackPtr );
+	}
 }

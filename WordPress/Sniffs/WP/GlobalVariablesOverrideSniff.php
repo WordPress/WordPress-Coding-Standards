@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -24,6 +24,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
  * @since   1.1.0  The sniff now also detects variables being overriden in the global namespace.
+ * @since   2.2.0  The sniff now also detects variable assignments via the list() construct.
  *
  * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
  */
@@ -31,7 +32,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 	/**
 	 * Whether to treat all files as if they were included from
-	 * a within function.
+	 * within a function.
 	 *
 	 * This is mostly useful for projects containing views which are being
 	 * included from within a function in another file, like themes.
@@ -44,6 +45,21 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 * @var bool
 	 */
 	public $treat_files_as_scoped = false;
+
+	/**
+	 * Whitelist select variables from the Sniff::$wp_globals array.
+	 *
+	 * A few select variables in WP Core are _intended_ to be overwritten
+	 * by themes/plugins. This sniff should not throw an error for those.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var array
+	 */
+	protected $override_allowed = array(
+		'content_width'     => true,
+		'wp_cockneyreplace' => true,
+	);
 
 	/**
 	 * Scoped object and function structures to skip over as
@@ -73,6 +89,8 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		$targets = array(
 			\T_GLOBAL,
 			\T_VARIABLE,
+			\T_LIST,
+			\T_OPEN_SHORT_ARRAY,
 		);
 
 		// Only used to skip over test classes.
@@ -114,12 +132,19 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Examine variables within a function scope based on a `global` statement in the
 		 * function.
-		 * Examine variable not within a function scope and access to the `$GLOBALS`
+		 * Examine variables not within a function scope, but within a list construct, based
+		 * on that.
+		 * Examine variables not within a function scope and access to the `$GLOBALS`
 		 * variable based on the variable token.
 		 */
 		$in_function_scope = $this->phpcsFile->hasCondition( $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 
-		if ( \T_VARIABLE === $token['code']
+		if ( ( \T_LIST === $token['code'] || \T_OPEN_SHORT_ARRAY === $token['code'] )
+			&& false === $in_function_scope
+			&& false === $this->treat_files_as_scoped
+		) {
+			return $this->process_list_assignment( $stackPtr );
+		} elseif ( \T_VARIABLE === $token['code']
 			&& ( '$GLOBALS' === $token['content']
 				|| ( false === $in_function_scope && false === $this->treat_files_as_scoped ) )
 		) {
@@ -132,15 +157,46 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	}
 
 	/**
+	 * Check that global variables declared via a list construct are prefixed.
+	 *
+	 * @internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	protected function process_list_assignment( $stackPtr ) {
+		$list_open_close = $this->find_list_open_close( $stackPtr );
+		if ( false === $list_open_close ) {
+			// Short array, not short list.
+			return;
+		}
+
+		$var_pointers = $this->get_list_variables( $stackPtr, $list_open_close );
+		foreach ( $var_pointers as $ptr ) {
+			$this->process_variable_assignment( $ptr, true );
+		}
+
+		// No need to re-examine these variables.
+		return $list_open_close['closer'];
+	}
+
+	/**
 	 * Check that defined global variables are prefixed.
 	 *
 	 * @since 1.1.0 Logic was previously contained in the process_token() method.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param int  $stackPtr The position of the current token in the stack.
+	 * @param bool $in_list  Whether or not this is a variable in a list assignment.
+	 *                       Defaults to false.
 	 *
 	 * @return void
 	 */
-	protected function process_variable_assignment( $stackPtr ) {
+	protected function process_variable_assignment( $stackPtr, $in_list = false ) {
 
 		if ( $this->has_whitelist_comment( 'override', $stackPtr ) === true ) {
 			return;
@@ -195,9 +251,17 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		}
 
 		/*
+		 * Is this one of the WP global variables which are allowed to be overwritten ?
+		 */
+		if ( isset( $this->override_allowed[ $var_name ] ) === true ) {
+			return;
+		}
+
+		/*
 		 * Check if the variable value is being changed.
 		 */
-		if ( false === $this->is_assignment( $stackPtr )
+		if ( false === $in_list
+			&& false === $this->is_assignment( $stackPtr )
 			&& false === $this->is_foreach_as( $stackPtr )
 		) {
 			return;
@@ -207,7 +271,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 * Function parameters with the same name as a WP global variable are fine,
 		 * including when they are being assigned a default value.
 		 */
-		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+		if ( false === $in_list && isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 			foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
 				if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
 					&& ( \T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
@@ -222,7 +286,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Class property declarations with the same name as WP global variables are fine.
 		 */
-		if ( true === $this->is_class_property( $stackPtr ) ) {
+		if ( false === $in_list && true === $this->is_class_property( $stackPtr ) ) {
 			return;
 		}
 
@@ -256,7 +320,10 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			if ( \T_VARIABLE === $var['code'] ) {
-				if ( isset( $this->wp_globals[ substr( $var['content'], 1 ) ] ) ) {
+				$var_name = substr( $var['content'], 1 );
+				if ( isset( $this->wp_globals[ $var_name ] )
+					&& isset( $this->override_allowed[ $var_name ] ) === false
+				) {
 					$search[] = $var['content'];
 				}
 			}
@@ -297,6 +364,34 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				}
 
 				$ptr = $this->tokens[ $ptr ]['scope_closer'];
+				continue;
+			}
+
+			// Make sure to recognize assignments to variables in a list construct.
+			if ( \T_LIST === $this->tokens[ $ptr ]['code']
+				|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $ptr ]['code']
+			) {
+				$list_open_close = $this->find_list_open_close( $ptr );
+
+				if ( false === $list_open_close ) {
+					// Short array, not short list.
+					continue;
+				}
+
+				$var_pointers = $this->get_list_variables( $ptr, $list_open_close );
+				foreach ( $var_pointers as $ptr ) {
+					$var_name = $this->tokens[ $ptr ]['content'];
+					if ( '$GLOBALS' === $var_name ) {
+						$var_name = '$' . $this->strip_quotes( $this->get_array_access_key( $ptr ) );
+					}
+
+					if ( \in_array( $var_name, $search, true ) ) {
+						$this->process_variable_assignment( $ptr, true );
+					}
+				}
+
+				// No need to re-examine these variables.
+				$ptr = $list_open_close['closer'];
 				continue;
 			}
 

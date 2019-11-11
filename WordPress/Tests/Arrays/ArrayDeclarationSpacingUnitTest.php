@@ -3,7 +3,7 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -93,6 +93,7 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					91  => 1,
 					92  => 1,
 					104 => 1,
+					126 => 1,
 				);
 
 			default:

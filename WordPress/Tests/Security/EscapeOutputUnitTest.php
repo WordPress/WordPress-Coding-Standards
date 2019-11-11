@@ -3,7 +3,7 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -80,6 +80,7 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			266 => 1,
 			289 => 1,
 			294 => 1,
+			297 => 1,
 		);
 	}
 

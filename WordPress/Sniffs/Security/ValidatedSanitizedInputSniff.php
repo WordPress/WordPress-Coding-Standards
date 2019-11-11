@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -15,7 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/69
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards/issues/69
  *
  * @package WPCS\WordPressCodingStandards
  *

@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -633,8 +633,8 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Check for the presence of a translators comment if one of the text strings contains a placeholder.
 	 *
-	 * @param int   $stack_ptr  The position of the gettext call token in the stack.
-	 * @param array $args       The function arguments.
+	 * @param int   $stack_ptr The position of the gettext call token in the stack.
+	 * @param array $args      The function arguments.
 	 * @return void
 	 */
 	protected function check_for_translator_comment( $stack_ptr, $args ) {

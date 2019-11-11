@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -1345,6 +1345,20 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '5.1.0',
 		),
+
+		// WP 5.3.0.
+		'_wp_json_prepare_data' => array(
+			'alt'     => '',
+			'version' => '5.3.0',
+		),
+		'_wp_privacy_requests_screen_options' => array(
+			'alt'     => '',
+			'version' => '5.3.0',
+		),
+		'update_user_status' => array(
+			'alt'     => 'wp_update_user()',
+			'version' => '5.3.0',
+		),
 	);
 
 	/**
@@ -1367,7 +1381,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
+	 * @param string $group_name      The name of the group which was matched. Will
 	 *                                always be 'deprecated_functions'.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *

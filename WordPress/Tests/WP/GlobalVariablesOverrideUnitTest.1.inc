@@ -39,7 +39,7 @@ function global_vars() {
 }
 
 // Test against cross-contamination of global detection.
-// https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/486
+// https://github.com/WordPress/WordPress-Coding-Standards/issues/486
 function local_var_only() {
 	$pagenow = 'test'; // Ok, function scope.
 }
@@ -58,7 +58,7 @@ add_filter( 'comments_open', function( $open, $post_id ) {
 $closure = function() { $page = 'test' }; // Ok, check against cross-contaminiation from within a closure.
 
 // Allow overriding globals in functions within unit test classes.
-// https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/300#issuecomment-158778606
+// https://github.com/WordPress/WordPress-Coding-Standards/issues/300#issuecomment-158778606
 trait WP_UnitTestCase {
 
 	public function test_something() {
@@ -177,7 +177,7 @@ function global_vars() {
 	$closure = function ( $pagenow ) { // OK, local to the closure.
 		$pagenow = 'something'; // OK, local to the closure.
 	};
-	
+
 	$pagenow = 'something else'; // Bad.
 
 	return $closure( $pagenow ); // OK, not an assignment.
@@ -210,3 +210,33 @@ class MyClass {
 
 // Test assigning to multiple variables at once.
 $is_NS4 = $is_opera = $is_safari = $GLOBALS['is_winIE'] = true; // Bad x 4.
+
+// Issue #1043.
+function globals_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'acronym_content_width', 640 );
+}
+
+function global_content_width() {
+	global $content_width;
+
+	$content_width = apply_filters( 'acronym_content_width', 640 );
+}
+
+$content_width = 1000;
+
+// Issue #1743: detect var override via list construct.
+function acronym_prepare_items() {
+	global $wp_query, $post_mime_types, $avail_post_mime_types, $mode;
+	list( $post_mime_types, $avail_post_mime_types ) = get_an_array(); // Bad x 2.
+	[ $post_mime_types, $avail_post_mime_types ]     = get_an_array(); // PHP 7.1 short list syntax, bad x 2.
+
+	// Keyed list. Keys are not assignments.
+	list( (string) $wp_query => $GLOBALS['mode']["B"], (string) $c => $mode["D"] ) = $e->getIndexable(); // Bad x 2.
+	[ $mode => $not_global ] = $bar; // OK.
+}
+
+// Nested list.
+list( $active_signup, list( $s => $typenow, $GLOBALS['status'], ), $ignore ) = $array; // Bad x 3.
+
+// List with array assignments.
+[ $path[ $type ], , ] = $array; // Bad x 1.

@@ -3,13 +3,14 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
@@ -64,7 +65,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	protected $punctuation_regex = '`[^\w%s]`';
 
 	/**
-	 * Groups of function to restrict.
+	 * Groups of functions to restrict.
 	 *
 	 * @since 0.11.0
 	 *
@@ -72,6 +73,13 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function getGroups() {
 		$this->target_functions = $this->hookInvokeFunctions;
+
+		// No need to examine the names of deprecated hooks.
+		unset(
+			$this->target_functions['do_action_deprecated'],
+			$this->target_functions['apply_filters_deprecated']
+		);
+
 		return parent::getGroups();
 	}
 
@@ -81,21 +89,13 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.11.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		// Ignore deprecated hook names.
-		if ( strpos( $matched_content, '_deprecated' ) > 0 ) {
-			return;
-		}
-
-		if ( ! isset( $parameters[1] ) ) {
-			return;
-		}
 
 		$regex = $this->prepare_regex();
 
@@ -105,57 +105,90 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		$expected    = array();
 
 		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+			// Skip past comment tokens.
+			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) !== false ) {
+				continue;
+			}
+
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-				$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
+			// Skip past potential variable array access: $var['Key'].
+			if ( \T_VARIABLE === $this->tokens[ $i ]['code'] ) {
+				do {
+					$open_bracket = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+					if ( false === $open_bracket
+						|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
+						|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
+					) {
+						continue 2;
+					}
 
-				/*
-				 * Here be dragons - a double quoted string can contain extrapolated variables
-				 * which don't have to comply with these rules.
-				 */
-				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
-					$transform       = $this->transform_complex_string( $string, $regex );
-					$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
-					$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
-				} else {
-					$transform       = $this->transform( $string, $regex );
-					$case_transform  = $this->transform( $string, $regex, 'case' );
-					$punct_transform = $this->transform( $string, $regex, 'punctuation' );
-				}
+					$i = $this->tokens[ $open_bracket ]['bracket_closer'];
 
-				if ( $string === $transform ) {
-					continue;
-				}
+				} while ( isset( $this->tokens[ $i ] ) && $i <= $parameters[1]['end'] );
 
-				if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
-					$expected[ $i ] = '"' . $transform . '"';
-				} else {
-					$expected[ $i ] = '\'' . $transform . '\'';
-				}
+				continue;
+			}
 
-				if ( $string !== $case_transform ) {
-					$case_errors++;
-				}
-				if ( $string !== $punct_transform ) {
-					$underscores++;
-				}
+			// Skip past non-string tokens.
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
+				continue;
+			}
+
+			$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
+
+			/*
+			 * Here be dragons - a double quoted string can contain extrapolated variables
+			 * which don't have to comply with these rules.
+			 */
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				$transform       = $this->transform_complex_string( $string, $regex );
+				$case_transform  = $this->transform_complex_string( $string, $regex, 'case' );
+				$punct_transform = $this->transform_complex_string( $string, $regex, 'punctuation' );
+			} else {
+				$transform       = $this->transform( $string, $regex );
+				$case_transform  = $this->transform( $string, $regex, 'case' );
+				$punct_transform = $this->transform( $string, $regex, 'punctuation' );
+			}
+
+			if ( $string === $transform ) {
+				continue;
+			}
+
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $i ]['code'] ) {
+				$expected[ $i ] = '"' . $transform . '"';
+			} else {
+				$expected[ $i ] = '\'' . $transform . '\'';
+			}
+
+			if ( $string !== $case_transform ) {
+				$case_errors++;
+			}
+			if ( $string !== $punct_transform ) {
+				$underscores++;
 			}
 		}
 
+		$first_non_empty = $this->phpcsFile->findNext(
+			Tokens::$emptyTokens,
+			$parameters[1]['start'],
+			( $parameters[1]['end'] + 1 ),
+			true
+		);
+
 		$data = array(
-			implode( '', $expected ),
-			implode( '', $content ),
+			trim( implode( '', $expected ) ),
+			trim( implode( '', $content ) ),
 		);
 
 		if ( $case_errors > 0 ) {
 			$error = 'Hook names should be lowercase. Expected: %s, but found: %s.';
-			$this->phpcsFile->addError( $error, $stackPtr, 'NotLowercase', $data );
+			$this->phpcsFile->addError( $error, $first_non_empty, 'NotLowercase', $data );
 		}
 		if ( $underscores > 0 ) {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
-			$this->phpcsFile->addWarning( $error, $stackPtr, 'UseUnderscores', $data );
+			$this->phpcsFile->addWarning( $error, $first_non_empty, 'UseUnderscores', $data );
 		}
 	}
 

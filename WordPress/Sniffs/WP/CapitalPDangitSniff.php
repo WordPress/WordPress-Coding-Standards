@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -28,7 +28,7 @@ class CapitalPDangitSniff extends Sniff {
 	 * Regex to match a large number or spelling variations of WordPress in text strings.
 	 *
 	 * Prevents matches on:
-	 * - URLs for wordpress.org/com/net/tv.
+	 * - URLs for wordpress.org/com/net/test/tv.
 	 * - `@...` usernames starting with `wordpress`
 	 * - email addresses with a domain starting with `wordpress`
 	 * - email addresses with a user name ending with `wordpress`
@@ -42,7 +42,7 @@ class CapitalPDangitSniff extends Sniff {
 	 *
 	 * @var string
 	 */
-	const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif|pot))#i';
+	const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|test|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif|pot))#i';
 
 	/**
 	 * Regex to match a large number or spelling variations of WordPress in class names.

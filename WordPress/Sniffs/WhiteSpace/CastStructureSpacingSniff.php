@@ -3,7 +3,7 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
@@ -13,7 +13,7 @@ use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**
- * Ensure cast statements don't contain whitespace, but *are* surrounded by whitespace, based upon Squiz code.
+ * Ensure cast statements are preceded by whitespace.
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
  *
@@ -24,6 +24,9 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.11.0 The error level for all errors thrown by this sniff has been raised from warning to error.
  * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   1.2.0  Removed the `NoSpaceAfterCloseParenthesis` error code in favour of the
+ *                 upstream `Generic.Formatting.SpaceAfterCast.NoSpace` error.
+ * @since   2.2.0  Added exception for whitespace between spread operator and cast.
  */
 class CastStructureSpacingSniff extends Sniff {
 
@@ -45,7 +48,9 @@ class CastStructureSpacingSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( \T_WHITESPACE !== $this->tokens[ ( $stackPtr - 1 ) ]['code'] ) {
+		if ( \T_WHITESPACE !== $this->tokens[ ( $stackPtr - 1 ) ]['code']
+			&& \T_ELLIPSIS !== $this->tokens[ ( $stackPtr - 1 ) ]['code']
+		) {
 			$error = 'No space before opening casting parenthesis is prohibited';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpaceBeforeOpenParenthesis' );
 			if ( true === $fix ) {
