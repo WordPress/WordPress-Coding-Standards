@@ -9,6 +9,63 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 _No documentation available about unreleased changes as of yet._
 
 
+## [2.2.0] - 2019-11-11
+
+Note: The repository has moved. The new URL is https://github.com/WordPress/WordPress-Coding-Standards.
+The move does not affect the package name for Packagist. This remains the same: `wp-coding-standards/wpcs`.
+
+### Added
+- New `WordPress.DateTime.CurrentTimeTimestamp` sniff to the `WordPress-Core` ruleset, which checks against the use of the WP native `current_time()` function to retrieve a timestamp as this won't be a _real_ timestamp. Includes an auto-fixer.
+- New `WordPress.DateTime.RestrictedFunctions` sniff to the `WordPress-Core` ruleset, which checks for the use of certain date/time related functions. Initially this sniff forbids the use of the PHP native `date_default_timezone_set()` and `date()` functions.
+- New `WordPress.PHP.DisallowShortTernary` sniff to the `WordPress-Core` ruleset, which, as the name implies, disallows the use of short ternaries.
+- New `WordPress.CodeAnalysis.EscapedNotTranslated` sniff to the `WordPress-Extra` ruleset which will warn when a text string is escaped for output, but not being translated, while the arguments passed to the function call give the impression that translation is intended.
+- New `WordPress.NamingConventions.ValidPostTypeSlug` sniff to the `WordPress-Extra` ruleset which will examine calls to `register_post_type()` and throw errors when an invalid post type slug is used.
+- `Generic.Arrays.DisallowShortArraySyntax` to the `WordPress-Core` ruleset.
+- `WordPress.NamingConventions.PrefixAllGlobals`: the `PHP` prefix has been added to the prefix blacklist as it is reserved by PHP itself.
+- The `wp_sanitize_redirect()` function to the `sanitizingFunctions` list used by the `WordPress.Security.NonceVerification`, `WordPress.Security.ValidatedSanitizedInput` and `WordPress.Security.EscapeOutput` sniffs.
+- The `sanitize_key()` and the `highlight_string()` functions to the `escapingFunctions` list used by the `WordPress.Security.EscapeOutput` sniff.
+- The `RECOVERY_MODE_COOKIE` constant to the list of WP Core constants which may be defined by plugins and themes and therefore don't need to be prefixed (`WordPress.NamingConventions.PrefixAllGlobals`).
+- `$content_width`, `$plugin`, `$mu_plugin` and `$network_plugin` to the list of WP globals which is used by both the `WordPress.Variables.GlobalVariables` and the `WordPress.NamingConventions.PrefixAllGlobals` sniffs.
+- `Sniff::is_short_list()` utility method to determine whether a _short array_ open/close token actually represents a PHP 7.1+ short list.
+- `Sniff::find_list_open_close()` utility method to find the opener and closer for `list()` constructs, including short lists.
+- `Sniff::get_list_variables()` utility method which will retrieve an array with the token pointers to the variables which are being assigned to in a `list()` construct. Includes support for short lists.
+- `Sniff::is_function_deprecated()` static utility method to determine whether a declared function has been marked as deprecated in the function DocBlock.
+- End-user documentation to the following existing sniffs: `WordPress.Arrays.ArrayIndentation`, `WordPress.Arrays.ArrayKeySpacingRestrictions`, `WordPress.Arrays.MultipleStatementAlignment`, `WordPress.Classes.ClassInstantiation`, `WordPress.NamingConventions.ValidHookName`, `WordPress.PHP.IniSet`, `WordPress.Security.SafeRedirect`, `WordPress.WhiteSpace.CastStructureSpacing`, `WordPress.WhiteSpace.DisallowInlineTabs`, `WordPress.WhiteSpace.PrecisionAlignment`, `WordPress.WP.CronInterval`, `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`, `WordPress.WP.DeprecatedParameters`, `WordPress.WP.DeprecatedParameterValues`, `WordPress.WP.EnqueuedResources`, `WordPress.WP.PostsPerPage`.
+    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage).
+
+### Changed
+- The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `5.0`.
+- The `WordPress.Arrays.ArrayKeySpacingRestrictions` sniff has two new error codes: `TooMuchSpaceBeforeKey` and `TooMuchSpaceAfterKey`. Both auto-fixable.
+    The sniff will now check that there is _exactly_ one space on the inside of the square brackets around the array key for non-string, non-numeric array keys. Previously, it only checked that there was whitespace, not how much whitespace.
+- `WordPress.Arrays.ArrayKeySpacingRestrictions`: the fixers have been made more efficient and less fixer-conflict prone.
+- `WordPress.NamingConventions.PrefixAllGlobals`: plugin/theme prefixes should be at least three characters long. A new `ShortPrefixPassed` error has been added for when the prefix passed does not comply with this rule.
+- `WordPress.WhiteSpace.CastStructureSpacing` now allows for no whitespace before a cast when the cast is preceded by the spread `...` operator. This pre-empts a fixer conflict for when the spacing around the spread operator will start to get checked.
+- The `WordPress.WP.DeprecatedClasses` sniff will now detect classes deprecated in WP 4.9 and WP 5.3.
+- The `WordPress.WP.DeprecatedFunctions` sniff will now detect functions deprecated in WP 5.3.
+- `WordPress.NamingConventions.ValidHookName` now has "cleaner" error messages and higher precision for the line on which an error is thrown.
+- `WordPress.Security.EscapeOutput`: if an error refers to array access via a variable, the array index key will now be included in the error message.
+- The processing of the `WordPress` ruleset by `PHP_CodeSniffer` will now be faster.
+- Various minor code tweaks and clean up.
+- Various minor documentation fixes.
+- Documentation: updated the repo URL in all relevant places.
+
+### Deprecated
+- The `WordPress.WP.TimezoneChange` sniff. Use the `WordPress.DateTime.RestrictedFunctions` instead.
+    The deprecated sniff will be removed in WPCS 3.0.0.
+
+### Fixed
+- All sniffs in the `WordPress.Arrays` category will no longer treat _short lists_ as if they were a short array.
+- The `WordPress.NamingConventions.ValidFunctionName` and the `WordPress.NamingConventions.PrefixAllGlobals` sniff will now ignore functions marked as `@deprecated`.
+- Both the `WordPress.NamingConventions.PrefixAllGlobals` sniff as well as the `WordPress.WP.GlobalVariablesOverride` sniff have been updated to recognize variables being declared via (long/short) `list()` constructs and handle them correctly.
+- Both the `WordPress.NamingConventions.PrefixAllGlobals` sniff as well as the `WordPress.WP.GlobalVariablesOverride` sniff will now take a limited list of WP global variables _which are intended to be overwritten by plugins/themes_ into account.
+    Initially this list contains the `$content_width` and the `$wp_cockneyreplace` variables.
+- `WordPress.NamingConventions.ValidHookName`: will no longer examine a string array access index key as if it were a part of the hook name.
+- `WordPress.Security.EscapeOutput`: will no longer trigger on the typical `basename( __FILE__ )` pattern if found as the first parameter passed to a call to `_deprecated_file()`.
+- `WordPress.WP.CapitalPDangit`: now allows for the `.test` TLD in URLs.
+- WPCS is now fully compatible with PHP 7.4.
+    Note: `PHP_CodeSniffer` itself is only compatible with PHP 7.4 from PHPCS 3.5.0 onwards.
+
+
 ## [2.1.1] - 2019-05-21
 
 ### Changed
@@ -1091,6 +1148,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/master...HEAD
+[2.2.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.0.0-RC1...2.0.0
