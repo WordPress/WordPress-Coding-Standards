@@ -279,3 +279,18 @@ $returntype = function ( string $input ): string {}; // Ok.
 $returntype = function ( string $input ) : string {}; // Ok.
 $returntype = function ( string $input, array $inputs ): string {}; // Ok.
 $returntype = function ( string $input, array $inputs ) : string {}; // Ok.
+
+// Issue 1792.
+$matching_options = array_filter(
+	$imported_options,
+	function ( $option ) use ( $option_id ): bool {
+		return $option['id'] === $option_id;
+	}
+);
+
+$matching_options = array_filter(
+	$imported_options,
+	function ( $option ) use ( $option_id ) : bool {
+		return $option['id'] === $option_id;
+	}
+);
