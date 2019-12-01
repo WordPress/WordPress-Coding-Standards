@@ -8,8 +8,7 @@ cache:
     # Cache directory for more recent Composer versions.
     - $HOME/.cache/composer/files
 
-language:
-    - php
+language: php
 
 php:
     - 5.4
@@ -111,10 +110,6 @@ jobs:
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 5.4
       env: PHPCS_BRANCH="3.3.1"
-
-  allow_failures:
-    # Allow failures for unstable builds.
-    - php: "7.4snapshot"
 
 before_install:
     # Speed up build time by disabling Xdebug.
