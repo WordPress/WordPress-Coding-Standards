@@ -346,7 +346,8 @@ class ControlStructureSpacingSniff extends Sniff {
 				if ( \T_WHITESPACE !== $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
 					&& ! ( // Do NOT flag : immediately following ) for return types declarations.
 						\T_COLON === $this->tokens[ ( $parenthesisCloser + 1 ) ]['code']
-						&& in_array( $this->tokens[ $this->tokens[ $parenthesisCloser ]['parenthesis_owner'] ]['code'], array( \T_FUNCTION, \T_CLOSURE ), true )
+						&& ( isset( $this->tokens[ $parenthesisCloser ]['parenthesis_owner'] ) === false
+							|| in_array( $this->tokens[ $this->tokens[ $parenthesisCloser ]['parenthesis_owner'] ]['code'], array( \T_FUNCTION, \T_CLOSURE ), true ) )
 					)
 					&& ( isset( $scopeOpener ) && \T_COLON !== $this->tokens[ $scopeOpener ]['code'] )
 				) {
