@@ -18,7 +18,8 @@ php:
     - 7.1
     - 7.2
     - 7.3
-    - "7.4snapshot"
+    - 7.4
+    - "nightly"
 
 env:
   # `master` is now 3.x.
@@ -110,6 +111,10 @@ jobs:
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 5.4
       env: PHPCS_BRANCH="3.3.1"
+
+  allow_failures:
+    # Allow failures for unstable builds.
+    - php: "nightly"
 
 before_install:
     # Speed up build time by disabling Xdebug.
