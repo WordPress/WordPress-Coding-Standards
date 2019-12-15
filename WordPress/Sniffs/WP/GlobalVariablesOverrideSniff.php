@@ -351,7 +351,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			$end = $this->tokens[ $scope_cond ]['scope_closer'];
 		} else {
 			// Global statement in the global namespace with file is being treated as scoped.
-			$end = ( $this->phpcsFile->numTokens + 1 );
+			$end = $this->phpcsFile->numTokens;
 		}
 
 		for ( $ptr = $start; $ptr < $end; $ptr++ ) {
