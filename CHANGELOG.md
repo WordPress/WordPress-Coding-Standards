@@ -8,6 +8,20 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [2.2.1] - 2020-02-04
+
+### Added
+- Metrics to the `WordPress.Arrays.CommaAfterArrayItem` sniff. These can be displayed using `--report=info`.
+- The `sanitize_hex_color()` and the `sanitize_hex_color_no_hash()` functions to the `escapingFunctions` list used by the `WordPress.Security.EscapeOutput` sniff.
+
+### Changed
+- The recommended version of the suggested DealerDirect PHPCS Composer plugin is now `^0.6`.
+
+### Fixed
+- `WordPress.PHP.NoSilencedErrors`: depending on the custom properties set, the metrics would be different.
+- `WordPress.WhiteSpace.ControlStructureSpacing`: fixed undefined index notice for closures with `use`.
+- `WordPress.WP.GlobalVariablesOverride`: fixed undefined offset notice when the `treat_files_as_scoped` property would be set to `true`.
+- `WordPress.WP.I18n`: fixed a _Trying to access array offset on value of type null_ error when the sniff was run on PHP 7.4  and would encounter a translation function expecting singular and plural texts for which one of these arguments was missing.
 
 ## [2.2.0] - 2019-11-11
 
@@ -1148,6 +1162,7 @@ See the comparison for full list.
 Initial tagged release.
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/master...HEAD
+[2.2.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.0.0...2.1.0
