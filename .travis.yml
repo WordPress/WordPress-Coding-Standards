@@ -45,7 +45,7 @@ jobs:
   include:
     #### SNIFF STAGE ####
     - stage: sniff
-      php: 7.3
+      php: 7.4
       env: PHPCS_BRANCH="dev-master"
       addons:
         apt:
@@ -70,12 +70,16 @@ jobs:
         - diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml")
         - diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample")
 
+        # Validate the composer.json file.
+        # @link https://getcomposer.org/doc/03-cli.md#validate
+        - composer validate --no-check-all --strict
+
     #### RULESET STAGE ####
     # Make sure the rulesets don't throw unexpected errors or warnings.
     # This check needs to be run against a high PHP version to prevent triggering the syntax error check.
     # It also needs to be run against all PHPCS versions WPCS is tested against.
     - stage: rulesets
-      php: 7.3
+      php: 7.4
       env: PHPCS_BRANCH="dev-master"
       script:
         - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Core
@@ -91,7 +95,7 @@ jobs:
         - travis_retry $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
 
     - stage: rulesets
-      php: 7.3
+      php: 7.4
       env: PHPCS_BRANCH="3.3.1"
       script:
         - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Core
@@ -103,7 +107,7 @@ jobs:
     # This is a much quicker test which only runs the unit tests and linting against the low/high
     # supported PHP/PHPCS combinations.
     - stage: quicktest
-      php: 7.3
+      php: 7.4
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 7.3
       env: PHPCS_BRANCH="3.3.1"
@@ -112,9 +116,16 @@ jobs:
     - php: 5.4
       env: PHPCS_BRANCH="3.3.1"
 
+    #### TEST STAGE ####
+    # Add extra build to test against PHPCS 4.
+    - stage: test
+      php: 7.4
+      env: PHPCS_BRANCH="4.0.x-dev"
+
   allow_failures:
     # Allow failures for unstable builds.
     - php: "nightly"
+    - env: PHPCS_BRANCH="4.0.x-dev"
 
 before_install:
     # Speed up build time by disabling Xdebug.
@@ -131,6 +142,13 @@ before_install:
 
     - export XMLLINT_INDENT="	"
     - export PHPUNIT_DIR=/tmp/phpunit
+    - |
+      if [[ $TRAVIS_PHP_VERSION == "nightly" || $PHPCS_BRANCH == "4.0.x-dev" ]]; then
+          # Even though we're not doing a dev install, dev requirements are still checked.
+          # Neither the PHPCS Composer plugin nor PHPCompatibility allows yet for PHPCS 4.x.
+          # The Composer plugin also doesn't allow for installation on PHP 8.x/nightly.
+          composer remove --dev dealerdirect/phpcodesniffer-composer-installer phpcompatibility/php-compatibility --no-update --no-scripts
+      fi
     - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --update-no-dev --no-suggest --no-scripts
     - |
       if [[ "$TRAVIS_BUILD_STAGE_NAME" == "Sniff" ]]; then
@@ -147,10 +165,6 @@ before_install:
 script:
   # Lint the PHP files against parse errors.
   - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
-
-  # Validate the composer.json file.
-  # @link https://getcomposer.org/doc/03-cli.md#validate
-  - if [[ "$LINT" == "1" ]]; then composer validate --no-check-all --strict; fi
 
   # Run the unit tests.
   - |
