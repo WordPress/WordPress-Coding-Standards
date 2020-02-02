@@ -153,7 +153,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'intval'                     => true,
 		'json_encode'                => true,
 		'like_escape'                => true,
-		'maybe_hash_hex_color'       => true,
 		'number_format'              => true,
 		'rawurlencode'               => true,
 		'sanitize_hex_color'         => true,
