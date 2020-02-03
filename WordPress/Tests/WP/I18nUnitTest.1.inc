@@ -183,5 +183,13 @@ _n_noop($singular); // Bad x 3.
 // This test is needed to verify that the missing plural argument above does not cause an internal error, stopping the run.
 _n_noop( 'I have %d cat.', 'I have %d cats.' ); // Bad.
 
+// HTML wrapped strings.
+__( '<address>123 Fake Street</address>', 'my-slug' ); // Bad, string shouldn't be wrapped in HTML.
+__( 'I live at <address>123 Fake Street</address>', 'my-slug' ); // Okay, no consensus on HTML tags within strings.
+__( '<address>123 Fake Street</address> is my home', 'my-slug' ); // Okay, no consensus on HTML tags within strings.
+__( '<span>Text</span> More text <span>Text</span>', 'my-slug' ); // Good, we're not wrapping
+__( '<div class="my-class">Translatable content</div>', 'my-slug' ); // Bad
+__( '<option id="%1$s" value="%2$s">Translatable option name</option>', 'my-slug' ); // Wrapping is okay, since there are placeholders
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true
