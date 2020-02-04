@@ -103,6 +103,12 @@ class CommaAfterArrayItemSniff extends Sniff {
 			 */
 			if ( true === $single_line && $item_index === $array_item_count ) {
 
+				$this->phpcsFile->recordMetric(
+					$stackPtr,
+					'Single line array - comma after last item',
+					( true === $is_comma ? 'yes' : 'no' )
+				);
+
 				if ( true === $is_comma ) {
 					$fix = $this->phpcsFile->addFixableError(
 						'Comma not allowed after last value in single-line array declaration',
@@ -151,6 +157,14 @@ class CommaAfterArrayItemSniff extends Sniff {
 				if ( true === $fix ) {
 					$this->phpcsFile->fixer->addContent( $last_content, ',' );
 				}
+			}
+
+			if ( false === $single_line && $item_index === $array_item_count ) {
+				$this->phpcsFile->recordMetric(
+					$stackPtr,
+					'Multi-line array - comma after last item',
+					( true === $is_comma ? 'yes' : 'no' )
+				);
 			}
 
 			if ( false === $is_comma ) {
