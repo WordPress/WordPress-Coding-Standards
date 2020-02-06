@@ -98,6 +98,16 @@
 	<!-- Covers rule: Braces should always be used, even when they are not required. -->
 	<rule ref="Generic.ControlStructures.InlineControlStructure"/>
 
+	<!-- Covers rule: parenthesis should not be used when using include, include_once, require, require_once. -->
+	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequire">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
+		<type>warning</type>
+	</rule>
 
 	<!--
 	#############################################################################
@@ -235,6 +245,10 @@
 		<severity>0</severity>
 	</rule>
 
+	<!-- Check correct spacing of language constructs. This also ensures that the
+	     above rule for not using brackets with require is fixed correctly.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1153 -->
+	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Covers rule: Call a function, like so: my_function( $param1, func_param( $param2 ) ); -->
 	<rule ref="PEAR.Functions.FunctionCallSignature">
