@@ -639,7 +639,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		/*
-		 * NoHtmlWrappedStrings.
+		 * NoHtmlWrappedStrings and NoAHrefWrappedStrings.
 		 *
 		 * Strip surrounding quotes.
 		 */
@@ -659,7 +659,15 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			}
 		}
 
-		// Is this all there is?
+		// Dedicated rule for cases where strings are wrapped in '<a href="...">...</a>'.
+		// The link target might actually need localization.
+		// Using a separate rule here allows codebases to disable it independently of the NoHtmlWrappedStrings rule.
+		if ( $reader->name === 'a' && $reader->getAttribute( 'href' ) ) {
+			$this->phpcsFile->addWarning( 'Strings should not be wrapped in <a href="...">...</a>', $stack_ptr, 'NoAHrefWrappedStrings' );
+			return;
+		}
+
+		// Does the entire string only consist of this HTML node?
 		if ( $reader->readOuterXml() === $content_without_surrounding_quotes ) {
 			$this->phpcsFile->addWarning( 'Strings should not be wrapped in HTML', $stack_ptr, 'NoHtmlWrappedStrings' );
 		}
