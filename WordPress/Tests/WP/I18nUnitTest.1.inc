@@ -196,6 +196,7 @@ __( '<div>text to translate', 'my-slug' );
 __( 'text to <div>translate', 'my-slug' );
 __( 'text < to translate', 'my-slug' );
 __( 'text to > translate', 'my-slug' );
+__( '<div data-type=">foo">my address</div>', 'my-slug' );
 
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true
