@@ -191,5 +191,11 @@ __( '<span>Text</span> More text <span>Text</span>', 'my-slug' ); // Good, we're
 __( '<div class="my-class">Translatable content</div>', 'my-slug' ); // Bad
 __( '<option id="%1$s" value="%2$s">Translatable option name</option>', 'my-slug' ); // Wrapping is okay, since there are placeholders
 
+// Strings containing malformed XML, to make sure we're able to parse them. No warnings should be thrown.
+__( '<div>text to translate', 'my-slug' );
+__( 'text to <div>translate', 'my-slug' );
+__( 'text < to translate', 'my-slug' );
+__( 'text to > translate', 'my-slug' );
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true
