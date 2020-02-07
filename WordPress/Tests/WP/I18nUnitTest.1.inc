@@ -206,9 +206,10 @@ __( '<<>>123</<>', 'my-slug' );
 
 // Strings wrapped in '<a href="...">...</a>'. These get a different warning, as the link target might actually be localized.
 // phpcs:disable WordPress.WP.I18n.NoHtmlWrappedStrings
-__( '<a href="http://wordpress.org">WordPress</a>', 'my-slug' ); // Bad, strings shouldn't be wrapped in <a href="...">...</a>
-__( '<a id="anchor">translatable text</a>', 'my-slug' ) // Good, since we have disabled the NoHtmlWrappedStrings rule here
-__( '<a>translatable text</a>', 'my-slug' ) // Good, since we have disabled the NoHtmlWrappedStrings rule here
+__( '<a href="http://wordpress.org">WordPress</a>', 'my-slug' ); // Bad, strings shouldn't be wrapped in <a href="...">...</a>.
+__( '<a id="anchor">translatable text</a>', 'my-slug' ) // Good, since we have disabled the NoHtmlWrappedStrings rule here.
+__( '<a>translatable text</a>', 'my-slug' ) // Good, since we have disabled the NoHtmlWrappedStrings rule here.
+__( '<a href="%s">translatable text</a>', 'my-slug' ) // Good, contains a placeholder in the href attribute.
 // phpcs:enable WordPress.WP.I18n.NoHtmlWrappedStrings
 
 // phpcs:set WordPress.WP.I18n text_domain[]
