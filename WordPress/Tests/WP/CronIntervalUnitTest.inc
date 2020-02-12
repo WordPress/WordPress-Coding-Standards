@@ -144,3 +144,13 @@ Custom::add_filter( 'cron_schedules', array( $class, $method ) ); // OK, not the
 add_filter( 'some_hook', array( $place, 'cron_schedules' ) ); // OK, not the hook we're looking for.
 add_filter( function() { return get_hook_name('cron_schedules'); }(), array( $class, $method ) ); // OK, nested in another function call.
 
+namespace Foo {
+	function my_add_every_hour( $schedules ) {
+		$schedules['every_hour'] = [
+			'interval' => HOUR_IN_SECONDS,
+			'display' => __( 'Once every hour' )
+		];
+		return $schedules;
+	}
+	add_filter( 'cron_schedules', __NAMESPACE__ . '\my_add_every_hour'); // OK: > 10 min.
+}
