@@ -190,6 +190,8 @@ __( '<address>123 Fake Street</address> is my home', 'my-slug' ); // Okay, no co
 __( '<span>Text</span> More text <span>Text</span>', 'my-slug' ); // Good, we're not wrapping
 __( '<div class="my-class">Translatable content</div>', 'my-slug' ); // Bad
 __( '<option id="%1$s" value="%2$s">Translatable option name</option>', 'my-slug' ); // Wrapping is okay, since there are placeholders
+__( '<b><i>Foo</i></b>', 'my-slug' ); // Bad
+__( '<foo>Foo</foo>', 'my-slug' ); // Good
 
 // Strings containing malformed XML, to make sure we're able to parse them. No warnings should be thrown.
 __( '<div>text to translate', 'my-slug' );
@@ -203,6 +205,9 @@ __( '<>text to translate<>', 'my-slug' );
 __( '<div><div>', 'my-slug' );
 __( '<<>>text to translate<<>', 'my-slug' );
 __( '<<>>123</<>', 'my-slug' );
+__( '<b><i>Foo</b></i>', 'my-slug' );
+__( '<b><i>Foo</b></i></b>', 'my-slug' );
+__( '<foo>Foo</bar>', 'my-slug' );
 
 // Strings wrapped in '<a href="...">...</a>'. These get a different warning, as the link target might actually be localized.
 // phpcs:disable WordPress.WP.I18n.NoHtmlWrappedStrings

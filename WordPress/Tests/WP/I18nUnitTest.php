@@ -166,7 +166,9 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					159 => 1,
 					187 => 1,
 					191 => 1,
-					209 => 1,
+					193 => 1,
+					194 => 1,
+					214 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
