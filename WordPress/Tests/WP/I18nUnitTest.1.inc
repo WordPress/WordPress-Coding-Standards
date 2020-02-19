@@ -195,9 +195,9 @@ __( '<foo>Foo</foo>', 'my-slug' ); // Good
 
 // Strings wrapped in `<a href="...">...</a>` aren't flagged, since the link target might require localization.
 __( '<a href="http://wordpress.org">WordPress</a>', 'my-slug' ); // Good
-__( '<a id="anchor">translatable text</a>', 'my-slug' ) // Bad, since no href.
-__( '<a>translatable text</a>', 'my-slug' ) // Bad, since no href.
-__( '<a href="%s">translatable text</a>', 'my-slug' ) // Good, contains a placeholder in the href attribute.
+__( '<a id="anchor">translatable text</a>', 'my-slug' ) // Bad, since no href
+__( '<a>translatable text</a>', 'my-slug' ) // Bad, since no href
+__( '<a href="%s">translatable text</a>', 'my-slug' ) // Good
 
 // Strings containing malformed XML, to make sure we're able to parse them. No warnings should be thrown.
 __( '<div>text to translate', 'my-slug' );
