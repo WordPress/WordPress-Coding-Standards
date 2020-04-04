@@ -141,7 +141,7 @@ before_install:
     # On stable PHPCS versions, allow for PHP deprecation notices.
     # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
     - |
-      if [[ "$TRAVIS_BUILD_STAGE_NAME" != "Sniff" && $PHPCS_BRANCH != "dev-master" ]]; then
+      if [[ "${TRAVIS_BUILD_STAGE_NAME^}" != "Sniff" && $PHPCS_BRANCH != "dev-master" ]]; then
         echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
       fi
 
@@ -156,7 +156,7 @@ before_install:
       fi
     - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --update-no-dev --no-suggest --no-scripts
     - |
-      if [[ "$TRAVIS_BUILD_STAGE_NAME" == "Sniff" ]]; then
+      if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
           composer install --dev --no-suggest
           # The `dev` required DealerDirect Composer plugin takes care of the installed_paths.
       else
