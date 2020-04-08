@@ -39,7 +39,7 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
 	WHERE `meta_key` = "sort_order"
 		AND `post_id` IN (%s)',
 	$wpdb->postmeta,
-	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+	\implode( ',', \array_fill( 0, \count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // Ok.
 
 $wpdb->query( "
