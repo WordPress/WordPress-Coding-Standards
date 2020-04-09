@@ -654,7 +654,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		// If the opening HTML element includes placeholders in its attributes, we don't warn.
 		// E.g. '<option id="%1$s" value="%2$s">Translatable option name</option>'.
 		for ( $i = 0; $attr = $reader->getAttributeNo( $i ); $i++ ) {
-			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $attr ) ) {
+			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $attr ) === 1 ) {
 				return;
 			}
 		}
