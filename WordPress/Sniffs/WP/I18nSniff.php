@@ -630,8 +630,8 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 *
 		 * Strip placeholders and surrounding quotes.
 		 */
-		$content_without_surrounding_quotes = trim( $this->strip_quotes( $content ) );
-		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $content_without_surrounding_quotes );
+		$content_without_quotes  = trim( $this->strip_quotes( $content ) );
+		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $content_without_quotes );
 
 		if ( '' === $non_placeholder_content ) {
 			$this->phpcsFile->addError( 'Strings should have translatable content', $stack_ptr, 'NoEmptyStrings' );
@@ -644,7 +644,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 * Strip surrounding quotes.
 		 */
 		$reader = new \XMLReader();
-		$reader->XML( $content_without_surrounding_quotes, 'UTF-8', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_NOWARNING );
+		$reader->XML( $content_without_quotes, 'UTF-8', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_NOWARNING );
 
 		// Is the first node an HTML element?
 		if ( ! $reader->read() || \XMLReader::ELEMENT !== $reader->nodeType ) {
@@ -665,7 +665,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		// Does the entire string only consist of this HTML node?
-		if ( $reader->readOuterXml() === $content_without_surrounding_quotes ) {
+		if ( $reader->readOuterXml() === $content_without_quotes ) {
 			$this->phpcsFile->addWarning( 'Strings should not be wrapped in HTML', $stack_ptr, 'NoHtmlWrappedStrings' );
 		}
 	}
