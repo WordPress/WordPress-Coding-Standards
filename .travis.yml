@@ -87,10 +87,10 @@ jobs:
       php: 7.4
       env: PHPCS_BRANCH="dev-master"
       script:
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Core
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Docs
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Extra
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
 
         # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
         # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
@@ -103,10 +103,10 @@ jobs:
       php: 7.4
       env: PHPCS_BRANCH="3.5.0"
       script:
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Core
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Docs
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Extra
-        - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
+        - $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
 
     #### QUICK TEST STAGE ####
     # This is a much quicker test which only runs the unit tests and linting against the low/high
