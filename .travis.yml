@@ -169,7 +169,7 @@ install:
 
 script:
   # Lint the PHP files against parse errors.
-  - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
+  - if [[ "$LINT" == "1" ]]; then composer lint; fi
 
   # Run the unit tests.
   - composer run-tests
