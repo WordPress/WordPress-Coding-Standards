@@ -22,10 +22,10 @@ php:
     - "nightly"
 
 env:
-  # `master` is now 3.x.
+  # PHPCS `master`.
   - PHPCS_BRANCH="dev-master" LINT=1
   # Lowest supported release in the 3.x series with which WPCS is compatible.
-  - PHPCS_BRANCH="3.3.1"
+  - PHPCS_BRANCH="3.5.0"
 
 # Define the stages used.
 # For non-PRs, only the sniff, ruleset and quicktest stages are run.
@@ -101,7 +101,7 @@ jobs:
 
     - stage: rulesets
       php: 7.4
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.5.0"
       script:
         - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Core
         - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Docs
@@ -115,11 +115,11 @@ jobs:
       php: 7.4
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 7.3
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.5.0"
     - php: 5.4
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 5.4
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.5.0"
 
     #### TEST STAGE ####
     # Add extra build to test against PHPCS 4.
