@@ -10,8 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
-use WordPressCS\WordPress\PHPCSHelper;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Enforces WordPress array indentation for multi-line arrays.
@@ -90,7 +90,7 @@ class ArrayIndentationSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->tab_width ) ) {
-			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
+			$this->tab_width = Helper::getTabWidth( $this->phpcsFile );
 		}
 
 		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']

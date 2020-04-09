@@ -10,8 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
 use WordPressCS\WordPress\Sniff;
-use WordPressCS\WordPress\PHPCSHelper;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Warn on line indentation ending with spaces for precision alignment.
@@ -90,7 +90,7 @@ class PrecisionAlignmentSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->tab_width ) ) {
-			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
+			$this->tab_width = Helper::getTabWidth( $this->phpcsFile );
 		}
 
 		// Handle any custom ignore tokens received from a ruleset.
