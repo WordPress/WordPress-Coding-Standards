@@ -6,10 +6,12 @@
 [![Latest Unstable Version](https://img.shields.io/badge/unstable-dev--develop-e68718.svg?maxAge=2419200)](https://packagist.org/packages/wp-coding-standards/wpcs#dev-develop)
 [![Last Commit to Unstable](https://img.shields.io/github/last-commit/WordPress/WordPress-Coding-Standards/develop.svg)](https://github.com/WordPress/WordPress-Coding-Standards/commits/develop)
 
-[![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Tested on PHP 5.4 to 7.4 snapshot](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%207.3%20|%207.4snapshot-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
 [![Basic QA checks](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/basic-qa.yml/badge.svg)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/basic-qa.yml)
 [![Unit Tests](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
+[![codecov.io](https://codecov.io/gh/WordPress/WordPress-Coding-Standards/branch/stable/graph/badge.svg?branch=develop)](https://codecov.io/gh/WordPress/WordPress-Coding-Standards?branch=develop)
+
+[![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
+[![Tested on PHP 5.4 to 7.4 snapshot](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%207.3%20|%207.4snapshot-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
 
 [![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/LICENSE)
 [![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
