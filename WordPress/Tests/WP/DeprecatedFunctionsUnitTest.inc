@@ -345,3 +345,5 @@ install_blog();
 _wp_json_prepare_data();
 _wp_privacy_requests_screen_options();
 update_user_status();
+/* ============ WP 5.4 ============ */
+wp_get_user_request_data();

@@ -1359,6 +1359,12 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'wp_update_user()',
 			'version' => '5.3.0',
 		),
+
+		// WP 5.4.0.
+		'wp_get_user_request_data' => array(
+			'alt'     => 'wp_get_user_request()',
+			'version' => '5.4.0',
+		),
 	);
 
 	/**
