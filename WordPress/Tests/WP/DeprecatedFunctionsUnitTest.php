@@ -76,10 +76,13 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 
-		$warnings = array_fill( 342, 6, 1 );
+		$warnings = array_fill( 342, 8, 1 );
 
 		// Unset the lines related to version comments.
-		unset( $warnings[344] );
+		unset(
+			$warnings[344],
+			$warnings[348]
+		);
 
 		return $warnings;
 	}
