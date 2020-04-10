@@ -13,7 +13,6 @@ use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
-use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\PassedParameters;
@@ -2328,21 +2327,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return preg_replace( self::REGEX_COMPLEX_VARS, '', $string );
-	}
-
-	/**
-	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
-	 *
-	 * @since      0.12.0
-	 * @deprecated 3.0.0 Use {@see PHPCSUtils\Utils\Arrays::getOpenClose()} instead.
-	 *
-	 * @param int $stackPtr The stack pointer to the array token.
-	 *
-	 * @return array|bool Array with two keys `opener`, `closer` or false if
-	 *                    either or these could not be determined.
-	 */
-	protected function find_array_open_close( $stackPtr ) {
-		return Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
