@@ -2555,25 +2555,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Determine whether a T_OPEN/CLOSE_SHORT_ARRAY token is a short list() construct.
-	 *
-	 * @internal This function will be introduced in PHPCS upstream in version 3.5.0
-	 * and can be removed from WPCS once WPCS raises the minimum version.
-	 *
-	 * @since      2.2.0
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Lists::isShortList()} instead.
-	 *
-	 * @param int $stackPtr The position of the array bracket token.
-	 *
-	 * @return bool True if the token passed is the open/close bracket of a short list.
-	 *              False if the token is a short array bracket or not
-	 *              a T_OPEN/CLOSE_SHORT_ARRAY token.
-	 */
-	protected function is_short_list( $stackPtr ) {
-		return Lists::isShortList( $this->phpcsFile, $stackPtr );
-	}
-
-	/**
 	 * Get a list of the token pointers to the variables being assigned to in a list statement.
 	 *
 	 * @internal No need to take special measures for nested lists. Nested or not,
