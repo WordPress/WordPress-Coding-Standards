@@ -2330,21 +2330,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Determine the namespace name an arbitrary token lives in.
-	 *
-	 * @since      0.10.0
-	 * @since      0.12.0 Moved from the `AbstractClassRestrictionsSniff` to this class.
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Namespaces::determineNamespace()} instead.
-	 *
-	 * @param int $stackPtr The token position for which to determine the namespace.
-	 *
-	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applies.
-	 */
-	public function determine_namespace( $stackPtr ) {
-		return Namespaces::determineNamespace( $this->phpcsFile, $stackPtr );
-	}
-
-	/**
 	 * Get the complete namespace name for a namespace declaration.
 	 *
 	 * For hierarchical namespaces, the name will be composed of several tokens,
