@@ -2330,22 +2330,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Find the list opener & closer based on a T_LIST or T_OPEN_SHORT_ARRAY token.
-	 *
-	 * @since      2.2.0
-	 * @deprecated 3.0.0 Use {@see PHPCSUtils\Utils\Lists::getOpenClose()} instead.
-	 *
-	 * @param int $stackPtr The stack pointer to the array token.
-	 *
-	 * @return array|bool Array with two keys `opener`, `closer` or false if
-	 *                    not a (short) list token or if either or these
-	 *                    could not be determined.
-	 */
-	protected function find_list_open_close( $stackPtr ) {
-		return Lists::getOpenClose( $this->phpcsFile, $stackPtr );
-	}
-
-	/**
 	 * Determine the namespace name an arbitrary token lives in.
 	 *
 	 * @since      0.10.0
