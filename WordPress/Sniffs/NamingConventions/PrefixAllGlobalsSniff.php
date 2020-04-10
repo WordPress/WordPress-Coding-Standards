@@ -13,6 +13,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -362,7 +363,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		} else {
 
 			// Namespaced methods, classes and constants do not need to be prefixed.
-			$namespace = $this->determine_namespace( $stackPtr );
+			$namespace = Namespaces::determineNamespace( $this->phpcsFile, $stackPtr );
 			if ( '' !== $namespace && '\\' !== $namespace ) {
 				return;
 			}

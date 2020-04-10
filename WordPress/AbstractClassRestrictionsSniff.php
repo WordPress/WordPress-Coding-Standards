@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHPCSUtils\Utils\Namespaces;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
@@ -229,7 +230,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 			// No namespace keyword found at all, so global namespace.
 			$classname = '\\' . $classname;
 		} else {
-			$namespace = $this->determine_namespace( $search_from );
+			$namespace = Namespaces::determineNamespace( $this->phpcsFile, $search_from );
 
 			if ( ! empty( $namespace ) ) {
 				$classname = '\\' . $namespace . '\\' . $classname;

@@ -1216,7 +1216,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Is the class/trait one of the whitelisted test classes ?
-		$namespace = $this->determine_namespace( $stackPtr );
+		$namespace = Namespaces::determineNamespace( $this->phpcsFile, $stackPtr );
 		$className = $this->phpcsFile->getDeclarationName( $stackPtr );
 		if ( '' !== $namespace ) {
 			if ( isset( $whitelist[ $namespace . '\\' . $className ] ) ) {
