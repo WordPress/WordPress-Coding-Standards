@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -284,7 +285,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Class property declarations with the same name as WP global variables are fine.
 		 */
-		if ( false === $in_list && true === $this->is_class_property( $stackPtr ) ) {
+		if ( false === $in_list && true === Scopes::isOOProperty( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 

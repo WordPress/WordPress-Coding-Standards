@@ -686,7 +686,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Properties in a class do not need to be prefixed.
-			if ( false === $in_list && true === $this->is_class_property( $stackPtr ) ) {
+			if ( false === $in_list && true === Scopes::isOOProperty( $this->phpcsFile, $stackPtr ) ) {
 				return;
 			}
 
