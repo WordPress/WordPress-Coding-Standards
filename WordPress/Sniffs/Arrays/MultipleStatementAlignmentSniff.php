@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
+use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -184,7 +185,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$opener = $array_open_close['opener'];
 		$closer = $array_open_close['closer'];
 
-		$array_items = $this->get_function_call_parameters( $stackPtr );
+		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		if ( empty( $array_items ) ) {
 			return;
 		}

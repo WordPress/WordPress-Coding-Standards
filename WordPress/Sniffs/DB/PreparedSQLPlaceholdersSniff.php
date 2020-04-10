@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -175,7 +176,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
-		$parameters = $this->get_function_call_parameters( $this->methodPtr );
+		$parameters = PassedParameters::getParameters( $this->phpcsFile, $this->methodPtr );
 		if ( empty( $parameters ) ) {
 			return;
 		}
@@ -211,7 +212,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
 					if ( 'sprintf' === strtolower( $this->tokens[ $i ]['content'] ) ) {
-						$sprintf_parameters = $this->get_function_call_parameters( $i );
+						$sprintf_parameters = PassedParameters::getParameters( $this->phpcsFile, $i );
 
 						if ( ! empty( $sprintf_parameters ) ) {
 							$skip_from  = ( $sprintf_parameters[1]['end'] + 1 );
@@ -498,7 +499,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				&& ( \T_ARRAY === $this->tokens[ $next ]['code']
 					|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $next ]['code'] )
 			) {
-				$replacements = $this->get_function_call_parameters( $next );
+				$replacements = PassedParameters::getParameters( $this->phpcsFile, $next );
 			}
 		}
 
@@ -614,7 +615,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * @return bool True if the pattern is found, false otherwise.
 	 */
 	protected function analyse_implode( $implode_token ) {
-		$implode_params = $this->get_function_call_parameters( $implode_token );
+		$implode_params = PassedParameters::getParameters( $this->phpcsFile, $implode_token );
 
 		if ( empty( $implode_params ) || \count( $implode_params ) !== 2 ) {
 			return false;
@@ -641,7 +642,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		$array_fill_params = $this->get_function_call_parameters( $array_fill );
+		$array_fill_params = PassedParameters::getParameters( $this->phpcsFile, $array_fill );
 
 		if ( empty( $array_fill_params ) || \count( $array_fill_params ) !== 3 ) {
 			return false;

@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Enforces WordPress array indentation for multi-line arrays.
@@ -165,7 +166,7 @@ class ArrayIndentationSniff extends Sniff {
 		/*
 		 * Verify & correct the array item indentation.
 		 */
-		$array_items = $this->get_function_call_parameters( $stackPtr );
+		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		if ( empty( $array_items ) ) {
 			// Strange, no array items found.
 			return;

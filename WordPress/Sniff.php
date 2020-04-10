@@ -2097,7 +2097,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						continue 2;
 					}
 
-					$params = $this->get_function_call_parameters( $i );
+					$params = PassedParameters::getParameters( $this->phpcsFile, $i );
 					if ( count( $params ) < 2 ) {
 						continue 2;
 					}

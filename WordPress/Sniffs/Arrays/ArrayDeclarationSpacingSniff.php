@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Enforces WordPress array spacing format.
@@ -193,7 +194,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		$array_has_keys = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $opener, $closer );
 		if ( false !== $array_has_keys ) {
 
-			$array_items = $this->get_function_call_parameters( $stackPtr );
+			$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
 			if ( ( false === $this->allow_single_item_single_line_associative_arrays
 					&& ! empty( $array_items ) )
@@ -375,7 +376,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check that each array item starts on a new line.
 		 */
-		$array_items      = $this->get_function_call_parameters( $stackPtr );
+		$array_items      = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		$end_of_last_item = $opener;
 
 		foreach ( $array_items as $item ) {

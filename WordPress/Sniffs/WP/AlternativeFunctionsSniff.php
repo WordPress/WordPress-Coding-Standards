@@ -219,7 +219,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				 * Using `wp_remote_get()` will only work for remote URLs.
 				 * See if we can determine is this function call is for a local file and if so, bow out.
 				 */
-				$params = $this->get_function_call_parameters( $stackPtr );
+				$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
 				if ( isset( $params[2] ) && 'true' === $params[2]['raw'] ) {
 					// Setting `$use_include_path` to `true` is only relevant for local files.
