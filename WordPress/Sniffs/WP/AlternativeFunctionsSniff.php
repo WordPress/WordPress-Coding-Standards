@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
@@ -192,7 +193,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				 * The function `wp_strip_all_tags()` is only a valid alternative when
 				 * only the first parameter is passed to `strip_tags()`.
 				 */
-				if ( $this->get_function_call_parameter_count( $stackPtr ) !== 1 ) {
+				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1 ) {
 					return;
 				}
 
@@ -205,7 +206,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				 *
 				 * @see https://developer.wordpress.org/reference/functions/wp_parse_url/#changelog
 				 */
-				if ( $this->get_function_call_parameter_count( $stackPtr ) !== 1
+				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1
 					&& version_compare( $this->minimum_supported_version, '4.7.0', '<' )
 				) {
 					return;

@@ -2281,7 +2281,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		if ( $this->get_function_call_parameter_count( $function_ptr ) >= $this->arrayCompareFunctions[ $function_name ] ) {
+		if ( PassedParameters::getParameterCount( $this->phpcsFile, $function_ptr ) >= $this->arrayCompareFunctions[ $function_name ] ) {
 			return true;
 		}
 
