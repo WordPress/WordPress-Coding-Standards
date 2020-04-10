@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Namespaces;
+use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -443,7 +444,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 				case 'T_CONST':
 					// Constants in a class do not need to be prefixed.
-					if ( true === $this->is_class_constant( $stackPtr ) ) {
+					if ( true === Scopes::isOOConstant( $this->phpcsFile, $stackPtr ) ) {
 						return;
 					}
 

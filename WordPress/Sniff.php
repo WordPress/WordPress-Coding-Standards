@@ -2531,7 +2531,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		if ( false !== $prev
 			&& \T_CONST === $this->tokens[ $prev ]['code']
-			&& $this->is_class_constant( $prev )
+			&& Scopes::isOOConstant( $this->phpcsFile, $prev )
 		) {
 			// Class constant declaration of the same name.
 			return false;
