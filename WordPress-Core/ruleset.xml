@@ -479,7 +479,7 @@
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
 	<!-- There should be no empty statements, i.e. lone semi-colons or open/close tags without content. -->
-	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
+	<rule ref="Generic.CodeAnalysis.EmptyPHPStatement"/>
 
 	<!-- Lowercase PHP constants, like true, false and null. -->
 	<!-- https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions -->
