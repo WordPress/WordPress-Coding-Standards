@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
 
 /**
@@ -63,7 +64,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 		/*
 		 * Determine the array opener & closer.
 		 */
-		$array_open_close = $this->find_array_open_close( $stackPtr );
+		$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $array_open_close ) {
 			// Array open/close could not be determined.
 			return;

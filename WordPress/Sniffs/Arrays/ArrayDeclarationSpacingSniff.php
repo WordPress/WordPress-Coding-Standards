@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
 
 /**
@@ -99,7 +100,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Determine the array opener & closer.
 		 */
-		$array_open_close = $this->find_array_open_close( $stackPtr );
+		$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $array_open_close ) {
 			// Array open/close could not be determined.
 			return;
@@ -214,7 +215,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 						// Skip passed any nested arrays.
 						if ( isset( $this->targets[ $this->tokens[ $ptr ]['code'] ] ) ) {
-							$nested_array_open_close = $this->find_array_open_close( $ptr );
+							$nested_array_open_close = Arrays::getOpenClose( $this->phpcsFile, $ptr );
 							if ( false === $nested_array_open_close ) {
 								// Nested array open/close could not be determined.
 								continue;
