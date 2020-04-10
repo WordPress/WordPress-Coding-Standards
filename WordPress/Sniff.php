@@ -13,6 +13,13 @@ use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\Namespaces;
+use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\Scopes;
+use PHPCSUtils\Utils\TextStrings;
+use PHPCSUtils\Utils\UseStatements;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -942,13 +949,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * Intended for use with the contents of a T_CONSTANT_ENCAPSED_STRING / T_DOUBLE_QUOTED_STRING.
 	 *
-	 * @since 0.11.0
+	 * @since      0.11.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\TextStrings::stripQuotes()} instead.
 	 *
 	 * @param string $string The raw string.
 	 * @return string String without quotes around it.
 	 */
 	public function strip_quotes( $string ) {
-		return preg_replace( '`^([\'"])(.*)\1$`Ds', '$2', $string );
+		return TextStrings::stripQuotes( $string );
 	}
 
 	/**
@@ -2308,7 +2316,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * This function will check the token and return 'closure', 'trait', or 'class',
 	 * based on which of these uses the use is being used for.
 	 *
-	 * @since 0.7.0
+	 * @since      0.7.0
+	 * @deprecated 3.0.0 Use {@see PHPCSUtils\Utils\UseStatements::getType()} instead.
 	 *
 	 * @param int $stackPtr The position of the token to check.
 	 *
@@ -2316,25 +2325,12 @@ abstract class Sniff implements PHPCS_Sniff {
 	 */
 	protected function get_use_type( $stackPtr ) {
 
-		// USE keywords inside closures.
-		$next = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
-
-		if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code'] ) {
-			return 'closure';
+		$type = UseStatements::getType( $this->phpcsFile, $stackPtr );
+		if ( 'import' === $type ) {
+			$type = 'class';
 		}
 
-		// USE keywords for traits.
-		$valid_scopes = array(
-			'T_CLASS'      => true,
-			'T_ANON_CLASS' => true,
-			'T_TRAIT'      => true,
-		);
-		if ( false !== $this->valid_direct_scope( $stackPtr, $valid_scopes ) ) {
-			return 'trait';
-		}
-
-		// USE keywords for classes to import to a namespace.
-		return 'class';
+		return $type;
 	}
 
 	/**
@@ -2391,59 +2387,15 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/120
 	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/152
 	 *
-	 * @since 0.11.0
+	 * @since      0.11.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\PassedParameters::hasParameters()} instead.
 	 *
 	 * @param int $stackPtr The position of the function call token.
 	 *
 	 * @return bool
 	 */
 	public function does_function_call_have_parameters( $stackPtr ) {
-
-		// Check for the existence of the token.
-		if ( false === isset( $this->tokens[ $stackPtr ] ) ) {
-			return false;
-		}
-
-		// Is this one of the tokens this function handles ?
-		if ( false === \in_array( $this->tokens[ $stackPtr ]['code'], array( \T_STRING, \T_ARRAY, \T_OPEN_SHORT_ARRAY ), true ) ) {
-			return false;
-		}
-
-		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-
-		// Deal with short array syntax.
-		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
-			if ( false === isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
-				return false;
-			}
-
-			if ( $next_non_empty === $this->tokens[ $stackPtr ]['bracket_closer'] ) {
-				// No parameters.
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		// Deal with function calls & long arrays.
-		// Next non-empty token should be the open parenthesis.
-		if ( false === $next_non_empty && \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code'] ) {
-			return false;
-		}
-
-		if ( false === isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) ) {
-			return false;
-		}
-
-		$close_parenthesis   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
-		$next_next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), ( $close_parenthesis + 1 ), true );
-
-		if ( $next_next_non_empty === $close_parenthesis ) {
-			// No parameters.
-			return false;
-		}
-
-		return true;
+		return PassedParameters::hasParameters( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -2459,18 +2411,15 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/114
 	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/151
 	 *
-	 * @since 0.11.0
+	 * @since      0.11.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\PassedParameters::getParameterCount()} instead.
 	 *
 	 * @param int $stackPtr The position of the function call token.
 	 *
 	 * @return int
 	 */
 	public function get_function_call_parameter_count( $stackPtr ) {
-		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
-			return 0;
-		}
-
-		return \count( $this->get_function_call_parameters( $stackPtr ) );
+		return PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -2482,7 +2431,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer,
 	 * it will tokenize the values / key/value pairs contained in the array call.
 	 *
-	 * @since 0.11.0
+	 * @since      0.11.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\PassedParameters::getParameters()} instead.
 	 *
 	 * @param int $stackPtr The position of the function call token.
 	 *
@@ -2496,94 +2446,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *               }
 	 */
 	public function get_function_call_parameters( $stackPtr ) {
-		if ( false === $this->does_function_call_have_parameters( $stackPtr ) ) {
-			return array();
-		}
-
-		/*
-		 * Ok, we know we have a T_STRING, T_ARRAY or T_OPEN_SHORT_ARRAY with parameters
-		 * and valid open & close brackets/parenthesis.
-		 */
-
-		// Mark the beginning and end tokens.
-		if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $stackPtr ]['type'] ) {
-			$opener = $stackPtr;
-			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
-
-			$nestedParenthesisCount = 0;
-		} else {
-			$opener = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-			$closer = $this->tokens[ $opener ]['parenthesis_closer'];
-
-			$nestedParenthesisCount = 1;
-		}
-
-		// Which nesting level is the one we are interested in ?
-		if ( isset( $this->tokens[ $opener ]['nested_parenthesis'] ) ) {
-			$nestedParenthesisCount += \count( $this->tokens[ $opener ]['nested_parenthesis'] );
-		}
-
-		$parameters  = array();
-		$next_comma  = $opener;
-		$param_start = ( $opener + 1 );
-		$cnt         = 1;
-		while ( $next_comma = $this->phpcsFile->findNext( array( \T_COMMA, $this->tokens[ $closer ]['code'], \T_OPEN_SHORT_ARRAY, \T_CLOSURE ), ( $next_comma + 1 ), ( $closer + 1 ) ) ) {
-			// Ignore anything within short array definition brackets.
-			if ( 'T_OPEN_SHORT_ARRAY' === $this->tokens[ $next_comma ]['type']
-				&& ( isset( $this->tokens[ $next_comma ]['bracket_opener'] )
-					&& $this->tokens[ $next_comma ]['bracket_opener'] === $next_comma )
-				&& isset( $this->tokens[ $next_comma ]['bracket_closer'] )
-			) {
-				// Skip forward to the end of the short array definition.
-				$next_comma = $this->tokens[ $next_comma ]['bracket_closer'];
-				continue;
-			}
-
-			// Skip past closures passed as function parameters.
-			if ( 'T_CLOSURE' === $this->tokens[ $next_comma ]['type']
-				&& ( isset( $this->tokens[ $next_comma ]['scope_condition'] )
-					&& $this->tokens[ $next_comma ]['scope_condition'] === $next_comma )
-				&& isset( $this->tokens[ $next_comma ]['scope_closer'] )
-			) {
-				// Skip forward to the end of the closure declaration.
-				$next_comma = $this->tokens[ $next_comma ]['scope_closer'];
-				continue;
-			}
-
-			// Ignore comma's at a lower nesting level.
-			if ( \T_COMMA === $this->tokens[ $next_comma ]['code']
-				&& isset( $this->tokens[ $next_comma ]['nested_parenthesis'] )
-				&& \count( $this->tokens[ $next_comma ]['nested_parenthesis'] ) !== $nestedParenthesisCount
-			) {
-				continue;
-			}
-
-			// Ignore closing parenthesis/bracket if not 'ours'.
-			if ( $this->tokens[ $next_comma ]['type'] === $this->tokens[ $closer ]['type'] && $next_comma !== $closer ) {
-				continue;
-			}
-
-			// Ok, we've reached the end of the parameter.
-			$parameters[ $cnt ]['start'] = $param_start;
-			$parameters[ $cnt ]['end']   = ( $next_comma - 1 );
-			$parameters[ $cnt ]['raw']   = trim( $this->phpcsFile->getTokensAsString( $param_start, ( $next_comma - $param_start ) ) );
-
-			/*
-			 * Check if there are more tokens before the closing parenthesis.
-			 * Prevents code like the following from setting a third parameter:
-			 * functionCall( $param1, $param2, );
-			 */
-			$has_next_param = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_comma + 1 ), $closer, true, null, true );
-			if ( false === $has_next_param ) {
-				break;
-			}
-
-			// Prepare for the next parameter.
-			$param_start = ( $next_comma + 1 );
-			$cnt++;
-		}
-
-		return $parameters;
+		return PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -2596,7 +2459,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * of the parameter at a specific offset.
 	 * If the specified parameter is not found, will return false.
 	 *
-	 * @since 0.11.0
+	 * @since      0.11.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\PassedParameters::getParameter()} instead.
 	 *
 	 * @param int $stackPtr     The position of the function call token.
 	 * @param int $param_offset The 1-based index position of the parameter to retrieve.
@@ -2604,19 +2468,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @return array|false
 	 */
 	public function get_function_call_parameter( $stackPtr, $param_offset ) {
-		$parameters = $this->get_function_call_parameters( $stackPtr );
-
-		if ( false === isset( $parameters[ $param_offset ] ) ) {
-			return false;
-		}
-
-		return $parameters[ $param_offset ];
+		return PassedParameters::getParameter( $this->phpcsFile, $stackPtr, $param_offset );
 	}
 
 	/**
 	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
 	 *
-	 * @since 0.12.0
+	 * @since      0.12.0
+	 * @deprecated 3.0.0 Use {@see PHPCSUtils\Utils\Arrays::getOpenClose()} instead.
 	 *
 	 * @param int $stackPtr The stack pointer to the array token.
 	 *
@@ -2624,37 +2483,14 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                    either or these could not be determined.
 	 */
 	protected function find_array_open_close( $stackPtr ) {
-		/*
-		 * Determine the array opener & closer.
-		 */
-		if ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
-			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
-				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
-
-				if ( isset( $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
-					$closer = $this->tokens[ $opener ]['parenthesis_closer'];
-				}
-			}
-		} else {
-			// Short array syntax.
-			$opener = $stackPtr;
-			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
-		}
-
-		if ( isset( $opener, $closer ) ) {
-			return array(
-				'opener' => $opener,
-				'closer' => $closer,
-			);
-		}
-
-		return false;
+		return Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
 	 * Find the list opener & closer based on a T_LIST or T_OPEN_SHORT_ARRAY token.
 	 *
-	 * @since 2.2.0
+	 * @since      2.2.0
+	 * @deprecated 3.0.0 Use {@see PHPCSUtils\Utils\Lists::getOpenClose()} instead.
 	 *
 	 * @param int $stackPtr The stack pointer to the array token.
 	 *
@@ -2663,107 +2499,22 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                    could not be determined.
 	 */
 	protected function find_list_open_close( $stackPtr ) {
-		/*
-		 * Determine the list opener & closer.
-		 */
-		if ( \T_LIST === $this->tokens[ $stackPtr ]['code'] ) {
-			// PHPCS 3.5.0.
-			if ( isset( $this->tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
-				$opener = $this->tokens[ $stackPtr ]['parenthesis_opener'];
-
-			} else {
-				// PHPCS < 3.5.0.
-				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-				if ( false !== $next_non_empty
-					&& \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
-				) {
-					$opener = $next_non_empty;
-				}
-			}
-
-			if ( isset( $opener, $this->tokens[ $opener ]['parenthesis_closer'] ) ) {
-				$closer = $this->tokens[ $opener ]['parenthesis_closer'];
-			}
-		}
-
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
-			&& $this->is_short_list( $stackPtr ) === true
-		) {
-			$opener = $stackPtr;
-			$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
-		}
-
-		if ( isset( $opener, $closer ) ) {
-			return array(
-				'opener' => $opener,
-				'closer' => $closer,
-			);
-		}
-
-		return false;
+		return Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
 	 * Determine the namespace name an arbitrary token lives in.
 	 *
-	 * @since 0.10.0
-	 * @since 0.12.0 Moved from the `AbstractClassRestrictionsSniff` to this class.
+	 * @since      0.10.0
+	 * @since      0.12.0 Moved from the `AbstractClassRestrictionsSniff` to this class.
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Namespaces::determineNamespace()} instead.
 	 *
 	 * @param int $stackPtr The token position for which to determine the namespace.
 	 *
 	 * @return string Namespace name or empty string if it couldn't be determined or no namespace applies.
 	 */
 	public function determine_namespace( $stackPtr ) {
-
-		// Check for the existence of the token.
-		if ( ! isset( $this->tokens[ $stackPtr ] ) ) {
-			return '';
-		}
-
-		// Check for scoped namespace {}.
-		if ( ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
-			$namespacePtr = $this->phpcsFile->getCondition( $stackPtr, \T_NAMESPACE );
-			if ( false !== $namespacePtr ) {
-				$namespace = $this->get_declared_namespace_name( $namespacePtr );
-				if ( false !== $namespace ) {
-					return $namespace;
-				}
-
-				// We are in a scoped namespace, but couldn't determine the name.
-				// Searching for a global namespace is futile.
-				return '';
-			}
-		}
-
-		/*
-		 * Not in a scoped namespace, so let's see if we can find a non-scoped namespace instead.
-		 * Keeping in mind that:
-		 * - there can be multiple non-scoped namespaces in a file (bad practice, but it happens).
-		 * - the namespace keyword can also be used as part of a function/method call and such.
-		 * - that a non-named namespace resolves to the global namespace.
-		 */
-		$previousNSToken = $stackPtr;
-		$namespace       = false;
-		do {
-			$previousNSToken = $this->phpcsFile->findPrevious( \T_NAMESPACE, ( $previousNSToken - 1 ) );
-
-			// Stop if we encounter a scoped namespace declaration as we already know we're not in one.
-			if ( ! empty( $this->tokens[ $previousNSToken ]['scope_condition'] )
-				&& $this->tokens[ $previousNSToken ]['scope_condition'] === $previousNSToken
-			) {
-				break;
-			}
-
-			$namespace = $this->get_declared_namespace_name( $previousNSToken );
-
-		} while ( false === $namespace && false !== $previousNSToken );
-
-		// If we still haven't got a namespace, return an empty string.
-		if ( false === $namespace ) {
-			return '';
-		}
-
-		return $namespace;
+		return Namespaces::determineNamespace( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -2772,8 +2523,9 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * For hierarchical namespaces, the name will be composed of several tokens,
 	 * i.e. MyProject\Sub\Level which will be returned together as one string.
 	 *
-	 * @since 0.12.0 A lesser variant of this method previously existed in the
-	 *               `AbstractClassRestrictionsSniff` class.
+	 * @since      0.12.0 A lesser variant of this method previously existed in the
+	 *                    `AbstractClassRestrictionsSniff` class.
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Namespaces::getDeclaredName()} instead.
 	 *
 	 * @param int|bool $stackPtr The position of a T_NAMESPACE token.
 	 *
@@ -2781,109 +2533,35 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                      Namespace name can be an empty string for global namespace declaration.
 	 */
 	public function get_declared_namespace_name( $stackPtr ) {
-
-		// Check for the existence of the token.
-		if ( false === $stackPtr || ! isset( $this->tokens[ $stackPtr ] ) ) {
-			return false;
-		}
-
-		if ( \T_NAMESPACE !== $this->tokens[ $stackPtr ]['code'] ) {
-			return false;
-		}
-
-		$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-		if ( \T_NS_SEPARATOR === $this->tokens[ $nextToken ]['code'] ) {
-			// Not a namespace declaration, but use of, i.e. `namespace\someFunction();`.
-			return false;
-		}
-
-		if ( \T_OPEN_CURLY_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
-			// Declaration for global namespace when using multiple namespaces in a file.
-			// I.e.: `namespace {}`.
-			return '';
-		}
-
-		// Ok, this should be a namespace declaration, so get all the parts together.
-		$acceptedTokens = array(
-			\T_STRING       => true,
-			\T_NS_SEPARATOR => true,
-		);
-		$validTokens    = $acceptedTokens + Tokens::$emptyTokens;
-
-		$namespaceName = '';
-		while ( isset( $validTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
-			if ( isset( $acceptedTokens[ $this->tokens[ $nextToken ]['code'] ] ) ) {
-				$namespaceName .= trim( $this->tokens[ $nextToken ]['content'] );
-			}
-			++$nextToken;
-		}
-
-		return $namespaceName;
+		return Namespaces::getDeclaredName( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
 	 * Check whether a T_CONST token is a class constant declaration.
 	 *
-	 * @since 0.14.0
+	 * @since      0.14.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Scopes::isOOConstant()} instead.
 	 *
 	 * @param int $stackPtr The position in the stack of the T_CONST token to verify.
 	 *
 	 * @return bool
 	 */
 	public function is_class_constant( $stackPtr ) {
-		if ( ! isset( $this->tokens[ $stackPtr ] ) || \T_CONST !== $this->tokens[ $stackPtr ]['code'] ) {
-			return false;
-		}
-
-		// Note: traits can not declare constants.
-		$valid_scopes = array(
-			'T_CLASS'      => true,
-			'T_ANON_CLASS' => true,
-			'T_INTERFACE'  => true,
-		);
-
-		return is_int( $this->valid_direct_scope( $stackPtr, $valid_scopes ) );
+		return Scopes::isOOConstant( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
 	 * Check whether a T_VARIABLE token is a class property declaration.
 	 *
-	 * @since 0.14.0
+	 * @since      0.14.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Scopes::isOOProperty()} instead.
 	 *
 	 * @param int $stackPtr The position in the stack of the T_VARIABLE token to verify.
 	 *
 	 * @return bool
 	 */
 	public function is_class_property( $stackPtr ) {
-		if ( ! isset( $this->tokens[ $stackPtr ] ) || \T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
-			return false;
-		}
-
-		// Note: interfaces can not declare properties.
-		$valid_scopes = array(
-			'T_CLASS'      => true,
-			'T_ANON_CLASS' => true,
-			'T_TRAIT'      => true,
-		);
-
-		$scopePtr = $this->valid_direct_scope( $stackPtr, $valid_scopes );
-		if ( false !== $scopePtr ) {
-			// Make sure it's not a method parameter.
-			if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-				return true;
-			} else {
-				$parenthesis  = array_keys( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
-				$deepest_open = array_pop( $parenthesis );
-				if ( $deepest_open < $scopePtr
-					|| isset( $this->tokens[ $deepest_open ]['parenthesis_owner'] ) === false
-					|| \T_FUNCTION !== $this->tokens[ $this->tokens[ $deepest_open ]['parenthesis_owner'] ]['code']
-				) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return Scopes::isOOProperty( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -2892,7 +2570,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * Used to check, for instance, if a T_CONST is a class constant.
 	 *
-	 * @since 0.14.0
+	 * @since      0.14.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Scopes::validDirectScope()} instead.
 	 *
 	 * @param int   $stackPtr     The position in the stack of the token to verify.
 	 * @param array $valid_scopes Array of token types.
@@ -2903,25 +2582,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @return int|bool StackPtr to the scope if valid, false otherwise.
 	 */
 	protected function valid_direct_scope( $stackPtr, array $valid_scopes ) {
-		if ( empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
-			return false;
-		}
-
-		/*
-		 * Check only the direct wrapping scope of the token.
-		 */
-		$conditions = array_keys( $this->tokens[ $stackPtr ]['conditions'] );
-		$ptr        = array_pop( $conditions );
-
-		if ( ! isset( $this->tokens[ $ptr ] ) ) {
-			return false;
-		}
-
-		if ( isset( $valid_scopes[ $this->tokens[ $ptr ]['type'] ] ) ) {
-			return $ptr;
-		}
-
-		return false;
+		return Scopes::validDirectScope( $this->phpcsFile, $stackPtr, $valid_scopes );
 	}
 
 	/**
@@ -3155,7 +2816,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @internal This function will be introduced in PHPCS upstream in version 3.5.0
 	 * and can be removed from WPCS once WPCS raises the minimum version.
 	 *
-	 * @since 2.2.0
+	 * @since      2.2.0
+	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Lists::isShortList()} instead.
 	 *
 	 * @param int $stackPtr The position of the array bracket token.
 	 *
@@ -3164,53 +2826,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *              a T_OPEN/CLOSE_SHORT_ARRAY token.
 	 */
 	protected function is_short_list( $stackPtr ) {
-		// Is this one of the tokens this function handles ?
-		if ( \T_OPEN_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
-			&& \T_CLOSE_SHORT_ARRAY !== $this->tokens[ $stackPtr ]['code']
-		) {
-			return false;
-		}
-
-		switch ( $this->tokens[ $stackPtr ]['code'] ) {
-			case \T_OPEN_SHORT_ARRAY:
-				$opener = $stackPtr;
-				$closer = $this->tokens[ $stackPtr ]['bracket_closer'];
-				break;
-
-			case \T_CLOSE_SHORT_ARRAY:
-				$opener = $this->tokens[ $stackPtr ]['bracket_opener'];
-				$closer = $stackPtr;
-				break;
-		}
-
-		$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $closer + 1 ), null, true, null, true );
-		if ( false !== $nextNonEmpty && \T_EQUAL === $this->tokens[ $nextNonEmpty ]['code'] ) {
-			return true;
-		}
-
-		// Check for short list in foreach, i.e. `foreach($array as [$a, $b])`.
-		if ( $this->is_foreach_as( $stackPtr ) === true ) {
-			return true;
-		}
-
-		// Maybe this is a short list syntax nested inside another short list syntax ?
-		$parentOpen = $opener;
-		do {
-			$parentOpen = $this->phpcsFile->findPrevious(
-				\T_OPEN_SHORT_ARRAY,
-				( $parentOpen - 1 ),
-				null,
-				false,
-				null,
-				true
-			);
-
-			if ( false === $parentOpen ) {
-				return false;
-			}
-		} while ( $this->tokens[ $parentOpen ]['bracket_closer'] < $opener );
-
-		return $this->is_short_list( $parentOpen );
+		return Lists::isShortList( $this->phpcsFile, $stackPtr );
 	}
 
 	/**
