@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
@@ -641,7 +642,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$stackPtr      = $array_key;
-			$variable_name = $this->strip_quotes( $this->tokens[ $array_key ]['content'] );
+			$variable_name = TextStrings::stripQuotes( $this->tokens[ $array_key ]['content'] );
 
 			// Check whether a prefix is needed.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
@@ -792,7 +793,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$is_error    = true;
-		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
+		$raw_content = TextStrings::stripQuotes( $parameters[1]['raw'] );
 
 		if ( ( 'define' !== $matched_content
 			&& isset( $this->whitelisted_core_hooks[ $raw_content ] ) )
@@ -817,7 +818,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
-			$first_non_empty_content = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
+			$first_non_empty_content = TextStrings::stripQuotes( $this->tokens[ $first_non_empty ]['content'] );
 
 			// Try again with just the first token if it's a text string.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )

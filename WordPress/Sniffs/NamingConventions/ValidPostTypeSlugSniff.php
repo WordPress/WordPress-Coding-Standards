@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Validates post type names.
@@ -136,7 +137,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$post_type = $this->strip_quotes( $this->tokens[ $string_pos ]['content'] );
+		$post_type = TextStrings::stripQuotes( $this->tokens[ $string_pos ]['content'] );
 
 		if ( strlen( $post_type ) === 0 ) {
 			// Error for using empty slug.

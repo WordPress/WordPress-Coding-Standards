@@ -1828,7 +1828,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				);
 
 				if ( false !== $first_non_empty && \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $first_non_empty ]['code'] ) {
-					$functionName = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
+					$functionName = TextStrings::stripQuotes( $this->tokens[ $first_non_empty ]['content'] );
 				}
 			}
 		}
@@ -2035,7 +2035,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			$array_keys = (array) $array_keys;
 		}
 
-		$bare_array_keys = array_map( array( $this, 'strip_quotes' ), $array_keys );
+		$bare_array_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $array_keys );
 		$targets         = array(
 			\T_ISSET          => 'construct',
 			\T_EMPTY          => 'construct',
@@ -2077,7 +2077,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
 						if ( ! empty( $bare_array_keys ) ) {
 							$found_keys = $this->get_array_access_keys( $i );
-							$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+							$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 							$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 							if ( ! empty( $diff ) ) {
 								continue;
@@ -2138,7 +2138,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						 */
 
 						$found_keys = $this->get_array_access_keys( $param2_first_token );
-						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 
 						// First try matching the complete set against the second parameter.
 						$diff = array_diff_assoc( $bare_array_keys, $found_keys );
@@ -2148,7 +2148,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 						// If that failed, try getting an exact match for the subset against the
 						// second parameter and the last key against the first.
-						if ( $bare_keys === $found_keys && $this->strip_quotes( $params[1]['raw'] ) === $last_key ) {
+						if ( $bare_keys === $found_keys && TextStrings::stripQuotes( $params[1]['raw'] ) === $last_key ) {
 							return true;
 						}
 
@@ -2182,7 +2182,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 					if ( ! empty( $bare_array_keys ) ) {
 						$found_keys = $this->get_array_access_keys( $prev );
-						$found_keys = array_map( array( $this, 'strip_quotes' ), $found_keys );
+						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 						if ( ! empty( $diff ) ) {
 							continue 2;

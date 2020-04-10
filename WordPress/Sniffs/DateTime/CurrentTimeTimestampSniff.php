@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\DateTime;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Don't use current_time() to get a (timezone corrected) "timestamp".
@@ -79,7 +80,7 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 			}
 
 			if ( isset( Tokens::$textStringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-				$content_first = trim( $this->strip_quotes( $this->tokens[ $i ]['content'] ) );
+				$content_first = trim( TextStrings::stripQuotes( $this->tokens[ $i ]['content'] ) );
 				if ( 'U' !== $content_first && 'timestamp' !== $content_first ) {
 					// Most likely valid use of current_time().
 					return;

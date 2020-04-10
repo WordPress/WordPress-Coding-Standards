@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Files;
 
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -138,8 +139,8 @@ class FileNameSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		// Usage of `strip_quotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
-		$file = $this->strip_quotes( $this->phpcsFile->getFileName() );
+		// Usage of `stripQuotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
+		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
 		if ( 'STDIN' === $file ) {
 			return;
 		}

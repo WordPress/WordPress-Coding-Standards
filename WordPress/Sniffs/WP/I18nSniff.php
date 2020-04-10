@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Makes sure WP internationalization functions are used properly.
@@ -477,7 +478,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 		if ( isset( Tokens::$textStringTokens[ $tokens[0]['code'] ] ) ) {
 			if ( 'domain' === $arg_name && ! empty( $this->text_domain ) ) {
-				$stripped_content = $this->strip_quotes( $content );
+				$stripped_content = TextStrings::stripQuotes( $content );
 
 				if ( ! \in_array( $stripped_content, $this->text_domain, true ) ) {
 					$this->addMessage(
@@ -630,7 +631,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 *
 		 * Strip placeholders and surrounding quotes.
 		 */
-		$content_without_quotes  = trim( $this->strip_quotes( $content ) );
+		$content_without_quotes  = trim( TextStrings::stripQuotes( $content ) );
 		$non_placeholder_content = preg_replace( self::SPRINTF_PLACEHOLDER_REGEX, '', $content_without_quotes );
 
 		if ( '' === $non_placeholder_content ) {

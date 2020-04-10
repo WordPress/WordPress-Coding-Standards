@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
@@ -136,8 +137,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$option_name  = $this->strip_quotes( $parameters[1]['raw'] );
-		$option_value = $this->strip_quotes( $parameters[2]['raw'] );
+		$option_name  = TextStrings::stripQuotes( $parameters[1]['raw'] );
+		$option_value = TextStrings::stripQuotes( $parameters[2]['raw'] );
 		if ( isset( $this->whitelisted_options[ $option_name ] ) ) {
 			$whitelisted_option = $this->whitelisted_options[ $option_name ];
 			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( strtolower( $option_value ), $whitelisted_option['valid_values'], true ) ) {

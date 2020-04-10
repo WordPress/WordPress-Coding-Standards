@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Verifies that all outputted strings are escaped.
@@ -400,7 +401,7 @@ class EscapeOutputSniff extends Sniff {
 							if ( false !== $mapped_function
 								&& \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $mapped_function ]['code']
 							) {
-								$functionName = $this->strip_quotes( $this->tokens[ $mapped_function ]['content'] );
+								$functionName = TextStrings::stripQuotes( $this->tokens[ $mapped_function ]['content'] );
 								$ptr          = $mapped_function;
 							}
 						}

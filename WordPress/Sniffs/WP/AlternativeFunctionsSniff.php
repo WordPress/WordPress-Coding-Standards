@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
@@ -298,7 +299,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	protected function is_local_data_stream( $raw_param_value ) {
 
-		$raw_stripped = $this->strip_quotes( $raw_param_value );
+		$raw_stripped = TextStrings::stripQuotes( $raw_param_value );
 		if ( isset( $this->allowed_local_streams[ $raw_stripped ] )
 			|| isset( $this->allowed_local_stream_constants[ $raw_param_value ] )
 		) {

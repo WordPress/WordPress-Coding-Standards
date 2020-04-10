@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Check for incorrect use of the $wpdb->prepare method.
@@ -229,7 +230,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 							$query['start']
 						);
 
-						$prev_content = $this->strip_quotes( $this->tokens[ $prev ]['content'] );
+						$prev_content = TextStrings::stripQuotes( $this->tokens[ $prev ]['content'] );
 						$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
 
 						// Only examine the implode if preceded by an ` IN (`.
@@ -268,7 +269,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 			$regex_quote = $this->regex_quote;
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-				$content     = $this->strip_quotes( $content );
+				$content     = TextStrings::stripQuotes( $content );
 				$regex_quote = $this->get_regex_quote_snippet( $content, $this->tokens[ $i ]['content'] );
 			}
 

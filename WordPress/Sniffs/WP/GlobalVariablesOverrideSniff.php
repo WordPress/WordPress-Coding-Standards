@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Warns about overwriting WordPress native global variables.
@@ -226,7 +227,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				}
 
 				if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
-					$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
+					$var_name .= TextStrings::stripQuotes( $this->tokens[ $ptr ]['content'] );
 				}
 			}
 
@@ -378,7 +379,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				foreach ( $var_pointers as $ptr ) {
 					$var_name = $this->tokens[ $ptr ]['content'];
 					if ( '$GLOBALS' === $var_name ) {
-						$var_name = '$' . $this->strip_quotes( $this->get_array_access_key( $ptr ) );
+						$var_name = '$' . TextStrings::stripQuotes( $this->get_array_access_key( $ptr ) );
 					}
 
 					if ( \in_array( $var_name, $search, true ) ) {

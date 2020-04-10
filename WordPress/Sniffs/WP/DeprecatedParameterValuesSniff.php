@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed.
@@ -187,7 +188,7 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$matched_parameter = $this->strip_quotes( $this->tokens[ $parameter_position ]['content'] );
+		$matched_parameter = TextStrings::stripQuotes( $this->tokens[ $parameter_position ]['content'] );
 		if ( ! isset( $parameter_args[ $matched_parameter ] ) ) {
 			return;
 		}

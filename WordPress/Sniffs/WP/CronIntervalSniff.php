@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Flag cron schedules less than 15 minutes.
@@ -86,7 +87,7 @@ class CronIntervalSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		$token = $this->tokens[ $stackPtr ];
 
-		if ( 'cron_schedules' !== $this->strip_quotes( $token['content'] ) ) {
+		if ( 'cron_schedules' !== TextStrings::stripQuotes( $token['content'] ) ) {
 			return;
 		}
 
@@ -135,7 +136,7 @@ class CronIntervalSniff extends Sniff {
 		if ( \T_CLOSURE === $this->tokens[ $callbackFunctionPtr ]['code'] ) {
 			$functionPtr = $callbackFunctionPtr;
 		} else {
-			$functionName = $this->strip_quotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
+			$functionName = TextStrings::stripQuotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
 
 			for ( $ptr = 0; $ptr < $this->phpcsFile->numTokens; $ptr++ ) {
 				if ( \T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
@@ -165,7 +166,7 @@ class CronIntervalSniff extends Sniff {
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
 			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-				if ( 'interval' === $this->strip_quotes( $this->tokens[ $i ]['content'] ) ) {
+				if ( 'interval' === TextStrings::stripQuotes( $this->tokens[ $i ]['content'] ) ) {
 					$operator = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( false === $operator ) {
 						$this->confused( $stackPtr );
