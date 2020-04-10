@@ -2330,25 +2330,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Get the complete namespace name for a namespace declaration.
-	 *
-	 * For hierarchical namespaces, the name will be composed of several tokens,
-	 * i.e. MyProject\Sub\Level which will be returned together as one string.
-	 *
-	 * @since      0.12.0 A lesser variant of this method previously existed in the
-	 *                    `AbstractClassRestrictionsSniff` class.
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Namespaces::getDeclaredName()} instead.
-	 *
-	 * @param int|bool $stackPtr The position of a T_NAMESPACE token.
-	 *
-	 * @return string|false Namespace name or false if not a namespace declaration.
-	 *                      Namespace name can be an empty string for global namespace declaration.
-	 */
-	public function get_declared_namespace_name( $stackPtr ) {
-		return Namespaces::getDeclaredName( $this->phpcsFile, $stackPtr );
-	}
-
-	/**
 	 * Check whether a T_CONST token is a class constant declaration.
 	 *
 	 * @since      0.14.0
