@@ -2330,20 +2330,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check whether a T_VARIABLE token is a class property declaration.
-	 *
-	 * @since      0.14.0
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\Scopes::isOOProperty()} instead.
-	 *
-	 * @param int $stackPtr The position in the stack of the T_VARIABLE token to verify.
-	 *
-	 * @return bool
-	 */
-	public function is_class_property( $stackPtr ) {
-		return Scopes::isOOProperty( $this->phpcsFile, $stackPtr );
-	}
-
-	/**
 	 * Check whether the direct wrapping scope of a token is within a limited set of
 	 * acceptable tokens.
 	 *
