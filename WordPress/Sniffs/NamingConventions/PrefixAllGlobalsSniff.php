@@ -321,7 +321,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return $this->process_list_assignment( $stackPtr );
 
 		} elseif ( \T_NAMESPACE === $this->tokens[ $stackPtr ]['code'] ) {
-			$namespace_name = $this->get_declared_namespace_name( $stackPtr );
+			$namespace_name = Namespaces::getDeclaredName( $this->phpcsFile, $stackPtr );
 
 			if ( false === $namespace_name || '' === $namespace_name || '\\' === $namespace_name ) {
 				return;
