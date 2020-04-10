@@ -69,7 +69,7 @@
 	</rule>
 
 	<!-- Covers rule: ... while spaces can be used mid-line for alignment. -->
-	<rule ref="WordPress.WhiteSpace.DisallowInlineTabs"/>
+	<rule ref="Universal.WhiteSpace.DisallowInlineTabs"/>
 
 	<!-- Implied through the examples: align the assignment operator in a block of assignments. -->
 	<rule ref="Generic.Formatting.MultipleStatementAlignment">
