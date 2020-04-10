@@ -31,7 +31,7 @@
 	  function exampleFunctionE() {} // Bad: [tab][space][space].
 	   function exampleFunctionF() {} // Bad: [tab][space][space][space].
 
-	 function exampleFunctionG() {} // WPCS: precision alignment ok.
+	 function exampleFunctionG() {} // Bad old-style whitelist comment: WPCS: precision alignment ok.
 
 ?>
 

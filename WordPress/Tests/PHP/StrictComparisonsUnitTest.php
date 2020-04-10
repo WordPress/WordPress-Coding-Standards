@@ -40,9 +40,7 @@ class StrictComparisonsUnitTest extends AbstractSniffUnitTest {
 			3  => 1,
 			10 => 1,
 			12 => 1,
-			19 => 1, // Whitelist comment deprecation warning.
-			24 => 1,
-			29 => 1,
+			19 => 1, // Old-style WPCS whitelist comments are no longer supported.
 		);
 	}
 

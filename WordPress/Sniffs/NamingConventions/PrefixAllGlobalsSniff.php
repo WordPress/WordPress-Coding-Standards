@@ -263,18 +263,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		/*
-		 * Allow for whitelisting.
-		 *
-		 * Generally speaking a theme/plugin should *only* execute their own hooks, but there may be a
-		 * good reason to execute a core hook.
-		 *
-		 * Similarly, newer PHP or WP functions or constants may need to be emulated for continued support
-		 * of older PHP and WP versions.
-		 */
-		if ( $this->has_whitelist_comment( 'prefix', $stackPtr ) ) {
-			return;
-		}
 
 		// Allow overruling the prefixes set in a ruleset via the command line.
 		$cl_prefixes = trim( PHPCSHelper::get_config_data( 'prefixes' ) );

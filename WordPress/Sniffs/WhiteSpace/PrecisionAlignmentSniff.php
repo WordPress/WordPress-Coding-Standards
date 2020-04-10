@@ -182,7 +182,7 @@ class PrecisionAlignmentSniff extends Sniff {
 					break;
 			}
 
-			if ( $spaces > 0 && ! $this->has_whitelist_comment( 'precision alignment', $i ) ) {
+			if ( $spaces > 0 ) {
 				$this->phpcsFile->addWarning(
 					'Found precision alignment of %s spaces.',
 					$i,

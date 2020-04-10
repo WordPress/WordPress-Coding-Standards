@@ -47,10 +47,8 @@ class StrictComparisonsSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( ! $this->has_whitelist_comment( 'loose comparison', $stackPtr ) ) {
-			$error = 'Found: ' . $this->tokens[ $stackPtr ]['content'] . '. Use strict comparisons (=== or !==).';
-			$this->phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
-		}
+		$error = 'Found: ' . $this->tokens[ $stackPtr ]['content'] . '. Use strict comparisons (=== or !==).';
+		$this->phpcsFile->addWarning( $error, $stackPtr, 'LooseComparison' );
 	}
 
 }

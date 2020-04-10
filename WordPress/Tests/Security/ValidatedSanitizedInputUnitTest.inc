@@ -73,7 +73,7 @@ function zebra() {
 	}
 }
 
-echo $_GET['test']; // WPCS: sanitization OK.
+echo $_GET['test']; // Bad: old-style whitelist comment. WPCS: sanitization OK.
 
 echo array_map( 'sanitize_text_field', wp_unslash( $_GET['test'] ) ); // Ok.
 echo array_map( 'foo', wp_unslash( $_GET['test'] ) ); // Bad.

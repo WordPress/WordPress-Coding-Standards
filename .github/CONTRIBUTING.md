@@ -37,9 +37,7 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 > **Important**:
 > PHPCS 3.2.0 introduced new selective ignore annotations, which can be considered an improved version of the whitelist mechanism which WPCS contains.
 >
-> Support for the WPCS native whitelist comments has been deprecated in WPCS 2.0.0 and will be removed in WPCS 3.0.0.
->
-> With that in mind, (new) sniffs should not introduce new WPCS native whitelist comments.
+> Support for the WPCS native whitelist comments has been deprecated in WPCS 2.0.0 and removed in WPCS 3.0.0.
 
 
 # Unit Testing

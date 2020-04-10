@@ -37,6 +37,7 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					3   => 1,
 					6   => 1,
 					8   => 1,
+					11  => 1, // Old-style WPCS whitelist comments are no longer supported.
 					16  => 1,
 					17  => 1,
 					18  => 1,
@@ -90,20 +91,10 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = '' ) {
-		switch ( $testFile ) {
-			case 'GlobalVariablesOverrideUnitTest.1.inc':
-				return array(
-					11 => 1, // Whitelist comment deprecation warning.
-				);
-
-			default:
-				return array();
-		}
+	public function getWarningList() {
+		return array();
 	}
 
 }
