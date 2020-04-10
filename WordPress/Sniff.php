@@ -945,21 +945,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Strip quotes surrounding an arbitrary string.
-	 *
-	 * Intended for use with the contents of a T_CONSTANT_ENCAPSED_STRING / T_DOUBLE_QUOTED_STRING.
-	 *
-	 * @since      0.11.0
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\TextStrings::stripQuotes()} instead.
-	 *
-	 * @param string $string The raw string.
-	 * @return string String without quotes around it.
-	 */
-	public function strip_quotes( $string ) {
-		return TextStrings::stripQuotes( $string );
-	}
-
-	/**
 	 * Add a PHPCS message to the output stack as either a warning or an error.
 	 *
 	 * @since 0.11.0
