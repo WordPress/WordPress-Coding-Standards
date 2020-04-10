@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -758,7 +759,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	protected function process_list_assignment( $stackPtr ) {
-		$list_open_close = $this->find_list_open_close( $stackPtr );
+		$list_open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $list_open_close ) {
 			// Short array, not short list.
 			return;

@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -171,7 +172,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	protected function process_list_assignment( $stackPtr ) {
-		$list_open_close = $this->find_list_open_close( $stackPtr );
+		$list_open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $list_open_close ) {
 			// Short array, not short list.
 			return;
@@ -368,7 +369,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			if ( \T_LIST === $this->tokens[ $ptr ]['code']
 				|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $ptr ]['code']
 			) {
-				$list_open_close = $this->find_list_open_close( $ptr );
+				$list_open_close = Lists::getOpenClose( $this->phpcsFile, $ptr );
 
 				if ( false === $list_open_close ) {
 					// Short array, not short list.

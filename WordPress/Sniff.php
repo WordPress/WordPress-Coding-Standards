@@ -2696,7 +2696,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		if ( empty( $list_open_close ) ) {
-			$list_open_close = $this->find_list_open_close( $stackPtr );
+			$list_open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 			if ( false === $list_open_close ) {
 				// Not a (short) list.
 				return array();
