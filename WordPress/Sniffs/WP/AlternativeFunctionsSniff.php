@@ -263,7 +263,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				/*
 				 * Allow for handling raw data streams from the request body.
 				 */
-				$first_param = $this->get_function_call_parameter( $stackPtr, 1 );
+				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 
 				if ( false === $first_param ) {
 					// If the file to work with is not set, local data streams don't come into play.

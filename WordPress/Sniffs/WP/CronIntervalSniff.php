@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -97,7 +98,7 @@ class CronIntervalSniff extends Sniff {
 			return;
 		}
 
-		$callback = $this->get_function_call_parameter( $functionPtr, 2 );
+		$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, 2 );
 		if ( false === $callback ) {
 			return;
 		}
@@ -115,7 +116,7 @@ class CronIntervalSniff extends Sniff {
 			&& ( \T_ARRAY === $this->tokens[ $callbackArrayPtr ]['code']
 				|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $callbackArrayPtr ]['code'] )
 		) {
-			$callback = $this->get_function_call_parameter( $callbackArrayPtr, 2 );
+			$callback = PassedParameters::getParameter( $this->phpcsFile, $callbackArrayPtr, 2 );
 
 			if ( false === $callback ) {
 				$this->confused( $stackPtr );

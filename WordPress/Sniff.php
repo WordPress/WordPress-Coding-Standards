@@ -1483,7 +1483,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
 		if ( false !== $functionPtr ) {
-			$second_param = $this->get_function_call_parameter( $functionPtr, 2 );
+			$second_param = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, 2 );
 			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
 				return true;
 			}
@@ -1797,7 +1797,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
 
 			// Get the callback parameter.
-			$callback = $this->get_function_call_parameter( $functionPtr, $this->arrayWalkingFunctions[ $functionName ] );
+			$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, $this->arrayWalkingFunctions[ $functionName ] );
 
 			if ( ! empty( $callback ) ) {
 				/*

@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 
 /**
@@ -195,7 +196,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// These functions only need to have the first argument escaped.
 			if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
-				$first_param      = $this->get_function_call_parameter( $stackPtr, 1 );
+				$first_param      = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 				$end_of_statement = ( $first_param['end'] + 1 );
 				unset( $first_param );
 			}
@@ -205,7 +206,7 @@ class EscapeOutputSniff extends Sniff {
 			 * pattern, it doesn't need to be escaped.
 			 */
 			if ( '_deprecated_file' === $function ) {
-				$first_param = $this->get_function_call_parameter( $stackPtr, 1 );
+				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 
 				// Quick check. This disregards comments.
 				if ( preg_match( '`^basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
@@ -381,7 +382,8 @@ class EscapeOutputSniff extends Sniff {
 					if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
 
 						// Get the callback parameter.
-						$callback = $this->get_function_call_parameter(
+						$callback = PassedParameters::getParameter(
+							$this->phpcsFile,
 							$ptr,
 							$this->arrayWalkingFunctions[ $functionName ]
 						);
