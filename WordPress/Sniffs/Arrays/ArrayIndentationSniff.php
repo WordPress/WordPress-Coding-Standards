@@ -96,7 +96,7 @@ class ArrayIndentationSniff extends Sniff {
 		}
 
 		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
-			&& $this->is_short_list( $stackPtr )
+			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
 		) {
 			// Short list, not short array.
 			return;
