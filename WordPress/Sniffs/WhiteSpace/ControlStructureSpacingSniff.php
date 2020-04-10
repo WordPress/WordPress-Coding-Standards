@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\UseStatements;
 
 /**
  * Enforces spacing around logical operators and assignments, based upon Squiz code.
@@ -113,6 +114,12 @@ class ControlStructureSpacingSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		$this->spaces_before_closure_open_paren = (int) $this->spaces_before_closure_open_paren;
 
+		if ( \T_USE === $this->tokens[ $stackPtr ]['code']
+			&& UseStatements::isClosureUse( $this->phpcsFile, $stackPtr ) === false
+		) {
+			return;
+		}
+
 		if ( isset( $this->tokens[ ( $stackPtr + 1 ) ] ) && \T_WHITESPACE !== $this->tokens[ ( $stackPtr + 1 ) ]['code']
 			&& ! ( \T_ELSE === $this->tokens[ $stackPtr ]['code'] && \T_COLON === $this->tokens[ ( $stackPtr + 1 ) ]['code'] )
 			&& ! ( \T_CLOSURE === $this->tokens[ $stackPtr ]['code']
@@ -128,7 +135,7 @@ class ControlStructureSpacingSniff extends Sniff {
 
 		if ( ! isset( $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
 
-			if ( \T_USE === $this->tokens[ $stackPtr ]['code'] && 'closure' === $this->get_use_type( $stackPtr ) ) {
+			if ( \T_USE === $this->tokens[ $stackPtr ]['code'] ) {
 				$scopeOpener = $this->phpcsFile->findNext( \T_OPEN_CURLY_BRACKET, ( $stackPtr + 1 ) );
 				$scopeCloser = $this->tokens[ $scopeOpener ]['scope_closer'];
 			} elseif ( \T_WHILE !== $this->tokens[ $stackPtr ]['code'] ) {
