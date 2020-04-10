@@ -2331,29 +2331,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Checks if a function call has parameters.
-	 *
-	 * Expects to be passed the T_STRING stack pointer for the function call.
-	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
-	 *
-	 * Extra feature: If passed an T_ARRAY or T_OPEN_SHORT_ARRAY stack pointer, it
-	 * will detect whether the array has values or is empty.
-	 *
-	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/120
-	 * @link https://github.com/PHPCompatibility/PHPCompatibility/issues/152
-	 *
-	 * @since      0.11.0
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\PassedParameters::hasParameters()} instead.
-	 *
-	 * @param int $stackPtr The position of the function call token.
-	 *
-	 * @return bool
-	 */
-	public function does_function_call_have_parameters( $stackPtr ) {
-		return PassedParameters::hasParameters( $this->phpcsFile, $stackPtr );
-	}
-
-	/**
 	 * Count the number of parameters a function call has been passed.
 	 *
 	 * Expects to be passed the T_STRING stack pointer for the function call.
