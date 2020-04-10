@@ -19,7 +19,6 @@ use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
-use PHPCSUtils\Utils\UseStatements;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -2287,35 +2286,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Check what type of 'use' statement a token is part of.
-	 *
-	 * The T_USE token has multiple different uses:
-	 *
-	 * 1. In a closure: function () use ( $var ) {}
-	 * 2. In a class, to import a trait: use Trait_Name
-	 * 3. In a namespace, to import a class: use Some\Class;
-	 *
-	 * This function will check the token and return 'closure', 'trait', or 'class',
-	 * based on which of these uses the use is being used for.
-	 *
-	 * @since      0.7.0
-	 * @deprecated 3.0.0 Use {@see PHPCSUtils\Utils\UseStatements::getType()} instead.
-	 *
-	 * @param int $stackPtr The position of the token to check.
-	 *
-	 * @return string The type of use.
-	 */
-	protected function get_use_type( $stackPtr ) {
-
-		$type = UseStatements::getType( $this->phpcsFile, $stackPtr );
-		if ( 'import' === $type ) {
-			$type = 'class';
-		}
-
-		return $type;
 	}
 
 	/**
