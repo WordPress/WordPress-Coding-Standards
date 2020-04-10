@@ -2331,28 +2331,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Get information on a specific parameter passed to a function call.
-	 *
-	 * Expects to be passed the T_STRING stack pointer for the function call.
-	 * If passed a T_STRING which is *not* a function call, the behaviour is unreliable.
-	 *
-	 * Will return a array with the start token pointer, end token pointer and the raw value
-	 * of the parameter at a specific offset.
-	 * If the specified parameter is not found, will return false.
-	 *
-	 * @since      0.11.0
-	 * @deprecated 3.0.0  Use {@see PHPCSUtils\Utils\PassedParameters::getParameter()} instead.
-	 *
-	 * @param int $stackPtr     The position of the function call token.
-	 * @param int $param_offset The 1-based index position of the parameter to retrieve.
-	 *
-	 * @return array|false
-	 */
-	public function get_function_call_parameter( $stackPtr, $param_offset ) {
-		return PassedParameters::getParameter( $this->phpcsFile, $stackPtr, $param_offset );
-	}
-
-	/**
 	 * Find the array opener & closer based on a T_ARRAY or T_OPEN_SHORT_ARRAY token.
 	 *
 	 * @since      0.12.0
