@@ -111,5 +111,11 @@ $wpdb->query( "SELECT * FROM ${wpdb->{${'a'}}} WHERE post_title LIKE '${title->{
 // More defensive variable checking
 $wpdb->query( "SELECT * FROM $wpdb" ); // Bad x 1, $wpdb on its own is not valid.
 
+$wpdb
+	-> /*comment*/ query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . $_GET['title'] . "';" ); // Bad.
+
+$wpdb?->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . (int) $foo . "';" ); // OK.
+$wpdb?->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts

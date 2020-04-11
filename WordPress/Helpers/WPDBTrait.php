@@ -10,7 +10,9 @@
 namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\BCFile;
+use PHPCSUtils\Tokens\Collections;
 
 /**
  * Helper utilities for sniffs which examine WPDB method calls.
@@ -59,19 +61,14 @@ trait WPDBTrait {
 		}
 
 		// Check that this is a method call.
-		$is_object_call = $phpcsFile->findNext(
-			array( \T_OBJECT_OPERATOR, \T_DOUBLE_COLON ),
-			( $stackPtr + 1 ),
-			null,
-			false,
-			null,
-			true
-		);
-		if ( false === $is_object_call ) {
+		$is_object_call = $phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $is_object_call
+			|| isset( Collections::objectOperators()[ $tokens[ $is_object_call ]['code'] ] ) === false
+		) {
 			return false;
 		}
 
-		$methodPtr = $phpcsFile->findNext( \T_WHITESPACE, ( $is_object_call + 1 ), null, true, null, true );
+		$methodPtr = $phpcsFile->findNext( Tokens::$emptyTokens, ( $is_object_call + 1 ), null, true, null, true );
 		if ( false === $methodPtr ) {
 			return false;
 		}
@@ -81,7 +78,7 @@ trait WPDBTrait {
 		}
 
 		// Find the opening parenthesis.
-		$opening_paren = $phpcsFile->findNext( \T_WHITESPACE, ( $methodPtr + 1 ), null, true, null, true );
+		$opening_paren = $phpcsFile->findNext( Tokens::$emptyTokens, ( $methodPtr + 1 ), null, true, null, true );
 
 		if ( false === $opening_paren ) {
 			return false;
