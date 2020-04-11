@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPCSUtils\BackCompat\BCFile;
 
 /**
  * Helper utilities for sniffs which examine WPDB method calls.
@@ -102,7 +103,7 @@ trait WPDBTrait {
 		}
 
 		// Find the end of the first parameter.
-		$end = $phpcsFile->findEndOfStatement( $opening_paren + 1 );
+		$end = BCFile::findEndOfStatement( $phpcsFile, $opening_paren + 1 );
 
 		if ( \T_COMMA !== $tokens[ $end ]['code'] ) {
 			++$end;
