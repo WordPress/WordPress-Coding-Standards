@@ -1398,7 +1398,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->get_wp_version_from_cl();
+		$this->get_wp_version_from_cl( $this->phpcsFile );
 
 		$function_name = strtolower( $matched_content );
 

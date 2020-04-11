@@ -80,11 +80,13 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @since 0.14.0
 	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
+	 *               Now requires the $phpcsFile object to be passed in.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 */
-	protected function get_wp_version_from_cl() {
-		$cl_supported_version = trim( Helper::getConfigData( 'minimum_supported_wp_version' ) );
+	protected function get_wp_version_from_cl( File $phpcsFile ) {
+		$cl_supported_version = trim( Helper::getCommandLineData( $phpcsFile, 'minimum_supported_wp_version' ) );
+
 		if ( ! empty( $cl_supported_version )
 			&& filter_var( $cl_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
 		) {
