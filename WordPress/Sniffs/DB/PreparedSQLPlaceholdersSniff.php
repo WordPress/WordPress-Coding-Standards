@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\WPDBTrait;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -42,6 +43,8 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.14.0
  */
 class PreparedSQLPlaceholdersSniff extends Sniff {
+
+	use WPDBTrait;
 
 	/**
 	 * These regexes were originally copied from https://www.php.net/function.sprintf#93552
@@ -168,7 +171,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( ! $this->is_wpdb_method_call( $stackPtr, $this->target_methods ) ) {
+		if ( ! $this->is_wpdb_method_call( $this->phpcsFile, $stackPtr, $this->target_methods ) ) {
 			return;
 		}
 

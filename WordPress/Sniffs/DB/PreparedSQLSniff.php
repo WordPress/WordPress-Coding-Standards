@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\WPDBTrait;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -27,6 +28,8 @@ use WordPressCS\WordPress\Sniff;
  * @since   1.0.0  This sniff has been moved from the `WP` category to the `DB` category.
  */
 class PreparedSQLSniff extends Sniff {
+
+	use WPDBTrait;
 
 	/**
 	 * The lists of $wpdb methods.
@@ -124,7 +127,7 @@ class PreparedSQLSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( ! $this->is_wpdb_method_call( $stackPtr, $this->methods ) ) {
+		if ( ! $this->is_wpdb_method_call( $this->phpcsFile, $stackPtr, $this->methods ) ) {
 			return;
 		}
 
@@ -161,7 +164,7 @@ class PreparedSQLSniff extends Sniff {
 
 			if ( \T_VARIABLE === $this->tokens[ $this->i ]['code'] ) {
 				if ( '$wpdb' === $this->tokens[ $this->i ]['content'] ) {
-					$this->is_wpdb_method_call( $this->i, $this->methods );
+					$this->is_wpdb_method_call( $this->phpcsFile, $this->i, $this->methods );
 					continue;
 				}
 
