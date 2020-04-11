@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Check for usage of deprecated parameters in WP functions and suggest alternative based on the parameter passed.
@@ -29,9 +30,11 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * The group name for this group of functions.

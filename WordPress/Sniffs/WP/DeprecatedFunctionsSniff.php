@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Restricts the use of various deprecated WordPress functions and suggests alternatives.
@@ -28,9 +29,11 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * List of deprecated functions with alternative when available.

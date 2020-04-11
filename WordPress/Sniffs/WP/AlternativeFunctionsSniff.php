@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Discourages the use of various functions and suggests (WordPress) alternatives.
@@ -23,9 +24,11 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * @since   1.0.0  - Takes the minimum supported WP version into account.
  *                 - Takes exceptions based on passed parameters into account.
  *
- * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * Local input streams which should not be flagged for the file system function checks.
