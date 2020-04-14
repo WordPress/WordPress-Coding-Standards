@@ -218,6 +218,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'term_description'          => true,
 		'the_author'                => true,
 		'the_date'                  => true,
+		'the_privacy_policy_link'   => true,
 		'the_title_attribute'       => true,
 		'walk_nav_menu_tree'        => true,
 		'wp_dropdown_categories'    => true,
