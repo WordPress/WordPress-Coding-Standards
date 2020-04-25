@@ -456,7 +456,7 @@ class EscapeOutputSniff extends Sniff {
 				"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 				$ptr,
 				'OutputNotEscaped',
-				$content
+				array( $content )
 			);
 		}
 
