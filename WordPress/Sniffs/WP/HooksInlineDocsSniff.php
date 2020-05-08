@@ -17,7 +17,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * @package WPCS\WordPressCodingStandards
  */
-class HooksMustHaveDocblockSniff extends AbstractFunctionRestrictionsSniff {
+class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Array of WordPress hook execution functions.
