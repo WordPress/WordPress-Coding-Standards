@@ -181,8 +181,8 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 	protected function verify_valid_match( $stack_ptr ) {
 		$func_open_paren_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
 		if ( false === $func_open_paren_token
-		     || \T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
-		     || ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] )
+			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
+			|| ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] )
 		) {
 			// Live coding, parse error or not a function call.
 			return false;
