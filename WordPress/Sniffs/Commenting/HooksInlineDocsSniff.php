@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPressCS\WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\Commenting;
 
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use PHP_CodeSniffer\Util\Tokens;
