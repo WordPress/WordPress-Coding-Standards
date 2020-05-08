@@ -8,6 +8,24 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [2.3.0] - 2020-05-14
+
+### Added
+- The `WordPress.WP.I18n` sniff contains a new check for translatable text strings which are wrapped in HTML tags, like `<h1>Translate me</h1>`. Those tags should be moved out of the translatable string.
+    Note: Translatable strings wrapped in `<a href..>` tags where the URL is intended to be localized will not trigger this check.
+
+### Changed
+- The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `5.1`.
+- The `WordPress.WP.DeprecatedFunctions` sniff will now detect functions deprecated in WP 5.4.
+- Improved grammar of an error message in the `WordPress.WP.DiscouragedFunctions` sniff.
+- CI: The codebase is now - preliminary - being tested against the PHPCS 4.x development branch.
+
+### Fixed
+- All function call detection sniffs: fixed a bug where constants with the same name as one of the targeted functions could inadvertently be recognized as if they were a called function.
+- `WordPress.DB.PreparedSQL`: fixed a bug where the sniff would trigger on the namespace separator character `\\`.
+- `WordPress.Security.EscapeOutput`: fixed a bug with the variable replacement in one of the error messages.
+
+
 ## [2.2.1] - 2020-02-04
 
 ### Added
