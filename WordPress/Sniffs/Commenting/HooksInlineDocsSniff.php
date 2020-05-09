@@ -95,7 +95,6 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 					$stack_ptr,
 					'NoDocblockFound'
 				);
-				// return; Do we need to return here? Can we keep going?
 			}
 
 			/*
@@ -121,8 +120,8 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 					// If it is false, there is no text or if the text is on the another line, error.
 					if ( false === $string || $this->tokens[ $string ]['line'] !== $this->tokens[ $tag ]['line'] ) {
 						$this->phpcsFile->addError( 'Since tag must have a value.', $tag, 'EmptySince' );
-					} elseif ( ! preg_match( '\'/^\d+\.\d+\.\d+/\'', $string ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
-						$this->phpcsFile->addError( 'Since tag must have a X.Y.Z. version number.', $tag, 'InvalidSince' );
+					} elseif ( ! preg_match('/^\d+\.\d+\.\d+/', $this->tokens[ $string ]['content'] ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
+						$this->phpcsFile->addError( 'Since tag must have a X.Y.Z version number.' . $this->tokens[ $string ]['content'], $tag, 'InvalidSince' );
 					}
 				}
 			}
@@ -160,11 +159,19 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @param int $start       The position of the starting token in the stack.
 	 * @param int $end       The position of the ending token in the stack.
+	 *
+	 * @return bool If docblock matches the previously documented convention.
 	 */
 	protected function is_previously_documented( $start, $end ) {
 		$string = $this->phpcsFile->findNext( T_DOC_COMMENT_STRING, $start, $end );
+
+		$content = $this->tokens[ $string ]['content'];
 		// If the call is documented elsewhere, stop here.
-		if ( 0 === strpos( $this->tokens[ $string ]['content'], 'This filter is documented in' ) ) {
+		if ( 0 === strpos( $content, 'This filter is documented' ) ) {
+			return true;
+		}
+
+		if ( 0 === strpos( $content, 'This action is documented' ) ) {
 			return true;
 		}
 
