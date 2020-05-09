@@ -34,6 +34,23 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 	);
 
 	/**
+	 * Array of allowed exceptional version numbers.
+	 *
+	 * By default, X.Y.Z version numbers are required. If there are any exceptions,
+	 * they can be passed in the ruleset XML file via:
+	 * <rule ref="WordPress.Commenting.HooksInlineDocs">
+	 *  <properties>
+	 *   <property name="allowed_extra_versions" type="array">
+	 *    <element key="0.71" value="0.71"/>
+	 *    <element key="MU (3.0.0)" value="MU (3.0.0)"/>
+	 *   </property>
+	 * </rule>
+	 *
+	 * The key values are used to determine if a version is allowed outside of the X.Y.Z scheme. The value is not considered.
+	 */
+	public $allowed_extra_versions = array();
+
+	/**
 	 * Groups of functions to restrict.
 	 *
 	 * Example: groups => array(
@@ -120,8 +137,10 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 					// If it is false, there is no text or if the text is on the another line, error.
 					if ( false === $string || $this->tokens[ $string ]['line'] !== $this->tokens[ $tag ]['line'] ) {
 						$this->phpcsFile->addError( 'Since tag must have a value.', $tag, 'EmptySince' );
-					} elseif ( ! preg_match('/^\d+\.\d+\.\d+/', $this->tokens[ $string ]['content'] ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
-						$this->phpcsFile->addError( 'Since tag must have a X.Y.Z version number.' . $this->tokens[ $string ]['content'], $tag, 'InvalidSince' );
+					} elseif ( ! preg_match('/^\d+\.\d+\.\d+/', $this->tokens[ $string ]['content'], $matches ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
+						if ( empty( $this->allowed_extra_versions ) || ! $this->array_begins_with( $this->tokens[ $string ]['content'], $this->allowed_extra_versions ) ) {
+							$this->phpcsFile->addError( 'Since tag must have a X.Y.Z version number.' . $this->tokens[ $string ]['content'], $tag, 'InvalidSince' );
+						}
 					}
 				}
 			}
@@ -196,5 +215,14 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		return true;
+	}
+
+	protected function array_begins_with( $string, $array ){
+		foreach ( $array as $key => $value ) {
+			if ( 0 === strpos( $string, $key ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
