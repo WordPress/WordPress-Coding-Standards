@@ -40,13 +40,13 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 	 * they can be passed in the ruleset XML file via:
 	 * <rule ref="WordPress.Commenting.HooksInlineDocs">
 	 *  <properties>
-	 *   <property name="allowed_extra_versions" type="array">
-	 *    <element key="0.71" value="0.71"/>
-	 *    <element key="MU (3.0.0)" value="MU (3.0.0)"/>
-	 *   </property>
+	 *   <property name="allowed_extra_versions" type="array" value="0.71"/>
+	 *   <property name="allowed_extra_versions" type="array" value="MU (3.0.0)"/>
 	 * </rule>
 	 *
 	 * The key values are used to determine if a version is allowed outside of the X.Y.Z scheme. The value is not considered.
+	 *
+	 * @var array Array of allowed exceptional values.
 	 */
 	public $allowed_extra_versions = array();
 
@@ -137,7 +137,7 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 					// If it is false, there is no text or if the text is on the another line, error.
 					if ( false === $string || $this->tokens[ $string ]['line'] !== $this->tokens[ $tag ]['line'] ) {
 						$this->phpcsFile->addError( 'Since tag must have a value.', $tag, 'EmptySince' );
-					} elseif ( ! preg_match('/^\d+\.\d+\.\d+/', $this->tokens[ $string ]['content'], $matches ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
+					} elseif ( ! preg_match( '/^\d+\.\d+\.\d+/', $this->tokens[ $string ]['content'], $matches ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
 						if ( empty( $this->allowed_extra_versions ) || ! $this->array_begins_with( $this->tokens[ $string ]['content'], $this->allowed_extra_versions ) ) {
 							$this->phpcsFile->addError( 'Since tag must have a X.Y.Z version number.', $tag, 'InvalidSince' );
 						}
@@ -218,16 +218,16 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 	}
 
 	/**
-	 * Checks if an array key begins with a particular string.
+	 * Checks if an array value begins with a particular string.
 	 *
 	 * @param string $string Needle value.
-	 * @param array $array Haystack value.
+	 * @param array  $array Haystack value.
 	 *
 	 * @return bool If any array key begins within the given string.
 	 */
-	protected function array_begins_with( $string, $array ){
-		foreach ( $array as $key => $value ) {
-			if ( 0 === strpos( $string, $key ) ) {
+	protected function array_begins_with( $string, $array ) {
+		foreach ( $array as $value ) {
+			if ( 0 === strpos( $string, $value ) ) {
 				return true;
 			}
 		}

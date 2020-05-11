@@ -1,5 +1,5 @@
 <?php
-// phpcs:set WordPress.Commenting.HooksLineDocs allowed_extra_versions ['MU'=>'MU']
+// phpcs:set WordPress.Commenting.HooksInlineDocs allowed_extra_versions[] MU
 
 /*
  * Set 1
@@ -96,3 +96,5 @@ apply_filters( 'hook', 'function' );
  * @since MU Additional text.
  */
 apply_filters( 'hook', 'function' );
+
+// phpcs:set WordPress.Commenting.HooksLineDocs allowed_extra_versions[]
