@@ -139,7 +139,7 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 						$this->phpcsFile->addError( 'Since tag must have a value.', $tag, 'EmptySince' );
 					} elseif ( ! preg_match('/^\d+\.\d+\.\d+/', $this->tokens[ $string ]['content'], $matches ) ) { // Requires X.Y.Z. Trailing 0 is needed for a major release.
 						if ( empty( $this->allowed_extra_versions ) || ! $this->array_begins_with( $this->tokens[ $string ]['content'], $this->allowed_extra_versions ) ) {
-							$this->phpcsFile->addError( 'Since tag must have a X.Y.Z version number.' . $this->tokens[ $string ]['content'], $tag, 'InvalidSince' );
+							$this->phpcsFile->addError( 'Since tag must have a X.Y.Z version number.', $tag, 'InvalidSince' );
 						}
 					}
 				}
