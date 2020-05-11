@@ -217,6 +217,14 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 		return true;
 	}
 
+	/**
+	 * Checks if an array key begins with a particular string.
+	 *
+	 * @param string $string Needle value.
+	 * @param array $array Haystack value.
+	 *
+	 * @return bool If any array key begins within the given string.
+	 */
 	protected function array_begins_with( $string, $array ){
 		foreach ( $array as $key => $value ) {
 			if ( 0 === strpos( $string, $key ) ) {
