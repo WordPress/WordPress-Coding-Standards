@@ -97,4 +97,12 @@ apply_filters( 'hook', 'function' );
  */
 apply_filters( 'hook', 'function' );
 
+// "Already documented" example of an action.
+/** This action is documented in file.php */
+do_action( 'hook ' );
+
+// "Already documented" example of a filter.
+/** This filter is documented in file.php */
+apply_filters(' hook', 'function' );
+
 // phpcs:set WordPress.Commenting.HooksLineDocs allowed_extra_versions[]
