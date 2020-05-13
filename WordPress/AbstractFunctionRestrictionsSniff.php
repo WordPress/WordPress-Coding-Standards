@@ -57,7 +57,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @var string
 	 */
-	protected $regex_pattern = '`\b(?:%s)\b`i';
+	protected $regex_pattern = '`^(?:%s)$`i';
 
 	/**
 	 * Cache for the group information.
@@ -212,35 +212,52 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 */
 	public function is_targetted_token( $stackPtr ) {
 
+		if ( \T_STRING !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			if ( $this->is_class_object_call( $stackPtr ) === true ) {
+		if ( $this->is_class_object_call( $stackPtr ) === true ) {
+			return false;
+		}
+
+		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
+			return false;
+		}
+
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false !== $prev ) {
+			// Skip sniffing on function, class definitions or for function aliases in use statements.
+			$skipped = array(
+				\T_FUNCTION        => \T_FUNCTION,
+				\T_CLASS           => \T_CLASS,
+				\T_AS              => \T_AS, // Use declaration alias.
+			);
+
+			if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
 				return false;
 			}
+		}
 
-			if ( $this->is_token_namespaced( $stackPtr ) === true ) {
-				return false;
-			}
+		// Check if this could even be a function call.
+		$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $next ) {
+			return false;
+		}
 
-			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-
-			if ( false !== $prev ) {
-				// Skip sniffing if calling a same-named method, or on function definitions.
-				$skipped = array(
-					\T_FUNCTION        => \T_FUNCTION,
-					\T_CLASS           => \T_CLASS,
-					\T_AS              => \T_AS, // Use declaration alias.
-				);
-
-				if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
-					return false;
-				}
-			}
-
+		// Check for `use function ... (as|;)`.
+		if ( ( \T_STRING === $this->tokens[ $prev ]['code'] && 'function' === $this->tokens[ $prev ]['content'] )
+			&& ( \T_AS === $this->tokens[ $next ]['code'] || \T_SEMICOLON === $this->tokens[ $next ]['code'] )
+		) {
 			return true;
 		}
 
-		return false;
+		// If it's not a `use` statement, there should be parenthesis.
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next ]['code'] ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

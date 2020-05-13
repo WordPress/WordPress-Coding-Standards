@@ -71,3 +71,10 @@ curl_version(); // OK.
 
 // Safeguard that additional logic uses case-insensitive function name check.
 Strip_Tags( $something ); // Warning.
+
+if ( ! $curl['features'] && CURL_VERSION_SSL ) {} // OK.
+my_parse_url_function(); // OK.
+function curl_version_ssl() {} // OK.
+use function curl_version; // OK.
+use function something as curl_version; // OK.
+use function curl_init as curl_version; // Bad.

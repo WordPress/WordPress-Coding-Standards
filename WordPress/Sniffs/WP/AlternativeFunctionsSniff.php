@@ -89,6 +89,9 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'functions' => array(
 					'curl_*',
 				),
+				'whitelist' => array(
+					'curl_version' => true,
+				),
 			),
 
 			'parse_url' => array(
@@ -273,10 +276,6 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				unset( $first_param );
 
 				break;
-
-			case 'curl_version':
-				// Curl version doesn't actually create a connection.
-				return;
 		}
 
 		if ( ! isset( $this->groups[ $group_name ]['since'] ) ) {

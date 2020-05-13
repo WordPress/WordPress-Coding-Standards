@@ -33,6 +33,9 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 		// Test overruling the text domain from the command line for one test file.
 		if ( 'I18nUnitTest.3.inc' === $testFile ) {
 			$config->setConfigData( 'text_domain', 'something', true );
+		} else {
+			// Delete the text domain option so it doesn't persist for subsequent test files.
+			$config->setConfigData( 'text_domain', null, true );
 		}
 	}
 
@@ -161,6 +164,12 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					154 => 1,
 					158 => 1,
 					159 => 1,
+					187 => 1,
+					191 => 1,
+					193 => 1,
+					194 => 1,
+					198 => 1,
+					199 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':

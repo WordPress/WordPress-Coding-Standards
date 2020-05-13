@@ -82,7 +82,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_supported_version = '5.0';
+	public $minimum_supported_version = '5.1';
 
 	/**
 	 * Custom list of classes which test classes can extend.

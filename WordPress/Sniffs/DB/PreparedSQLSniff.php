@@ -69,6 +69,7 @@ class PreparedSQLSniff extends Sniff {
 		\T_INT_CAST                 => true,
 		\T_DOUBLE_CAST              => true,
 		\T_BOOL_CAST                => true,
+		\T_NS_SEPARATOR             => true,
 	);
 
 	/**

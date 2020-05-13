@@ -183,5 +183,37 @@ _n_noop($singular); // Bad x 3.
 // This test is needed to verify that the missing plural argument above does not cause an internal error, stopping the run.
 _n_noop( 'I have %d cat.', 'I have %d cats.' ); // Bad.
 
+// HTML wrapped strings.
+__( '<address>123 Fake Street</address>', 'my-slug' ); // Bad, string shouldn't be wrapped in HTML.
+__( 'I live at <address>123 Fake Street</address>', 'my-slug' ); // Okay, no consensus on HTML tags within strings.
+__( '<address>123 Fake Street</address> is my home', 'my-slug' ); // Okay, no consensus on HTML tags within strings.
+__( '<span>Text</span> More text <span>Text</span>', 'my-slug' ); // Good, we're not wrapping
+__( '<div class="my-class">Translatable content</div>', 'my-slug' ); // Bad
+__( '<option id="%1$s" value="%2$s">Translatable option name</option>', 'my-slug' ); // Wrapping is okay, since there are placeholders
+__( '<b><i>Foo</i></b>', 'my-slug' ); // Bad
+__( '<foo>Foo</foo>', 'my-slug' ); // Good
+
+// Strings wrapped in `<a href="...">...</a>` aren't flagged, since the link target might require localization.
+__( '<a href="http://wordpress.org">WordPress</a>', 'my-slug' ); // Good
+__( '<a id="anchor">translatable text</a>', 'my-slug' ) // Bad, since no href
+__( '<a>translatable text</a>', 'my-slug' ) // Bad, since no href
+__( '<a href="%s">translatable text</a>', 'my-slug' ) // Good
+
+// Strings containing malformed XML, to make sure we're able to parse them. No warnings should be thrown.
+__( '<div>text to translate', 'my-slug' );
+__( 'text to <div>translate', 'my-slug' );
+__( 'text < to translate', 'my-slug' );
+__( 'text to > translate', 'my-slug' );
+__( '<div data-type=">foo">my address</div>', 'my-slug' );
+__( '<div>text to translate<div>', 'my-slug' );
+__( '<>text to translate</>', 'my-slug' );
+__( '<>text to translate<>', 'my-slug' );
+__( '<div><div>', 'my-slug' );
+__( '<<>>text to translate<<>', 'my-slug' );
+__( '<<>>123</<>', 'my-slug' );
+__( '<b><i>Foo</b></i>', 'my-slug' );
+__( '<b><i>Foo</b></i></b>', 'my-slug' );
+__( '<foo>Foo</bar>', 'my-slug' );
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true
