@@ -8,7 +8,9 @@
         <code title="Valid: using a DocBlock to describe a hook.">
             <![CDATA[
 /**
- * Description of hook.
+ * Summary of hook.
+ *
+ * This is a longer description of a hook.
  *
  * @since 1.0.0
  */
@@ -18,7 +20,7 @@ do_action( 'hook' );
         <code title="Invalid: not using a DocBlock comment">
             <![CDATA[
 /*
- * This is not a docblock.
+ * This is not a DocBlock.
  */
 do_action( 'hook' );
         ]]>
