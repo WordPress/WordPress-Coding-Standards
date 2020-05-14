@@ -1,11 +1,11 @@
-<documentation title="Hooks Inline Docblock Standard">
+<documentation title="Hooks Inline DocBlock Standard">
     <standard>
         <![CDATA[
-    All WordPress hook execution functions should be preceded by a docblock explaining the hook.
+    All WordPress hook execution functions should be preceded by a DocBlock explaining the hook.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: using a docblock to describe a hook.">
+        <code title="Valid: using a DocBlock to describe a hook.">
             <![CDATA[
 /**
  * Description of hook.
@@ -15,7 +15,7 @@
 do_action( 'hook' );
         ]]>
         </code>
-        <code title="Invalid: using a non-docblock comment">
+        <code title="Invalid: not using a DocBlock comment">
             <![CDATA[
 /*
  * This is not a docblock.
@@ -28,7 +28,7 @@ do_action( 'hook' );
         <code title="Valid: including a @since tag with a valid X.Y.Z version.">
             <![CDATA[
 /**
- * Description of hook.
+ * Summary of hook.
  *
  * <em>@since 1.0.0</em>
  */

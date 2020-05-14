@@ -50,7 +50,7 @@ apply_filters( 'hook', 'function' );
  */
 apply_filters( 'hook', 'function' );
 
-// Has a since tag with an wrong value.
+// Has a since tag with a wrong value.
 /**
  * This is a description.
  *
