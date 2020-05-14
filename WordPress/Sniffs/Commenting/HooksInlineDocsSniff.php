@@ -18,21 +18,6 @@ use PHP_CodeSniffer\Util\Tokens;
  * @package WPCS\WordPressCodingStandards
  */
 class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
-
-	/**
-	 * Array of WordPress hook execution functions.
-	 *
-	 * @var array WordPress hook execution function name => filter or action.
-	 */
-	protected $hook_functions = array(
-		'apply_filters'            => 'filter',
-		'apply_filters_ref_array'  => 'filter',
-		'apply_filters_deprecated' => 'filter',
-		'do_action'                => 'action',
-		'do_action_ref_array'      => 'action',
-		'do_action_deprecated'     => 'action',
-	);
-
 	/**
 	 * Array of allowed exceptional version numbers.
 	 *
@@ -66,7 +51,7 @@ class HooksInlineDocsSniff extends AbstractFunctionRestrictionsSniff {
 	public function getGroups() {
 		return array(
 			'hooks' => array(
-				'functions' => array_keys( $this->hook_functions ),
+				'functions' => array_keys( $this->hookInvokeFunctions ),
 			),
 		);
 	}
