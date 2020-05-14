@@ -1,5 +1,7 @@
 <?php
-// phpcs:set WordPress.Commenting.HooksInlineDocs allowed_extra_versions[] MU
+/**
+ * Test file for the hooks DocBlocks.
+ */
 
 /*
  * Set 1
@@ -72,20 +74,21 @@ apply_filters( 'hook', 'function' );
  */
 apply_filters( 'hook', 'function' );
 
-// Complete docblock with a "exceptional" version number declared in the XML.
-/**
- * This is a description.
- *
- * @since MU
- */
-apply_filters( 'hook', 'function' );
-
 // Complete docblock with a "normal" version number and extra text.
 /**
  * This is a description.
  *
  * @since 1.0.0
  * @since 1.2.0 Added something.
+ */
+apply_filters( 'hook', 'function' );
+
+// phpcs:set WordPress.Commenting.HooksInlineDocs allowed_extra_versions[] MU
+// Complete docblock with a "exceptional" version number declared in the XML or via phpcs:set.
+/**
+ * This is a description.
+ *
+ * @since MU
  */
 apply_filters( 'hook', 'function' );
 
@@ -97,6 +100,8 @@ apply_filters( 'hook', 'function' );
  */
 apply_filters( 'hook', 'function' );
 
+// phpcs:set WordPress.Commenting.HooksLineDocs allowed_extra_versions[]
+
 // "Already documented" example of an action.
 /** This action is documented in file.php */
 do_action( 'hook ' );
@@ -104,5 +109,3 @@ do_action( 'hook ' );
 // "Already documented" example of a filter.
 /** This filter is documented in file.php */
 apply_filters(' hook', 'function' );
-
-// phpcs:set WordPress.Commenting.HooksLineDocs allowed_extra_versions[]
