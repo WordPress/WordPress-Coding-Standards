@@ -61,7 +61,42 @@ apply_filters( 'hook', 'function' );
 apply_filters( 'hook', 'function' );
 
 /*
- * Set 4
+ * Set 6
+ *
+ * "Real World Cases"
+ */
+
+// This should fail since the hook does not have a DocBlock.
+/**
+ * This is my function DocBlock.
+ *
+ * @since 0000.00000.0000000000
+ */
+function my_function_has_a_hook() {
+	do_action( 'foo' );
+}
+
+// This should fail since the hook does not have a DocBlock.
+/**
+ * This is my function DocBlock.
+ *
+ * @since 0000.00000.0000000000
+ */
+function my_function_has_a_hook() {
+	echo 'foo';
+}
+do_action( 'foo' );
+
+// This should fail since the hook does not have a DocBlock.
+/**
+ * This is my function DocBlock.
+ *
+ * @since 0000.00000.0000000000
+ */
+function my_function_has_a_hook() { do_action( 'foo' ); }
+
+/*
+ * Set 5
  *
  * Valid comments. These should pass.
  */

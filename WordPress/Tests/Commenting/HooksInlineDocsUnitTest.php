@@ -26,17 +26,20 @@ class HooksInlineDocsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			10 => 2,
-			11 => 2,
 			12 => 2,
 			13 => 2,
 			14 => 2,
 			15 => 2,
-			24 => 1,
-			29 => 1,
-			41 => 1,
-			49 => 1,
-			57 => 1,
+			16 => 2,
+			17 => 2,
+			26 => 1,
+			31 => 1,
+			43 => 1,
+			51 => 1,
+			59 => 1,
+			76 => 1,
+			88 => 1,
+			96 => 1,
 		);
 	}
 
