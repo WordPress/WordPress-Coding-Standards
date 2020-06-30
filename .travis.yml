@@ -22,10 +22,10 @@ php:
     - "nightly"
 
 env:
-  # `master` is now 3.x.
+  # PHPCS `master`.
   - PHPCS_BRANCH="dev-master" LINT=1
   # Lowest supported release in the 3.x series with which WPCS is compatible.
-  - PHPCS_BRANCH="3.3.1"
+  - PHPCS_BRANCH="3.5.0"
 
 # Define the stages used.
 # For non-PRs, only the sniff, ruleset and quicktest stages are run.
@@ -101,7 +101,7 @@ jobs:
 
     - stage: rulesets
       php: 7.4
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.5.0"
       script:
         - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Core
         - $(pwd)/vendor/bin/phpcs -ps ./bin/class-ruleset-test.php --standard=WordPress-Docs
@@ -115,22 +115,22 @@ jobs:
       php: 7.4
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 7.3
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.5.0"
     - php: 5.4
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 5.4
-      env: PHPCS_BRANCH="3.3.1"
+      env: PHPCS_BRANCH="3.5.0"
 
     #### TEST STAGE ####
     # Add extra build to test against PHPCS 4.
     - stage: test
       php: 7.4
-      env: PHPCS_BRANCH="4.0.x-dev"
+      env: PHPCS_BRANCH="4.0.x-dev as 3.9.99"
 
   allow_failures:
     # Allow failures for unstable builds.
     - php: "nightly"
-    - env: PHPCS_BRANCH="4.0.x-dev"
+    - env: PHPCS_BRANCH="4.0.x-dev as 3.9.99"
 
 before_install:
     # Speed up build time by disabling Xdebug.
@@ -147,21 +147,23 @@ before_install:
 
     - export XMLLINT_INDENT="	"
     - export PHPUNIT_DIR=/tmp/phpunit
+
     - |
-      if [[ $TRAVIS_PHP_VERSION == "nightly" || $PHPCS_BRANCH == "4.0.x-dev" ]]; then
-          # Even though we're not doing a dev install, dev requirements are still checked.
-          # Neither the PHPCS Composer plugin nor PHPCompatibility allows yet for PHPCS 4.x.
-          # The Composer plugin also doesn't allow for installation on PHP 8.x/nightly.
-          composer remove --dev dealerdirect/phpcodesniffer-composer-installer phpcompatibility/php-compatibility --no-update --no-scripts
+      if [[ ${PHPCS_BRANCH:0:2} == "4." ]]; then
+        # Set Composer up to download only PHPCS from source for PHPCS 4.x.
+        # The source is needed to get the base testcase from PHPCS.
+        composer config preferred-install.squizlabs/php_codesniffer source
+      else
+        composer config preferred-install.squizlabs/php_codesniffer auto
       fi
-    - composer require squizlabs/php_codesniffer:${PHPCS_BRANCH} --update-no-dev --no-suggest --no-scripts
+    - composer require squizlabs/php_codesniffer:"${PHPCS_BRANCH}" --update-no-dev --no-suggest --no-scripts
     - |
       if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
           composer install --dev --no-suggest
           # The `dev` required DealerDirect Composer plugin takes care of the installed_paths.
       else
           # The above require already does the install.
-          $(pwd)/vendor/bin/phpcs --config-set installed_paths $(pwd)
+          composer install-codestandards
       fi
     # Download PHPUnit 7.x for builds on PHP >= 7.2 as the PHPCS
     # test suite is currently not compatible with PHPUnit 8.x.
