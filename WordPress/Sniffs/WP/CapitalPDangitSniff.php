@@ -113,9 +113,13 @@ class CapitalPDangitSniff extends Sniff {
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
 		 */
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& isset( $this->tokens[ $stackPtr ]['bracket_closer'] )
+		) {
 			return $this->tokens[ $stackPtr ]['bracket_closer'];
-		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
+		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] )
+		) {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
