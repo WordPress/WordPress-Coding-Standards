@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Tests\Utils;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the I18nTextDomainFixer sniff.
@@ -52,15 +53,18 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList( $testFile = '' ) {
 
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		switch ( $testFile ) {
 			case 'I18nTextDomainFixerUnitTest.css':
 				return array(
-					29  => 1,
-					92  => 1,
-					107 => 1,
-					120 => 1,
-					133 => 1,
-					149 => 1,
+					29  => ( true === $is_phpcs_4 ? 0 : 1 ),
+					92  => ( true === $is_phpcs_4 ? 0 : 1 ),
+					107 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					120 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					133 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					149 => ( true === $is_phpcs_4 ? 0 : 1 ),
 				);
 
 			case 'I18nTextDomainFixerUnitTest.3.inc':
