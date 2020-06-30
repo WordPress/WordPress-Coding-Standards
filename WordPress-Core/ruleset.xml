@@ -7,6 +7,15 @@
 	<arg name="tab-width" value="4"/>
 
 	<!--
+		 Trigger error if PHPCSUtils cannot be found.
+		 PHPCSUtils does not contain any sniffs, so this rule isn't strictly necessary, but
+		 by having this here anyway, if PHPCSUtils is missing, the user will get a
+		 descriptive error message during the loading of the ruleset instead of
+		 a fatal "class not found" error once the sniffs start running.
+	-->
+	<rule ref="PHPCSUtils"/>
+
+	<!--
 	#############################################################################
 	Handbook: PHP - Single and Double Quotes.
 	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#single-and-double-quotes
