@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 
 /**
  * Enforces Yoda conditional statements.
@@ -106,7 +107,7 @@ class YodaConditionsSniff extends Sniff {
 			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
 		}
 
-		if ( \in_array( $this->tokens[ $next_non_empty ]['code'], array( \T_SELF, \T_PARENT, \T_STATIC ), true ) ) {
+		if ( isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $next_non_empty ]['code'] ] ) === true ) {
 			$next_non_empty = $this->phpcsFile->findNext(
 				( Tokens::$emptyTokens + array( \T_DOUBLE_COLON => \T_DOUBLE_COLON ) ),
 				( $next_non_empty + 1 ),
