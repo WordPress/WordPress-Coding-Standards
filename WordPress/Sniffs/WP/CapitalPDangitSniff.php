@@ -12,16 +12,18 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\ObjectDeclarations;
+use PHPCSUtils\Utils\Namespaces;
 
 /**
  * Capital P Dangit!
  *
- * Verify the correct spelling of `WordPress` in text strings, comments and class names.
+ * Verify the correct spelling of `WordPress` in text strings, comments and OO and namespace names.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   3.0.0  Now also checks namespace names.
  */
 class CapitalPDangitSniff extends Sniff {
 
@@ -83,7 +85,9 @@ class CapitalPDangitSniff extends Sniff {
 		// Union the arrays - keeps the array keys.
 		$this->text_and_comment_tokens = ( Tokens::$textStringTokens + $this->comment_text_tokens );
 
-		$targets = ( $this->text_and_comment_tokens + Tokens::$ooScopeTokens );
+		$targets   = $this->text_and_comment_tokens;
+		$targets  += Tokens::$ooScopeTokens;
+		$targets[] = \T_NAMESPACE;
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
 		$targets[ \T_ARRAY ]            = \T_ARRAY;
@@ -113,6 +117,36 @@ class CapitalPDangitSniff extends Sniff {
 			return $this->tokens[ $stackPtr ]['bracket_closer'];
 		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
+		}
+
+		/*
+		 * Deal with misspellings in namespace names.
+		 * These are not auto-fixable, but need the attention of a developer.
+		 */
+		if ( \T_NAMESPACE === $this->tokens[ $stackPtr ]['code'] ) {
+			$ns_name = Namespaces::getDeclaredName( $this->phpcsFile, $stackPtr );
+			if ( empty( $ns_name ) ) {
+				// Namespace operator or declaration without name.
+				return;
+			}
+
+			$levels = explode( '\\', $ns_name );
+			foreach ( $levels as $level ) {
+				if ( preg_match_all( self::WP_CLASSNAME_REGEX, $level, $matches, \PREG_PATTERN_ORDER ) > 0 ) {
+					$mispelled = $this->retrieve_misspellings( $matches[1] );
+
+					if ( ! empty( $mispelled ) ) {
+						$this->phpcsFile->addWarning(
+							'Please spell "WordPress" correctly. Found: "%s" as part of the namespace name.',
+							$stackPtr,
+							'MisspelledNamespaceName',
+							array( implode( ', ', $mispelled ) )
+						);
+					}
+				}
+			}
+
+			return;
 		}
 
 		/*
