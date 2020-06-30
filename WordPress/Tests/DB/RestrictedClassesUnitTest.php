@@ -19,6 +19,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   3.0.0  Renamed the fixtures to create compatibility with PHPCS 4.x/PHPUnit >=8.
  */
 class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
@@ -28,8 +29,10 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 *
 	 * Note: as that class extends the abstract FunctionRestrictions class, that's
 	 * where we are passing the parameters to.
+	 *
+	 * @before
 	 */
-	protected function setUp() {
+	protected function enhanceGroups() {
 		parent::setUp();
 
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
@@ -46,8 +49,10 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Reset the $groups property.
+	 *
+	 * @after
 	 */
-	protected function tearDown() {
+	protected function resetGroups() {
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array();
 		parent::tearDown();
 	}
