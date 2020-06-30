@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\ObjectDeclarations;
 
 /**
  * Capital P Dangit!
@@ -52,19 +53,6 @@ class CapitalPDangitSniff extends Sniff {
 	const WP_CLASSNAME_REGEX = '`(?:^|_)(Word[_]*Pres+)(?:_|$)`i';
 
 	/**
-	 * String tokens we want to listen for.
-	 *
-	 * @var array
-	 */
-	private $text_string_tokens = array(
-		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
-		\T_DOUBLE_QUOTED_STRING     => \T_DOUBLE_QUOTED_STRING,
-		\T_HEREDOC                  => \T_HEREDOC,
-		\T_NOWDOC                   => \T_NOWDOC,
-		\T_INLINE_HTML              => \T_INLINE_HTML,
-	);
-
-	/**
 	 * Comment tokens we want to listen for as they contain text strings.
 	 *
 	 * @var array
@@ -93,7 +81,7 @@ class CapitalPDangitSniff extends Sniff {
 	 */
 	public function register() {
 		// Union the arrays - keeps the array keys.
-		$this->text_and_comment_tokens = ( $this->text_string_tokens + $this->comment_text_tokens );
+		$this->text_and_comment_tokens = ( Tokens::$textStringTokens + $this->comment_text_tokens );
 
 		$targets = ( $this->text_and_comment_tokens + Tokens::$ooScopeTokens );
 
@@ -132,7 +120,7 @@ class CapitalPDangitSniff extends Sniff {
 		 * These are not auto-fixable, but need the attention of a developer.
 		 */
 		if ( isset( Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
-			$classname = $this->phpcsFile->getDeclarationName( $stackPtr );
+			$classname = ObjectDeclarations::getName( $this->phpcsFile, $stackPtr );
 			if ( empty( $classname ) ) {
 				return;
 			}
