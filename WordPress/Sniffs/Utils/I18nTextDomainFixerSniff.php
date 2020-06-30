@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Utils;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -334,14 +335,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->tab_width ) === false ) {
-			if ( isset( $this->phpcsFile->config->tabWidth ) === false
-				|| 0 === $this->phpcsFile->config->tabWidth
-			) {
-				// We have no idea how wide tabs are, so assume 4 spaces for fixing.
-				$this->tab_width = 4;
-			} else {
-				$this->tab_width = $this->phpcsFile->config->tabWidth;
-			}
+			$this->tab_width = Helper::getTabWidth( $this->phpcsFile );
 		}
 
 		if ( \T_DOC_COMMENT_OPEN_TAG === $this->tokens[ $stackPtr ]['code']
