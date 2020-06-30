@@ -72,7 +72,7 @@ class Ruleset_Test {
 		$d = new self();
 		$e = apply_filter( 'filter_name', $d, $c );
 
-		if ( $a == $b ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		if ( $a == $b ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$f = isset( $_GET['nonce'] ) ? 1 : 2; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 
