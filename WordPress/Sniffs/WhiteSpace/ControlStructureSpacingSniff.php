@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use WordPressCS\WordPress\Sniff;
+use PHPCSUtils\Tokens\Collections;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces spacing around logical operators and assignments, based upon Squiz code.
@@ -287,13 +288,11 @@ final class ControlStructureSpacingSniff extends Sniff {
 
 			// We ignore spacing for some structures that tend to have their own rules.
 			$ignore  = array(
-				\T_FUNCTION             => true,
-				\T_CLOSURE              => true,
 				\T_DOC_COMMENT_OPEN_TAG => true,
 				\T_CLOSE_TAG            => true,
 				\T_COMMENT              => true,
 			);
-			$ignore += Tokens::$ooScopeTokens;
+			$ignore += Collections::closedScopes();
 
 			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
 				&& $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
@@ -453,7 +452,7 @@ final class ControlStructureSpacingSniff extends Sniff {
 		) {
 			// Another control structure's closing brace.
 			$owner = $this->tokens[ $trailingContent ]['scope_condition'];
-			if ( \in_array( $this->tokens[ $owner ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT, \T_ENUM ), true ) ) {
+			if ( isset( Collections::closedScopes()[ $this->tokens[ $owner ]['code'] ] ) === true ) {
 				// The next content is the closing brace of a function, class, interface or trait
 				// so normal function/class rules apply and we can ignore it.
 				return;
