@@ -184,13 +184,16 @@ class CapitalPDangitSniff extends Sniff {
 			|| \T_DOC_COMMENT === $this->tokens[ $stackPtr ]['code']
 		) {
 
-			$comment_start = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, ( $stackPtr - 1 ) );
-			if ( false !== $comment_start ) {
-				$comment_tag = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_TAG, ( $stackPtr - 1 ), $comment_start );
-				if ( false !== $comment_tag && '@link' === $this->tokens[ $comment_tag ]['content'] ) {
-					// @link tag, so ignore.
-					return;
-				}
+			$comment_tag = $this->phpcsFile->findPrevious(
+				array( \T_DOC_COMMENT_TAG, \T_DOC_COMMENT_OPEN_TAG ),
+				( $stackPtr - 1 )
+			);
+			if ( false !== $comment_tag
+				&& \T_DOC_COMMENT_TAG === $this->tokens[ $comment_tag ]['code']
+				&& '@link' === $this->tokens[ $comment_tag ]['content']
+			) {
+				// @link tag, so ignore.
+				return;
 			}
 		}
 
