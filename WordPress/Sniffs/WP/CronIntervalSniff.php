@@ -11,6 +11,9 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 
@@ -72,10 +75,7 @@ class CronIntervalSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			\T_CONSTANT_ENCAPSED_STRING,
-			\T_DOUBLE_QUOTED_STRING,
-		);
+		return Tokens::$stringTokens;
 	}
 
 	/**
@@ -92,7 +92,7 @@ class CronIntervalSniff extends Sniff {
 			return;
 		}
 
-		// If within add_filter.
+		// Check if the text was found within a function call to add_filter().
 		$functionPtr = $this->is_in_function_call( $stackPtr, $this->valid_functions );
 		if ( false === $functionPtr ) {
 			return;
@@ -114,7 +114,9 @@ class CronIntervalSniff extends Sniff {
 		// If callback is array, get second element.
 		if ( false !== $callbackArrayPtr
 			&& ( \T_ARRAY === $this->tokens[ $callbackArrayPtr ]['code']
-				|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $callbackArrayPtr ]['code'] )
+				|| ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $callbackArrayPtr ]['code'] ] )
+					&& Arrays::isShortArray( $this->phpcsFile, $callbackArrayPtr ) === true )
+				)
 		) {
 			$callback = PassedParameters::getParameter( $this->phpcsFile, $callbackArrayPtr, 2 );
 
@@ -127,7 +129,9 @@ class CronIntervalSniff extends Sniff {
 		unset( $functionPtr );
 
 		// Search for the function in tokens.
-		$callbackFunctionPtr = $this->phpcsFile->findNext( array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING, \T_CLOSURE ), $callback['start'], ( $callback['end'] + 1 ) );
+		$search               = Tokens::$stringTokens;
+		$search[ \T_CLOSURE ] = \T_CLOSURE;
+		$callbackFunctionPtr  = $this->phpcsFile->findNext( $search, $callback['start'], ( $callback['end'] + 1 ) );
 
 		if ( false === $callbackFunctionPtr ) {
 			$this->confused( $stackPtr );
@@ -141,7 +145,7 @@ class CronIntervalSniff extends Sniff {
 
 			for ( $ptr = 0; $ptr < $this->phpcsFile->numTokens; $ptr++ ) {
 				if ( \T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
-					$foundName = $this->phpcsFile->getDeclarationName( $ptr );
+					$foundName = FunctionDeclarations::getName( $this->phpcsFile, $ptr );
 					if ( $foundName === $functionName ) {
 						$functionPtr = $ptr;
 						break;
@@ -166,7 +170,7 @@ class CronIntervalSniff extends Sniff {
 		$closing = $this->tokens[ $functionPtr ]['scope_closer'];
 		for ( $i = $opening; $i <= $closing; $i++ ) {
 
-			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === true ) {
 				if ( 'interval' === TextStrings::stripQuotes( $this->tokens[ $i ]['content'] ) ) {
 					$operator = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $i, null, false, null, true );
 					if ( false === $operator ) {
