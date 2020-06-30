@@ -60,24 +60,6 @@ class EscapeOutputSniff extends Sniff {
 	);
 
 	/**
-	 * List of names of the tokens representing PHP magic constants.
-	 *
-	 * @since 0.10.0
-	 *
-	 * @var array
-	 */
-	private $magic_constant_tokens = array(
-		'T_CLASS_C'  => true, // __CLASS__
-		'T_DIR'      => true, // __DIR__
-		'T_FILE'     => true, // __FILE__
-		'T_FUNC_C'   => true, // __FUNCTION__
-		'T_LINE'     => true, // __LINE__
-		'T_METHOD_C' => true, // __METHOD__
-		'T_NS_C'     => true, // __NAMESPACE__
-		'T_TRAIT_C'  => true, // __TRAIT__
-	);
-
-	/**
 	 * List of names of the native PHP constants which can be considered safe.
 	 *
 	 * @since 1.0.0
@@ -296,7 +278,7 @@ class EscapeOutputSniff extends Sniff {
 			}
 
 			// Handle magic constants for debug functions.
-			if ( isset( $this->magic_constant_tokens[ $this->tokens[ $i ]['type'] ] ) ) {
+			if ( isset( Tokens::$magicConstants[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
