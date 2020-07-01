@@ -9,11 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use PHP_CodeSniffer\Standards\PEAR\Sniffs\NamingConventions\ValidFunctionNameSniff as PHPCS_PEAR_ValidFunctionNameSniff;
-use PHP_CodeSniffer\Files\File;
 use WordPressCS\WordPress\Sniff;
+use PHPCSUtils\BackCompat\BCTokens;
 use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\ObjectDeclarations;
+use PHPCSUtils\Utils\Scopes;
 
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
@@ -27,27 +27,57 @@ use PHPCSUtils\Utils\ObjectDeclarations;
  * @since   2.0.0  The `get_name_suggestion()` method has been moved to the
  *                 WordPress native `Sniff` base class as `get_snake_case_name_suggestion()`.
  * @since   2.2.0  Will now ignore functions and methods which are marked as @deprecated.
- *
- * Last synced with parent class December 2018 up to commit ee167761d7756273b8ad0ad68bf3db1f2c211bb8.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php
- *
- * {@internal While this class extends the PEAR parent, it does not actually use the checks
- * contained in the parent. It only uses the properties and the token registration from the parent.}}
+ * @since   3.0.0  This sniff has been refactored and no longer extends the upstream
+ *                 PEAR.NamingConventions.ValidFunctionName sniff.
  */
-class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
+class ValidFunctionNameSniff extends Sniff {
 
 	/**
-	 * Processes the tokens outside the scope.
+	 * Returns an array of tokens this test wants to listen for.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
-	 * @param int                         $stackPtr  The position where this token was
-	 *                                               found.
+	 * @since 3.0.0
+	 *
+	 * @return array
+	 */
+	public function register() {
+		return array( \T_FUNCTION );
+	}
+
+	/**
+	 * Processes this test, when one of its tokens is encountered.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process_token( $stackPtr ) {
+
+		$ooPtr = Scopes::validDirectScope( $this->phpcsFile, $stackPtr, BCTokens::ooScopeTokens() );
+		if ( false === $ooPtr ) {
+			$this->process_function_declaration( $stackPtr );
+		} else {
+			$this->process_method_declaration( $stackPtr, $ooPtr );
+		}
+	}
+
+	/**
+	 * Processes a function declaration for a function in the global namespace.
+	 *
+	 * @since 0.1.0
+	 * @since 3.0.0 Renamed from `processTokenOutsideScope()` to `process_function_declaration()`.
+	 *              Method signature has been changed as well as this method no longer overloads
+	 *              a method from the PEAR sniff which was previously the sniff parent.
+	 *
+	 * @param int $stackPtr The position where this token was found.
 	 *
 	 * @return void
 	 */
-	protected function processTokenOutsideScope( File $phpcsFile, $stackPtr ) {
+	protected function process_function_declaration( $stackPtr ) {
 
-		if ( Sniff::is_function_deprecated( $phpcsFile, $stackPtr ) === true ) {
+		if ( Sniff::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
 			/*
 			 * Deprecated functions don't have to comply with the naming conventions,
 			 * otherwise functions deprecated in favour of a function with a compliant
@@ -56,7 +86,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$functionName = FunctionDeclarations::getName( $phpcsFile, $stackPtr );
+		$functionName = FunctionDeclarations::getName( $this->phpcsFile, $stackPtr );
 
 		if ( ! isset( $functionName ) ) {
 			// Ignore closures.
@@ -77,42 +107,35 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		if ( 0 === strpos( $functionName, '__' ) ) {
 			$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
 			$errorData = array( $functionName );
-			$phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
+			$this->phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
 		}
 
 		if ( strtolower( $functionName ) !== $functionName ) {
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
-				Sniff::get_snake_case_name_suggestion( $functionName ),
+				$this->get_snake_case_name_suggestion( $functionName ),
 			);
-			$phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
+			$this->phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
 	}
 
 	/**
-	 * Processes the tokens within the scope.
+	 * Processes a method declaration.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being processed.
-	 * @param int                         $stackPtr  The position where this token was
-	 *                                               found.
-	 * @param int                         $currScope The position of the current scope.
+	 * @since 0.1.0
+	 * @since 3.0.0 Renamed from `processTokenWithinScope()` to `process_method_declaration()`.
+	 *              Method signature has been changed as well as this method no longer overloads
+	 *              a method from the PEAR sniff which was previously the sniff parent.
+	 *
+	 * @param int $stackPtr  The position where this token was found.
+	 * @param int $currScope The position of the current scope.
 	 *
 	 * @return void
 	 */
-	protected function processTokenWithinScope( File $phpcsFile, $stackPtr, $currScope ) {
+	protected function process_method_declaration( $stackPtr, $currScope ) {
 
-		$tokens = $phpcsFile->getTokens();
-
-		// Determine if this is a function which needs to be examined.
-		$conditions = $tokens[ $stackPtr ]['conditions'];
-		end( $conditions );
-		$deepestScope = key( $conditions );
-		if ( $deepestScope !== $currScope ) {
-			return;
-		}
-
-		if ( Sniff::is_function_deprecated( $phpcsFile, $stackPtr ) === true ) {
+		if ( Sniff::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
 			/*
 			 * Deprecated functions don't have to comply with the naming conventions,
 			 * otherwise functions deprecated in favour of a function with a compliant
@@ -121,14 +144,14 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$methodName = FunctionDeclarations::getName( $phpcsFile, $stackPtr );
+		$methodName = FunctionDeclarations::getName( $this->phpcsFile, $stackPtr );
 
 		if ( ! isset( $methodName ) ) {
 			// Ignore closures.
 			return;
 		}
 
-		$className = ObjectDeclarations::getName( $phpcsFile, $currScope );
+		$className = ObjectDeclarations::getName( $this->phpcsFile, $currScope );
 		if ( isset( $className ) === false ) {
 			$className = '[Anonymous Class]';
 		}
@@ -156,8 +179,8 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$extended   = ObjectDeclarations::findExtendedClassName( $phpcsFile, $currScope );
-		$interfaces = ObjectDeclarations::findImplementedInterfaceNames( $phpcsFile, $currScope );
+		$extended   = ObjectDeclarations::findExtendedClassName( $this->phpcsFile, $currScope );
+		$interfaces = ObjectDeclarations::findImplementedInterfaceNames( $this->phpcsFile, $currScope );
 
 		// If this is a child class or interface implementation, it may have to use camelCase or double underscores.
 		if ( ! empty( $extended ) || ! empty( $interfaces ) ) {
@@ -168,7 +191,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 		if ( 0 === strpos( $methodName, '__' ) ) {
 			$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
 			$errorData = array( $className . '::' . $methodName );
-			$phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
+			$this->phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
 		}
 
 		// Check for all lowercase.
@@ -177,9 +200,9 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			$errorData = array(
 				$methodName,
 				$className,
-				Sniff::get_snake_case_name_suggestion( $methodName ),
+				$this->get_snake_case_name_suggestion( $methodName ),
 			);
-			$phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
+			$this->phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 	}
 
