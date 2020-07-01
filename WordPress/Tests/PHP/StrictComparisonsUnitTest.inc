@@ -15,7 +15,7 @@ if ( true != $true ) { // Bad.
 	echo 'False';
 }
 
-// Bad - whitelisted via old-style whitelist comment.
+// Bad - ignored via old-style ignore comment.
 if ( true == $true ) { // Loose comparison, OK.
 	echo 'True';
 }

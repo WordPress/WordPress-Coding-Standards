@@ -162,7 +162,7 @@ $installed = self::check_plugin_is_installed( 'wordpress-importer' ); // OK.
 
 
 /*
- * Bad - whitelisted via old-style whitelist comment.
+ * Bad - ignored via old-style ignore comment.
  */
 echo 'This is an explanation about WordPress.'; // WPCS: spelling ok.
 

@@ -207,7 +207,7 @@ if ( ! defined( 'PHP_VERSION_ID' ) ) {
 }
 
 /*
- * Bad - whitelisted via old-style whitelist comment.
+ * Bad - ignored via old-style ignore comment.
  */
 $something = 'abc'; // WPCS: prefix ok.
 

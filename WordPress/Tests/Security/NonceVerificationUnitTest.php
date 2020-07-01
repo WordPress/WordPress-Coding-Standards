@@ -36,7 +36,7 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			44  => 1,
 			48  => 1,
 			69  => 1,
-			88  => 1, // Old-style WPCS whitelist comments are no longer supported.
+			88  => 1, // Old-style WPCS ignore comments are no longer supported.
 			89  => 1,
 			113 => 1,
 			114 => 1,

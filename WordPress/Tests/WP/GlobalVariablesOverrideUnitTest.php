@@ -37,7 +37,7 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					3   => 1,
 					6   => 1,
 					8   => 1,
-					11  => 1, // Old-style WPCS whitelist comments are no longer supported.
+					11  => 1, // Old-style WPCS ignore comments are no longer supported.
 					16  => 1,
 					17  => 1,
 					18  => 1,

@@ -35,7 +35,7 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			20  => 1,
 			33  => 3,
 			65  => 1,
-			76  => 2, // Old-style WPCS whitelist comments are no longer supported.
+			76  => 2, // Old-style WPCS ignore comments are no longer supported.
 			79  => 1,
 			80  => 1,
 			81  => 1,

@@ -121,7 +121,7 @@ wp_die( -1 ); // Ok.
 <input type="hidden" name="sync-action" class="sync-action" value="<?php echo esc_attr( $continue_sync ? 'sync_progress' : '' ); ?>" /><!-- OK. -->
 <?php
 
-// Bad - whitelisted via old-style whitelist comment.
+// Bad - ignored via old-style ignore comment.
 echo $html_fragment; // Bad.
 echo $html_fragment; // xss OK.
 echo $html_fragment; // WPCS: XSS whitelist.

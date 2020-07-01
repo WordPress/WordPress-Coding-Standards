@@ -52,9 +52,9 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			113 => 1,
 			114 => 1,
 			125 => 1,
-			126 => 1, // Old-style WPCS whitelist comments are no longer supported.
-			127 => 1, // Old-style WPCS whitelist comments are no longer supported.
-			128 => 1, // Old-style WPCS whitelist comments are no longer supported.
+			126 => 1, // Old-style WPCS ignore comments are no longer supported.
+			127 => 1, // Old-style WPCS ignore comments are no longer supported.
+			128 => 1, // Old-style WPCS ignore comments are no longer supported.
 			131 => 1,
 			135 => 1,
 			138 => 1,
@@ -76,9 +76,9 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			223 => 1,
 			225 => 1,
 			226 => 1,
-			241 => 1, // Old-style WPCS whitelist comments are no longer supported.
-			245 => 1, // Old-style WPCS whitelist comments are no longer supported.
-			249 => 1, // Old-style WPCS whitelist comments are no longer supported.
+			241 => 1, // Old-style WPCS ignore comments are no longer supported.
+			245 => 1, // Old-style WPCS ignore comments are no longer supported.
+			249 => 1, // Old-style WPCS ignore comments are no longer supported.
 			252 => 1,
 			253 => 1,
 			263 => 1,
