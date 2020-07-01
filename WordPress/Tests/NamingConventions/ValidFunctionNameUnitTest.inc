@@ -192,6 +192,13 @@ class OnlyUnderscores {
 	public function _____() {}
 }
 
+// Class vs function name PHP case-sensitivity quirks.
+class FooBÃÈ {
+	function FooBÃÈ() {} // OK, same case.
+	function fOOBÃÈ() {} // OK, same case for the non-ascii chars.
+	function FooBãè() {} // Bad - not PHP 4-type constructor, non ascii chars not in same case - POC: https://3v4l.org/YOc2R.
+}
+
 // Live coding/parse error.
 // This has to be the last test in the file.
 function

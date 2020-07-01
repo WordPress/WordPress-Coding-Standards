@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use PHPCSUtils\BackCompat\BCTokens;
 use PHPCSUtils\Utils\FunctionDeclarations;
+use PHPCSUtils\Utils\NamingConventions;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\DeprecationHelper;
@@ -142,19 +143,16 @@ class ValidFunctionNameSniff extends Sniff {
 			$className = '[Anonymous Class]';
 		} else {
 			$className = ObjectDeclarations::getName( $this->phpcsFile, $currScope );
-		}
 
-		$methodNameLc = strtolower( $methodName );
-		$classNameLc  = strtolower( $className );
+			// PHP4 constructors are allowed to break our rules.
+			if ( NamingConventions::isEqual( $methodName, $className ) === true ) {
+				return;
+			}
 
-		// PHP4 constructors are allowed to break our rules.
-		if ( $methodNameLc === $classNameLc ) {
-			return;
-		}
-
-		// PHP4 destructors are allowed to break our rules.
-		if ( '_' . $classNameLc === $methodNameLc ) {
-			return;
+			// PHP4 destructors are allowed to break our rules.
+			if ( NamingConventions::isEqual( $methodName, '_' . $className ) === true ) {
+				return;
+			}
 		}
 
 		// PHP magic methods are exempt from our rules.
@@ -178,7 +176,7 @@ class ValidFunctionNameSniff extends Sniff {
 		}
 
 		// Check for all lowercase.
-		if ( $methodNameLc !== $methodName ) {
+		if ( strtolower( $methodName ) !== $methodName ) {
 			$error     = 'Method name "%s" in class %s is not in snake case format, try "%s"';
 			$errorData = array(
 				$methodName,
@@ -188,5 +186,4 @@ class ValidFunctionNameSniff extends Sniff {
 			$this->phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
 	}
-
 }
