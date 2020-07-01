@@ -136,9 +136,10 @@ class ValidFunctionNameSniff extends Sniff {
 	 */
 	protected function process_method_declaration( $stackPtr, $methodName, $currScope ) {
 
-		$className = ObjectDeclarations::getName( $this->phpcsFile, $currScope );
-		if ( isset( $className ) === false ) {
+		if ( \T_ANON_CLASS === $this->tokens[ $currScope ]['code'] ) {
 			$className = '[Anonymous Class]';
+		} else {
+			$className = ObjectDeclarations::getName( $this->phpcsFile, $currScope );
 		}
 
 		$methodNameLc = strtolower( $methodName );
