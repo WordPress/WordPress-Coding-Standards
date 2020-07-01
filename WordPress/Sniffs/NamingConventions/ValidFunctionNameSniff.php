@@ -12,6 +12,8 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Standards\PEAR\Sniffs\NamingConventions\ValidFunctionNameSniff as PHPCS_PEAR_ValidFunctionNameSniff;
 use PHP_CodeSniffer\Files\File;
 use WordPressCS\WordPress\Sniff;
+use PHPCSUtils\Utils\FunctionDeclarations;
+use PHPCSUtils\Utils\ObjectDeclarations;
 
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
@@ -54,7 +56,7 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$functionName = $phpcsFile->getDeclarationName( $stackPtr );
+		$functionName = FunctionDeclarations::getName( $phpcsFile, $stackPtr );
 
 		if ( ! isset( $functionName ) ) {
 			// Ignore closures.
@@ -122,14 +124,14 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$methodName = $phpcsFile->getDeclarationName( $stackPtr );
+		$methodName = FunctionDeclarations::getName( $phpcsFile, $stackPtr );
 
 		if ( ! isset( $methodName ) ) {
 			// Ignore closures.
 			return;
 		}
 
-		$className = $phpcsFile->getDeclarationName( $currScope );
+		$className = ObjectDeclarations::getName( $phpcsFile, $currScope );
 		if ( isset( $className ) === false ) {
 			$className = '[Anonymous Class]';
 		}
@@ -152,8 +154,8 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$extended   = $phpcsFile->findExtendedClassName( $currScope );
-		$interfaces = $phpcsFile->findImplementedInterfaceNames( $currScope );
+		$extended   = ObjectDeclarations::findExtendedClassName( $phpcsFile, $currScope );
+		$interfaces = ObjectDeclarations::findImplementedInterfaceNames( $phpcsFile, $currScope );
 
 		// If this is a child class or interface implementation, it may have to use camelCase or double underscores.
 		if ( ! empty( $extended ) || ! empty( $interfaces ) ) {
