@@ -36,7 +36,7 @@
     + [Using PHPCS and WPCS from within your IDE](#using-phpcs-and-wpcs-from-within-your-ide)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
     + [Travis CI](#travis-ci)
-* [Fixing errors or whitelisting them](#fixing-errors-or-whitelisting-them)
+* [Fixing errors or ignoring them](#fixing-errors-or-ignoring-them)
     + [Tools shipped with WPCS](#tools-shipped-with-wpcs)
 * [Contributing](#contributing)
 * [License](#license)
@@ -267,7 +267,7 @@ script:
 More examples and advice about integrating PHPCS in your Travis build tests can be found here: https://github.com/jrfnl/make-phpcs-work-for-you/tree/master/travis-examples
 
 
-## Fixing errors or whitelisting them
+## Fixing errors or ignoring them
 
 You can find information on how to deal with some of the more frequent issues in the [wiki](https://github.com/WordPress/WordPress-Coding-Standards/wiki).
 
