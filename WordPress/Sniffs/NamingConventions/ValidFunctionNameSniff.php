@@ -68,22 +68,19 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		$functionNameLc = strtolower( $functionName );
+		// PHP magic functions are exempt from our rules.
+		if ( FunctionDeclarations::isMagicFunctionName( $functionName ) === true ) {
+			return;
+		}
 
-		// Is this a magic function ? I.e., it is prefixed with "__" ?
-		// Outside class scope this basically just means __autoload().
+		// Is the function name prefixed with "__" ?
 		if ( 0 === strpos( $functionName, '__' ) ) {
-			$magicPart = substr( $functionNameLc, 2 );
-			if ( isset( $this->magicFunctions[ $magicPart ] ) ) {
-				return;
-			}
-
 			$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
 			$errorData = array( $functionName );
 			$phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
 		}
 
-		if ( $functionNameLc !== $functionName ) {
+		if ( strtolower( $functionName ) !== $functionName ) {
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
