@@ -145,3 +145,8 @@ class Deprecated {
 	 */
 	public static function __deprecatedMethod() {}
 }
+
+class PHP74Magic {
+	function __serialize() {} // OK.
+	function __unserialize() {} // OK.
+}

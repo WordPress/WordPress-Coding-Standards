@@ -151,6 +151,11 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
+		// PHP magic methods are exempt from our rules.
+		if ( FunctionDeclarations::isMagicMethodName( $methodName ) === true ) {
+			return;
+		}
+
 		$extended   = ObjectDeclarations::findExtendedClassName( $phpcsFile, $currScope );
 		$interfaces = ObjectDeclarations::findImplementedInterfaceNames( $phpcsFile, $currScope );
 
@@ -159,13 +164,8 @@ class ValidFunctionNameSniff extends PHPCS_PEAR_ValidFunctionNameSniff {
 			return;
 		}
 
-		// Is this a magic method ? I.e. is it prefixed with "__" ?
+		// Is the method name prefixed with "__" ?
 		if ( 0 === strpos( $methodName, '__' ) ) {
-			$magicPart = substr( $methodNameLc, 2 );
-			if ( isset( $this->magicMethods[ $magicPart ] ) ) {
-				return;
-			}
-
 			$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
 			$errorData = array( $className . '::' . $methodName );
 			$phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
