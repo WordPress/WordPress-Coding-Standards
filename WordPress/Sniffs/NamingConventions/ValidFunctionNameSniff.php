@@ -55,11 +55,31 @@ class ValidFunctionNameSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
+		if ( Sniff::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
+			/*
+			 * Deprecated functions don't have to comply with the naming conventions,
+			 * otherwise functions deprecated in favour of a function with a compliant
+			 * name would still trigger an error.
+			 */
+			return;
+		}
+
+		$name = FunctionDeclarations::getName( $this->phpcsFile, $stackPtr );
+		if ( empty( $name ) === true ) {
+			// Live coding or parse error.
+			return;
+		}
+
+		if ( '' === ltrim( $name, '_' ) ) {
+			// Ignore special functions, like __().
+			return;
+		}
+
 		$ooPtr = Scopes::validDirectScope( $this->phpcsFile, $stackPtr, BCTokens::ooScopeTokens() );
 		if ( false === $ooPtr ) {
-			$this->process_function_declaration( $stackPtr );
+			$this->process_function_declaration( $stackPtr, $name );
 		} else {
-			$this->process_method_declaration( $stackPtr, $ooPtr );
+			$this->process_method_declaration( $stackPtr, $name, $ooPtr );
 		}
 	}
 
@@ -71,32 +91,12 @@ class ValidFunctionNameSniff extends Sniff {
 	 *              Method signature has been changed as well as this method no longer overloads
 	 *              a method from the PEAR sniff which was previously the sniff parent.
 	 *
-	 * @param int $stackPtr The position where this token was found.
+	 * @param int    $stackPtr     The position where this token was found.
+	 * @param string $functionName The name of the function.
 	 *
 	 * @return void
 	 */
-	protected function process_function_declaration( $stackPtr ) {
-
-		if ( Sniff::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
-			/*
-			 * Deprecated functions don't have to comply with the naming conventions,
-			 * otherwise functions deprecated in favour of a function with a compliant
-			 * name would still trigger an error.
-			 */
-			return;
-		}
-
-		$functionName = FunctionDeclarations::getName( $this->phpcsFile, $stackPtr );
-
-		if ( ! isset( $functionName ) ) {
-			// Ignore closures.
-			return;
-		}
-
-		if ( '' === ltrim( $functionName, '_' ) ) {
-			// Ignore special functions, like __().
-			return;
-		}
+	protected function process_function_declaration( $stackPtr, $functionName ) {
 
 		// PHP magic functions are exempt from our rules.
 		if ( FunctionDeclarations::isMagicFunctionName( $functionName ) === true ) {
@@ -128,28 +128,13 @@ class ValidFunctionNameSniff extends Sniff {
 	 *              Method signature has been changed as well as this method no longer overloads
 	 *              a method from the PEAR sniff which was previously the sniff parent.
 	 *
-	 * @param int $stackPtr  The position where this token was found.
-	 * @param int $currScope The position of the current scope.
+	 * @param int    $stackPtr   The position where this token was found.
+	 * @param string $methodName The name of the method.
+	 * @param int    $currScope  The position of the current scope.
 	 *
 	 * @return void
 	 */
-	protected function process_method_declaration( $stackPtr, $currScope ) {
-
-		if ( Sniff::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
-			/*
-			 * Deprecated functions don't have to comply with the naming conventions,
-			 * otherwise functions deprecated in favour of a function with a compliant
-			 * name would still trigger an error.
-			 */
-			return;
-		}
-
-		$methodName = FunctionDeclarations::getName( $this->phpcsFile, $stackPtr );
-
-		if ( ! isset( $methodName ) ) {
-			// Ignore closures.
-			return;
-		}
+	protected function process_method_declaration( $stackPtr, $methodName, $currScope ) {
 
 		$className = ObjectDeclarations::getName( $this->phpcsFile, $currScope );
 		if ( isset( $className ) === false ) {
@@ -158,11 +143,6 @@ class ValidFunctionNameSniff extends Sniff {
 
 		$methodNameLc = strtolower( $methodName );
 		$classNameLc  = strtolower( $className );
-
-		// Ignore special functions.
-		if ( '' === ltrim( $methodName, '_' ) ) {
-			return;
-		}
 
 		// PHP4 constructors are allowed to break our rules.
 		if ( $methodNameLc === $classNameLc ) {
