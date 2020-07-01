@@ -157,3 +157,9 @@ class More_Nested {
 		function __CamelCase() {} // Bad x 2 for *function*, not method.
 	}
 }
+
+function ___triple_underscore() {} // OK.
+
+class Triple {
+	function ___triple_underscore() {} // OK.
+}

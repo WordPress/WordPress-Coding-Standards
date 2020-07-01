@@ -104,7 +104,7 @@ class ValidFunctionNameSniff extends Sniff {
 		}
 
 		// Is the function name prefixed with "__" ?
-		if ( 0 === strpos( $functionName, '__' ) ) {
+		if ( preg_match( '`^__[^_]`', $functionName ) === 1 ) {
 			$error     = 'Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
 			$errorData = array( $functionName );
 			$this->phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
@@ -168,7 +168,7 @@ class ValidFunctionNameSniff extends Sniff {
 		}
 
 		// Is the method name prefixed with "__" ?
-		if ( 0 === strpos( $methodName, '__' ) ) {
+		if ( preg_match( '`^__[^_]`', $methodName ) === 1 ) {
 			$error     = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
 			$errorData = array( $className . '::' . $methodName );
 			$this->phpcsFile->addError( $error, $stackPtr, 'MethodDoubleUnderscore', $errorData );
