@@ -10,6 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\DB;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Conditions;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -208,36 +210,30 @@ class DirectDatabaseQuerySniff extends Sniff {
 
 		$cached       = false;
 		$wp_cache_get = false;
-		if ( ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
-			$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 
-			if ( false === $scope_function ) {
-				$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-			}
+		$scope_function = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
+		if ( false !== $scope_function ) {
+			$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
+			$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
 
-			if ( false !== $scope_function ) {
-				$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
-				$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
+			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
+				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
-				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
-					if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-						if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
+							$cached = true;
+							break;
+						}
+					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-							if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
-								$cached = true;
-								break;
-							}
-						} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+						$wp_cache_get = true;
 
-							$wp_cache_get = true;
+					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-						} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
-
-							if ( $wp_cache_get ) {
-								$cached = true;
-								break;
-							}
+						if ( $wp_cache_get ) {
+							$cached = true;
+							break;
 						}
 					}
 				}
