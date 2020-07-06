@@ -38,7 +38,6 @@ class TypeCastsSniff extends Sniff {
 		return array(
 			\T_DOUBLE_CAST,
 			\T_UNSET_CAST,
-			\T_STRING_CAST,
 			\T_BINARY_CAST,
 		);
 	}
@@ -80,12 +79,7 @@ class TypeCastsSniff extends Sniff {
 				);
 				break;
 
-			case \T_STRING_CAST:
 			case \T_BINARY_CAST:
-				if ( \T_STRING_CAST === $token_code && '(binary)' !== $typecast_lc ) {
-					break;
-				}
-
 				$this->phpcsFile->addWarning(
 					'Using binary casting is strongly discouraged. Found: "%s"',
 					$stackPtr,
