@@ -69,7 +69,7 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 					30 => 1,
 					31 => 1,
 					32 => 1,
-					34 => 1, // Whitelist comment deprecation warning.
+					34 => 1, // Old-style WPCS ignore comments are no longer supported.
 					39 => 1,
 					65 => 1,
 				);

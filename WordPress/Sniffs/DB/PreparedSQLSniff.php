@@ -127,10 +127,6 @@ class PreparedSQLSniff extends Sniff {
 			return;
 		}
 
-		if ( $this->has_whitelist_comment( 'unprepared SQL', $stackPtr ) ) {
-			return;
-		}
-
 		for ( $this->i; $this->i < $this->end; $this->i++ ) {
 
 			if ( isset( $this->ignored_tokens[ $this->tokens[ $this->i ]['code'] ] ) ) {

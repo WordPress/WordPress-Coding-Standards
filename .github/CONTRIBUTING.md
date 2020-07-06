@@ -32,16 +32,6 @@ Only make a property `public` if that is the intended behaviour.
 
 When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 
-## Whitelist comments
-
-> **Important**:
-> PHPCS 3.2.0 introduced new selective ignore annotations, which can be considered an improved version of the whitelist mechanism which WPCS contains.
->
-> Support for the WPCS native whitelist comments has been deprecated in WPCS 2.0.0 and will be removed in WPCS 3.0.0.
->
-> With that in mind, (new) sniffs should not introduce new WPCS native whitelist comments.
-
-
 # Unit Testing
 
 ## Pre-requisites

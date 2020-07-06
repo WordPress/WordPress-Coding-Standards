@@ -83,7 +83,7 @@ function foo_2() {
 	$_POST['settings'][ $setting ] = 'bb'; // OK.
 }
 
-// Particular cases can be whitelisted with a comment.
+// Bad - ignored via old-style ignore comment.
 function foo_3() {
 	bar( $_POST['var'] ); // WPCS: CSRF OK.
 	bar( $_POST['var'] ); // Bad.

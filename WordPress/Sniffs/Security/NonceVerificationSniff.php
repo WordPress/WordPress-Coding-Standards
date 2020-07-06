@@ -111,10 +111,6 @@ class NonceVerificationSniff extends Sniff {
 			return;
 		}
 
-		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
-			return;
-		}
-
 		if ( $this->is_assignment( $stackPtr ) ) {
 			return;
 		}

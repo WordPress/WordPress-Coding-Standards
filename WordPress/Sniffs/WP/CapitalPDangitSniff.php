@@ -115,11 +115,6 @@ class CapitalPDangitSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-
-		if ( $this->has_whitelist_comment( 'spelling', $stackPtr ) ) {
-			return;
-		}
-
 		/*
 		 * Ignore tokens within an array definition as this is a false positive in 80% of all cases.
 		 *

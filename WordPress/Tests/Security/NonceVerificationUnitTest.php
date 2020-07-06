@@ -36,6 +36,7 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			44  => 1,
 			48  => 1,
 			69  => 1,
+			88  => 1, // Old-style WPCS ignore comments are no longer supported.
 			89  => 1,
 			113 => 1,
 			114 => 1,
@@ -62,9 +63,7 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			88 => 1, // Whitelist comment deprecation warning.
-		);
+		return array();
 	}
 
 }

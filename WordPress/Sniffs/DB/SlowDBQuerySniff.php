@@ -48,27 +48,6 @@ class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
 	}
 
 	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @since 0.10.0
-	 *
-	 * @param int $stackPtr The position of the current token in the stack.
-	 *
-	 * @return int|void Integer stack pointer to skip forward or void to continue
-	 *                  normal file processing.
-	 */
-	public function process_token( $stackPtr ) {
-
-		if ( $this->has_whitelist_comment( 'slow query', $stackPtr ) ) {
-			return;
-		} elseif ( $this->has_whitelist_comment( 'tax_query', $stackPtr ) ) {
-			return;
-		}
-
-		return parent::process_token( $stackPtr );
-	}
-
-	/**
 	 * Callback to process each confirmed key, to check value.
 	 * This must be extended to add the logic to check assignment value.
 	 *

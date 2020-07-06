@@ -198,10 +198,6 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 */
 	protected function process_variable_assignment( $stackPtr, $in_list = false ) {
 
-		if ( $this->has_whitelist_comment( 'override', $stackPtr ) === true ) {
-			return;
-		}
-
 		$token    = $this->tokens[ $stackPtr ];
 		$var_name = substr( $token['content'], 1 ); // Strip the dollar sign.
 		$data     = array();
@@ -410,31 +406,14 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			if ( true === $this->is_assignment( $ptr ) ) {
-				$this->maybe_add_error( $ptr );
+				$this->add_error( $ptr );
 				continue;
 			}
 
 			// Check if this is a variable assignment within a `foreach()` declaration.
 			if ( $this->is_foreach_as( $ptr ) === true ) {
-				$this->maybe_add_error( $ptr );
+				$this->add_error( $ptr );
 			}
-		}
-	}
-
-	/**
-	 * Add the error if there is no whitelist comment present.
-	 *
-	 * @since 0.11.0
-	 * @since 1.1.0  - Visibility changed from public to protected.
-	 *               - Check for being in a test class moved to the process_token() method.
-	 *
-	 * @param int $stackPtr The position of the token to throw the error for.
-	 *
-	 * @return void
-	 */
-	protected function maybe_add_error( $stackPtr ) {
-		if ( $this->has_whitelist_comment( 'override', $stackPtr ) === false ) {
-			$this->add_error( $stackPtr );
 		}
 	}
 

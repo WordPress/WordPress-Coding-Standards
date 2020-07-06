@@ -47,10 +47,4 @@
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_yield_fromFound"/>
 	</rule>
 
-	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.DeprecatedWhitelistCommentFound">
-		<!-- False positive for whitelist comment recognition, but no use fixing this now
-			 as the WPCS native whitelist comments are deprecated anyhow. -->
-		<exclude-pattern>/WordPress/AbstractClassRestrictionsSniff\.php$</exclude-pattern>
-	</rule>
-
 </ruleset>

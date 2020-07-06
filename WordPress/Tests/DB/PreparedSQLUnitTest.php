@@ -36,6 +36,8 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			5  => 1,
 			7  => 1,
 			8  => 1,
+			11 => 1, // Old-style WPCS ignore comments are no longer supported.
+			12 => 1, // Old-style WPCS ignore comments are no longer supported.
 			16 => 1,
 			17 => 1,
 			18 => 1,
@@ -57,12 +59,7 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			11 => 1, // Whitelist comment deprecation warning.
-			12 => 1, // Whitelist comment deprecation warning.
-			97 => 1, // Whitelist comment deprecation warning.
-			99 => 1, // Whitelist comment deprecation warning.
-		);
+		return array();
 	}
 
 }

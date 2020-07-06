@@ -171,10 +171,6 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			);
 		}
 
-		if ( $this->has_whitelist_comment( 'sanitization', $stackPtr ) ) {
-			return;
-		}
-
 		// If this variable is being tested with one of the `is_..()` functions, sanitization isn't needed.
 		if ( $this->is_in_type_test( $stackPtr ) ) {
 			return;

@@ -51,6 +51,9 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					39  => 1,
 					40  => 1,
 					90  => 1,
+					212 => 1, // Old-style WPCS ignore comments are no longer supported.
+					215 => 1, // Old-style WPCS ignore comments are no longer supported.
+					216 => 1, // Old-style WPCS ignore comments are no longer supported.
 					// Backfills.
 					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
 					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
@@ -108,11 +111,6 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
 					1   => 3, // 3 x warning for potentially incorrect prefix passed.
-					201 => 1, // Whitelist comment deprecation warning.
-					208 => 1, // Whitelist comment deprecation warning.
-					212 => 1, // Whitelist comment deprecation warning.
-					215 => 1, // Whitelist comment deprecation warning.
-					216 => 1, // Whitelist comment deprecation warning.
 					249 => 1,
 					250 => 1,
 					253 => 1,

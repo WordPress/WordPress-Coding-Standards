@@ -85,9 +85,9 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			57  => 1,
 			58  => 1,
 			61  => 1,
-			62  => 1, // Whitelist comment deprecation warning.
+			62  => 1, // Old-style WPCS ignore comments are no longer supported.
 			66  => 1,
-			68  => 1, // Whitelist comment deprecation warning.
+			68  => 1, // Old-style WPCS ignore comments are no longer supported.
 			126 => 1,
 			139 => 1,
 			160 => 2,

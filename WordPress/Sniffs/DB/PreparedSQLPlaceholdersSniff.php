@@ -445,11 +445,6 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
-		$count_diff_whitelisted = $this->has_whitelist_comment(
-			'PreparedSQLPlaceholders replacement count',
-			$stackPtr
-		);
-
 		if ( 0 === $total_placeholders ) {
 			if ( 1 === $total_parameters ) {
 				if ( false === $variable_found && false === $sql_wildcard_found ) {
@@ -465,7 +460,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 						'UnnecessaryPrepare'
 					);
 				}
-			} elseif ( false === $count_diff_whitelisted && 0 === $valid_in_clauses['uses_in'] ) {
+			} elseif ( 0 === $valid_in_clauses['uses_in'] ) {
 				$this->phpcsFile->addWarning(
 					'Replacement variables found, but no valid placeholders found in the query.',
 					$i,
@@ -483,10 +478,6 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				'MissingReplacements',
 				array( $total_placeholders )
 			);
-			return;
-		}
-
-		if ( true === $count_diff_whitelisted ) {
 			return;
 		}
 

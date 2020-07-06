@@ -8,7 +8,7 @@ $wpdb = 'test'; // Bad.
 $post = get_post( 1 ); // Bad.
 
 global $post;
-$post = get_post( 1 ); // Override ok.
+$post = get_post( 1 ); // Bad: old-style ignore comment. Override ok.
 
 // Bad: Using different types of assignment operators.
 function test_different_assignment_operators() {
