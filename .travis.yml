@@ -146,8 +146,8 @@ before_install:
       fi
 
     - export XMLLINT_INDENT="	"
-    - export PHPUNIT_DIR=/tmp/phpunit
 
+install:
     - |
       if [[ ${PHPCS_BRANCH:0:2} == "4." ]]; then
         # Set Composer up to download only PHPCS from source for PHPCS 4.x.
@@ -156,27 +156,20 @@ before_install:
       else
         composer config preferred-install.squizlabs/php_codesniffer auto
       fi
-    - composer require squizlabs/php_codesniffer:"${PHPCS_BRANCH}" --update-no-dev --no-suggest --no-scripts
+    - composer require squizlabs/php_codesniffer:"${PHPCS_BRANCH}" --no-update --no-suggest --no-scripts
     - |
-      if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Sniff" ]]; then
-          composer install --dev --no-suggest
-          # The `dev` required DealerDirect Composer plugin takes care of the installed_paths.
+      if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then
+        # PHPUnit 7.x does not allow for installation on PHP 8, so ignore platform
+        # requirements to get PHPUnit 7.x to install on nightly.
+        composer install --ignore-platform-reqs --no-suggest
       else
-          # The above require already does the install.
-          composer install-codestandards
+        # Do a normal dev install in all other cases.
+        composer install --no-suggest
       fi
-    # Download PHPUnit 7.x for builds on PHP >= 7.2 as the PHPCS
-    # test suite is currently not compatible with PHPUnit 8.x.
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then wget -P $PHPUNIT_DIR https://phar.phpunit.de/phpunit-7.phar && chmod +x $PHPUNIT_DIR/phpunit-7.phar; fi
 
 script:
   # Lint the PHP files against parse errors.
   - if [[ "$LINT" == "1" ]]; then if find . -path ./vendor -prune -o -path ./bin -prune -o -name "*.php" -exec php -l {} \; | grep "^[Parse error|Fatal error]"; then exit 1; fi; fi
 
   # Run the unit tests.
-  - |
-    if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then
-      php $PHPUNIT_DIR/phpunit-7.phar --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
-    else
-      phpunit --filter WordPress --bootstrap="$(pwd)/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" $(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php
-    fi
+  - composer run-tests
