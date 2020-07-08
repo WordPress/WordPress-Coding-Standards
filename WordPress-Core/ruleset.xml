@@ -406,7 +406,9 @@
 
 	<!-- Rule: Unless absolutely necessary, loose comparisons should not be used,
 		 as their behaviour can be misleading. -->
-	<rule ref="WordPress.PHP.StrictComparisons"/>
+	<rule phpcs-only="true" ref="Universal.Operators.StrictComparisons">
+		<type>warning</type>
+	</rule>
 	<rule ref="WordPress.PHP.StrictInArray"/>
 
 	<!-- Rule: Assignments must not be placed in placed in conditionals.
