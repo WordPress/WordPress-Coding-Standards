@@ -106,7 +106,7 @@
 	#############################################################################
 	-->
 	<!-- Covers rule: Arrays must be declared using long array syntax. -->
-	<rule ref="Generic.Arrays.DisallowShortArraySyntax"/>
+	<rule ref="Universal.Arrays.DisallowShortArraySyntax"/>
 
 
 	<!--
