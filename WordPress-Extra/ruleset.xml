@@ -50,7 +50,7 @@
 	<!-- Check correct spacing of language constructs. This also ensures that the
 	     above rule for not using brackets with require is fixed correctly.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1153 -->
-	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
+	<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Hook callbacks may not use all params -->
 	<!-- https://github.com/WordPress/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
