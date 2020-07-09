@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the PrecisionAlignment sniff.
@@ -61,6 +62,9 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList( $testFile = '' ) {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		switch ( $testFile ) {
 			case 'PrecisionAlignmentUnitTest.1.inc':
 				return array(
@@ -105,14 +109,14 @@ class PrecisionAlignmentUnitTest extends AbstractSniffUnitTest {
 
 			case 'PrecisionAlignmentUnitTest.css':
 				return array(
-					4 => 1,
+					4 => ( true === $is_phpcs_4 ? 0 : 1 ),
 				);
 
 			case 'PrecisionAlignmentUnitTest.js':
 				return array(
-					4 => 1,
-					5 => 1,
-					6 => 1,
+					4 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					5 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					6 => ( true === $is_phpcs_4 ? 0 : 1 ),
 				);
 
 			case 'PrecisionAlignmentUnitTest.2.inc':

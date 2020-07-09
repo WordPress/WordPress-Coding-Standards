@@ -342,7 +342,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 			// Examine for plugin/theme file header.
 			return $this->process_comments( $stackPtr );
 
-		} elseif ( 'CSS' !== $this->phpcsFile->tokenizerType ) {
+		} elseif ( isset( $this->phpcsFile->tokenizerType ) === false || 'CSS' !== $this->phpcsFile->tokenizerType ) {
 			// Examine a T_STRING token in a PHP file as a function call.
 			return parent::process_token( $stackPtr );
 		}
@@ -552,7 +552,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$file_name = basename( $file );
-		if ( 'CSS' === $this->phpcsFile->tokenizerType ) {
+		if ( isset( $this->phpcsFile->tokenizerType ) && 'CSS' === $this->phpcsFile->tokenizerType ) {
 			if ( 'style.css' !== $file_name && ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
 				// CSS files only need to be examined for the file header.
 				return ( $this->phpcsFile->numTokens + 1 );

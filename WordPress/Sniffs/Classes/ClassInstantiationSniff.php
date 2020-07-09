@@ -91,8 +91,9 @@ class ClassInstantiationSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		// Make sure we have the right token, JS vs PHP.
-		if ( ( 'PHP' === $this->phpcsFile->tokenizerType && \T_NEW !== $this->tokens[ $stackPtr ]['code'] )
-			|| ( 'JS' === $this->phpcsFile->tokenizerType
+		if ( ( ( isset( $this->phpcsFile->tokenizerType ) === false || 'PHP' === $this->phpcsFile->tokenizerType )
+				&& \T_NEW !== $this->tokens[ $stackPtr ]['code'] )
+			|| ( ( isset( $this->phpcsFile->tokenizerType ) && 'JS' === $this->phpcsFile->tokenizerType )
 				&& ( \T_STRING !== $this->tokens[ $stackPtr ]['code']
 				|| 'new' !== strtolower( $this->tokens[ $stackPtr ]['content'] ) ) )
 		) {
@@ -102,7 +103,7 @@ class ClassInstantiationSniff extends Sniff {
 		/*
 		 * Check for new by reference used in PHP files.
 		 */
-		if ( 'PHP' === $this->phpcsFile->tokenizerType ) {
+		if ( isset( $this->phpcsFile->tokenizerType ) === false || 'PHP' === $this->phpcsFile->tokenizerType ) {
 			$prev_non_empty = $this->phpcsFile->findPrevious(
 				Tokens::$emptyTokens,
 				( $stackPtr - 1 ),
