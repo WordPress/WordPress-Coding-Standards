@@ -10,8 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
-use WordPressCS\WordPress\PHPCSHelper;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Makes sure WP internationalization functions are used properly.
@@ -191,7 +191,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$this->text_domain_is_default       = false;
 
 		// Allow overruling the text_domain set in a ruleset via the command line.
-		$cl_text_domain = trim( PHPCSHelper::get_config_data( 'text_domain' ) );
+		$cl_text_domain = trim( Helper::getConfigData( 'text_domain' ) );
 		if ( ! empty( $cl_text_domain ) ) {
 			$this->text_domain = array_filter( array_map( 'trim', explode( ',', $cl_text_domain ) ) );
 		}

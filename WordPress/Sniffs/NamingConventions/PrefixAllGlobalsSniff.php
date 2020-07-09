@@ -10,8 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use WordPressCS\WordPress\PHPCSHelper;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
@@ -265,7 +265,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	public function process_token( $stackPtr ) {
 
 		// Allow overruling the prefixes set in a ruleset via the command line.
-		$cl_prefixes = trim( PHPCSHelper::get_config_data( 'prefixes' ) );
+		$cl_prefixes = trim( Helper::getConfigData( 'prefixes' ) );
 		if ( ! empty( $cl_prefixes ) ) {
 			$this->prefixes = array_filter( array_map( 'trim', explode( ',', $cl_prefixes ) ) );
 		}

@@ -12,7 +12,7 @@ namespace WordPressCS\WordPress;
 use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
-use WordPressCS\WordPress\PHPCSHelper;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -1141,7 +1141,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.14.0
 	 */
 	protected function get_wp_version_from_cl() {
-		$cl_supported_version = trim( PHPCSHelper::get_config_data( 'minimum_supported_wp_version' ) );
+		$cl_supported_version = trim( Helper::getConfigData( 'minimum_supported_wp_version' ) );
 		if ( ! empty( $cl_supported_version )
 			&& filter_var( $cl_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
 		) {
