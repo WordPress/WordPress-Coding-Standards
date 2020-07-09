@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -164,16 +165,16 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 			$keyIdx = $this->phpcsFile->findPrevious( array( \T_WHITESPACE, \T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
 			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
-				$key            = $this->strip_quotes( $this->tokens[ $keyIdx ]['content'] );
+				$key            = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart       = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $operator + 1 ), null, true );
 				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 				$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
-				$val            = $this->strip_quotes( $val );
+				$val            = TextStrings::stripQuotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
 		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
 			// $foo = 'bar=taz&other=thing';
-			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', $this->strip_quotes( $token['content'] ), $matches ) <= 0 ) {
+			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', TextStrings::stripQuotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
 			}
 			foreach ( $matches[1] as $i => $_k ) {

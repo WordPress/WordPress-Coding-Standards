@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
@@ -136,7 +137,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			$string = $this->strip_quotes( $this->tokens[ $i ]['content'] );
+			$string = TextStrings::stripQuotes( $this->tokens[ $i ]['content'] );
 
 			/*
 			 * Here be dragons - a double quoted string can contain extrapolated variables

@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
@@ -305,7 +306,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 					$matched_parameter = array();
 					break;
 				default:
-					$matched_parameter = $this->strip_quotes( $parameters[ $position ]['raw'] );
+					$matched_parameter = TextStrings::stripQuotes( $parameters[ $position ]['raw'] );
 					break;
 			}
 

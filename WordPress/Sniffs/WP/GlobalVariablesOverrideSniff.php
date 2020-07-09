@@ -11,6 +11,9 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\Scopes;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Warns about overwriting WordPress native global variables.
@@ -170,7 +173,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	protected function process_list_assignment( $stackPtr ) {
-		$list_open_close = $this->find_list_open_close( $stackPtr );
+		$list_open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $list_open_close ) {
 			// Short array, not short list.
 			return;
@@ -226,7 +229,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				}
 
 				if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $ptr ]['code'] ) {
-					$var_name .= $this->strip_quotes( $this->tokens[ $ptr ]['content'] );
+					$var_name .= TextStrings::stripQuotes( $this->tokens[ $ptr ]['content'] );
 				}
 			}
 
@@ -282,7 +285,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Class property declarations with the same name as WP global variables are fine.
 		 */
-		if ( false === $in_list && true === $this->is_class_property( $stackPtr ) ) {
+		if ( false === $in_list && true === Scopes::isOOProperty( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
@@ -367,7 +370,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			if ( \T_LIST === $this->tokens[ $ptr ]['code']
 				|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $ptr ]['code']
 			) {
-				$list_open_close = $this->find_list_open_close( $ptr );
+				$list_open_close = Lists::getOpenClose( $this->phpcsFile, $ptr );
 
 				if ( false === $list_open_close ) {
 					// Short array, not short list.
@@ -378,7 +381,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				foreach ( $var_pointers as $ptr ) {
 					$var_name = $this->tokens[ $ptr ]['content'];
 					if ( '$GLOBALS' === $var_name ) {
-						$var_name = '$' . $this->strip_quotes( $this->get_array_access_key( $ptr ) );
+						$var_name = '$' . TextStrings::stripQuotes( $this->get_array_access_key( $ptr ) );
 					}
 
 					if ( \in_array( $var_name, $search, true ) ) {

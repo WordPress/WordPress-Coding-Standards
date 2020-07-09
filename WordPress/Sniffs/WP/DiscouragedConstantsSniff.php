@@ -11,6 +11,8 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Scopes;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Warns against usage of discouraged WP CONSTANTS and recommends alternatives.
@@ -131,7 +133,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 
 		if ( false !== $prev
 			&& \T_CONST === $this->tokens[ $prev ]['code']
-			&& true === $this->is_class_constant( $prev )
+			&& true === Scopes::isOOConstant( $this->phpcsFile, $prev )
 		) {
 			// Class constant of the same name.
 			return;
@@ -199,7 +201,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$raw_content = $this->strip_quotes( $parameters[ $target_param ]['raw'] );
+		$raw_content = TextStrings::stripQuotes( $parameters[ $target_param ]['raw'] );
 
 		if ( isset( $this->discouraged_constants[ $raw_content ] ) ) {
 			$this->phpcsFile->addWarning(

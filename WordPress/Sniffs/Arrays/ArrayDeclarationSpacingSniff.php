@@ -11,6 +11,8 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Enforces WordPress array spacing format.
@@ -89,7 +91,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 
 		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
-			&& $this->is_short_list( $stackPtr )
+			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
 		) {
 			// Short list, not short array.
 			return;
@@ -98,7 +100,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Determine the array opener & closer.
 		 */
-		$array_open_close = $this->find_array_open_close( $stackPtr );
+		$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $array_open_close ) {
 			// Array open/close could not be determined.
 			return;
@@ -193,7 +195,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		$array_has_keys = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $opener, $closer );
 		if ( false !== $array_has_keys ) {
 
-			$array_items = $this->get_function_call_parameters( $stackPtr );
+			$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
 			if ( ( false === $this->allow_single_item_single_line_associative_arrays
 					&& ! empty( $array_items ) )
@@ -213,7 +215,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 
 						// Skip passed any nested arrays.
 						if ( isset( $this->targets[ $this->tokens[ $ptr ]['code'] ] ) ) {
-							$nested_array_open_close = $this->find_array_open_close( $ptr );
+							$nested_array_open_close = Arrays::getOpenClose( $this->phpcsFile, $ptr );
 							if ( false === $nested_array_open_close ) {
 								// Nested array open/close could not be determined.
 								continue;
@@ -375,7 +377,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check that each array item starts on a new line.
 		 */
-		$array_items      = $this->get_function_call_parameters( $stackPtr );
+		$array_items      = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		$end_of_last_item = $opener;
 
 		foreach ( $array_items as $item ) {

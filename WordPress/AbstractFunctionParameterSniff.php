@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
@@ -68,7 +69,7 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$parameters = $this->get_function_call_parameters( $stackPtr );
+		$parameters = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
 		if ( empty( $parameters ) ) {
 			return $this->process_no_parameters( $stackPtr, $group_name, $matched_content );

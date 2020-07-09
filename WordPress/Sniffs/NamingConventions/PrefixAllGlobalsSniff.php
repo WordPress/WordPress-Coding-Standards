@@ -12,6 +12,10 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\Namespaces;
+use PHPCSUtils\Utils\Scopes;
+use PHPCSUtils\Utils\TextStrings;
 
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
@@ -318,7 +322,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return $this->process_list_assignment( $stackPtr );
 
 		} elseif ( \T_NAMESPACE === $this->tokens[ $stackPtr ]['code'] ) {
-			$namespace_name = $this->get_declared_namespace_name( $stackPtr );
+			$namespace_name = Namespaces::getDeclaredName( $this->phpcsFile, $stackPtr );
 
 			if ( false === $namespace_name || '' === $namespace_name || '\\' === $namespace_name ) {
 				return;
@@ -360,7 +364,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		} else {
 
 			// Namespaced methods, classes and constants do not need to be prefixed.
-			$namespace = $this->determine_namespace( $stackPtr );
+			$namespace = Namespaces::determineNamespace( $this->phpcsFile, $stackPtr );
 			if ( '' !== $namespace && '\\' !== $namespace ) {
 				return;
 			}
@@ -440,7 +444,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 				case 'T_CONST':
 					// Constants in a class do not need to be prefixed.
-					if ( true === $this->is_class_constant( $stackPtr ) ) {
+					if ( true === Scopes::isOOConstant( $this->phpcsFile, $stackPtr ) ) {
 						return;
 					}
 
@@ -641,7 +645,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$stackPtr      = $array_key;
-			$variable_name = $this->strip_quotes( $this->tokens[ $array_key ]['content'] );
+			$variable_name = TextStrings::stripQuotes( $this->tokens[ $array_key ]['content'] );
 
 			// Check whether a prefix is needed.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
@@ -682,7 +686,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 
 			// Properties in a class do not need to be prefixed.
-			if ( false === $in_list && true === $this->is_class_property( $stackPtr ) ) {
+			if ( false === $in_list && true === Scopes::isOOProperty( $this->phpcsFile, $stackPtr ) ) {
 				return;
 			}
 
@@ -757,7 +761,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	protected function process_list_assignment( $stackPtr ) {
-		$list_open_close = $this->find_list_open_close( $stackPtr );
+		$list_open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $list_open_close ) {
 			// Short array, not short list.
 			return;
@@ -792,7 +796,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$is_error    = true;
-		$raw_content = $this->strip_quotes( $parameters[1]['raw'] );
+		$raw_content = TextStrings::stripQuotes( $parameters[1]['raw'] );
 
 		if ( ( 'define' !== $matched_content
 			&& isset( $this->whitelisted_core_hooks[ $raw_content ] ) )
@@ -817,7 +821,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				return;
 			}
 
-			$first_non_empty_content = $this->strip_quotes( $this->tokens[ $first_non_empty ]['content'] );
+			$first_non_empty_content = TextStrings::stripQuotes( $this->tokens[ $first_non_empty ]['content'] );
 
 			// Try again with just the first token if it's a text string.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
