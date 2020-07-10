@@ -137,14 +137,14 @@ class CapitalPDangitSniff extends Sniff {
 			$levels = explode( '\\', $ns_name );
 			foreach ( $levels as $level ) {
 				if ( preg_match_all( self::WP_CLASSNAME_REGEX, $level, $matches, \PREG_PATTERN_ORDER ) > 0 ) {
-					$mispelled = $this->retrieve_misspellings( $matches[1] );
+					$misspelled = $this->retrieve_misspellings( $matches[1] );
 
-					if ( ! empty( $mispelled ) ) {
+					if ( ! empty( $misspelled ) ) {
 						$this->phpcsFile->addWarning(
 							'Please spell "WordPress" correctly. Found: "%s" as part of the namespace name.',
 							$stackPtr,
 							'MisspelledNamespaceName',
-							array( implode( ', ', $mispelled ) )
+							array( implode( ', ', $misspelled ) )
 						);
 					}
 				}
@@ -164,14 +164,14 @@ class CapitalPDangitSniff extends Sniff {
 			}
 
 			if ( preg_match_all( self::WP_CLASSNAME_REGEX, $classname, $matches, \PREG_PATTERN_ORDER ) > 0 ) {
-				$mispelled = $this->retrieve_misspellings( $matches[1] );
+				$misspelled = $this->retrieve_misspellings( $matches[1] );
 
-				if ( ! empty( $mispelled ) ) {
+				if ( ! empty( $misspelled ) ) {
 					$this->phpcsFile->addWarning(
 						'Please spell "WordPress" correctly. Found: "%s" as part of the class/interface/trait name.',
 						$stackPtr,
 						'MisspelledClassName',
-						array( implode( ', ', $mispelled ) )
+						array( implode( ', ', $misspelled ) )
 					);
 				}
 			}
@@ -263,9 +263,9 @@ class CapitalPDangitSniff extends Sniff {
 				}
 			}
 
-			$mispelled = $this->retrieve_misspellings( $matches[1] );
+			$misspelled = $this->retrieve_misspellings( $matches[1] );
 
-			if ( empty( $mispelled ) ) {
+			if ( empty( $misspelled ) ) {
 				return;
 			}
 
@@ -274,8 +274,8 @@ class CapitalPDangitSniff extends Sniff {
 				$stackPtr,
 				'Misspelled',
 				array(
-					\count( $mispelled ),
-					implode( ', ', $mispelled ),
+					\count( $misspelled ),
+					implode( ', ', $misspelled ),
 				)
 			);
 
@@ -298,7 +298,7 @@ class CapitalPDangitSniff extends Sniff {
 	 * @return array Array containing only the misspelled variants.
 	 */
 	protected function retrieve_misspellings( $match_stack ) {
-		$mispelled = array();
+		$misspelled = array();
 		foreach ( $match_stack as $match ) {
 			// Deal with multi-dimensional arrays when capturing offset.
 			if ( \is_array( $match ) ) {
@@ -306,11 +306,11 @@ class CapitalPDangitSniff extends Sniff {
 			}
 
 			if ( 'WordPress' !== $match ) {
-				$mispelled[] = $match;
+				$misspelled[] = $match;
 			}
 		}
 
-		return $mispelled;
+		return $misspelled;
 	}
 
 }
