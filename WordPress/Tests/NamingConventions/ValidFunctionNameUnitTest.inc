@@ -145,3 +145,21 @@ class Deprecated {
 	 */
 	public static function __deprecatedMethod() {}
 }
+
+class PHP74Magic {
+	function __serialize() {} // OK.
+	function __unserialize() {} // OK.
+}
+
+class More_Nested {
+	public function method_name() {
+		function __autoload() {} // OK - magic function in global namespace.
+		function __CamelCase() {} // Bad x 2 for *function*, not method.
+	}
+}
+
+function ___triple_underscore() {} // OK.
+
+class Triple {
+	function ___triple_underscore() {} // OK.
+}
