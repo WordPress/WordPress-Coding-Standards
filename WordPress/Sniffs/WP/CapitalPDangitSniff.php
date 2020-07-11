@@ -11,16 +11,19 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\ObjectDeclarations;
+use PHPCSUtils\Utils\Namespaces;
 
 /**
  * Capital P Dangit!
  *
- * Verify the correct spelling of `WordPress` in text strings, comments and class names.
+ * Verify the correct spelling of `WordPress` in text strings, comments and OO and namespace names.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.12.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   3.0.0  Now also checks namespace names.
  */
 class CapitalPDangitSniff extends Sniff {
 
@@ -52,19 +55,6 @@ class CapitalPDangitSniff extends Sniff {
 	const WP_CLASSNAME_REGEX = '`(?:^|_)(Word[_]*Pres+)(?:_|$)`i';
 
 	/**
-	 * String tokens we want to listen for.
-	 *
-	 * @var array
-	 */
-	private $text_string_tokens = array(
-		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
-		\T_DOUBLE_QUOTED_STRING     => \T_DOUBLE_QUOTED_STRING,
-		\T_HEREDOC                  => \T_HEREDOC,
-		\T_NOWDOC                   => \T_NOWDOC,
-		\T_INLINE_HTML              => \T_INLINE_HTML,
-	);
-
-	/**
 	 * Comment tokens we want to listen for as they contain text strings.
 	 *
 	 * @var array
@@ -93,9 +83,11 @@ class CapitalPDangitSniff extends Sniff {
 	 */
 	public function register() {
 		// Union the arrays - keeps the array keys.
-		$this->text_and_comment_tokens = ( $this->text_string_tokens + $this->comment_text_tokens );
+		$this->text_and_comment_tokens = ( Tokens::$textStringTokens + $this->comment_text_tokens );
 
-		$targets = ( $this->text_and_comment_tokens + Tokens::$ooScopeTokens );
+		$targets   = $this->text_and_comment_tokens;
+		$targets  += Tokens::$ooScopeTokens;
+		$targets[] = \T_NAMESPACE;
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
 		$targets[ \T_ARRAY ]            = \T_ARRAY;
@@ -121,10 +113,44 @@ class CapitalPDangitSniff extends Sniff {
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
 		 */
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['bracket_closer'] ) ) {
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& isset( $this->tokens[ $stackPtr ]['bracket_closer'] )
+		) {
 			return $this->tokens[ $stackPtr ]['bracket_closer'];
-		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] ) ) {
+		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] )
+		) {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
+		}
+
+		/*
+		 * Deal with misspellings in namespace names.
+		 * These are not auto-fixable, but need the attention of a developer.
+		 */
+		if ( \T_NAMESPACE === $this->tokens[ $stackPtr ]['code'] ) {
+			$ns_name = Namespaces::getDeclaredName( $this->phpcsFile, $stackPtr );
+			if ( empty( $ns_name ) ) {
+				// Namespace operator or declaration without name.
+				return;
+			}
+
+			$levels = explode( '\\', $ns_name );
+			foreach ( $levels as $level ) {
+				if ( preg_match_all( self::WP_CLASSNAME_REGEX, $level, $matches, \PREG_PATTERN_ORDER ) > 0 ) {
+					$misspelled = $this->retrieve_misspellings( $matches[1] );
+
+					if ( ! empty( $misspelled ) ) {
+						$this->phpcsFile->addWarning(
+							'Please spell "WordPress" correctly. Found: "%s" as part of the namespace name.',
+							$stackPtr,
+							'MisspelledNamespaceName',
+							array( implode( ', ', $misspelled ) )
+						);
+					}
+				}
+			}
+
+			return;
 		}
 
 		/*
@@ -132,20 +158,20 @@ class CapitalPDangitSniff extends Sniff {
 		 * These are not auto-fixable, but need the attention of a developer.
 		 */
 		if ( isset( Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
-			$classname = $this->phpcsFile->getDeclarationName( $stackPtr );
+			$classname = ObjectDeclarations::getName( $this->phpcsFile, $stackPtr );
 			if ( empty( $classname ) ) {
 				return;
 			}
 
 			if ( preg_match_all( self::WP_CLASSNAME_REGEX, $classname, $matches, \PREG_PATTERN_ORDER ) > 0 ) {
-				$mispelled = $this->retrieve_misspellings( $matches[1] );
+				$misspelled = $this->retrieve_misspellings( $matches[1] );
 
-				if ( ! empty( $mispelled ) ) {
+				if ( ! empty( $misspelled ) ) {
 					$this->phpcsFile->addWarning(
 						'Please spell "WordPress" correctly. Found: "%s" as part of the class/interface/trait name.',
 						$stackPtr,
 						'MisspelledClassName',
-						array( implode( ', ', $mispelled ) )
+						array( implode( ', ', $misspelled ) )
 					);
 				}
 			}
@@ -162,13 +188,16 @@ class CapitalPDangitSniff extends Sniff {
 			|| \T_DOC_COMMENT === $this->tokens[ $stackPtr ]['code']
 		) {
 
-			$comment_start = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, ( $stackPtr - 1 ) );
-			if ( false !== $comment_start ) {
-				$comment_tag = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_TAG, ( $stackPtr - 1 ), $comment_start );
-				if ( false !== $comment_tag && '@link' === $this->tokens[ $comment_tag ]['content'] ) {
-					// @link tag, so ignore.
-					return;
-				}
+			$comment_tag = $this->phpcsFile->findPrevious(
+				array( \T_DOC_COMMENT_TAG, \T_DOC_COMMENT_OPEN_TAG ),
+				( $stackPtr - 1 )
+			);
+			if ( false !== $comment_tag
+				&& \T_DOC_COMMENT_TAG === $this->tokens[ $comment_tag ]['code']
+				&& '@link' === $this->tokens[ $comment_tag ]['content']
+			) {
+				// @link tag, so ignore.
+				return;
 			}
 		}
 
@@ -234,9 +263,9 @@ class CapitalPDangitSniff extends Sniff {
 				}
 			}
 
-			$mispelled = $this->retrieve_misspellings( $matches[1] );
+			$misspelled = $this->retrieve_misspellings( $matches[1] );
 
-			if ( empty( $mispelled ) ) {
+			if ( empty( $misspelled ) ) {
 				return;
 			}
 
@@ -245,8 +274,8 @@ class CapitalPDangitSniff extends Sniff {
 				$stackPtr,
 				'Misspelled',
 				array(
-					\count( $mispelled ),
-					implode( ', ', $mispelled ),
+					\count( $misspelled ),
+					implode( ', ', $misspelled ),
 				)
 			);
 
@@ -269,7 +298,7 @@ class CapitalPDangitSniff extends Sniff {
 	 * @return array Array containing only the misspelled variants.
 	 */
 	protected function retrieve_misspellings( $match_stack ) {
-		$mispelled = array();
+		$misspelled = array();
 		foreach ( $match_stack as $match ) {
 			// Deal with multi-dimensional arrays when capturing offset.
 			if ( \is_array( $match ) ) {
@@ -277,11 +306,11 @@ class CapitalPDangitSniff extends Sniff {
 			}
 
 			if ( 'WordPress' !== $match ) {
-				$mispelled[] = $match;
+				$misspelled[] = $match;
 			}
 		}
 
-		return $mispelled;
+		return $misspelled;
 	}
 
 }

@@ -191,3 +191,15 @@ class TestMe {
 
 // Allow "test" domain.
 $value = function_call( 'git.wordpress.test' );
+
+/*
+ * Test recognizing misspelling in namespace names.
+ */
+namespace {} // OK - no name.
+echo namespace\function_name(); // OK - operator.
+namespace Foo\WordPress\Bar; // OK.
+namespace My_WordPress_Plugin; // OK.
+
+namespace Foo\Bar\Wordpress\; // Bad.
+namespace Foo\word_presss\Bar; // Bad.
+namespace My_Wordpresss_Plugin\Foo\Bar; // Bad.

@@ -62,6 +62,9 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 			167 => 1, // Old-style WPCS ignore comments are no longer supported.
 			173 => 1,
 			181 => 1,
+			203 => 1,
+			204 => 1,
+			205 => 1,
 		);
 	}
 
