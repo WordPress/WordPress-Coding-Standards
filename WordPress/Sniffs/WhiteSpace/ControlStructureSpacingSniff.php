@@ -209,7 +209,7 @@ class ControlStructureSpacingSniff extends Sniff {
 						$error,
 						$stackPtr,
 						'SpaceBeforeFunctionOpenParenthesis',
-						$this->tokens[ ( $function_name_ptr + 1 ) ]['content']
+						array( $this->tokens[ ( $function_name_ptr + 1 ) ]['content'] )
 					);
 
 					if ( true === $fix ) {
@@ -282,7 +282,7 @@ class ControlStructureSpacingSniff extends Sniff {
 				$error,
 				$stackPtr,
 				'ExtraSpaceBeforeOpenParenthesis',
-				$this->tokens[ ( $stackPtr + 1 ) ]['content']
+				array( $this->tokens[ ( $stackPtr + 1 ) ]['content'] )
 			);
 
 			if ( true === $fix ) {
@@ -310,7 +310,7 @@ class ControlStructureSpacingSniff extends Sniff {
 					$error,
 					$stackPtr,
 					'ExtraSpaceAfterOpenParenthesis',
-					$this->tokens[ ( $parenthesisOpener + 1 ) ]['content']
+					array( $this->tokens[ ( $parenthesisOpener + 1 ) ]['content'] )
 				);
 
 				if ( true === $fix ) {
@@ -341,7 +341,7 @@ class ControlStructureSpacingSniff extends Sniff {
 							$error,
 							$stackPtr,
 							'ExtraSpaceBeforeCloseParenthesis',
-							$this->tokens[ ( $parenthesisCloser - 1 ) ]['content']
+							array( $this->tokens[ ( $parenthesisCloser - 1 ) ]['content'] )
 						);
 
 						if ( true === $fix ) {
@@ -399,7 +399,7 @@ class ControlStructureSpacingSniff extends Sniff {
 					$error,
 					$stackPtr,
 					'ExtraSpaceAfterCloseParenthesis',
-					$this->tokens[ ( $parenthesisCloser + 1 ) ]['content']
+					array( $this->tokens[ ( $parenthesisCloser + 1 ) ]['content'] )
 				);
 
 				if ( true === $fix ) {
