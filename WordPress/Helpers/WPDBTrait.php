@@ -45,7 +45,8 @@ trait WPDBTrait {
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile      The file being scanned.
 	 * @param int                         $stackPtr       The index of the $wpdb variable.
-	 * @param array                       $target_methods Array of methods. Key(s) should be method name.
+	 * @param array                       $target_methods Array of methods. Key(s) should be method name
+	 *                                                    in lowercase.
 	 *
 	 * @return bool Whether this is a $wpdb method call.
 	 */
@@ -55,7 +56,7 @@ trait WPDBTrait {
 
 		// Check for wpdb.
 		if ( ( \T_VARIABLE === $tokens[ $stackPtr ]['code'] && '$wpdb' !== $tokens[ $stackPtr ]['content'] )
-			|| ( \T_STRING === $tokens[ $stackPtr ]['code'] && 'wpdb' !== $tokens[ $stackPtr ]['content'] )
+			|| ( \T_STRING === $tokens[ $stackPtr ]['code'] && 'wpdb' !== strtolower( $tokens[ $stackPtr ]['content'] ) )
 		) {
 			return false;
 		}
@@ -95,7 +96,7 @@ trait WPDBTrait {
 		}
 
 		// Check that this is one of the methods that we are interested in.
-		if ( ! isset( $target_methods[ $tokens[ $methodPtr ]['content'] ] ) ) {
+		if ( ! isset( $target_methods[ strtolower( $tokens[ $methodPtr ]['content'] ) ] ) ) {
 			return false;
 		}
 
