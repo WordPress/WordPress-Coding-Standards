@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Arrays;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Check for proper spacing in array key references.
@@ -48,6 +49,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 
 		$token = $this->tokens[ $stackPtr ];
+
 		if ( ! isset( $token['bracket_closer'] ) ) {
 			$this->phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr, 'MissingBracketCloser' );
 			return;
@@ -115,8 +117,8 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		// If spaces are needed, check that there is only one space.
 		if ( false !== $need_spaces && ( $spaced1 || $spaced2 ) ) {
 			if ( $spaced1 ) {
-				$ptr    = ( $stackPtr + 1 );
-				$length = 0;
+				$ptr = ( $stackPtr + 1 );
+
 				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ ( $ptr + 1 ) ]['line'] ) {
 					$length = 'newline';
 				} else {
@@ -134,18 +136,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 					);
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
-
-						for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-							if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-								break;
-							}
-
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
+						$this->replaceTokensFix( $ptr, $token );
 					}
 				}
 			}
@@ -153,7 +144,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			if ( $spaced2 ) {
 				$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $token['bracket_closer'] - 1 ), null, true );
 				$ptr            = ( $prev_non_empty + 1 );
-				$length         = 0;
+
 				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ $token['bracket_closer'] ]['line'] ) {
 					$length = 'newline';
 				} else {
@@ -171,22 +162,33 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 					);
 
 					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
-
-						for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-							if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-								break;
-							}
-
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
+						$this->replaceTokensFix( $ptr, $token );
 					}
 				}
 			}
 		}
 	}
 
+	/**
+	 * Tokens replacement fixer
+	 *
+	 * @param mixed $ptr Position of the specified pointer.
+	 * @param array $token The token to replace.
+	 *
+	 * @return void
+	 */
+	private function replaceTokensFix( $ptr, array $token ) {
+		$this->phpcsFile->fixer->beginChangeset();
+		$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
+
+		for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
+			if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
+				break;
+			}
+
+			$this->phpcsFile->fixer->replaceToken( $i, '' );
+		}
+
+		$this->phpcsFile->fixer->endChangeset();
+	}
 }
