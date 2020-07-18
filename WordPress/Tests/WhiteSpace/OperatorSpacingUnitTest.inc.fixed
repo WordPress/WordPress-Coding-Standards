@@ -64,3 +64,14 @@ if ( $a === $b
 
 if ( $a === $b or
 	$b === $c ) {}
+
+// Safeguard that the "|" in PHP 8.0 union types is disregarded.
+function foo( int|float $param ) : string|false {}
+
+// Safeguard that the "&" in PHP 8.1 intersection types is disregarded.
+function foo( TypeA&namespace\TypeB $param ) : \TypeC&Partially\Qualified {}
+
+// Safeguard handling of union type separator for readonly properties.
+class Foo {
+	public readonly int|string $prop;
+}
