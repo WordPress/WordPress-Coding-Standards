@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Classes;
 
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\BCTokens;
 
 /**
  * Verifies object instantiation statements.
@@ -59,7 +59,7 @@ class ClassInstantiationSniff extends Sniff {
 		 *
 		 * Currently does not account for classnames passed as a variable variable.
 		 */
-		$this->classname_tokens                    = Tokens::$emptyTokens;
+		$this->classname_tokens                    = BCTokens::emptyTokens();
 		$this->classname_tokens[ \T_NS_SEPARATOR ] = \T_NS_SEPARATOR;
 		$this->classname_tokens[ \T_STRING ]       = \T_STRING;
 		$this->classname_tokens[ \T_SELF ]         = \T_SELF;
@@ -105,7 +105,7 @@ class ClassInstantiationSniff extends Sniff {
 		 */
 		if ( isset( $this->phpcsFile->tokenizerType ) === false || 'PHP' === $this->phpcsFile->tokenizerType ) {
 			$prev_non_empty = $this->phpcsFile->findPrevious(
-				Tokens::$emptyTokens,
+				BCTokens::emptyTokens(),
 				( $stackPtr - 1 ),
 				null,
 				true
@@ -144,7 +144,7 @@ class ClassInstantiationSniff extends Sniff {
 		// Walk back to the last part of the class name.
 		$has_comment = false;
 		for ( $classname_ptr = ( $next_non_empty_after_class_name - 1 ); $classname_ptr >= $stackPtr; $classname_ptr-- ) {
-			if ( ! isset( Tokens::$emptyTokens[ $this->tokens[ $classname_ptr ]['code'] ] ) ) {
+			if ( ! isset( BCTokens::emptyTokens()[ $this->tokens[ $classname_ptr ]['code'] ] ) ) {
 				// Prevent a false positive on variable variables, disregard them for now.
 				if ( $stackPtr === $classname_ptr ) {
 					return;
