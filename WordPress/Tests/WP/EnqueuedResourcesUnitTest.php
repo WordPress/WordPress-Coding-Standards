@@ -44,6 +44,12 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 			26 => 1,
 			30 => 1,
 			31 => 1,
+			42 => 1,
+			46 => 1,
+			48 => 1,
+			49 => 1,
+			54 => 1,
+			55 => 1,
 		);
 	}
 
