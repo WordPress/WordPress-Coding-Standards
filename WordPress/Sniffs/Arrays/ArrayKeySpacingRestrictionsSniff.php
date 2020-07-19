@@ -9,9 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use PHP_CodeSniffer\Util\Tokens;
-use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Fixers\SpacesFixer;
+use PHPCSUtils\Utils\Numbers;
+use PHPCSUtils\Utils\Operators;
 use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Check for proper spacing in array key references.
@@ -49,18 +51,33 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 
 		$token = $this->tokens[ $stackPtr ];
-
 		if ( ! isset( $token['bracket_closer'] ) ) {
 			$this->phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr, 'MissingBracketCloser' );
 			return;
 		}
 
 		$need_spaces = $this->phpcsFile->findNext(
-			array( \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
+			array( \T_CONSTANT_ENCAPSED_STRING, \T_WHITESPACE ),
 			( $stackPtr + 1 ),
 			$token['bracket_closer'],
 			true
 		);
+
+		if ( false !== $need_spaces ) {
+			if ( \T_MINUS === $this->tokens[$need_spaces]['code'] ||
+				\T_PLUS === $this->tokens[$need_spaces]['code']
+			) {
+				if (Operators::isUnaryPlusMinus($this->phpcsFile, $stackPtr)) {
+					return;
+				}
+			}
+
+			if ( \T_LNUMBER === $this->tokens[$need_spaces]['code'] ) {
+				// $number = Numbers::getCompleteNumber($this->phpcsFile, $stackPtr);
+				// Use Numbers::getCompleteNumber();
+				// For 7.4
+			}
+		}
 
 		$spaced1 = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
 		$spaced2 = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
@@ -71,6 +88,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		) {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
+			// SpacesFixer::checkAndFix($this->phpcsFile, $stackPtr, $stackPtr + 1, 1, '', $error, 'NoSpacesAroundArrayKeys');
 			if ( true === $fix ) {
 				if ( ! $spaced1 ) {
 					$this->phpcsFile->fixer->addContentBefore( ( $stackPtr + 1 ), ' ' );
@@ -117,8 +135,8 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		// If spaces are needed, check that there is only one space.
 		if ( false !== $need_spaces && ( $spaced1 || $spaced2 ) ) {
 			if ( $spaced1 ) {
-				$ptr = ( $stackPtr + 1 );
-
+				$ptr    = ( $stackPtr + 1 );
+				$length = 0;
 				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ ( $ptr + 1 ) ]['line'] ) {
 					$length = 'newline';
 				} else {
@@ -144,7 +162,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			if ( $spaced2 ) {
 				$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $token['bracket_closer'] - 1 ), null, true );
 				$ptr            = ( $prev_non_empty + 1 );
-
+				$length         = 0;
 				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ $token['bracket_closer'] ]['line'] ) {
 					$length = 'newline';
 				} else {
@@ -170,25 +188,25 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 	}
 
 	/**
-	 * Tokens replacement fixer
-	 *
-	 * @param mixed $ptr Position of the specified pointer.
-	 * @param array $token The token to replace.
-	 *
-	 * @return void
-	 */
-	private function replaceTokensFix( $ptr, array $token ) {
-		$this->phpcsFile->fixer->beginChangeset();
-		$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
+     * Tokens replacement fixer
+     *
+     * @param mixed $ptr Position of the specified pointer.
+     * @param array $token The token to replace.
+     *
+     * @return void
+     */
+    private function replaceTokensFix( $ptr, array $token ) {
+        $this->phpcsFile->fixer->beginChangeset();
+        $this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
 
-		for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-			if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-				break;
-			}
+        for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
+            if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
+                break;
+            }
 
-			$this->phpcsFile->fixer->replaceToken( $i, '' );
-		}
+            $this->phpcsFile->fixer->replaceToken( $i, '' );
+        }
 
-		$this->phpcsFile->fixer->endChangeset();
-	}
+        $this->phpcsFile->fixer->endChangeset();
+    }
 }

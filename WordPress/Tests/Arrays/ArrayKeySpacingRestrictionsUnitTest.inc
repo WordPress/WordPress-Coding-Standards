@@ -44,3 +44,9 @@ $arr[
 
 $a = $arr[    /*comment*/ 'key']; // Bad x 2.
 $a = $arr[/*comment*/ 'key'   ]; // Bad x 2.
+
+$a = $arr[10_00_000]; // OK.
+$a = $arr[ 10_00_000 ]; // Bad.
+
+$arr[+1]; // Good.
+$arr[ +1 ]; // Bad.

@@ -47,6 +47,8 @@ class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest {
 			40 => 1,
 			45 => 2,
 			46 => 2,
+			49 => 1,
+			52 => 1,
 		);
 	}
 
