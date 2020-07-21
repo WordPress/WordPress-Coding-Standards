@@ -434,7 +434,13 @@ $my_array = [
  */
 [
 'prop1' => $prop1,
-			'prop2' => $prop2,
+            'prop2' => $prop2,
 ] = $some_var;
+
+// Fixer conflict prevention.
+$bad = array(
+    'key1' => 'value1', /* comment
+    end */ 'key2' => 'value2',
+);
 
 // phpcs:set WordPress.Arrays.ArrayIndentation tabIndent true
