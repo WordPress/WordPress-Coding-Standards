@@ -185,7 +185,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->get_wp_version_from_cl( $this->phpcsFile );
+		$this->get_wp_version_from_cli( $this->phpcsFile );
 
 		/*
 		 * Deal with exceptions.

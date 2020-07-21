@@ -18,7 +18,7 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * Usage instructions:
  * - Add appropriate `use` statement(s) to the file/class which intends to use this functionality.
- * - Call the `MinimumWPVersionTrait::get_wp_version_from_cl()` method in the `process()`/`process_token()`
+ * - Call the `MinimumWPVersionTrait::get_wp_version_from_cli()` method in the `process()`/`process_token()`
  *   method.
  * - After that, the `MinimumWPVersionTrait::$minimum_supported_version` property can be freely used
  *   in the sniff.
@@ -79,12 +79,13 @@ trait MinimumWPVersionTrait {
 	 * `$minimum_supported_version` set for individual sniffs through the ruleset.
 	 *
 	 * @since 0.14.0
-	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
-	 *               Now requires the $phpcsFile object to be passed in.
+	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
+	 *               - Renamed from `get_wp_version_from_cl()` to `get_wp_version_from_cli()`.
+	 *               - Now requires the $phpcsFile object to be passed in.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 */
-	protected function get_wp_version_from_cl( File $phpcsFile ) {
+	protected function get_wp_version_from_cli( File $phpcsFile ) {
 		$cl_supported_version = trim( Helper::getCommandLineData( $phpcsFile, 'minimum_supported_wp_version' ) );
 
 		if ( ! empty( $cl_supported_version )
