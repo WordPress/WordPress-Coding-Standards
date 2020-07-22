@@ -208,11 +208,20 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Bow out from reporting and fixing mixed multi-line/single-line arrays.
 			// That is handled by the ArrayDeclarationSpacingSniff.
-			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
-				|| ( 1 !== $this->tokens[ $first_content ]['column']
-					&& \T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )
-			) {
+			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line'] ) {
 				return $closer;
+			}
+
+			// Ignore this item if there is anything but whitespace before the start of the next item.
+			if ( 1 !== $this->tokens[ $first_content ]['column'] ) {
+				// Go to the start of the line.
+				$i = $first_content;
+				while ( 1 !== $this->tokens[ --$i ]['column'] );
+
+				if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
+					$end_of_previous_item = $end_of_this_item;
+					continue;
+				}
 			}
 
 			$found_spaces = ( $this->tokens[ $first_content ]['column'] - 1 );
