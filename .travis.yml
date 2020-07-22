@@ -1,4 +1,5 @@
-dist: trusty
+os: linux
+dist: xenial
 
 cache:
   apt: true
@@ -11,8 +12,6 @@ cache:
 language: php
 
 php:
-    - 5.4
-    - 5.5
     - 5.6
     - 7.0
     - 7.1
@@ -117,8 +116,10 @@ jobs:
     - php: 7.3
       env: PHPCS_BRANCH="3.5.0"
     - php: 5.4
+      dist: trusty
       env: PHPCS_BRANCH="dev-master" LINT=1
     - php: 5.4
+      dist: trusty
       env: PHPCS_BRANCH="3.5.0"
 
     #### TEST STAGE ####
@@ -126,6 +127,20 @@ jobs:
     - stage: test
       php: 7.4
       env: PHPCS_BRANCH="4.0.x-dev as 3.9.99"
+
+    # Builds which need a different distro.
+    - php: 5.5
+      dist: trusty
+      env: PHPCS_BRANCH="dev-master" LINT=1
+    - php: 5.5
+      dist: trusty
+      env: PHPCS_BRANCH="3.5.0"
+    - php: 5.4
+      dist: trusty
+      env: PHPCS_BRANCH="dev-master" LINT=1
+    - php: 5.4
+      dist: trusty
+      env: PHPCS_BRANCH="3.5.0"
 
   allow_failures:
     # Allow failures for unstable builds.
