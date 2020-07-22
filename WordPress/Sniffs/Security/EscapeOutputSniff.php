@@ -196,7 +196,12 @@ class EscapeOutputSniff extends Sniff {
 
 			// These functions only need to have the first argument escaped.
 			if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
-				$first_param      = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
+				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
+				if ( false === $first_param ) {
+					// First parameter doesn't exist. Nothing to do.
+					return;
+				}
+
 				$end_of_statement = ( $first_param['end'] + 1 );
 				unset( $first_param );
 			}
@@ -207,6 +212,10 @@ class EscapeOutputSniff extends Sniff {
 			 */
 			if ( '_deprecated_file' === $function ) {
 				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
+				if ( false === $first_param ) {
+					// First parameter doesn't exist. Nothing to do.
+					return;
+				}
 
 				// Quick check. This disregards comments.
 				if ( preg_match( '`^basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
