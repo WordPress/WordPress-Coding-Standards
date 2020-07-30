@@ -9,9 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed.
@@ -20,9 +21,11 @@ use PHPCSUtils\Utils\TextStrings;
  *
  * @since   1.0.0
  *
- * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * The group name for this group of functions.
@@ -151,7 +154,7 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$this->get_wp_version_from_cl();
+		$this->get_wp_version_from_cli( $this->phpcsFile );
 		$param_count = \count( $parameters );
 		foreach ( $this->target_functions[ $matched_content ] as $position => $parameter_args ) {
 

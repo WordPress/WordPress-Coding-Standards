@@ -12,7 +12,6 @@ namespace WordPressCS\WordPress;
 use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
-use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\PassedParameters;
@@ -48,46 +47,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var string
 	 */
 	const REGEX_COMPLEX_VARS = '`(?:(\{)?(?<!\\\\)\$)?(\{)?(?<!\\\\)\$(\{)?(?P<varname>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:->\$?(?P>varname)|\[[^\]]+\]|::\$?(?P>varname)|\([^\)]*\))*(?(3)\}|)(?(2)\}|)(?(1)\}|)`';
-
-	/**
-	 * Minimum supported WordPress version.
-	 *
-	 * Currently used by the `WordPress.WP.AlternativeFunctions`,
-	 * `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`
-	 * and the `WordPress.WP.DeprecatedParameter` sniff.
-	 *
-	 * These sniffs will throw an error when usage of a deprecated class/function/parameter
-	 * is detected if the class/function/parameter was deprecated before the minimum
-	 * supported WP version; a warning otherwise.
-	 * By default, it is set to presume that a project will support the current
-	 * WP version and up to three releases before.
-	 *
-	 * This property allows changing the minimum supported WP version used by
-	 * these sniffs by setting a property in a custom phpcs.xml ruleset.
-	 * This property will need to be set for each sniff which uses it.
-	 *
-	 * Example usage:
-	 * <rule ref="WordPress.WP.DeprecatedClasses">
-	 *  <properties>
-	 *   <property name="minimum_supported_version" value="4.3"/>
-	 *  </properties>
-	 * </rule>
-	 *
-	 * Alternatively, the value can be passed in one go for all sniff using it via
-	 * the command line or by setting a `<config>` value in a custom phpcs.xml ruleset.
-	 * Note: the `_wp_` in the command line property name!
-	 *
-	 * CL: `phpcs --runtime-set minimum_supported_wp_version 4.5`
-	 * Ruleset: `<config name="minimum_supported_wp_version" value="4.5"/>`
-	 *
-	 * @since 0.14.0 Previously the individual sniffs each contained this property.
-	 *
-	 * @internal When the value of this property is changed, it will also need
-	 *           to be changed in the `WP/AlternativeFunctionsUnitTest.inc` file.
-	 *
-	 * @var string WordPress version.
-	 */
-	public $minimum_supported_version = '5.1';
 
 	/**
 	 * Custom list of classes which test classes can extend.
@@ -1119,25 +1078,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		$lastPtr = ( $nextPtr - 1 );
 
 		return $lastPtr;
-	}
-
-	/**
-	 * Overrule the minimum supported WordPress version with a command-line/config value.
-	 *
-	 * Handle setting the minimum supported WP version in one go for all sniffs which
-	 * expect it via the command line or via a `<config>` variable in a ruleset.
-	 * The config variable overrules the default `$minimum_supported_version` and/or a
-	 * `$minimum_supported_version` set for individual sniffs through the ruleset.
-	 *
-	 * @since 0.14.0
-	 */
-	protected function get_wp_version_from_cl() {
-		$cl_supported_version = trim( Helper::getConfigData( 'minimum_supported_wp_version' ) );
-		if ( ! empty( $cl_supported_version )
-			&& filter_var( $cl_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
-		) {
-			$this->minimum_supported_version = $cl_supported_version;
-		}
 	}
 
 	/**

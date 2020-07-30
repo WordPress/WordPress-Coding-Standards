@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Restricts the use of deprecated WordPress classes and suggests alternatives.
@@ -28,9 +29,11 @@ use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPressCS\WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * List of deprecated classes with alternative when available.
@@ -93,7 +96,7 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->get_wp_version_from_cl();
+		$this->get_wp_version_from_cli( $this->phpcsFile );
 
 		$class_name = ltrim( strtolower( $matched_content ), '\\' );
 
