@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\GetTokensAsString;
 
 /**
  * Flag calls to escaping functions which look like they may have been intended
@@ -76,7 +77,7 @@ class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 		$data = array(
 			$matched_content,
 			$this->target_functions[ $matched_content ],
-			$this->phpcsFile->getTokensAsString( $stackPtr, ( $closer - $stackPtr + 1 ) ),
+			GetTokensAsString::compact( $this->phpcsFile, $stackPtr, $closer, true ),
 		);
 
 		$this->phpcsFile->addWarning(
