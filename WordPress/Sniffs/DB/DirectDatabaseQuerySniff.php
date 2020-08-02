@@ -174,9 +174,13 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$is_object_call = $this->phpcsFile->findNext( \T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
-		if ( false === $is_object_call ) {
-			return; // This is not a call to the wpdb object.
+		$is_object_call = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $is_object_call
+			|| ( \T_OBJECT_OPERATOR !== $this->tokens[ $is_object_call ]['code']
+				&& \T_NULLSAFE_OBJECT_OPERATOR !== $this->tokens[ $is_object_call ]['code'] )
+		) {
+			// This is not a call to the wpdb object.
+			return;
 		}
 
 		$methodPtr = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );

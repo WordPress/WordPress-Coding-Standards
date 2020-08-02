@@ -280,3 +280,17 @@ function non_cachable() {
 	global $wpdb;
 	$wpdb->insert( 'table', array( 'column' => 'foo', 'field' => 'bar' ) ); // Warning direct DB call.
 }
+
+// Safeguard recognition of PHP 8.0+ nullsafe object operator.
+function nullsafe_object_operator() {
+	global $wpdb;
+	$listofthings = $wpdb?->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning x 2.
+	$last = $wpdb?->insert( $wpdb->users, $data, $where ); // Warning x 1.
+}
+
+function stabilize_token_walking($other_db) {
+	global $wpdb;
+	// Overwritting $wpdb is bad, of course, but that's not the concern of this sniff.
+	// This test is making sure that the `$other_db->query` code is not flagged as if it were a call to a `$wpdb` method.
+	$wpdb = $other_db->query;
+}
