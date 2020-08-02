@@ -70,3 +70,6 @@ switch(	STYLESHEETPATH ) {
 
 define( 'STYLESHEETPATH', 'something' );
 const STYLESHEETPATH = 'something';
+
+// Ignore also as "not a global constant" when the nullsafe object operator is used.
+echo $obj?->STYLESHEETPATH;

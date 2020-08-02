@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
@@ -59,6 +60,8 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Array of tokens which if found preceding the $stackPtr indicate that a T_STRING is not a constant.
 	 *
+	 * Additional tokens are added from within the contructor.
+	 *
 	 * @var array
 	 */
 	private $preceding_tokens_to_ignore = array(
@@ -71,11 +74,16 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		\T_IMPLEMENTS      => true,
 		\T_NEW             => true,
 		\T_FUNCTION        => true,
-		\T_DOUBLE_COLON    => true,
-		\T_OBJECT_OPERATOR => true,
 		\T_INSTANCEOF      => true,
 		\T_GOTO            => true,
 	);
+
+	/**
+	 * Constructor to enrich a property.
+	 */
+	public function __construct() {
+		$this->preceding_tokens_to_ignore += Collections::objectOperators();
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
