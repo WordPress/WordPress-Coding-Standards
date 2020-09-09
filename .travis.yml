@@ -171,15 +171,15 @@ install:
       else
         composer config preferred-install.squizlabs/php_codesniffer auto
       fi
-    - composer require squizlabs/php_codesniffer:"${PHPCS_BRANCH}" --no-update --no-suggest --no-scripts
+    - travis_retry composer require squizlabs/php_codesniffer:"${PHPCS_BRANCH}" --no-update --no-suggest --no-scripts
     - |
       if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then
         # PHPUnit 7.x does not allow for installation on PHP 8, so ignore platform
         # requirements to get PHPUnit 7.x to install on nightly.
-        composer install --ignore-platform-reqs --no-suggest
+        travis_retry composer install --ignore-platform-reqs --no-suggest
       else
         # Do a normal dev install in all other cases.
-        composer install --no-suggest
+        travis_retry composer install --no-suggest
       fi
 
 script:
