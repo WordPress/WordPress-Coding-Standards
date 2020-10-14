@@ -97,6 +97,16 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'str_rot13',
 				),
 			),
+			'typecasting' => array(
+				'type'      => 'warning',
+				'message'   => '%s() can be replaced with type casting.',
+				'functions' => array(
+					'intval',
+					'strval',
+					'floatval',
+					'boolval',
+				),
+			),
 		);
 	}
 

@@ -60,6 +60,10 @@ class DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 			37 => 1,
 			38 => 1,
 			39 => 1,
+			42 => 1,
+			43 => 1,
+			44 => 1,
+			45 => 1,
 		);
 	}
 
