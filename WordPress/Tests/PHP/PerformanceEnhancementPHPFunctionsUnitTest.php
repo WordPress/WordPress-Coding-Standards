@@ -37,10 +37,10 @@ class PerformanceEnhancementPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array(
 			4  => 1,
-			5 => 1,
-			6 => 1,
-			7 => 1,
-			8 => 1,
+			5  => 1,
+			6  => 1,
+			7  => 1,
+			8  => 1,
 			10 => 1,
 		);
 	}
