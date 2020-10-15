@@ -12,13 +12,13 @@ namespace WordPressCS\WordPress\Tests\PHP;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the PerformanceEnhancementPHPFunctions sniff.
+ * Unit test class for the PerformantPHPFunctions sniff.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since 3.0.0
  */
-class PerformanceEnhancementPHPFunctionsUnitTest extends AbstractSniffUnitTest {
+class PerformantPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

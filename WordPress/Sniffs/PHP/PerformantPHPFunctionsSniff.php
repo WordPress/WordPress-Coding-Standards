@@ -18,7 +18,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since 3.0.0
  */
-class PerformanceEnhancementPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+class PerformantPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to discourage.
