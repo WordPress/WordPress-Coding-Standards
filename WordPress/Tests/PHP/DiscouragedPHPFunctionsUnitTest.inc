@@ -38,12 +38,6 @@ $output = shell_exec( 'ls -lart' );
 $last_line = system( 'ls', $retval );
 $handle = popen( '/bin/ls', 'r' );
 
-// These calls are slow and type casting is more performant. Warning.
-intval( '10' );
-strval( 100 );
-floatval( '100' );
-boolval( 1 );
-
 // Issue #898.
 class System {}
 class Serialize {}
