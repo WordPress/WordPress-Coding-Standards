@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPressCS\WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
