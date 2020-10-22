@@ -44,7 +44,7 @@ class PerformantPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'floatval',
 					'boolval',
 					'doubleval',
-					'setttype',
+					'settype',
 				),
 			),
 		);
