@@ -99,6 +99,10 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
 
+	<!-- Non enqueable inline scripts should be generated using wp_get_inline_script_tag().
+		 https://core.trac.wordpress.org/ticket/39941 -->
+	<rule ref="WordPress.WP.TemplatedInlineScripts"/>
+	
 	<!-- Warn against overriding WP global variables.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/26 -->
 	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
