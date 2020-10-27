@@ -17,6 +17,7 @@ use WordPressCS\WordPress\Sniff;
 
 /**
  * Makes sure inline scripts and scripts are generated using either {@see wp_get_script_tag()} or {@see wp_get_inline_script_tag()}.
+ * Script loader tags are already detected by {@see EnqueuedResourcesSniff}.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0
