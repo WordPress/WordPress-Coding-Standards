@@ -28,7 +28,7 @@ trait IsUnitTestTrait {
 	/**
 	 * Custom list of classes which test classes can extend.
 	 *
-	 * This property allows end-users to add to the $test_class_whitelist via their ruleset.
+	 * This property allows end-users to add to the $known_test_classes via their ruleset.
 	 * This property will need to be set for each sniff which uses the
 	 * `is_test_class()` method.
 	 * Currently the method is used by the `WordPress.WP.GlobalVariablesOverride`,
@@ -52,14 +52,15 @@ trait IsUnitTestTrait {
 	public $custom_test_class_whitelist = array();
 
 	/**
-	 * Whitelist of classes which test classes can extend.
+	 * List of PHPUnit and WP native classes which test classes can extend.
 	 *
 	 * @since 0.11.0
 	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
+	 *               Renamed from `$test_class_whitelist` to `$known_test_classes`.
 	 *
 	 * @var string[]
 	 */
-	protected $test_class_whitelist = array(
+	protected $known_test_classes = array(
 		'WP_UnitTestCase_Base'                       => true,
 		'WP_UnitTestCase'                            => true,
 		'WP_Ajax_UnitTestCase'                       => true,
@@ -99,10 +100,10 @@ trait IsUnitTestTrait {
 			return false;
 		}
 
-		// Add any potentially whitelisted custom test classes to the whitelist.
+		// Add any potentially extra custom test classes to the known test classes list.
 		$whitelist = WPCS_Sniff::merge_custom_array(
 			$this->custom_test_class_whitelist,
-			$this->test_class_whitelist
+			$this->known_test_classes
 		);
 
 		/*
