@@ -10,8 +10,8 @@ $a = (object) $b;
 $a = (double) $b;
 $a = (real) $b;
 
+$a = (unset) $b; // Error.
 // Warning: Discouraged casts.
-$a = (unset) $b; // Warning.
 $a = (binary) $b; // Warning.
 $a = b"binary string"; // Warning.
 $a = b"binary $string"; // Warning.
@@ -25,5 +25,5 @@ $a = (object      ) $b;
 
 $a = (double ) $b; // Error.
 $a = ( real ) $b; // Error.
-$a = (  unset ) $b; // Warning.
+$a = (  unset ) $b; // Error.
 $a = ( binary ) $b; // Warning.

@@ -29,8 +29,10 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 		return array(
 			10 => 1,
 			11 => 1,
+			13 => 1,
 			26 => 1,
 			27 => 1,
+			28 => 1,
 		);
 	}
 
@@ -41,11 +43,9 @@ class TypeCastsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			14 => 1,
 			15 => 1,
 			16 => 1,
 			17 => 1,
-			28 => 1,
 			29 => 1,
 		);
 	}
