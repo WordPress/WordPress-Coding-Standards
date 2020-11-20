@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Files;
 
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
+use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 
 /**
  * Ensures filenames do not contain underscores.
@@ -29,9 +30,11 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.12.0 Now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_class_whitelist
  */
 class FileNameSniff extends Sniff {
+
+	use IsUnitTestTrait;
 
 	/**
 	 * Regex for the theme specific exceptions.
@@ -192,7 +195,7 @@ class FileNameSniff extends Sniff {
 		 */
 		if ( true === $this->strict_class_file_names ) {
 			$has_class = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
-			if ( false !== $has_class && false === $this->is_test_class( $has_class ) ) {
+			if ( false !== $has_class && false === $this->is_test_class( $this->phpcsFile, $has_class ) ) {
 				$class_name = $this->phpcsFile->getDeclarationName( $has_class );
 				$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 

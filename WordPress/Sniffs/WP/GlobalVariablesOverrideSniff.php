@@ -9,11 +9,12 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Sniff;
+use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 
 /**
  * Warns about overwriting WordPress native global variables.
@@ -29,9 +30,11 @@ use PHPCSUtils\Utils\TextStrings;
  * @since   1.1.0  The sniff now also detects variables being overriden in the global namespace.
  * @since   2.2.0  The sniff now also detects variable assignments via the list() construct.
  *
- * @uses    \WordPressCS\WordPress\Sniff::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_class_whitelist
  */
 class GlobalVariablesOverrideSniff extends Sniff {
+
+	use IsUnitTestTrait;
 
 	/**
 	 * Whether to treat all files as if they were included from
@@ -120,7 +123,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		// Ignore variable overrides in test classes.
 		if ( isset( Tokens::$ooScopeTokens[ $token['code'] ] ) ) {
 
-			if ( true === $this->is_test_class( $stackPtr )
+			if ( true === $this->is_test_class( $this->phpcsFile, $stackPtr )
 				&& $token['scope_condition'] === $stackPtr
 				&& isset( $token['scope_closer'] )
 			) {
