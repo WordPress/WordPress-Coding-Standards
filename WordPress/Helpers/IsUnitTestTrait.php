@@ -55,6 +55,9 @@ trait IsUnitTestTrait {
 	/**
 	 * List of PHPUnit and WP native classes which test classes can extend.
 	 *
+	 * {internal These are the test cases provided in the `/tests/phpunit/includes/`
+	 *           directory of WP Core.}
+	 *
 	 * @since 0.11.0
 	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
 	 *               Renamed from `$test_class_whitelist` to `$known_test_classes`.
@@ -65,10 +68,12 @@ trait IsUnitTestTrait {
 		'WP_UnitTestCase_Base'                       => true,
 		'WP_UnitTestCase'                            => true,
 		'WP_Ajax_UnitTestCase'                       => true,
+		'Block_Supported_Styles_Test'                => true,
 		'WP_Canonical_UnitTestCase'                  => true,
 		'WP_Test_REST_TestCase'                      => true,
 		'WP_Test_REST_Controller_Testcase'           => true,
 		'WP_Test_REST_Post_Type_Controller_Testcase' => true,
+		'WP_Test_XML_TestCase'                       => true,
 		'WP_XMLRPC_UnitTestCase'                     => true,
 		'PHPUnit_Framework_TestCase'                 => true,
 		'PHPUnit\Framework\TestCase'                 => true,
