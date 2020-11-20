@@ -102,7 +102,7 @@ trait IsUnitTestTrait {
 		}
 
 		// Add any potentially extra custom test classes to the known test classes list.
-		$whitelist = WPCS_Sniff::merge_custom_array(
+		$known_test_classes = WPCS_Sniff::merge_custom_array(
 			$this->custom_test_classes,
 			$this->known_test_classes
 		);
@@ -111,18 +111,18 @@ trait IsUnitTestTrait {
 		 * Show some tolerance for user input.
 		 * The custom test class names should be passed as FQN without a prefixing `\`.
 		 */
-		foreach ( $whitelist as $k => $v ) {
-			$whitelist[ $k ] = ltrim( $v, '\\' );
+		foreach ( $known_test_classes as $k => $v ) {
+			$known_test_classes[ $k ] = ltrim( $v, '\\' );
 		}
 
 		// Is the class/trait one of the whitelisted test classes ?
 		$namespace = Namespaces::determineNamespace( $phpcsFile, $stackPtr );
 		$className = ObjectDeclarations::getName( $phpcsFile, $stackPtr );
 		if ( '' !== $namespace ) {
-			if ( isset( $whitelist[ $namespace . '\\' . $className ] ) ) {
+			if ( isset( $known_test_classes[ $namespace . '\\' . $className ] ) ) {
 				return true;
 			}
-		} elseif ( isset( $whitelist[ $className ] ) ) {
+		} elseif ( isset( $known_test_classes[ $className ] ) ) {
 			return true;
 		}
 
@@ -133,14 +133,14 @@ trait IsUnitTestTrait {
 		}
 
 		if ( '\\' === $extendedClassName[0] ) {
-			if ( isset( $whitelist[ substr( $extendedClassName, 1 ) ] ) ) {
+			if ( isset( $known_test_classes[ substr( $extendedClassName, 1 ) ] ) ) {
 				return true;
 			}
 		} elseif ( '' !== $namespace ) {
-			if ( isset( $whitelist[ $namespace . '\\' . $extendedClassName ] ) ) {
+			if ( isset( $known_test_classes[ $namespace . '\\' . $extendedClassName ] ) ) {
 				return true;
 			}
-		} elseif ( isset( $whitelist[ $extendedClassName ] ) ) {
+		} elseif ( isset( $known_test_classes[ $extendedClassName ] ) ) {
 			return true;
 		}
 
