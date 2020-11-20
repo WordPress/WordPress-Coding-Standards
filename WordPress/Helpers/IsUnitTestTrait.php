@@ -19,6 +19,13 @@ use WordPressCS\WordPress\Sniff as WPCS_Sniff;
  * Helper utilities for sniffs which need to take into account whether the
  * code under examination is unit test code or not.
  *
+ * Usage instructions:
+ * - Add appropriate `use` statement(s) to the file/class which intends to use this functionality.
+ * - Now the sniff will automatically support the public `custom_test_classes` property which
+ *   users can set in their custom ruleset. Do not add the property to the sniff!
+ * - The sniff can call the methods in this trait to verify if certain code was found within
+ *   a test method or is a test class and will take the custom property into account.
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The properties and method in this trait were previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and have been moved here.
@@ -28,13 +35,15 @@ trait IsUnitTestTrait {
 	/**
 	 * Custom list of classes which test classes can extend.
 	 *
-	 * This property allows end-users to add to the $known_test_classes via their ruleset.
-	 * This property will need to be set for each sniff which uses the
-	 * `is_test_class()` method.
-	 * Currently the method is used by the `WordPress.WP.GlobalVariablesOverride`,
+	 * This property allows end-users to add to the build-in `$known_test_classes`
+	 * via their custom PHPCS ruleset.
+	 * This property will need to be set for each sniff which uses this trait.
+	 *
+	 * Currently this property is used by the `WordPress.WP.GlobalVariablesOverride`,
 	 * `WordPress.NamingConventions.PrefixAllGlobals` and the `WordPress.Files.Filename` sniffs.
 	 *
 	 * Example usage:
+	 * ```xml
 	 * <rule ref="WordPress.[Subset].[Sniffname]">
 	 *  <properties>
 	 *   <property name="custom_test_classes" type="array">
@@ -43,6 +52,11 @@ trait IsUnitTestTrait {
 	 *   </property>
 	 *  </properties>
 	 * </rule>
+	 * ```
+	 *
+	 * Note: it is strongly _recommended_ to exclude your test directories for
+	 * select error codes of those particular sniffs instead of relying on this
+	 * property/trait.
 	 *
 	 * @since 0.11.0
 	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
@@ -85,8 +99,9 @@ trait IsUnitTestTrait {
 	 * Check if a class token is part of a unit test suite.
 	 *
 	 * Unit test classes are identified as such:
-	 * - Class which either extends WP_UnitTestCase or PHPUnit_Framework_TestCase
-	 *   or a custom whitelisted unit test class.
+	 * - Class which either extends one of the known test cases, such as `WP_UnitTestCase`
+	 *   or `PHPUnit_Framework_TestCase` or extends a custom unit test class as listed in the
+	 *   `custom_test_classes` property.
 	 *
 	 * @since 0.12.0 Split off from the `is_token_in_test_method()` method.
 	 * @since 1.0.0  Improved recognition of namespaced class names.
