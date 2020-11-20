@@ -37,7 +37,7 @@ trait IsUnitTestTrait {
 	 * Example usage:
 	 * <rule ref="WordPress.[Subset].[Sniffname]">
 	 *  <properties>
-	 *   <property name="custom_test_class_whitelist" type="array">
+	 *   <property name="custom_test_classes" type="array">
 	 *     <element value="My_Plugin_First_Test_Class"/>
 	 *     <element value="My_Plugin_Second_Test_Class"/>
 	 *   </property>
@@ -46,10 +46,11 @@ trait IsUnitTestTrait {
 	 *
 	 * @since 0.11.0
 	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
+	 *               Renamed from `$custom_test_class_whitelist` to `$custom_test_classes`.
 	 *
 	 * @var string|string[]
 	 */
-	public $custom_test_class_whitelist = array();
+	public $custom_test_classes = array();
 
 	/**
 	 * List of PHPUnit and WP native classes which test classes can extend.
@@ -102,7 +103,7 @@ trait IsUnitTestTrait {
 
 		// Add any potentially extra custom test classes to the known test classes list.
 		$whitelist = WPCS_Sniff::merge_custom_array(
-			$this->custom_test_class_whitelist,
+			$this->custom_test_classes,
 			$this->known_test_classes
 		);
 

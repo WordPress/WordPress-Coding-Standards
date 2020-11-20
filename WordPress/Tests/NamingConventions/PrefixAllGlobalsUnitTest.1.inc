@@ -181,7 +181,7 @@ class Example extends WP_UnitTestCase {
 	function do_something() {}
 }
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist[] My_TestClass
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_classes[] My_TestClass
 class Test_Class_D extends My_TestClass {
 
 	const SOME_CONSTANT = 'value';
@@ -190,7 +190,7 @@ class Test_Class_D extends My_TestClass {
 
 	function do_something() {}
 }
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist[]
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_classes[]
 
 
 if ( ! function_exists( 'intdiv' ) ) {

@@ -30,7 +30,7 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
  * @since   0.12.0 Now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
 class FileNameSniff extends Sniff {
 

@@ -30,7 +30,7 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
  * @since   1.1.0  The sniff now also detects variables being overriden in the global namespace.
  * @since   2.2.0  The sniff now also detects variable assignments via the list() construct.
  *
- * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
 class GlobalVariablesOverrideSniff extends Sniff {
 

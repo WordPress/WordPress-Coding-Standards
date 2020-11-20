@@ -29,7 +29,7 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
  * @since   2.2.0  - Now also checks variables assigned via the list() construct.
  *                 - Now also ignores global functions which are marked as @deprecated.
  *
- * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_class_whitelist
+ * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
 class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
