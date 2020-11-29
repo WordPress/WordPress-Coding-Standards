@@ -701,62 +701,72 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 					continue;
 				}
 
-				$previous_comment = $this->phpcsFile->findPrevious( Tokens::$commentTokens, ( $stack_ptr - 1 ) );
+				/*
+				 * Check that the comment is either on the line before the gettext call or
+				 * if it's not, that there is only whitespace between.
+				 *
+				 * For multiline gettext calls, check that the comment is either on the same line with the gettext call
+				 * or between the gettext call and the next string
+				 */
 
-				if ( false !== $previous_comment ) {
-					/*
-					 * Check that the comment is either on the line before the gettext call or
-					 * if it's not, that there is only whitespace between.
-					 */
-					$correctly_placed = false;
+				$correctly_placed = false;
+				$instruction_end  = $this->phpcsFile->findEndOfStatement( $stack_ptr );
+				$next_string      = $this->phpcsFile->findNext( Tokens::$stringTokens, $stack_ptr + 1 );
 
-					if ( ( $this->tokens[ $previous_comment ]['line'] + 1 ) === $this->tokens[ $stack_ptr ]['line'] ) {
+				if ( $this->tokens[ $instruction_end ]['line'] > $this->tokens[ $stack_ptr ]['line'] && $next_string && $this->tokens[ $next_string ]['line'] !== $this->tokens[ $stack_ptr ]['line'] ) {
+					$comment = $this->phpcsFile->findNext( Tokens::$commentTokens, $stack_ptr + 1 );
+					if ( $this->tokens[ $comment ]['line'] >= $this->tokens[ $stack_ptr ]['line'] && $this->tokens[ $comment ]['line'] <= $this->tokens[ $next_string ]['line'] ) {
+						$correctly_placed = true;
+					}
+				} else {
+					$comment = $this->phpcsFile->findPrevious( Tokens::$commentTokens, $stack_ptr - 1 );
+					if ( ( $this->tokens[ $comment ]['line'] + 1 ) === $this->tokens[ $stack_ptr ]['line'] ) {
 						$correctly_placed = true;
 					} else {
-						$next_non_whitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $previous_comment + 1 ), $stack_ptr, true );
+						$next_non_whitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $comment + 1 ), $stack_ptr, true );
 						if ( false === $next_non_whitespace || $this->tokens[ $next_non_whitespace ]['line'] === $this->tokens[ $stack_ptr ]['line'] ) {
 							// No non-whitespace found or next non-whitespace is on same line as gettext call.
 							$correctly_placed = true;
 						}
 						unset( $next_non_whitespace );
 					}
+				}
 
+				if ( false !== $comment && true === $correctly_placed ) {
 					/*
 					 * Check that the comment starts with 'translators:'.
 					 */
-					if ( true === $correctly_placed ) {
+					if ( \T_COMMENT === $this->tokens[ $comment ]['code'] ) {
+						$comment_text = trim( $this->tokens[ $comment ]['content'] );
 
-						if ( \T_COMMENT === $this->tokens[ $previous_comment ]['code'] ) {
-							$comment_text = trim( $this->tokens[ $previous_comment ]['content'] );
-
-							// If it's multi-line /* */ comment, collect all the parts.
-							if ( '*/' === substr( $comment_text, -2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
-								for ( $i = ( $previous_comment - 1 ); 0 <= $i; $i-- ) {
-									if ( \T_COMMENT !== $this->tokens[ $i ]['code'] ) {
-										break;
-									}
-
-									$comment_text = trim( $this->tokens[ $i ]['content'] ) . $comment_text;
+						// If it's multi-line /* */ comment, collect all the parts.
+						if ( '*/' === substr( $comment_text, - 2 ) && '/*' !== substr( $comment_text, 0, 2 ) ) {
+							for ( $i = ( $comment - 1 ); 0 <= $i; $i -- ) {
+								if ( \T_COMMENT !== $this->tokens[ $i ]['code'] ) {
+									break;
 								}
-							}
 
-							if ( true === $this->is_translators_comment( $comment_text ) ) {
-								// Comment is ok.
-								return;
+								$comment_text = trim( $this->tokens[ $i ]['content'] ) . $comment_text;
 							}
-						} elseif ( \T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $previous_comment ]['code'] ) {
-							// If it's docblock comment (wrong style) make sure that it's a translators comment.
-							$db_start      = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, ( $previous_comment - 1 ) );
-							$db_first_text = $this->phpcsFile->findNext( \T_DOC_COMMENT_STRING, ( $db_start + 1 ), $previous_comment );
+						}
 
-							if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
-								$this->phpcsFile->addWarning(
-									'A "translators:" comment must be a "/* */" style comment. Docblock comments will not be picked up by the tools to generate a ".pot" file.',
-									$stack_ptr,
-									'TranslatorsCommentWrongStyle'
-								);
-								return;
-							}
+						if ( true === $this->is_translators_comment( $comment_text ) ) {
+							// Comment is ok.
+							return;
+						}
+					} elseif ( \T_DOC_COMMENT_CLOSE_TAG === $this->tokens[ $comment ]['code'] ) {
+						// If it's docblock comment (wrong style) make sure that it's a translators comment.
+						$db_start      = $this->phpcsFile->findPrevious( \T_DOC_COMMENT_OPEN_TAG, ( $comment - 1 ) );
+						$db_first_text = $this->phpcsFile->findNext( \T_DOC_COMMENT_STRING, ( $db_start + 1 ), $comment );
+
+						if ( true === $this->is_translators_comment( $this->tokens[ $db_first_text ]['content'] ) ) {
+							$this->phpcsFile->addWarning(
+								'A "translators:" comment must be a "/* */" style comment. Docblock comments will not be picked up by the tools to generate a ".pot" file.',
+								$stack_ptr,
+								'TranslatorsCommentWrongStyle'
+							);
+
+							return;
 						}
 					}
 				}
