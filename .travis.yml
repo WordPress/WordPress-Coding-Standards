@@ -129,6 +129,13 @@ jobs:
       env: PHPCS_BRANCH="4.0.x-dev as 3.9.99"
 
     # Builds which need a different distro.
+    - php: 8.0
+      env: PHPCS_BRANCH="dev-master" LINT=1
+    - php: 8.0
+      # PHPCS is only compatible with PHP 8.0 as of version 3.5.7.
+      env: PHPCS_BRANCH="3.5.7"
+
+    # Builds which need a different distro.
     - php: 5.5
       dist: trusty
       env: PHPCS_BRANCH="dev-master" LINT=1
@@ -173,7 +180,7 @@ install:
       fi
     - travis_retry composer require squizlabs/php_codesniffer:"${PHPCS_BRANCH}" --no-update --no-suggest --no-scripts
     - |
-      if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then
+      if [[ $TRAVIS_PHP_VERSION == "nightly" || $TRAVIS_PHP_VERSION == "8.0" ]]; then
         # PHPUnit 7.x does not allow for installation on PHP 8, so ignore platform
         # requirements to get PHPUnit 7.x to install on nightly.
         travis_retry composer install --ignore-platform-reqs --no-suggest
