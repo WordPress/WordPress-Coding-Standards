@@ -1081,46 +1081,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a token is used within a unit test.
-	 *
-	 * Unit test methods are identified as such:
-	 * - Method is within a known unit test class;
-	 * - or Method is within a class/trait which extends a known unit test class.
-	 *
-	 * @since 0.11.0
-	 * @since 1.1.0  Supports anonymous test classes and improved handling of nested scopes.
-	 *
-	 * @param int $stackPtr The position of the token to be examined.
-	 *
-	 * @return bool True if the token is within a unit test, false otherwise.
-	 */
-	protected function is_token_in_test_method( $stackPtr ) {
-		// Is the token inside of a function definition ?
-		$functionToken = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
-		if ( false === $functionToken ) {
-			// No conditions or no function condition.
-			return false;
-		}
-
-		$conditions = $this->tokens[ $stackPtr ]['conditions'];
-		foreach ( $conditions as $token => $condition ) {
-			if ( $token === $functionToken ) {
-				// Only examine the conditions the function is nested in, not those nested within the function.
-				break;
-			}
-
-			if ( isset( Tokens::$ooScopeTokens[ $condition ] ) ) {
-				$is_test_class = $this->is_test_class( $token );
-				if ( true === $is_test_class ) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check if a class token is part of a unit test suite.
 	 *
 	 * Unit test classes are identified as such:
