@@ -1,0 +1,69 @@
+name: Sniffs
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+jobs:
+
+  sniff:
+    name: Sniffs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Set up Composer caching
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer-dependencies
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      # WordPress Coding Standards.
+      # @link https://github.com/WordPress/WordPress-Coding-Standards
+      # @link http://pear.php.net/package/PHP_CodeSniffer/
+      - name: Configure runtime.
+        run: $(pwd)/vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1
+
+      # @link http://xmlsoft.org/xmllint.html
+      # For the build to properly error when validating against a scheme, these each have to be in their own condition.
+      - name: Validate the xml files.
+        run: |
+          xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+          xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+
+      - name: Check the code-style consistency of the xml files.
+        run: |
+          diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml")
+          diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml")
+          diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml")
+          diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml")
+          diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample")
+
+      # @link https://getcomposer.org/doc/03-cli.md#validate
+      - name: Validate the composer.json file.
+        run: |
+          composer validate --no-check-all --strict
+
+      # For now, just check that all sniffs have unit tests.
+      # At a later stage the documentation check can be activated.
+      - name: Check that the sniffs available are feature complete.
+        run: |
+          composer check-complete
