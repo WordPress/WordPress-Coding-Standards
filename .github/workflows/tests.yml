@@ -39,7 +39,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-          extensions: libxml2-utils
+
+      - name: Install xmllint
+        run: sudo apt-get install libxml2-utils
 
       - name: Setup PHPCS
         run: composer config preferred-install.squizlabs/php_codesniffer auto
