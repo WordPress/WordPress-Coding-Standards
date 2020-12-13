@@ -37,7 +37,7 @@ jobs:
 
     env:
       PHP_VERSION: ${{ matrix.php }}
-      phpcs_branch: ${{ matrix.phpcs_branch }}
+      PHPCS_BRANCH: ${{ matrix.phpcs_branch }}
       LINT: ${{ matrix.lint }}
 
     steps:
