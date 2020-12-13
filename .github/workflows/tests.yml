@@ -39,7 +39,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-          extenstions: [ 'libxml2-utils' ]
+          extensions: libxml2-utils
 
       - name: Setup PHPCS
         run: composer config preferred-install.squizlabs/php_codesniffer auto
