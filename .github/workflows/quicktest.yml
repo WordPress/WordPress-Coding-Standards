@@ -1,0 +1,86 @@
+name: Quick Test
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+env:
+  XMLLINT_INDENT: '	'
+
+jobs:
+
+  sniff:
+    name: Quicktests - PHP ${{ matrix.php }}/PHPCS ${{ matrix.phpcs_branch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.4', '7.3', '5.4' ]
+        phpcs_branch: [ 'dev-master', '3.5.0' ]
+        lint: [ '1' ]
+        include:
+          - php: '7.3'
+            phpcs_branch: '3.5.0'
+            lint: 0
+          - php: '5.4'
+            phpcs_branch: '3.5.0'
+            lint: 0
+        exclude:
+          - php: '7.3'
+            phpcs_branch: '3.5.0'
+            lint: 1
+          - php: '7.3'
+            phpcs_branch: '3.5.0'
+            lint: 1
+
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      phpcs_branch: ${{ matrix.phpcs_branch }}
+      LINT: ${{ matrix.lint }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Set up Composer caching
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer-dependencies
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          # On stable PHPCS versions, allow for PHP deprecation notices.
+          # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+          ini-values: error_reporting=E_ALL & ~E_DEPRECATED
+
+      - name: Install xmllint
+        run: sudo apt-get install libxml2-utils
+
+      - name: Setup PHPCS
+        run: composer config preferred-install.squizlabs/php_codesniffer auto
+
+      - name: Install PHPCS
+        run: composer require squizlabs/php_codesniffer:"${{ env.PHPCS_BRANCH }}" --no-update --no-suggest --no-scripts
+
+      - name: Install Composer dependencies
+        run: composer install --no-suggest
+
+      - name: Lint PHP files against parse errors.
+        if: ${{ env.LINT }}
+        run: composer lint
+
+      - name: Run unit tests
+        run: composer run-tests
