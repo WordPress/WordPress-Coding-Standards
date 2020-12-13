@@ -54,7 +54,7 @@ jobs:
       # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
       - name: Allow PHP deprecation notices
         if: ${{ env.PHPCS_BRANCH != 'dev-master' }}
-        run: echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+        run: echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> ~/.phpenv/versions/${{ matrix.php }}/etc/conf.d/travis.ini
 
       - name: Setup PHPCS
         run: composer config preferred-install.squizlabs/php_codesniffer auto
