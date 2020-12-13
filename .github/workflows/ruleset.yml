@@ -1,0 +1,87 @@
+name: Sniffs
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+env:
+  XMLLINT_INDENT: '	'
+
+jobs:
+
+  sniff:
+    name: Check rulesets
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.4' ]
+        PHPCS_BRANCH: [ 'dev-master', '3.5.0' ]
+
+    env:
+      PHP_VERSION: ${{ matrix.php }}
+      PHPCS_BRANCH: ${{ matrix.php }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Set up Composer caching
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer-dependencies
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - name: Install xmllint
+        run: sudo apt-get install libxml2-utils
+
+      # On stable PHPCS versions, allow for PHP deprecation notices.
+      # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+      - name: Allow PHP deprecation notices
+        if: ${{ env.PHPCS_BRANCH != 'dev-master' }}
+        run: echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+      - name: Setup PHPCS
+        run: composer config preferred-install.squizlabs/php_codesniffer auto
+
+      - name: Install PHPCS
+        run: composer require squizlabs/php_codesniffer:"${{ env.PHPCS_BRANCH }}" --no-update --no-suggest --no-scripts
+
+      - name: Install Composer dependencies
+        run: composer install --no-suggest
+
+      - name: Check WordPress-Core rulesest
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
+
+      - name: Check WordPress-Docs ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
+
+      - name: Check WordPress-Extra ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
+
+      - name: Check WordPress ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
+
+      # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
+      # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
+      # For the first run, the exit code will be 1 (= all fixable errors fixed).
+      # `travis_retry` should then kick in to run the fixer again which should now return 0 (= no fixable errors found).
+      # All error codes for the PHPCBF: https://github.com/squizlabs/PHP_CodeSniffer/issues/1270#issuecomment-272768413
+      - name:
+        if: ${{ matrix.PHPCS_BRANCH == 'dev-master' }}
+        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
