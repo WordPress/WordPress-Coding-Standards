@@ -7,10 +7,14 @@ on:
       - develop
   pull_request:
 
+env:
+  PHPCS_BRANCH: 'dev-master'
+  XMLLINT_INDENT: '	'
+
 jobs:
 
   sniff:
-    name: Sniffs
+    name: Run sniffs
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +40,15 @@ jobs:
         with:
           php-version: '7.4'
 
+      - name: Setup PHPCS
+        run: composer config preferred-install.squizlabs/php_codesniffer auto
+
+      - name: Install PHPCS
+        run: composer require squizlabs/php_codesniffer:"${{ env.PHPCS_BRANCH }}" --no-update --no-suggest --no-scripts
+
+      - name: Install Composer dependencies
+        run: composer install --no-suggest
+
       # WordPress Coding Standards.
       # @link https://github.com/WordPress/WordPress-Coding-Standards
       # @link http://pear.php.net/package/PHP_CodeSniffer/
@@ -59,11 +72,9 @@ jobs:
 
       # @link https://getcomposer.org/doc/03-cli.md#validate
       - name: Validate the composer.json file.
-        run: |
-          composer validate --no-check-all --strict
+        run: composer validate --no-check-all --strict
 
       # For now, just check that all sniffs have unit tests.
       # At a later stage the documentation check can be activated.
       - name: Check that the sniffs available are feature complete.
-        run: |
-          composer check-complete
+        run: composer check-complete
