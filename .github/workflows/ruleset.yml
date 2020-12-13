@@ -22,7 +22,7 @@ jobs:
 
     env:
       PHP_VERSION: ${{ matrix.php }}
-      PHPCS_BRANCH: ${{ matrix.php }}
+      PHPCS_BRANCH: ${{ matrix.PHPCS_BRANCH }}
 
     steps:
       - name: Checkout repository
