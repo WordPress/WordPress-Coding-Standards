@@ -1,4 +1,4 @@
-name: Sniffs
+name: Ruleset checks
 
 on:
   push:
