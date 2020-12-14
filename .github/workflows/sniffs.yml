@@ -2,9 +2,6 @@ name: Code Sniffs
 
 on:
   push:
-    branches:
-      - master
-      - develop
   pull_request:
 
 env:
@@ -19,7 +16,7 @@ jobs:
   # - Sets up PHP.
   # - Installs libxml2-utils.
   # - Installs PHPCS.
-  # _ Install Composer dependencies.
+  # - Install Composer dependencies.
   # - Runs PHPCS ignoring warnings.
   # - Validates the WordPress rulesets.
   # - Validates the sample ruleset.
@@ -27,7 +24,7 @@ jobs:
   # - Validates the composer.json file.
   # - Checks that sniffs have unit tests.
   sniffs:
-    name: Run sniffs
+    name: Run code sniffs
     runs-on: ubuntu-latest
 
     steps:

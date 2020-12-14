@@ -2,9 +2,6 @@ name: Ruleset checks
 
 on:
   push:
-    branches:
-      - master
-      - develop
   pull_request:
 
 jobs:
@@ -16,21 +13,16 @@ jobs:
   # - Checks out the repository.
   # - Configures caching for Composer.
   # - Sets up PHP.
-  # - Configures error reporting in PHP.
   # - Installs PHPCS.
   # - Installs Composer dependencies.
   # - Checks the WordPress rulesets.
-  sniff:
-    name: Check rulesets
+  ruleset-checks:
+    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ '7.4' ]
-        PHPCS_BRANCH: [ 'dev-master', '3.5.0' ]
-
-    env:
-      PHP_VERSION: ${{ matrix.php }}
-      PHPCS_BRANCH: ${{ matrix.PHPCS_BRANCH }}
+        phpcs_branch: [ 'dev-master', '3.5.0' ]
 
     steps:
       - name: Checkout repository
@@ -52,17 +44,21 @@ jobs:
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
+        if: ${{ matrix.phpcs_branch != 'dev-master' }}
         with:
-          php-version: ${{ env.PHP_VERSION }}
+          php-version: ${{ matrix.php }}
 
       # On stable PHPCS versions, allow for PHP deprecation notices.
       # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
-      - name: Configure error reporting
-        if: ${{ matrix.PHPCS_BRANCH == 'dev-master' }}
-        run: echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> /etc/php/${{ env.PHP_VERSION }}/cli/php.ini
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        if: ${{ matrix.phpcs_branch == 'dev-master' }}
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
       - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"${{ env.PHPCS_BRANCH }}" --no-update --no-suggest --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-suggest --no-scripts
 
       - name: Install Composer dependencies
         run: composer install --no-suggest
@@ -83,12 +79,12 @@ jobs:
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
       # For the first run, the exit code will be 1 (= all fixable errors fixed).
       - name: Test for fixer conflicts (fixes expected)
-        if: ${{ matrix.PHPCS_BRANCH == 'dev-master' }}
+        if: ${{ matrix.phpcs_branch == 'dev-master' }}
         continue-on-error: true
         run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
 
       # Run the fixer again which should now return 0 (= no fixable errors found).
       # All error codes for the PHPCBF: https://github.com/squizlabs/PHP_CodeSniffer/issues/1270#issuecomment-272768413
       - name: Test for fixer conflicts
-        if: ${{ matrix.PHPCS_BRANCH == 'dev-master' }}
+        if: ${{ matrix.phpcs_branch == 'dev-master' }}
         run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary

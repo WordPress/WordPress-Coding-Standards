@@ -1,20 +1,22 @@
-name: Quick Tests
+name: Unit Tests
 
 on:
   push:
-    branches-ignore:
+    branches:
       - master
       - develop
+  pull_request:
 
 jobs:
-  # Performs some quick tests.
-  # This is a much quicker test suite which only runs the unit tests and linting
-  # against the low/high supported PHP/PHPCS combinations.
+  # Runs the test suite against all supported branches and combinations.
+  #
+  # Linting is performed on all jobs run against PHPCS `dev-master`.
   #
   # Performs the following steps:
   # - Checks out the repository.
   # - Configures caching for Composer.
   # - Sets up PHP.
+  # - Configures PHPCS to install from source (only when running with 4.0.x-dev).
   # - Installs PHPCS.
   # - Install Composer dependencies.
   # - Runs the Composer linting script (if desired).
@@ -22,15 +24,30 @@ jobs:
   quick-tests:
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}${{ matrix.lint && ' with linting' || '' }}
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.allowed_failure }}
     strategy:
       matrix:
-        php: [ '7.4', '5.4' ]
-        phpcs_branch: [ 'dev-master' ]
+        php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4' ]
+        phpcs_branch: [ 'dev-master', '3.5.0' ]
+        allowed_failure: [ false ]
         include:
-          - php: '7.3'
-            phpcs_branch: '3.5.0'
-          - php: '5.4'
-            phpcs_branch: '3.5.0'
+          - php: '8.0'
+            phpcs_branch: 'dev-master'
+            allowed_failure: false
+          # PHPCS is only compatible with PHP 8.0 as of version 3.5.7.
+          - php: '8.0'
+            phpcs_branch: '3.5.7'
+            allowed_failure: false
+          # Add extra build to test against PHPCS 4.
+          - php: '7.4'
+            phpcs_branch: '4.0.x-dev as 3.9.99'
+            allowed_failure: true
+          - php: '8.1'
+            phpcs_branch: 'dev-master'
+            allowed_failure: true
+          - php: '8.1'
+            phpcs_branch: '3.5.7'
+            allowed_failure: true
 
     steps:
       - name: Checkout repository
@@ -65,10 +82,22 @@ jobs:
           php-version: ${{ matrix.php }}
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
+      # Set Composer up to download only PHPCS from source for PHPCS 4.x.
+      # The source is needed to get the base testcase from PHPCS.
+      # All other jobs can use `auto`, which is Composer's default value.
+      - name: Configure PHPCS
+        if: ${{ contains( '4.0.x-dev', matrix.phpcs_branch ) }}
+        run: composer config preferred-install.squizlabs/php_codesniffer source
+
       - name: Install PHPCS
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-suggest --no-scripts
 
-      - name: Install Composer dependencies
+      - name: Install composer dependencies (PHP >= 8.0)
+        if: ${{ matrix.php >= 8.0 }}
+        run: composer install --ignore-platform-reqs --no-suggest
+
+      - name: Install Composer dependencies (PHP < 8.0 )
+        if: ${{ matrix.php < 8.0 }}
         run: composer install --no-suggest
 
       - name: Lint PHP files against parse errors
