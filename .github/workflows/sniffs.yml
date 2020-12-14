@@ -1,4 +1,4 @@
-name: Sniffs
+name: Code Sniffs
 
 on:
   push:
@@ -8,12 +8,25 @@ on:
   pull_request:
 
 env:
-  PHPCS_BRANCH: 'dev-master'
   XMLLINT_INDENT: '	'
 
 jobs:
-
-  sniff:
+  # Performs some code-style related checks.
+  #
+  # Performs the following steps:
+  # - Checks out the repository.
+  # - Configures caching for Composer.
+  # - Sets up PHP.
+  # - Installs libxml2-utils.
+  # - Installs PHPCS.
+  # _ Install Composer dependencies.
+  # - Runs PHPCS ignoring warnings.
+  # - Validates the WordPress rulesets.
+  # - Validates the sample ruleset.
+  # - Checks for code-style consistency.
+  # - Validates the composer.json file.
+  # - Checks that sniffs have unit tests.
+  sniffs:
     name: Run sniffs
     runs-on: ubuntu-latest
 
@@ -25,7 +38,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - name: Set up Composer caching
+      - name: Configure Composer caching
         uses: actions/cache@v2
         env:
           cache-name: cache-composer-dependencies
@@ -35,7 +48,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Set up PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
@@ -43,11 +56,8 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get install libxml2-utils
 
-      - name: Setup PHPCS
-        run: composer config preferred-install.squizlabs/php_codesniffer auto
-
       - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"${{ env.PHPCS_BRANCH }}" --no-update --no-suggest --no-scripts
+        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-suggest --no-scripts
 
       - name: Install Composer dependencies
         run: composer install --no-suggest
@@ -55,17 +65,19 @@ jobs:
       # WordPress Coding Standards.
       # @link https://github.com/WordPress/WordPress-Coding-Standards
       # @link http://pear.php.net/package/PHP_CodeSniffer/
-      - name: Configure runtime.
+      - name: Run PHPCS ignoring warnings
         run: $(pwd)/vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1
 
+      # Validate the xml files.
       # @link http://xmlsoft.org/xmllint.html
       # For the build to properly error when validating against a scheme, these each have to be in their own condition.
-      - name: Validate the xml files.
-        run: |
-          xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
-          xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+      - name: Validate the WordPress rulesets
+        run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
-      - name: Check the code-style consistency of the xml files.
+      - name: Validate the sample ruleset
+        run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+
+      - name: Check the code-style consistency of the xml files
         run: |
           diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml")
           diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml")
@@ -74,10 +86,11 @@ jobs:
           diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample")
 
       # @link https://getcomposer.org/doc/03-cli.md#validate
-      - name: Validate the composer.json file.
+      - name: Validate the composer.json file
         run: composer validate --no-check-all --strict
 
+      # Check that the sniffs available are feature complete.
       # For now, just check that all sniffs have unit tests.
       # At a later stage the documentation check can be activated.
-      - name: Check that the sniffs available are feature complete.
+      - name: Check that all sniffs have unit tests
         run: composer check-complete
