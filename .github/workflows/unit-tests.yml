@@ -21,7 +21,7 @@ jobs:
   # - Install Composer dependencies.
   # - Runs the Composer linting script (if desired).
   # - Runs Composer run-tests script.
-  quick-tests:
+  test:
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}${{ matrix.lint && ' with linting' || '' }}
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.allowed_failure }}
