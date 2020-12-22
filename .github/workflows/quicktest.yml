@@ -66,7 +66,7 @@ jobs:
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
       - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-suggest --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
         run: composer install --no-suggest
