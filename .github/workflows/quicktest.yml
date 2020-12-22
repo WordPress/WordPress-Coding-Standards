@@ -69,7 +69,7 @@ jobs:
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
-        run: composer install --no-suggest
+        run: composer install
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
