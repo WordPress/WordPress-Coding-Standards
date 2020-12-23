@@ -19,10 +19,10 @@ jobs:
   # - Configures PHPCS to install from source (only when running with 4.0.x-dev).
   # - Installs PHPCS.
   # - Install Composer dependencies.
-  # - Runs the Composer linting script (if desired).
+  # - Runs the Composer linting script.
   # - Runs Composer run-tests script.
   test:
-    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}${{ matrix.lint && ' with linting' || '' }}
+    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.allowed_failure }}
     strategy:
