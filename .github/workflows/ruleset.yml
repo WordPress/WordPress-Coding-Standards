@@ -21,7 +21,7 @@ jobs:
   # - Installs Composer dependencies.
   # - Checks the WordPress rulesets.
   ruleset-checks:
-    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
+    name: "Ruleset check: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
