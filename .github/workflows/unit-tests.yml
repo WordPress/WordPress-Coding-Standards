@@ -45,9 +45,6 @@ jobs:
           - php: '8.1'
             phpcs_branch: 'dev-master'
             allowed_failure: true
-          - php: '8.1'
-            phpcs_branch: '3.5.7'
-            allowed_failure: true
 
     steps:
       - name: Checkout repository
