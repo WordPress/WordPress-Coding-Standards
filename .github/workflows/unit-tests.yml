@@ -72,6 +72,7 @@ jobs:
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
         with:
           php-version: ${{ matrix.php }}
+          coverage: none
 
       # On stable PHPCS versions, allow for PHP deprecation notices.
       # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
@@ -80,6 +81,7 @@ jobs:
         if: ${{ matrix.phpcs_branch != 'dev-master' }}
         with:
           php-version: ${{ matrix.php }}
+          coverage: none
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
       # Set Composer up to download only PHPCS from source for PHPCS 4.x.
