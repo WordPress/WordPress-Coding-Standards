@@ -20,7 +20,7 @@ jobs:
   # - Runs the Composer linting script (if desired).
   # - Runs Composer run-tests script.
   quick-tests:
-    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}${{ matrix.lint && ' with linting' || '' }}
+    name: QTest: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -65,11 +65,11 @@ jobs:
           php-version: ${{ matrix.php }}
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
-      - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-suggest --no-scripts
+      - name: Set PHPCS version
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
-        run: composer install --no-suggest
+        run: composer install
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
