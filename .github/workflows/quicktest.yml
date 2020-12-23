@@ -20,7 +20,7 @@ jobs:
   # - Runs the Composer linting script (if desired).
   # - Runs Composer run-tests script.
   quick-tests:
-    name: QTest: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
+    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
