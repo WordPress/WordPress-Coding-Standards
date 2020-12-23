@@ -2,7 +2,11 @@ name: Ruleset checks
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
   pull_request:
+    paths-ignore:
+      - '**.md'
 
 jobs:
   # Makes sure the rulesets don't throw unexpected errors or warnings.
