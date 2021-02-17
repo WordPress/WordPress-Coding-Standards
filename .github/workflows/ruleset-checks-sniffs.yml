@@ -78,17 +78,11 @@ jobs:
 
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
-      # For the first run, the exit code will be 1 (= all fixable errors fixed).
+      # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
       - name: Test for fixer conflicts (fixes expected)
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
         continue-on-error: true
-        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
-
-      # Run the fixer again which should now return 0 (= no fixable errors found).
-      # All error codes for the PHPCBF: https://github.com/squizlabs/PHP_CodeSniffer/issues/1270#issuecomment-272768413
-      - name: Test for fixer conflicts
-        if: ${{ matrix.phpcs_branch == 'dev-master' }}
-        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
+        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; if [ $? -eq 1 ]; then exit 0; fi
 
   # Performs some code-style related checks.
   #
