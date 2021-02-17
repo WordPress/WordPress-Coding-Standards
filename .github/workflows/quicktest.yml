@@ -51,13 +51,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        if: ${{ matrix.phpcs_branch == 'dev-master' }}
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-
       # On stable PHPCS versions, allow for PHP deprecation notices.
       # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
       - name: Setup ini config
