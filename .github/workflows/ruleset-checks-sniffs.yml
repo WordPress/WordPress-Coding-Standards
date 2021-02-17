@@ -59,10 +59,10 @@ jobs:
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
       - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-suggest --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
-        run: composer install --no-suggest
+        run: composer install
 
       - name: Check the WordPress-Core rulesest
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
@@ -137,10 +137,10 @@ jobs:
         run: sudo apt-get install libxml2-utils
 
       - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-suggest --no-scripts
+        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts
 
       - name: Install Composer dependencies
-        run: composer install --no-suggest
+        run: composer install
 
       # WordPress Coding Standards.
       # @link https://github.com/WordPress/WordPress-Coding-Standards
