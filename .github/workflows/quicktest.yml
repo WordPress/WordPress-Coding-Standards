@@ -60,13 +60,21 @@ jobs:
 
       # On stable PHPCS versions, allow for PHP deprecation notices.
       # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+      - name: Setup ini config
+        id: set_ini
+        run: |
+          if [ "${{ matrix.phpcs_branch }}" != "dev-master" ]; then
+            echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED'
+          else
+            echo '::set-output name=PHP_INI::error_reporting=E_ALL'
+          fi
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
-        if: ${{ matrix.phpcs_branch != 'dev-master' }}
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-          ini-values: error_reporting = E_ALL & ~E_DEPRECATED
+          ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
 
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
