@@ -14,10 +14,9 @@ jobs:
   #
   # Performs the following steps:
   # - Checks out the repository.
-  # - Configures caching for Composer.
   # - Sets up PHP.
   # - Installs PHPCS.
-  # - Install Composer dependencies.
+  # - Install Composer dependencies (from cache if available).
   # - Runs the Composer linting script (if desired).
   # - Runs Composer run-tests script.
   quick-tests:
@@ -59,7 +58,7 @@ jobs:
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v1"
+        uses: ramsey/composer-install@v1
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
