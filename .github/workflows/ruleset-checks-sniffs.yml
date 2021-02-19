@@ -6,9 +6,6 @@ on:
   # Allow manually triggering the workflow.
   workflow_dispatch:
 
-env:
-  XMLLINT_INDENT: '	'
-
 jobs:
   # Performs some code-style related checks.
   #
@@ -28,6 +25,9 @@ jobs:
   sniffs:
     name: Run code sniffs
     runs-on: ubuntu-latest
+
+    env:
+      XMLLINT_INDENT: '	'
 
     steps:
       - name: Checkout repository
