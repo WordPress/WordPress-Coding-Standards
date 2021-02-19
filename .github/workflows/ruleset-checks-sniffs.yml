@@ -12,78 +12,6 @@ env:
   XMLLINT_INDENT: '	'
 
 jobs:
-  # Makes sure the rulesets don't throw unexpected errors or warnings.
-  # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
-  # It also needs to be run against all PHPCS versions WPCS is tested against.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Configures caching for Composer.
-  # - Sets up PHP.
-  # - Installs PHPCS.
-  # - Installs Composer dependencies.
-  # - Checks the WordPress rulesets.
-  ruleset-checks:
-    name: "Ruleset check: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: [ '7.4' ]
-        phpcs_branch: [ 'dev-master', '3.5.0' ]
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Set up Composer caching
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-composer-dependencies
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      # On stable PHPCS versions, allow for PHP deprecation notices.
-      # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-          ini-values: error_reporting = E_ALL & ~E_DEPRECATED
-
-      - name: Install PHPCS
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
-
-      - name: Install Composer dependencies
-        run: composer install
-
-      - name: Check the WordPress-Core rulesest
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
-
-      - name: Check the WordPress-Docs ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
-
-      - name: Check the WordPress-Extra ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
-
-      - name: Check the WordPress ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
-
-      # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
-      # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
-      # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
-      - name: Test for fixer conflicts (fixes expected)
-        if: ${{ matrix.phpcs_branch == 'dev-master' }}
-        continue-on-error: true
-        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; if [ $? -eq 1 ]; then exit 0; fi
-
   # Performs some code-style related checks.
   #
   # Performs the following steps:
@@ -168,3 +96,75 @@ jobs:
       # At a later stage the documentation check can be activated.
       - name: Check that all sniffs have unit tests
         run: composer check-complete
+
+  # Makes sure the rulesets don't throw unexpected errors or warnings.
+  # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
+  # It also needs to be run against all PHPCS versions WPCS is tested against.
+  #
+  # Performs the following steps:
+  # - Checks out the repository.
+  # - Configures caching for Composer.
+  # - Sets up PHP.
+  # - Installs PHPCS.
+  # - Installs Composer dependencies.
+  # - Checks the WordPress rulesets.
+  ruleset-checks:
+    name: "Ruleset check: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.4' ]
+        phpcs_branch: [ 'dev-master', '3.5.0' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Set up Composer caching
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer-dependencies
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      # On stable PHPCS versions, allow for PHP deprecation notices.
+      # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          ini-values: error_reporting = E_ALL & ~E_DEPRECATED
+
+      - name: Install PHPCS
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Check the WordPress-Core rulesest
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
+
+      - name: Check the WordPress-Docs ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
+
+      - name: Check the WordPress-Extra ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
+
+      - name: Check the WordPress ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
+
+      # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
+      # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
+      # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
+      - name: Test for fixer conflicts (fixes expected)
+        if: ${{ matrix.phpcs_branch == 'dev-master' }}
+        continue-on-error: true
+        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; if [ $? -eq 1 ]; then exit 0; fi
