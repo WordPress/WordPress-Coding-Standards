@@ -77,7 +77,7 @@ jobs:
         if: ${{ startsWith( matrix.phpcs_branch, '4' ) }}
         run: composer config preferred-install.squizlabs/php_codesniffer source
 
-      - name: Install PHPCS
+      - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies (PHP < 8.0 )

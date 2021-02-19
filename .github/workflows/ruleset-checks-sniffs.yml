@@ -40,7 +40,7 @@ jobs:
           coverage: none
           tools: cs2pr
 
-      - name: Install PHPCS
+      - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts
 
       - name: Install Composer dependencies
@@ -85,7 +85,7 @@ jobs:
       # Check that the sniffs available are feature complete.
       # For now, just check that all sniffs have unit tests.
       # At a later stage the documentation check can be activated.
-      - name: Check that all sniffs have unit tests
+      - name: Check sniff feature completeness
         run: composer check-complete
 
   # Makes sure the rulesets don't throw unexpected errors or warnings.
@@ -99,8 +99,8 @@ jobs:
   # - Installs PHPCS.
   # - Installs Composer dependencies.
   # - Checks the WordPress rulesets.
-  ruleset-checks:
-    name: "Ruleset check: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}"
+  ruleset-tests:
+    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -120,22 +120,22 @@ jobs:
           coverage: none
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
 
-      - name: Install PHPCS
+      - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
 
-      - name: Check the WordPress-Core rulesest
+      - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
 
-      - name: Check the WordPress-Docs ruleset
+      - name: Test the WordPress-Docs ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
 
-      - name: Check the WordPress-Extra ruleset
+      - name: Test the WordPress-Extra ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
 
-      - name: Check the WordPress ruleset
+      - name: Test the WordPress ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
 
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
