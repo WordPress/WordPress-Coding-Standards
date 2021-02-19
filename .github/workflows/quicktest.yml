@@ -22,17 +22,17 @@ jobs:
   # - Runs the Composer linting script (if desired).
   # - Runs Composer run-tests script.
   quick-tests:
-    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}
+    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ '7.4', '5.4' ]
-        phpcs_branch: [ 'dev-master' ]
+        phpcs_version: [ 'dev-master' ]
         include:
           - php: '7.3'
-            phpcs_branch: '3.5.0'
+            phpcs_version: '3.5.0'
           - php: '5.4'
-            phpcs_branch: '3.5.0'
+            phpcs_version: '3.5.0'
 
     steps:
       - name: Checkout repository
@@ -43,7 +43,7 @@ jobs:
       - name: Setup ini config
         id: set_ini
         run: |
-          if [ "${{ matrix.phpcs_branch }}" != "dev-master" ]; then
+          if [ "${{ matrix.phpcs_version }}" != "dev-master" ]; then
             echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED'
           else
             echo '::set-output name=PHP_INI::error_reporting=E_ALL'
@@ -58,13 +58,13 @@ jobs:
           tools: cs2pr
 
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
 
       - name: Lint PHP files against parse errors
-        if: ${{ matrix.phpcs_branch == 'dev-master' }}
+        if: ${{ matrix.phpcs_version == 'dev-master' }}
         run: composer lint-ci | cs2pr
 
       - name: Run unit tests

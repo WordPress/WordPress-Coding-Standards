@@ -100,12 +100,12 @@ jobs:
   # - Installs Composer dependencies.
   # - Checks the WordPress rulesets.
   ruleset-tests:
-    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_branch }}"
+    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ '7.4' ]
-        phpcs_branch: [ 'dev-master', '3.5.0' ]
+        phpcs_version: [ 'dev-master', '3.5.0' ]
 
     steps:
       - name: Checkout repository
@@ -120,7 +120,7 @@ jobs:
           coverage: none
 
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
@@ -141,7 +141,7 @@ jobs:
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
       # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
       - name: Test for fixer conflicts (fixes expected)
-        if: ${{ matrix.phpcs_branch == 'dev-master' }}
+        if: ${{ matrix.phpcs_version == 'dev-master' }}
         continue-on-error: true
         run: |
           $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
