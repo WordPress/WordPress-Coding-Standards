@@ -1,4 +1,4 @@
-name: Ruleset checks & Code Sniffs
+name: Basic QA checks
 
 on:
   push:
