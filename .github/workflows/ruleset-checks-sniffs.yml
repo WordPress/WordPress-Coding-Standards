@@ -54,14 +54,18 @@ jobs:
           coverage: none
           tools: cs2pr
 
-      - name: Install xmllint
-        run: sudo apt-get install libxml2-utils
-
       - name: Install PHPCS
         run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts
 
       - name: Install Composer dependencies
         run: composer install
+
+      - name: Install xmllint
+        run: sudo apt-get install libxml2-utils
+
+      # Show XML violations inline in the file diff.
+      # @link https://github.com/marketplace/actions/xmllint-problem-matcher
+      - uses: korelstar/xmllint-problem-matcher@v1
 
       # WordPress Coding Standards.
       # @link https://github.com/WordPress/WordPress-Coding-Standards
