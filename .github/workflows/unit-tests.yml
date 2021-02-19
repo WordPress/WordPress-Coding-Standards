@@ -1,0 +1,98 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+jobs:
+  # Runs the test suite against all supported branches and combinations.
+  #
+  # Linting is performed on all jobs run against PHPCS `dev-master`.
+  #
+  # Performs the following steps:
+  # - Checks out the repository.
+  # - Configures caching for Composer.
+  # - Sets up PHP.
+  # - Configures PHPCS to install from source (only when running with 4.0.x-dev).
+  # - Installs PHPCS.
+  # - Install Composer dependencies.
+  # - Runs the Composer linting script.
+  # - Runs Composer run-tests script.
+  test:
+    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.allowed_failure }}
+    strategy:
+      matrix:
+        php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4' ]
+        phpcs_version: [ 'dev-master', '3.5.0' ]
+        allowed_failure: [ false ]
+        include:
+          - php: '8.0'
+            phpcs_version: 'dev-master'
+            allowed_failure: false
+          # PHPCS is only compatible with PHP 8.0 as of version 3.5.7.
+          - php: '8.0'
+            phpcs_version: '3.5.7'
+            allowed_failure: false
+          # Add extra build to test against PHPCS 4.
+          - php: '7.4'
+            phpcs_version: '4.0.x-dev as 3.9.99'
+            allowed_failure: true
+          - php: '8.1'
+            phpcs_version: 'dev-master'
+            allowed_failure: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # On stable PHPCS versions, allow for PHP deprecation notices.
+      # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+      - name: Setup ini config
+        id: set_ini
+        run: |
+          if [ "${{ matrix.phpcs_version }}" != "dev-master" ]; then
+            echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED'
+          else
+            echo '::set-output name=PHP_INI::error_reporting=E_ALL'
+          fi
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
+          coverage: none
+          tools: cs2pr
+
+      # Set Composer up to download only PHPCS from source for PHPCS 4.x.
+      # The source is needed to get the base testcase from PHPCS.
+      # All other jobs can use `auto`, which is Composer's default value.
+      - name: Configure PHPCS
+        if: ${{ startsWith( matrix.phpcs_version, '4' ) }}
+        run: composer config preferred-install.squizlabs/php_codesniffer source
+
+      - name: Set PHPCS version
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
+
+      - name: Install Composer dependencies (PHP < 8.0 )
+        if: ${{ matrix.php < 8.0 }}
+        uses: ramsey/composer-install@v1
+
+      - name: Install Composer dependencies (PHP >= 8.0)
+        if: ${{ matrix.php >= 8.0 }}
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: --ignore-platform-reqs
+
+      - name: Lint PHP files against parse errors
+        if: ${{ matrix.phpcs_version == 'dev-master' }}
+        run: composer lint-ci | cs2pr
+
+      - name: Run unit tests
+        run: composer run-tests

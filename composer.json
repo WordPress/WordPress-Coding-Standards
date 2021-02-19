@@ -33,6 +33,9 @@
 		"lint": [
 			"@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --exclude vendor --exclude .git"
 		],
+		"lint-ci": [
+			"@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --exclude vendor --exclude .git --checkstyle"
+		],
 		"check-cs": [
 			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
 		],
