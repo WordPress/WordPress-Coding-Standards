@@ -7,6 +7,8 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
 
 env:
   XMLLINT_INDENT: '	'

@@ -5,6 +5,8 @@ on:
     branches:
       - master
   pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
 
 jobs:
   # Runs the test suite against all supported branches and combinations.
