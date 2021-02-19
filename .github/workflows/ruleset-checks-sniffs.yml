@@ -2,11 +2,7 @@ name: Ruleset checks & Code Sniffs
 
 on:
   push:
-    paths-ignore:
-      - '**.md'
   pull_request:
-    paths-ignore:
-      - '**.md'
   # Allow manually triggering the workflow.
   workflow_dispatch:
 
