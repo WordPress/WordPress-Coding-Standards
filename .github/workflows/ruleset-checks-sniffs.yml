@@ -144,4 +144,6 @@ jobs:
       - name: Test for fixer conflicts (fixes expected)
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
         continue-on-error: true
-        run: $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary; if [ $? -eq 1 ]; then exit 0; fi
+        run: |
+          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
+          if [ $? -eq 1 ]; then exit 0; fi
