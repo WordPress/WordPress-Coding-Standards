@@ -65,10 +65,10 @@ jobs:
       # Validate the XML files.
       # @link http://xmlsoft.org/xmllint.html
       - name: Validate the WordPress rulesets
-        run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
       - name: Validate the sample ruleset
-        run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
 
       - name: Check the code-style consistency of the xml files
         run: |
