@@ -40,6 +40,7 @@ jobs:
           coverage: none
           tools: cs2pr
 
+      # Using PHPCS `master` as an early detection system for bugs upstream.
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts
 
@@ -61,9 +62,8 @@ jobs:
           vendor/bin/phpcs --report-checkstyle=./phpcs-report.xml --runtime-set ignore_warnings_on_exit 1
           cs2pr ./phpcs-report.xml
 
-      # Validate the xml files.
+      # Validate the XML files.
       # @link http://xmlsoft.org/xmllint.html
-      # For the build to properly error when validating against a scheme, these each have to be in their own condition.
       - name: Validate the WordPress rulesets
         run: xmllint --noout --schema ./vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
@@ -111,14 +111,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # On stable PHPCS versions, allow for PHP deprecation notices.
-      # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: none
+          # Allow for PHP deprecation notices.
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
+          coverage: none
 
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
