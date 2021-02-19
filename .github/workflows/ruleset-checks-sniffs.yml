@@ -57,7 +57,7 @@ jobs:
       # @link https://github.com/WordPress/WordPress-Coding-Standards
       # @link http://pear.php.net/package/PHP_CodeSniffer/
       - name: Run PHPCS ignoring warnings
-        run:  vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1
+        run: vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1
 
       # Validate the XML files.
       # @link http://xmlsoft.org/xmllint.html
