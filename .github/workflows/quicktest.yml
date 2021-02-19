@@ -55,6 +55,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
+          tools: cs2pr
 
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_branch }}" --no-update --no-scripts
@@ -64,7 +65,7 @@ jobs:
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
-        run: composer lint
+        run: composer lint-ci | cs2pr
 
       - name: Run unit tests
         run: composer run-tests

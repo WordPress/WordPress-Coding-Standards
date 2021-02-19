@@ -82,6 +82,7 @@ jobs:
           php-version: ${{ matrix.php }}
           ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
           coverage: none
+          tools: cs2pr
 
       # Set Composer up to download only PHPCS from source for PHPCS 4.x.
       # The source is needed to get the base testcase from PHPCS.
@@ -103,7 +104,7 @@ jobs:
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_branch == 'dev-master' }}
-        run: composer lint
+        run: composer lint-ci | cs2pr
 
       - name: Run unit tests
         run: composer run-tests
