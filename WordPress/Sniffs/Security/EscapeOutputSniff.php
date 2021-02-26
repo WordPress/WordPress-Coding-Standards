@@ -218,7 +218,7 @@ class EscapeOutputSniff extends Sniff {
 				}
 
 				// Quick check. This disregards comments.
-				if ( preg_match( '`^basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
+				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
 					$stackPtr = ( $first_param['end'] + 2 );
 				}
 				unset( $first_param );

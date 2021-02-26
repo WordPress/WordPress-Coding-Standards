@@ -298,3 +298,5 @@ _deprecated_file( $file, '1.3.0' ); // Error.
 
 trigger_error(); // Ignore.
 _deprecated_file(); // Ignore.
+
+\_deprecated_file( \basename( __FILE__ ), '1.3.0' ); // Ok.
