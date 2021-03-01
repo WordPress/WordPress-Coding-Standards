@@ -81,61 +81,64 @@ class NoSilencedErrorsSniff extends Sniff {
 	 */
 	protected $function_whitelist = array(
 		// Directory extension.
-		'chdir'                 => true,
-		'opendir'               => true,
-		'scandir'               => true,
+		'chdir'                        => true,
+		'opendir'                      => true,
+		'scandir'                      => true,
 
 		// File extension.
-		'file_exists'           => true,
-		'file_get_contents'     => true,
-		'file'                  => true,
-		'fileatime'             => true,
-		'filectime'             => true,
-		'filegroup'             => true,
-		'fileinode'             => true,
-		'filemtime'             => true,
-		'fileowner'             => true,
-		'fileperms'             => true,
-		'filesize'              => true,
-		'filetype'              => true,
-		'fopen'                 => true,
-		'is_dir'                => true,
-		'is_executable'         => true,
-		'is_file'               => true,
-		'is_link'               => true,
-		'is_readable'           => true,
-		'is_writable'           => true,
-		'is_writeable'          => true,
-		'lstat'                 => true,
-		'mkdir'                 => true,
-		'move_uploaded_file'    => true,
-		'readfile'              => true,
-		'readlink'              => true,
-		'rename'                => true,
-		'rmdir'                 => true,
-		'stat'                  => true,
-		'unlink'                => true,
+		'file_exists'                  => true,
+		'file_get_contents'            => true,
+		'file'                         => true,
+		'fileatime'                    => true,
+		'filectime'                    => true,
+		'filegroup'                    => true,
+		'fileinode'                    => true,
+		'filemtime'                    => true,
+		'fileowner'                    => true,
+		'fileperms'                    => true,
+		'filesize'                     => true,
+		'filetype'                     => true,
+		'fopen'                        => true,
+		'is_dir'                       => true,
+		'is_executable'                => true,
+		'is_file'                      => true,
+		'is_link'                      => true,
+		'is_readable'                  => true,
+		'is_writable'                  => true,
+		'is_writeable'                 => true,
+		'lstat'                        => true,
+		'mkdir'                        => true,
+		'move_uploaded_file'           => true,
+		'readfile'                     => true,
+		'readlink'                     => true,
+		'rename'                       => true,
+		'rmdir'                        => true,
+		'stat'                         => true,
+		'unlink'                       => true,
 
 		// FTP extension.
-		'ftp_chdir'             => true,
-		'ftp_login'             => true,
-		'ftp_rename'            => true,
+		'ftp_chdir'                    => true,
+		'ftp_login'                    => true,
+		'ftp_rename'                   => true,
 
 		// Stream extension.
-		'stream_select'         => true,
-		'stream_set_chunk_size' => true,
+		'stream_select'                => true,
+		'stream_set_chunk_size'        => true,
 
 		// Zlib extension.
-		'deflate_add'           => true,
-		'deflate_init'          => true,
-		'inflate_add'           => true,
-		'inflate_init'          => true,
-		'readgzfile'            => true,
+		'deflate_add'                  => true,
+		'deflate_init'                 => true,
+		'inflate_add'                  => true,
+		'inflate_init'                 => true,
+		'readgzfile'                   => true,
+
+		// LibXML extension.
+		'libxml_disable_entity_loader' => true, // PHP 8.0 deprecation warning, but function call still needed in select cases.
 
 		// Miscellaneous other functions.
-		'imagecreatefromstring' => true,
-		'parse_url'             => true, // Pre-PHP 5.3.3 an E_WARNING was thrown when URL parsing failed.
-		'unserialize'           => true,
+		'imagecreatefromstring'        => true,
+		'parse_url'                    => true, // Pre-PHP 5.3.3 an E_WARNING was thrown when URL parsing failed.
+		'unserialize'                  => true,
 	);
 
 	/**
