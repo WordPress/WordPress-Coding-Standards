@@ -40,9 +40,9 @@ jobs:
             phpcs_version: '3.5.7'
             allowed_failure: false
           # Add extra build to test against PHPCS 4.
-          - php: '7.4'
-            phpcs_version: '4.0.x-dev as 3.9.99'
-            allowed_failure: true
+          #- php: '7.4'
+          #  phpcs_version: '4.0.x-dev as 3.9.99'
+          #  allowed_failure: true
           - php: '8.1'
             phpcs_version: 'dev-master'
             allowed_failure: true
