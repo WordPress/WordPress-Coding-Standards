@@ -86,8 +86,13 @@ trait MinimumWPVersionTrait {
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 */
 	protected function get_wp_version_from_cli( File $phpcsFile ) {
-		$cli_supported_version = trim( Helper::getCommandLineData( $phpcsFile, 'minimum_supported_wp_version' ) );
+		$cli_supported_version = Helper::getCommandLineData( $phpcsFile, 'minimum_supported_wp_version' );
 
+		if ( empty( $cli_supported_version ) ) {
+			return;
+		}
+
+		$cli_supported_version = trim( $cli_supported_version );
 		if ( ! empty( $cli_supported_version )
 			&& filter_var( $cli_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
 		) {
