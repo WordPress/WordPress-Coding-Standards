@@ -272,9 +272,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	public function process_token( $stackPtr ) {
 
 		// Allow overruling the prefixes set in a ruleset via the command line.
-		$cl_prefixes = trim( Helper::getConfigData( 'prefixes' ) );
+		$cl_prefixes = Helper::getConfigData( 'prefixes' );
 		if ( ! empty( $cl_prefixes ) ) {
-			$this->prefixes = array_filter( array_map( 'trim', explode( ',', $cl_prefixes ) ) );
+			$cl_prefixes = trim( $cl_prefixes );
+			if ( '' !== $cl_prefixes ) {
+				$this->prefixes = array_filter( array_map( 'trim', explode( ',', $cl_prefixes ) ) );
+			}
 		}
 
 		$this->prefixes = $this->merge_custom_array( $this->prefixes, array(), false );
