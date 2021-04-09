@@ -94,5 +94,10 @@ jobs:
         if: ${{ matrix.phpcs_version == 'dev-master' }}
         run: composer lint-ci | cs2pr
 
-      - name: Run unit tests
+      - name: Run the unit tests - PHP 5.4 - 8.0
+        if: ${{ matrix.php != '8.1' }}
         run: composer run-tests
+
+      - name: Run the unit tests - PHP 8.1
+        if: ${{ matrix.php == '8.1' }}
+        run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
