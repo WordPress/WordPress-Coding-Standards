@@ -1,0 +1,19 @@
+<documentation title="Discourage the usage of the unneeded ternary operator">
+    <standard>
+    <![CDATA[
+    When storing a boolean value to a variable, a ternary check is not needed.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: simple test in the assignment.">
+        <![CDATA[
+$true_variable = $var === 42;
+        ]]>
+        </code>
+        <code title="Invalid: ternary usage with boolean in the assignment.">
+        <![CDATA[
+$true_variable = $var === 42 ? <em>true</em> : <em>false</em>;
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
