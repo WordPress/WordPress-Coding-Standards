@@ -108,3 +108,23 @@ _e(); // Bad.
 printf( __( 'There are %1$d monkeys in the %2$s', 'my-slug' ), intval( $number ), esc_html( $string ) ); // Bad.
 
 // phpcs:set WordPress.WP.I18n text_domain[]
+
+/* translators: number of monkeys, location. */
+__( 'There are %1$d monkeys in the %2$s'
+); // Ok, the string is on the same line as the gettext call
+
+__( /* translators: number of monkeys, location. */
+	'There are %1$d monkeys in the %2$s'
+); // OK, comment is on the same line as the gettext call
+
+/* translators: number of monkeys, location. */
+_n(
+	'There are %1$d monkeys in the %2$s',
+	'There are %1$d monkeys in the %2$s'
+); // Bad, comment will not be extracted
+
+_n(
+/* translators: number of monkeys, location. */
+	'There are %1$d monkeys in the %2$s',
+	'There are %1$d monkeys in the %2$s'
+); // Ok, comment will be extracted
