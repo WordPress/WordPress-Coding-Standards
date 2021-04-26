@@ -1,0 +1,22 @@
+<documentation title="Prefer Performant PHP">
+    <standard>
+        <![CDATA[
+    Various PHP functions are legacy and less performant than other language constructs.
+    This sniff will help identify use of functions that may be better served using other options.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using native type casting.">
+            <![CDATA[
+$var = '100'; // string.
+return <em>(int)</em> $var;
+        ]]>
+        </code>
+        <code title="Invalid: Using legacy PHP functions.">
+            <![CDATA[
+$var = '100'; // string.
+return <em>intval</em>( $var );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
