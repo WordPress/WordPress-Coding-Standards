@@ -1,0 +1,22 @@
+<documentation title="Disallow the changing of timezone.">
+    <standard>
+    <![CDATA[
+      Using date_default_timezone_set() and similar isn't allowed, instead use WP internal timezone support.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using WP internal timezone support.">
+        <![CDATA[
+$date = new DateTime();
+$date->setTimezone(
+    new DateTimeZone( 'America/Toronto' )
+);
+        ]]>
+        </code>
+        <code title="Invalid: date_default_timezone_set() is used.">
+        <![CDATA[
+date_default_timezone_set( 'Foo/Bar' );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
