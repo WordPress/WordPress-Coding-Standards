@@ -1,0 +1,67 @@
+<documentation title="Prefix All Globals">
+    <standard>
+    <![CDATA[
+      All globals terms must be prefixed with a theme/plugin specific term. Global terms include Namespace names, Class/Interface/Trait names (when not namespaced), Functions (when not namespaced or classed), Constants/Variable names declared in the global namespace, and Hook names. While prefixes must be distinct and unique to the plugin/theme, in order to prevent potential conflicts, they may be chosen by the developers and defined in a custom ruleset.
+
+https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#naming-conventions-prefix-everything-in-the-global-namespace
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using the prefix ECPT_">
+        <![CDATA[
+define( 'ECPT_VERSION', '1.0' );
+        ]]>
+        </code>
+        <code title="Invalid: Using a generic prefix of PLUGIN_">
+        <![CDATA[
+define( 'PLUGIN_VERSION', '1.0' );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      Using any prefixes reserved for WordPress are not permitted, even if WordPress has not used the define. This includes all defines such as _() (underscores), __() double underscores, wp_, and wordpress_
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using the prefix mycoolplugin_">
+        <![CDATA[
+function mycoolplugin_save_post();
+        ]]>
+        </code>
+        <code title="Invalid: Using a WordPress reserved prefix wp_">
+        <![CDATA[
+function wp_save_post();
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Using the prefix mycoolplugin_">
+        <![CDATA[
+function myplugin_edit_post();
+        ]]>
+        </code>
+        <code title="Invalid: Using a WordPress reserved prefix _">
+        <![CDATA[
+function _edit_post();
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      Two-letter prefixes should be avoided as many plugins and themes share the same initials.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using the distinct prefix MyPlugin">
+        <![CDATA[
+class MyPluginIsCool {}
+        ]]>
+        </code>
+        <code title="Invalid: Using a two-letter prefix MP">
+        <![CDATA[
+class MP {}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
