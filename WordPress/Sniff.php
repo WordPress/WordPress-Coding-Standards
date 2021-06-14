@@ -1027,9 +1027,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// We've made it to the next line, back up one to the last in the previous line.
 		// We do this for micro-optimization of the above loop.
-		$lastPtr = ( $nextPtr - 1 );
-
-		return $lastPtr;
+		return ( $nextPtr - 1 );
 	}
 
 	/**
