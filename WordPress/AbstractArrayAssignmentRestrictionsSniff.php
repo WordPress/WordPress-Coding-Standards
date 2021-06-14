@@ -153,9 +153,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		$inst = array();
 
 		/*
-		 * Covers:
-		 * $foo = array( 'bar' => 'taz' );
-		 * $foo['bar'] = $taz;
+		 * Covers array assignments:
+		 * `$foo = array( 'bar' => 'taz' );`
+		 * `$foo['bar'] = $taz;`
 		 */
 		if ( \in_array( $token['code'], array( \T_CLOSE_SQUARE_BRACKET, \T_DOUBLE_ARROW ), true ) ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
@@ -173,7 +173,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
 		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-			// $foo = 'bar=taz&other=thing';
+			// Covers assignments via query parameters: `$foo = 'bar=taz&other=thing';`.
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', TextStrings::stripQuotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
 			}

@@ -1923,7 +1923,7 @@ abstract class Sniff implements PHPCS_Sniff {
 					$prev = $i;
 					do {
 						$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
-						// Skip over array keys, like $_GET['key']['subkey'].
+						// Skip over array keys, like `$_GET['key']['subkey']`.
 						if ( \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $prev ]['code'] ) {
 							$prev = $this->tokens[ $prev ]['bracket_opener'];
 							continue;
