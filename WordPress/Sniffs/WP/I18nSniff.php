@@ -9,10 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\TextStrings;
+use XMLReader;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Makes sure WP internationalization functions are used properly.
@@ -647,11 +648,11 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 *
 		 * Strip surrounding quotes.
 		 */
-		$reader = new \XMLReader();
+		$reader = new XMLReader();
 		$reader->XML( $content_without_quotes, 'UTF-8', \LIBXML_NOERROR | \LIBXML_ERR_NONE | \LIBXML_NOWARNING );
 
 		// Is the first node an HTML element?
-		if ( ! $reader->read() || \XMLReader::ELEMENT !== $reader->nodeType ) {
+		if ( ! $reader->read() || XMLReader::ELEMENT !== $reader->nodeType ) {
 			return;
 		}
 
