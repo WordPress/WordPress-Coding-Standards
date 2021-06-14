@@ -1377,7 +1377,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$this->deprecated_functions = array_change_key_case( $this->deprecated_functions, CASE_LOWER );
+		$this->deprecated_functions = array_change_key_case( $this->deprecated_functions, \CASE_LOWER );
 
 		return array(
 			'deprecated_functions' => array(

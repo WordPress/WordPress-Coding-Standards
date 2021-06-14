@@ -61,7 +61,7 @@ class EnqueuedResourcesSniff extends Sniff {
 			}
 		}
 
-		if ( preg_match_all( '# rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $content, $matches, PREG_OFFSET_CAPTURE ) > 0 ) {
+		if ( preg_match_all( '# rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {
 			foreach ( $matches[0] as $match ) {
 				$this->phpcsFile->addError(
 					'Stylesheets must be registered/enqueued via wp_enqueue_style',
@@ -71,7 +71,7 @@ class EnqueuedResourcesSniff extends Sniff {
 			}
 		}
 
-		if ( preg_match_all( '#<script[^>]*(?<=src=)#', $content, $matches, PREG_OFFSET_CAPTURE ) > 0 ) {
+		if ( preg_match_all( '#<script[^>]*(?<=src=)#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {
 			foreach ( $matches[0] as $match ) {
 				$this->phpcsFile->addError(
 					'Scripts must be registered/enqueued via wp_enqueue_script',

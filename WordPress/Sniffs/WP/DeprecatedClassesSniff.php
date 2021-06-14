@@ -75,7 +75,7 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$this->deprecated_classes = array_change_key_case( $this->deprecated_classes, CASE_LOWER );
+		$this->deprecated_classes = array_change_key_case( $this->deprecated_classes, \CASE_LOWER );
 
 		return array(
 			'deprecated_classes' => array(

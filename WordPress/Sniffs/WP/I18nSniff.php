@@ -648,7 +648,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		 * Strip surrounding quotes.
 		 */
 		$reader = new \XMLReader();
-		$reader->XML( $content_without_quotes, 'UTF-8', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_NOWARNING );
+		$reader->XML( $content_without_quotes, 'UTF-8', \LIBXML_NOERROR | \LIBXML_ERR_NONE | \LIBXML_NOWARNING );
 
 		// Is the first node an HTML element?
 		if ( ! $reader->read() || \XMLReader::ELEMENT !== $reader->nodeType ) {
