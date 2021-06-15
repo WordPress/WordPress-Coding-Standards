@@ -1027,9 +1027,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// We've made it to the next line, back up one to the last in the previous line.
 		// We do this for micro-optimization of the above loop.
-		$lastPtr = ( $nextPtr - 1 );
-
-		return $lastPtr;
+		return ( $nextPtr - 1 );
 	}
 
 	/**
@@ -1923,7 +1921,7 @@ abstract class Sniff implements PHPCS_Sniff {
 					$prev = $i;
 					do {
 						$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
-						// Skip over array keys, like $_GET['key']['subkey'].
+						// Skip over array keys, like `$_GET['key']['subkey']`.
 						if ( \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $prev ]['code'] ) {
 							$prev = $this->tokens[ $prev ]['bracket_opener'];
 							continue;
