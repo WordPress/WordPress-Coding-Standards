@@ -44,9 +44,9 @@ jobs:
         id: set_ini
         run: |
           if [ "${{ matrix.phpcs_version }}" != "dev-master" ]; then
-            echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED'
+            echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On'
           else
-            echo '::set-output name=PHP_INI::error_reporting=E_ALL'
+            echo '::set-output name=PHP_INI::error_reporting=E_ALL, display_errors=On'
           fi
 
       - name: Set up PHP
