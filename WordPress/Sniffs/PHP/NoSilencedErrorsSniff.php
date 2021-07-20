@@ -137,6 +137,7 @@ class NoSilencedErrorsSniff extends Sniff {
 
 		// Miscellaneous other functions.
 		'imagecreatefromstring'        => true,
+		'imagecreatefromwebp'          => true,
 		'parse_url'                    => true, // Pre-PHP 5.3.3 an E_WARNING was thrown when URL parsing failed.
 		'unserialize'                  => true,
 	);
