@@ -79,16 +79,21 @@ trait IsUnitTestTrait {
 	 * @var string[]
 	 */
 	protected $known_test_classes = array(
-		'WP_UnitTestCase_Base'                       => true,
+		// Base test cases.
 		'WP_UnitTestCase'                            => true,
+		'WP_UnitTestCase_Base'                       => true,
+		'PHPUnit_Adapter_TestCase'                   => true,
+
+		// Domain specific base test cases.
 		'WP_Ajax_UnitTestCase'                       => true,
-		'Block_Supported_Styles_Test'                => true,
 		'WP_Canonical_UnitTestCase'                  => true,
-		'WP_Test_REST_TestCase'                      => true,
 		'WP_Test_REST_Controller_Testcase'           => true,
 		'WP_Test_REST_Post_Type_Controller_Testcase' => true,
+		'WP_Test_REST_TestCase'                      => true,
 		'WP_Test_XML_TestCase'                       => true,
 		'WP_XMLRPC_UnitTestCase'                     => true,
+
+		// PHPUnit native test cases.
 		'PHPUnit_Framework_TestCase'                 => true,
 		'PHPUnit\Framework\TestCase'                 => true,
 		// PHPUnit native TestCase class when imported via use statement.
