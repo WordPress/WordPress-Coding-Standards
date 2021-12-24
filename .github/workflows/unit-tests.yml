@@ -8,6 +8,12 @@ on:
   # Allow manually triggering the workflow.
   workflow_dispatch:
 
+# Cancels all previous workflow runs for the same branch that have not yet completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # Runs the test suite against all supported branches and combinations.
   #
@@ -32,6 +38,13 @@ jobs:
         phpcs_version: [ 'dev-master', '3.5.0' ]
         allowed_failure: [ false ]
         include:
+          - php: '8.1'
+            phpcs_version: 'dev-master'
+            allowed_failure: false
+          # PHPCS is only compatible with PHP 8.1 as of version 3.6.1.
+          - php: '8.1'
+            phpcs_version: '3.6.1'
+            allowed_failure: false
           - php: '8.0'
             phpcs_version: 'dev-master'
             allowed_failure: false
@@ -43,7 +56,7 @@ jobs:
           #- php: '7.4'
           #  phpcs_version: '4.0.x-dev as 3.9.99'
           #  allowed_failure: true
-          - php: '8.1'
+          - php: '8.2'
             phpcs_version: 'dev-master'
             allowed_failure: true
 
@@ -59,7 +72,7 @@ jobs:
           if [ "${{ matrix.phpcs_version }}" != "dev-master" ]; then
             echo '::set-output name=PHP_INI::error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On'
           else
-            echo '::set-output name=PHP_INI::error_reporting=E_ALL, display_errors=On'
+            echo '::set-output name=PHP_INI::error_reporting=-1, display_errors=On'
           fi
 
       - name: Set up PHP
@@ -78,15 +91,15 @@ jobs:
         run: composer config preferred-install.squizlabs/php_codesniffer source
 
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies (PHP < 8.0 )
         if: ${{ matrix.php < 8.0 }}
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Install Composer dependencies (PHP >= 8.0)
         if: ${{ matrix.php >= 8.0 }}
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
         with:
           composer-options: --ignore-platform-reqs
 
@@ -95,9 +108,9 @@ jobs:
         run: composer lint-ci | cs2pr
 
       - name: Run the unit tests - PHP 5.4 - 8.0
-        if: ${{ matrix.php != '8.1' }}
+        if: ${{ matrix.php < '8.1' }}
         run: composer run-tests
 
       - name: Run the unit tests - PHP 8.1
-        if: ${{ matrix.php == '8.1' }}
+        if: ${{ matrix.php >= '8.1' }}
         run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
