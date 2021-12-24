@@ -63,10 +63,10 @@ jobs:
           coverage: none
 
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_version == 'dev-master' }}

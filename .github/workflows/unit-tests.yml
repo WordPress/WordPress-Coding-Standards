@@ -91,15 +91,15 @@ jobs:
         run: composer config preferred-install.squizlabs/php_codesniffer source
 
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies (PHP < 8.0 )
         if: ${{ matrix.php < 8.0 }}
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Install Composer dependencies (PHP >= 8.0)
         if: ${{ matrix.php >= 8.0 }}
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
         with:
           composer-options: --ignore-platform-reqs
 

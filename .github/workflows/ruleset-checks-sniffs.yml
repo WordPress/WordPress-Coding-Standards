@@ -48,10 +48,10 @@ jobs:
 
       # Using PHPCS `master` as an early detection system for bugs upstream.
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Install xmllint
         run: sudo apt-get install libxml2-utils
@@ -128,10 +128,10 @@ jobs:
           coverage: none
 
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
