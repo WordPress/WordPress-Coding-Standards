@@ -277,9 +277,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Allow overruling the prefixes set in a ruleset via the command line.
-		$cl_prefixes = trim( PHPCSHelper::get_config_data( 'prefixes' ) );
-		if ( ! empty( $cl_prefixes ) ) {
-			$this->prefixes = array_filter( array_map( 'trim', explode( ',', $cl_prefixes ) ) );
+		$cl_prefixes = PHPCSHelper::get_config_data( 'prefixes' );
+		if ( ! is_null( $cl_prefixes ) ) {
+			$cl_prefixes = trim( $cl_prefixes );
+			if ( ! empty( $cl_prefixes ) ) {
+				$this->prefixes = array_filter( array_map( 'trim', explode( ',', $cl_prefixes ) ) );
+			}
 		}
 
 		$this->prefixes = $this->merge_custom_array( $this->prefixes, array(), false );
