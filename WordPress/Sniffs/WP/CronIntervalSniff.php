@@ -177,10 +177,15 @@ class CronIntervalSniff extends Sniff {
 					$valueStart = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true, null, true );
 					$valueEnd   = $this->phpcsFile->findNext( array( \T_COMMA, \T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
 					$value      = '';
-					for ( $j = $valueStart; $j < $valueEnd; $j++ ) {
+					for ( $j = $valueStart; $j <= $valueEnd; $j++ ) {
 						if ( isset( Tokens::$emptyTokens[ $this->tokens[ $j ]['code'] ] ) ) {
 							continue;
 						}
+
+						if ( $j === $valueEnd && \T_COMMA === $this->tokens[ $j ]['code'] ) {
+							break;
+						}
+
 						$value .= $this->tokens[ $j ]['content'];
 					}
 
@@ -192,8 +197,8 @@ class CronIntervalSniff extends Sniff {
 					// Deal correctly with WP time constants.
 					$value = str_replace( array_keys( $this->wp_time_constants ), array_values( $this->wp_time_constants ), $value );
 
-					// If all digits and operators, eval!
-					if ( preg_match( '#^[\s\d+*/-]+$#', $value ) > 0 ) {
+					// If all parentheses, digits and operators, eval!
+					if ( preg_match( '#^[\s\d()+*/-]+$#', $value ) > 0 ) {
 						$interval = eval( "return ( $value );" ); // phpcs:ignore Squiz.PHP.Eval -- No harm here.
 						break;
 					}
