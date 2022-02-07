@@ -144,3 +144,19 @@ Custom::add_filter( 'cron_schedules', array( $class, $method ) ); // OK, not the
 add_filter( 'some_hook', array( $place, 'cron_schedules' ) ); // OK, not the hook we're looking for.
 add_filter( function() { return get_hook_name('cron_schedules'); }(), array( $class, $method ) ); // OK, nested in another function call.
 
+// Deal correctly with the time calculations within parentheses.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_2_days_and_a_bit'] = [
+		'interval' => ( 2 * DAY_IN_SECONDS + 2 * HOUR_IN_SECONDS ),
+		'display' => __( 'Once every 2 days and a bit' )
+	];
+	return $schedules;
+} ); // Ok: > 15 min.
+
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_8_minutes'] = [
+		'interval' => (8 * MINUTE_IN_SECONDS),
+		'display' => __( 'Once every 8 minutes' )
+	];
+	return $schedules;
+} ); // Error: 8 min.
