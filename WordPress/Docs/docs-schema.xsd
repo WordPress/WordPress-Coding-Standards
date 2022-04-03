@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:element name="documentation">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="standard" type="xs:string"/>
+				<xs:element name="code_comparison" type="code_comparisonType"/>
+			</xs:choice>
+			<xs:attribute name="title" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="code_comparisonType">
+		<xs:sequence>
+			<xs:element name="code" type="codeType" maxOccurs="unbounded" minOccurs="2"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="codeType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="title" use="required" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
