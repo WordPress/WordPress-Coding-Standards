@@ -3,17 +3,17 @@
 
 	<xs:element name="documentation">
 		<xs:complexType>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:choice maxOccurs="unbounded">
 				<xs:element name="standard" type="xs:string"/>
 				<xs:element name="code_comparison" type="code_comparisonType"/>
 			</xs:choice>
-			<xs:attribute name="title" type="xs:string"/>
+			<xs:attribute name="title" use="required" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
 	<xs:complexType name="code_comparisonType">
 		<xs:sequence>
-			<xs:element name="code" type="codeType" maxOccurs="unbounded" minOccurs="2"/>
+			<xs:element name="code" type="codeType" maxOccurs="2" minOccurs="2"/>
 		</xs:sequence>
 	</xs:complexType>
 
