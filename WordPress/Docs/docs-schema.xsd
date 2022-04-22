@@ -2,14 +2,27 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:element name="documentation">
         <xs:complexType>
-            <xs:sequence maxOccurs="unbounded">
-                <xs:element name="standard" type="xs:string"/>
-                <xs:element name="code_comparison" type="code_comparisonType"/>
+            <xs:sequence>
+                <xs:group ref="rulegroup"/>
             </xs:sequence>
-            <xs:attribute name="title" use="required" type="xs:string"/>
+            <xs:attribute name="title" use="required" type="titleType"/>
             <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>
+
+    <xs:group name="rulegroup">
+        <xs:sequence>
+            <xs:element name="standard" type="standardType"/>
+            <xs:element name="code_comparison" type="code_comparisonType"/>
+            <xs:any minOccurs="0"/>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:simpleType name="titleType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="58"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="code_comparisonType">
         <xs:sequence>
@@ -21,6 +34,14 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute name="title" use="required" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="standardType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:anyAttribute/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
