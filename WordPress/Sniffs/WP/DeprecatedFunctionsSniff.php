@@ -1419,7 +1419,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			$message,
 			$stackPtr,
 			( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_supported_version, '<' ) ),
-			$this->string_to_errorcode( $matched_content . 'Found' ),
+			MessageHelper::stringToErrorcode( $matched_content . 'Found' ),
 			$data
 		);
 	}

@@ -316,7 +316,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			$this->groups[ $group_name ]['message'],
 			$stackPtr,
 			( 'error' === $this->groups[ $group_name ]['type'] ),
-			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
+			MessageHelper::stringToErrorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
 	}

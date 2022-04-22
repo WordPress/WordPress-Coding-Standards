@@ -218,7 +218,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 						$message,
 						$stackPtr,
 						( 'error' === $group['type'] ),
-						$this->string_to_errorcode( $groupName . '_' . $key ),
+						MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
 						array( $key, $val )
 					);
 				}

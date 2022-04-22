@@ -214,7 +214,7 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 			$message,
 			$parameter_position,
 			$is_error,
-			$this->string_to_errorcode( 'Found' ),
+			'Found',
 			$data
 		);
 	}

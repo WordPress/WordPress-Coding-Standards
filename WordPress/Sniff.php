@@ -846,21 +846,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Convert an arbitrary string to an alphanumeric string with underscores.
-	 *
-	 * Pre-empt issues with arbitrary strings being used as error codes in XML and PHP.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @param string $base_string Arbitrary string.
-	 *
-	 * @return string
-	 */
-	protected function string_to_errorcode( $base_string ) {
-		return preg_replace( '`[^a-z0-9_]`i', '_', $base_string );
-	}
-
-	/**
 	 * Transform the name of a PHP construct (function, variable etc) to one in snake_case.
 	 *
 	 * @since 2.0.0 Moved from the `WordPress.NamingConventions.ValidFunctionName` sniff
