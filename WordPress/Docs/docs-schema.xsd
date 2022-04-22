@@ -6,7 +6,7 @@
                 <xs:group ref="rulegroup"/>
             </xs:sequence>
             <xs:attribute name="title" use="required" type="titleType"/>
-            <xs:anyAttribute/>
+            <xs:anyAttribute processContents="lax"/>
         </xs:complexType>
     </xs:element>
 
