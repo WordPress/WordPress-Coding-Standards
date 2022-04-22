@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Restricts usage of some functions.
@@ -310,7 +311,8 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$this->groups[ $group_name ]['message'],
 			$stackPtr,
 			( 'error' === $this->groups[ $group_name ]['type'] ),

@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
 
@@ -212,7 +213,8 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 						$message = $output;
 					}
 
-					$this->addMessage(
+					MessageHelper::addMessage(
+						$this->phpcsFile,
 						$message,
 						$stackPtr,
 						( 'error' === $group['type'] ),

@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
@@ -335,7 +336,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 				$message .= ' Instead do not pass the parameter.';
 			}
 
-			$this->addMessage( $message, $stackPtr, $is_error, $code, $data, 0 );
+			MessageHelper::addMessage( $this->phpcsFile, $message, $stackPtr, $is_error, $code, $data, 0 );
 		}
 	}
 

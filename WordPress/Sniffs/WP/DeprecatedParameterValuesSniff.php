@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
@@ -208,7 +209,8 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$is_error = version_compare( $parameter_args[ $matched_parameter ]['version'], $this->minimum_supported_version, '<' );
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$message,
 			$parameter_position,
 			$is_error,

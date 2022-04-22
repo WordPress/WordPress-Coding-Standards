@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
@@ -741,7 +742,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Still here ? In that case, the variable name should be prefixed.
-		$recorded = $this->addMessage(
+		$recorded = MessageHelper::addMessage(
+			$this->phpcsFile,
 			self::ERROR_MSG,
 			$stackPtr,
 			$is_error,
@@ -885,7 +887,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		$data[] = $raw_content;
 
-		$recorded = $this->addMessage( self::ERROR_MSG, $first_non_empty, $is_error, $error_code, $data );
+		$recorded = MessageHelper::addMessage( $this->phpcsFile, self::ERROR_MSG, $first_non_empty, $is_error, $error_code, $data );
 
 		if ( true === $recorded ) {
 			$this->record_potential_prefix_metric( $stackPtr, $raw_content );
