@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:element name="documentation">
         <xs:complexType>
-            <xs:sequence>
+            <xs:sequence maxOccurs="unbounded">
                 <xs:group ref="rulegroup"/>
             </xs:sequence>
             <xs:attribute name="title" use="required" type="titleType"/>
@@ -13,7 +13,7 @@
     <xs:group name="rulegroup">
         <xs:sequence>
             <xs:element name="standard" type="standardType"/>
-            <xs:element name="code_comparison" type="code_comparisonType"/>
+            <xs:element name="code_comparison" type="code_comparisonType" maxOccurs="unbounded"/>
             <xs:any minOccurs="0"/>
         </xs:sequence>
     </xs:group>
