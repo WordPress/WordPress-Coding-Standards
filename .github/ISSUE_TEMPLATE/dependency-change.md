@@ -4,7 +4,7 @@ about: A reminder to take action when a WPCS dependency changes
 
 ---
 
-<!-- PLEASE prefix the title the Issue with the dependency name and version when action should be taken e.g. PHPCS 3.5: ... -->
+<!-- PLEASE prefix the title the Issue with the dependency name and version when action should be taken e.g. PHPCS 3.7.0: ... -->
 
 ## Rationale
 
