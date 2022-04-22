@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
@@ -265,7 +266,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 */
 		if ( false === $in_list
 			&& false === $this->is_assignment( $stackPtr )
-			&& false === $this->is_foreach_as( $stackPtr )
+			&& Context::inForeachCondition( $this->phpcsFile, $stackPtr ) !== 'afterAs'
 		) {
 			return;
 		}
@@ -418,7 +419,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Check if this is a variable assignment within a `foreach()` declaration.
-			if ( $this->is_foreach_as( $ptr ) === true ) {
+			if ( Context::inForeachCondition( $this->phpcsFile, $ptr ) === 'afterAs' ) {
 				$this->add_error( $ptr );
 			}
 		}
