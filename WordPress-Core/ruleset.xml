@@ -523,6 +523,9 @@
 		<message>Best practices: Declare only one class/interface/trait in a file.</message>
 	</rule>
 
+	<!-- Error on merge conflict markers. -->
+	<rule ref="Generic.VersionControl.GitMergeConflict"/>
+
 	<!--
 	#############################################################################
 	Not in the coding standard handbook: WP specific sniffs.
