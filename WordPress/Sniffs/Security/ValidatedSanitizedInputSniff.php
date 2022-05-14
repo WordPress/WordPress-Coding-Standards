@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Helpers\TextStringHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
@@ -100,7 +101,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 				function ( $symbol ) {
 					return '$' . $symbol;
 				},
-				$this->get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
+				TextStringHelper::get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
 			);
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
 				$this->phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $this->tokens[ $stackPtr ]['content'] ) );

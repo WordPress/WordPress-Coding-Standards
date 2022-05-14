@@ -14,6 +14,7 @@ use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\TextStrings;
 use XMLReader;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\TextStringHelper;
 
 /**
  * Makes sure WP internationalization functions are used properly.
@@ -470,7 +471,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		if ( \T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || \T_HEREDOC === $tokens[0]['code'] ) {
-			$interpolated_variables = $this->get_interpolated_variables( $content );
+			$interpolated_variables = TextStringHelper::get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
 				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
 				$this->addMessage( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $is_error, $code, array( $arg_name, $interpolated_variable ) );

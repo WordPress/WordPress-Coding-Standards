@@ -39,15 +39,6 @@ use PHPCSUtils\Utils\TextStrings;
 abstract class Sniff implements PHPCS_Sniff {
 
 	/**
-	 * Regex to get complex variables from T_DOUBLE_QUOTED_STRING or T_HEREDOC.
-	 *
-	 * @since 0.14.0
-	 *
-	 * @var string
-	 */
-	const REGEX_COMPLEX_VARS = '`(?:(\{)?(?<!\\\\)\$)?(\{)?(?<!\\\\)\$(\{)?(?P<varname>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(?:->\$?(?P>varname)|\[[^\]]+\]|::\$?(?P>varname)|\([^\)]*\))*(?(3)\}|)(?(2)\}|)(?(1)\}|)`';
-
-	/**
 	 * List of the functions which verify nonces.
 	 *
 	 * @since 0.5.0
@@ -2061,48 +2052,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Get the interpolated variable names from a string.
-	 *
-	 * Check if '$' is followed by a valid variable name, and that it is not preceded by an escape sequence.
-	 *
-	 * @since 0.9.0
-	 *
-	 * @param string $string The contents of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
-	 *
-	 * @return array Variable names (without '$' sigil).
-	 */
-	protected function get_interpolated_variables( $string ) {
-		$variables = array();
-		if ( preg_match_all( '/(?P<backslashes>\\\\*)\$(?P<symbol>\w+)/', $string, $match_sets, \PREG_SET_ORDER ) ) {
-			foreach ( $match_sets as $matches ) {
-				if ( ! isset( $matches['backslashes'] ) || ( \strlen( $matches['backslashes'] ) % 2 ) === 0 ) {
-					$variables[] = $matches['symbol'];
-				}
-			}
-		}
-		return $variables;
-	}
-
-	/**
-	 * Strip variables from an arbitrary double quoted/heredoc string.
-	 *
-	 * Intended for use with the contents of a T_DOUBLE_QUOTED_STRING or T_HEREDOC token.
-	 *
-	 * @since 0.14.0
-	 *
-	 * @param string $string The raw string.
-	 *
-	 * @return string String without variables in it.
-	 */
-	public function strip_interpolated_variables( $string ) {
-		if ( strpos( $string, '$' ) === false ) {
-			return $string;
-		}
-
-		return preg_replace( self::REGEX_COMPLEX_VARS, '', $string );
 	}
 
 	/**

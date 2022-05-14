@@ -9,10 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\TextStringHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Check for incorrect use of the $wpdb->prepare method.
@@ -278,9 +279,9 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				|| \T_HEREDOC === $this->tokens[ $i ]['code']
 			) {
 				// Only interested in actual query text, so strip out variables.
-				$stripped_content = $this->strip_interpolated_variables( $content );
+				$stripped_content = TextStringHelper::strip_interpolated_variables( $content );
 				if ( $stripped_content !== $content ) {
-					$interpolated_vars = $this->get_interpolated_variables( $content );
+					$interpolated_vars = TextStringHelper::get_interpolated_variables( $content );
 					$vars_without_wpdb = array_diff( $interpolated_vars, array( 'wpdb' ) );
 					$content           = $stripped_content;
 
