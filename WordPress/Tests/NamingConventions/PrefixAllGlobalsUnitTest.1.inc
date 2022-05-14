@@ -482,6 +482,20 @@ function acronym_lists_in_function_scope() {
  */
 function deprecated_function() {}
 
+/**
+ * Function description.
+ *
+ * @since 1.2.3
+ * @deprecated 2.3.4
+ *
+ * @return void
+ */
+#[MyAttribute([
+	'something',
+	'something else',
+])]
+function deprecated_function_with_attribute() {}
+
 /*
  * Bad: Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/1733.
  *

@@ -163,3 +163,17 @@ function ___triple_underscore() {} // OK.
 class Triple {
 	function ___triple_underscore() {} // OK.
 }
+
+class DeprecatedWithAttribute {
+	/**
+	 * Function description.
+	 *
+	 * @since 1.2.3
+	 * @deprecated 2.3.4
+	 *
+	 * @return void
+	 */
+	#[SomeAttribute]
+	#[AnotherAttribute]
+	public static function __deprecatedMethod() {}
+}

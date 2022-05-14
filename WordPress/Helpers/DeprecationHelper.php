@@ -38,11 +38,25 @@ final class DeprecationHelper {
 	 * @return bool
 	 */
 	public static function is_function_deprecated( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		$find   = Tokens::$methodPrefixes;
-		$find[] = \T_WHITESPACE;
+		$tokens                  = $phpcsFile->getTokens();
+		$ignore                  = Tokens::$methodPrefixes;
+		$ignore[ \T_WHITESPACE ] = \T_WHITESPACE;
 
-		$comment_end = $phpcsFile->findPrevious( $find, ( $stackPtr - 1 ), null, true );
+		for ( $comment_end = ( $stackPtr - 1 ); $comment_end >= 0; $comment_end-- ) {
+			if ( isset( $ignore[ $tokens[ $comment_end ]['code'] ] ) === true ) {
+				continue;
+			}
+
+			if ( \T_ATTRIBUTE_END === $tokens[ $comment_end ]['code']
+				&& isset( $tokens[ $comment_end ]['attribute_opener'] ) === true
+			) {
+				$comment_end = $tokens[ $comment_end ]['attribute_opener'];
+				continue;
+			}
+
+			break;
+		}
+
 		if ( \T_DOC_COMMENT_CLOSE_TAG !== $tokens[ $comment_end ]['code'] ) {
 			// Function doesn't have a doc comment or is using the wrong type of comment.
 			return false;
