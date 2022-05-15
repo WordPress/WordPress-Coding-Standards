@@ -16,6 +16,7 @@ use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\VariableHelper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -1614,82 +1615,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Get the index keys of an array variable.
-	 *
-	 * E.g., "bar" and "baz" in $foo['bar']['baz'].
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int  $stackPtr The index of the variable token in the stack.
-	 * @param bool $all      Whether to get all keys or only the first.
-	 *                       Defaults to `true`(= all).
-	 *
-	 * @return array An array of index keys whose value is being accessed.
-	 *               or an empty array if this is not array access.
-	 */
-	protected function get_array_access_keys( $stackPtr, $all = true ) {
-
-		$keys = array();
-
-		if ( \T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
-			return $keys;
-		}
-
-		$current = $stackPtr;
-
-		do {
-			// Find the next non-empty token.
-			$open_bracket = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
-				( $current + 1 ),
-				null,
-				true
-			);
-
-			// If it isn't a bracket, this isn't an array-access.
-			if ( false === $open_bracket
-				|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
-				|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
-			) {
-				break;
-			}
-
-			$key = $this->phpcsFile->getTokensAsString(
-				( $open_bracket + 1 ),
-				( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
-			);
-
-			$keys[]  = trim( $key );
-			$current = $this->tokens[ $open_bracket ]['bracket_closer'];
-		} while ( isset( $this->tokens[ $current ] ) && true === $all );
-
-		return $keys;
-	}
-
-	/**
-	 * Get the index key of an array variable.
-	 *
-	 * E.g., "bar" in $foo['bar'].
-	 *
-	 * @since 0.5.0
-	 * @since 2.1.0 Now uses get_array_access_keys() under the hood.
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return string|false The array index key whose value is being accessed.
-	 */
-	protected function get_array_access_key( $stackPtr ) {
-
-		$keys = $this->get_array_access_keys( $stackPtr, false );
-
-		if ( isset( $keys[0] ) ) {
-			return $keys[0];
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check if the existence of a variable is validated with isset(), empty(), array_key_exists()
 	 * or key_exists().
 	 *
@@ -1826,7 +1751,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						// If we're checking for specific array keys (ex: 'hello' in
 						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
 						if ( ! empty( $bare_array_keys ) ) {
-							$found_keys = $this->get_array_access_keys( $i );
+							$found_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $i );
 							$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 							$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 							if ( ! empty( $diff ) ) {
@@ -1887,7 +1812,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						 * parameter, so we need to check both options.
 						 */
 
-						$found_keys = $this->get_array_access_keys( $param2_first_token );
+						$found_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $param2_first_token );
 						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 
 						// First try matching the complete set against the second parameter.
@@ -1931,7 +1856,7 @@ abstract class Sniff implements PHPCS_Sniff {
 					}
 
 					if ( ! empty( $bare_array_keys ) ) {
-						$found_keys = $this->get_array_access_keys( $prev );
+						$found_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $prev );
 						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 						if ( ! empty( $diff ) ) {

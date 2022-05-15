@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
 use WordPressCS\WordPress\Helpers\TextStringHelper;
+use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -125,7 +126,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
-		$array_keys = $this->get_array_access_keys( $stackPtr );
+		$array_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $stackPtr );
 
 		if ( empty( $array_keys ) ) {
 			return;
