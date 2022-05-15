@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\GetTokensAsString;
+use PHPCSUtils\Utils\Parentheses;
 
 /**
  * Helper utilities for working with variables.
@@ -146,16 +147,8 @@ final class VariableHelper {
 		}
 
 		// We first check if this is a switch statement (switch ( $var )).
-		if ( isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
-			$close_parenthesis  = end( $nested_parenthesis );
-
-			if (
-				isset( $tokens[ $close_parenthesis ]['parenthesis_owner'] )
-				&& \T_SWITCH === $tokens[ $tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
-			) {
-				return true;
-			}
+		if ( Parentheses::lastOwnerIn( $phpcsFile, $stackPtr, array( \T_SWITCH ) ) !== false ) {
+			return true;
 		}
 
 		// Find the previous non-empty token. We check before the var first because
