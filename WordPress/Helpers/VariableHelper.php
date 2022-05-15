@@ -120,7 +120,7 @@ final class VariableHelper {
 	 *
 	 * E.g., $var === 'foo', 1 <= $var, etc.
 	 *
-	 * Also recognizes `switch ( $var )`.
+	 * Also recognizes `switch ( $var )` and `match ( $var )`.
 	 *
 	 * @since 0.5.0
 	 * @since 2.1.0 Added the $include_coalesce parameter.
@@ -146,8 +146,8 @@ final class VariableHelper {
 			unset( $comparisonTokens[ \T_COALESCE ] );
 		}
 
-		// We first check if this is a switch statement (switch ( $var )).
-		if ( Parentheses::lastOwnerIn( $phpcsFile, $stackPtr, array( \T_SWITCH ) ) !== false ) {
+		// We first check if this is a switch or match statement (switch ( $var )).
+		if ( Parentheses::lastOwnerIn( $phpcsFile, $stackPtr, array( \T_SWITCH, \T_MATCH ) ) !== false ) {
 			return true;
 		}
 
