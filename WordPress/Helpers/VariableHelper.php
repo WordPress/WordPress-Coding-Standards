@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\GetTokensAsString;
 
 /**
  * Helper utilities for working with variables representing arrays.
@@ -74,9 +75,11 @@ final class VariableHelper {
 				break;
 			}
 
-			$key = $phpcsFile->getTokensAsString(
+			$key = GetTokensAsString::compact(
+				$phpcsFile,
 				( $open_bracket + 1 ),
-				( $tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
+				( $tokens[ $open_bracket ]['bracket_closer'] - 1 ),
+				true
 			);
 
 			$keys[]  = trim( $key );
