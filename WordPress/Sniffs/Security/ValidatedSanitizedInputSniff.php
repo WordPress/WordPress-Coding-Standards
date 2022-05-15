@@ -179,7 +179,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// If this is a comparison ('a' == $_POST['foo']), sanitization isn't needed.
-		if ( $this->is_comparison( $stackPtr, false ) ) {
+		if ( VariableHelper::is_comparison( $this->phpcsFile, $stackPtr, false ) ) {
 			return;
 		}
 

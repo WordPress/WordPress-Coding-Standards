@@ -1124,7 +1124,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$allow_nonce_after = false;
 		if ( $this->is_in_isset_or_empty( $stackPtr )
 			|| $this->is_in_type_test( $stackPtr )
-			|| $this->is_comparison( $stackPtr )
+			|| VariableHelper::is_comparison( $this->phpcsFile, $stackPtr )
 			|| $this->is_in_array_comparison( $stackPtr )
 			|| $this->is_in_function_call( $stackPtr, $this->unslashingFunctions ) !== false
 			|| $this->is_only_sanitized( $stackPtr )
@@ -1867,85 +1867,6 @@ abstract class Sniff implements PHPCS_Sniff {
 					// Right variable, correct key.
 					return true;
 			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check whether a variable is being compared to another value.
-	 *
-	 * E.g., $var === 'foo', 1 <= $var, etc.
-	 *
-	 * Also recognizes `switch ( $var )`.
-	 *
-	 * @since 0.5.0
-	 * @since 2.1.0 Added the $include_coalesce parameter.
-	 *
-	 * @param int  $stackPtr         The index of this token in the stack.
-	 * @param bool $include_coalesce Optional. Whether or not to regard the null
-	 *                               coalesce operator - ?? - as a comparison operator.
-	 *                               Defaults to true.
-	 *                               Null coalesce is a special comparison operator in this
-	 *                               sense as it doesn't compare a variable to whatever is
-	 *                               on the other side of the comparison operator.
-	 *
-	 * @return bool Whether this is a comparison.
-	 */
-	protected function is_comparison( $stackPtr, $include_coalesce = true ) {
-
-		$comparisonTokens = Tokens::$comparisonTokens;
-		if ( false === $include_coalesce ) {
-			unset( $comparisonTokens[ \T_COALESCE ] );
-		}
-
-		// We first check if this is a switch statement (switch ( $var )).
-		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-			$close_parenthesis  = end( $nested_parenthesis );
-
-			if (
-				isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
-				&& \T_SWITCH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
-			) {
-				return true;
-			}
-		}
-
-		// Find the previous non-empty token. We check before the var first because
-		// yoda conditions are usually expected.
-		$previous_token = $this->phpcsFile->findPrevious(
-			Tokens::$emptyTokens,
-			( $stackPtr - 1 ),
-			null,
-			true
-		);
-
-		if ( isset( $comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
-			return true;
-		}
-
-		// Maybe the comparison operator is after this.
-		$next_token = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			( $stackPtr + 1 ),
-			null,
-			true
-		);
-
-		// This might be an opening square bracket in the case of arrays ($var['a']).
-		while ( false !== $next_token && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
-
-			$next_token = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
-				( $this->tokens[ $next_token ]['bracket_closer'] + 1 ),
-				null,
-				true
-			);
-		}
-
-		if ( false !== $next_token && isset( $comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
-			return true;
 		}
 
 		return false;

@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\GetTokensAsString;
 
 /**
- * Helper utilities for working with variables representing arrays.
+ * Helper utilities for working with variables.
  *
  * ---------------------------------------------------------------------------------------------
  * This class is only intended for internal use by WordPressCS and is not part of the public API.
@@ -109,6 +109,79 @@ final class VariableHelper {
 		$keys = self::get_array_access_keys( $phpcsFile, $stackPtr, false );
 		if ( isset( $keys[0] ) ) {
 			return $keys[0];
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether a variable is being compared to another value.
+	 *
+	 * E.g., $var === 'foo', 1 <= $var, etc.
+	 *
+	 * Also recognizes `switch ( $var )`.
+	 *
+	 * @since 0.5.0
+	 * @since 2.1.0 Added the $include_coalesce parameter.
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - Visibility is now `public` (was `protected`) and the method `static`.
+	 *              - The $phpcsFile parameter was added.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile        The file being scanned.
+	 * @param int                         $stackPtr         The index of this token in the stack.
+	 * @param bool                        $include_coalesce Optional. Whether or not to regard the null
+	 *                                                      coalesce operator - ?? - as a comparison operator.
+	 *                                                      Defaults to true.
+	 *                                                      Null coalesce is a special comparison operator in this
+	 *                                                      sense as it doesn't compare a variable to whatever is
+	 *                                                      on the other side of the comparison operator.
+	 *
+	 * @return bool Whether this is a comparison.
+	 */
+	public static function is_comparison( File $phpcsFile, $stackPtr, $include_coalesce = true ) {
+		$tokens           = $phpcsFile->getTokens();
+		$comparisonTokens = Tokens::$comparisonTokens;
+		if ( false === $include_coalesce ) {
+			unset( $comparisonTokens[ \T_COALESCE ] );
+		}
+
+		// We first check if this is a switch statement (switch ( $var )).
+		if ( isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
+			$close_parenthesis  = end( $nested_parenthesis );
+
+			if (
+				isset( $tokens[ $close_parenthesis ]['parenthesis_owner'] )
+				&& \T_SWITCH === $tokens[ $tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
+			) {
+				return true;
+			}
+		}
+
+		// Find the previous non-empty token. We check before the var first because
+		// yoda conditions are usually expected.
+		$previous_token = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+
+		if ( isset( $comparisonTokens[ $tokens[ $previous_token ]['code'] ] ) ) {
+			return true;
+		}
+
+		// Maybe the comparison operator is after this.
+		$next_token = $phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+
+		// This might be an opening square bracket in the case of arrays ($var['a']).
+		while ( false !== $next_token && \T_OPEN_SQUARE_BRACKET === $tokens[ $next_token ]['code'] ) {
+
+			$next_token = $phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				( $tokens[ $next_token ]['bracket_closer'] + 1 ),
+				null,
+				true
+			);
+		}
+
+		if ( false !== $next_token && isset( $comparisonTokens[ $tokens[ $next_token ]['code'] ] ) ) {
+			return true;
 		}
 
 		return false;
