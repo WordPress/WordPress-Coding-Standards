@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Helpers\TextStringHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Sniff for prepared SQL.
@@ -138,7 +139,7 @@ class PreparedSQLSniff extends Sniff {
 			) {
 
 				$bad_variables = array_filter(
-					$this->get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
+					TextStringHelper::get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
 					function ( $symbol ) {
 						return ( 'wpdb' !== $symbol );
 					}
