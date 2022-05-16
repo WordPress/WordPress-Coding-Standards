@@ -34,24 +34,10 @@ jobs:
     continue-on-error: ${{ matrix.allowed_failure }}
     strategy:
       matrix:
-        php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4' ]
-        phpcs_version: [ 'dev-master', '3.5.0' ]
+        php: [ '8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4' ]
+        phpcs_version: [ 'dev-master', '3.6.2' ]
         allowed_failure: [ false ]
         include:
-          - php: '8.1'
-            phpcs_version: 'dev-master'
-            allowed_failure: false
-          # PHPCS is only compatible with PHP 8.1 as of version 3.6.1.
-          - php: '8.1'
-            phpcs_version: '3.6.1'
-            allowed_failure: false
-          - php: '8.0'
-            phpcs_version: 'dev-master'
-            allowed_failure: false
-          # PHPCS is only compatible with PHP 8.0 as of version 3.5.7.
-          - php: '8.0'
-            phpcs_version: '3.5.7'
-            allowed_failure: false
           # Add extra build to test against PHPCS 4.
           #- php: '7.4'
           #  phpcs_version: '4.0.x-dev as 3.9.99'
