@@ -9,11 +9,12 @@
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use WordPressCS\WordPress\Sniff;
 use PHPCSUtils\BackCompat\BCTokens;
 use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Scopes;
+use WordPressCS\WordPress\Helpers\DeprecationHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
@@ -55,7 +56,7 @@ class ValidFunctionNameSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( Sniff::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
+		if ( DeprecationHelper::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
 			/*
 			 * Deprecated functions don't have to comply with the naming conventions,
 			 * otherwise functions deprecated in favour of a function with a compliant

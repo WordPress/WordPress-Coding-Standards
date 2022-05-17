@@ -16,6 +16,7 @@ use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\DeprecationHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 
 /**
@@ -386,7 +387,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 						return;
 					}
 
-					if ( $this->is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
+					if ( DeprecationHelper::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
 						/*
 						 * Deprecated functions don't have to comply with the naming conventions,
 						 * otherwise functions deprecated in favour of a function with a compliant
