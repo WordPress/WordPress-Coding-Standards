@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use WordPressCS\WordPress\Sniff;
 
 /**
- * Enforces spacing around logical operators and assignments, based upon Squiz code.
+ * Checks that control structures have the correct spacing around brackets, based upon Squiz code.
  *
  * @since 0.1.0
  * @since 2013-06-11 This sniff no longer supports JS.
@@ -23,10 +23,10 @@ use WordPressCS\WordPress\Sniff;
  * @since 0.13.0     Class name changed: this class is now namespaced.
  * @since 3.0.0      Checks related to function declarations have been removed from this sniff.
  *
- * Last synced with base class 2017-01-15 at commit b024ad84656c37ef5733c6998ebc1e60957b2277.
+ * Last synced with base class 2021-11-20 at commit 7f11ffc8222b123c06345afd3261221561c3bb29.
  * Note: This class has diverged quite far from the original. All the same, checking occasionally
  * to see if there are upstream fixes made from which this sniff can benefit, is warranted.
- * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
+ * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
 final class ControlStructureSpacingSniff extends Sniff {
 
