@@ -295,6 +295,9 @@ final class ControlStructureSpacingSniff extends Sniff {
 			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
 				&& $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
 			) {
+				$gap = ( $this->tokens[ $firstContent ]['line'] - $this->tokens[ $scopeOpener ]['line'] - 1 );
+				$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at start of control structure', $gap );
+
 				$error = 'Blank line found at start of control structure';
 				$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'BlankLineAfterStart' );
 
@@ -311,6 +314,8 @@ final class ControlStructureSpacingSniff extends Sniff {
 					$this->phpcsFile->fixer->addNewline( $scopeOpener );
 					$this->phpcsFile->fixer->endChangeset();
 				}
+			} else {
+				$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at start of control structure', 0 );
 			}
 
 			if ( $firstContent !== $scopeCloser ) {
@@ -326,6 +331,9 @@ final class ControlStructureSpacingSniff extends Sniff {
 				if ( ! isset( $ignore[ $this->tokens[ $checkToken ]['code'] ] )
 					&& $this->tokens[ $lastContent ]['line'] <= ( $this->tokens[ $scopeCloser ]['line'] - 2 )
 				) {
+					$gap = ( $this->tokens[ $scopeCloser ]['line'] - $this->tokens[ $lastContent ]['line'] - 1 );
+					$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at end of control structure', $gap );
+
 					for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
 						if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
 							&& \T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
@@ -359,6 +367,8 @@ final class ControlStructureSpacingSniff extends Sniff {
 							break;
 						}
 					}
+				} else {
+					$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at end of control structure', 0 );
 				}
 			}
 			unset( $ignore );
