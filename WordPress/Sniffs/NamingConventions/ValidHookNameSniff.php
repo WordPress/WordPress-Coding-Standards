@@ -100,10 +100,11 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 		$regex = $this->prepare_regex();
 
-		$case_errors = 0;
-		$underscores = 0;
-		$content     = array();
-		$expected    = array();
+		$case_errors    = 0;
+		$underscores    = 0;
+		$content        = array();
+		$expected       = array();
+		$last_non_empty = null;
 
 		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
 			// Skip past comment tokens.
@@ -129,15 +130,28 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 				} while ( isset( $this->tokens[ $i ] ) && $i <= $parameters[1]['end'] );
 
+				$last_non_empty = $i;
+				continue;
+			}
+
+			// Skip over parameters passed to function calls.
+			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
+				&& \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
+			) {
+				$i              = $this->tokens[ $i ]['parenthesis_closer'];
+				$last_non_empty = $i;
 				continue;
 			}
 
 			// Skip past non-string tokens.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
+				$last_non_empty = $i;
 				continue;
 			}
 
-			$string = TextStrings::stripQuotes( $this->tokens[ $i ]['content'] );
+			$last_non_empty = $i;
+			$string         = TextStrings::stripQuotes( $this->tokens[ $i ]['content'] );
 
 			/*
 			 * Here be dragons - a double quoted string can contain extrapolated variables

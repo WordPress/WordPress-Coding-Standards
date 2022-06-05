@@ -94,3 +94,17 @@ do_action(
 	// phpcs:ignore Stnd.Cat.Sniff -- For reasons.
 	'prefix_hook-name' /* comment */
 );
+
+// Ignore text strings when passed as parameters to a function call. WPCS #2055.
+$value = apply_filters(
+	get_filter_name( 'UPPERCASE', 'wrong-delimiter' ),
+	$value,
+	$attributes
+);
+
+// ... but do not ignore text strings in arbitrary parentheses.
+$value = apply_filters(
+	( $name ? 'UPPERCASE' : 'wrong-delimiter' ),
+	$value,
+	$attributes
+);
