@@ -97,7 +97,7 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 		);
 
 		// Temporarily until PHPCS supports PHP 8.2.
-		if ( PHP_VERSION_ID >= 80200 ) {
+		if ( \PHP_VERSION_ID >= 80200 ) {
 			unset( $warnings[364] ); // Function call to readonly.
 		}
 
