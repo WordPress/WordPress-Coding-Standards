@@ -72,13 +72,17 @@ jobs:
       - name: Show PHPCS results in PR
         run: cs2pr ./phpcs-report.xml --graceful-warnings
 
-      # Validate the XML files.
+      # Validate the Ruleset XML files.
       # @link http://xmlsoft.org/xmllint.html
       - name: Validate the WordPress rulesets
         run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
       - name: Validate the sample ruleset
         run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+
+      # Validate the Documentation XML files.
+      - name: Validate documentation against schema
+        run: xmllint --noout --schema vendor/phpcsstandards/phpcsdevtools/DocsXsd/phpcsdocs.xsd ./WordPress/Docs/*/*Standard.xml
 
       - name: Check the code-style consistency of the xml files
         run: |
