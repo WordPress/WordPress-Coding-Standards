@@ -1,4 +1,8 @@
-<documentation title="Current Time Timestamp">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Current Time Timestamp"
+    >
     <standard>
     <![CDATA[
     Don't use current_time() to get a timestamp as it doesn't produce a Unix (UTC) timestamp, but a "WordPress timestamp", i.e. a Unix timestamp with current timezone offset.

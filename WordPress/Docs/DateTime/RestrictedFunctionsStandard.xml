@@ -1,4 +1,8 @@
-<documentation title="Restricted Date and Time Functions">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted Date and Time Functions"
+    >
     <standard>
     <![CDATA[
     The restricted functions date_default_timezone_set() and date() should not be used.

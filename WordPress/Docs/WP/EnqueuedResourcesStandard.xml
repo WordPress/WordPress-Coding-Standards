@@ -1,4 +1,8 @@
-<documentation title="Enqueued Resources">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Enqueued Resources"
+    >
     <standard>
     <![CDATA[
     Scripts must be registered/enqueued via wp_enqueue_script().

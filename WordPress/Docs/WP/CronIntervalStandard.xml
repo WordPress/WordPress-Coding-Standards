@@ -1,4 +1,8 @@
-<documentation title="Cron interval">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Cron Interval"
+    >
     <standard>
     <![CDATA[
     Cron schedules running more often than once every 15 minutes are discouraged. Crons running that frequently can negatively impact the performance of a site.

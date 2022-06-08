@@ -1,4 +1,8 @@
-<documentation title="Class Instantiation">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Class Instantiation"
+    >
     <standard>
     <![CDATA[
     Instantiation of an object should be done with parenthesis.

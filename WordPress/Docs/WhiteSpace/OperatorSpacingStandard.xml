@@ -1,4 +1,8 @@
-<documentation title="Operator Spacing">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Operator Spacing"
+    >
     <standard>
     <![CDATA[
     Always put one space on both sides of logical, comparison and concatenation operators.

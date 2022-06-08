@@ -1,4 +1,8 @@
-<documentation title="Multiple Statement Alignment">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Array Multiple Statement Alignment"
+    >
     <standard>
     <![CDATA[
         When declaring arrays, there should be one space on either side of a double arrow operator used to assign a value to a key.
