@@ -16,7 +16,7 @@
 	],
 	"require": {
 		"php": ">=5.4",
-		"squizlabs/php_codesniffer": "^3.6.2",
+		"squizlabs/php_codesniffer": "^3.7.0",
 		"phpcsstandards/phpcsutils": "^1.0",
 		"phpcsstandards/phpcsextra": "^1.0"
 	},
