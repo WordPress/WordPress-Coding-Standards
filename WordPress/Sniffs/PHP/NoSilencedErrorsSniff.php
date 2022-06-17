@@ -202,7 +202,7 @@ class NoSilencedErrorsSniff extends Sniff {
 					|| ( ! empty( $this->customAllowedFunctionsList )
 					&& in_array( $function_name, $this->customAllowedFunctionsList, true ) === true )
 				) {
-					$this->phpcsFile->recordMetric( $stackPtr, 'Error silencing', 'whitelisted function call: ' . $function_name );
+					$this->phpcsFile->recordMetric( $stackPtr, 'Error silencing', 'silencing allowed function call: ' . $function_name );
 					return;
 				}
 			}
