@@ -187,9 +187,9 @@ class NoSilencedErrorsSniff extends Sniff {
 		$this->customAllowedFunctionsList = array_map( 'strtolower', $this->customAllowedFunctionsList );
 
 		/*
-		 * Check if the error silencing is done for one of the whitelisted functions.
+		 * Check if the error silencing is done for one of the allowed functions.
 		 *
-		 * @internal The function call name determination is done even when there is no whitelist active
+		 * @internal The function call name determination is done even when there is no allow list active
 		 * to allow the metrics to be more informative.
 		 */
 		$next_non_empty = $this->phpcsFile->findNext( $this->empty_tokens, ( $stackPtr + 1 ), null, true, null, true );
