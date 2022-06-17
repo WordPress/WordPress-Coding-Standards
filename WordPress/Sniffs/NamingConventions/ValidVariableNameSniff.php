@@ -117,7 +117,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList();
+		$this->merge_allow_lists();
 
 		// Likewise if it is a mixed-case var used by WordPress core.
 		if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
@@ -212,7 +212,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		// Merge any custom variables with the defaults.
-		$this->mergeWhiteList();
+		$this->merge_allow_lists();
 
 		if ( ! isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
 			$error = 'Member variable "$%s" is not in valid snake_case format, try "$%s"';
@@ -240,7 +240,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
 
 			// Merge any custom variables with the defaults.
-			$this->mergeWhiteList();
+			$this->merge_allow_lists();
 
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
@@ -276,15 +276,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	}
 
 	/**
-	 * Merge a custom whitelist provided via a custom ruleset with the predefined whitelist,
+	 * Merge a custom allow list provided via a custom ruleset with the predefined allow list,
 	 * if we haven't already.
 	 *
 	 * @since 0.10.0
 	 * @since 2.0.0  Removed unused $phpcs_file parameter.
+	 * @since 3.0.0  Renamed from `mergeWhiteList()` to `merge_allow_lists()`.
 	 *
 	 * @return void
 	 */
-	protected function mergeWhiteList() {
+	protected function merge_allow_lists() {
 		if ( $this->allowed_custom_properties !== $this->addedCustomProperties['properties'] ) {
 			// Fix property potentially passed as comma-delimited string.
 			$customProperties = Sniff::merge_custom_array( $this->allowed_custom_properties, array(), false );
