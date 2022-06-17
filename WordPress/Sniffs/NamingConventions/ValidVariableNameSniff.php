@@ -76,10 +76,11 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * Custom list of properties which can have mixed case.
 	 *
 	 * @since 0.11.0
+	 * @since 3.0.0  Renamed from `$customPropertiesWhitelist` to `$allowed_custom_properties`.
 	 *
 	 * @var string|string[]
 	 */
-	public $customPropertiesWhitelist = array();
+	public $allowed_custom_properties = array();
 
 	/**
 	 * Cache of previously added custom functions.
@@ -284,16 +285,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @return void
 	 */
 	protected function mergeWhiteList() {
-		if ( $this->customPropertiesWhitelist !== $this->addedCustomProperties['properties'] ) {
+		if ( $this->allowed_custom_properties !== $this->addedCustomProperties['properties'] ) {
 			// Fix property potentially passed as comma-delimited string.
-			$customProperties = Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
+			$customProperties = Sniff::merge_custom_array( $this->allowed_custom_properties, array(), false );
 
 			$this->allowed_mixed_case_member_var_names = Sniff::merge_custom_array(
 				$customProperties,
 				$this->allowed_mixed_case_member_var_names
 			);
 
-			$this->addedCustomProperties['properties'] = $this->customPropertiesWhitelist;
+			$this->addedCustomProperties['properties'] = $this->allowed_custom_properties;
 		}
 	}
 
