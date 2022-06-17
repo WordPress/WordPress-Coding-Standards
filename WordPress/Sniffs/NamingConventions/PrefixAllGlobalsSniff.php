@@ -148,6 +148,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * A list of core constants that are allowed to be defined by plugins and themes.
 	 *
 	 * @since 1.0.0
+	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
 	 *
 	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/default-constants.php#L0}
 	 * The constants are listed in the order they are found in the source file
@@ -157,7 +158,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $whitelisted_core_constants = array(
+	protected $allowed_core_constants = array(
 		'WP_MEMORY_LIMIT'      => true,
 		'WP_MAX_MEMORY_LIMIT'  => true,
 		'WP_CONTENT_DIR'       => true,
@@ -468,7 +469,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 						return;
 					}
 
-					if ( isset( $this->whitelisted_core_constants[ $item_name ] ) ) {
+					if ( isset( $this->allowed_core_constants[ $item_name ] ) ) {
 						// Defining a WP Core constant intended for overruling.
 						return;
 					}
@@ -809,7 +810,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		if ( ( 'define' !== $matched_content
 			&& isset( $this->allowed_core_hooks[ $raw_content ] ) )
 			|| ( 'define' === $matched_content
-			&& isset( $this->whitelisted_core_constants[ $raw_content ] ) )
+			&& isset( $this->allowed_core_constants[ $raw_content ] ) )
 		) {
 			return;
 		}
