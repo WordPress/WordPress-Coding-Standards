@@ -405,7 +405,7 @@ class ArrayDeclarationSpacingSniff extends Sniff {
 						&& substr( rtrim( $this->tokens[ $end_of_comment ]['content'] ), -2 ) !== '*/'
 						&& ( $end_of_comment + 1 ) < $end_of_this_item
 					) {
-						$end_of_comment++;
+						++$end_of_comment;
 					}
 
 					if ( $this->tokens[ $end_of_comment ]['line'] !== $this->tokens[ $end_of_last_item ]['line'] ) {

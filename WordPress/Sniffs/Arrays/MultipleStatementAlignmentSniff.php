@@ -358,7 +358,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				$items[ $key ]['single_line'] = true;
 			} else {
 				$items[ $key ]['single_line'] = false;
-				$multi_line_count++;
+				++$multi_line_count;
 			}
 
 			if ( ( $index_end_position + 2 ) <= $this->maxColumn ) {
@@ -368,7 +368,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			if ( ! isset( $double_arrow_cols[ $this->tokens[ $double_arrow ]['column'] ] ) ) {
 				$double_arrow_cols[ $this->tokens[ $double_arrow ]['column'] ] = 1;
 			} else {
-				$double_arrow_cols[ $this->tokens[ $double_arrow ]['column'] ]++;
+				++$double_arrow_cols[ $this->tokens[ $double_arrow ]['column'] ];
 			}
 		}
 		unset( $key, $item, $double_arrow, $has_array_opener, $last_index_token );
@@ -413,7 +413,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				if ( ! isset( $double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ] ) ) {
 					$double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ] = 1;
 				} else {
-					$double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ]++;
+					++$double_arrow_cols[ $this->tokens[ $item['operatorPtr'] ]['column'] ];
 				}
 			}
 		}

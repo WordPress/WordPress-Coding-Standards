@@ -188,7 +188,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 
 					if ( \T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
 						if ( $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar ) {
-							$newlines++;
+							++$newlines;
 						} else {
 							$spaces += $this->tokens[ $i ]['length'];
 						}
