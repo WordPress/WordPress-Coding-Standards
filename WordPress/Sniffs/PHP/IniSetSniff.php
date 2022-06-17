@@ -149,8 +149,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->disallowed_options[ $option_name ] ) ) {
-			$blacklisted_option = $this->disallowed_options[ $option_name ];
-			if ( ! isset( $blacklisted_option['invalid_values'] ) || in_array( strtolower( $option_value ), $blacklisted_option['invalid_values'], true ) ) {
+			$disallowed_option = $this->disallowed_options[ $option_name ];
+			if ( ! isset( $disallowed_option['invalid_values'] ) || in_array( strtolower( $option_value ), $disallowed_option['invalid_values'], true ) ) {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
@@ -159,7 +159,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 						$matched_content,
 						$parameters[1]['raw'],
 						$parameters[2]['raw'],
-						$blacklisted_option['message'],
+						$disallowed_option['message'],
 					)
 				);
 				return;
