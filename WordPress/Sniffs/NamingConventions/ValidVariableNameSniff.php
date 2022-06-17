@@ -59,10 +59,11 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 *
 	 * @since 0.9.0
 	 * @since 0.11.0 Changed from public to protected.
+	 * @since 3.0.0  Renamed from `$whitelisted_mixed_case_member_var_names` to `$allowed_mixed_case_member_var_names`.
 	 *
 	 * @var array
 	 */
-	protected $whitelisted_mixed_case_member_var_names = array(
+	protected $allowed_mixed_case_member_var_names = array(
 		'ID'                => true,
 		'comment_ID'        => true,
 		'comment_post_ID'   => true,
@@ -139,7 +140,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 						$obj_var_name = substr( $obj_var_name, 1 );
 					}
 
-					if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $obj_var_name ] ) && self::isSnakeCase( $obj_var_name ) === false ) {
+					if ( ! isset( $this->allowed_mixed_case_member_var_names[ $obj_var_name ] ) && self::isSnakeCase( $obj_var_name ) === false ) {
 						$error = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
 						$data  = array(
 							$original_var_name,
@@ -168,7 +169,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		if ( self::isSnakeCase( $var_name ) === false ) {
-			if ( $in_class && ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) ) {
+			if ( $in_class && ! isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) ) {
 				$error      = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
 				$error_name = 'UsedPropertyNotSnakeCase';
 			} elseif ( ! $in_class ) {
@@ -212,7 +213,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		// Merge any custom variables with the defaults.
 		$this->mergeWhiteList();
 
-		if ( ! isset( $this->whitelisted_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
+		if ( ! isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
 			$error = 'Member variable "$%s" is not in valid snake_case format, try "$%s"';
 			$data  = array(
 				$var_name,
@@ -287,9 +288,9 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			// Fix property potentially passed as comma-delimited string.
 			$customProperties = Sniff::merge_custom_array( $this->customPropertiesWhitelist, array(), false );
 
-			$this->whitelisted_mixed_case_member_var_names = Sniff::merge_custom_array(
+			$this->allowed_mixed_case_member_var_names = Sniff::merge_custom_array(
 				$customProperties,
-				$this->whitelisted_mixed_case_member_var_names
+				$this->allowed_mixed_case_member_var_names
 			);
 
 			$this->addedCustomProperties['properties'] = $this->customPropertiesWhitelist;
