@@ -54,7 +54,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	public $treat_files_as_scoped = false;
 
 	/**
-	 * Whitelist select variables from the Sniff::$wp_globals array.
+	 * Allow select variables from the Sniff::$wp_globals array to be overwritten.
 	 *
 	 * A few select variables in WP Core are _intended_ to be overwritten
 	 * by themes/plugins. This sniff should not throw an error for those.

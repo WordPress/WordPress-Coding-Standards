@@ -9,9 +9,9 @@
  * This file should inherit the property settings from the 7a test case file.
  */
 
-  // Bad, but not reported as token type is whitelisted.
-	 function exampleFunctionD() {} // Bad, but not reported as token type is (still) whitelisted.
-	  function exampleFunctionE() {} // Bad, but not reported as token type is (still) whitelisted.
-	   function exampleFunctionF() {} // Bad, but not reported as token type is (still) whitelisted.
+  // Bad, but not reported as token type is ignored.
+	 function exampleFunctionD() {} // Bad, but not reported as token type is (still) ignored.
+	  function exampleFunctionE() {} // Bad, but not reported as token type is (still) ignored.
+	   function exampleFunctionF() {} // Bad, but not reported as token type is (still) ignored.
 
 // phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[]

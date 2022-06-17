@@ -67,7 +67,7 @@ _x( $text, $context, $variableTextdomain );
 _ex( $text, $context, CONSTANT_TEXTDOMAIN );
 
 /*
- * Text domains *not* in the whitelisted "old" domain list should be ignored.
+ * Text domains *not* in the "old" domain list should be ignored.
  */
 load_plugin_textdomain( 'tgmpa', false, '/languages/' );
 _e( $text, 'default' );

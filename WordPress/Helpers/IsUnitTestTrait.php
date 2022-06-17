@@ -140,7 +140,7 @@ trait IsUnitTestTrait {
 			$known_test_classes[ $k ] = ltrim( $v, '\\' );
 		}
 
-		// Is the class/trait one of the whitelisted test classes ?
+		// Is the class/trait one of the known test classes ?
 		$namespace = Namespaces::determineNamespace( $phpcsFile, $stackPtr );
 		$className = ObjectDeclarations::getName( $phpcsFile, $stackPtr );
 		if ( '' !== $namespace ) {
@@ -151,7 +151,7 @@ trait IsUnitTestTrait {
 			return true;
 		}
 
-		// Does the class/trait extend one of the whitelisted test classes ?
+		// Does the class/trait extend one of the known test classes ?
 		$extendedClassName = ObjectDeclarations::findExtendedClassName( $phpcsFile, $stackPtr );
 		if ( false === $extendedClassName ) {
 			return false;
