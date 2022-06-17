@@ -56,7 +56,7 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'mysqlnd_memcache_*',
 					'maxdb_*',
 				),
-				'whitelist' => array(
+				'allow'     => array(
 					'mysql_to_rfc3339' => true,
 				),
 			),

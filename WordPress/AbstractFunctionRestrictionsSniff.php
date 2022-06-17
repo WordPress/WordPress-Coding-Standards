@@ -97,14 +97,14 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *         'message'   => 'Use anonymous functions instead please!',
 	 *         'functions' => array( 'file_get_contents', 'create_function', 'mysql_*' ),
 	 *         // Only useful when using wildcards:
-	 *         'whitelist' => array( 'mysql_to_rfc3339' => true, ),
+	 *         'allow' => array( 'mysql_to_rfc3339' => true, ),
 	 *     )
 	 * )
 	 *
 	 * You can use * wildcards to target a group of functions.
 	 * When you use * wildcards, you may inadvertently restrict too many
-	 * functions. In that case you can add the `whitelist` key to
-	 * whitelist individual functions to prevent false positives.
+	 * functions. In that case you can add the `allow` key to
+	 * safe list individual functions to prevent false positives.
 	 *
 	 * @return array
 	 */
@@ -280,7 +280,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				continue;
 			}
 
-			if ( isset( $group['whitelist'][ $token_content ] ) ) {
+			if ( isset( $group['allow'][ $token_content ] ) ) {
 				continue;
 			}
 

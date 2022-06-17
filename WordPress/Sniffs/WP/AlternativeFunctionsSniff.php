@@ -94,7 +94,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'functions' => array(
 					'curl_*',
 				),
-				'whitelist' => array(
+				'allow'     => array(
 					'curl_version' => true,
 				),
 			),
