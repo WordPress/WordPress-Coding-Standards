@@ -40,8 +40,8 @@ class NoSilencedErrorsSniff extends Sniff {
 	 *
 	 * Defaults to true.
 	 *
-	 * This property only affects whether the standard function list is
-	 * used. The custom whitelist, if set, will always be respected.
+	 * This property only affects whether the standard function list is used.
+	 * The custom allowed functions list, if set, will always be respected.
 	 *
 	 * @since 1.1.0
 	 * @since 3.0.0 Renamed from `$use_default_whitelist` to `$usePHPFunctionsList`.
@@ -51,16 +51,17 @@ class NoSilencedErrorsSniff extends Sniff {
 	public $usePHPFunctionsList = true;
 
 	/**
-	 * User defined whitelist.
+	 * User defined function list.
 	 *
-	 * Allows users to pass a list of additional functions to whitelist
-	 * from their custom ruleset.
+	 * Allows users to pass a list of additional functions for which to allow
+	 * the use of the silence operator. This list can be set in a custom ruleset.
 	 *
 	 * @since 1.1.0
+	 * @since 3.0.0 Renamed from `$custom_whitelist` to `$customAllowedFunctionsList`.
 	 *
 	 * @var array
 	 */
-	public $custom_whitelist = array();
+	public $customAllowedFunctionsList = array();
 
 	/**
 	 * PHP native function whitelist.
@@ -180,9 +181,9 @@ class NoSilencedErrorsSniff extends Sniff {
 	 * @param int $stackPtr The position of the current token in the stack.
 	 */
 	public function process_token( $stackPtr ) {
-		// Handle the user-defined custom function whitelist.
-		$this->custom_whitelist = $this->merge_custom_array( $this->custom_whitelist, array(), false );
-		$this->custom_whitelist = array_map( 'strtolower', $this->custom_whitelist );
+		// Handle the user-defined custom function list.
+		$this->customAllowedFunctionsList = $this->merge_custom_array( $this->customAllowedFunctionsList, array(), false );
+		$this->customAllowedFunctionsList = array_map( 'strtolower', $this->customAllowedFunctionsList );
 
 		/*
 		 * Check if the error silencing is done for one of the whitelisted functions.
@@ -197,8 +198,8 @@ class NoSilencedErrorsSniff extends Sniff {
 				$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
 				if ( ( true === $this->usePHPFunctionsList
 					&& isset( $this->function_whitelist[ $function_name ] ) === true )
-					|| ( ! empty( $this->custom_whitelist )
-					&& in_array( $function_name, $this->custom_whitelist, true ) === true )
+					|| ( ! empty( $this->customAllowedFunctionsList )
+					&& in_array( $function_name, $this->customAllowedFunctionsList, true ) === true )
 				) {
 					$this->phpcsFile->recordMetric( $stackPtr, 'Error silencing', 'whitelisted function call: ' . $function_name );
 					return;

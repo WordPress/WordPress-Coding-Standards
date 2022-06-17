@@ -39,11 +39,11 @@ if ( @ftp_fget($conn_id, $handle, $remote_file, FTP_ASCII, 0 ) ) { // Bad.
 }
 @ftp_close($conn_id); // Bad.
 
-// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[] fgetcsv,hex2bin
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[] fgetcsv,hex2bin
 while ( ( $csvdata = @fgetcsv( $handle, 2000, $separator ) ) !== false ) {}
 echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );
-// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[]
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[]
 
 $decoded = @hex2bin( $data ); // Bad.
 
@@ -71,12 +71,12 @@ if (@is_dir($dir)) { // Bad.
 $files1 = @ & scandir($dir); // Bad.
 
 /*
- * Custom whitelist will be respected even when `usePHPFunctionsList` is set to false.
+ * The custom allowed functions list will be respected even when `usePHPFunctionsList` is set to false.
  */
-// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[] fgetcsv,hex2bin
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[] fgetcsv,hex2bin
 while ( ( $csvdata = @fgetcsv( $handle, 2000, $separator ) ) !== false ) {}
 echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );
-// phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[]
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[]
 
 // phpcs:set WordPress.PHP.NoSilencedErrors usePHPFunctionsList true
