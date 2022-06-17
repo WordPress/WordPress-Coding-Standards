@@ -52,7 +52,7 @@ $unserialized = @unserialize( $str );
 /*
  * ... and test the same principle again, but now without using the whitelist.
  */
-// phpcs:set WordPress.PHP.NoSilencedErrors use_default_whitelist false
+// phpcs:set WordPress.PHP.NoSilencedErrors usePHPFunctionsList false
 
 // File extension.
 if ( @&file_exists( $filename ) && @ /*comment*/ is_readable( $filename ) ) { // Bad x2.
@@ -71,7 +71,7 @@ if (@is_dir($dir)) { // Bad.
 $files1 = @ & scandir($dir); // Bad.
 
 /*
- * Custom whitelist will be respected even when `use_default_whitelist` is set to false.
+ * Custom whitelist will be respected even when `usePHPFunctionsList` is set to false.
  */
 // phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[] fgetcsv,hex2bin
 while ( ( $csvdata = @fgetcsv( $handle, 2000, $separator ) ) !== false ) {}
@@ -79,4 +79,4 @@ echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );
 // phpcs:set WordPress.PHP.NoSilencedErrors custom_whitelist[]
 
-// phpcs:set WordPress.PHP.NoSilencedErrors use_default_whitelist true
+// phpcs:set WordPress.PHP.NoSilencedErrors usePHPFunctionsList true

@@ -147,11 +147,11 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1371 -->
 	<rule ref="WordPress.PHP.PregQuoteDelimiter"/>
 
-	<!-- The Core ruleset respects the whitelist. For `Extra` the sniff is stricter.
+	<!-- The Core ruleset respects the PHP allowed functions list. For `Extra` the sniff is stricter.
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1450 -->
 	<rule ref="WordPress.PHP.NoSilencedErrors">
 		<properties>
-			<property name="use_default_whitelist" value="false"/>
+			<property name="usePHPFunctionsList" value="false"/>
 		</properties>
 	</rule>
 

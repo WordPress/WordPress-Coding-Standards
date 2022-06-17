@@ -16,7 +16,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * Discourage the use of the PHP error silencing operator.
  *
  * This sniff allows the error operator to be used with a select list
- * of whitelisted functions, as no amount of error checking can prevent
+ * of functions, as no amount of error checking can prevent
  * PHP from throwing errors when those functions are used.
  *
  * @package WPCS\WordPressCodingStandards
@@ -40,14 +40,15 @@ class NoSilencedErrorsSniff extends Sniff {
 	 *
 	 * Defaults to true.
 	 *
-	 * This property only affects whether the standard function whitelist is
+	 * This property only affects whether the standard function list is
 	 * used. The custom whitelist, if set, will always be respected.
 	 *
 	 * @since 1.1.0
+	 * @since 3.0.0 Renamed from `$use_default_whitelist` to `$usePHPFunctionsList`.
 	 *
 	 * @var bool
 	 */
-	public $use_default_whitelist = true;
+	public $usePHPFunctionsList = true;
 
 	/**
 	 * User defined whitelist.
@@ -194,7 +195,7 @@ class NoSilencedErrorsSniff extends Sniff {
 			$has_parenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
 			if ( false !== $has_parenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $has_parenthesis ]['code'] ) {
 				$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
-				if ( ( true === $this->use_default_whitelist
+				if ( ( true === $this->usePHPFunctionsList
 					&& isset( $this->function_whitelist[ $function_name ] ) === true )
 					|| ( ! empty( $this->custom_whitelist )
 					&& in_array( $function_name, $this->custom_whitelist, true ) === true )
