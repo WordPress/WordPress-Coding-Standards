@@ -154,7 +154,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
-					$this->string_to_errorcode( $option_name . '_Blacklisted' ),
+					$this->string_to_errorcode( $option_name . '_Disallowed' ),
 					array(
 						$matched_content,
 						$parameters[1]['raw'],
