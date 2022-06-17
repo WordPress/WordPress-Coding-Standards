@@ -637,7 +637,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$variable_name = substr( $this->tokens[ $stackPtr ]['content'], 1 ); // Strip the dollar sign.
 
 		// Bow out early if we know for certain no prefix is needed.
-		if ( $this->variable_prefixed_or_whitelisted( $stackPtr, $variable_name ) === true ) {
+		if ( $this->variable_prefixed_or_allowed( $stackPtr, $variable_name ) === true ) {
 			return;
 		}
 
@@ -659,7 +659,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Check whether a prefix is needed.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
-				&& $this->variable_prefixed_or_whitelisted( $stackPtr, $variable_name ) === true
+				&& $this->variable_prefixed_or_allowed( $stackPtr, $variable_name ) === true
 			) {
 				return;
 			}
@@ -670,7 +670,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$exploded = explode( '$', $variable_name );
 				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
-					if ( $this->variable_prefixed_or_whitelisted( $array_key, $first ) === true ) {
+					if ( $this->variable_prefixed_or_allowed( $array_key, $first ) === true ) {
 						return;
 					}
 				} else {
@@ -930,14 +930,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 1.0.1  Added $stackPtr parameter.
+	 * @since 3.0.0  Renamed from `variable_prefixed_or_whitelisted()` to `variable_prefixed_or_allowed()`.
 	 *
 	 * @param int    $stackPtr The position of the token to record the metric against.
 	 * @param string $name     Variable name without the dollar sign.
 	 *
-	 * @return bool True if the variable name is whitelisted or already prefixed.
+	 * @return bool True if the variable name is allowed or already prefixed.
 	 *              False otherwise.
 	 */
-	private function variable_prefixed_or_whitelisted( $stackPtr, $name ) {
+	private function variable_prefixed_or_allowed( $stackPtr, $name ) {
 		// Ignore superglobals and WP global variables.
 		if ( isset( $this->superglobals[ $name ] ) || isset( $this->wp_globals[ $name ] ) ) {
 			return true;
