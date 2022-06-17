@@ -399,7 +399,7 @@ class Some_Test_Class extends NonTestClass { // Bad.
 }
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wordpress,somethingelse
-// The above line adds an issue to line 1 about a blacklisted prefix.
+// The above line adds an issue to line 1 about a blocked prefix.
 function wordpress_do_something() {} // Bad.
 function somethingelse_do_something() {} // OK.
 

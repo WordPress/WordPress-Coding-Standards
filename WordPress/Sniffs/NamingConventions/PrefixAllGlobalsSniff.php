@@ -64,13 +64,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	public $prefixes = '';
 
 	/**
-	 * Prefix blacklist.
+	 * Prefix blocklist.
 	 *
 	 * @since 0.12.0
+	 * @since 3.0.0  Renamed from `$prefix_blacklist` to `$prefix_blocklist`.
 	 *
 	 * @var string[]
 	 */
-	protected $prefix_blacklist = array(
+	protected $prefix_blocklist = array(
 		'wordpress' => true,
 		'wp'        => true,
 		'_'         => true,
@@ -949,7 +950,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Validate an array of prefixes as passed through a custom property or via the command line.
 	 *
 	 * Checks that the prefix:
-	 * - is not one of the blacklisted ones.
+	 * - is not one of the blocked ones.
 	 * - complies with the PHP rules for valid function, class, variable, constant names.
 	 *
 	 * @since 0.12.0
@@ -968,7 +969,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		foreach ( $this->prefixes as $key => $prefix ) {
 			$prefixLC = strtolower( $prefix );
 
-			if ( isset( $this->prefix_blacklist[ $prefixLC ] ) ) {
+			if ( isset( $this->prefix_blocklist[ $prefixLC ] ) ) {
 				$this->phpcsFile->addError(
 					'The "%s" prefix is not allowed.',
 					0,
