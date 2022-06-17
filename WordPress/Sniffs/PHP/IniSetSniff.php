@@ -15,7 +15,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 /**
  * Detect use of the `ini_set()` function.
  *
- * - Won't throw notices for "safe" ini directives as listed in the whitelist.
+ * - Won't throw notices for "safe" ini directives as listed in the safe-list.
  * - Throws errors for ini directives listed in the blacklist.
  * - A warning will be thrown in all other cases.
  *
@@ -44,15 +44,16 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * Array of PHP configuration options that are allowed to be manipulated.
 	 *
 	 * @since 2.1.0
+	 * @since 3.0.0 Renamed from `$whitelisted_options` to `$safe_options`.
 	 *
 	 * @var array Multidimensional array with parameter details.
-	 *     $whitelisted_options = array(
+	 *     $safe_options = array(
 	 *         (string) option name. = array(
 	 *             (string[]) 'valid_values' = array()
 	 *         )
 	 *     );
 	 */
-	protected $whitelisted_options = array(
+	protected $safe_options = array(
 		'auto_detect_line_endings' => array(),
 		'highlight.bg'             => array(),
 		'highlight.comment'        => array(),
@@ -125,7 +126,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * Process the parameter of a matched function.
 	 *
 	 * Errors if an option is found in the blacklist. Warns as
-	 * 'risky' when the option is not found in the whitelist.
+	 * 'risky' when the option is not found in the safe-list.
 	 *
 	 * @since 2.1.0
 	 *
@@ -139,8 +140,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		$option_name  = TextStrings::stripQuotes( $parameters[1]['raw'] );
 		$option_value = TextStrings::stripQuotes( $parameters[2]['raw'] );
-		if ( isset( $this->whitelisted_options[ $option_name ] ) ) {
-			$whitelisted_option = $this->whitelisted_options[ $option_name ];
+		if ( isset( $this->safe_options[ $option_name ] ) ) {
+			$whitelisted_option = $this->safe_options[ $option_name ];
 			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( strtolower( $option_value ), $whitelisted_option['valid_values'], true ) ) {
 				return;
 			}
