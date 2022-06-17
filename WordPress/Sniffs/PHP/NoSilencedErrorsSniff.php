@@ -36,7 +36,7 @@ class NoSilencedErrorsSniff extends Sniff {
 	public $context_length = 6;
 
 	/**
-	 * Whether or not the `$function_whitelist` should be used.
+	 * Whether or not the `$allowedFunctionsList` should be used.
 	 *
 	 * Defaults to true.
 	 *
@@ -64,7 +64,7 @@ class NoSilencedErrorsSniff extends Sniff {
 	public $customAllowedFunctionsList = array();
 
 	/**
-	 * PHP native function whitelist.
+	 * PHP native functions allow list.
 	 *
 	 * Errors caused by calls to any of these native PHP functions
 	 * are allowed to be silenced as file system permissions and such
@@ -78,10 +78,11 @@ class NoSilencedErrorsSniff extends Sniff {
 	 * error will be thrown on failure are accepted into this list.
 	 *
 	 * @since 1.1.0
+	 * @since 3.0.0 Renamed from `$function_whitelist` to `$allowedFunctionsList`.
 	 *
 	 * @var array <string function name> => <bool true>
 	 */
-	protected $function_whitelist = array(
+	protected $allowedFunctionsList = array(
 		// Directory extension.
 		'chdir'                        => true,
 		'opendir'                      => true,
@@ -197,7 +198,7 @@ class NoSilencedErrorsSniff extends Sniff {
 			if ( false !== $has_parenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $has_parenthesis ]['code'] ) {
 				$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
 				if ( ( true === $this->usePHPFunctionsList
-					&& isset( $this->function_whitelist[ $function_name ] ) === true )
+					&& isset( $this->allowedFunctionsList[ $function_name ] ) === true )
 					|| ( ! empty( $this->customAllowedFunctionsList )
 					&& in_array( $function_name, $this->customAllowedFunctionsList, true ) === true )
 				) {

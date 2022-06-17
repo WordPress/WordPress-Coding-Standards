@@ -50,7 +50,7 @@ $decoded = @hex2bin( $data ); // Bad.
 $unserialized = @unserialize( $str );
 
 /*
- * ... and test the same principle again, but now without using the whitelist.
+ * ... and test the same principle again, but now without using the PHP function allow list.
  */
 // phpcs:set WordPress.PHP.NoSilencedErrors usePHPFunctionsList false
 
