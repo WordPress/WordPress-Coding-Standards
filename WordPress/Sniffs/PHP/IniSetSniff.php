@@ -16,7 +16,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * Detect use of the `ini_set()` function.
  *
  * - Won't throw notices for "safe" ini directives as listed in the safe-list.
- * - Throws errors for ini directives listed in the blacklist.
+ * - Throws errors for ini directives listed in the disallow-list.
  * - A warning will be thrown in all other cases.
  *
  * @package WPCS\WordPressCodingStandards
@@ -70,16 +70,17 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * Array of PHP configuration options that are not allowed to be manipulated.
 	 *
 	 * @since 2.1.0
+	 * @since 3.0.0 Renamed from `$blacklisted_options` to `$disallowed_options`.
 	 *
 	 * @var array Multidimensional array with parameter details.
-	 *     $blacklisted_options = array(
+	 *     $disallowed_options = array(
 	 *         (string) option name. = array(
 	 *             (string[]) 'invalid_values' = array()
 	 *             (string) 'message'
 	 *         )
 	 *     );
 	 */
-	protected $blacklisted_options = array(
+	protected $disallowed_options = array(
 		'bcmath.scale' => array(
 			'message' => 'Use `bcscale()` instead.',
 		),
@@ -125,7 +126,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the parameter of a matched function.
 	 *
-	 * Errors if an option is found in the blacklist. Warns as
+	 * Errors if an option is found in the disallow-list. Warns as
 	 * 'risky' when the option is not found in the safe-list.
 	 *
 	 * @since 2.1.0
@@ -147,8 +148,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			}
 		}
 
-		if ( isset( $this->blacklisted_options[ $option_name ] ) ) {
-			$blacklisted_option = $this->blacklisted_options[ $option_name ];
+		if ( isset( $this->disallowed_options[ $option_name ] ) ) {
+			$blacklisted_option = $this->disallowed_options[ $option_name ];
 			if ( ! isset( $blacklisted_option['invalid_values'] ) || in_array( strtolower( $option_value ), $blacklisted_option['invalid_values'], true ) ) {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
