@@ -142,8 +142,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		$option_name  = TextStrings::stripQuotes( $parameters[1]['raw'] );
 		$option_value = TextStrings::stripQuotes( $parameters[2]['raw'] );
 		if ( isset( $this->safe_options[ $option_name ] ) ) {
-			$whitelisted_option = $this->safe_options[ $option_name ];
-			if ( ! isset( $whitelisted_option['valid_values'] ) || in_array( strtolower( $option_value ), $whitelisted_option['valid_values'], true ) ) {
+			$safe_option = $this->safe_options[ $option_name ];
+			if ( ! isset( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
 				return;
 			}
 		}
