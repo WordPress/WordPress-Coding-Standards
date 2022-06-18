@@ -159,7 +159,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 			}
 		}
 
-		$this->phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
+		$this->phpcsFile->addWarning( 'Use of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 
 		if ( ! isset( $this->methods['cachable'][ $method ] ) ) {
 			return $endOfStatement;
