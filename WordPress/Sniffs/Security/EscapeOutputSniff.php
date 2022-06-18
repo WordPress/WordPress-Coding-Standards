@@ -9,10 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\VariableHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Verifies that all outputted strings are escaped.
@@ -452,7 +453,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// Make the error message a little more informative for array access variables.
 			if ( \T_VARIABLE === $this->tokens[ $ptr ]['code'] ) {
-				$array_keys = $this->get_array_access_keys( $ptr );
+				$array_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $ptr );
 
 				if ( ! empty( $array_keys ) ) {
 					$content .= '[' . implode( '][', $array_keys ) . ']';

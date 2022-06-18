@@ -16,6 +16,7 @@ use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\VariableHelper;
 
 /**
  * Represents a PHP_CodeSniffer sniff for sniffing WordPress coding standards.
@@ -1123,7 +1124,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$allow_nonce_after = false;
 		if ( $this->is_in_isset_or_empty( $stackPtr )
 			|| $this->is_in_type_test( $stackPtr )
-			|| $this->is_comparison( $stackPtr )
+			|| VariableHelper::is_comparison( $this->phpcsFile, $stackPtr )
 			|| $this->is_in_array_comparison( $stackPtr )
 			|| $this->is_in_function_call( $stackPtr, $this->unslashingFunctions ) !== false
 			|| $this->is_only_sanitized( $stackPtr )
@@ -1614,82 +1615,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Get the index keys of an array variable.
-	 *
-	 * E.g., "bar" and "baz" in $foo['bar']['baz'].
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int  $stackPtr The index of the variable token in the stack.
-	 * @param bool $all      Whether to get all keys or only the first.
-	 *                       Defaults to `true`(= all).
-	 *
-	 * @return array An array of index keys whose value is being accessed.
-	 *               or an empty array if this is not array access.
-	 */
-	protected function get_array_access_keys( $stackPtr, $all = true ) {
-
-		$keys = array();
-
-		if ( \T_VARIABLE !== $this->tokens[ $stackPtr ]['code'] ) {
-			return $keys;
-		}
-
-		$current = $stackPtr;
-
-		do {
-			// Find the next non-empty token.
-			$open_bracket = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
-				( $current + 1 ),
-				null,
-				true
-			);
-
-			// If it isn't a bracket, this isn't an array-access.
-			if ( false === $open_bracket
-				|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
-				|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
-			) {
-				break;
-			}
-
-			$key = $this->phpcsFile->getTokensAsString(
-				( $open_bracket + 1 ),
-				( $this->tokens[ $open_bracket ]['bracket_closer'] - $open_bracket - 1 )
-			);
-
-			$keys[]  = trim( $key );
-			$current = $this->tokens[ $open_bracket ]['bracket_closer'];
-		} while ( isset( $this->tokens[ $current ] ) && true === $all );
-
-		return $keys;
-	}
-
-	/**
-	 * Get the index key of an array variable.
-	 *
-	 * E.g., "bar" in $foo['bar'].
-	 *
-	 * @since 0.5.0
-	 * @since 2.1.0 Now uses get_array_access_keys() under the hood.
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return string|false The array index key whose value is being accessed.
-	 */
-	protected function get_array_access_key( $stackPtr ) {
-
-		$keys = $this->get_array_access_keys( $stackPtr, false );
-
-		if ( isset( $keys[0] ) ) {
-			return $keys[0];
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check if the existence of a variable is validated with isset(), empty(), array_key_exists()
 	 * or key_exists().
 	 *
@@ -1826,7 +1751,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						// If we're checking for specific array keys (ex: 'hello' in
 						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
 						if ( ! empty( $bare_array_keys ) ) {
-							$found_keys = $this->get_array_access_keys( $i );
+							$found_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $i );
 							$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 							$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 							if ( ! empty( $diff ) ) {
@@ -1887,7 +1812,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						 * parameter, so we need to check both options.
 						 */
 
-						$found_keys = $this->get_array_access_keys( $param2_first_token );
+						$found_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $param2_first_token );
 						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 
 						// First try matching the complete set against the second parameter.
@@ -1931,7 +1856,7 @@ abstract class Sniff implements PHPCS_Sniff {
 					}
 
 					if ( ! empty( $bare_array_keys ) ) {
-						$found_keys = $this->get_array_access_keys( $prev );
+						$found_keys = VariableHelper::get_array_access_keys( $this->phpcsFile, $prev );
 						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
 						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 						if ( ! empty( $diff ) ) {
@@ -1942,85 +1867,6 @@ abstract class Sniff implements PHPCS_Sniff {
 					// Right variable, correct key.
 					return true;
 			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check whether a variable is being compared to another value.
-	 *
-	 * E.g., $var === 'foo', 1 <= $var, etc.
-	 *
-	 * Also recognizes `switch ( $var )`.
-	 *
-	 * @since 0.5.0
-	 * @since 2.1.0 Added the $include_coalesce parameter.
-	 *
-	 * @param int  $stackPtr         The index of this token in the stack.
-	 * @param bool $include_coalesce Optional. Whether or not to regard the null
-	 *                               coalesce operator - ?? - as a comparison operator.
-	 *                               Defaults to true.
-	 *                               Null coalesce is a special comparison operator in this
-	 *                               sense as it doesn't compare a variable to whatever is
-	 *                               on the other side of the comparison operator.
-	 *
-	 * @return bool Whether this is a comparison.
-	 */
-	protected function is_comparison( $stackPtr, $include_coalesce = true ) {
-
-		$comparisonTokens = Tokens::$comparisonTokens;
-		if ( false === $include_coalesce ) {
-			unset( $comparisonTokens[ \T_COALESCE ] );
-		}
-
-		// We first check if this is a switch statement (switch ( $var )).
-		if ( isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-			$close_parenthesis  = end( $nested_parenthesis );
-
-			if (
-				isset( $this->tokens[ $close_parenthesis ]['parenthesis_owner'] )
-				&& \T_SWITCH === $this->tokens[ $this->tokens[ $close_parenthesis ]['parenthesis_owner'] ]['code']
-			) {
-				return true;
-			}
-		}
-
-		// Find the previous non-empty token. We check before the var first because
-		// yoda conditions are usually expected.
-		$previous_token = $this->phpcsFile->findPrevious(
-			Tokens::$emptyTokens,
-			( $stackPtr - 1 ),
-			null,
-			true
-		);
-
-		if ( isset( $comparisonTokens[ $this->tokens[ $previous_token ]['code'] ] ) ) {
-			return true;
-		}
-
-		// Maybe the comparison operator is after this.
-		$next_token = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			( $stackPtr + 1 ),
-			null,
-			true
-		);
-
-		// This might be an opening square bracket in the case of arrays ($var['a']).
-		while ( false !== $next_token && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_token ]['code'] ) {
-
-			$next_token = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
-				( $this->tokens[ $next_token ]['bracket_closer'] + 1 ),
-				null,
-				true
-			);
-		}
-
-		if ( false !== $next_token && isset( $comparisonTokens[ $this->tokens[ $next_token ]['code'] ] ) ) {
-			return true;
 		}
 
 		return false;

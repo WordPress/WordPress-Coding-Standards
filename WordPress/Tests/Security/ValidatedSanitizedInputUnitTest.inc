@@ -333,3 +333,6 @@ function test_using_different_unslashing_functions() {
 }
 
 echo wp_sanitize_redirect( wp_unslash( $_GET['test'] ) ); // OK.
+
+$result = match ( $_POST['foo'] ) {}; // Ok.
+$result = match ( do_something( wp_unslash( $_POST['foo'] ) ) ) {}; // Bad.
