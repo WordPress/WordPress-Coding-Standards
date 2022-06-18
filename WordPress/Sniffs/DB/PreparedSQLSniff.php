@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\DB;
 
 use PHP_CodeSniffer\Util\Tokens;
-use WordPressCS\WordPress\Helpers\TextStringHelper;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -139,15 +139,17 @@ class PreparedSQLSniff extends Sniff {
 			) {
 
 				$bad_variables = array_filter(
-					TextStringHelper::get_interpolated_variables( $this->tokens[ $this->i ]['content'] ),
+					TextStrings::getEmbeds( $this->tokens[ $this->i ]['content'] ),
 					function ( $symbol ) {
-						return ( 'wpdb' !== $symbol );
+						return ( strpos( $symbol, '$wpdb' ) !== 0
+							&& strpos( $symbol, '{$wpdb') !== 0
+							&& strpos( $symbol, '${wpdb') !== 0 );
 					}
 				);
 
 				foreach ( $bad_variables as $bad_variable ) {
 					$this->phpcsFile->addError(
-						'Use placeholders and $wpdb->prepare(); found interpolated variable $%s at %s',
+						'Use placeholders and $wpdb->prepare(); found interpolated variable %s at %s',
 						$this->i,
 						'InterpolatedNotPrepared',
 						array(
