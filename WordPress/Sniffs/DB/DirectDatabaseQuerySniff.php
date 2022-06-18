@@ -24,6 +24,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since   0.11.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
+ * @since   3.0.0  Support for the very sniff specific WPCS native ignore comment syntax has been removed.
  */
 class DirectDatabaseQuerySniff extends Sniff {
 
@@ -146,11 +147,6 @@ class DirectDatabaseQuerySniff extends Sniff {
 			}
 		}
 
-		$whitelisted_db_call = false;
-		if ( preg_match( '/db call\W*(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
-			$whitelisted_db_call = true;
-		}
-
 		// Check for Database Schema Changes.
 		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
 			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
@@ -163,22 +159,15 @@ class DirectDatabaseQuerySniff extends Sniff {
 			}
 		}
 
-		// Flag instance if not whitelisted.
-		if ( ! $whitelisted_db_call ) {
-			$this->phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
-		}
+		$this->phpcsFile->addWarning( 'Use of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 
 		if ( ! isset( $this->methods['cachable'][ $method ] ) ) {
 			return $endOfStatement;
 		}
 
-		$whitelisted_cache = false;
-		$cached            = false;
-		$wp_cache_get      = false;
-		if ( preg_match( '/cache\s+(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
-			$whitelisted_cache = true;
-		}
-		if ( ! $whitelisted_cache && ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
+		$cached       = false;
+		$wp_cache_get = false;
+		if ( ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
 			$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 
 			if ( false === $scope_function ) {
@@ -214,7 +203,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 			}
 		}
 
-		if ( ! $cached && ! $whitelisted_cache ) {
+		if ( ! $cached ) {
 			$message = 'Direct database call without caching detected. Consider using wp_cache_get() / wp_cache_set() or wp_cache_delete().';
 			$this->phpcsFile->addWarning( $message, $stackPtr, 'NoCaching' );
 		}
