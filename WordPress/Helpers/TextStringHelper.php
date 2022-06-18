@@ -12,6 +12,11 @@ namespace WordPressCS\WordPress\Helpers;
 /**
  * Helper utilities for handling text strings.
  *
+ * ---------------------------------------------------------------------------------------------
+ * This class is only intended for internal use by WordPressCS and is not part of the public API.
+ * This also means that it has no promise of backward compatibility. Use at your own risk.
+ * ---------------------------------------------------------------------------------------------
+ *
  * {@internal The functionality in this class will likely be replaced at some point in
  * the future by functions from PHPCSUtils.}
  *
