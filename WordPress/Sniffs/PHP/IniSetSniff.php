@@ -41,7 +41,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Array of PHP configuration options that are allowed to be manipulated.
+	 * Array of PHP configuration options that are safe to be manipulated, as changing
+	 * the value of these, won't cause interoperability issues between WP/plugins/themes.
 	 *
 	 * @since 2.1.0
 	 * @since 3.0.0 Renamed from `$whitelisted_options` to `$safe_options`.
@@ -67,7 +68,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Array of PHP configuration options that are not allowed to be manipulated.
+	 * Array of PHP configuration options that are not allowed to be manipulated, as changing
+	 * the value of these, will be problematic for interoperability between WP/plugins/themes.
 	 *
 	 * @since 2.1.0
 	 * @since 3.0.0 Renamed from `$blacklisted_options` to `$disallowed_options`.
