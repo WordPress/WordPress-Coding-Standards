@@ -35,6 +35,7 @@
     + [Command line](#command-line)
     + [Using PHPCS and WPCS from within your IDE](#using-phpcs-and-wpcs-from-within-your-ide)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
+    + [GitHub Actions](#github-actions)
     + [Travis CI](#travis-ci)
 * [Fixing errors or ignoring them](#fixing-errors-or-ignoring-them)
     + [Tools shipped with WPCS](#tools-shipped-with-wpcs)
@@ -224,6 +225,10 @@ Will result in following output:
 
 
 ## Running your code through WPCS automatically using CI tools
+
+### [GitHub Actions](https://github.com/features/actions)
+
+To run WPCS in GitHub Actions, check this documentation page: [Running in GitHub Actions](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Running-in-GitHub-Actions).
 
 ### [Travis CI](https://travis-ci.com/)
 
