@@ -35,8 +35,6 @@
     + [Command line](#command-line)
     + [Using PHPCS and WPCS from within your IDE](#using-phpcs-and-wpcs-from-within-your-ide)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
-    + [GitHub Actions](#github-actions)
-    + [Travis CI](#travis-ci)
 * [Fixing errors or ignoring them](#fixing-errors-or-ignoring-them)
     + [Tools shipped with WPCS](#tools-shipped-with-wpcs)
 * [Contributing](#contributing)
