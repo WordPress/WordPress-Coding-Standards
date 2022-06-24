@@ -35,7 +35,6 @@
     + [Command line](#command-line)
     + [Using PHPCS and WPCS from within your IDE](#using-phpcs-and-wpcs-from-within-your-ide)
 * [Running your code through WPCS automatically using CI tools](#running-your-code-through-wpcs-automatically-using-ci-tools)
-    + [Travis CI](#travis-ci)
 * [Fixing errors or ignoring them](#fixing-errors-or-ignoring-them)
     + [Tools shipped with WPCS](#tools-shipped-with-wpcs)
 * [Contributing](#contributing)
@@ -225,47 +224,8 @@ Will result in following output:
 
 ## Running your code through WPCS automatically using CI tools
 
-### [Travis CI](https://travis-ci.com/)
-
-To integrate PHPCS with WPCS with Travis CI, you'll need to install both `before_install` and add the run command to the `script`.
-If your project uses Composer, the typical instructions might be different.
-
-If you use a matrix setup in Travis to test your code against different PHP and/or WordPress versions, you don't need to run PHPCS on each variant of the matrix as the results will be same.
-You can set an environment variable in the Travis matrix to only run the sniffs against one setup in the matrix.
-
-#### Travis CI example
-```yaml
-language: php
-
-matrix:
-  include:
-    # Arbitrary PHP version to run the sniffs against.
-    - php: '7.0'
-      env: SNIFF=1
-
-before_install:
-  - if [[ "$SNIFF" == "1" ]]; then export PHPCS_DIR=/tmp/phpcs; fi
-  - if [[ "$SNIFF" == "1" ]]; then export SNIFFS_DIR=/tmp/sniffs; fi
-  # Install PHP_CodeSniffer.
-  - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR; fi
-  # Install WordPress Coding Standards.
-  - if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress/WordPress-Coding-Standards.git $SNIFFS_DIR; fi
-  # Set install path for WordPress Coding Standards.
-  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs --config-set installed_paths $SNIFFS_DIR; fi
-  # After CodeSniffer install you should refresh your path.
-  - if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
-
-script:
-  # Run against WordPress Coding Standards.
-  # If you use a custom ruleset, change `--standard=WordPress` to point to your ruleset file,
-  # for example: `--standard=wpcs.xml`.
-  # You can use any of the normal PHPCS command line arguments in the command:
-  # https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage
-  - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p . --standard=WordPress; fi
-```
-
-More examples and advice about integrating PHPCS in your Travis build tests can be found here: https://github.com/jrfnl/make-phpcs-work-for-you/tree/master/travis-examples
-
+- [Running in GitHub Actions](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Running-in-GitHub-Actions)
+- [Running in Travis](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Running-in-Travis)
 
 ## Fixing errors or ignoring them
 
