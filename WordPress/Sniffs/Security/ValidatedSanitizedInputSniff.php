@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
-use WordPressCS\WordPress\Helpers\TextStringHelper;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -98,12 +98,14 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code']
 			|| \T_HEREDOC === $this->tokens[ $stackPtr ]['code']
 		) {
+			// Retrieve all embeds, but use only the initial variable name part.
 			$interpolated_variables = array_map(
-				function ( $symbol ) {
-					return '$' . $symbol;
+				function( $embed ) {
+					return '$' . preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
 				},
-				TextStringHelper::get_interpolated_variables( $this->tokens[ $stackPtr ]['content'] )
+				TextStrings::getEmbeds( $this->tokens[ $stackPtr ]['content'] )
 			);
+
 			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
 				$this->phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $this->tokens[ $stackPtr ]['content'] ) );
 			}
