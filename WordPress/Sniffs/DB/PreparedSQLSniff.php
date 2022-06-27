@@ -141,9 +141,7 @@ class PreparedSQLSniff extends Sniff {
 				$bad_variables = array_filter(
 					TextStrings::getEmbeds( $this->tokens[ $this->i ]['content'] ),
 					function ( $symbol ) {
-						return ( strpos( $symbol, '$wpdb' ) !== 0
-							&& strpos( $symbol, '{$wpdb') !== 0
-							&& strpos( $symbol, '${wpdb') !== 0 );
+						return preg_match( '`^\{?\$\{?wpdb\??->`', $symbol ) !== 1;
 					}
 				);
 
