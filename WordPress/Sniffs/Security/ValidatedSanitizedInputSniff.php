@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\TextStrings;
+use PHPCSUtils\Utils\Variables;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 use WordPressCS\WordPress\Helpers\ValidationHelper;
@@ -75,12 +76,20 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			// Retrieve all embeds, but use only the initial variable name part.
 			$interpolated_variables = array_map(
 				function ( $embed ) {
-					return '$' . preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
+					return preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
 				},
 				TextStrings::getEmbeds( $this->tokens[ $stackPtr ]['content'] )
 			);
 
-			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
+			// Filter the embeds down to superglobals only.
+			$interpolated_superglobals = array_filter(
+				$interpolated_variables,
+				function ( $var_name ) {
+					return ( 'GLOBALS' !== $var_name && Variables::isSuperglobalName( $var_name ) );
+				}
+			);
+
+			foreach ( $interpolated_superglobals as $bad_variable ) {
 				$this->phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $this->tokens[ $stackPtr ]['content'] ) );
 			}
 

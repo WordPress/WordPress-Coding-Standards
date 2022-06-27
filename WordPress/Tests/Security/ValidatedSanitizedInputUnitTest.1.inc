@@ -443,3 +443,10 @@ function test_arrow_open_scope() {
 
 	$arrow = fn() => isset( $_SERVER['abc'] ) ? (int) $_SERVER['abc'] : 0; // OK.
 }
+
+// Ensure the sniff flags $_ENV and $_SESSION too.
+function test_examine_additional_superglobals_in_textstrings() {
+	$text = "Use {$_SESSION['key']} for something"; // Bad.
+	$text = "Use {$_ENV['key']} for something"; // Bad.
+	$text = "Use {$GLOBALS['key']} for something"; // OK.
+}
