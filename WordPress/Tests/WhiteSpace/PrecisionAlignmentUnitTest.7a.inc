@@ -9,7 +9,7 @@ phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[] T_COMM
  * 7a, 7b and 7c test files together test (against) the issue.
  */
 
-  // Bad, but not reported as token type is whitelisted.
-	 function exampleFunctionD() {} // Bad, but not reported as token type is whitelisted.
-	  function exampleFunctionE() {} // Bad, but not reported as token type is whitelisted.
-	   function exampleFunctionF() {} // Bad, but not reported as token type is whitelisted.
+  // Bad, but not reported as token type is ignored.
+	 function exampleFunctionD() {} // Bad, but not reported as token type is ignored.
+	  function exampleFunctionE() {} // Bad, but not reported as token type is ignored.
+	   function exampleFunctionF() {} // Bad, but not reported as token type is ignored.

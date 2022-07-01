@@ -107,7 +107,7 @@ trait My_Class {
 	}
 }
 
-// Test adding additional test classes to the whitelist.
+// Test adding additional test classes to the custom test classes list.
 // phpcs:set WordPress.WP.GlobalVariablesOverride custom_test_classes[] My_TestClass
 class Test_Class_D extends My_TestClass {
 

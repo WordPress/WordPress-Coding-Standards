@@ -127,15 +127,15 @@ echo "This is a $comment_ID"; // Bad
 echo "This is $PHP_SELF with $HTTP_RAW_POST_DATA"; // Ok.
 
 /*
- * Unit test whitelisting.
+ * Ignoring unit tests.
  */
-// phpcs:set WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist[] varName,DOMProperty
-echo MyClass::$varName; // Ok, whitelisted.
-echo $this->DOMProperty; // Ok, whitelisted.
-echo $object->varName;  // Ok, whitelisted.
-// phpcs:set WordPress.NamingConventions.ValidVariableName customPropertiesWhitelist[]
+// phpcs:set WordPress.NamingConventions.ValidVariableName allowed_custom_properties[] varName,DOMProperty
+echo MyClass::$varName; // Ok, allowed.
+echo $this->DOMProperty; // Ok, allowed.
+echo $object->varName;  // Ok, allowed.
+// phpcs:set WordPress.NamingConventions.ValidVariableName allowed_custom_properties[]
 
-echo $object->varName;  // Bad, no longer whitelisted.
+echo $object->varName;  // Bad, no longer allowed.
 
 // Code style independent token checking.
 echo $object

@@ -38,14 +38,15 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	const POST_TYPE_MAX_LENGTH = 20;
 
 	/**
-	 * Regex that whitelists characters that can be used as the post type slug.
+	 * Regex to validate the characters that can be used as the post type slug.
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/register_post_type/
 	 * @since 2.2.0
+	 * @since 3.0.0 Renamed from `POST_TYPE_CHARACTER_WHITELIST` to `VALID_POST_TYPE_CHARACTERS`.
 	 *
 	 * @var string
 	 */
-	const POST_TYPE_CHARACTER_WHITELIST = '/^[a-z0-9_-]+$/';
+	const VALID_POST_TYPE_CHARACTERS = '/^[a-z0-9_-]+$/';
 
 	/**
 	 * Array of functions that must be checked.
@@ -165,7 +166,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 			$post_type = TextStringHelper::strip_interpolated_variables( $post_type );
 		}
 
-		if ( preg_match( self::POST_TYPE_CHARACTER_WHITELIST, $post_type ) === 0 ) {
+		if ( preg_match( self::VALID_POST_TYPE_CHARACTERS, $post_type ) === 0 ) {
 			// Error for invalid characters.
 			$this->phpcsFile->addError(
 				'register_post_type() called with invalid post type %s. Post type contains invalid characters. Only lowercase alphanumeric characters, dashes, and underscores are allowed.',

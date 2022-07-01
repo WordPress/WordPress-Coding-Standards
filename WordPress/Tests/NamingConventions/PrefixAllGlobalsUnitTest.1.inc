@@ -157,7 +157,7 @@ namespace Acronym {
 
 
 /*
- * OK - exceptions whitelisted by default.
+ * OK - exceptions ignored by default.
  */
 $_POST['something'] = 'value';
 
@@ -319,7 +319,7 @@ namespace TGMPA\Testing {
 	define( 'MY\\' . __NAMESPACE__, __FILE__ ); // OK, even though strangely setup, the constant is in a namespace.
 }
 
-// OK: whitelisted core hooks.
+// OK: ignored core hooks.
 apply_filters( 'widget_title', $title );
 do_action( 'add_meta_boxes' );
 
@@ -399,7 +399,7 @@ class Some_Test_Class extends NonTestClass { // Bad.
 }
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wordpress,somethingelse
-// The above line adds an issue to line 1 about a blacklisted prefix.
+// The above line adds an issue to line 1 about a blocked prefix.
 function wordpress_do_something() {} // Bad.
 function somethingelse_do_something() {} // OK.
 

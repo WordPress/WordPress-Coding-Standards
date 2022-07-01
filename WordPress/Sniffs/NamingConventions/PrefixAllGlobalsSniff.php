@@ -64,13 +64,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	public $prefixes = '';
 
 	/**
-	 * Prefix blacklist.
+	 * Prefix blocklist.
 	 *
 	 * @since 0.12.0
+	 * @since 3.0.0  Renamed from `$prefix_blacklist` to `$prefix_blocklist`.
 	 *
 	 * @var string[]
 	 */
-	protected $prefix_blacklist = array(
+	protected $prefix_blocklist = array(
 		'wordpress' => true,
 		'wp'        => true,
 		'_'         => true,
@@ -135,10 +136,11 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * A list of core hooks that are allowed to be called by plugins and themes.
 	 *
 	 * @since 0.14.0
+	 * @since 3.0.0 Renamed from `$whitelisted_core_hooks` to `$allowed_core_hooks`.
 	 *
 	 * @var array
 	 */
-	protected $whitelisted_core_hooks = array(
+	protected $allowed_core_hooks = array(
 		'widget_title'   => true,
 		'add_meta_boxes' => true,
 	);
@@ -147,6 +149,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * A list of core constants that are allowed to be defined by plugins and themes.
 	 *
 	 * @since 1.0.0
+	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
 	 *
 	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/default-constants.php#L0}
 	 * The constants are listed in the order they are found in the source file
@@ -156,7 +159,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array
 	 */
-	protected $whitelisted_core_constants = array(
+	protected $allowed_core_constants = array(
 		'WP_MEMORY_LIMIT'      => true,
 		'WP_MAX_MEMORY_LIMIT'  => true,
 		'WP_CONTENT_DIR'       => true,
@@ -467,7 +470,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 						return;
 					}
 
-					if ( isset( $this->whitelisted_core_constants[ $item_name ] ) ) {
+					if ( isset( $this->allowed_core_constants[ $item_name ] ) ) {
 						// Defining a WP Core constant intended for overruling.
 						return;
 					}
@@ -634,7 +637,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$variable_name = substr( $this->tokens[ $stackPtr ]['content'], 1 ); // Strip the dollar sign.
 
 		// Bow out early if we know for certain no prefix is needed.
-		if ( $this->variable_prefixed_or_whitelisted( $stackPtr, $variable_name ) === true ) {
+		if ( $this->variable_prefixed_or_allowed( $stackPtr, $variable_name ) === true ) {
 			return;
 		}
 
@@ -656,7 +659,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Check whether a prefix is needed.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $array_key ]['code'] ] )
-				&& $this->variable_prefixed_or_whitelisted( $stackPtr, $variable_name ) === true
+				&& $this->variable_prefixed_or_allowed( $stackPtr, $variable_name ) === true
 			) {
 				return;
 			}
@@ -667,7 +670,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$exploded = explode( '$', $variable_name );
 				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
-					if ( $this->variable_prefixed_or_whitelisted( $array_key, $first ) === true ) {
+					if ( $this->variable_prefixed_or_allowed( $array_key, $first ) === true ) {
 						return;
 					}
 				} else {
@@ -806,9 +809,9 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$raw_content = TextStrings::stripQuotes( $parameters[1]['raw'] );
 
 		if ( ( 'define' !== $matched_content
-			&& isset( $this->whitelisted_core_hooks[ $raw_content ] ) )
+			&& isset( $this->allowed_core_hooks[ $raw_content ] ) )
 			|| ( 'define' === $matched_content
-			&& isset( $this->whitelisted_core_constants[ $raw_content ] ) )
+			&& isset( $this->allowed_core_constants[ $raw_content ] ) )
 		) {
 			return;
 		}
@@ -927,14 +930,15 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 1.0.1  Added $stackPtr parameter.
+	 * @since 3.0.0  Renamed from `variable_prefixed_or_whitelisted()` to `variable_prefixed_or_allowed()`.
 	 *
 	 * @param int    $stackPtr The position of the token to record the metric against.
 	 * @param string $name     Variable name without the dollar sign.
 	 *
-	 * @return bool True if the variable name is whitelisted or already prefixed.
+	 * @return bool True if the variable name is allowed or already prefixed.
 	 *              False otherwise.
 	 */
-	private function variable_prefixed_or_whitelisted( $stackPtr, $name ) {
+	private function variable_prefixed_or_allowed( $stackPtr, $name ) {
 		// Ignore superglobals and WP global variables.
 		if ( isset( $this->superglobals[ $name ] ) || isset( $this->wp_globals[ $name ] ) ) {
 			return true;
@@ -947,7 +951,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Validate an array of prefixes as passed through a custom property or via the command line.
 	 *
 	 * Checks that the prefix:
-	 * - is not one of the blacklisted ones.
+	 * - is not one of the blocked ones.
 	 * - complies with the PHP rules for valid function, class, variable, constant names.
 	 *
 	 * @since 0.12.0
@@ -966,7 +970,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		foreach ( $this->prefixes as $key => $prefix ) {
 			$prefixLC = strtolower( $prefix );
 
-			if ( isset( $this->prefix_blacklist[ $prefixLC ] ) ) {
+			if ( isset( $this->prefix_blocklist[ $prefixLC ] ) ) {
 				$this->phpcsFile->addError(
 					'The "%s" prefix is not allowed.',
 					0,

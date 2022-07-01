@@ -34,10 +34,6 @@ use WordPressCS\WordPress\Sniff;
  * created using code along the lines of:
  * `sprintf( 'query .... IN (%s) ...', implode( ',', array_fill( 0, count( $something ), '%s' ) ) )`.
  *
- * A "PreparedSQLPlaceholders replacement count" whitelist comment is supported
- * specifically to silence the `ReplacementsWrongNumber` and `UnfinishedPrepare`
- * error codes. The other error codes are not affected by it.
- *
  * @link https://developer.wordpress.org/reference/classes/wpdb/prepare/
  * @link https://core.trac.wordpress.org/changeset/41496
  * @link https://core.trac.wordpress.org/changeset/41471

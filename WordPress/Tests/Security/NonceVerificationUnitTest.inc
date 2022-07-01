@@ -165,7 +165,7 @@ function foo_8() {
  * Using a superglobal in a is_...() function is OK as long as a nonce check is done
  * before the variable is *really* used.
  */
-function test_whitelisting_use_in_type_test_functions() {
+function test_ignoring_use_in_type_test_functions() {
 	if ( ! is_numeric ( $_POST['foo'] ) ) { // OK.
 		return;
 	}
