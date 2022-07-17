@@ -81,3 +81,7 @@ $arr[0xCAFE_F00D]; // Good.
 
 $arr[ 1_000_000 ]; // Bad.
 $arr[ 0xCAFE_F00D ]; // Bad.
+
+// Ensure correct handling of PHP 8.1+ octal literals.
+$arr[0o137]; // Good.
+$arr[ 0o137 ]; // Bad.
