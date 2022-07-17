@@ -66,3 +66,10 @@ $arr[0xCAFE]; // Good.
 $arr[012]; // Bad.
 $arr[0b01]; // Bad.
 $arr[0xCAFE]; // Bad.
+
+// Ensure correct handling of PHP 7.4+ numeric literals with underscores.
+$arr[1_000_000]; // Good.
+$arr[0xCAFE_F00D]; // Good.
+
+$arr[1_000_000]; // Bad.
+$arr[0xCAFE_F00D]; // Bad.
