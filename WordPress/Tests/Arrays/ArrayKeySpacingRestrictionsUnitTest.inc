@@ -44,3 +44,13 @@ $arr[
 
 $a = $arr[    /*comment*/ 'key']; // Bad x 2.
 $a = $arr[/*comment*/ 'key'   ]; // Bad x 2.
+
+// Verify handling of array assignments without an explicit key.
+$bar[] = 10; // Good.
+$bar[   ] = 10; // Bad.
+$bar[
+    ] = 10; // Bad.
+
+// Verify handling of array assignments without an explicit key, but with a comment.
+$bar[ /*comment*/ ] = 10; // Good.
+$bar[/*comment*/] = 10; // Bad.

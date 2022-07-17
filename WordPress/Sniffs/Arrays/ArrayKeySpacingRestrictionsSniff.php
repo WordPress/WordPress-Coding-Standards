@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Fixers\SpacesFixer;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Check for proper spacing in array key references.
@@ -52,6 +53,27 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			return;
 		}
 
+		/*
+		 * Handle square brackets without a key (array assignments) first.
+		 */
+		$first_non_ws = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+		if ( $first_non_ws === $token['bracket_closer'] ) {
+			$error = 'There should be %1$s between the square brackets for an array assignment without an explicit key. Found: %2$s';
+			SpacesFixer::checkAndFix(
+				$this->phpcsFile,
+				$stackPtr,
+				$token['bracket_closer'],
+				0,
+				$error,
+				'SpacesBetweenBrackets'
+			);
+
+			return;
+		}
+
+		/*
+		 * Handle the spaces around explicit array keys.
+		 */
 		$need_spaces = $this->phpcsFile->findNext(
 			array( \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
 			( $stackPtr + 1 ),
