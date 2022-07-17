@@ -93,17 +93,18 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		$has_space_after_opener = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
 		$has_space_before_close = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
 
-		// It should have spaces unless if it only has strings or numbers as the key.
+		// The array key should be surrounded by spaces unless the key only consists of a string or an integer.
 		if ( true === $needs_spaces
 			&& ( false === $has_space_after_opener || false === $has_space_before_close )
 		) {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
 			if ( true === $fix ) {
-				if ( ! $has_space_after_opener ) {
-					$this->phpcsFile->fixer->addContentBefore( ( $stackPtr + 1 ), ' ' );
+				if ( false === $has_space_after_opener ) {
+					$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
 				}
-				if ( ! $has_space_before_close ) {
+
+				if ( false === $has_space_before_close ) {
 					$this->phpcsFile->fixer->addContentBefore( $token['bracket_closer'], ' ' );
 				}
 			}
@@ -113,9 +114,8 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			if ( true === $fix ) {
 				if ( $has_space_after_opener ) {
 					$this->phpcsFile->fixer->beginChangeset();
-					$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
 
-					for ( $i = ( $stackPtr + 2 ); $i < $token['bracket_closer']; $i++ ) {
+					for ( $i = ( $stackPtr + 1 ); $i < $token['bracket_closer']; $i++ ) {
 						if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
 							break;
 						}
@@ -125,11 +125,11 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 
 					$this->phpcsFile->fixer->endChangeset();
 				}
+
 				if ( $has_space_before_close ) {
 					$this->phpcsFile->fixer->beginChangeset();
-					$this->phpcsFile->fixer->replaceToken( ( $token['bracket_closer'] - 1 ), '' );
 
-					for ( $i = ( $token['bracket_closer'] - 2 ); $i > $stackPtr; $i-- ) {
+					for ( $i = ( $token['bracket_closer'] - 1 ); $i > $stackPtr; $i-- ) {
 						if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
 							break;
 						}
