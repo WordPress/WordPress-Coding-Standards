@@ -73,7 +73,7 @@ class TypeCastsSniff extends Sniff {
 
 			case \T_UNSET_CAST:
 				$this->phpcsFile->addError(
-					'Using the "(unset)" cast is forbidden as the type cast is removed in PHP 8. Use the "unset()" language construct or assign "null" as the value to the variable instead.',
+					'Using the "(unset)" cast is forbidden as the type cast is removed in PHP 8.0. Use the "unset()" language construct instead.',
 					$stackPtr,
 					'UnsetFound'
 				);
