@@ -9,7 +9,6 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Fixers\SpacesFixer;
 use WordPressCS\WordPress\Sniff;
 
@@ -143,78 +142,30 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		}
 
 		// If spaces are needed, check that there is only one space.
-		if ( true === $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
+		if ( true === $needs_spaces ) {
 			if ( $has_space_after_opener ) {
-				$ptr    = ( $stackPtr + 1 );
-				$length = 0;
-				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ ( $ptr + 1 ) ]['line'] ) {
-					$length = 'newline';
-				} else {
-					$length = $this->tokens[ $ptr ]['length'];
-				}
-
-				if ( 1 !== $length ) {
-					$error = 'There should be exactly one space before the array key. Found: %s';
-					$data  = array( $length );
-					$fix   = $this->phpcsFile->addFixableError(
-						$error,
-						$ptr,
-						'TooMuchSpaceBeforeKey',
-						$data
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
-
-						for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-							if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-								break;
-							}
-
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
-					}
-				}
+				$error = 'There should be exactly %1$s before the array key. Found: %2$s';
+				SpacesFixer::checkAndFix(
+					$this->phpcsFile,
+					$stackPtr,
+					$first_non_ws,
+					1,
+					$error,
+					'TooMuchSpaceBeforeKey'
+				);
 			}
 
 			if ( $has_space_before_close ) {
-				$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $token['bracket_closer'] - 1 ), null, true );
-				$ptr            = ( $prev_non_empty + 1 );
-				$length         = 0;
-				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ $token['bracket_closer'] ]['line'] ) {
-					$length = 'newline';
-				} else {
-					$length = $this->tokens[ $ptr ]['length'];
-				}
-
-				if ( 1 !== $length ) {
-					$error = 'There should be exactly one space after the array key. Found: %s';
-					$data  = array( $length );
-					$fix   = $this->phpcsFile->addFixableError(
-						$error,
-						$ptr,
-						'TooMuchSpaceAfterKey',
-						$data
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
-
-						for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-							if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-								break;
-							}
-
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
-					}
-				}
+				$last_non_ws = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $token['bracket_closer'] - 1 ), null, true );
+				$error       = 'There should be exactly %1$s after the array key. Found: %2$s';
+				SpacesFixer::checkAndFix(
+					$this->phpcsFile,
+					$last_non_ws,
+					$token['bracket_closer'],
+					1,
+					$error,
+					'TooMuchSpaceAfterKey'
+				);
 			}
 		}
 	}
