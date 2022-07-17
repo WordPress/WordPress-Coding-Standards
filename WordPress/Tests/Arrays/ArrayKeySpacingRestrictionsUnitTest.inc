@@ -25,11 +25,6 @@ bar( $arr['string'.$var] ); // Bad.
 // Non-string/int.
 $arr[FooClass::FOO_KEY]; // Bad.
 
-$arr[0]; // Good.
-$arr[ 0 ]; // Bad.
-$arr[-1]; // Good.
-$arr[ -1 ]; // Bad.
-
 // Space size check.
 bar( $arr[
 	'test'
@@ -54,3 +49,10 @@ $bar[
 // Verify handling of array assignments without an explicit key, but with a comment.
 $bar[ /*comment*/ ] = 10; // Good.
 $bar[/*comment*/] = 10; // Bad.
+
+// Integer keys.
+$arr[0]; // Good.
+$arr[-1]; // Good.
+
+$arr[ 0 ]; // Bad.
+$arr[ -1 ]; // Bad.
