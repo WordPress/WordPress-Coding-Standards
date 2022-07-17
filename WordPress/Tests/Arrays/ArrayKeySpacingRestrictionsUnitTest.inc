@@ -65,3 +65,12 @@ $arr[ 5-2 - -1 ]; // Good.
 
 $arr[ 10 + 5]; // Bad.
 $arr[5-2 - -1 ]; // Bad.
+
+// Verify non-decimal integer keys are handled correctly.
+$arr[012]; // Good.
+$arr[0b01]; // Good.
+$arr[0xCAFE]; // Good.
+
+$arr[ 012 ]; // Bad.
+$arr[ 0b01 ]; // Bad.
+$arr[ 0xCAFE ]; // Bad.
