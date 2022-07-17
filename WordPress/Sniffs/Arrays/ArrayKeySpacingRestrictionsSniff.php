@@ -74,35 +74,35 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		/*
 		 * Handle the spaces around explicit array keys.
 		 */
-		$need_spaces = $this->phpcsFile->findNext(
+		$needs_spaces = $this->phpcsFile->findNext(
 			array( \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
 			( $stackPtr + 1 ),
 			$token['bracket_closer'],
 			true
 		);
 
-		$spaced1 = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
-		$spaced2 = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
+		$has_space_after_opener = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
+		$has_space_before_close = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
 
 		// It should have spaces unless if it only has strings or numbers as the key.
-		if ( false !== $need_spaces
-			&& ( false === $spaced1 || false === $spaced2 )
+		if ( false !== $needs_spaces
+			&& ( false === $has_space_after_opener || false === $has_space_before_close )
 		) {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
 			if ( true === $fix ) {
-				if ( ! $spaced1 ) {
+				if ( ! $has_space_after_opener ) {
 					$this->phpcsFile->fixer->addContentBefore( ( $stackPtr + 1 ), ' ' );
 				}
-				if ( ! $spaced2 ) {
+				if ( ! $has_space_before_close ) {
 					$this->phpcsFile->fixer->addContentBefore( $token['bracket_closer'], ' ' );
 				}
 			}
-		} elseif ( false === $need_spaces && ( $spaced1 || $spaced2 ) ) {
+		} elseif ( false === $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
 			$error = 'Array keys must NOT be surrounded by spaces if they only contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'SpacesAroundArrayKeys' );
 			if ( true === $fix ) {
-				if ( $spaced1 ) {
+				if ( $has_space_after_opener ) {
 					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
 
@@ -116,7 +116,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 
 					$this->phpcsFile->fixer->endChangeset();
 				}
-				if ( $spaced2 ) {
+				if ( $has_space_before_close ) {
 					$this->phpcsFile->fixer->beginChangeset();
 					$this->phpcsFile->fixer->replaceToken( ( $token['bracket_closer'] - 1 ), '' );
 
@@ -134,8 +134,8 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		}
 
 		// If spaces are needed, check that there is only one space.
-		if ( false !== $need_spaces && ( $spaced1 || $spaced2 ) ) {
-			if ( $spaced1 ) {
+		if ( false !== $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
+			if ( $has_space_after_opener ) {
 				$ptr    = ( $stackPtr + 1 );
 				$length = 0;
 				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ ( $ptr + 1 ) ]['line'] ) {
@@ -171,7 +171,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 				}
 			}
 
-			if ( $spaced2 ) {
+			if ( $has_space_before_close ) {
 				$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $token['bracket_closer'] - 1 ), null, true );
 				$ptr            = ( $prev_non_empty + 1 );
 				$length         = 0;
