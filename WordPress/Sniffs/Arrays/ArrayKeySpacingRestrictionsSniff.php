@@ -49,7 +49,6 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 
 		$token = $this->tokens[ $stackPtr ];
 		if ( ! isset( $token['bracket_closer'] ) ) {
-			$this->phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr, 'MissingBracketCloser' );
 			return;
 		}
 
