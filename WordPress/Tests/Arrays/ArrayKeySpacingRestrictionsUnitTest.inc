@@ -53,6 +53,15 @@ $bar[/*comment*/] = 10; // Bad.
 // Integer keys.
 $arr[0]; // Good.
 $arr[-1]; // Good.
+$arr[+1]; // Good.
 
 $arr[ 0 ]; // Bad.
 $arr[ -1 ]; // Bad.
+$arr[ +1 ]; // Bad.
+
+// Verify key calculations are handled correctly.
+$arr[ 10 + 5 ]; // Good.
+$arr[ 5-2 - -1 ]; // Good.
+
+$arr[ 10 + 5]; // Bad.
+$arr[5-2 - -1 ]; // Bad.

@@ -74,18 +74,27 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		/*
 		 * Handle the spaces around explicit array keys.
 		 */
-		$needs_spaces = $this->phpcsFile->findNext(
-			array( \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
-			( $stackPtr + 1 ),
-			$token['bracket_closer'],
-			true
-		);
+		$needs_spaces = true;
+
+		// Skip over a potential plus/minus sign for integers.
+		$first_effective = $first_non_ws;
+		if ( \T_MINUS === $this->tokens[ $first_effective ]['code'] || \T_PLUS === $this->tokens[ $first_effective ]['code'] ) {
+			$first_effective = $this->phpcsFile->findNext( \T_WHITESPACE, ( $first_effective + 1 ), null, true );
+		}
+
+		$next_non_ws = $this->phpcsFile->findNext( \T_WHITESPACE, ( $first_effective + 1 ), null, true );
+		if ( ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $first_effective ]['code']
+			|| \T_LNUMBER === $this->tokens[ $first_effective ]['code'] )
+			&& $next_non_ws === $token['bracket_closer']
+		) {
+			$needs_spaces = false;
+		}
 
 		$has_space_after_opener = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
 		$has_space_before_close = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
 
 		// It should have spaces unless if it only has strings or numbers as the key.
-		if ( false !== $needs_spaces
+		if ( true === $needs_spaces
 			&& ( false === $has_space_after_opener || false === $has_space_before_close )
 		) {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
@@ -134,7 +143,7 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		}
 
 		// If spaces are needed, check that there is only one space.
-		if ( false !== $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
+		if ( true === $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
 			if ( $has_space_after_opener ) {
 				$ptr    = ( $stackPtr + 1 );
 				$length = 0;
