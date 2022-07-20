@@ -241,7 +241,7 @@
 
 	<!-- Covers rule: Use real tabs and not spaces. -->
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
-	<rule ref="WordPress.WhiteSpace.PrecisionAlignment"/>
+	<rule ref="Universal.WhiteSpace.PrecisionAlignment"/>
 
 	<!-- Generic array layout check. -->
 	<!-- Covers rule: For associative arrays, each item should start on a new line
