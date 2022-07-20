@@ -30,10 +30,11 @@ class YodaConditionsSniff extends Sniff {
 	 * The tokens that indicate the start of a condition.
 	 *
 	 * @since 0.12.0
+	 * @since 3.0.0  This property is now `private`.
 	 *
 	 * @var array
 	 */
-	protected $condition_start_tokens;
+	private $condition_start_tokens;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -82,7 +83,7 @@ class YodaConditionsSniff extends Sniff {
 				continue;
 			}
 
-			// If this is a variable or array, we've seen all we need to see.
+			// If this is a variable or array assignment, we've seen all we need to see.
 			if ( \T_VARIABLE === $this->tokens[ $i ]['code']
 				|| \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $i ]['code']
 			) {
