@@ -217,6 +217,10 @@
 		</properties>
 	</rule>
 
+	<!-- Covers rule: When using increment or decrement operators, there should be
+		 no spaces between the operator and the variable it applies to. -->
+	<rule ref="Generic.WhiteSpace.IncrementDecrementSpacing"/>
+
 
 	<!--
 	#############################################################################
@@ -466,6 +470,19 @@
 	<!-- Covers rule: This operator is often used lazily instead of doing proper error checking.
 		 Its use is highly discouraged. -->
 	<rule ref="WordPress.PHP.NoSilencedErrors"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: Operators - Increment/decrement operators.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#increment-decrement-operators
+	#############################################################################
+	-->
+	<!-- Covers rule: Pre-increment/decrement should be favoured over post-increment/decrement
+		 for stand-alone statements. -->
+	<rule ref="Universal.Operators.DisallowStandalonePostIncrementDecrement">
+		<type>warning</type>
+	</rule>
 
 
 	<!--
