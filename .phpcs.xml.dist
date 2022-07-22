@@ -30,8 +30,6 @@
 		</properties>
 	</rule>
 
-	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
-
 	<!-- Check code for cross-version PHP compatibility. -->
 	<config name="testVersion" value="5.4-"/>
 	<rule ref="PHPCompatibility">

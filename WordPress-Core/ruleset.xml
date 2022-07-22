@@ -294,6 +294,10 @@
 	<!-- Covers rule: Omitting the closing PHP tag at the end of a file is preferred. -->
 	<rule ref="PSR2.Files.ClosingTag"/>
 
+	<!-- Covers rule: There should be no trailing blank lines at the end of a function body. -->
+	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
+
+
 	<!--
 	#############################################################################
 	Handbook: Formatting - Brace Style.
