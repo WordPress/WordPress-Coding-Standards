@@ -18,7 +18,7 @@
 <!--
 	#############################################################################
 	Handbook: PHP - Opening and Closing PHP Tags.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#opening-and-closing-php-tags
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#opening-and-closing-php-tags
 	#############################################################################
 	-->
 	<!-- Covers rule: When embedding multi-line PHP snippets within a HTML block, the
@@ -41,7 +41,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - No Shorthand PHP Tags.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#no-shorthand-php-tags
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#no-shorthand-php-tags
 	#############################################################################
 	-->
 	<!-- Covers rule: Never use shorthand PHP start tags. Always use full PHP tags. -->
@@ -52,7 +52,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Single and Double Quotes.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#single-and-double-quotes
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#single-and-double-quotes
 	#############################################################################
 	-->
 	<!-- Covers rule: Use single and double quotes when appropriate.
@@ -66,7 +66,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Naming Conventions.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
 	#############################################################################
 	-->
 	<!-- Covers rule: Use lowercase letters in variable, action/filter, and function names.
@@ -95,7 +95,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Interpolation for Naming Dynamic Hooks.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#interpolation-for-naming-dynamic-hooks
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#interpolation-for-naming-dynamic-hooks
 
 	https://github.com/WordPress/WordPress-Coding-Standards/issues/751
 	#############################################################################
@@ -112,7 +112,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Space Usage.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
 	#############################################################################
 	-->
 	<!-- Covers rule: Always put spaces after commas, and on both sides of logical,
@@ -193,7 +193,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Indentation.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
 	#############################################################################
 	-->
 	<!-- Covers rule: Your indentation should always reflect logical structure. -->
@@ -259,7 +259,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Remove Trailing Spaces.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#remove-trailing-spaces
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#remove-trailing-spaces
 	#############################################################################
 	-->
 	<!-- Covers rule: Remove trailing whitespace at the end of each line of code. -->
@@ -271,7 +271,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Brace Style.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#brace-style
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#brace-style
 	#############################################################################
 	-->
 	<!-- Covers rule: Braces shall be used for all blocks. -->
@@ -284,7 +284,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Declaring Arrays.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#declaring-arrays
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#declaring-arrays
 	#############################################################################
 	-->
 	<!-- Covers rule: Arrays must be declared using long array syntax. -->
@@ -294,7 +294,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Multiline Function Calls.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#multiline-function-calls
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#multiline-function-calls
 	#############################################################################
 	-->
 	<!-- Rule: When splitting a function call over multiple lines, each parameter must be on a separate line.
@@ -322,7 +322,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Use elseif, not else if.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#use-elseif-not-else-if
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
 	-->
 	<!-- Covers rule: ... use elseif for conditionals. -->
@@ -332,7 +332,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Yoda Conditions.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#yoda-conditions
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#yoda-conditions
 	#############################################################################
 	-->
 	<!-- Covers rule: When doing logical comparisons, always put the variable on the right side,
@@ -346,7 +346,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Ternary Operator.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#ternary-operator
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#ternary-operator
 	#############################################################################
 	-->
 	<!-- Rule: Always have Ternaries test if the statement is true, not false.
@@ -360,7 +360,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - (No) Error Control Operator @.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#error-control-operator
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#error-control-operator
 	#############################################################################
 	-->
 	<!-- Covers rule: This operator is often used lazily instead of doing proper error checking.
@@ -371,7 +371,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Database Queries.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
 	#############################################################################
 	-->
 	<!-- Covers rule: Avoid touching the database directly. -->
@@ -382,7 +382,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Formatting SQL statements.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#formatting-sql-statements
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#formatting-sql-statements
 	#############################################################################
 	-->
 	<!-- Rule: Always capitalize the SQL parts of the statement like UPDATE or WHERE.
@@ -405,7 +405,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Self-Explanatory Flag Values for Function Arguments.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#self-explanatory-flag-values-for-function-arguments
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#self-explanatory-flag-values-for-function-arguments
 	#############################################################################
 	-->
 
@@ -413,7 +413,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Clever Code.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#clever-code
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#clever-code
 	#############################################################################
 	-->
 	<!-- Rule: In general, readability is more important than cleverness or brevity.
@@ -459,7 +459,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Regular Expressions.
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#regular-expressions
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#regular-expressions
 	#############################################################################
 	-->
 	<!-- Covers rule: Perl compatible regular expressions should be used in preference
@@ -476,7 +476,7 @@
 	<!--
 	#############################################################################
 	Handbook: PHP - Don't extract().
-	Ref: https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#dont-extract
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#dont-extract
 	#############################################################################
 	-->
 	<rule ref="WordPress.PHP.DontExtract"/>
@@ -507,7 +507,7 @@
 	<rule ref="Generic.CodeAnalysis.EmptyPHPStatement"/>
 
 	<!-- Lowercase PHP constants, like true, false and null. -->
-	<!-- https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions -->
+	<!-- https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions -->
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
 
 	<!-- Lowercase PHP keywords, like class, function and case. -->
