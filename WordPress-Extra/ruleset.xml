@@ -35,23 +35,6 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
-	<!-- And yet more best practices.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1143 -->
-	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
-		<type>warning</type>
-	</rule>
-	<rule ref="PEAR.Files.IncludingFile.UseRequire">
-		<type>warning</type>
-	</rule>
-	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
-		<type>warning</type>
-	</rule>
-
-	<!-- Check correct spacing of language constructs. This also ensures that the
-		 above rule for not using brackets with require is fixed correctly.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1153 -->
-	<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
-
 	<!-- Check that functions use all parameters passed.
 		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/xxx -->
 	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
