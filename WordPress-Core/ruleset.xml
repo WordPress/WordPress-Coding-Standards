@@ -339,9 +339,7 @@
 	#############################################################################
 	-->
 	<!-- Covers rule: Only One Object Structure (Class/Interface/Trait) per file. -->
-	<rule ref="Generic.Files.OneObjectStructurePerFile">
-		<message>Best practices: Declare only one class/interface/trait in a file.</message>
-	</rule>
+	<rule ref="Generic.Files.OneObjectStructurePerFile"/>
 
 
 	<!--
