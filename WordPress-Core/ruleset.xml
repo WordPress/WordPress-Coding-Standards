@@ -417,6 +417,9 @@
 		<severity>0</severity>
 	</rule>
 
+	<!-- Implied through the examples: Single space after each modifier keyword. -->
+	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
+
 
 	<!--
 	#############################################################################

@@ -49,10 +49,6 @@
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed"/>
 	</rule>
 
-	<!-- Verify modifier keywords for declared methods and properties in classes.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
-	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
-
 	<!-- Do not allow leading underscores in property or method names. Visibility should be used instead.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
