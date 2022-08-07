@@ -160,3 +160,45 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	];
 	return $schedules;
 } ); // Warning: 8 min.
+
+// Correctly handle fully qualified WP time constants.
+class FQNConstants {
+	public function add_schedules() {
+		add_filter( 'cron_schedules', array( $this, 'add_weekly_schedule' ) ); // Ok: > 15 min.
+		add_filter( 'cron_schedules', array( $this, 'add_eight_minute_schedule' ) ); // Warning: 8 min.
+		add_filter( 'cron_schedules', array( $this, 'add_hundred_minute_schedule' ) ); // Warning: time undetermined.
+		add_filter( 'cron_schedules', array( $this, 'sneaky_fake_wp_constant_schedule' ) ); // Warning: time undetermined.
+	}
+
+	public function add_weekly_schedule( $schedules ) {
+		$schedules['weekly'] = [
+			'interval' => \WEEK_IN_SECONDS,
+			'display'  => \__( 'Once Weekly', 'text-domain' ),
+		];
+		return $schedules;
+	}
+
+	public function add_eight_minute_schedule( $schedules ) {
+		$schedules['every_8_minutes'] = [
+			'interval' => (8 * \MINUTE_IN_SECONDS),
+			'display' => __( 'Once every 8 minutes' )
+		];
+		return $schedules;
+	}
+
+	public function add_hundred_minute_schedule( $schedules ) {
+		$schedules['every_100_minutes'] = [
+			'interval' => (100 * My\Name\MINUTE_IN_SECONDS),
+			'display' => __( 'Once every 100 minutes' )
+		];
+		return $schedules;
+	}
+
+	public function sneaky_fake_wp_constant_schedule( $schedules ) {
+		$schedules['every_100_seconds'] = [
+			'interval' => (100 * MINUTE_\IN_\SECONDS),
+			'display' => __( 'Once every 100 minutes' )
+		];
+		return $schedules;
+	}
+}
