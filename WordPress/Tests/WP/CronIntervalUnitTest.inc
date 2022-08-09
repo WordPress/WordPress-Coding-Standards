@@ -9,12 +9,12 @@ function my_add_weekly( $schedules ) {
 	);
 	return $schedules;
 }
-add_filter( 'cron_schedules', 'my_add_weekly'); // Error: 6 min.
+add_filter( 'cron_schedules', 'my_add_weekly'); // Warning: 6 min.
 
 
 class Foo {
 	public function __construct() {
-		add_filter( 'cron_schedules', array( $this, 'my_add_quickly' ) ); // Error: 10 min.
+		add_filter( 'cron_schedules', array( $this, 'my_add_quickly' ) ); // Warning: 10 min.
 	}
 
 	public function my_add_quickly( $schedules ) {
@@ -34,7 +34,7 @@ class Foo {
 	}
 }
 
-add_filter( 'cron_schedules', array( 'Foo', 'my_add_quicklier' ) ); // Error: 5 min.
+add_filter( 'cron_schedules', array( 'Foo', 'my_add_quicklier' ) ); // Warning: 5 min.
 
 add_filter( 'cron_schedules', array( $some_other_place, 'some_other_method' ) ); // Warning: time undetermined.
 
@@ -46,11 +46,11 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 		'display' => __( 'Once every 9 minutes' )
 	);
 	return $schedules;
-} ); // Error: 9 min.
+} ); // Warning: 9 min.
 
 add_filter( 'cron_schedules' ); // Ignore, no callback parameter.
 
-add_filter( 'cron_schedules', [ 'Foo', 'my_add_quicklier' ] ); // Error: 5 min.
+add_filter( 'cron_schedules', [ 'Foo', 'my_add_quicklier' ] ); // Warning: 5 min.
 
 // Ignore, not our function.
 My_Custom::add_filter( 'cron_schedules', [ 'Foo', 'my_add_quicklier' ] );
@@ -70,7 +70,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 		'display' => __( 'Once every 8 minutes' )
 	];
 	return $schedules;
-} ); // Error: 8 min.
+} ); // Warning: 8 min.
 
 // Deal correctly with the function calls for interval.
 add_filter( 'cron_schedules', function ( $schedules ) {
@@ -88,7 +88,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 		'display' => __( 'Once every 2 minutes' )
 	);
 	return $schedules;
-} ); // Error: 2 min.
+} ); // Warning: 2 min.
 add_filter( 'cron_schedules', function ( $schedules ) {
 	$schedules['every_10_mins'] = array(
 		'interval' => 10 * 60,
@@ -111,14 +111,14 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 		'display' => __( 'Once every 2 minutes' )
 	);
 	return $schedules;
-} ); // Error: 2 min.
+} ); // Warning: 2 min.
 add_filter( 'cron_schedules', function ( $schedules ) {
 	$schedules['every_15_mins'] = array(
 		'interval' => 15 * 60,
 		'display' => __( 'Once every 15 minutes' )
 	);
 	return $schedules;
-} ); // Error: 15 min.
+} ); // Warning: 15 min.
 add_filter( 'cron_schedules', function ( $schedules ) {
 	$schedules['every_hour'] = [
 		'interval' => HOUR_IN_SECONDS,
@@ -138,7 +138,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 		'display' => __( 'Once every 9 minutes' )
 	);
 	return $schedules;
-} ); // Error: 9 min.
+} ); // Warning: 9 min.
 
 Custom::add_filter( 'cron_schedules', array( $class, $method ) ); // OK, not the WP function.
 add_filter( 'some_hook', array( $place, 'cron_schedules' ) ); // OK, not the hook we're looking for.
@@ -159,4 +159,4 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 		'display' => __( 'Once every 8 minutes' )
 	];
 	return $schedules;
-} ); // Error: 8 min.
+} ); // Warning: 8 min.
