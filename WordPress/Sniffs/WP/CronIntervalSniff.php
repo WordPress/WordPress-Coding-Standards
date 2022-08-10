@@ -182,6 +182,11 @@ class CronIntervalSniff extends Sniff {
 							continue;
 						}
 
+						if ( \T_NS_SEPARATOR === $this->tokens[ $j ]['code'] ) {
+							$value .= ' ';
+							continue;
+						}
+
 						if ( $j === $valueEnd && \T_COMMA === $this->tokens[ $j ]['code'] ) {
 							break;
 						}
