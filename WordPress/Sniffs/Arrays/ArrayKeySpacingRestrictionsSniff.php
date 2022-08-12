@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
+use PHPCSUtils\Fixers\SpacesFixer;
 use WordPressCS\WordPress\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Check for proper spacing in array key references.
@@ -49,43 +49,72 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 
 		$token = $this->tokens[ $stackPtr ];
 		if ( ! isset( $token['bracket_closer'] ) ) {
-			$this->phpcsFile->addWarning( 'Missing bracket closer.', $stackPtr, 'MissingBracketCloser' );
 			return;
 		}
 
-		$need_spaces = $this->phpcsFile->findNext(
-			array( \T_CONSTANT_ENCAPSED_STRING, \T_LNUMBER, \T_WHITESPACE, \T_MINUS ),
-			( $stackPtr + 1 ),
-			$token['bracket_closer'],
-			true
-		);
+		/*
+		 * Handle square brackets without a key (array assignments) first.
+		 */
+		$first_non_ws = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+		if ( $first_non_ws === $token['bracket_closer'] ) {
+			$error = 'There should be %1$s between the square brackets for an array assignment without an explicit key. Found: %2$s';
+			SpacesFixer::checkAndFix(
+				$this->phpcsFile,
+				$stackPtr,
+				$token['bracket_closer'],
+				0,
+				$error,
+				'SpacesBetweenBrackets'
+			);
 
-		$spaced1 = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
-		$spaced2 = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
+			return;
+		}
 
-		// It should have spaces unless if it only has strings or numbers as the key.
-		if ( false !== $need_spaces
-			&& ( false === $spaced1 || false === $spaced2 )
+		/*
+		 * Handle the spaces around explicit array keys.
+		 */
+		$needs_spaces = true;
+
+		// Skip over a potential plus/minus sign for integers.
+		$first_effective = $first_non_ws;
+		if ( \T_MINUS === $this->tokens[ $first_effective ]['code'] || \T_PLUS === $this->tokens[ $first_effective ]['code'] ) {
+			$first_effective = $this->phpcsFile->findNext( \T_WHITESPACE, ( $first_effective + 1 ), null, true );
+		}
+
+		$next_non_ws = $this->phpcsFile->findNext( \T_WHITESPACE, ( $first_effective + 1 ), null, true );
+		if ( ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $first_effective ]['code']
+			|| \T_LNUMBER === $this->tokens[ $first_effective ]['code'] )
+			&& $next_non_ws === $token['bracket_closer']
+		) {
+			$needs_spaces = false;
+		}
+
+		$has_space_after_opener = ( \T_WHITESPACE === $this->tokens[ ( $stackPtr + 1 ) ]['code'] );
+		$has_space_before_close = ( \T_WHITESPACE === $this->tokens[ ( $token['bracket_closer'] - 1 ) ]['code'] );
+
+		// The array key should be surrounded by spaces unless the key only consists of a string or an integer.
+		if ( true === $needs_spaces
+			&& ( false === $has_space_after_opener || false === $has_space_before_close )
 		) {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
 			if ( true === $fix ) {
-				if ( ! $spaced1 ) {
-					$this->phpcsFile->fixer->addContentBefore( ( $stackPtr + 1 ), ' ' );
+				if ( false === $has_space_after_opener ) {
+					$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
 				}
-				if ( ! $spaced2 ) {
+
+				if ( false === $has_space_before_close ) {
 					$this->phpcsFile->fixer->addContentBefore( $token['bracket_closer'], ' ' );
 				}
 			}
-		} elseif ( false === $need_spaces && ( $spaced1 || $spaced2 ) ) {
+		} elseif ( false === $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
 			$error = 'Array keys must NOT be surrounded by spaces if they only contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'SpacesAroundArrayKeys' );
 			if ( true === $fix ) {
-				if ( $spaced1 ) {
+				if ( $has_space_after_opener ) {
 					$this->phpcsFile->fixer->beginChangeset();
-					$this->phpcsFile->fixer->replaceToken( ( $stackPtr + 1 ), '' );
 
-					for ( $i = ( $stackPtr + 2 ); $i < $token['bracket_closer']; $i++ ) {
+					for ( $i = ( $stackPtr + 1 ); $i < $token['bracket_closer']; $i++ ) {
 						if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
 							break;
 						}
@@ -95,11 +124,11 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 
 					$this->phpcsFile->fixer->endChangeset();
 				}
-				if ( $spaced2 ) {
-					$this->phpcsFile->fixer->beginChangeset();
-					$this->phpcsFile->fixer->replaceToken( ( $token['bracket_closer'] - 1 ), '' );
 
-					for ( $i = ( $token['bracket_closer'] - 2 ); $i > $stackPtr; $i-- ) {
+				if ( $has_space_before_close ) {
+					$this->phpcsFile->fixer->beginChangeset();
+
+					for ( $i = ( $token['bracket_closer'] - 1 ); $i > $stackPtr; $i-- ) {
 						if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
 							break;
 						}
@@ -113,78 +142,30 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 		}
 
 		// If spaces are needed, check that there is only one space.
-		if ( false !== $need_spaces && ( $spaced1 || $spaced2 ) ) {
-			if ( $spaced1 ) {
-				$ptr    = ( $stackPtr + 1 );
-				$length = 0;
-				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ ( $ptr + 1 ) ]['line'] ) {
-					$length = 'newline';
-				} else {
-					$length = $this->tokens[ $ptr ]['length'];
-				}
-
-				if ( 1 !== $length ) {
-					$error = 'There should be exactly one space before the array key. Found: %s';
-					$data  = array( $length );
-					$fix   = $this->phpcsFile->addFixableError(
-						$error,
-						$ptr,
-						'TooMuchSpaceBeforeKey',
-						$data
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
-
-						for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-							if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-								break;
-							}
-
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
-					}
-				}
+		if ( true === $needs_spaces ) {
+			if ( $has_space_after_opener ) {
+				$error = 'There should be exactly %1$s before the array key. Found: %2$s';
+				SpacesFixer::checkAndFix(
+					$this->phpcsFile,
+					$stackPtr,
+					$first_non_ws,
+					1,
+					$error,
+					'TooMuchSpaceBeforeKey'
+				);
 			}
 
-			if ( $spaced2 ) {
-				$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $token['bracket_closer'] - 1 ), null, true );
-				$ptr            = ( $prev_non_empty + 1 );
-				$length         = 0;
-				if ( $this->tokens[ $ptr ]['line'] !== $this->tokens[ $token['bracket_closer'] ]['line'] ) {
-					$length = 'newline';
-				} else {
-					$length = $this->tokens[ $ptr ]['length'];
-				}
-
-				if ( 1 !== $length ) {
-					$error = 'There should be exactly one space after the array key. Found: %s';
-					$data  = array( $length );
-					$fix   = $this->phpcsFile->addFixableError(
-						$error,
-						$ptr,
-						'TooMuchSpaceAfterKey',
-						$data
-					);
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						$this->phpcsFile->fixer->replaceToken( $ptr, ' ' );
-
-						for ( $i = ( $ptr + 1 ); $i < $token['bracket_closer']; $i++ ) {
-							if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
-								break;
-							}
-
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
-					}
-				}
+			if ( $has_space_before_close ) {
+				$last_non_ws = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $token['bracket_closer'] - 1 ), null, true );
+				$error       = 'There should be exactly %1$s after the array key. Found: %2$s';
+				SpacesFixer::checkAndFix(
+					$this->phpcsFile,
+					$last_non_ws,
+					$token['bracket_closer'],
+					1,
+					$error,
+					'TooMuchSpaceAfterKey'
+				);
 			}
 		}
 	}
