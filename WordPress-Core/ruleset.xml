@@ -397,9 +397,8 @@
 		 placeholders. Note that they are not 'quoted'! -->
 	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
-	<!-- Covers rule:  $wpdb->prepare()... The benefit of this is that we don't have to remember
-		 to manually use esc_sql(), and also that it is easy to see at a glance whether something
-		 has been escaped or not, because it happens right when the query happens. -->
+	<!-- Covers rule:  Escaping should be done as close to the time of the query
+		 as possible, preferably by using $wpdb->prepare(). -->
 	<rule ref="WordPress.DB.PreparedSQL"/>
 
 
