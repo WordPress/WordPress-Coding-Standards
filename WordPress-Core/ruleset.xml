@@ -225,8 +225,9 @@
 	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
 	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
 
-	<!-- Covers rule: For switch structures case should indent one tab from the
-		 switch statement and break one tab from the case statement. -->
+	<!-- Covers rule: For switch control structures, case statements should be indented one tab
+		 from the switch statement and the contents of the case should be indented one tab
+		 from the case condition statement. -->
 	<rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
 	<!-- Prevent duplicate messages for the same issue. Covered by other sniffs. -->
 	<rule ref="PSR2.ControlStructures.SwitchDeclaration.NotLower">
