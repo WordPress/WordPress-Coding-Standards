@@ -40,7 +40,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - No Shorthand PHP Tags.
+	Handbook: General - No Shorthand PHP Tags.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#no-shorthand-php-tags
 	#############################################################################
 	-->
@@ -51,7 +51,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Single and Double Quotes.
+	Handbook: General - Single and Double Quotes.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#single-and-double-quotes
 	#############################################################################
 	-->
@@ -66,7 +66,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Naming Conventions.
+	Handbook: Naming - Naming Conventions.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
 	#############################################################################
 	-->
@@ -95,7 +95,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Interpolation for Naming Dynamic Hooks.
+	Handbook: Naming - Interpolation for Naming Dynamic Hooks.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#interpolation-for-naming-dynamic-hooks
 
 	https://github.com/WordPress/WordPress-Coding-Standards/issues/751
@@ -112,7 +112,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Space Usage.
+	Handbook: Whitespace - Space Usage.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
 	#############################################################################
 	-->
@@ -126,8 +126,7 @@
 		</properties>
 	</rule>
 
-	<!-- Covers rule: Put spaces on both sides of the opening and closing parenthesis of
-		 if, elseif, foreach, for, and switch blocks. -->
+	<!-- Covers rule: Put spaces on both sides of the opening and closing parentheses of control structure blocks. -->
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
 
 	<!-- Covers rule: Define a function like so: function my_function( $param1 = 'foo', $param2 = 'bar' ) { -->
@@ -165,7 +164,7 @@
 
 	<!-- Covers rule: Type casts must be lowercase. Always prefer the short form
 		 of type casts, (int) instead of (integer) and (bool) rather than (boolean).
-		 For float casts use (float). -->
+		 For float casts use (float), not (real) which is deprecated in PHP 7.4, and removed in PHP 8. -->
 	<rule ref="Generic.Formatting.SpaceAfterCast"/>
 	<rule ref="Squiz.WhiteSpace.CastSpacing"/>
 	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
@@ -177,12 +176,12 @@
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 
-	<!-- Rule: In a switch block, there must be no space before the colon for a case statement. -->
+	<!-- Rule: In a switch block, there must be no space between the case condition and the colon. -->
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
 	<!-- Rule: Similarly, there should be no space before the colon on return type declarations. -->
 
-	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside of them. -->
+	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside them. -->
 	<rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">
 		<properties>
 			<property name="spacing" value="1"/>
@@ -193,7 +192,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Indentation.
+	Handbook: Whitespace - Indentation.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
 	#############################################################################
 	-->
@@ -260,7 +259,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Remove Trailing Spaces.
+	Handbook: Whitespace - Remove Trailing Spaces.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#remove-trailing-spaces
 	#############################################################################
 	-->
@@ -272,7 +271,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Brace Style.
+	Handbook: Formatting - Brace Style.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#brace-style
 	#############################################################################
 	-->
@@ -285,7 +284,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Declaring Arrays.
+	Handbook: Formatting - Declaring Arrays.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#declaring-arrays
 	#############################################################################
 	-->
@@ -295,7 +294,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Multiline Function Calls.
+	Handbook: Formatting - Multiline Function Calls.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#multiline-function-calls
 	#############################################################################
 	-->
@@ -310,7 +309,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Only One Object Structure (Class/Interface/Trait) per File.
+	Handbook: Object-Oriented Programming - Only One Object Structure (Class/Interface/Trait) per File.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#only-one-object-structure-class-interface-trait-per-file
 	#############################################################################
 	-->
@@ -322,7 +321,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Use elseif, not else if.
+	Handbook: Control Structures - Use elseif, not else if.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
 	-->
@@ -332,12 +331,12 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Yoda Conditions.
+	Handbook: Control Structures - Yoda Conditions.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#yoda-conditions
 	#############################################################################
 	-->
-	<!-- Covers rule: When doing logical comparisons, always put the variable on the right side,
-		 constants or literals on the left. -->
+	<!-- Covers rule: When doing logical comparisons involving variables, always put the variable on the right side
+		 and put constants, literals, or function calls on the left side. -->
 	<rule ref="WordPress.PHP.YodaConditions"/>
 
 	<!-- Rule: Yoda conditions for <, >, <= or >= are significantly more difficult to read
@@ -346,11 +345,11 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Ternary Operator.
+	Handbook: Operators - Ternary Operator.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#ternary-operator
 	#############################################################################
 	-->
-	<!-- Rule: Always have Ternaries test if the statement is true, not false.
+	<!-- Rule: Always have ternaries test if the statement is true, not false.
 		 An exception would be using ! empty(), as testing for false here is generally more intuitive.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/643 -->
 
@@ -360,7 +359,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - (No) Error Control Operator @.
+	Handbook: Operators - (No) Error Control Operator @.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#error-control-operator
 	#############################################################################
 	-->
@@ -371,7 +370,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Database Queries.
+	Handbook: Database - Database Queries.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
 	#############################################################################
 	-->
@@ -382,7 +381,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Formatting SQL statements.
+	Handbook: Database - Formatting SQL statements.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#formatting-sql-statements
 	#############################################################################
 	-->
@@ -393,18 +392,18 @@
 		 SQL slash escaping when passed.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/640 -->
 
+	<!-- Covers rule: Escaping should be done as close to the time of the query
+		 as possible, preferably by using $wpdb->prepare(). -->
+	<rule ref="WordPress.DB.PreparedSQL"/>
+
 	<!-- Rule: in $wpdb->prepare - %s is used for string placeholders and %d is used for integer
 		 placeholders. Note that they are not 'quoted'! -->
 	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
-	<!-- Covers rule:  Escaping should be done as close to the time of the query
-		 as possible, preferably by using $wpdb->prepare(). -->
-	<rule ref="WordPress.DB.PreparedSQL"/>
-
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Self-Explanatory Flag Values for Function Arguments.
+	Handbook: Recommendations - Self-Explanatory Flag Values for Function Arguments.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#self-explanatory-flag-values-for-function-arguments
 	#############################################################################
 	-->
@@ -412,7 +411,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Clever Code.
+	Handbook: Recommendations - Clever Code.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#clever-code
 	#############################################################################
 	-->
@@ -452,13 +451,23 @@
 	</rule>
 
 	<!-- Rule: create_function() function, which internally performs an eval(),
-		 is deprecated in PHP 7.2. ... these must not be used. -->
+		 is deprecated in PHP 7.2 and has been removed in PHP 8.0. ... these must not be used. -->
 	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
 
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Regular Expressions.
+	Handbook: Recommendations - Closures.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#closures-anonymous-functions
+	#############################################################################
+	-->
+	<!-- Rule: Closures should not be passed as filter or action callbacks.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1486 -->
+
+
+	<!--
+	#############################################################################
+	Handbook: Recommendations - Regular Expressions.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#regular-expressions
 	#############################################################################
 	-->
@@ -475,7 +484,7 @@
 
 	<!--
 	#############################################################################
-	Handbook: PHP - Don't extract().
+	Handbook: Recommendations - Don't extract().
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#dont-extract
 	#############################################################################
 	-->
