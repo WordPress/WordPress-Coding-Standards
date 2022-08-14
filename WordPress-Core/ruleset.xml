@@ -59,7 +59,8 @@
 		 If you're not evaluating anything in the string, use single quotes. -->
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
 
-	<!-- Rule: Text that goes into attributes should be run through esc_attr().
+	<!-- Rule: Text that goes into HTML or XML attributes should be escaped so that
+		 single or double quotes do not end the attribute value.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/527 -->
 
 
