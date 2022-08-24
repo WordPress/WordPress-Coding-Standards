@@ -5,6 +5,7 @@
 	"keywords": [
 		"phpcs",
 		"standards",
+		"static analysis",
 		"WordPress"
 	],
 	"license": "MIT",
