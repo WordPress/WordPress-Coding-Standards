@@ -1,4 +1,8 @@
-<documentation title="Precision Alignment">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Precision Alignment"
+    >
     <standard>
     <![CDATA[
     Line indentation should only use tabs. Precision alignment with spaces after the tabs is strongly discouraged.

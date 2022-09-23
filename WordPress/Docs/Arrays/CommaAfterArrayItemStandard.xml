@@ -1,4 +1,8 @@
-<documentation title="Comma After Array Item">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Comma After Array Item"
+    >
     <standard>
     <![CDATA[
     There should be no space between an array item and the comma following it.

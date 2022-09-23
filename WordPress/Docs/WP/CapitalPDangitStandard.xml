@@ -1,4 +1,8 @@
-<documentation title="Capital P Dangit">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Capital P Dangit"
+    >
     <standard>
     <![CDATA[
 The correct spelling of "WordPress" should be used in text strings, comments and object names.

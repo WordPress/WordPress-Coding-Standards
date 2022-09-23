@@ -1,4 +1,8 @@
-<documentation title="Cast Structure Spacing">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Cast Structure Spacing"
+    >
     <standard>
     <![CDATA[
     A type cast should be preceded by whitespace.

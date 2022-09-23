@@ -1,4 +1,8 @@
-<documentation title="Strict In Array Syntax">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Strict In Array Syntax"
+    >
     <standard>
     <![CDATA[
     When using functions which compare a value to a range of values in an array, make sure a strict comparison is executed.

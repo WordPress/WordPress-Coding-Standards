@@ -1,4 +1,8 @@
-<documentation title="Array Key Spacing Restrictions">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Array Key Spacing Restrictions"
+    >
     <standard>
     <![CDATA[
       When referring to array items, only include a space around the index if it is a variable or the key is concatenated.

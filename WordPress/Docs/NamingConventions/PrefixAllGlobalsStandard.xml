@@ -1,4 +1,8 @@
-<documentation title="Prefix All Globals">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Prefix All Globals"
+    >
     <standard>
     <![CDATA[
     All globals terms must be prefixed with a theme/plugin specific term. Global terms include Namespace names, Class/Interface/Trait names (when not namespaced), Functions (when not namespaced or in an OO structure), Constants/Variable names declared in the global namespace, and Hook names.

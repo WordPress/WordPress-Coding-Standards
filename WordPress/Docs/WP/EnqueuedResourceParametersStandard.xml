@@ -1,4 +1,8 @@
-<documentation title="Enqueued Resource Parameters">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Enqueued Resource Parameters"
+    >
     <standard>
     <![CDATA[
     The resource version must be set, to prevent the browser from using an outdated, cached version after the resource has been updated.
