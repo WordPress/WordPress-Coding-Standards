@@ -116,7 +116,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		'category_description'      	=> true,
 		'checked'                   	=> true,
 		'comment_class'             	=> true,
-		'count'                         => true,
+		'count'                     	=> true,
 		'disabled'                  	=> true,
 		'do_shortcode'              	=> true,
 		'do_shortcode_tag'          	=> true,
@@ -169,7 +169,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'wp_tag_cloud'              	=> true,
 		'wp_title'                  	=> true,
 	);
-
 
 	/**
 	 * Functions that sanitize values.
