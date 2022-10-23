@@ -66,10 +66,11 @@ jobs:
       # @link https://github.com/WordPress/WordPress-Coding-Standards
       # @link http://pear.php.net/package/PHP_CodeSniffer/
       - name: Run PHPCS ignoring warnings
-        continue-on-error: true
+        id: phpcs
         run: vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1 --report-full --report-checkstyle=./phpcs-report.xml
 
       - name: Show PHPCS results in PR
+        if: ${{ always() && steps.phpcs.outcome == 'failure' }}
         run: cs2pr ./phpcs-report.xml --graceful-warnings
 
       # Validate the Ruleset XML files.
