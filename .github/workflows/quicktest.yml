@@ -36,9 +36,9 @@ jobs:
         phpcs_version: [ 'dev-master' ]
         include:
           - php: '7.3'
-            phpcs_version: '3.7.0'
+            phpcs_version: '3.7.1'
           - php: '5.4'
-            phpcs_version: '3.7.0'
+            phpcs_version: '3.7.1'
 
     steps:
       - name: Checkout repository
