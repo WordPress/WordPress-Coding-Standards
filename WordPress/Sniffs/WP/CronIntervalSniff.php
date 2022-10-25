@@ -98,7 +98,7 @@ class CronIntervalSniff extends Sniff {
 			return;
 		}
 
-		$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, 2 );
+		$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, 2, 'callback' );
 		if ( false === $callback ) {
 			return;
 		}

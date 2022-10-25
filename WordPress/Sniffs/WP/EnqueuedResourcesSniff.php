@@ -36,7 +36,7 @@ class EnqueuedResourcesSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		$targets   = Collections::$textStingStartTokens;
+		$targets   = Collections::textStringStartTokens();
 		$targets[] = \T_INLINE_HTML;
 
 		return $targets;
