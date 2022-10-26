@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
@@ -156,7 +157,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
-					$this->string_to_errorcode( $option_name . '_Disallowed' ),
+					MessageHelper::stringToErrorcode( $option_name . '_Disallowed' ),
 					array(
 						$matched_content,
 						$parameters[1]['raw'],

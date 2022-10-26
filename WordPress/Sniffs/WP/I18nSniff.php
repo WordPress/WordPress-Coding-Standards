@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use XMLReader;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
@@ -431,9 +432,9 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$content   = isset( $tokens[0] ) ? $tokens[0]['content'] : '';
 
 		if ( empty( $tokens ) || 0 === \count( $tokens ) ) {
-			$code = $this->string_to_errorcode( 'MissingArg' . ucfirst( $arg_name ) );
+			$code = MessageHelper::stringToErrorcode( 'MissingArg' . ucfirst( $arg_name ) );
 			if ( 'domain' !== $arg_name ) {
-				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
+				MessageHelper::addMessage( $this->phpcsFile, 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 				return false;
 			}
 
@@ -450,7 +451,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 					array( $arg_name )
 				);
 			} elseif ( ! empty( $this->text_domain ) ) {
-				$this->addMessage( 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
+				MessageHelper::addMessage( $this->phpcsFile, 'Missing $%s arg.', $stack_ptr, $is_error, $code, array( $arg_name ) );
 			}
 
 			return false;
@@ -461,8 +462,15 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			foreach ( $tokens as $token ) {
 				$contents .= $token['content'];
 			}
-			$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-			$this->addMessage( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $contents ) );
+			$code = MessageHelper::stringToErrorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
+			MessageHelper::addMessage(
+				$this->phpcsFile,
+				'The $%s arg must be a single string literal, not "%s".',
+				$stack_ptr,
+				$is_error,
+				$code,
+				array( $arg_name, $contents )
+			);
 			return false;
 		}
 
@@ -473,8 +481,15 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		if ( \T_DOUBLE_QUOTED_STRING === $tokens[0]['code'] || \T_HEREDOC === $tokens[0]['code'] ) {
 			$interpolated_variables = TextStringHelper::get_interpolated_variables( $content );
 			foreach ( $interpolated_variables as $interpolated_variable ) {
-				$code = $this->string_to_errorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
-				$this->addMessage( 'The $%s arg must not contain interpolated variables. Found "$%s".', $stack_ptr, $is_error, $code, array( $arg_name, $interpolated_variable ) );
+				$code = MessageHelper::stringToErrorcode( 'InterpolatedVariable' . ucfirst( $arg_name ) );
+				MessageHelper::addMessage(
+					$this->phpcsFile,
+					'The $%s arg must not contain interpolated variables. Found "$%s".',
+					$stack_ptr,
+					$is_error,
+					$code,
+					array( $arg_name, $interpolated_variable )
+				);
 			}
 			if ( ! empty( $interpolated_variables ) ) {
 				return false;
@@ -486,7 +501,8 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 				$stripped_content = TextStrings::stripQuotes( $content );
 
 				if ( ! \in_array( $stripped_content, $this->text_domain, true ) ) {
-					$this->addMessage(
+					MessageHelper::addMessage(
+						$this->phpcsFile,
 						'Mismatched text domain. Expected \'%s\' but got %s.',
 						$stack_ptr,
 						$is_error,
@@ -530,8 +546,15 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			return true;
 		}
 
-		$code = $this->string_to_errorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
-		$this->addMessage( 'The $%s arg must be a single string literal, not "%s".', $stack_ptr, $is_error, $code, array( $arg_name, $content ) );
+		$code = MessageHelper::stringToErrorcode( 'NonSingularStringLiteral' . ucfirst( $arg_name ) );
+		MessageHelper::addMessage(
+			$this->phpcsFile,
+			'The $%s arg must be a single string literal, not "%s".',
+			$stack_ptr,
+			$is_error,
+			$code,
+			array( $arg_name, $content )
+		);
 		return false;
 	}
 
@@ -589,7 +612,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 		$all_matches_count       = preg_match_all( self::SPRINTF_PLACEHOLDER_REGEX, $content, $all_matches );
 
 		if ( $unordered_matches_count > 0 && $unordered_matches_count !== $all_matches_count && $all_matches_count > 1 ) {
-			$code = $this->string_to_errorcode( 'MixedOrderedPlaceholders' . ucfirst( $arg_name ) );
+			$code = MessageHelper::stringToErrorcode( 'MixedOrderedPlaceholders' . ucfirst( $arg_name ) );
 			$this->phpcsFile->addError(
 				'Multiple placeholders should be ordered. Mix of ordered and non-ordered placeholders found. Found: %s.',
 				$stack_ptr,
@@ -598,7 +621,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			);
 
 		} elseif ( $unordered_matches_count >= 2 ) {
-			$code = $this->string_to_errorcode( 'UnorderedPlaceholders' . ucfirst( $arg_name ) );
+			$code = MessageHelper::stringToErrorcode( 'UnorderedPlaceholders' . ucfirst( $arg_name ) );
 
 			$suggestions     = array();
 			$replace_regexes = array();
@@ -616,7 +639,8 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 				$replacements[ $i ] = str_replace( '$', '\\$', $replacements[ $i ] );
 			}
 
-			$fix = $this->addFixableMessage(
+			$fix = MessageHelper::addFixableMessage(
+				$this->phpcsFile,
 				'Multiple placeholders should be ordered. Expected \'%s\', but got %s.',
 				$stack_ptr,
 				$is_error,

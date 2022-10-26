@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 
@@ -172,7 +173,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		$this->phpcsFile->addWarning(
 			'Found usage of constant "%s". Use %s instead.',
 			$stackPtr,
-			$this->string_to_errorcode( $content . 'UsageFound' ),
+			MessageHelper::stringToErrorcode( $content . 'UsageFound' ),
 			array(
 				$content,
 				$this->discouraged_constants[ $content ],
@@ -207,7 +208,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			$this->phpcsFile->addWarning(
 				'Found declaration of constant "%s". Use %s instead.',
 				$stackPtr,
-				$this->string_to_errorcode( $raw_content . 'DeclarationFound' ),
+				MessageHelper::stringToErrorcode( $raw_content . 'DeclarationFound' ),
 				array(
 					$raw_content,
 					$this->discouraged_constants[ $raw_content ],

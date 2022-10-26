@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
+use PHPCSUtils\Utils\MessageHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -127,7 +128,8 @@ class NonceVerificationSniff extends Sniff {
 		}
 
 		// If we're still here, no nonce-verification function was found.
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			'Processing form data without nonce verification.',
 			$stackPtr,
 			$this->superglobals[ $instance['content'] ],

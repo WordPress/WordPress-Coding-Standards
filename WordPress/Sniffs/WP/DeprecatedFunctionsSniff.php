@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\MessageHelper;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
@@ -1413,11 +1414,12 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			$data[]   = $this->deprecated_functions[ $function_name ]['alt'];
 		}
 
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$message,
 			$stackPtr,
 			( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_supported_version, '<' ) ),
-			$this->string_to_errorcode( $matched_content . 'Found' ),
+			MessageHelper::stringToErrorcode( $matched_content . 'Found' ),
 			$data
 		);
 	}

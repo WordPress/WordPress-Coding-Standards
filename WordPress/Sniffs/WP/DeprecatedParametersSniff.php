@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
@@ -319,7 +320,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
 			$message  = 'The parameter "%s" at position #%s of %s() has been deprecated since WordPress version %s.';
 			$is_error = version_compare( $parameter_args['version'], $this->minimum_supported_version, '<' );
-			$code     = $this->string_to_errorcode( ucfirst( $matched_content ) . 'Param' . $position . 'Found' );
+			$code     = MessageHelper::stringToErrorcode( ucfirst( $matched_content ) . 'Param' . $position . 'Found' );
 
 			$data = array(
 				$parameters[ $position ]['raw'],
@@ -335,7 +336,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 				$message .= ' Instead do not pass the parameter.';
 			}
 
-			$this->addMessage( $message, $stackPtr, $is_error, $code, $data, 0 );
+			MessageHelper::addMessage( $this->phpcsFile, $message, $stackPtr, $is_error, $code, $data, 0 );
 		}
 	}
 
