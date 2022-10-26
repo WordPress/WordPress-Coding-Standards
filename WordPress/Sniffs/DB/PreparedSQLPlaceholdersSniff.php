@@ -275,7 +275,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				|| \T_HEREDOC === $this->tokens[ $i ]['code']
 			) {
 				// Only interested in actual query text, so strip out variables.
-				$stripped_content = TextStringHelper::strip_interpolated_variables( $content );
+				$stripped_content = TextStrings::stripEmbeds( $content );
 				if ( $stripped_content !== $content ) {
 					$interpolated_vars = TextStringHelper::get_interpolated_variables( $content );
 					$vars_without_wpdb = array_diff( $interpolated_vars, array( 'wpdb' ) );

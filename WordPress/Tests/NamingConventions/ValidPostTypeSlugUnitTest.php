@@ -71,6 +71,8 @@ class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
 			40 => 1,
 			45 => 1,
 			49 => 1,
+			55 => 1,
+			56 => 1,
 		);
 	}
 }

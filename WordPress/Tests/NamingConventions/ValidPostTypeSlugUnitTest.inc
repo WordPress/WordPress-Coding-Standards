@@ -50,3 +50,7 @@ register_post_type( "my-own-post-type-too-long-{$i}" ); // 1x Error, Too long. 1
 register_post_type( 'my/own/post/type/too/long', array() ); // Bad. Invalid chars: "/" and too long.
 
 register_post_type( 'wp_block', array() ); // Bad. Must only error on reserved keyword, not invalid prefix.
+
+// Test handling of more complex embedded variables and expressions.
+register_post_type("testing123-${(foo)}-test");
+register_post_type("testing123-${foo["${bar['baz']}"]}-test");

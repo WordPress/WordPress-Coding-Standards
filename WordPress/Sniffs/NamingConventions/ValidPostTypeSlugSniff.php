@@ -12,7 +12,6 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use WordPressCS\WordPress\Helpers\TextStringHelper;
 
 /**
  * Validates post type names.
@@ -163,7 +162,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 				'PartiallyDynamic',
 				$data
 			);
-			$post_type = TextStringHelper::strip_interpolated_variables( $post_type );
+			$post_type = TextStrings::stripEmbeds( $post_type );
 		}
 
 		if ( preg_match( self::VALID_POST_TYPE_CHARACTERS, $post_type ) === 0 ) {
