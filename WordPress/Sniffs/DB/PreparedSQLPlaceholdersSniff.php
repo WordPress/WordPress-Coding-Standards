@@ -12,7 +12,6 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
-use WordPressCS\WordPress\Helpers\TextStringHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -277,15 +276,20 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				// Only interested in actual query text, so strip out variables.
 				$stripped_content = TextStrings::stripEmbeds( $content );
 				if ( $stripped_content !== $content ) {
-					$interpolated_vars = TextStringHelper::get_interpolated_variables( $content );
-					$vars_without_wpdb = array_diff( $interpolated_vars, array( 'wpdb' ) );
-					$content           = $stripped_content;
+					$vars_without_wpdb = array_filter(
+						TextStrings::getEmbeds( $content ),
+						function ( $symbol ) {
+							return preg_match( '`^\{?\$\{?wpdb\??->`', $symbol ) !== 1;
+						}
+					);
+
+					$content = $stripped_content;
 
 					if ( ! empty( $vars_without_wpdb ) ) {
 						$variable_found = true;
 					}
 				}
-				unset( $stripped_content, $interpolated_vars, $vars_without_wpdb );
+				unset( $stripped_content, $vars_without_wpdb );
 			}
 
 			$placeholders = preg_match_all( '`' . self::PREPARE_PLACEHOLDER_REGEX . '`x', $content, $matches );

@@ -217,3 +217,11 @@ __( '<foo>Foo</bar>', 'my-slug' );
 
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true
+
+// Test handling of more complex embedded variables and expressions.
+__( "${foo}", 'my-slug' );
+__( "{$foo['bar']}", 'my-slug' );
+__( "{$foo->bar()}", 'my-slug' );
+__( "{$foo['bar']->baz()()}", 'my-slug' );
+__( "${foo->bar}", 'my-slug' );
+__( "${foo["${bar['baz']}"]}", 'my-slug' );

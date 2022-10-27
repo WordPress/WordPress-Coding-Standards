@@ -82,7 +82,7 @@ ND
 	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // OK.
 
-wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+wpdb::prepare( "SELECT * FROM $wpdb?->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
 
 $wpdb->query( // Some arbitrary comment.
 	"SELECT *
@@ -101,6 +101,15 @@ $wpdb->query(
 		( $foo )
 	. ";"
 );
+
+// Test handling of more complex embedded variables and expressions.
+$wpdb->query( "SELECT * FROM {$wpdb->bar()} WHERE post_title LIKE '{$title->sub()}';" ); // Bad x 1.
+$wpdb->query( "SELECT * FROM ${wpdb->bar} WHERE post_title LIKE '${title->sub}';" ); // Bad x 1.
+$wpdb->query( "SELECT * FROM ${wpdb->{$baz}} WHERE post_title LIKE '${title->{$sub}}';" ); // Bad x 1.
+$wpdb->query( "SELECT * FROM ${wpdb->{${'a'}}} WHERE post_title LIKE '${title->{${'sub'}}}';" ); // Bad x 1.
+
+// More defensive variable checking
+$wpdb->query( "SELECT * FROM $wpdb" ); // Bad x 1, $wpdb on its own is not valid.
 
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts

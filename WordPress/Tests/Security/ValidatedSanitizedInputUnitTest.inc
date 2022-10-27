@@ -336,3 +336,12 @@ echo wp_sanitize_redirect( wp_unslash( $_GET['test'] ) ); // OK.
 
 $result = match ( $_POST['foo'] ) {}; // Ok.
 $result = match ( do_something( wp_unslash( $_POST['foo'] ) ) ) {}; // Bad.
+
+// Test handling of more complex embedded variables and expressions.
+function test_handling_embeds() {
+	echo "My ${_POST} and {$_GET['bar']} and ${_REQUEST['bar']}"; // Bad x 3.
+	// Below heredoc: bad x 3.
+	echo <<<"EOD"
+Do ${(_POST)} and ${_GET["${bar}"]} and ${_FILES["${bar['baz']}"]}
+EOD;
+}
