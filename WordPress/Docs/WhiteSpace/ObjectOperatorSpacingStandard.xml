@@ -1,0 +1,19 @@
+<documentation title="Object Operator Spacing">
+    <standard>
+    <![CDATA[
+    The object operators (->, ?->, ::) should not have any spaces around them, though new lines are allowed except for use with the `::class` constant.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: No spaces around the object operator.">
+        <![CDATA[
+$foo<em></em>-><em></em>bar();
+        ]]>
+        </code>
+        <code title="Invalid: Whitespace surrounding the object operator.">
+        <![CDATA[
+$foo<em>  </em>?-><em>  </em>bar();
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

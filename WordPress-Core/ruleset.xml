@@ -526,7 +526,7 @@
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
 	<!-- Object operators should not have whitespace around them unless they are multi-line. -->
-	<rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
+	<rule ref="WordPress.WhiteSpace.ObjectOperatorSpacing">
 		<properties>
 			<property name="ignoreNewlines" value="true"/>
 		</properties>
