@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Namespaces;
@@ -629,7 +630,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		 */
 		if ( false === $in_list
 			&& false === $this->is_assignment( $stackPtr )
-			&& false === $this->is_foreach_as( $stackPtr )
+			&& Context::inForeachCondition( $this->phpcsFile, $stackPtr ) !== 'afterAs'
 		) {
 			return;
 		}
