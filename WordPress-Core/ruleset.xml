@@ -66,6 +66,31 @@
 
 	<!--
 	#############################################################################
+	Handbook: General - Writing include/require statements.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#single-and-double-quotes
+	#############################################################################
+	-->
+
+	<!-- Covers rule: include[_once] and require[_once] are language constructs, they do
+		 not need parentheses around the path, so those shouldn't be used. -->
+	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired"/>
+
+	<!-- Covers rule: There should only be one space between the path and the include/require keywords.
+		 Note: the sniff covers more language constructs than just include/require. While not in the handbook,
+		 WP Core already complies with this, so we may as well enforce it.  -->
+	<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
+
+	<!-- Covers rule: It is strongly recommended to use require[_once] for unconditional includes. -->
+	<rule ref="PEAR.Files.IncludingFile.UseRequire">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
+		<type>warning</type>
+	</rule>
+
+
+	<!--
+	#############################################################################
 	Handbook: Naming - Naming Conventions.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
 	#############################################################################
