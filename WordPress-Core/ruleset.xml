@@ -427,6 +427,25 @@
 
 	<!--
 	#############################################################################
+	Handbook: Object-Oriented Programming - Object Instantiation.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#object-instantiation
+	#############################################################################
+	-->
+	<!-- Covers rule: When instantiating a new object instance, parenthesis must always be used, even when not strictly necessary. -->
+	<rule ref="PSR12.Classes.ClassInstantiation"/>
+	<rule ref="Universal.Classes.RequireAnonClassParentheses"/>
+
+	<!-- Covers rule: There should be no space between the name of the class being instantiated and the opening parenthesis. -->
+	<!-- Covered by the PEAR.Functions.FunctionCallSignature sniff for non-anonymous classes. -->
+	<rule ref="Universal.WhiteSpace.AnonClassKeywordSpacing">
+		<properties>
+			<property name="spacing" value="0"/>
+		</properties>
+	</rule>
+
+
+	<!--
+	#############################################################################
 	Handbook: Control Structures - Use elseif, not else if.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
