@@ -375,6 +375,20 @@
 
 	<!--
 	#############################################################################
+	Handbook: Formatting - Magic constants.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#magic-constants
+	#############################################################################
+	-->
+	<!-- Covers rule: The PHP native __*__ magic constants should be written in uppercase. -->
+	<rule ref="Universal.Constants.UppercaseMagicConstants"/>
+
+	<!-- Rule: When using the ::class constant for class name resolution, the class keyword should be in lowercase... -->
+
+	<!-- Rule: ... and there should be no spaces around the :: operator. -->
+
+
+	<!--
+	#############################################################################
 	Handbook: Formatting - Spread operator.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#spread-operator
 	#############################################################################
