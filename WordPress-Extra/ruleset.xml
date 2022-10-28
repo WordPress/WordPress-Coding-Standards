@@ -52,11 +52,13 @@
 	<!-- Verify modifier keywords for declared methods and properties in classes.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
-	<rule ref="PSR2.Methods.MethodDeclaration"/>
 
 	<!-- Do not allow leading underscores in property or method names. Visibility should be used instead.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
 	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<severity>5</severity>
+	</rule>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
 		<severity>5</severity>
 	</rule>
 

@@ -389,6 +389,37 @@
 
 	<!--
 	#############################################################################
+	Handbook: Object-Oriented Programming - Visibility and modifier order.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#visibility-and-modifier-order
+	#############################################################################
+	-->
+	<!-- Rule: When using multiple modifiers for a class declaration, the order should be as follows:
+		 - First the optional abstract or final modifier.
+		 - Next, the optional readonly modifier. -->
+
+	<!-- Rule: When using multiple modifiers for a constant declaration inside object-oriented structures,
+		 the order should be as follows:
+		 - First the optional final modifier.
+		 - Next, the visibility modifier. -->
+
+	<!-- Covers rule: When using multiple modifiers for a property declaration, the order should be as follows:
+		 - First a visibility modifier.
+		 - Next, the optional static or readonly modifier (these keywords are mutually exclusive).
+		 - Finally, the optional type declaration. -->
+	<!-- Covered by the PSR2.Classes.PropertyDeclaration sniff. -->
+
+	<!-- Covers rule: When using multiple modifiers for a method declaration, the order should be as follows:
+		 - First the optional abstract or final modifier.
+		 - Then, a visibility modifier.
+		 - Finally, the optional static modifier. -->
+	<rule ref="PSR2.Methods.MethodDeclaration"/>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<severity>0</severity>
+	</rule>
+
+
+	<!--
+	#############################################################################
 	Handbook: Control Structures - Use elseif, not else if.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
