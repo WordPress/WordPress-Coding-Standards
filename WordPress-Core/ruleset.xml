@@ -485,6 +485,35 @@
 
 	<!--
 	#############################################################################
+	Handbook: Object-Oriented Programming - Trait Use Statements.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#trait-use-statements
+	#############################################################################
+	-->
+	<!-- Covers rule: Trait use statements should be at the top of a class ... -->
+	<!-- Covered by the PSR12.Traits.UseDeclaration sniff. -->
+
+	<!-- Rule: ... and should have exactly one blank line before the first use statement,
+		 and at least one blank line after the last statement.
+		 The only exception is when the class only contains trait use statements,
+		 in which case the blank line after may be omitted. -->
+	<!-- Blank line after covered by the PSR12.Traits.UseDeclaration sniff. -->
+
+	<!-- Covers rule: (example based rules: spacing, grouping and indentation). -->
+	<rule ref="PSR12.Traits.UseDeclaration"/>
+
+	<!-- Allow for a blank line between the OO statement and the first trait use statement. -->
+	<rule ref="PSR12.Traits.UseDeclaration.UseAfterBrace">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Prevent duplicate messages - spacing after use is already covered by `Generic.WhiteSpace.LanguageConstructSpacing`. -->
+	<rule ref="PSR12.Traits.UseDeclaration.SpaceAfterUse">
+		<severity>0</severity>
+	</rule>
+
+
+	<!--
+	#############################################################################
 	Handbook: Object-Oriented Programming - Visibility should always be declared.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#visibility-should-always-be-declared
 	#############################################################################
