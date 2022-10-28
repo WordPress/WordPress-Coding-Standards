@@ -561,6 +561,16 @@
 
 	<!--
 	#############################################################################
+	Handbook: Recommendations - Shell commands.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#shell-commands
+	#############################################################################
+	-->
+	<!-- Covers rule: Use of the backtick operator is not allowed. -->
+	<rule ref="Generic.PHP.BacktickOperator"/>
+
+
+	<!--
+	#############################################################################
 	Not in the handbook: Generic sniffs.
 	#############################################################################
 	-->

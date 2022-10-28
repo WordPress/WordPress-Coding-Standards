@@ -108,9 +108,6 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1146 -->
 	<rule ref="WordPress.WP.EnqueuedResourceParameters"/>
 
-	<!-- Discourage use of the backtick operator (execution of shell commands).
-		 https://github.com/WordPress/WordPress-Coding-Standards/pull/646 -->
-	<rule ref="Generic.PHP.BacktickOperator"/>
 
 	<!-- Check for PHP Parse errors.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/522 -->
