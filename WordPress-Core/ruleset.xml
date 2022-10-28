@@ -170,6 +170,9 @@
 	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose">
 		<severity>0</severity>
 	</rule>
+	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterVariadic">
+		<severity>0</severity>
+	</rule>
 
 
 	<!-- Covers rule: Call a function, like so: my_function( $param1, func_param( $param2 ) ); -->
@@ -334,6 +337,23 @@
 	<!-- Rule: Each parameter must take up no more than a single line. Multi-line parameter
 		 values must be assigned to a variable and then that variable should be passed to the function call.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1330 -->
+
+
+	<!--
+	#############################################################################
+	Handbook: Formatting - Spread operator.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#spread-operator
+	#############################################################################
+	-->
+	<!-- Covers rule: When using the spread operator, there should be one space or a new line
+		 with the appropriate indentation before the spread operator. -->
+	<!-- Covered by a variety of sniffs which deal with function calls, function declarations, array declarations. -->
+
+	<!-- Covers rule: There should be no spaces between the spread operator and the variable/function call it applies to. -->
+	<rule ref="Generic.WhiteSpace.SpreadOperatorSpacingAfter"/>
+
+	<!-- Covers rule: When combining the spread operator with the reference operator (&), there should be no spaces between them.. -->
+	<!-- Covered by the Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterReference error code. -->
 
 
 	<!--
