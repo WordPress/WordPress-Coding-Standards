@@ -348,6 +348,27 @@
 
 	<!--
 	#############################################################################
+	Handbook: Object-Oriented Programming - Visibility should always be declared.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#visibility-should-always-be-declared
+	#############################################################################
+	-->
+	<!-- Covers rule: For all constructs that allow it (properties, methods, class constants since PHP 7.1),
+		 visibility should be explicitly declared. -->
+	<rule ref="PSR2.Classes.PropertyDeclaration"/>
+	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.Classes.PropertyDeclaration.Multiple">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.Scope.MethodScope"/>
+
+	<!-- Covers rule: Using the var keyword for property declarations is not allowed. -->
+	<!-- Covered by the PSR2.Classes.PropertyDeclaration sniff. -->
+
+
+	<!--
+	#############################################################################
 	Handbook: Control Structures - Use elseif, not else if.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#use-elseif-not-else-if
 	#############################################################################
