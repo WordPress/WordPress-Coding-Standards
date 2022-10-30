@@ -58,12 +58,6 @@
 		<severity>5</severity>
 	</rule>
 
-	<!-- Do not allow multi-property declarations.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
-	<rule ref="PSR2.Classes.PropertyDeclaration.Multiple">
-		<severity>5</severity>
-	</rule>
-
 	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
 	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
 		<!-- Restore default severity of 5 which WordPress-Core sets to 0. -->
