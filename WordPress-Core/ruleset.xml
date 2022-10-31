@@ -373,12 +373,10 @@
 	#############################################################################
 	-->
 	<!-- Covers rule: For all constructs that allow it (properties, methods, class constants since PHP 7.1),
-		 visibility should be explicitly declared. -->
+		 visibility should be explicitly declared.
+		 Includes "only one property declaration per statement". -->
 	<rule ref="PSR2.Classes.PropertyDeclaration"/>
 	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
-		<severity>0</severity>
-	</rule>
-	<rule ref="PSR2.Classes.PropertyDeclaration.Multiple">
 		<severity>0</severity>
 	</rule>
 	<rule ref="Squiz.Scope.MethodScope"/>
