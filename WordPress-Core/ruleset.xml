@@ -699,6 +699,7 @@
 
 	<!-- Lowercase PHP keywords, like class, function and case. -->
 	<rule ref="Generic.PHP.LowerCaseKeyword"/>
+	<rule ref="Universal.UseStatements.LowercaseFunctionConst"/>
 
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
