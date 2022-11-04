@@ -42,7 +42,7 @@
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed"/>
 		<!-- Allow for functions in extended classes/implemented interfaces. -->
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtentedClass"/>
-		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtentedClassBeforeLastUsed"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtentedClassAfterLastUsed"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed"/>
