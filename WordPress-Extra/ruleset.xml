@@ -41,9 +41,9 @@
 		<!-- Allow for callback functions which may not need all parameters passed. -->
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed"/>
 		<!-- Allow for functions in extended classes/implemented interfaces. -->
-		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtentedClass"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed"/>
-		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtentedClassAfterLastUsed"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed"/>
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed"/>
