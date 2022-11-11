@@ -77,7 +77,6 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'chown',
 					'delete',
 					'fclose',
-					'file_get_contents',
 					'file_put_contents',
 					'flock',
 					'fopen',
