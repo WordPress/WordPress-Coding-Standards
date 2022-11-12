@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\DB;
+namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPress\AbstractClassRestrictionsSniff;
+use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
 
 /**
  * Verifies that no database related PHP classes are used.
@@ -57,4 +57,4 @@ class RestrictedClassesSniff extends AbstractClassRestrictionsSniff {
 		);
 	}
 
-} // End class.
+}

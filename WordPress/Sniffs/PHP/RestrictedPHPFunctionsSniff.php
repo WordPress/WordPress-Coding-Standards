@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Forbids the use of various native PHP functions and suggests alternatives.
@@ -37,13 +37,12 @@ class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		return array(
 			'create_function' => array(
 				'type'      => 'error',
-				'message'   => '%s() is deprecated as of PHP 7.2, please use full fledged functions or anonymous functions instead.',
+				'message'   => '%s() is deprecated as of PHP 7.2 and removed in PHP 8.0, please use full fledged functions or anonymous functions instead.',
 				'functions' => array(
 					'create_function',
 				),
 			),
-
 		);
-	} // end getGroups()
+	}
 
-} // End class.
+}

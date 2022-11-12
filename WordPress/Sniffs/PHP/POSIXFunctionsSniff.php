@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Perl compatible regular expressions (PCRE, preg_ functions) should be used in preference
@@ -20,8 +20,9 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff
- *                 and the WordPress_Sniffs_PHP_DiscouragedPHPFunctionsSniff.
+ * @since   0.10.0 Previously this check was contained within the
+ *                 `WordPress.VIP.RestrictedFunctions` and the
+ *                 `WordPress.PHP.DiscouragedPHPFunctions` sniffs.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
@@ -70,6 +71,6 @@ class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

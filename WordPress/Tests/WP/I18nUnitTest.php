@@ -3,14 +3,13 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the I18n sniff.
@@ -23,27 +22,7 @@ use WordPress\PHPCSHelper;
 class I18nUnitTest extends AbstractSniffUnitTest {
 
 	/**
-	 * Get a list of CLI values to set before the file is tested.
-	 *
-	 * Used by PHPCS 2.x.
-	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
-	 * @return array
-	 */
-	public function getCliValues( $testFile ) {
-		// Test overruling the text domain from the command line for one test file.
-		if ( 'I18nUnitTest.3.inc' === $testFile ) {
-			PHPCSHelper::set_config_data( 'text_domain', 'something', true );
-		}
-
-		return array();
-	}
-
-	/**
 	 * Set CLI values before the file is tested.
-	 *
-	 * Used by PHPCS 3.x.
 	 *
 	 * @param string                  $testFile The name of the file being tested.
 	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.
@@ -54,6 +33,9 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 		// Test overruling the text domain from the command line for one test file.
 		if ( 'I18nUnitTest.3.inc' === $testFile ) {
 			$config->setConfigData( 'text_domain', 'something', true );
+		} else {
+			// Delete the text domain option so it doesn't persist for subsequent test files.
+			$config->setConfigData( 'text_domain', null, true );
 		}
 	}
 
@@ -134,6 +116,15 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					144 => 1,
 					153 => 1,
 					157 => 1,
+					178 => 1,
+					181 => 3,
+					184 => 1,
+					222 => 1,
+					223 => 1,
+					224 => 1,
+					225 => 1,
+					226 => 1,
+					227 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
@@ -157,10 +148,8 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
-	} // end getErrorList()
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -181,22 +170,28 @@ class I18nUnitTest extends AbstractSniffUnitTest {
 					154 => 1,
 					158 => 1,
 					159 => 1,
+					187 => 1,
+					191 => 1,
+					193 => 1,
+					194 => 1,
+					198 => 1,
+					199 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
 				return array(
-					9  => 1,
-					43 => 1,
-					49 => 1,
-					52 => 1,
-					74 => 1,
-					85 => 1,
+					9   => 1,
+					43  => 1,
+					49  => 1,
+					52  => 1,
+					74  => 1,
+					85  => 1,
+					108 => 1,
 				);
 
 			default:
 				return array();
-
 		}
 	}
 
-} // End class.
+}

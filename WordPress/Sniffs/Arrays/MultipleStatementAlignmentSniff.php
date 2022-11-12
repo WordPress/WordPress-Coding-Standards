@@ -3,13 +3,15 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\PassedParameters;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces alignment of the double arrow assignment operator for multi-item, multi-line arrays.
@@ -148,8 +150,8 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
+			\T_ARRAY,
+			\T_OPEN_SHORT_ARRAY,
 		);
 	}
 
@@ -164,10 +166,18 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
+		) {
+			// Short list, not short array.
+			return;
+		}
+
 		/*
 		 * Determine the array opener & closer.
 		 */
-		$array_open_close = $this->find_array_open_close( $stackPtr );
+		$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $array_open_close ) {
 			// Array open/close could not be determined.
 			return;
@@ -176,7 +186,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$opener = $array_open_close['opener'];
 		$closer = $array_open_close['closer'];
 
-		$array_items = $this->get_function_call_parameters( $stackPtr );
+		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		if ( empty( $array_items ) ) {
 			return;
 		}
@@ -216,13 +226,13 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		 * Just find and fix them all.
 		 */
 		$next_arrow = $this->phpcsFile->findNext(
-			T_DOUBLE_ARROW,
+			\T_DOUBLE_ARROW,
 			( $opener + 1 ),
 			$closer
 		);
 
 		while ( false !== $next_arrow ) {
-			if ( T_WHITESPACE === $this->tokens[ ( $next_arrow - 1 ) ]['code'] ) {
+			if ( \T_WHITESPACE === $this->tokens[ ( $next_arrow - 1 ) ]['code'] ) {
 				$space_length = $this->tokens[ ( $next_arrow - 1 ) ]['length'];
 				if ( 1 !== $space_length ) {
 					$error = 'Expected 1 space between "%s" and double arrow; %s found';
@@ -240,7 +250,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			// Find the position of the next double arrow.
 			$next_arrow = $this->phpcsFile->findNext(
-				T_DOUBLE_ARROW,
+				\T_DOUBLE_ARROW,
 				( $next_arrow + 1 ),
 				$closer
 			);
@@ -282,7 +292,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$index_end_cols    = array(); // Keep track of the end column position of index keys.
 		$double_arrow_cols = array(); // Keep track of arrow column position and count.
 		$multi_line_count  = 0;
-		$total_items       = count( $items );
+		$total_items       = \count( $items );
 
 		foreach ( $items as $key => $item ) {
 			if ( strpos( $item['raw'], '=>' ) === false ) {
@@ -293,7 +303,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			// Find the position of the first double arrow.
 			$double_arrow = $this->phpcsFile->findNext(
-				T_DOUBLE_ARROW,
+				\T_DOUBLE_ARROW,
 				$item['start'],
 				( $item['end'] + 1 )
 			);
@@ -319,7 +329,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			// Find the end of the array key.
 			$last_index_token = $this->phpcsFile->findPrevious(
-				T_WHITESPACE,
+				\T_WHITESPACE,
 				( $double_arrow - 1 ),
 				$item['start'],
 				true
@@ -424,11 +434,11 @@ class MultipleStatementAlignmentSniff extends Sniff {
 			 * If the alignment does not have to be exact, see if a majority
 			 * group of the arrows is already at an acceptable position.
 			 */
-			arsort( $double_arrow_cols, SORT_NUMERIC );
+			arsort( $double_arrow_cols, \SORT_NUMERIC );
 			reset( $double_arrow_cols );
 			$count = current( $double_arrow_cols );
 
-			if ( $count > 1 || ( 1 === $count && count( $items ) === 1 ) ) {
+			if ( $count > 1 || ( 1 === $count && \count( $items ) === 1 ) ) {
 				// Allow for several groups of arrows having the same $count.
 				$filtered_double_arrow_cols = array_keys( $double_arrow_cols, $count, true );
 
@@ -453,7 +463,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				continue;
 			}
 
-			if ( T_WHITESPACE !== $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['code'] ) {
+			if ( \T_WHITESPACE !== $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['code'] ) {
 				$before = 0;
 			} else {
 				if ( $this->tokens[ $item['last_index_token'] ]['line'] !== $this->tokens[ $item['operatorPtr'] ]['line'] ) {
@@ -562,7 +572,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				}
 			}
 		}
-	} // End process_multi_line_array().
+	}
 
 	/**
 	 * Validate that a valid value has been received for the alignMultilineItems property.
@@ -584,7 +594,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				$operator = $matches[1];
 				$number   = (int) $matches[2];
 
-				if ( in_array( $operator, array( '<', '<=', '>', '>=', '==', '=', '!=', '<>' ), true ) === true
+				if ( \in_array( $operator, array( '<', '<=', '>', '>=', '==', '=', '!=', '<>' ), true ) === true
 					&& ( $number >= 0 && $number <= 100 )
 				) {
 					$this->alignMultilineItems = $alignMultilineItems;
@@ -606,4 +616,4 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$this->alignMultilineItems = 'always';
 	}
 
-} // End class.
+}

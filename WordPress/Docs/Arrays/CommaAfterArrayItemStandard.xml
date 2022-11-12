@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Comma After Array Item"
+    >
+    <standard>
+    <![CDATA[
+    There should be no space between an array item and the comma following it.
+    There should be either exactly one space, or a new line, after the comma.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: No space before a comma.">
+        <![CDATA[
+$array = array(
+    'type'   => 'value'<em>,</em>
+    'values' => array( 1 )<em>,</em>
+    'extra'  => 'c'<em>,</em> /* Comment. */
+);
+        ]]>
+        </code>
+        <code title="Invalid: One or more spaces before a comma.">
+        <![CDATA[
+$array = array(
+    'type'   => 'value'<em>  ,</em>
+    'values' => array( 1 ),
+    'extra'  => 'c'<em>       ,</em> /* Comment. */
+);
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Exactly one space after a comma in a single line array.">
+        <![CDATA[
+$array = array( 'a'<em>, </em>'b'<em>, </em>'c' );
+        ]]>
+        </code>
+        <code title="Invalid: Multiple or no spaces after a comma in a single line array.">
+        <![CDATA[
+$array = array( 'a'<em>,</em>'b'<em>,    </em>'c' );
+        ]]>
+        </code>
+    </code_comparison>
+
+    <standard>
+    <![CDATA[
+    Single line arrays should not have a trailing comma after the last array item.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Single line array without a trailing comma.">
+        <![CDATA[
+$array = array( 'a', 'b', <em>'c' </em>);
+        ]]>
+        </code>
+        <code title="Invalid: Single line array with a trailing comma.">
+        <![CDATA[
+$array = array( 'a', 'b', <em>'c', </em>);
+        ]]>
+        </code>
+    </code_comparison>
+
+    <standard>
+    <![CDATA[
+    Multi-line arrays must have a trailing comma after the last array item.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Comma after each item in a multi-line array.">
+        <![CDATA[
+$array = array(
+    'a',
+    <em>'c',</em>
+);
+
+$assoc = array(
+    'type' => 'value',
+    'key'  => <em>'c'</em>,
+);
+        ]]>
+        </code>
+
+        <code title="Invalid: Missing trailing comma after last item in a multi-line array.">
+        <![CDATA[
+$array = array(
+    'a',
+    <em>'c'</em>
+);
+
+$assoc = array(
+    'type' => 'value',
+    'key' => <em>'c'</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

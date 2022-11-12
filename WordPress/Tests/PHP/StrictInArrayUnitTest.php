@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\PHP;
+namespace WordPressCS\WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -27,9 +27,7 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array(
-			17 => 1,
-		);
+		return array();
 	}
 
 	/**
@@ -53,4 +51,4 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 		);
 	}
 
-} // End class.
+}

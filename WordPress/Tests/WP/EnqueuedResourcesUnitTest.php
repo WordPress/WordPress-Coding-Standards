@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -44,8 +44,13 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 			26 => 1,
 			30 => 1,
 			31 => 1,
+			42 => 1,
+			46 => 1,
+			48 => 1,
+			49 => 1,
+			54 => 1,
+			55 => 1,
 		);
-
 	}
 
 	/**
@@ -55,7 +60,6 @@ class EnqueuedResourcesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

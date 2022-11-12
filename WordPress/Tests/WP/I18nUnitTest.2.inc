@@ -2,7 +2,7 @@
 /*
  * Test sniffing for translator comments.
  */
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain my-slug
+// phpcs:set WordPress.WP.I18n text_domain[] my-slug
 
 /* Basic test ****************************************************************/
 __( 'No placeholders here.', 'my-slug' ); // Ok, no placeholders, so no translators comment needed.
@@ -103,4 +103,8 @@ __( 'foo 100% bar', 'my-slug' ); // Ok, not a placeholder.
 // Issue #830.
 _e(); // Bad.
 
-// @codingStandardsChangeSetting WordPress.WP.I18n text_domain false
+/* translators: number of monkeys, location. */
+// phpcs:ignore Standard.Category.Sniff -- testing that the PHPCS annotations are handled correctly.
+printf( __( 'There are %1$d monkeys in the %2$s', 'my-slug' ), intval( $number ), esc_html( $string ) ); // Bad.
+
+// phpcs:set WordPress.WP.I18n text_domain[]

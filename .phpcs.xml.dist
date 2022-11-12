@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Coding Standards" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
+	<description>The Coding standard for the WordPress Coding Standards itself.</description>
+
+	<file>.</file>
+
+	<arg value="sp"/>
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="parallel" value="8"/>
+
+	<exclude-pattern>/bin/class-ruleset-test.php</exclude-pattern>
+	<!-- Exclude Composer vendor directory. -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName"/>
+		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
+		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
+	</rule>
+
+	<!-- Enforce PSR1 compatible namespaces. -->
+	<rule ref="PSR1.Classes.ClassDeclaration"/>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="alignMultilineItems" value="!=100"/>
+			<property name="exact" value="false" phpcs-only="true"/>
+		</properties>
+	</rule>
+
+	<!-- Check code for cross-version PHP compatibility. -->
+	<config name="testVersion" value="5.4-"/>
+	<rule ref="PHPCompatibility">
+		<!-- Exclude PHP constants back-filled by PHPCS. -->
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_finallyFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_yieldFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_ellipsisFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_powFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_pow_equalFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_spaceshipFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesceFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesce_equalFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_yield_fromFound"/>
+	</rule>
+
+</ruleset>

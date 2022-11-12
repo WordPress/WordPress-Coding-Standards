@@ -14,9 +14,8 @@ rawurlencode(); // Ok.
 
 dl(); // Warning.
 error_reporting(); // Warning.
-ini_alter(); // Warning.
+
 ini_restore(); // Warning.
-ini_set(); // Warning.
 magic_quotes_runtime(); // Warning.
 set_magic_quotes_runtime(); // Warning.
 apache_setenv(); // Warning.
@@ -38,3 +37,7 @@ $process = proc_open( 'php', $descriptorspec, $pipes, $cwd, $env );
 $output = shell_exec( 'ls -lart' );
 $last_line = system( 'ls', $retval );
 $handle = popen( '/bin/ls', 'r' );
+
+// Issue #898.
+class System {}
+class Serialize {}

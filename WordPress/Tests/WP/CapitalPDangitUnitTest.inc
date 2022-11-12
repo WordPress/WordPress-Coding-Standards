@@ -162,7 +162,7 @@ $installed = self::check_plugin_is_installed( 'wordpress-importer' ); // OK.
 
 
 /*
- * Test whitelisting
+ * Bad - ignored via old-style ignore comment.
  */
 echo 'This is an explanation about wordpress.'; // WPCS: spelling ok.
 
@@ -180,3 +180,26 @@ wordpress.pot
 $text = <<<'EOD'
 This is an explanation about word-press.
 EOD;
+
+// Issue 1698 - ignore constant declarations.
+define( 'WORDPRESS_SOMETHING', 'wordpress' ); // OK.
+class TestMe {
+	public const MY_CONST = 123,
+		ANOTHER => array( 'a' => 'b' ),
+		WORDPRESS_SOMETHING = 'wordpress'; // OK (complex declaration to make sure start of statement is detected correctly).
+}
+
+// Allow "test" domain.
+$value = function_call( 'git.wordpress.test' );
+
+/*
+ * Test recognizing misspelling in namespace names.
+ */
+namespace {} // OK - no name.
+echo namespace\function_name(); // OK - operator.
+namespace Foo\WordPress\Bar; // OK.
+namespace My_WordPress_Plugin; // OK.
+
+namespace Foo\Bar\Wordpress\; // Bad.
+namespace Foo\word_presss\Bar; // Bad.
+namespace My_Wordpresss_Plugin\Foo\Bar; // Bad.

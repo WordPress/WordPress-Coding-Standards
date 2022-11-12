@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Operator Spacing"
+    >
+    <standard>
+    <![CDATA[
+    Always put one space on both sides of logical, comparison and concatenation operators.
+    Always put one space after an assignment operator.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: one space before and after an operator.">
+        <![CDATA[
+if ( $a<em> === </em>$b<em> && </em>$b<em> === </em>$c ) {}
+if (<em> ! </em>$var ) {}
+        ]]>
+        </code>
+        <code title="Invalid: too much/little space.">
+        <![CDATA[
+// Too much space.
+if ( $a === $b<em>   &&   </em>$b<em> ===      </em>$c ) {}
+if (<em>  ! </em>$var ) {}
+
+// Too little space.
+if ( $a<em>===</em>$b<em> &&</em>$b<em> ===</em>$c ) {}
+if (<em> !</em>$var ) {}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: a new line instead of a space is okay too.">
+        <![CDATA[
+if ( $a === $b<em>
+    && </em>$b === $c
+) {}
+        ]]>
+        </code>
+        <code title="Invalid: too much space after operator on new line.">
+        <![CDATA[
+if ( $a === $b<em>
+    &&     </em>$b === $c
+) {}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: one space after assignment operator.">
+        <![CDATA[
+$a   <em>= </em>'foo';
+$all <em>= </em>'foobar';
+        ]]>
+        </code>
+        <code title="Invalid: too much/little space after assignment operator.">
+        <![CDATA[
+$a   <em>=     </em>'foo';
+$all <em>=</em>'foobar';
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

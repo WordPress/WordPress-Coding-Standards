@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Strict In Array Syntax"
+    >
+    <standard>
+    <![CDATA[
+    When using functions which compare a value to a range of values in an array, make sure a strict comparison is executed.
+
+    Typically, this rule verifies function calls to the PHP native `in_array()`, `array_search()` and `array_keys()` functions pass the `$strict` parameter.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: calling in_array() with the $strict parameter set to `true`.">
+        <![CDATA[
+$array = array( '1', 1, true );
+if ( in_array( $value, $array, <em>true</em> ) ) {}
+        ]]>
+        </code>
+        <code title="Invalid: calling in_array() without passing the $strict parameter.">
+        <![CDATA[
+$array = array( '1', 1, true );
+if ( in_array( $value, $array<em> </em>) ) {}
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: calling array_search() with the $strict parameter set to `true`.">
+        <![CDATA[
+$key = array_search( 1, $array, <em>true</em> );
+        ]]>
+        </code>
+        <code title="Invalid: calling array_search() without passing the $strict parameter.">
+        <![CDATA[
+$key = array_search( 1, $array<em> </em>);
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: calling array_keys() with a $search_value and the $strict parameter set to `true`.">
+        <![CDATA[
+$keys = array_keys( $array, $key, <em>true</em> );
+        ]]>
+        </code>
+        <code title="Invalid: calling array_keys() with a $search_value without passing the $strict parameter.">
+        <![CDATA[
+$keys = array_keys( $array, $key<em> </em>);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

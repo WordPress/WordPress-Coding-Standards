@@ -2,6 +2,8 @@ Hi, thank you for your interest in contributing to the WordPress Coding Standard
 
 # Reporting Bugs
 
+Please search the repo to see if your issue has been reported already and if so, comment in that issue instead of opening a new one.
+
 Before reporting a bug, you should check what sniff an error is coming from.
 Running `phpcs` with the `-s` flag will show the name of the sniff with each error.
 
@@ -15,7 +17,7 @@ Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will b
 
 ## Branches
 
-Ongoing development will be done in the `develop` with merges done into `master` once considered stable.
+Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
 
 To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
@@ -28,56 +30,31 @@ Once a commit is made to `develop`, a PR should be opened from `develop` into `m
 When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
 Only make a property `public` if that is the intended behaviour.
 
-When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
-
-## Whitelist comments
-
-Sometimes, a sniff will flag code which upon further inspection by a human turns out to be OK.
-If the sniff you are writing is susceptible to this, please consider adding the ability to [whitelist lines of code](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors).
-
-To this end, the `WordPress\Sniff::has_whitelist_comment()` method was introduced.
-
-Example usage:
-```php
-namespace WordPress\Sniffs\CSRF;
-
-use WordPress\Sniff;
-
-class NonceVerificationSniff extends Sniff {
-
-	public function process_token( $stackPtr ) {
-
-		// Check something.
-		
-		if ( $this->has_whitelist_comment( 'CSRF', $stackPtr ) ) {
-			return;
-		}
-		
-		$this->phpcsFile->addError( ... );
-	}
-}
-```
-
-When you introduce a new whitelist comment, please don't forget to update the [whitelisting code wiki page](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) with the relevant details once your PR has been merged into the `develop` branch.
-
+When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 
 # Unit Testing
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 2.9.x or 3.x
-* PHPUnit 4.x, 5.x or 6.x
+* PHP_CodeSniffer 3.7.1 or higher
+* PHPUnit 4.x, 5.x, 6.x or 7.x
 
-The WordPress Coding Standards use the PHP_CodeSniffer native unit test suite for unit testing the sniffs.
+The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test suite for unit testing the sniffs.
 
-Presuming you have installed PHP_CodeSniffer and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
+Presuming you have installed `PHP_CodeSniffer` and the WordPress-Coding-Standards as [noted in the README](https://github.com/WordPress/WordPress-Coding-Standards#how-to-use-this), all you need now is `PHPUnit`.
 
-N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
+> N.B.: If you installed WPCS using Composer, make sure you used `--prefer-source` or run `composer install --prefer-source` now to make sure the unit tests are available.
+> Other than that, you're all set already as Composer will have installed PHPUnit for you.
 
 If you already have PHPUnit installed on your system: Congrats, you're all set.
 
-If not, you can navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies.
-Alternatively, you can [install PHPUnit](https://phpunit.de/manual/5.7/en/installation.html) as a PHAR file.
+## Installing PHPUnit
+
+N.B.: _If you used Composer to install the WordPress Coding Standards, you can skip this step._
+
+You can either navigate to the directory where the `PHP_CodeSniffer` repo is checked out and do `composer install` to install the `dev` dependencies or you can [install PHPUnit](https://phpunit.readthedocs.io/en/7.4/installation.html) as a PHAR file.
+
+You may want to add the directory where PHPUnit is installed to a `PATH` environment variable for your operating system to make the command available everywhere on your system.
 
 ## Before running the unit tests
 
@@ -85,50 +62,43 @@ N.B.: _If you used Composer to install the WordPress Coding Standards, you can s
 
 For the unit tests to work, you need to make sure PHPUnit can find your `PHP_CodeSniffer` install.
 
-The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file. Make sure to adjust the path to reflect your local setup.
+The easiest way to do this is to add a `phpunit.xml` file to the root of your WPCS installation and set a `PHPCS_DIR` environment variable from within this file.
+Copy the existing `phpunit.xml.dist` file and add the below `<env>` directive within the `<php>` section. Make sure to adjust the path to reflect your local setup.
 ```xml
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
-	beStrictAboutTestsThatDoNotTestAnything="false"
-	backupGlobals="true">
 	<php>
 		<env name="PHPCS_DIR" value="/path/to/PHP_CodeSniffer/"/>
 	</php>
-</phpunit>
 ```
 
 ## Running the unit tests
 
-The WordPress Coding Standards are compatible with both PHPCS 2.x as well as 3.x. This has some implications for running the unit tests.
-
-* Make sure you have registered the directory in which you installed WPCS with PHPCS using;
+* If you didn't install WPCS using Composer, make sure you have registered the directory in which you installed WPCS with PHPCS using:
     ```sh
-    phpcs --config-set installed_path path/to/WPCS
+    phpcs --config-set installed_paths path/to/WPCS
     ```
 * Navigate to the directory in which you installed WPCS.
-* To run the unit tests with PHPCS 3.x:
+* To run the unit tests:
     ```sh
-    phpunit --bootstrap="./Test/phpcs3-bootstrap.php" --filter WordPress /path/to/PHP_CodeSniffer/tests/AllTests.php
-    ```
-* To run the unit tests with PHPCS 2.x:
-    ```sh
-    phpunit --bootstrap="./Test/phpcs2-bootstrap.php" --filter WordPress ./Test/AllTests.php
+    phpunit --filter WordPress --bootstrap="/path/to/PHP_CodeSniffer/tests/bootstrap.php" /path/to/PHP_CodeSniffer/tests/AllTests.php
+
+    # Or if you've installed WPCS with Composer:
+    composer run-tests
     ```
 
 Expected output:
 ```
-PHPUnit 4.8.19 by Sebastian Bergmann and contributors.
+PHPUnit 7.5.0 by Sebastian Bergmann and contributors.
 
-Runtime:        PHP 7.1.3 with Xdebug 2.5.1
-Configuration:  /WordPressCS/phpunit.xml
+Runtime:       PHP 7.2.13
+Configuration: /WordPressCS/phpunit.xml
 
-..........................................................
+........................................................          56 / 56 (100%)
 
-Tests generated 556 unique error codes; 48 were fixable (8.63%)
+152 sniff test files generated 487 unique error codes; 52 were fixable (10.68%)
 
-Time: 24.08 seconds, Memory: 41.75Mb
+Time: 21.36 seconds, Memory: 22.00MB
 
-OK (58 tests, 0 assertions)
+OK (56 tests, 0 assertions)
 ```
 
 [![asciicast](https://asciinema.org/a/98078.png)](https://asciinema.org/a/98078)
@@ -141,7 +111,7 @@ Lets take a look at what's inside `POSIXFunctionsUnitTest.php`:
 
 ```php
 ...
-namespace WordPress\Tests\PHP;
+namespace WordPressCS\WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -207,4 +177,4 @@ The `--sniffs=...` directive limits the output to the sniff you are testing.
 
 ## Code Standards for this project
 
-The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/bin/phpcs.xml`.
+The sniffs and test files - not test _case_ files! - for WPCS should be written such that they pass the `WordPress-Extra` and the `WordPress-Docs` code standards using the custom ruleset as found in `/.phpcs.xml.dist`.

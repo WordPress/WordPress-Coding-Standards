@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Docs">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Docs" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
 	<description>WordPress Coding Standards for Inline Documentation and Comments</description>
 
 	<!--
@@ -61,6 +62,8 @@
 		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital"/>
 		<!-- Excluded to allow param documentation for arrays  -->
 		<exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName"/>
+		<!-- It is too early for PHP7 features to be required -->
+		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
 		<!-- WP doesn't require type hints -->
 		<exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
 
@@ -68,6 +71,8 @@
 		<exclude name="Squiz.Commenting.InlineComment.DocBlock"/>
 		<!-- Excluded to allow /* translators: ... */ comments -->
 		<exclude name="Squiz.Commenting.InlineComment.NotCapital"/>
+		<!-- WP handbook doesn't clarify one way or another, so ignore -->
+		<exclude name="Squiz.Commenting.InlineComment.SpacingAfter"/>
 
 		<!-- Not in Inline Docs standard, and a code smell -->
 		<exclude name="Squiz.Commenting.LongConditionClosingComment"/>
@@ -81,19 +86,9 @@
 		<exclude name="Squiz.Commenting.VariableComment.TagNotAllowed"/>
 		<!-- WP prefers @since first -->
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
-
-		<!-- It is too early for PHP7 features to be required -->
-		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
 	</rule>
 
-	<!-- Make this sniff less likely to trigger on end comments. -->
-	<rule ref="Squiz.PHP.CommentedOutCode">
-		<properties>
-			<property name="maxPercentage" value="45"/>
-		</properties>
-	</rule>
-
-	<rule ref="Generic.Commenting">
+	<rule ref="Generic.Commenting.DocComment">
 		<!-- WP has different alignment of tag values -->
 		<exclude name="Generic.Commenting.DocComment.TagValueIndent"/>
 		<!-- WP has a different prefered order of tags -->
@@ -110,10 +105,5 @@
 		<exclude name="Generic.Commenting.DocComment.SpacingBeforeShort"/>
 		<!-- Exclude to allow duplicate hooks to be documented -->
 		<exclude name="Generic.Commenting.DocComment.ContentBeforeClose"/>
-
-		<!-- WP allows @todo's in comments -->
-		<exclude name="Generic.Commenting.Todo.CommentFound"/>
-		<!-- WP allows @todo's in comments -->
-		<exclude name="Generic.Commenting.Todo.TaskFound"/>
 	</rule>
 </ruleset>

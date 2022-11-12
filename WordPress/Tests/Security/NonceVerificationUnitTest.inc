@@ -17,7 +17,7 @@ function ajax_process() {
 }
 add_action( 'wp_ajax_process', 'ajax_process' );
 
-// It's also OK to check with isset() before the the nonce check.
+// It's also OK to check with isset() before the nonce check.
 function foo() {
 	if ( ! isset( $_POST['test'] ) || ! wp_verify_nonce( 'some_action' ) ) {
 		exit;
@@ -83,7 +83,7 @@ function foo_2() {
 	$_POST['settings'][ $setting ] = 'bb'; // OK.
 }
 
-// Particular cases can be whitelisted with a comment.
+// Bad - ignored via old-style ignore comment.
 function foo_3() {
 	bar( $_POST['var'] ); // WPCS: CSRF OK.
 	bar( $_POST['var'] ); // Bad.
@@ -129,9 +129,9 @@ $b = function () {
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customNonceVerificationFunctions my_nonce_check
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customSanitizingFunctions sanitize_pc,sanitize_twitter
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customUnslashingSanitizingFunctions do_something
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] my_nonce_check
+// phpcs:set WordPress.Security.NonceVerification customSanitizingFunctions[] sanitize_pc,sanitize_twitter
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[] do_something
 
 function foo_6() {
 
@@ -140,8 +140,8 @@ function foo_6() {
 	my_nonce_check( do_something( $_POST['tweet'] ) ); // OK.
 }
 
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customSanitizingFunctions sanitize_pc
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customUnslashingSanitizingFunctions false
+// phpcs:set WordPress.Security.NonceVerification customSanitizingFunctions[] sanitize_pc
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[]
 
 function foo_7() {
 
@@ -151,8 +151,8 @@ function foo_7() {
 	my_nonce_check( sanitize_twitter( $_POST['tweet'] ) ); // OK.
 }
 
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customNonceVerificationFunctions false
-// @codingStandardsChangeSetting WordPress.Security.NonceVerification customSanitizingFunctions false
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
+// phpcs:set WordPress.Security.NonceVerification customSanitizingFunctions[]
 
 function foo_8() {
 
@@ -160,3 +160,144 @@ function foo_8() {
 	sanitize_pc( $_POST['bar'] ); // Bad.
 	my_nonce_check( sanitize_twitter( $_POST['tweet'] ) ); // Bad.
 }
+
+/*
+ * Using a superglobal in a is_...() function is OK as long as a nonce check is done
+ * before the variable is *really* used.
+ */
+function test_ignoring_use_in_type_test_functions() {
+	if ( ! is_numeric ( $_POST['foo'] ) ) { // OK.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function test_incorrect_use_in_type_test_functions() {
+	if ( ! is_numeric ( $_POST['foo'] ) ) { // Bad.
+		return;
+	}
+}
+
+function fix_false_negatives_userland_method_same_name() {
+	WP_Faker::check_ajax_referer( 'something' );
+	$faker->check_admin_referer( 'something' );
+	do_something( $_POST['abc'] ); // Bad.
+}
+
+function fix_false_negatives_namespaced_function_same_name() {
+	WP_Faker\SecurityBypass\wp_verify_nonce( 'something' );
+	do_something( $_POST['abc'] ); // Bad.
+}
+
+function skip_over_nested_constructs_1() {
+	$b = function () {
+		check_ajax_referer( 'something' ); // Nonce check is not in the same function scope.
+	};
+
+	do_something( $_POST['abc'] ); // Bad.
+}
+
+function skip_over_nested_constructs_2() {
+	if ( $_POST['abc'] === 'test' ) { // Bad.
+		return;
+	}
+
+	$b = new class() {
+		public function named() {
+			check_ajax_referer( 'something' ); // Nonce check is not in the same function scope.
+		}
+	};
+}
+
+// Issue #1506
+function allow_for_compare_before_noncecheck() {
+	if (
+		'newsletter_sign_up' === $_POST['action'] && // OK.
+		wp_verify_nonce( $_POST['newsletter_nonce'] )
+	) {}
+}
+
+// Issue #1114
+function allow_for_nonce_check_within_switch() {
+	if ( ! isset( $_REQUEST['action'] ) ) {
+		return;
+	}
+
+	switch ( $_REQUEST['action'] ) { // OK.
+		case 'foo':
+			check_admin_referer( 'foo' );
+			break;
+		case 'bar':
+			check_admin_referer( 'bar' );
+			break;
+	}
+}
+
+function allow_for_array_compare_before_noncecheck() {
+	if ( array_search( array( 'subscribe', 'unsubscribe', $_POST['action'], true ) // OK.
+		&& wp_verify_nonce( $_POST['newsletter_nonce'] )
+	) {}
+}
+
+function allow_for_array_comparison_in_condition() {
+	if ( in_array( $_GET['action'], $valid_actions, true ) ) { // OK.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
+
+// Issue #572.
+function allow_for_unslash_before_noncecheck_but_demand_noncecheck() {
+	$var = wp_unslash( $_POST['foo'] ); // Bad.
+	echo $var;
+}
+
+function allow_for_unslash_before_noncecheck() {
+	$var = stripslashes_from_strings_only( $_POST['foo'] ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}
+
+function allow_for_unslash_in_sanitization() {
+	$var = sanitize_text_field( wp_unslash( $_POST['foo'] ) ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}
+
+function dont_allow_bypass_nonce_via_sanitization() {
+	$var = sanitize_text_field( $_POST['foo'] ); // Bad.
+	echo $var;
+}
+
+function dont_allow_bypass_nonce_via_sanitization() {
+	$var = sanitize_text_field( $_POST['foo'] ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}
+
+// Issue #1694
+function function_containing_nested_class() {
+	if ( !class_exists( 'Nested_Class' ) ) {
+		class Nested_Class extends Something {
+			public function method_in_nested_class() {
+				if ( isset( $_POST['my_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' ) ) {
+					if ( isset( $_POST['hello'] ) ) {
+						echo 'world';
+					}
+				}
+			}
+		}
+	}
+}
+
+function function_containing_nested_closure() {
+	$closure = function() {
+		if ( isset( $_POST['my_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' ) ) {
+			if ( isset( $_POST['hello'] ) ) {
+				echo 'world';
+			}
+		}
+	};
+}
+

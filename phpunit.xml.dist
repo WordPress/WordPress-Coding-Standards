@@ -3,7 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
 	backupGlobals="true"
-	bootstrap="./Test/bootstrap.php"
+	bootstrap="./Tests/bootstrap.php"
 	beStrictAboutTestsThatDoNotTestAnything="false"
 	colors="true">
+
+	<testsuites>
+		<testsuite name="WordPress">
+			<directory suffix="UnitTest.php">./WordPress/Tests/</directory>
+		</testsuite>
+	</testsuites>
+
 </phpunit>

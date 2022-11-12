@@ -3,14 +3,14 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Enforces Yoda conditional statements.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.3.0
- * @since   0.12.0 This class now extends WordPress_Sniff.
+ * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class YodaConditionsSniff extends Sniff {
@@ -41,24 +41,23 @@ class YodaConditionsSniff extends Sniff {
 	 */
 	public function register() {
 
-		$starters                       = Tokens::$booleanOperators;
-		$starters                      += Tokens::$assignmentTokens;
-		$starters[ T_CASE ]             = T_CASE;
-		$starters[ T_RETURN ]           = T_RETURN;
-		$starters[ T_INLINE_THEN ]      = T_INLINE_THEN;
-		$starters[ T_INLINE_ELSE ]      = T_INLINE_ELSE;
-		$starters[ T_SEMICOLON ]        = T_SEMICOLON;
-		$starters[ T_OPEN_PARENTHESIS ] = T_OPEN_PARENTHESIS;
+		$starters                        = Tokens::$booleanOperators;
+		$starters                       += Tokens::$assignmentTokens;
+		$starters[ \T_CASE ]             = \T_CASE;
+		$starters[ \T_RETURN ]           = \T_RETURN;
+		$starters[ \T_INLINE_THEN ]      = \T_INLINE_THEN;
+		$starters[ \T_INLINE_ELSE ]      = \T_INLINE_ELSE;
+		$starters[ \T_SEMICOLON ]        = \T_SEMICOLON;
+		$starters[ \T_OPEN_PARENTHESIS ] = \T_OPEN_PARENTHESIS;
 
 		$this->condition_start_tokens = $starters;
 
 		return array(
-			T_IS_EQUAL,
-			T_IS_NOT_EQUAL,
-			T_IS_IDENTICAL,
-			T_IS_NOT_IDENTICAL,
+			\T_IS_EQUAL,
+			\T_IS_NOT_EQUAL,
+			\T_IS_IDENTICAL,
+			\T_IS_NOT_IDENTICAL,
 		);
-
 	}
 
 	/**
@@ -83,15 +82,15 @@ class YodaConditionsSniff extends Sniff {
 			}
 
 			// If this is a variable or array, we've seen all we need to see.
-			if ( T_VARIABLE === $this->tokens[ $i ]['code']
-				|| T_CLOSE_SQUARE_BRACKET === $this->tokens[ $i ]['code']
+			if ( \T_VARIABLE === $this->tokens[ $i ]['code']
+				|| \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $i ]['code']
 			) {
 				$needs_yoda = true;
 				break;
 			}
 
 			// If this is a function call or something, we are OK.
-			if ( T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
+			if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
 				return;
 			}
 		}
@@ -107,21 +106,20 @@ class YodaConditionsSniff extends Sniff {
 			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
 		}
 
-		if ( in_array( $this->tokens[ $next_non_empty ]['code'], array( T_SELF, T_PARENT, T_STATIC ), true ) ) {
+		if ( \in_array( $this->tokens[ $next_non_empty ]['code'], array( \T_SELF, \T_PARENT, \T_STATIC ), true ) ) {
 			$next_non_empty = $this->phpcsFile->findNext(
-				array_merge( Tokens::$emptyTokens, array( T_DOUBLE_COLON ) ),
+				( Tokens::$emptyTokens + array( \T_DOUBLE_COLON => \T_DOUBLE_COLON ) ),
 				( $next_non_empty + 1 ),
 				null,
 				true
 			);
 		}
 
-		if ( T_VARIABLE === $this->tokens[ $next_non_empty ]['code'] ) {
+		if ( \T_VARIABLE === $this->tokens[ $next_non_empty ]['code'] ) {
 			return;
 		}
 
 		$this->phpcsFile->addError( 'Use Yoda Condition checks, you must.', $stackPtr, 'NotYoda' );
+	}
 
-	} // End process().
-
-} // End class.
+}

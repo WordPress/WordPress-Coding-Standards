@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -27,9 +27,13 @@ class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array_fill( 9, 7, 1 );
+		$errors = array_fill( 9, 10, 1 );
 
-	} // End getErrorList().
+		// Unset the lines related to version comments.
+		unset( $errors[16] );
+
+		return $errors;
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -37,8 +41,7 @@ class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
-
+		return array_fill( 24, 1, 1 );
 	}
 
-} // End class.
+}

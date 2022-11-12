@@ -97,7 +97,7 @@ $value = [
 
 $value = [
 	1 => $one,
-	2 => $two, // Comment.
+	2 => $two, // phpcs:ignore Standard.Category.Sniff.Errorcode -- for reason.
 	3 => $three, // Comment.
 ];
 
@@ -137,7 +137,7 @@ $fields = [
 $bad = [ 'key' => 'value' ]; // Bad, spacing around parenthesis.
 $bad = [ 'key' => 'value' ]; // Bad, spacing around parenthesis.
 
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
 
 $bad = [
 'key' => 'value'
@@ -147,4 +147,49 @@ $bad = [
 'key2' => 'value2'
 ]; // Bad.
 
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true
+
+$foo = [
+	'meta_key'   => 'foo', // phpcs:ignore Standard.Category.SniffName.ErrorCode
+	'meta_value' => 'bar', // phpcs:ignore Standard.Category.SniffName.ErrorCode
+];
+
+// Test for fixing array with multi-line comments between values.
+$bad = [
+	'key1' => 'value1', /* comment
+	end */
+'key2' => 'value2', // Bad.
+	/* Non-trailing comment. */
+	'key3' => 'value3', /* comment
+	end */
+	'key4' => 'value4'
+];
+
+/*
+ * Issue #1692: Test distinguishing between short array and short list.
+ *
+ * Note: these short lists should all contain "violations" against the array
+ * declaration sniff if they would be recognized as short array to make sure
+ * they are correctly recognized as short lists.
+ */
+// Empty list, not allowed since PHP 7.0, but not our concern.
+[  ] = $array; // OK.
+[, ,] = $array; // OK.
+
+[$var1, $var2] = $array; // OK.
+
+// Keyed list.
+[$foo => $bar] = $bar; // OK.
+['enabled' => $enabled, 'compression' => $compression] = [
+'enabled' => true,
+'compression' => 'gzip'
+]; // Bad x 1 - only for the short array, not the short list.
+
+// Nested short lists.
+[$var1, , [$var2, $var3,], $var4] = $array; // OK.
+[ 'o' => [[ $one, $two, $three ], [ 'what' => $what ]] ] = $x; // OK.
+
+// Destructuring - multiline.
+[
+	'prop1' => $prop1, 'prop2' => $prop2, // OK.
+] = $some_var;

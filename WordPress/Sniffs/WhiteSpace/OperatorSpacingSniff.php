@@ -3,17 +3,18 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WhiteSpace;
+namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\OperatorSpacingSniff as PHPCS_Squiz_OperatorSpacingSniff;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
- * Verify operator spacing, uses the Squiz sniff, but additionally also sniffs for the `!` (boolean not) operator.
+ * Verify operator spacing, uses the Squiz sniff, but additionally also sniffs for the
+ * `!` (boolean not) and the boolean and logical and/or operators.
  *
  * "Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators."
  *
@@ -31,7 +32,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *                 $ignoreNewlines property.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
- * Last synced with base class June 2017 at commit 41127aa4764536f38f504fb3f7b8831f05919c89.
+ * Last verified with base class July 2020 at commit a957a73e3533353451eb9fd62ee58bd0aba2773c.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php
  */
 class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
@@ -52,12 +53,11 @@ class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
 	 * @return array
 	 */
 	public function register() {
-		$tokens                  = parent::register();
-		$tokens[ T_BOOLEAN_NOT ] = T_BOOLEAN_NOT;
-		$logical_operators       = Tokens::$booleanOperators;
+		$tokens                   = parent::register();
+		$tokens[ \T_BOOLEAN_NOT ] = \T_BOOLEAN_NOT;
+		$tokens                  += Tokens::$booleanOperators;
 
-		// Using array union to auto-dedup.
-		return $tokens + $logical_operators;
+		return $tokens;
 	}
 
-} // End class.
+}

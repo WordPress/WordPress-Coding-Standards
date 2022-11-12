@@ -3,13 +3,14 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use PHPCSUtils\Utils\Namespaces;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Restricts usage of some classes.
@@ -69,18 +70,17 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		return array(
-			T_DOUBLE_COLON,
-			T_NEW,
-			T_EXTENDS,
-			T_IMPLEMENTS,
+			\T_DOUBLE_COLON,
+			\T_NEW,
+			\T_EXTENDS,
+			\T_IMPLEMENTS,
 		);
-
 	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * {@internal Unlike in the `WordPress_AbstractFunctionRestrictionsSniff`,
+	 * {@internal Unlike in the `AbstractFunctionRestrictionsSniff`,
 	 *            we can't do a preliminary check on classes as at this point
 	 *            we don't know the class name yet.}}
 	 *
@@ -119,28 +119,28 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		$token     = $this->tokens[ $stackPtr ];
 		$classname = '';
 
-		if ( in_array( $token['code'], array( T_NEW, T_EXTENDS, T_IMPLEMENTS ), true ) ) {
-			if ( T_NEW === $token['code'] ) {
-				$nameEnd = ( $this->phpcsFile->findNext( array( T_OPEN_PARENTHESIS, T_WHITESPACE, T_SEMICOLON, T_OBJECT_OPERATOR ), ( $stackPtr + 2 ) ) - 1 );
+		if ( \in_array( $token['code'], array( \T_NEW, \T_EXTENDS, \T_IMPLEMENTS ), true ) ) {
+			if ( \T_NEW === $token['code'] ) {
+				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_OBJECT_OPERATOR ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
-				$nameEnd = ( $this->phpcsFile->findNext( array( T_CLOSE_CURLY_BRACKET, T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
+				$nameEnd = ( $this->phpcsFile->findNext( array( \T_CLOSE_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
 			}
 
 			$length    = ( $nameEnd - ( $stackPtr + 1 ) );
 			$classname = $this->phpcsFile->getTokensAsString( ( $stackPtr + 2 ), $length );
 
-			if ( T_NS_SEPARATOR !== $this->tokens[ ( $stackPtr + 2 ) ]['code'] ) {
+			if ( \T_NS_SEPARATOR !== $this->tokens[ ( $stackPtr + 2 ) ]['code'] ) {
 				$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
 			}
 		}
 
-		if ( T_DOUBLE_COLON === $token['code'] ) {
-			$nameEnd   = $this->phpcsFile->findPrevious( T_STRING, ( $stackPtr - 1 ) );
-			$nameStart = ( $this->phpcsFile->findPrevious( array( T_STRING, T_NS_SEPARATOR, T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
+		if ( \T_DOUBLE_COLON === $token['code'] ) {
+			$nameEnd   = $this->phpcsFile->findPrevious( \T_STRING, ( $stackPtr - 1 ) );
+			$nameStart = ( $this->phpcsFile->findPrevious( array( \T_STRING, \T_NS_SEPARATOR, \T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
 			$length    = ( $nameEnd - ( $nameStart - 1 ) );
 			$classname = $this->phpcsFile->getTokensAsString( $nameStart, $length );
 
-			if ( T_NS_SEPARATOR !== $this->tokens[ $nameStart ]['code'] ) {
+			if ( \T_NS_SEPARATOR !== $this->tokens[ $nameStart ]['code'] ) {
 				$classname = $this->get_namespaced_classname( $classname, ( $nameStart - 1 ) );
 			}
 		}
@@ -150,15 +150,14 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 			return false;
 		}
 
-		// Nothing to do if 'parent', 'self' or 'static'.
-		if ( in_array( $classname, array( 'parent', 'self', 'static' ), true ) ) {
+		// Nothing to do if one of the hierarchy keywords - 'parent', 'self' or 'static' - is used.
+		if ( \in_array( $classname, array( 'parent', 'self', 'static' ), true ) ) {
 			return false;
 		}
 
 		$this->classname = $classname;
 		return true;
-
-	} // End is_targetted_token().
+	}
 
 	/**
 	 * Verify if the current token is one of the targetted classes.
@@ -189,8 +188,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		return min( $skip_to );
-
-	} // End is_targetted_token().
+	}
 
 	/**
 	 * Prepare the class name for use in a regular expression.
@@ -227,12 +225,12 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 			$classname = substr( $classname, 10 );
 		}
 
-		$namespace_keyword = $this->phpcsFile->findPrevious( T_NAMESPACE, $search_from );
+		$namespace_keyword = $this->phpcsFile->findPrevious( \T_NAMESPACE, $search_from );
 		if ( false === $namespace_keyword ) {
 			// No namespace keyword found at all, so global namespace.
 			$classname = '\\' . $classname;
 		} else {
-			$namespace = $this->determine_namespace( $search_from );
+			$namespace = Namespaces::determineNamespace( $this->phpcsFile, $search_from );
 
 			if ( ! empty( $namespace ) ) {
 				$classname = '\\' . $namespace . '\\' . $classname;
@@ -245,4 +243,4 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		return $classname;
 	}
 
-} // End class.
+}

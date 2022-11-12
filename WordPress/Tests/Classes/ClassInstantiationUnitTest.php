@@ -3,13 +3,14 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Classes;
+namespace WordPressCS\WordPress\Tests\Classes;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the ClassInstantiation sniff.
@@ -28,6 +29,9 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList( $testFile = '' ) {
+
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
 
 		switch ( $testFile ) {
 			case 'ClassInstantiationUnitTest.inc':
@@ -61,14 +65,13 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 
 			case 'ClassInstantiationUnitTest.js':
 				return array(
-					2 => 1,
-					3 => 1,
-					4 => 1,
+					2 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					3 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					4 => ( true === $is_phpcs_4 ? 0 : 1 ),
 				);
 
 			default:
 				return array();
-
 		}
 	}
 
@@ -79,7 +82,6 @@ class ClassInstantiationUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

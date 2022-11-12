@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayIndentation tabIndent false
+// phpcs:set WordPress.Arrays.ArrayIndentation tabIndent false
 $ok = array(
     'value',
     123,
@@ -400,4 +400,47 @@ b(
     ]
 );
 
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayIndentation tabIndent true
+            $a = array(
+                'post_type'    => 'post',
+                'post_content' => '
+Page 1/5
+<!--nextpage-->
+Page 2/3
+<!--nextpage-->
+Page 3/3
+',
+            );
+
+// Upstream issue #2060 - multi-line trailing comment.
+$NP = array(
+        'replacemaps' => array(
+                0x41 => array( 0x61 ),
+                0x33C1  => array( 0x6D, 0x3C9 ), /*
+                ,0x33C2  => array(0x61, 0x2E, 0x6D, 0x2E) */
+                0x33C3  => array( 0x62, 0x71 ),
+                ),
+);
+
+$my_array = [
+    'something' =>
+    apply_filters( '...', true ),// A
+// Multi-line inline comment about something...
+// B
+    'something_else',
+];
+
+/*
+ * Issue #1692: Test distinguishing between short array and short list.
+ */
+[
+'prop1' => $prop1,
+            'prop2' => $prop2,
+] = $some_var;
+
+// Fixer conflict prevention.
+$bad = array(
+    'key1' => 'value1', /* comment
+    end */ 'key2' => 'value2',
+);
+
+// phpcs:set WordPress.Arrays.ArrayIndentation tabIndent true

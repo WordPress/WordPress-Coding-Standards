@@ -3,15 +3,17 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
-use WordPress\PHPCSHelper;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Enforces WordPress array indentation for multi-line arrays.
@@ -59,7 +61,6 @@ class ArrayIndentationSniff extends Sniff {
 	 */
 	private $ignore_tokens = array();
 
-
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
@@ -72,12 +73,12 @@ class ArrayIndentationSniff extends Sniff {
 		 * Existing heredoc, nowdoc and inline HTML indentation should be respected at all times.
 		 */
 		$this->ignore_tokens = Tokens::$heredocTokens;
-		unset( $this->ignore_tokens[ T_START_HEREDOC ], $this->ignore_tokens[ T_START_NOWDOC ] );
-		$this->ignore_tokens[ T_INLINE_HTML ] = T_INLINE_HTML;
+		unset( $this->ignore_tokens[ \T_START_HEREDOC ], $this->ignore_tokens[ \T_START_NOWDOC ] );
+		$this->ignore_tokens[ \T_INLINE_HTML ] = \T_INLINE_HTML;
 
 		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
+			\T_ARRAY,
+			\T_OPEN_SHORT_ARRAY,
 		);
 	}
 
@@ -86,17 +87,25 @@ class ArrayIndentationSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->tab_width ) ) {
-			$this->tab_width = PHPCSHelper::get_tab_width( $this->phpcsFile );
+			$this->tab_width = Helper::getTabWidth( $this->phpcsFile );
+		}
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
+		) {
+			// Short list, not short array.
+			return;
 		}
 
 		/*
 		 * Determine the array opener & closer.
 		 */
-		$array_open_close = $this->find_array_open_close( $stackPtr );
+		$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $array_open_close ) {
 			// Array open/close could not be determined.
 			return;
@@ -126,7 +135,7 @@ class ArrayIndentationSniff extends Sniff {
 			 * nothing or only indentation whitespace before it.
 			 */
 			if ( 0 === $closer_line_spaces
-				|| ( T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
+				|| ( \T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
 					&& 1 === $this->tokens[ ( $closer - 1 ) ]['column'] )
 			) {
 				$this->add_array_alignment_error(
@@ -158,7 +167,7 @@ class ArrayIndentationSniff extends Sniff {
 		/*
 		 * Verify & correct the array item indentation.
 		 */
-		$array_items = $this->get_function_call_parameters( $stackPtr );
+		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		if ( empty( $array_items ) ) {
 			// Strange, no array items found.
 			return;
@@ -173,7 +182,7 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Find the line on which the item starts.
 			$first_content = $this->phpcsFile->findNext(
-				array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+				array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 				$item['start'],
 				$end_of_this_item,
 				true
@@ -181,11 +190,11 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Deal with trailing comments.
 			if ( false !== $first_content
-				&& T_COMMENT === $this->tokens[ $first_content ]['code']
+				&& \T_COMMENT === $this->tokens[ $first_content ]['code']
 				&& $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
 			) {
 				$first_content = $this->phpcsFile->findNext(
-					array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+					array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE, \T_COMMENT ),
 					( $first_content + 1 ),
 					$end_of_this_item,
 					true
@@ -199,11 +208,20 @@ class ArrayIndentationSniff extends Sniff {
 
 			// Bow out from reporting and fixing mixed multi-line/single-line arrays.
 			// That is handled by the ArrayDeclarationSpacingSniff.
-			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line']
-				|| ( 1 !== $this->tokens[ $first_content ]['column']
-					&& T_WHITESPACE !== $this->tokens[ ( $first_content - 1 ) ]['code'] )
-			) {
+			if ( $this->tokens[ $first_content ]['line'] === $this->tokens[ $end_of_previous_item ]['line'] ) {
 				return $closer;
+			}
+
+			// Ignore this item if there is anything but whitespace before the start of the next item.
+			if ( 1 !== $this->tokens[ $first_content ]['column'] ) {
+				// Go to the start of the line.
+				$i = $first_content;
+				while ( 1 !== $this->tokens[ --$i ]['column'] );
+
+				if ( \T_WHITESPACE !== $this->tokens[ $i ]['code'] ) {
+					$end_of_previous_item = $end_of_this_item;
+					continue;
+				}
 			}
 
 			$found_spaces = ( $this->tokens[ $first_content ]['column'] - 1 );
@@ -248,7 +266,7 @@ class ArrayIndentationSniff extends Sniff {
 			}
 
 			$first_content_on_line2 = $this->phpcsFile->findNext(
-				array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+				array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 				$ptr,
 				$end_of_this_item,
 				true
@@ -262,7 +280,7 @@ class ArrayIndentationSniff extends Sniff {
 				 * so check its placement.
 				 */
 				if ( $this->tokens[ $item['end'] ]['line'] !== $this->tokens[ $end_of_this_item ]['line']
-					&& T_COMMA === $this->tokens[ $end_of_this_item ]['code']
+					&& \T_COMMA === $this->tokens[ $end_of_this_item ]['code']
 					&& ( $this->tokens[ $end_of_this_item ]['column'] - 1 ) !== $expected_spaces
 				) {
 					$this->add_array_alignment_error(
@@ -305,7 +323,7 @@ class ArrayIndentationSniff extends Sniff {
 
 					// Fix second line for the array item.
 					if ( 1 === $this->tokens[ $first_content_on_line2 ]['column']
-						&& T_COMMENT === $this->tokens[ $first_content_on_line2 ]['code']
+						&& \T_COMMENT === $this->tokens[ $first_content_on_line2 ]['code']
 					) {
 						$actual_comment = ltrim( $this->tokens[ $first_content_on_line2 ]['content'] );
 						$replacement    = $expected_indent_on_line2 . $actual_comment;
@@ -328,7 +346,7 @@ class ArrayIndentationSniff extends Sniff {
 						}
 
 						$first_content_on_line = $this->phpcsFile->findNext(
-							array( T_WHITESPACE, T_DOC_COMMENT_WHITESPACE ),
+							array( \T_WHITESPACE, \T_DOC_COMMENT_WHITESPACE ),
 							$i,
 							$end_of_this_item,
 							true
@@ -351,7 +369,7 @@ class ArrayIndentationSniff extends Sniff {
 
 						if ( $found_spaces_on_line !== $expected_spaces_on_line ) {
 							if ( 1 === $this->tokens[ $first_content_on_line ]['column']
-								&& T_COMMENT === $this->tokens[ $first_content_on_line ]['code']
+								&& \T_COMMENT === $this->tokens[ $first_content_on_line ]['code']
 							) {
 								$actual_comment = ltrim( $this->tokens[ $first_content_on_line ]['content'] );
 								$replacement    = $expected_indent_on_line . $actual_comment;
@@ -371,7 +389,7 @@ class ArrayIndentationSniff extends Sniff {
 					 * Check the placement of the comma after the array item as it might be on a line by itself.
 					 */
 					if ( $this->tokens[ $item['end'] ]['line'] !== $this->tokens[ $end_of_this_item ]['line']
-						&& T_COMMA === $this->tokens[ $end_of_this_item ]['code']
+						&& \T_COMMA === $this->tokens[ $end_of_this_item ]['code']
 						&& ( $this->tokens[ $end_of_this_item ]['column'] - 1 ) !== $expected_spaces
 					) {
 						$this->add_array_alignment_error(
@@ -390,9 +408,7 @@ class ArrayIndentationSniff extends Sniff {
 
 			$end_of_previous_item = $end_of_this_item;
 		}
-
-	} // End process_token().
-
+	}
 
 	/**
 	 * Should the token be ignored ?
@@ -411,13 +427,26 @@ class ArrayIndentationSniff extends Sniff {
 			return true;
 		}
 
-		// If it's a subsequent line of a multi-line sting, it will not start with a quote character.
-		if ( ( T_CONSTANT_ENCAPSED_STRING === $token_code
-			|| T_DOUBLE_QUOTED_STRING === $token_code )
-			&& "'" !== $this->tokens[ $ptr ]['content'][0]
-			&& '"' !== $this->tokens[ $ptr ]['content'][0]
+		/*
+		 * If it's a subsequent line of a multi-line sting, it will not start with a quote
+		 * character, nor just *be* a quote character.
+		 */
+		if ( \T_CONSTANT_ENCAPSED_STRING === $token_code
+			|| \T_DOUBLE_QUOTED_STRING === $token_code
 		) {
-			return true;
+			// Deal with closing quote of a multi-line string being on its own line.
+			if ( "'" === $this->tokens[ $ptr ]['content']
+				|| '"' === $this->tokens[ $ptr ]['content']
+			) {
+				return true;
+			}
+
+			// Deal with subsequent lines of a multi-line string where the token is broken up per line.
+			if ( "'" !== $this->tokens[ $ptr ]['content'][0]
+				&& '"' !== $this->tokens[ $ptr ]['content'][0]
+			) {
+				return true;
+			}
 		}
 
 		return false;
@@ -441,8 +470,8 @@ class ArrayIndentationSniff extends Sniff {
 
 		$whitespace = '';
 
-		if ( T_WHITESPACE === $this->tokens[ $ptr ]['code']
-			|| T_DOC_COMMENT_WHITESPACE === $this->tokens[ $ptr ]['code']
+		if ( \T_WHITESPACE === $this->tokens[ $ptr ]['code']
+			|| \T_DOC_COMMENT_WHITESPACE === $this->tokens[ $ptr ]['code']
 		) {
 			return $this->tokens[ $ptr ]['length'];
 		}
@@ -454,13 +483,13 @@ class ArrayIndentationSniff extends Sniff {
 		 * First/Single line is tokenized as T_WHITESPACE + T_COMMENT
 		 * Subsequent lines are tokenized as T_COMMENT including the indentation whitespace.
 		 */
-		if ( T_COMMENT === $this->tokens[ $ptr ]['code'] ) {
+		if ( \T_COMMENT === $this->tokens[ $ptr ]['code'] ) {
 			$content        = $this->tokens[ $ptr ]['content'];
 			$actual_comment = ltrim( $content );
 			$whitespace     = str_replace( $actual_comment, '', $content );
 		}
 
-		return strlen( $whitespace );
+		return \strlen( $whitespace );
 	}
 
 	/**
@@ -521,4 +550,4 @@ class ArrayIndentationSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

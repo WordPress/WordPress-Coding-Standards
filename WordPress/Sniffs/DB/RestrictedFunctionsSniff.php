@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\DB;
+namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Verifies that no database related PHP functions are used.
@@ -56,12 +56,11 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'mysqlnd_memcache_*',
 					'maxdb_*',
 				),
-				'whitelist' => array(
+				'allow'     => array(
 					'mysql_to_rfc3339' => true,
 				),
 			),
-
 		);
 	}
 
-} // End class.
+}

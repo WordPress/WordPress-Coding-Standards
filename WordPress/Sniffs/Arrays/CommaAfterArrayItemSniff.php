@@ -3,14 +3,16 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\Arrays;
+namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use WordPressCS\WordPress\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Enforces a comma after each array item and the spacing around it.
@@ -38,8 +40,8 @@ class CommaAfterArrayItemSniff extends Sniff {
 	 */
 	public function register() {
 		return array(
-			T_ARRAY,
-			T_OPEN_SHORT_ARRAY,
+			\T_ARRAY,
+			\T_OPEN_SHORT_ARRAY,
 		);
 	}
 
@@ -51,10 +53,18 @@ class CommaAfterArrayItemSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
+
+		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
+		) {
+			// Short list, not short array.
+			return;
+		}
+
 		/*
 		 * Determine the array opener & closer.
 		 */
-		$array_open_close = $this->find_array_open_close( $stackPtr );
+		$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $array_open_close ) {
 			// Array open/close could not be determined.
 			return;
@@ -74,19 +84,19 @@ class CommaAfterArrayItemSniff extends Sniff {
 			$single_line = false;
 		}
 
-		$array_items = $this->get_function_call_parameters( $stackPtr );
+		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 		if ( empty( $array_items ) ) {
 			// Strange, no array items found.
 			return;
 		}
 
-		$array_item_count = count( $array_items );
+		$array_item_count = \count( $array_items );
 
 		// Note: $item_index is 1-based and the array items are split on the commas!
 		foreach ( $array_items as $item_index => $item ) {
 			$maybe_comma = ( $item['end'] + 1 );
 			$is_comma    = false;
-			if ( isset( $this->tokens[ $maybe_comma ] ) && T_COMMA === $this->tokens[ $maybe_comma ]['code'] ) {
+			if ( isset( $this->tokens[ $maybe_comma ] ) && \T_COMMA === $this->tokens[ $maybe_comma ]['code'] ) {
 				$is_comma = true;
 			}
 
@@ -94,6 +104,12 @@ class CommaAfterArrayItemSniff extends Sniff {
 			 * Check if this is a comma at the end of the last item in a single line array.
 			 */
 			if ( true === $single_line && $item_index === $array_item_count ) {
+
+				$this->phpcsFile->recordMetric(
+					$stackPtr,
+					'Single line array - comma after last item',
+					( true === $is_comma ? 'yes' : 'no' )
+				);
 
 				if ( true === $is_comma ) {
 					$fix = $this->phpcsFile->addFixableError(
@@ -145,6 +161,14 @@ class CommaAfterArrayItemSniff extends Sniff {
 				}
 			}
 
+			if ( false === $single_line && $item_index === $array_item_count ) {
+				$this->phpcsFile->recordMetric(
+					$stackPtr,
+					'Multi-line array - comma after last item',
+					( true === $is_comma ? 'yes' : 'no' )
+				);
+			}
+
 			if ( false === $is_comma ) {
 				// Can't check spacing around the comma if there is no comma.
 				continue;
@@ -162,13 +186,15 @@ class CommaAfterArrayItemSniff extends Sniff {
 				$spaces   = 0;
 				for ( $i = $item['end']; $i > $last_content; $i-- ) {
 
-					if ( T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
+					if ( \T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
 						if ( $this->tokens[ $i ]['content'] === $this->phpcsFile->eolChar ) {
 							$newlines++;
 						} else {
 							$spaces += $this->tokens[ $i ]['length'];
 						}
-					} elseif ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+					} elseif ( \T_COMMENT === $this->tokens[ $i ]['code']
+						|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $i ]['code'] ] )
+					) {
 						break;
 					}
 				}
@@ -196,10 +222,12 @@ class CommaAfterArrayItemSniff extends Sniff {
 					$this->phpcsFile->fixer->beginChangeset();
 					for ( $i = $item['end']; $i > $last_content; $i-- ) {
 
-						if ( T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
+						if ( \T_WHITESPACE === $this->tokens[ $i ]['code'] ) {
 							$this->phpcsFile->fixer->replaceToken( $i, '' );
 
-						} elseif ( T_COMMENT === $this->tokens[ $i ]['code'] ) {
+						} elseif ( \T_COMMENT === $this->tokens[ $i ]['code']
+							|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $i ]['code'] ] )
+						) {
 							// We need to move the comma to before the comment.
 							$this->phpcsFile->fixer->addContent( $last_content, ',' );
 							$this->phpcsFile->fixer->replaceToken( $maybe_comma, '' );
@@ -227,14 +255,14 @@ class CommaAfterArrayItemSniff extends Sniff {
 			 */
 			$next_token = $this->tokens[ ( $maybe_comma + 1 ) ];
 
-			if ( T_WHITESPACE === $next_token['code'] ) {
+			if ( \T_WHITESPACE === $next_token['code'] ) {
 
 				if ( false === $single_line && $this->phpcsFile->eolChar === $next_token['content'] ) {
 					continue;
 				}
 
 				$next_non_whitespace = $this->phpcsFile->findNext(
-					T_WHITESPACE,
+					\T_WHITESPACE,
 					( $maybe_comma + 1 ),
 					$closer,
 					true
@@ -243,7 +271,8 @@ class CommaAfterArrayItemSniff extends Sniff {
 				if ( false === $next_non_whitespace
 					|| ( false === $single_line
 						&& $this->tokens[ $next_non_whitespace ]['line'] === $this->tokens[ $maybe_comma ]['line']
-						&& T_COMMENT === $this->tokens[ $next_non_whitespace ]['code'] )
+						&& ( \T_COMMENT === $this->tokens[ $next_non_whitespace ]['code']
+							|| isset( Tokens::$phpcsCommentTokens[ $this->tokens[ $next_non_whitespace ]['code'] ] ) ) )
 				) {
 					continue;
 				}
@@ -283,4 +312,4 @@ class CommaAfterArrayItemSniff extends Sniff {
 		}
 	}
 
-} // End class.
+}

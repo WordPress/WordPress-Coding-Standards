@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Security;
+namespace WordPressCS\WordPress\Tests\Security;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `VIP` category to the `Security` category.
+ * @since   1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  */
 class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 
@@ -35,6 +35,7 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			20  => 1,
 			33  => 3,
 			65  => 1,
+			76  => 2, // Old-style WPCS ignore comments are no longer supported.
 			79  => 1,
 			80  => 1,
 			81  => 1,
@@ -54,8 +55,35 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			138 => 1,
 			150 => 2,
 			160 => 2,
+			164 => 2,
+			189 => 1,
+			202 => 1,
+			206 => 1,
+			210 => 1,
+			216 => 1,
+			217 => 1,
+			238 => 1,
+			242 => 1,
+			245 => 1,
+			251 => 1,
+			257 => 1,
+			266 => 1,
+			277 => 1,
+			290 => 2,
+			300 => 1,
+			305 => 2,
+			306 => 2,
+			307 => 2,
+			309 => 2,
+			310 => 2,
+			311 => 2,
+			315 => 2,
+			317 => 1,
+			323 => 1,
+			338 => 1,
+			342 => 3,
+			345 => 3,
 		);
-
 	}
 
 	/**
@@ -65,7 +93,6 @@ class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

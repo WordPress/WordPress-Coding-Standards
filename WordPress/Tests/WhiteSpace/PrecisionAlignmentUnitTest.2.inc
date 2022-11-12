@@ -1,4 +1,4 @@
-@codingStandardsChangeSetting WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens T_COMMENT,T_DOC_COMMENT_WHITESPACE,T_INLINE_HTML,T_FUNCTION
+phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[] T_COMMENT,T_DOC_COMMENT_WHITESPACE,T_INLINE_HTML,T_FUNCTION
 
 <?php
 
@@ -19,26 +19,26 @@
 	/**
 	 * OK: Doc comments are indented with tabs and one space.
 	 *
-	  * @var string  <= Bad.
+	  * @var string  <= Bad, but not reported as token type is ignored.
 	 * @access private
 	 */
 
 	/*
 	 * OK: Multi-line comments are indented with tabs and one space.
 	 *
-	   * <= Bad.
+	   * <= Bad, but not reported as token type is ignored
 	 */
 
-	 function exampleFunctionD() {} // Bad: [tab][space].
-	  function exampleFunctionE() {} // Bad: [tab][space][space].
-	   function exampleFunctionF() {} // Bad: [tab][space][space][space].
+	 function exampleFunctionD() {} // Bad, but not reported as token type is ignored.
+	  function exampleFunctionE() {} // Bad, but not reported as token type is ignored.
+	   function exampleFunctionF() {} // Bad, but not reported as token type is ignored.
 
 ?>
 
 	<p>
-	  Bad: Some text with precision alignment.
+	  Bad: Some text with precision alignment, but not reported as token type is ignored.
 	</p>
 
 <?php
 
-// @codingStandardsChangeSetting WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens T_NONE
+// phpcs:set WordPress.WhiteSpace.PrecisionAlignment ignoreAlignmentTokens[]

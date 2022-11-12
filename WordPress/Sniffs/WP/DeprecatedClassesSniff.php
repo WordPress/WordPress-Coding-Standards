@@ -3,13 +3,15 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractClassRestrictionsSniff;
+use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Restricts the use of deprecated WordPress classes and suggests alternatives.
@@ -28,9 +30,11 @@ use WordPress\AbstractClassRestrictionsSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * List of deprecated classes with alternative when available.
@@ -48,6 +52,20 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			'alt'     => 'WP_User_Query',
 			'version' => '3.1.0',
 		),
+
+		// WP 4.9.0.
+		'Customize_New_Menu_Section' => array(
+			'version' => '4.9.0',
+		),
+		'WP_Customize_New_Menu_Control' => array(
+			'version' => '4.9.0',
+		),
+
+		// WP 5.3.0.
+		'Services_JSON' => array(
+			'alt'     => 'The PHP native JSON extension',
+			'version' => '5.3.0',
+		),
 	);
 
 
@@ -58,31 +76,28 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$keys                     = array_keys( $this->deprecated_classes );
-		$keys                     = array_map( 'strtolower', $keys );
-		$this->deprecated_classes = array_combine( $keys, $this->deprecated_classes );
+		$this->deprecated_classes = array_change_key_case( $this->deprecated_classes, \CASE_LOWER );
 
 		return array(
 			'deprecated_classes' => array(
-				'classes' => $keys,
+				'classes' => array_keys( $this->deprecated_classes ),
 			),
 		);
-
-	} // End getGroups().
+	}
 
 	/**
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
-	 *                                always be 'deprecated_functions'.
+	 * @param string $group_name      The name of the group which was matched. Will
+	 *                                always be 'deprecated_classes'.
 	 * @param string $matched_content The token content (class name) which was matched.
 	 *
 	 * @return void
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->get_wp_version_from_cl();
+		$this->get_wp_version_from_cli( $this->phpcsFile );
 
 		$class_name = ltrim( strtolower( $matched_content ), '\\' );
 
@@ -97,14 +112,14 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			$data[]   = $this->deprecated_classes[ $class_name ]['alt'];
 		}
 
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$message,
 			$stackPtr,
 			( version_compare( $this->deprecated_classes[ $class_name ]['version'], $this->minimum_supported_version, '<' ) ),
-			$this->string_to_errorcode( $matched_content . 'Found' ),
+			MessageHelper::stringToErrorcode( $class_name . 'Found' ),
 			$data
 		);
+	}
 
-	} // End process_matched_token().
-
-} // End class.
+}

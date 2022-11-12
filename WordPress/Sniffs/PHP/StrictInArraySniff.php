@@ -3,26 +3,27 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.
  *
- * @link    https://vip.wordpress.com/documentation/code-review-what-we-look-for/#using-in_array-without-strict-parameter
+ * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#using-in_array-without-strict-parameter
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.9.0
- * @since   0.10.0 This sniff not only checks for `in_array()`, but also `array_search()` and `array_keys()`.
- *                 The sniff no longer needlessly extends the WordPress_Sniffs_Arrays_ArrayAssignmentRestrictionsSniff
- *                 which it didn't use.
- * @since   0.11.0 Refactored to extend the new WordPress_AbstractFunctionParameterSniff.
+ * @since   0.10.0 - This sniff not only checks for `in_array()`, but also `array_search()`
+ *                   and `array_keys()`.
+ *                 - The sniff no longer needlessly extends the `ArrayAssignmentRestrictionsSniff`
+ *                   class which it didn't use.
+ * @since   0.11.0 Refactored to extend the new WordPressCS native `AbstractFunctionParameterSniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
 class StrictInArraySniff extends AbstractFunctionParameterSniff {
@@ -65,7 +66,7 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	 * @since 0.11.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
@@ -74,7 +75,7 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 		// Check if the strict check is actually needed.
 		if ( false === $this->target_functions[ $matched_content ] ) {
-			if ( count( $parameters ) === 1 ) {
+			if ( \count( $parameters ) === 1 ) {
 				return;
 			}
 		}
@@ -101,19 +102,4 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 		}
 	}
 
-	/**
-	 * Process the function if no parameters were found.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
-	 *
-	 * @return void
-	 */
-	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {
-		$this->phpcsFile->addError( 'Missing arguments to %s.', $stackPtr, 'MissingArguments', array( $matched_content ) );
-	}
-
-} // End class.
+}

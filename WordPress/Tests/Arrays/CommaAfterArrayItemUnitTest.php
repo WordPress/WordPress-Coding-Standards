@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Arrays;
+namespace WordPressCS\WordPress\Tests\Arrays;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -62,6 +62,19 @@ class CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
 			128 => 1,
 			135 => 1,
 			140 => 1,
+			160 => 1,
+			162 => 2,
+			164 => 1,
+			166 => 1,
+			168 => 1,
+			174 => 1,
+			175 => 2,
+			179 => 1,
+			180 => 2,
+			184 => 2,
+			185 => 2,
+			190 => 1,
+			203 => 1,
 		);
 	}
 
@@ -72,7 +85,6 @@ class CommaAfterArrayItemUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

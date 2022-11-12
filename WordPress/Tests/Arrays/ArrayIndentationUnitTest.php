@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Arrays;
+namespace WordPressCS\WordPress\Tests\Arrays;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -29,27 +29,7 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 	private $tab_width = 4;
 
 	/**
-	 * Get a list of CLI values to set before the file is tested.
-	 *
-	 * Used by PHPCS 2.x.
-	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
-	 * @return array
-	 */
-	public function getCliValues( $testFile ) {
-		// Tab width setting is only needed for the tabbed file.
-		if ( 'ArrayIndentationUnitTest.1.inc' === $testFile ) {
-			return array( '--tab-width=' . $this->tab_width );
-		}
-
-		return array();
-	}
-
-	/**
 	 * Set CLI values before the file is tested.
-	 *
-	 * Used by PHPCS 3.x.
 	 *
 	 * @param string                  $testFile The name of the file being tested.
 	 * @param \PHP_CodeSniffer\Config $config   The config data for the test run.
@@ -64,7 +44,6 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 			$config->tabWidth = 0;
 		}
 	}
-
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -164,6 +143,11 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 			369 => 1,
 			398 => 1,
 			399 => 1,
+			416 => 1,
+			417 => 2,
+			418 => 1,
+			420 => 1,
+			421 => 1,
 		);
 	}
 
@@ -174,7 +158,6 @@ class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

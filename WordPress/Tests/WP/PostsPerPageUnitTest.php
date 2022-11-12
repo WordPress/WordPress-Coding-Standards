@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been split into two, with the check for high pagination
+ * @since   1.0.0  This sniff has been split into two, with the check for high pagination
  *                 limit being part of the WP category, and the check for pagination
  *                 disabling being part of the VIP category.
  */
@@ -49,7 +49,6 @@ class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 			24 => 1,
 			29 => 1,
 		);
-
 	}
 
-} // End class.
+}

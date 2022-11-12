@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Security;
+namespace WordPressCS\WordPress\Tests\Security;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.5.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `CSRF` category to the `Security` category.
+ * @since   1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
  */
 class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 
@@ -36,6 +36,7 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			44  => 1,
 			48  => 1,
 			69  => 1,
+			88  => 1, // Old-style WPCS ignore comments are no longer supported.
 			89  => 1,
 			113 => 1,
 			114 => 1,
@@ -46,6 +47,13 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			159 => 1,
 			160 => 1,
 			161 => 1,
+			177 => 1,
+			185 => 1,
+			190 => 1,
+			198 => 1,
+			202 => 1,
+			252 => 1,
+			269 => 1,
 		);
 	}
 
@@ -56,7 +64,6 @@ class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

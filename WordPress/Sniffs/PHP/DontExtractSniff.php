@@ -3,13 +3,13 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\PHP;
+namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Restricts the usage of extract().
@@ -18,9 +18,10 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.10.0 Previously this check was contained within WordPress_Sniffs_VIP_RestrictedFunctionsSniff.
+ * @since   0.10.0 Previously this check was contained within the
+ *                 `WordPress.VIP.RestrictedFunctions` sniff.
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `Functions` category to the `PHP` category.
+ * @since   1.0.0  This sniff has been moved from the `Functions` category to the `PHP` category.
  */
 class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
 
@@ -49,6 +50,6 @@ class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
 			),
 
 		);
-	} // End getGroups().
+	}
 
-} // End class.
+}

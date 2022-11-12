@@ -1,0 +1,164 @@
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] twentyeleven */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain twentyten */
+
+/*
+Theme Name: Correct text domain.
+Theme URI: https://wordpress.org/themes/twentyten/
+Description: The 2010 theme for WordPress is stylish, customizable, simple, and readable -- make it yours with a custom menu, header image, and background. Twenty Ten supports six widgetized areas (two in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes stylesheets for print and the admin Visual Editor, special styles for posts in the "Asides" and "Gallery" categories, and has an optional one-column page template that removes the sidebar.
+Author: the WordPress team
+Author URI: https://wordpress.org/
+Version: 2.5
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: blog, two-columns, custom-header, custom-background, threaded-comments, sticky-post, translation-ready, microformats, rtl-language-support, editor-style, custom-menu, flexible-header, featured-images, footer-widgets, featured-image-header
+Text Domain: twentyten
+*/
+
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] _s */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain something-else */
+
+/*!
+Theme Name: Text domain which should be fixed and checking that consecutive comments don't get mixed up.
+Theme URI: https://underscores.me/
+Author: Automattic
+Author URI: https://automattic.com/
+Description: Hi. I'm a starter theme called <code>_s</code>, or <em>underscores</em>, if you like. I'm a theme meant for hacking so don't use me as a <em>Parent Theme</em>. Instead try turning me into the next, most awesome, WordPress theme out there. That's what I'm here for.
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: something-else
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+_s is based on Underscores https://underscores.me/, (C) 2012-2017 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+Normalizing styles have been helped along thanks to the fine work of
+Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+*/
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Normalize
+# Typography
+# Elements
+# Forms
+# Navigation
+	## Links
+	## Menus
+# Accessibility
+# Alignments
+# Clearings
+# Widgets
+# Content
+	## Posts and pages
+	## Comments
+# Infinite scroll
+# Media
+	## Captions
+	## Galleries
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+# Normalize
+--------------------------------------------------------------*/
+/* normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+
+/* Document
+	 ========================================================================== */
+
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+html {
+	line-height: 1.15; /* 1 */
+	-webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain twentyseventeen */
+
+/*
+Theme Name: Missing text domain.
+Theme URI: https://wordpress.org/themes/twentyseventeen/
+Author: the WordPress team
+Author URI: https://wordpress.org/
+Description: Twenty Seventeen brings your site to life with header video and immersive featured images. With a focus on business sites, it features multiple sections on the front page as well as widgets, navigation and social menus, a logo, and more. Personalize its asymmetrical grid with a custom color scheme and showcase your multimedia content with post formats. Our default theme for 2017 works great in many languages, for any abilities, and on any device.
+Version: 1.6
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
+Text Domain: twentyseventeen
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+/*
+ * Theme Name	:	Missing text domain, different comment format, tab aligned.
+ * Theme URI	:	https://wordpress.org/themes/twentyseventeen/
+ * Author		:	the WordPress team
+ * Author URI	:	https://wordpress.org/
+ * Description	:	Twenty Seventeen brings your site to life with header video and immersive featured images. With a focus on business sites, it features multiple sections on the front page as well as widgets, navigation and social menus, a logo, and more. Personalize its asymmetrical grid with a custom color scheme and showcase your multimedia content with post formats. Our default theme for 2017 works great in many languages, for any abilities, and on any device.
+ * Version		:	1.6
+ * License		:	GNU General Public License v2 or later
+ * License URI	:	http://www.gnu.org/licenses/gpl-2.0.html
+ * Tags			:	one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
+ * Text Domain			:	twentyseventeen
+ *
+ * This theme, like WordPress, is licensed under the GPL.
+ * Use it to make something cool, have fun, and share what you've learned with others.
+ */
+
+/*
+ * Theme Name: Not the theme header (not enough headers found.
+ */
+
+/*
+Theme Name: Missing text domain. Minimum headers.
+Theme URI: http://protected
+Description: http://thisshouldntbeaurl
+Text Domain: twentyseventeen
+*/
+
+/*
+  Theme Name:       Missing text domain, different comment format, additional non-standard headers.
+  Theme URI:        https://protected
+  Author:           Lacy Morrow
+  Author URI:       http://protected
+  Description:      A Ghost-like WordPress theme. Casper (for WordPress) is a simple yet beautiful theme for bloggers. Inspired by the Ghost blogging platform, Casper is a WordPress port of the default theme by the same name. The goal of this project is to emulate the gorgeous theme while taking advantage of features exclusive to the WordPress framework. There are plenty of customization options included, accessible through the WordPress Customizer. Already included are hooks to serve responsive images appropriately and media queries to provide a fast and seamless experience from desktop to mobile. For questions, support, development instructions, or to contribute to the project visit [https://github.com/lacymorrow/casper]
+  Version:          1.1.5
+  License:          GNU General Public License v2.0
+  License URI:      http://www.gnu.org/licenses/gpl-2.0.html
+  Domain Path:      /languages/
+  Tags:             responsive-layout, black, white, one-column, fluid-layout, custom-header, custom-menu, editor-style
+  Text Domain:             twentyseventeen
+  GitHub Theme URI: https://github.com/protected
+  GitHub Branch:    master
+  Casper is based on Underscores http://underscores.me/, (C) 2012-2014 Automattic, Inc.
+*/
+
+/**
+ * Theme Name: Missing text domain. Docblock format.
+ * Theme URI: https://github.com/WordPress/twentynineteen
+ * Author: the WordPress team
+ * Author URI: https://wordpress.org/
+ * Description: A new Gutenberg-ready theme.
+ * Requires at least: WordPress 4.9.6
+ * Version: 1.0
+ * License: GNU General Public License v2 or later
+ * License URI: LICENSE
+ * Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+ * Text Domain: twentyseventeen
+ * This theme, like WordPress, is licensed under the GPL.
+ * Use it to make something cool, have fun, and share what you've learned with others.
+ * Twenty Nineteen is based on Underscores https://underscores.me/, (C) 2012-2018 Automattic, Inc.
+ * Underscores is distributed under the terms of the GNU GPL v2 or later.
+ * Normalizing styles have been helped along thanks to the fine work of
+ * Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+ */
+
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[] */
+/* phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false */

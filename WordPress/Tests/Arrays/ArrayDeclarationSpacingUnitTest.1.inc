@@ -76,7 +76,7 @@ $value = array(
 
 $value = array(
 	1 => $one,
-	2 => $two, // Comment.
+	2 => $two, // phpcs:ignore Standard.Category.Sniff.Errorcode -- for reason.
 	3 => $three, // Comment.
 );
 
@@ -103,9 +103,24 @@ $fields = array(
 $bad = array('key' => 'value'); // Bad, spacing around parenthesis.
 $bad = array(     'key' => 'value'     ); // Bad, spacing around parenthesis.
 
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
 
 $bad = array( 'key' => 'value' ); // Bad.
 $bad = array( 'key1' => 'value1', 'key2' => 'value2' ); // Bad.
 
-// @codingStandardsChangeSetting WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true
+
+$foo = array(
+	'meta_key'   => 'foo', // phpcs:ignore Standard.Category.SniffName.ErrorCode
+	'meta_value' => 'bar', // phpcs:ignore Standard.Category.SniffName.ErrorCode
+);
+
+// Test for fixing array with multi-line comments between values.
+$bad = array(
+	'key1' => 'value1', /* comment
+	end */ 'key2' => 'value2', // Bad.
+	/* Non-trailing comment. */
+	'key3' => 'value3', /* comment
+	end */
+	'key4' => 'value4'
+);

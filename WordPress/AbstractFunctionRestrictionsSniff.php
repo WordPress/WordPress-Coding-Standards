@@ -3,14 +3,15 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress;
+namespace WordPressCS\WordPress;
 
-use WordPress\Sniff;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Restricts usage of some functions.
@@ -20,9 +21,9 @@ use PHP_CodeSniffer_Tokens as Tokens;
  * @since   0.3.0
  * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
  *                 Moved the file and renamed the class from
- *                 `WordPress_Sniffs_Functions_FunctionRestrictionsSniff` to
- *                 `WordPress_AbstractFunctionRestrictionsSniff`.
- * @since   0.11.0 Extends the WordPress_Sniff class.
+ *                 `\WordPressCS\WordPress\Sniffs\Functions\FunctionRestrictionsSniff` to
+ *                 `\WordPressCS\WordPress\AbstractFunctionRestrictionsSniff`.
+ * @since   0.11.0 Extends the WordPressCS native `Sniff` class.
  */
 abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
@@ -31,9 +32,13 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * Example: 'switch_to_blog,user_meta'
 	 *
-	 * @var string Comma-delimited group list.
+	 * @since 0.3.0
+	 * @since 1.0.0 This property now expects to be passed an array.
+	 *              Previously a comma-delimited string was expected.
+	 *
+	 * @var array
 	 */
-	public $exclude = '';
+	public $exclude = array();
 
 	/**
 	 * Groups of function data to check against.
@@ -53,7 +58,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @var string
 	 */
-	protected $regex_pattern = '`\b(?:%s)\b`i';
+	protected $regex_pattern = '`^(?:%s)$`i';
 
 	/**
 	 * Cache for the group information.
@@ -93,14 +98,14 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *         'message'   => 'Use anonymous functions instead please!',
 	 *         'functions' => array( 'file_get_contents', 'create_function', 'mysql_*' ),
 	 *         // Only useful when using wildcards:
-	 *         'whitelist' => array( 'mysql_to_rfc3339' => true, ),
+	 *         'allow' => array( 'mysql_to_rfc3339' => true, ),
 	 *     )
 	 * )
 	 *
 	 * You can use * wildcards to target a group of functions.
 	 * When you use * wildcards, you may inadvertently restrict too many
-	 * functions. In that case you can add the `whitelist` key to
-	 * whitelist individual functions to prevent false positives.
+	 * functions. In that case you can add the `allow` key to
+	 * safe list individual functions to prevent false positives.
 	 *
 	 * @return array
 	 */
@@ -118,7 +123,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return array(
-			T_STRING,
+			\T_STRING,
 		);
 	}
 
@@ -161,7 +166,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		// Create one "super-regex" to allow for initial filtering.
-		$all_items                = call_user_func_array( 'array_merge', $all_items );
+		$all_items                = \call_user_func_array( 'array_merge', $all_items );
 		$all_items                = implode( '|', array_unique( $all_items ) );
 		$this->prelim_check_regex = sprintf( $this->regex_pattern, $all_items );
 
@@ -195,8 +200,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 			return $this->check_for_matches( $stackPtr );
 		}
-
-	} // End process_token().
+	}
 
 	/**
 	 * Verify is the current token is a function call.
@@ -209,37 +213,53 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 */
 	public function is_targetted_token( $stackPtr ) {
 
+		if ( \T_STRING !== $this->tokens[ $stackPtr ]['code'] ) {
+			return false;
+		}
+
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( T_STRING === $this->tokens[ $stackPtr ]['code'] && isset( $this->tokens[ ( $stackPtr - 1 ) ] ) ) {
-			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( $this->is_class_object_call( $stackPtr ) === true ) {
+			return false;
+		}
 
-			if ( false !== $prev ) {
-				// Skip sniffing if calling a same-named method, or on function definitions.
-				$skipped = array(
-					T_FUNCTION        => T_FUNCTION,
-					T_DOUBLE_COLON    => T_DOUBLE_COLON,
-					T_OBJECT_OPERATOR => T_OBJECT_OPERATOR,
-				);
+		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
+			return false;
+		}
 
-				if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
-					return false;
-				}
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false !== $prev ) {
+			// Skip sniffing on function, class definitions or for function aliases in use statements.
+			$skipped = array(
+				\T_FUNCTION        => \T_FUNCTION,
+				\T_CLASS           => \T_CLASS,
+				\T_AS              => \T_AS, // Use declaration alias.
+			);
 
-				// Skip namespaced functions, ie: \foo\bar() not \bar().
-				if ( T_NS_SEPARATOR === $this->tokens[ $prev ]['code'] ) {
-					$pprev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
-					if ( false !== $pprev && T_STRING === $this->tokens[ $pprev ]['code'] ) {
-						return false;
-					}
-				}
+			if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
+				return false;
 			}
+		}
 
+		// Check if this could even be a function call.
+		$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $next ) {
+			return false;
+		}
+
+		// Check for `use function ... (as|;)`.
+		if ( ( \T_STRING === $this->tokens[ $prev ]['code'] && 'function' === $this->tokens[ $prev ]['content'] )
+			&& ( \T_AS === $this->tokens[ $next ]['code'] || \T_SEMICOLON === $this->tokens[ $next ]['code'] )
+		) {
 			return true;
 		}
 
-		return false;
+		// If it's not a `use` statement, there should be parenthesis.
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next ]['code'] ) {
+			return false;
+		}
 
-	} // End is_targetted_token().
+		return true;
+	}
 
 	/**
 	 * Verify if the current token is one of the targetted functions.
@@ -261,7 +281,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				continue;
 			}
 
-			if ( isset( $group['whitelist'][ $token_content ] ) ) {
+			if ( isset( $group['allow'][ $token_content ] ) ) {
 				continue;
 			}
 
@@ -275,8 +295,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		return min( $skip_to );
-
-	} // End check_for_matches().
+	}
 
 	/**
 	 * Process a matched token.
@@ -292,16 +311,15 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$this->groups[ $group_name ]['message'],
 			$stackPtr,
 			( 'error' === $this->groups[ $group_name ]['type'] ),
-			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
+			MessageHelper::stringToErrorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
-
-		return;
-	} // End process_matched_token().
+	}
 
 	/**
 	 * Prepare the function name for use in a regular expression.
@@ -316,11 +334,11 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @return string Regex escaped function name.
 	 */
 	protected function prepare_name_for_regex( $function ) {
-		$function = str_replace( array( '.*', '*' ), '#', $function ); // Replace wildcards with placeholder.
+		$function = str_replace( array( '.*', '*' ), '@@', $function ); // Replace wildcards with placeholder.
 		$function = preg_quote( $function, '`' );
-		$function = str_replace( '#', '.*', $function ); // Replace placeholder with regex wildcard.
+		$function = str_replace( '@@', '.*', $function ); // Replace placeholder with regex wildcard.
 
 		return $function;
 	}
 
-} // End class.
+}

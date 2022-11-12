@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\NamingConventions;
+namespace WordPressCS\WordPress\Tests\NamingConventions;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -28,23 +28,26 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3  => 1,
-			9  => 1,
-			13 => 1,
-			15 => 1,
-			79 => 1,
-			80 => 1,
-			81 => 1,
-			82 => 1,
-			83 => 1,
-			84 => 1,
-			85 => 1,
-			86 => 1,
-			87 => 1,
-			88 => 1,
-			89 => 1,
+			3   => 1,
+			9   => 1,
+			13  => 1,
+			15  => 1,
+			79  => 2,
+			80  => 2,
+			81  => 2,
+			82  => 2,
+			83  => 2,
+			84  => 2,
+			85  => 2,
+			86  => 2,
+			87  => 2,
+			88  => 2,
+			89  => 2,
+			106 => 2,
+			116 => 1,
+			117 => 1,
+			157 => 2,
 		);
-
 	}
 
 	/**
@@ -54,7 +57,6 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

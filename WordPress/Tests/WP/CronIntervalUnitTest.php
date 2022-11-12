@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.3.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.15.0 This sniff has been moved from the `VIP` category to the `WP` category.
+ * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
  */
 class CronIntervalUnitTest extends AbstractSniffUnitTest {
 
@@ -29,7 +29,6 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
 	}
 
 	/**
@@ -46,14 +45,16 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 			41  => 1,
 			43  => 1,
 			53  => 1,
-			56  => 1, // False positive.
 			67  => 1,
 			76  => 1,
 			85  => 1,
 			108 => 1,
 			115 => 1,
+			133 => 1,
+			156 => 1,
+			168 => 1,
+			169 => 1,
+			170 => 1,
 		);
-
 	}
-
-} // End class.
+}

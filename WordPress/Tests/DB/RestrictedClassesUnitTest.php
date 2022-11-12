@@ -3,14 +3,14 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\DB;
+namespace WordPressCS\WordPress\Tests\DB;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Unit test class for the DB_RestrictedClasses sniff.
@@ -19,6 +19,7 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   3.0.0  Renamed the fixtures to create compatibility with PHPCS 4.x/PHPUnit >=8.
  */
 class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
@@ -28,8 +29,10 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 *
 	 * Note: as that class extends the abstract FunctionRestrictions class, that's
 	 * where we are passing the parameters to.
+	 *
+	 * @before
 	 */
-	protected function setUp() {
+	protected function enhanceGroups() {
 		parent::setUp();
 
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
@@ -46,8 +49,10 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Reset the $groups property.
+	 *
+	 * @after
 	 */
-	protected function tearDown() {
+	protected function resetGroups() {
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array();
 		parent::tearDown();
 	}
@@ -135,10 +140,8 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
-	} // End getErrorList().
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -147,7 +150,6 @@ class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

@@ -8,8 +8,8 @@ $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE 
 $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '$var';" ) ); // Bad.
 $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE %s;", $_GET['title'] ) ); // Ok.
 
-$wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . $escaped_var . "';" ); // WPCS: unprepared SQL OK.
-$wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '{$escaped_var}';" ); // WPCS: unprepared SQL OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . $escaped_var . "';" ); // Bad: old-style ignore comment. WPCS: unprepared SQL OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '{$escaped_var}';" ); //  Bad: old-style ignore comment. WPCS: unprepared SQL OK.
 
 $wpdb->query( $wpdb->prepare( "SELECT SUBSTRING( post_name, %d + 1 ) REGEXP '^[0-9]+$'", array( 123 ) ) ); // Ok.
 $wpdb->query( $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_title = 'The \$_GET var can be evil.' AND ID = %s", array( 123 ) ) ); // Ok.
@@ -39,7 +39,7 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
 	WHERE `meta_key` = "sort_order"
 		AND `post_id` IN (%s)',
 	$wpdb->postmeta,
-	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+	\implode( ',', \array_fill( 0, \count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // Ok.
 
 $wpdb->query( "
@@ -82,7 +82,7 @@ ND
 	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // OK.
 
-wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+wpdb::prepare( "SELECT * FROM $wpdb?->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
 
 $wpdb->query( // Some arbitrary comment.
 	"SELECT *
@@ -90,21 +90,26 @@ $wpdb->query( // Some arbitrary comment.
 		WHERE post_title LIKE '" . $escaped_var . "';"
 ); // Bad x 1.
 
-$wpdb->query(
-	"SELECT *
-		FROM $wpdb->posts
-		WHERE post_title LIKE '" . $escaped_var . "';"
-); // WPCS: unprepared SQL OK.
-
-$wpdb->query( // WPCS: unprepared SQL OK.
-	"SELECT *
-		FROM $wpdb->posts
-		WHERE post_title LIKE '" . $escaped_var . "';"
-);
-
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . (int) $foo . ";" ); // Ok.
 
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . (float) $foo . ";" ); // Ok.
+
+$wpdb->query(
+	"SELECT * FROM $wpdb->posts
+	WHERE ID = "
+	. absint // Ok.
+		( $foo )
+	. ";"
+);
+
+// Test handling of more complex embedded variables and expressions.
+$wpdb->query( "SELECT * FROM {$wpdb->bar()} WHERE post_title LIKE '{$title->sub()}';" ); // Bad x 1.
+$wpdb->query( "SELECT * FROM ${wpdb->bar} WHERE post_title LIKE '${title->sub}';" ); // Bad x 1.
+$wpdb->query( "SELECT * FROM ${wpdb->{$baz}} WHERE post_title LIKE '${title->{$sub}}';" ); // Bad x 1.
+$wpdb->query( "SELECT * FROM ${wpdb->{${'a'}}} WHERE post_title LIKE '${title->{${'sub'}}}';" ); // Bad x 1.
+
+// More defensive variable checking
+$wpdb->query( "SELECT * FROM $wpdb" ); // Bad x 1, $wpdb on its own is not valid.
 
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts

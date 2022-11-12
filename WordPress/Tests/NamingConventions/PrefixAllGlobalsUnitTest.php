@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\NamingConventions;
+namespace WordPressCS\WordPress\Tests\NamingConventions;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -27,12 +27,12 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList( $testFile = 'PrefixAllGlobalsUnitTest.inc' ) {
+	public function getErrorList( $testFile = 'PrefixAllGlobalsUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
-			case 'PrefixAllGlobalsUnitTest.inc':
+			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
-					1   => 2, // 2 x error for incorrect prefix passed.
+					1   => 8, // 2 x error for blocked prefix passed. 4 x error for short prefixes. 2 x no prefix.
 					10  => 1,
 					18  => 1,
 					21  => 1,
@@ -51,23 +51,53 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					39  => 1,
 					40  => 1,
 					90  => 1,
-					91  => 1,
+					212 => 1, // Old-style WPCS ignore comments are no longer supported.
+					215 => 1, // Old-style WPCS ignore comments are no longer supported.
+					216 => 1, // Old-style WPCS ignore comments are no longer supported.
 					// Backfills.
 					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
 					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
-					234 => ( defined( '\E_DEPRECATED' ) ) ? 0 : 1,
+					234 => ( \defined( '\E_DEPRECATED' ) ) ? 0 : 1,
 					238 => ( class_exists( '\IntlTimeZone' ) ) ? 0 : 1,
 					318 => 1,
+					339 => 1,
+					343 => 1,
+					344 => 1,
+					345 => 1,
+					346 => 2,
+					349 => 1,
+					352 => 1,
+					357 => 1,
+					387 => 1,
+					389 => 1,
+					403 => 1,
+					415 => 1,
+					423 => 1,
+					440 => 2,
+					444 => 2,
+					448 => 2,
+					449 => 1,
+					452 => 4,
+					455 => 2,
+					464 => 2,
+					465 => 1,
+					468 => 1,
 				);
 
-			case 'PrefixAllGlobalsUnitTest.1.inc':
+			case 'PrefixAllGlobalsUnitTest.4.inc':
+				return array(
+					1  => 1, // 1 x error for blocked prefix passed.
+					18 => 1,
+				);
+
+			case 'PrefixAllGlobalsUnitTest.2.inc':
 				// Namespaced - all OK, fall through to the default case.
+			case 'PrefixAllGlobalsUnitTest.3.inc':
+				// Test class - non-prefixed constant is fine, fall through to the default case.
 			default:
 				return array();
-
-		} // End switch().
-
-	} // end getErrorList()
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -75,11 +105,12 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 	 * @param string $testFile The name of the file being tested.
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList( $testFile = 'PrefixAllGlobalsUnitTest.inc' ) {
+	public function getWarningList( $testFile = 'PrefixAllGlobalsUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
-			case 'PrefixAllGlobalsUnitTest.inc':
+			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
+					1   => 3, // 3 x warning for potentially incorrect prefix passed.
 					249 => 1,
 					250 => 1,
 					253 => 1,
@@ -118,9 +149,7 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 
 			default:
 				return array();
-
-		} // End switch().
-
+		}
 	}
 
-} // End class.
+}

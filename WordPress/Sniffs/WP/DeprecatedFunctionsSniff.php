@@ -3,13 +3,15 @@
  * WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Sniffs\WP;
+namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPress\AbstractFunctionRestrictionsSniff;
+use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 
 /**
  * Restricts the use of various deprecated WordPress functions and suggests alternatives.
@@ -28,9 +30,11 @@ use WordPress\AbstractFunctionRestrictionsSniff;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPress\Sniff::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
  */
 class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+
+	use MinimumWPVersionTrait;
 
 	/**
 	 * List of deprecated functions with alternative when available.
@@ -577,6 +581,11 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		),
 		'graceful_fail' => array(
 			'alt'     => 'wp_die()',
+			'version' => '3.0.0',
+		),
+		// Verified version & alternative.
+		'install_blog_defaults' => array(
+			'alt'     => 'wp_install_defaults',
 			'version' => '3.0.0',
 		),
 		'is_main_blog' => array(
@@ -1330,6 +1339,36 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => '',
 			'version' => '4.9.0',
 		),
+
+		// WP 5.1.0.
+		'insert_blog' => array(
+			'alt'     => 'wp_insert_site()',
+			'version' => '5.1.0',
+		),
+		'install_blog' => array(
+			'alt'     => '',
+			'version' => '5.1.0',
+		),
+
+		// WP 5.3.0.
+		'_wp_json_prepare_data' => array(
+			'alt'     => '',
+			'version' => '5.3.0',
+		),
+		'_wp_privacy_requests_screen_options' => array(
+			'alt'     => '',
+			'version' => '5.3.0',
+		),
+		'update_user_status' => array(
+			'alt'     => 'wp_update_user()',
+			'version' => '5.3.0',
+		),
+
+		// WP 5.4.0.
+		'wp_get_user_request_data' => array(
+			'alt'     => 'wp_get_user_request()',
+			'version' => '5.4.0',
+		),
 	);
 
 	/**
@@ -1339,23 +1378,20 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function getGroups() {
 		// Make sure all array keys are lowercase.
-		$keys                       = array_keys( $this->deprecated_functions );
-		$keys                       = array_map( 'strtolower', $keys );
-		$this->deprecated_functions = array_combine( $keys, $this->deprecated_functions );
+		$this->deprecated_functions = array_change_key_case( $this->deprecated_functions, \CASE_LOWER );
 
 		return array(
 			'deprecated_functions' => array(
-				'functions' => $keys,
+				'functions' => array_keys( $this->deprecated_functions ),
 			),
 		);
-
-	} // End getGroups().
+	}
 
 	/**
 	 * Process a matched token.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched. Will
+	 * @param string $group_name      The name of the group which was matched. Will
 	 *                                always be 'deprecated_functions'.
 	 * @param string $matched_content The token content (function name) which was matched.
 	 *
@@ -1363,7 +1399,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->get_wp_version_from_cl();
+		$this->get_wp_version_from_cli( $this->phpcsFile );
 
 		$function_name = strtolower( $matched_content );
 
@@ -1378,14 +1414,14 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			$data[]   = $this->deprecated_functions[ $function_name ]['alt'];
 		}
 
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$message,
 			$stackPtr,
 			( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_supported_version, '<' ) ),
-			$this->string_to_errorcode( $matched_content . 'Found' ),
+			MessageHelper::stringToErrorcode( $matched_content . 'Found' ),
 			$data
 		);
-
-	} // End process_matched_token().
+	}
 
 }

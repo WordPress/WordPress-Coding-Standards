@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WhiteSpace;
+namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -24,61 +24,76 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
-		$ret = array(
-			4   => 2,
-			17  => 2,
-			29  => 5,
-			37  => 1,
-			41  => 1,
-			42  => 1,
-			49  => 5,
-			58  => 3,
-			67  => 1,
-			68  => 1,
-			69  => 1,
-			71  => 1,
-			72  => 1,
-			81  => 3,
-			82  => 1,
-			85  => 1,
-			91  => 2,
-			92  => 1,
-			94  => 1,
-			95  => 1,
-			97  => 1,
-			98  => 1,
-			135 => 2,
-			137 => 5,
-			144 => 1,
-			152 => 2,
-			179 => 1,
-			180 => 1,
-			182 => 1,
-			184 => 1,
-			190 => 1,
-			192 => 1,
-			196 => 2,
-			200 => 2,
-			247 => 1,
-			257 => 1,
-			267 => 1,
-		);
+	public function getErrorList( $testFile = '' ) {
 
-		/*
-		Uncomment when "$blank_line_check" parameter will be "true" by default.
+		switch ( $testFile ) {
+			case 'ControlStructureSpacingUnitTest.1.inc':
+				$ret = array(
+					4   => 2,
+					17  => 2,
+					29  => 5,
+					37  => 1,
+					41  => 1,
+					42  => 1,
+					49  => 5,
+					58  => 3,
+					67  => 1,
+					68  => 1,
+					69  => 1,
+					71  => 1,
+					72  => 1,
+					81  => 3,
+					82  => 1,
+					85  => 1,
+					91  => 2,
+					92  => 1,
+					94  => 1,
+					95  => 1,
+					97  => 1,
+					98  => 1,
+					135 => 2,
+					137 => 5,
+					144 => 1,
+					152 => 2,
+					179 => 1,
+					180 => 1,
+					182 => 1,
+					184 => 1,
+					190 => 1,
+					192 => 1,
+					196 => 2,
+					200 => 2,
+					247 => 1,
+					257 => 1,
+					267 => 1,
+				);
 
-		$ret[29] += 1;
-		$ret[33]  = 1;
-		$ret[36]  = 1;
-		$ret[38]  = 1;
-		 */
+				/*
+				Uncomment when "$blank_line_check" parameter will be "true" by default.
 
-		return $ret;
+				$ret[29] += 1;
+				$ret[33]  = 1;
+				$ret[36]  = 1;
+				$ret[38]  = 1;
+				 */
 
-	} // end getErrorList()
+				return $ret;
+
+			case 'ControlStructureSpacingUnitTest.2.inc':
+				return array(
+					6  => 1,
+					16 => 1,
+					19 => 1,
+				);
+
+			default:
+				return array();
+		}
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -87,7 +102,6 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

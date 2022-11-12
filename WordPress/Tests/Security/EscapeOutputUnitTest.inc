@@ -121,7 +121,7 @@ wp_die( -1 ); // Ok.
 <input type="hidden" name="sync-action" class="sync-action" value="<?php echo esc_attr( $continue_sync ? 'sync_progress' : '' ); ?>" /><!-- OK. -->
 <?php
 
-// Testing whitelisting comments.
+// Bad - ignored via old-style ignore comment.
 echo $html_fragment; // Bad.
 echo $html_fragment; // xss OK.
 echo $html_fragment; // WPCS: XSS whitelist.
@@ -186,21 +186,21 @@ echo add_filter( get_the_excerpt( get_the_ID() ) ; // Bad, but ignored as code c
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
-// @codingStandardsChangeSetting WordPress.Security.EscapeOutput customPrintingFunctions to_screen,my_print
+// phpcs:set WordPress.Security.EscapeOutput customPrintingFunctions[] to_screen,my_print
 to_screen( $var1, esc_attr( $var2 ) ); // Bad x 1.
 my_print( $var1, $var2 ); // Bad x 2.
 
-// @codingStandardsChangeSetting WordPress.Security.EscapeOutput customEscapingFunctions esc_form_field
-// @codingStandardsChangeSetting WordPress.Security.EscapeOutput customAutoEscapedFunctions post_info,cpt_info
+// phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[] esc_form_field
+// phpcs:set WordPress.Security.EscapeOutput customAutoEscapedFunctions[] post_info,cpt_info
 
 echo esc_form_field( $var ); // Ok.
 echo post_info( $post_id, 'field' ); // Ok.
 echo cpt_info( $post_type, 'query' ); // Ok.
 to_screen( esc_form_field( $var1), esc_attr( $var2 ) ); // Ok.
 
-// @codingStandardsChangeSetting WordPress.Security.EscapeOutput customPrintingFunctions false
-// @codingStandardsChangeSetting WordPress.Security.EscapeOutput customEscapingFunctions false
-// @codingStandardsChangeSetting WordPress.Security.EscapeOutput customAutoEscapedFunctions false
+// phpcs:set WordPress.Security.EscapeOutput customPrintingFunctions[]
+// phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[]
+// phpcs:set WordPress.Security.EscapeOutput customAutoEscapedFunctions[]
 
 echo esc_form_field( $var ); // Bad.
 echo post_info( $post_id, 'field' ); // Bad.
@@ -257,3 +257,46 @@ echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
 ?>
 	<input type="hidden" name="some-action" value="<?php echo esc_attr_x( 'none', 'context' ); ?>" /><!-- OK. -->
 <?php
+
+echo PHP_VERSION_ID, PHP_VERSION, PHP_EOL, PHP_EXTRA_VERSION; // OK.
+
+trigger_error( 'DEBUG INFO - ' . __METHOD__ . '::internal_domains: domain = ' . $domain ); // Bad.
+trigger_error( $domain ); // Bad.
+
+vprintf( 'Hello %s', [ $foo ] ); // Bad.
+vprintf( 'Hello %s', [ esc_html( $foo ) ] ); // Ok.
+
+function testIt( $obj ) {
+	$obj->print = new \Printer();
+	$obj->exit->customExit();
+	return $obj->print->transform( 'something' );
+}
+
+class Silly {
+	function echo() {}
+	function print() {}
+}
+
+echo  // phpcs:ignore WP.Secur1ty.EscapeOutput -- WPCS: XSS ok. (sniff name mangled on purpose).
+	esc_html( $something ),
+	$something_else,
+	esc_html( $something_more );
+
+echo esc_html( $something ),
+	$something_else,
+	esc_html( $something_more ); // phpcs:ignore WP.Secur1ty.EscapeOutput -- WPCS: XSS ok. (sniff name mangled on purpose).
+
+echo get_the_title(); // Bad.
+echo wp_kses_post( get_the_title() ); // Ok.
+echo esc_html( get_the_title() ); // Ok.
+
+echo implode( '<br>', map_deep( $items, 'esc_html' ) ); // Ok.
+echo implode( '<br>', map_deep( $items, 'foo' ) ); // Bad.
+
+_deprecated_file( basename( __FILE__ ), '1.3.0' ); // Ok.
+_deprecated_file( $file, '1.3.0' ); // Error.
+
+trigger_error(); // Ignore.
+_deprecated_file(); // Ignore.
+
+\_deprecated_file( \basename( __FILE__ ), '1.3.0' ); // Ok.

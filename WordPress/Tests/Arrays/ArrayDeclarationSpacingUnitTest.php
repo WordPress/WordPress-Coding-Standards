@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Arrays;
+namespace WordPressCS\WordPress\Tests\Arrays;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -62,35 +62,38 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 					104 => 2,
 					108 => 1,
 					109 => 1,
+					121 => 1,
 				);
 
 			// Short arrays.
 			case 'ArrayDeclarationSpacingUnitTest.2.inc':
 				return array(
-					8  => 2,
-					11 => 2,
-					16 => 4,
-					20 => 2,
-					22 => 1,
-					26 => 1,
-					29 => 1,
-					32 => 1,
-					45 => 1,
-					46 => 1,
-					47 => 1,
-					67 => 1,
-					68 => 1,
-					71 => 1,
-					72 => 2,
-					75 => 3,
-					77 => 1,
-					80 => 1,
-					81 => 2,
-					84 => 1,
-					86 => 2,
-					87 => 2,
-					91 => 1,
-					92 => 1,
+					8   => 2,
+					11  => 2,
+					16  => 4,
+					20  => 2,
+					22  => 1,
+					26  => 1,
+					29  => 1,
+					32  => 1,
+					45  => 1,
+					46  => 1,
+					47  => 1,
+					67  => 1,
+					68  => 1,
+					71  => 1,
+					72  => 2,
+					75  => 3,
+					77  => 1,
+					80  => 1,
+					81  => 2,
+					84  => 1,
+					86  => 2,
+					87  => 2,
+					91  => 1,
+					92  => 1,
+					104 => 1,
+					126 => 1,
 				);
 
 			default:
@@ -105,7 +108,6 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}

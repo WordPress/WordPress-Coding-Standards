@@ -59,13 +59,13 @@ $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login 
 
 $replacements = [1, "admin", $variable];
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", $replacements ); // Bad.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", $replacements ); // WPCS: PreparedSQLPlaceholders replacement count OK.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", $replacements ); // Bad - old-style ignore comment. WPCS: PreparedSQLPlaceholders replacement count OK.
 
 // Valid test case as found in WP core /wp-admin/includes/export.php
 $esses = array_fill( 0, count($post_types), '%s' );
 $where = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types ); // Warning.
-// Testing that whitelist comment work for this mismatch too.
-$where = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types ); // WPCS: PreparedSQLPlaceholders replacement count OK.
+// Testing that ignore comment works for this mismatch too.
+$where = $wpdb->prepare( "{$wpdb->posts}.post_type IN (" . implode( ',', $esses ) . ')', $post_types ); // Bad - old-style ignore comment. WPCS: PreparedSQLPlaceholders replacement count OK.
 
 /*
  * Test correctly recognizing queries using IN in combination with dynamic placeholder creation.

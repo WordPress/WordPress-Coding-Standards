@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\WP;
+namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -28,8 +28,7 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array();
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -60,10 +59,13 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 			101 => 1,
 			139 => 1,
 			146 => 0, // False negative.
+			167 => 1, // Old-style WPCS ignore comments are no longer supported.
 			173 => 1,
 			181 => 1,
+			203 => 1,
+			204 => 1,
+			205 => 1,
 		);
-
 	}
 
-} // End class.
+}

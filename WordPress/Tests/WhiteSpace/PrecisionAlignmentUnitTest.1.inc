@@ -31,7 +31,7 @@
 	  function exampleFunctionE() {} // Bad: [tab][space][space].
 	   function exampleFunctionF() {} // Bad: [tab][space][space][space].
 
-	 function exampleFunctionG() {} // WPCS: precision alignment ok.
+	 function exampleFunctionG() {} // Bad old-style ignore comment: WPCS: precision alignment ok.
 
 ?>
 
@@ -54,3 +54,15 @@
 	/*
 	* Provision some options
 	*/
+
+?>
+
+<script type="text/javascript">
+	/*
+	 * Multi-line javascript comment should not trigger this sniff.
+	 */
+	alert('OK');
+	  alert('bad');
+</script>
+
+<?php

@@ -76,17 +76,17 @@ class My_Soap extends SoapClient {
 }
 
 class My_Soap {
-	public function __doRequest() {} // Bad.
-	private function __getFunctions() {} // Bad.
-	protected function __getLastRequest() {} // Bad.
-	public function __getLastRequestHeaders() {} // Bad.
-	public function __getLastResponse() {} // Bad.
-	public function __getLastResponseHeaders() {} // Bad.
-	public function __getTypes() {} // Bad.
-	public function __setCookie() {} // Bad.
-	public function __setLocation() {} // Bad.
-	public function __setSoapHeaders() {} // Bad.
-	public function __soapCall() {} // Bad.
+	public function __doRequest() {} // Bad x 2.
+	private function __getFunctions() {} // Bad x 2.
+	protected function __getLastRequest() {} // Bad x 2.
+	public function __getLastRequestHeaders() {} // Bad x 2.
+	public function __getLastResponse() {} // Bad x 2.
+	public function __getLastResponseHeaders() {} // Bad x 2.
+	public function __getTypes() {} // Bad x 2.
+	public function __setCookie() {} // Bad x 2.
+	public function __setLocation() {} // Bad x 2.
+	public function __setSoapHeaders() {} // Bad x 2.
+	public function __soapCall() {} // Bad x 2.
 }
 
 class My_Soap extends somethingElse {
@@ -101,4 +101,79 @@ class My_Soap extends somethingElse {
 	public function __setLocation() {} // Ok.
 	public function __setSoapHeaders() {} // Ok.
 	public function __soapCall() {} // Ok.
+}
+
+function __MyTemplateTags() {} // Bad x 2.
+
+// Verify that interfaces which extend multiple other interfaces do not throw unnecessary errors.
+interface MyInterface extends InterfaceA, InterfaceB {
+	function __MyTemplateTags(); // OK.
+}
+
+class Nested {
+    public function get_anonymous_class() {
+        return new class() {
+            public function nestedFunction() {}
+            protected function __something() {}
+        };
+    }
+}
+
+abstract class My_Class {
+    public function my_Class() {}
+    public function _MY_CLASS() {}
+}
+
+/**
+ * Function description.
+ *
+ * @since 1.2.3
+ * @deprecated 2.3.4
+ *
+ * @return void
+ */
+function __deprecatedFunction() {}
+
+class Deprecated {
+	/**
+	 * Function description.
+	 *
+	 * @since 1.2.3
+	 * @deprecated 2.3.4
+	 *
+	 * @return void
+	 */
+	public static function __deprecatedMethod() {}
+}
+
+class PHP74Magic {
+	function __serialize() {} // OK.
+	function __unserialize() {} // OK.
+}
+
+class More_Nested {
+	public function method_name() {
+		function __autoload() {} // OK - magic function in global namespace.
+		function __CamelCase() {} // Bad x 2 for *function*, not method.
+	}
+}
+
+function ___triple_underscore() {} // OK.
+
+class Triple {
+	function ___triple_underscore() {} // OK.
+}
+
+class DeprecatedWithAttribute {
+	/**
+	 * Function description.
+	 *
+	 * @since 1.2.3
+	 * @deprecated 2.3.4
+	 *
+	 * @return void
+	 */
+	#[SomeAttribute]
+	#[AnotherAttribute]
+	public static function __deprecatedMethod() {}
 }

@@ -3,11 +3,11 @@
  * Unit test class for WordPress Coding Standard.
  *
  * @package WPCS\WordPressCodingStandards
- * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPress\Tests\Security;
+namespace WordPressCS\WordPress\Tests\Security;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   2013-06-11
  * @since   0.13.0     Class name changed: this class is now namespaced.
- * @since   0.15.0     This sniff has been moved from the `XSS` category to the `Security` category.
+ * @since   1.0.0      This sniff has been moved from the `XSS` category to the `Security` category.
  */
 class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 
@@ -52,6 +52,9 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			113 => 1,
 			114 => 1,
 			125 => 1,
+			126 => 1, // Old-style WPCS ignore comments are no longer supported.
+			127 => 1, // Old-style WPCS ignore comments are no longer supported.
+			128 => 1, // Old-style WPCS ignore comments are no longer supported.
 			131 => 1,
 			135 => 1,
 			138 => 1,
@@ -73,11 +76,21 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			223 => 1,
 			225 => 1,
 			226 => 1,
+			241 => 1, // Old-style WPCS ignore comments are no longer supported.
+			245 => 1, // Old-style WPCS ignore comments are no longer supported.
+			249 => 1, // Old-style WPCS ignore comments are no longer supported.
 			252 => 1,
 			253 => 1,
+			263 => 1,
+			264 => 1,
+			266 => 1,
+			282 => 1,
+			286 => 1,
+			289 => 1,
+			294 => 1,
+			297 => 1,
 		);
-
-	} // end getErrorList()
+	}
 
 	/**
 	 * Returns the lines where warnings should occur.
@@ -86,7 +99,6 @@ class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
-
 	}
 
-} // End class.
+}
