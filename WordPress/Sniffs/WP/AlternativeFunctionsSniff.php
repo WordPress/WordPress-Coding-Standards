@@ -129,7 +129,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'unlink' => array(
 				'type'      => 'warning',
 				'message'   => '%s() is discouraged. Use wp_delete_file() for remote URLs instead.',
-				'since'     => '2.7.0',
+				'since'     => 'x.x.x',
 				'functions' => array(
 					'unlink',
 				),
