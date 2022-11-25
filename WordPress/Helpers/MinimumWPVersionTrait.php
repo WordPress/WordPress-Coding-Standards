@@ -9,7 +9,6 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
-use PHP_CodeSniffer\Files\File;
 use PHPCSUtils\BackCompat\Helper;
 
 /**
@@ -81,12 +80,9 @@ trait MinimumWPVersionTrait {
 	 * @since 0.14.0
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
 	 *               - Renamed from `get_wp_version_from_cl()` to `get_wp_version_from_cli()`.
-	 *               - Now requires the $phpcsFile object to be passed in.
-	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 */
-	protected function get_wp_version_from_cli( File $phpcsFile ) {
-		$cli_supported_version = Helper::getCommandLineData( $phpcsFile, 'minimum_supported_wp_version' );
+	protected function get_wp_version_from_cli() {
+		$cli_supported_version = Helper::getConfigData( 'minimum_supported_wp_version' );
 
 		if ( empty( $cli_supported_version ) ) {
 			return;
