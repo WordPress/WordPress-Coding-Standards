@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Capabilities"
+    >
+    <standard>
+    <![CDATA[
+Capabilities passed should be valid capabilities (custom capabilities can be added in the ruleset).
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: a WP native or registered custom user capability is used.">
+        <![CDATA[
+if ( author_can( $post, <em>'manage_sites'</em> ) ) { }
+        ]]>
+        </code>
+        <code title="Invalid: unknown/unsupported user capability is used.">
+        <![CDATA[
+map_meta_cap( <em>'manage_site'</em>, $user->ID );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+Always use user capabilities instead of roles.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: user capability is used.">
+        <![CDATA[
+add_options_page(
+    esc_html__( 'Options', 'textdomain' ),
+    esc_html__( 'Options', 'textdomain' ),
+    <em>'manage_options'</em>,
+    'options_page_slug',
+    'project_options_page_cb'
+);
+        ]]>
+        </code>
+        <code title="Invalid: user role is used instead of a capability.">
+        <![CDATA[
+add_options_page(
+    esc_html__( 'Options', 'textdomain' ),
+    esc_html__( 'Options', 'textdomain' ),
+    <em>'author'</em>,
+    'options_page_slug',
+    'project_options_page_cb'
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+Don't use deprecated capabilities.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: a WP native or registered custom user capability is used.">
+        <![CDATA[
+if ( author_can( $post, <em>'read'</em> ) ) { }
+        ]]>
+        </code>
+        <code title="Invalid: deprecated user capability is used.">
+        <![CDATA[
+if ( author_can( $post, <em>'level_6'</em> ) ) { }
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
