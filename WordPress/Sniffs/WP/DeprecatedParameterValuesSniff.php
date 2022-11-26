@@ -22,7 +22,7 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  *
  * @since   1.0.0
  *
- * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 
@@ -208,7 +208,7 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 			$data[]   = $parameter_args[ $matched_parameter ]['alt'];
 		}
 
-		$is_error = version_compare( $parameter_args[ $matched_parameter ]['version'], $this->minimum_supported_version, '<' );
+		$is_error = version_compare( $parameter_args[ $matched_parameter ]['version'], $this->minimum_wp_version, '<' );
 		MessageHelper::addMessage(
 			$this->phpcsFile,
 			$message,

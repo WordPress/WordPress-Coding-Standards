@@ -30,7 +30,7 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 
@@ -116,7 +116,7 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			$this->phpcsFile,
 			$message,
 			$stackPtr,
-			( version_compare( $this->deprecated_classes[ $class_name ]['version'], $this->minimum_supported_version, '<' ) ),
+			( version_compare( $this->deprecated_classes[ $class_name ]['version'], $this->minimum_wp_version, '<' ) ),
 			MessageHelper::stringToErrorcode( $class_name . 'Found' ),
 			$data
 		);

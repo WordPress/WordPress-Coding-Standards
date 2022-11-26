@@ -24,6 +24,8 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   3.0.0
+ *
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 
@@ -432,7 +434,7 @@ class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 
 		if ( isset( $this->deprecated_capabilities[ $matched_parameter ] ) ) {
 			$this->get_wp_version_from_cli( $this->phpcsFile );
-			$is_error = version_compare( $this->deprecated_capabilities[ $matched_parameter ], $this->minimum_supported_version, '<' );
+			$is_error = version_compare( $this->deprecated_capabilities[ $matched_parameter ], $this->minimum_wp_version, '<' );
 
 			$data = array(
 				$matched_parameter,

@@ -28,17 +28,17 @@ srand(); // Warning.
 mt_srand(); // Warning.
 wp_rand(); // OK.
 
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
 parse_url( 'http://example.com/' ); // OK.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.6
 
 strip_tags( $something, '<iframe>' ); // OK.
 
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
 parse_url($url, PHP_URL_QUERY); // OK.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.7
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
 parse_url($url, PHP_URL_SCHEME); // Warning.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.6
 
 file_get_contents( $local_file, true ); // OK.
 file_get_contents( $url, false ); // Warning.

@@ -31,12 +31,12 @@ class CapabilitiesUnitTest extends AbstractSniffUnitTest {
 		if ( 'CapabilitiesUnitTest.1.inc' === $filename ) {
 			$config->warningSeverity = 3;
 		} elseif ( 'CapabilitiesUnitTest.2.inc' === $filename ) {
-			Helper::setConfigData( 'minimum_supported_wp_version', '2.9', true, $config );
+			Helper::setConfigData( 'minimum_wp_version', '2.9', true, $config );
 		} elseif ( 'CapabilitiesUnitTest.3.inc' === $filename ) {
-			Helper::setConfigData( 'minimum_supported_wp_version', '6.1', true, $config );
+			Helper::setConfigData( 'minimum_wp_version', '6.1', true, $config );
 		} else {
 			// Delete for other files.
-			Helper::setConfigData( 'minimum_supported_wp_version', null, true, $config );
+			Helper::setConfigData( 'minimum_wp_version', null, true, $config );
 		}
 	}
 

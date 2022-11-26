@@ -42,10 +42,10 @@ if ( author_can( $post, '' ) ) { } // Error.
 /*
  * Deprecated capabilities.
  */
-// phpcs:set WordPress.WP.Capabilities minimum_supported_version 2.9
+// phpcs:set WordPress.WP.Capabilities minimum_wp_version 2.9
 if ( author_can( $post, 'level_3' ) ) { } // Warning.
 
-// phpcs:set WordPress.WP.Capabilities minimum_supported_version 5.9
+// phpcs:set WordPress.WP.Capabilities minimum_wp_version 5.9
 if ( author_can( $post, 'level_5' ) ) { } // Error.
 add_options_page( 'page_title', 'menu_title', 'level_10', 'menu_slug', 'function' ); // Error.
 
