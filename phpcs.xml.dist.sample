@@ -52,13 +52,13 @@
 		Once we know the sniff names, we can opt to exclude sniffs which don't
 		suit our project like so.
 
-		The below two examples just show how you can exclude rules.
+		The below two examples just show how you can exclude rules/error codes.
 		They are not intended as advice about which sniffs to exclude.
 		-->
 
 		<!--
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
-		<exclude name="WordPress.Security.EscapeOutput"/>
+		<exclude name="Modernize.FunctionCalls.Dirname.Nested"/>
 		-->
 	</rule>
 
@@ -66,7 +66,6 @@
 	<rule ref="WordPress-Docs"/>
 
 	<!-- Add in some extra rules from other standards. -->
-	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
 	<rule ref="Generic.Commenting.Todo"/>
 
 	<!-- Check for PHP cross-version compatibility. -->
@@ -79,8 +78,10 @@
 	https://github.com/PHPCompatibility/PHPCompatibility
 	-->
 	<!--
-	<config name="testVersion" value="5.2-"/>
-	<rule ref="PHPCompatibilityWP"/>
+	<config name="testVersion" value="5.6-"/>
+	<rule ref="PHPCompatibilityWP">
+		<include-pattern>*\.php</include-pattern>
+	</rule>
 	-->
 
 
@@ -91,7 +92,7 @@
 	-->
 
 	<!--
-	To get the optimal benefits of using WPCS, we should add a couple of
+	To get the optimal benefits of using WordPressCS, we should add a couple of
 	custom properties.
 	Adjust the values of these properties to fit our needs.
 
@@ -99,7 +100,7 @@
 	the wiki:
 	https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties
 	-->
-	<config name="minimum_supported_wp_version" value="4.9"/>
+	<config name="minimum_wp_version" value="6.0"/>
 
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -116,6 +117,37 @@
 				<element value="my_prefix"/>
 			</property>
 		</properties>
+	</rule>
+
+
+	<!--
+	#############################################################################
+	SELECTIVE EXCLUSIONS
+	Exclude specific files for specific sniffs and/or exclude sub-groups in sniffs.
+	#############################################################################
+	-->
+
+	<!--
+	Sometimes, you may want to exclude a certain directory, like your tests,
+	for select sniffs.
+	The below examples demonstrate how to do this.
+
+	In the example, the `GlobalVariablesOverride` rule is excluded for test files
+	as it is sometimes necessary to overwrite WP globals in test situations (just
+	don't forget to restore them after the test!).
+
+	Along the same lines, PHPUnit is getting stricter about using PSR-4 file names,
+	so excluding test files from the `WordPress.Files.Filename` sniff can be a
+	legitimate exclusion.
+
+	For more information on ruleset configuration optiones, check out the PHPCS wiki:
+	https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset
+	-->
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>/path/to/Tests/*Test\.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.Filename">
+		<exclude-pattern>/path/to/Tests/*Test\.php</exclude-pattern>
 	</rule>
 
 </ruleset>
