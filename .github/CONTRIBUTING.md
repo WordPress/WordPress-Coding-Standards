@@ -17,11 +17,11 @@ Since WPCS employs many sniffs that are part of PHPCS, sometimes an issue will b
 
 ## Branches
 
-Ongoing development will be done in the `develop` branch with merges done into `master` once considered stable.
+Ongoing development will be done in the `develop` branch with merges to `main` once considered stable.
 
 To contribute an improvement to this project, fork the repo and open a pull request to the `develop` branch. Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
-Once a commit is made to `develop`, a PR should be opened from `develop` into `master` and named "Next release". This PR will provide collaborators with a forum to discuss the upcoming stable release.
+Once a commit is made to `develop`, a PR should be opened from `develop` to `main` and named "Next release". This PR will provide collaborators with a forum to discuss the upcoming stable release.
 
 # Considerations when writing sniffs
 

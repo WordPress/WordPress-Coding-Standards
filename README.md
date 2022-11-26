@@ -95,7 +95,7 @@ It is strongly suggested to `require` one of these plugins in your project to ha
 
 2. Clone the WordPress standards repository:
 
-        git clone -b master https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
+        git clone -b main https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
 
 3. Add its path to the PHP_CodeSniffer configuration:
 
@@ -111,7 +111,7 @@ To summarize:
 ```bash
 cd ~/projects
 git clone https://github.com/squizlabs/PHP_CodeSniffer.git phpcs
-git clone -b master https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
+git clone -b main https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
 cd phpcs
 ./bin/phpcs --config-set installed_paths ../wpcs
 ```

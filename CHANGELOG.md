@@ -1181,7 +1181,7 @@ Initial tagged release.
 
 [Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer
 
-[Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/master...HEAD
+[Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/main...HEAD
 [2.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.1...2.3.0
 [2.2.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.1.1...2.2.0
