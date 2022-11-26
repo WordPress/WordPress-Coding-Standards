@@ -410,10 +410,6 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'alt'     => 'wp_register_widget_control()',
 			'version' => '2.8.0',
 		),
-		'sanitize_url' => array(
-			'alt'     => 'esc_url_raw()',
-			'version' => '2.8.0',
-		),
 		'the_author_aim' => array(
 			'alt'     => 'the_author_meta(\'aim\')',
 			'version' => '2.8.0',
@@ -988,7 +984,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '3.5.0',
 		),
 		'wp_cache_reset' => array(
-			'alt'     => 'WP_Object_Cache::reset()',
+			'alt'     => 'wp_cache_switch_to_blog()',
 			'version' => '3.5.0',
 		),
 		'wp_create_thumbnail' => array(
@@ -1368,6 +1364,137 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_get_user_request_data' => array(
 			'alt'     => 'wp_get_user_request()',
 			'version' => '5.4.0',
+		),
+
+		// WP 5.5.0.
+		'_wp_register_meta_args_whitelist' => array(
+			'alt'     => '_wp_register_meta_args_allowed_list()',
+			'version' => '5.5.0',
+		),
+		'add_option_whitelist' => array(
+			'alt'     => 'add_allowed_options()',
+			'version' => '5.5.0',
+		),
+		'remove_option_whitelist' => array(
+			'alt'     => 'remove_allowed_options()',
+			'version' => '5.5.0',
+		),
+		'wp_blacklist_check' => array(
+			'alt'     => 'wp_check_comment_disallowed_list()',
+			'version' => '5.5.0',
+		),
+		'wp_make_content_images_responsive' => array(
+			'alt'     => 'wp_filter_content_tags()',
+			'version' => '5.5.0',
+		),
+		'wp_unregister_GLOBALS' => array(
+			'alt'     => '',
+			'version' => '5.5.0',
+		),
+
+		// WP 5.7.0.
+		'noindex' => array(
+			'alt'     => 'wp_robots_noindex()',
+			'version' => '5.7.0',
+		),
+		'wp_no_robots' => array(
+			'alt'     => 'wp_robots_no_robots()',
+			'version' => '5.7.0',
+		),
+		'wp_sensitive_page_meta' => array(
+			'alt'     => 'wp_robots_sensitive_page()',
+			'version' => '5.7.0',
+		),
+
+		// WP 5.8.0.
+		'_excerpt_render_inner_columns_blocks' => array(
+			'alt'     => '_excerpt_render_inner_blocks()',
+			'version' => '5.8.0',
+		),
+
+		// WP 5.9.0.
+		'readonly' => array(
+			'alt'     => 'wp_readonly()',
+			'version' => '5.9.0',
+		),
+
+		// WP 5.9.1.
+		'wp_render_duotone_filter_preset' => array(
+			'alt'     => 'wp_get_duotone_filter_property()',
+			'version' => '5.9.1',
+		),
+
+		// WP 6.0.0.
+		'image_attachment_fields_to_save' => array(
+			'alt'     => '',
+			'version' => '6.0.0',
+		),
+		'wp_add_iframed_editor_assets_html' => array(
+			'alt'     => '',
+			'version' => '6.0.0',
+		),
+		'wp_skip_border_serialization' => array(
+			'alt'     => 'wp_should_skip_block_supports_serialization()',
+			'version' => '6.0.0',
+		),
+		'wp_skip_dimensions_serialization' => array(
+			'alt'     => 'wp_should_skip_block_supports_serialization()',
+			'version' => '6.0.0',
+		),
+		'wp_skip_spacing_serialization' => array(
+			'alt'     => 'wp_should_skip_block_supports_serialization()',
+			'version' => '6.0.0',
+		),
+
+		// WP 6.0.2.
+		'the_meta' => array(
+			'alt'     => 'get_post_meta()',
+			'version' => '6.0.2',
+		),
+
+		// WP 6.0.3.
+		// Verified; see https://core.trac.wordpress.org/ticket/56791#comment:10.
+		'_filter_query_attachment_filenames' => array(
+			'alt'     => 'add_filter( "wp_allow_query_attachment_by_filename", "__return_true" )',
+			'version' => '6.0.3',
+		),
+
+		// WP 6.1.0.
+		'_get_path_to_translation' => array(
+			'alt'     => 'WP_Textdomain_Registry',
+			'version' => '6.1.0',
+		),
+		'_get_path_to_translation_from_lang_dir' => array(
+			'alt'     => 'WP_Textdomain_Registry',
+			'version' => '6.1.0',
+		),
+		'_wp_multiple_block_styles' => array(
+			'alt'     => '',
+			'version' => '6.1.0',
+		),
+		'global_terms' => array(
+			'alt'     => '',
+			'version' => '6.1.0',
+		),
+		'global_terms_enabled' => array(
+			'alt'     => '',
+			'version' => '6.1.0',
+		),
+		'install_global_terms' => array(
+			'alt'     => '',
+			'version' => '6.1.0',
+		),
+		'sync_category_tag_slugs' => array(
+			'alt'     => '',
+			'version' => '6.1.0',
+		),
+		'wp_get_attachment_thumb_file' => array(
+			'alt'     => '',
+			'version' => '6.1.0',
+		),
+		'wp_typography_get_css_variable_inline_style' => array(
+			'alt'     => 'wp_style_engine_get_styles()',
+			'version' => '6.1.0',
 		),
 	);
 

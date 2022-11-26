@@ -16,9 +16,5 @@ $a = (new WP_User_Search())->query();
 /* ============ WP 4.9 ============ */
 class Prefix_Menu_section extends Customize_New_Menu_Section {}
 WP_Customize_New_Menu_Control::foo();
-
-/*
- * Warning.
- */
 /* ============ WP 5.3 ============ */
 $json = new Services_JSON;

@@ -48,15 +48,15 @@ trait MinimumWPVersionTrait {
 	 * Example usage:
 	 * <rule ref="WordPress.WP.DeprecatedClasses">
 	 *  <properties>
-	 *   <property name="minimum_wp_version" value="4.3"/>
+	 *   <property name="minimum_wp_version" value="4.9"/>
 	 *  </properties>
 	 * </rule>
 	 *
 	 * Alternatively, the value can be passed in one go for all sniffs using it via
 	 * the command line or by setting a `<config>` value in a custom phpcs.xml ruleset.
 	 *
-	 * CL: `phpcs --runtime-set minimum_wp_version 4.5`
-	 * Ruleset: `<config name="minimum_wp_version" value="4.5"/>`
+	 * CL:      `phpcs --runtime-set minimum_wp_version 5.7`
+	 * Ruleset: `<config name="minimum_wp_version" value="6.0"/>`
 	 *
 	 * @since 0.14.0 Previously the individual sniffs each contained this property.
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
@@ -68,7 +68,7 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_wp_version = '5.1';
+	public $minimum_wp_version = '5.8';
 
 	/**
 	 * Overrule the minimum supported WordPress version with a command-line/config value.
