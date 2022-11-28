@@ -23,12 +23,12 @@ class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	/**
 	 * List of all WP native classes.
 	 *
-	 * To be updated after every major release.
-	 *
 	 * List is sorted alphabetically and based on the WIP autoloading PR.
 	 * {@link https://github.com/WordPress/wordpress-develop/pull/3470}
 	 *
 	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
 	 *
 	 * @since 3.0.0
 	 *
