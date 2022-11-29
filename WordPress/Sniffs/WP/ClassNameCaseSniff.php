@@ -346,6 +346,179 @@ class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	);
 
 	/**
+	 * List of all GetID3 classes include in WP Core.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $getid3_classes = array(
+		'AMFReader',
+		'AMFStream',
+		'AVCSequenceParameterSetReader',
+		'getID3',
+		'getid3_ac3',
+		'getid3_apetag',
+		'getid3_asf',
+		'getid3_dts',
+		'getid3_exception',
+		'getid3_flac',
+		'getid3_flv',
+		'getid3_handler',
+		'getid3_id3v1',
+		'getid3_id3v2',
+		'getid3_lib',
+		'getid3_lyrics3',
+		'getid3_matroska',
+		'getid3_mp3',
+		'getid3_ogg',
+		'getid3_quicktime',
+		'getid3_riff',
+	);
+
+	/**
+	 * List of all PHPMailer classes include in WP Core.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $phpmailer_classes = array(
+		'PHPMailer\\PHPMailer\\Exception',
+		'PHPMailer\\PHPMailer\\PHPMailer',
+		'PHPMailer\\PHPMailer\\SMTP',
+	);
+
+	/**
+	 * List of all Requests classes included in WP Core.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $requests_classes = array(
+		// Interfaces.
+		'Requests_Auth',
+		'Requests_Hooker',
+		'Requests_Proxy',
+		'Requests_Transport',
+
+		// Classes.
+		'Requests',
+		'Requests_Auth_Basic',
+		'Requests_Cookie',
+		'Requests_Cookie_Jar',
+		'Requests_Exception',
+		'Requests_Exception_HTTP',
+		'Requests_Exception_Transport',
+		'Requests_Exception_Transport_cURL',
+		'Requests_Exception_HTTP_304',
+		'Requests_Exception_HTTP_305',
+		'Requests_Exception_HTTP_306',
+		'Requests_Exception_HTTP_400',
+		'Requests_Exception_HTTP_401',
+		'Requests_Exception_HTTP_402',
+		'Requests_Exception_HTTP_403',
+		'Requests_Exception_HTTP_404',
+		'Requests_Exception_HTTP_405',
+		'Requests_Exception_HTTP_406',
+		'Requests_Exception_HTTP_407',
+		'Requests_Exception_HTTP_408',
+		'Requests_Exception_HTTP_409',
+		'Requests_Exception_HTTP_410',
+		'Requests_Exception_HTTP_411',
+		'Requests_Exception_HTTP_412',
+		'Requests_Exception_HTTP_413',
+		'Requests_Exception_HTTP_414',
+		'Requests_Exception_HTTP_415',
+		'Requests_Exception_HTTP_416',
+		'Requests_Exception_HTTP_417',
+		'Requests_Exception_HTTP_418',
+		'Requests_Exception_HTTP_428',
+		'Requests_Exception_HTTP_429',
+		'Requests_Exception_HTTP_431',
+		'Requests_Exception_HTTP_500',
+		'Requests_Exception_HTTP_501',
+		'Requests_Exception_HTTP_502',
+		'Requests_Exception_HTTP_503',
+		'Requests_Exception_HTTP_504',
+		'Requests_Exception_HTTP_505',
+		'Requests_Exception_HTTP_511',
+		'Requests_Exception_HTTP_Unknown',
+		'Requests_Hooks',
+		'Requests_IDNAEncoder',
+		'Requests_IPv6',
+		'Requests_IRI',
+		'Requests_Proxy_HTTP',
+		'Requests_Response',
+		'Requests_Response_Headers',
+		'Requests_Session',
+		'Requests_SSL',
+		'Requests_Transport_cURL',
+		'Requests_Transport_fsockopen',
+		'Requests_Utility_CaseInsensitiveDictionary',
+		'Requests_Utility_FilteredIterator',
+	);
+
+	/**
+	 * List of all SimplePier classes included in WP Core.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $simplepie_classes = array(
+		'SimplePie',
+		'SimplePie_Author',
+		'SimplePie_Cache',
+		'SimplePie_Caption',
+		'SimplePie_Category',
+		'SimplePie_Copyright',
+		'SimplePie_Core',
+		'SimplePie_Credit',
+		'SimplePie_Enclosure',
+		'SimplePie_Exception',
+		'SimplePie_File',
+		'SimplePie_gzdecode',
+		'SimplePie_IRI',
+		'SimplePie_Item',
+		'SimplePie_Locator',
+		'SimplePie_Misc',
+		'SimplePie_Parser',
+		'SimplePie_Rating',
+		'SimplePie_Registry',
+		'SimplePie_Restriction',
+		'SimplePie_Sanitize',
+		'SimplePie_Source',
+		'SimplePie_Content_Type_Sniffer',
+		'SimplePie_Decode_HTML_Entities',
+		'SimplePie_HTTP_Parser',
+		'SimplePie_Net_IPv6',
+		'SimplePie_Parse_Date',
+		'SimplePie_XML_Declaration_Parser',
+	);
+
+	/**
 	 * List of all WP native classes in lowercase.
 	 *
 	 * This array is automatically generated in the class constructor based on the $wp_classes property.
@@ -357,14 +530,76 @@ class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	private $wp_classes_lc = array();
 
 	/**
+	 * List of all GetID3 classes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $phpmailer_classes property.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $getid3_classes_lc = array();
+
+	/**
+	 * List of all PHPMailer classes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $phpmailer_classes property.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $phpmailer_classes_lc = array();
+
+	/**
+	 * List of all Requests classes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $requests_classes property.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $requests_classes_lc = array();
+
+	/**
+	 * List of all SimplePie classes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $simplepie_classes property.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $simplepie_classes_lc = array();
+
+	/**
+	 * Groups names.
+	 *
+	 * Used to dynamically fill in some of the above properties and to generate the getGroups() array.
+	 *
+	 * @var array
+	 */
+	private $class_groups = array(
+		'wp_classes',
+		'getid3_classes',
+		'phpmailer_classes',
+		'requests_classes',
+		'simplepie_classes',
+	);
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.0.0
 	 */
 	public function __construct() {
-		// Adjust the $wp_classes property to have the lowercased version of the value as a key.
-		$this->wp_classes_lc = array_map( 'strtolower', $this->wp_classes );
-		$this->wp_classes    = array_combine( $this->wp_classes_lc, $this->wp_classes );
+		// Adjust the class list properties to have the lowercased version of the value as a key.
+		foreach ( $this->class_groups as $name ) {
+			$name_lc        = $name . '_lc';
+			$this->$name_lc = array_map( 'strtolower', $this->$name );
+			$this->$name    = array_combine( $this->$name_lc, $this->$name );
+		}
 	}
 
 	/**
@@ -375,11 +610,15 @@ class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 * @return array
 	 */
 	public function getGroups() {
-		return array(
-			'wp_classes' => array(
-				'classes' => $this->wp_classes_lc,
-			),
-		);
+		$groups = array();
+		foreach ( $this->class_groups as $name ) {
+			$name_lc         = $name . '_lc';
+			$groups[ $name ] = array(
+				'classes' => $this->$name_lc,
+			);
+		}
+
+		return $groups;
 	}
 
 	/**
@@ -398,7 +637,7 @@ class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 
 		$matched_unqualified = ltrim( $matched_content, '\\' );
 		$matched_lowercase   = strtolower( $matched_unqualified );
-		$matched_proper_case = $this->wp_classes[ $matched_lowercase ];
+		$matched_proper_case = $this->get_proper_case( $matched_lowercase );
 
 		if ( $matched_unqualified === $matched_proper_case ) {
 			// Already using proper case, nothing to do.
@@ -412,5 +651,24 @@ class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		);
 
 		$this->phpcsFile->addWarning( $warning, $stackPtr, 'Incorrect', $data );
+	}
+
+	/**
+	 * Match a lowercase class name to its proper cased name.
+	 *
+	 * @param string $matched_lc Lowercase class name.
+	 *
+	 * @return string
+	 */
+	private function get_proper_case( $matched_lc ) {
+		foreach ( $this->class_groups as $name ) {
+			$current = $this->$name; // Needed to prevent issues with PHP < 7.0.
+			if ( isset( $current[ $matched_lc ] ) ) {
+				return $current[ $matched_lc ];
+			}
+		}
+
+		// Shouldn't be possible.
+		return ''; // @codeCoverageIgnore
 	}
 }

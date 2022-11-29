@@ -36,11 +36,15 @@ class ClassNameCaseUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			30 => 1,
-			31 => 1,
-			33 => 1,
-			35 => 1,
-			36 => 1,
+			37 => 1,
+			38 => 1,
+			40 => 1,
+			42 => 1,
+			43 => 1,
+			46 => 1,
+			47 => 1,
+			48 => 1,
+			49 => 1,
 		);
 	}
 }
