@@ -744,4 +744,8 @@
 	<!-- Check that class name references use the correct case. -->
 	<rule ref="WordPress.WP.ClassNameCase"/>
 
+	<!-- Check that __DIR__ is favoured over dirname(__FILE__).
+		 See: https://core.trac.wordpress.org/ticket/48082 -->
+	<rule ref="Modernize.FunctionCalls.Dirname.FileConstant"/>
+
 </ruleset>
