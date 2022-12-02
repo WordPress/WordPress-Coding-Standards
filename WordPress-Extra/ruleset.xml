@@ -84,6 +84,9 @@
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
+	<!-- Verify that capabilities are being used correctly. -->
+	<rule ref="WordPress.WP.Capabilities"/>
+
 	<!-- Scripts & style should be enqueued.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
