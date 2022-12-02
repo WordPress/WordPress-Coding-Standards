@@ -73,7 +73,7 @@ jobs:
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_version == 'dev-master' }}
-        run: composer lint-ci
+        run: composer lint -- --checkstyle
 
       - name: Run unit tests
         run: composer run-tests
