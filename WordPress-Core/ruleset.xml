@@ -673,4 +673,7 @@
 	<!-- Don't use current_time() to retrieve a timestamp. -->
 	<rule ref="WordPress.DateTime.CurrentTimeTimestamp"/>
 
+	<!-- Check that class name references use the correct case. -->
+	<rule ref="WordPress.WP.ClassNameCase"/>
+
 </ruleset>
