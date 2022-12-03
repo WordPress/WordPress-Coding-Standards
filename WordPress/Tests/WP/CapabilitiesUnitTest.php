@@ -19,8 +19,9 @@ use PHPCSUtils\BackCompat\Helper;
  * @since   3.0.0
  */
 class CapabilitiesUnitTest extends AbstractSniffUnitTest {
+
 	/**
-	 * Set warnings level to 3 to trigger suggestions as warnings.
+	 * Adjust the config to allow for testing with specific CLI arguments.
 	 *
 	 * @param string                  $filename The name of the file being tested.
 	 * @param \PHP_CodeSniffer\Config $config   The config data for the run.
@@ -30,7 +31,11 @@ class CapabilitiesUnitTest extends AbstractSniffUnitTest {
 	public function setCliValues( $filename, $config ) {
 		if ( 'CapabilitiesUnitTest.1.inc' === $filename ) {
 			$config->warningSeverity = 3;
-		} elseif ( 'CapabilitiesUnitTest.2.inc' === $filename ) {
+		} else {
+			$config->warningSeverity = 5;
+		}
+
+		if ( 'CapabilitiesUnitTest.2.inc' === $filename ) {
 			Helper::setConfigData( 'minimum_wp_version', '2.9', true, $config );
 		} elseif ( 'CapabilitiesUnitTest.3.inc' === $filename ) {
 			Helper::setConfigData( 'minimum_wp_version', '6.1', true, $config );
@@ -74,6 +79,13 @@ class CapabilitiesUnitTest extends AbstractSniffUnitTest {
 					10 => 1,
 					12 => 1,
 					14 => 1,
+				);
+
+			case 'CapabilitiesUnitTest.4.inc':
+				return array(
+					8  => 1,
+					10 => 1,
+					12 => 1,
 				);
 
 			default:
