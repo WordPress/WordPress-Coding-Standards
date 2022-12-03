@@ -19,7 +19,7 @@ use PHPCSUtils\BackCompat\Helper;
  * - Add appropriate `use` statement(s) to the file/class which intends to use this functionality.
  * - Call the `MinimumWPVersionTrait::get_wp_version_from_cli()` method in the `process()`/`process_token()`
  *   method.
- * - After that, the `MinimumWPVersionTrait::$minimum_supported_version` property can be freely used
+ * - After that, the `MinimumWPVersionTrait::$minimum_wp_version` property can be freely used
  *   in the sniff.
  *
  * @package WPCS\WordPressCodingStandards
@@ -32,12 +32,12 @@ trait MinimumWPVersionTrait {
 	 * Minimum supported WordPress version.
 	 *
 	 * Currently used by the `WordPress.WP.AlternativeFunctions`,
-	 * `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`,
-	 * `WordPress.WP.DeprecatedParameter` and the `WordPress.WP.DeprecatedParameterValues` sniff.
+	 * `WordPress.WP.Capabilities`, `WordPress.WP.DeprecatedClasses`,
+	 * `WordPress.WP.DeprecatedFunctions`, `WordPress.WP.DeprecatedParameter`
+	 * and the `WordPress.WP.DeprecatedParameterValues` sniff.
 	 *
-	 * These sniffs will throw an error when usage of a deprecated class/function/parameter
-	 * is detected if the class/function/parameter was deprecated before the minimum
-	 * supported WP version; a warning otherwise.
+	 * These sniffs will adapt their behaviour based on the minimum supported WP version
+	 * indicated.
 	 * By default, it is set to presume that a project will support the current
 	 * WP version and up to three releases before.
 	 *
@@ -48,41 +48,42 @@ trait MinimumWPVersionTrait {
 	 * Example usage:
 	 * <rule ref="WordPress.WP.DeprecatedClasses">
 	 *  <properties>
-	 *   <property name="minimum_supported_version" value="4.3"/>
+	 *   <property name="minimum_wp_version" value="4.3"/>
 	 *  </properties>
 	 * </rule>
 	 *
-	 * Alternatively, the value can be passed in one go for all sniff using it via
+	 * Alternatively, the value can be passed in one go for all sniffs using it via
 	 * the command line or by setting a `<config>` value in a custom phpcs.xml ruleset.
-	 * Note: the `_wp_` in the command line property name!
 	 *
-	 * CL: `phpcs --runtime-set minimum_supported_wp_version 4.5`
-	 * Ruleset: `<config name="minimum_supported_wp_version" value="4.5"/>`
+	 * CL: `phpcs --runtime-set minimum_wp_version 4.5`
+	 * Ruleset: `<config name="minimum_wp_version" value="4.5"/>`
 	 *
 	 * @since 0.14.0 Previously the individual sniffs each contained this property.
-	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
+	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
+	 *               - The property has been renamed from `$minimum_supported_version` to `$minimum_wp_version`.
+	 *               - The CLI option has been renamed from `minimum_supported_wp_version` to `minimum_wp_version`.
 	 *
 	 * @internal When the value of this property is changed, it will also need
 	 *           to be changed in the `WP/AlternativeFunctionsUnitTest.inc` file.
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_supported_version = '5.1';
+	public $minimum_wp_version = '5.1';
 
 	/**
 	 * Overrule the minimum supported WordPress version with a command-line/config value.
 	 *
 	 * Handle setting the minimum supported WP version in one go for all sniffs which
 	 * expect it via the command line or via a `<config>` variable in a ruleset.
-	 * The config variable overrules the default `$minimum_supported_version` and/or a
-	 * `$minimum_supported_version` set for individual sniffs through the ruleset.
+	 * The config variable overrules the default `$minimum_wp_version` and/or a
+	 * `$minimum_wp_version` set for individual sniffs through the ruleset.
 	 *
 	 * @since 0.14.0
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
 	 *               - Renamed from `get_wp_version_from_cl()` to `get_wp_version_from_cli()`.
 	 */
 	protected function get_wp_version_from_cli() {
-		$cli_supported_version = Helper::getConfigData( 'minimum_supported_wp_version' );
+		$cli_supported_version = Helper::getConfigData( 'minimum_wp_version' );
 
 		if ( empty( $cli_supported_version ) ) {
 			return;
@@ -92,7 +93,7 @@ trait MinimumWPVersionTrait {
 		if ( ! empty( $cli_supported_version )
 			&& filter_var( $cli_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
 		) {
-			$this->minimum_supported_version = $cli_supported_version;
+			$this->minimum_wp_version = $cli_supported_version;
 		}
 	}
 

@@ -31,7 +31,7 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  *                 being provided via the command-line or as as <config> value
  *                 in a custom ruleset.
  *
- * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_supported_version
+ * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 
@@ -319,7 +319,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$message  = 'The parameter "%s" at position #%s of %s() has been deprecated since WordPress version %s.';
-			$is_error = version_compare( $parameter_args['version'], $this->minimum_supported_version, '<' );
+			$is_error = version_compare( $parameter_args['version'], $this->minimum_wp_version, '<' );
 			$code     = MessageHelper::stringToErrorcode( ucfirst( $matched_content ) . 'Param' . $position . 'Found' );
 
 			$data = array(
