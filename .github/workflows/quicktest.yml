@@ -20,7 +20,6 @@ jobs:
   # This is a much quicker test suite which only runs the unit tests and linting
   # against the low/high supported PHP/PHPCS combinations.
   quick-tests:
-    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,6 +30,8 @@ jobs:
             phpcs_version: '3.7.1'
           - php: '5.4'
             phpcs_version: '3.7.1'
+
+    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
     steps:
       - name: Checkout repository

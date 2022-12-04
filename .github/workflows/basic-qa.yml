@@ -94,12 +94,13 @@ jobs:
   # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
   # It also needs to be run against all PHPCS versions WPCS is tested against.
   ruleset-tests:
-    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ '7.4' ]
         phpcs_version: [ 'dev-master', '3.7.1' ]
+
+    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
 
     steps:
       - name: Checkout repository
