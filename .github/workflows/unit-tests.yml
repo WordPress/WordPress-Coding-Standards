@@ -16,18 +16,7 @@ concurrency:
 
 jobs:
   # Runs the test suite against all supported branches and combinations.
-  #
   # Linting is performed on all jobs run against PHPCS `dev-master`.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Configures caching for Composer.
-  # - Sets up PHP.
-  # - Configures PHPCS to install from source (only when running with 4.0.x-dev).
-  # - Installs PHPCS.
-  # - Install Composer dependencies.
-  # - Runs the Composer linting script.
-  # - Runs Composer run-tests script.
   test:
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
     runs-on: ubuntu-latest

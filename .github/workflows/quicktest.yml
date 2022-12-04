@@ -19,14 +19,6 @@ jobs:
   # Performs some quick tests.
   # This is a much quicker test suite which only runs the unit tests and linting
   # against the low/high supported PHP/PHPCS combinations.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Sets up PHP.
-  # - Installs PHPCS.
-  # - Install Composer dependencies (from cache if available).
-  # - Runs the Composer linting script (if desired).
-  # - Runs Composer run-tests script.
   quick-tests:
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
     runs-on: ubuntu-latest
