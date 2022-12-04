@@ -58,13 +58,6 @@ jobs:
           coverage: none
           tools: cs2pr
 
-      # Set Composer up to download only PHPCS from source for PHPCS 4.x.
-      # The source is needed to get the base testcase from PHPCS.
-      # All other jobs can use `auto`, which is Composer's default value.
-      - name: Configure PHPCS
-        if: ${{ startsWith( matrix.phpcs_version, '4' ) }}
-        run: composer config preferred-install.squizlabs/php_codesniffer source
-
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
