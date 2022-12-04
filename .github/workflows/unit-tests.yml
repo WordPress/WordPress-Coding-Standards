@@ -19,19 +19,14 @@ jobs:
   # Linting is performed on all jobs run against PHPCS `dev-master`.
   test:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.allowed_failure }}
     strategy:
       matrix:
-        php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+        php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
         phpcs_version: [ '3.7.1', 'dev-master' ]
-        include:
+        #include:
           # Add extra build to test against PHPCS 4.
           #- php: '7.4'
           #  phpcs_version: '4.0.x-dev as 3.9.99'
-          #  allowed_failure: true
-          - php: '8.2'
-            phpcs_version: 'dev-master'
-            allowed_failure: true
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
@@ -83,6 +78,6 @@ jobs:
         if: ${{ matrix.php < '8.1' }}
         run: composer run-tests
 
-      - name: Run the unit tests - PHP 8.1
+      - name: Run the unit tests - PHP >= 8.1
         if: ${{ matrix.php >= '8.1' }}
         run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
