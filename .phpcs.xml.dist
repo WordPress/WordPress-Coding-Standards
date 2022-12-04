@@ -3,30 +3,41 @@
 
 	<description>The Coding standard for the WordPress Coding Standards itself.</description>
 
-	<file>.</file>
+	<!--
+	#############################################################################
+	COMMAND LINE ARGUMENTS
+	https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset
+	#############################################################################
+	-->
 
-	<arg value="sp"/>
-	<arg name="extensions" value="php"/>
-	<arg name="basepath" value="."/>
-	<arg name="parallel" value="8"/>
+	<file>.</file>
 
 	<!-- Exclude Composer vendor directory. -->
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<!-- Only check PHP files. -->
+	<arg name="extensions" value="php"/>
+
+	<!-- Show progress, show the error codes for each message (source). -->
+	<arg value="ps"/>
+
+	<!-- Strip the filepaths down to the relevant bit. -->
+	<arg name="basepath" value="."/>
+
+	<!-- Check up to 8 files simultaneously. -->
+	<arg name="parallel" value="8"/>
+
+
+	<!--
+	#############################################################################
+	SET UP THE RULESETS
+	#############################################################################
+	-->
 
 	<rule ref="WordPress">
 		<exclude name="WordPress.Files.FileName"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
 		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
-	</rule>
-
-	<!-- Enforce PSR1 compatible namespaces. -->
-	<rule ref="PSR1.Classes.ClassDeclaration"/>
-
-	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
-		<properties>
-			<property name="alignMultilineItems" value="!=100"/>
-			<property name="exact" value="false" phpcs-only="true"/>
-		</properties>
 	</rule>
 
 	<!-- Check code for cross-version PHP compatibility. -->
@@ -42,6 +53,23 @@
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesceFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesce_equalFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_yield_fromFound"/>
+	</rule>
+
+	<!-- Enforce PSR1 compatible namespaces. -->
+	<rule ref="PSR1.Classes.ClassDeclaration"/>
+
+
+	<!--
+	#############################################################################
+	SNIFF SPECIFIC CONFIGURATION
+	#############################################################################
+	-->
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="alignMultilineItems" value="!=100"/>
+			<property name="exact" value="false" phpcs-only="true"/>
+		</properties>
 	</rule>
 
 </ruleset>
