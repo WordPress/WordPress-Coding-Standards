@@ -27,8 +27,9 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-
-		$errors = array_fill( 8, 329, 1 );
+		$start_line = 8;
+		$end_line   = 356;
+		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
 		unset(
@@ -43,6 +44,7 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$errors[73],
 			$errors[76],
 			$errors[80],
+			$errors[102], // Undeprecated function.
 			$errors[118],
 			$errors[125],
 			$errors[162],
@@ -63,7 +65,12 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$errors[319],
 			$errors[323],
 			$errors[330],
-			$errors[332]
+			$errors[332],
+			$errors[337],
+			$errors[340],
+			$errors[344],
+			$errors[346],
+			$errors[353]
 		);
 
 		return $errors;
@@ -75,14 +82,24 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-
-		$warnings = array_fill( 342, 8, 1 );
+		$start_line = 362;
+		$end_line   = 386;
+		$warnings   = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
 		unset(
-			$warnings[344],
-			$warnings[348]
+			$warnings[363],
+			$warnings[365],
+			$warnings[367],
+			$warnings[373],
+			$warnings[375],
+			$warnings[377]
 		);
+
+		// Temporarily until PHPCS supports PHP 8.2.
+		if ( PHP_VERSION_ID >= 80200 ) {
+			unset( $warnings[364] ); // Function call to readonly.
+		}
 
 		return $warnings;
 	}

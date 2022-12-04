@@ -99,7 +99,7 @@ get_the_author_yim();
 js_escape();
 register_sidebar_widget();
 register_widget_control();
-sanitize_url();
+sanitize_url(); // Undeprecated as of WP 5.9. See #2031.
 the_author_aim();
 the_author_description();
 the_author_email();
@@ -334,10 +334,6 @@ get_shortcut_link();
 is_user_option_local();
 wp_ajax_press_this_add_category();
 wp_ajax_press_this_save_post();
-
-/*
- * Warning.
- */
 /* ============ WP 5.1 ============ */
 insert_blog();
 install_blog();
@@ -347,3 +343,44 @@ _wp_privacy_requests_screen_options();
 update_user_status();
 /* ============ WP 5.4 ============ */
 wp_get_user_request_data();
+/* ============ WP 5.5 ============ */
+_wp_register_meta_args_whitelist();
+add_option_whitelist();
+remove_option_whitelist();
+wp_blacklist_check();
+wp_make_content_images_responsive();
+wp_unregister_GLOBALS();
+/* ============ WP 5.7 ============ */
+noindex();
+wp_no_robots();
+wp_sensitive_page_meta();
+
+/*
+ * Warning.
+ */
+/* ============ WP 5.8 ============ */
+_excerpt_render_inner_columns_blocks();
+/* ============ WP 5.9 ============ */
+readonly();
+/* ============ WP 5.9.1 ============ */
+wp_render_duotone_filter_preset();
+/* ============ WP 6.0 ============ */
+image_attachment_fields_to_save();
+wp_add_iframed_editor_assets_html();
+wp_skip_border_serialization();
+wp_skip_dimensions_serialization();
+wp_skip_spacing_serialization();
+/* ============ WP 6.0.2 ============ */
+the_meta();
+/* ============ WP 6.0.3 ============ */
+_filter_query_attachment_filenames();
+/* ============ WP 6.1 ============ */
+_get_path_to_translation();
+_get_path_to_translation_from_lang_dir();
+_wp_multiple_block_styles();
+global_terms();
+global_terms_enabled();
+install_global_terms();
+sync_category_tag_slugs();
+wp_get_attachment_thumb_file();
+wp_typography_get_css_variable_inline_style();
