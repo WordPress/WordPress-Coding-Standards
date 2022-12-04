@@ -22,9 +22,8 @@ jobs:
     continue-on-error: ${{ matrix.allowed_failure }}
     strategy:
       matrix:
-        php: [ '8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4' ]
-        phpcs_version: [ 'dev-master', '3.7.1' ]
-        allowed_failure: [ false ]
+        php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+        phpcs_version: [ '3.7.1', 'dev-master' ]
         include:
           # Add extra build to test against PHPCS 4.
           #- php: '7.4'

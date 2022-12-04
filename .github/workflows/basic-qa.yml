@@ -98,7 +98,7 @@ jobs:
     strategy:
       matrix:
         php: [ '7.4' ]
-        phpcs_version: [ 'dev-master', '3.7.1' ]
+        phpcs_version: [ '3.7.1', 'dev-master' ]
 
     name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
 
