@@ -35,9 +35,18 @@
 	-->
 
 	<rule ref="WordPress">
+		<!-- This project needs to comply with naming standards from PHPCS, not WP. -->
 		<exclude name="WordPress.Files.FileName"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
+
+		<!-- While conditions with assignments are a typical way to walk the token stream. -->
 		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
+
+		<!-- The code in this project is run in the context of PHPCS, not WP. -->
+		<exclude name="WordPress.DateTime"/>
+		<exclude name="WordPress.DB"/>
+		<exclude name="WordPress.Security"/>
+		<exclude name="WordPress.WP"/>
 	</rule>
 
 	<!-- Check code for cross-version PHP compatibility. -->
