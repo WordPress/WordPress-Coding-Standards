@@ -106,8 +106,5 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {
-		return;
-	}
-
+	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {}
 }

@@ -68,13 +68,13 @@ jobs:
       # WordPress Coding Standards.
       # @link https://github.com/WordPress/WordPress-Coding-Standards
       # @link http://pear.php.net/package/PHP_CodeSniffer/
-      - name: Run PHPCS ignoring warnings
+      - name: Check the code style of the PHP files
         id: phpcs
-        run: vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1 --report-full --report-checkstyle=./phpcs-report.xml
+        run: vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml
 
       - name: Show PHPCS results in PR
         if: ${{ always() && steps.phpcs.outcome == 'failure' }}
-        run: cs2pr ./phpcs-report.xml --graceful-warnings
+        run: cs2pr ./phpcs-report.xml
 
       # Validate the Ruleset XML files.
       # @link http://xmlsoft.org/xmllint.html
