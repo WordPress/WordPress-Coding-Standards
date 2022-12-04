@@ -72,15 +72,6 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 					267 => 1,
 				);
 
-				/*
-				Uncomment when "$blank_line_check" parameter will be "true" by default.
-
-				$ret[29] += 1;
-				$ret[33]  = 1;
-				$ret[36]  = 1;
-				$ret[38]  = 1;
-				 */
-
 				return $ret;
 
 			case 'ControlStructureSpacingUnitTest.2.inc':
