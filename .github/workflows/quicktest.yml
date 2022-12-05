@@ -19,26 +19,19 @@ jobs:
   # Performs some quick tests.
   # This is a much quicker test suite which only runs the unit tests and linting
   # against the low/high supported PHP/PHPCS combinations.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Sets up PHP.
-  # - Installs PHPCS.
-  # - Install Composer dependencies (from cache if available).
-  # - Runs the Composer linting script (if desired).
-  # - Runs Composer run-tests script.
   quick-tests:
-    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.4', '5.4' ]
+        php: [ '5.4', 'latest' ]
         phpcs_version: [ 'dev-master' ]
         include:
           - php: '7.3'
             phpcs_version: '3.7.1'
           - php: '5.4'
             phpcs_version: '3.7.1'
+
+    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
     steps:
       - name: Checkout repository
@@ -65,15 +58,28 @@ jobs:
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
-      - name: Install Composer dependencies
+      - name: Install Composer dependencies (PHP < 8.0 )
+        if: ${{ matrix.php < 8.0 && matrix.php != 'latest' }}
         uses: ramsey/composer-install@v2
         with:
           # Bust the cache at least once a month - output format: YYYY-MM-DD.
+          custom-cache-suffix: $(date -u -d "-0 month -$(($(date +%d)-1)) days" "+%F")
+
+      - name: Install Composer dependencies (PHP >= 8.0)
+        if: ${{ matrix.php >= 8.0 || matrix.php == 'latest' }}
+        uses: ramsey/composer-install@v2
+        with:
+          composer-options: --ignore-platform-reqs
           custom-cache-suffix: $(date -u -d "-0 month -$(($(date +%d)-1)) days" "+%F")
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_version == 'dev-master' }}
         run: composer lint -- --checkstyle
 
-      - name: Run unit tests
+      - name: Run the unit tests - PHP 5.4 - 8.0
+        if: ${{ matrix.php < '8.1' && matrix.php != 'latest' }}
         run: composer run-tests
+
+      - name: Run the unit tests - PHP >= 8.1
+        if: ${{ matrix.php >= '8.1' || matrix.php == 'latest' }}
+        run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests

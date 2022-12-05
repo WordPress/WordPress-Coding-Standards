@@ -16,35 +16,19 @@ concurrency:
 
 jobs:
   # Runs the test suite against all supported branches and combinations.
-  #
   # Linting is performed on all jobs run against PHPCS `dev-master`.
-  #
-  # Performs the following steps:
-  # - Checks out the repository.
-  # - Configures caching for Composer.
-  # - Sets up PHP.
-  # - Configures PHPCS to install from source (only when running with 4.0.x-dev).
-  # - Installs PHPCS.
-  # - Install Composer dependencies.
-  # - Runs the Composer linting script.
-  # - Runs Composer run-tests script.
   test:
-    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.allowed_failure }}
     strategy:
       matrix:
-        php: [ '8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4' ]
-        phpcs_version: [ 'dev-master', '3.7.1' ]
-        allowed_failure: [ false ]
-        include:
+        php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        phpcs_version: [ '3.7.1', 'dev-master' ]
+        #include:
           # Add extra build to test against PHPCS 4.
           #- php: '7.4'
           #  phpcs_version: '4.0.x-dev as 3.9.99'
-          #  allowed_failure: true
-          - php: '8.2'
-            phpcs_version: 'dev-master'
-            allowed_failure: true
+
+    name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
     steps:
       - name: Checkout repository
@@ -68,13 +52,6 @@ jobs:
           ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
           coverage: none
           tools: cs2pr
-
-      # Set Composer up to download only PHPCS from source for PHPCS 4.x.
-      # The source is needed to get the base testcase from PHPCS.
-      # All other jobs can use `auto`, which is Composer's default value.
-      - name: Configure PHPCS
-        if: ${{ startsWith( matrix.phpcs_version, '4' ) }}
-        run: composer config preferred-install.squizlabs/php_codesniffer source
 
       - name: Set PHPCS version
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
@@ -101,6 +78,6 @@ jobs:
         if: ${{ matrix.php < '8.1' }}
         run: composer run-tests
 
-      - name: Run the unit tests - PHP 8.1
+      - name: Run the unit tests - PHP >= 8.1
         if: ${{ matrix.php >= '8.1' }}
         run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
