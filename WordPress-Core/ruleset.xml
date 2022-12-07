@@ -391,14 +391,16 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#visibility-and-modifier-order
 	#############################################################################
 	-->
-	<!-- Rule: When using multiple modifiers for a class declaration, the order should be as follows:
+	<!-- Covers rule: When using multiple modifiers for a class declaration, the order should be as follows:
 		 - First the optional abstract or final modifier.
 		 - Next, the optional readonly modifier. -->
+	<rule ref="Universal.Classes.ModifierKeywordOrder"/>
 
-	<!-- Rule: When using multiple modifiers for a constant declaration inside object-oriented structures,
+	<!-- Covers rule: When using multiple modifiers for a constant declaration inside object-oriented structures,
 		 the order should be as follows:
 		 - First the optional final modifier.
 		 - Next, the visibility modifier. -->
+	<rule ref="Universal.Constants.ModifierKeywordOrder"/>
 
 	<!-- Covers rule: When using multiple modifiers for a property declaration, the order should be as follows:
 		 - First a visibility modifier.
