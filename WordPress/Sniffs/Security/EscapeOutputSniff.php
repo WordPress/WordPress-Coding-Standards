@@ -263,7 +263,7 @@ class EscapeOutputSniff extends Sniff {
 		}
 
 		// Ignore the function itself.
-		$stackPtr++;
+		++$stackPtr;
 
 		$in_cast = false;
 
@@ -315,7 +315,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// Handle arrays for those functions that accept them.
 			if ( \T_ARRAY === $this->tokens[ $i ]['code'] ) {
-				$i++; // Skip the opening parenthesis.
+				++$i; // Skip the opening parenthesis.
 				continue;
 			}
 

@@ -178,10 +178,10 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			}
 
 			if ( $string !== $case_transform ) {
-				$case_errors++;
+				++$case_errors;
 			}
 			if ( $string !== $punct_transform ) {
-				$underscores++;
+				++$underscores;
 			}
 		}
 
@@ -270,7 +270,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 				$is_variable = true;
 				if ( '{' === $part ) {
 					$has_braces = true;
-					$braces++;
+					++$braces;
 				}
 				continue;
 			}
@@ -278,10 +278,10 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			if ( true === $is_variable ) {
 				if ( '[' === $part ) {
 					$has_braces = true;
-					$braces++;
+					++$braces;
 				}
 				if ( \in_array( $part, array( '}', ']' ), true ) ) {
-					$braces--;
+					--$braces;
 				}
 				if ( false === $has_braces && ' ' === $part ) {
 					$is_variable  = false;

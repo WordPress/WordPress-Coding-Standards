@@ -561,7 +561,7 @@ class ControlStructureSpacingSniff extends Sniff {
 					$i = ( $scopeCloser + 1 );
 					while ( $this->tokens[ $i ]['line'] !== $this->tokens[ $trailingContent ]['line'] ) {
 						$this->phpcsFile->fixer->replaceToken( $i, '' );
-						$i++;
+						++$i;
 					}
 
 					// TODO: Instead a separate error should be triggered when content comes right after closing brace.

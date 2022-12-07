@@ -928,7 +928,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$nextPtr     = ( $stackPtr + 1 );
 
 		while ( isset( $tokens[ $nextPtr ] ) && $tokens[ $nextPtr ]['line'] === $currentLine ) {
-			$nextPtr++;
+			++$nextPtr;
 			// Do nothing, we just want the last token of the line.
 		}
 

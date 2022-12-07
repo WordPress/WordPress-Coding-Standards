@@ -332,7 +332,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				}
 			}
 
-			$ptr++;
+			++$ptr;
 		}
 		unset( $var );
 
