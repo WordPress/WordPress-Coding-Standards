@@ -330,15 +330,15 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param string $function Function name.
+	 * @param string $function_name Function name.
 	 * @return string Regex escaped function name.
 	 */
-	protected function prepare_name_for_regex( $function ) {
-		$function = str_replace( array( '.*', '*' ), '@@', $function ); // Replace wildcards with placeholder.
-		$function = preg_quote( $function, '`' );
-		$function = str_replace( '@@', '.*', $function ); // Replace placeholder with regex wildcard.
+	protected function prepare_name_for_regex( $function_name ) {
+		$function_name = str_replace( array( '.*', '*' ), '@@', $function_name ); // Replace wildcards with placeholder.
+		$function_name = preg_quote( $function_name, '`' );
+		$function_name = str_replace( '@@', '.*', $function_name ); // Replace placeholder with regex wildcard.
 
-		return $function;
+		return $function_name;
 	}
 
 }

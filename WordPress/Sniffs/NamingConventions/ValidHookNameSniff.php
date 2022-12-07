@@ -228,38 +228,38 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Transform an arbitrary string to lowercase and replace punctuation and spaces with underscores.
 	 *
-	 * @param string $string         The target string.
+	 * @param string $text_string    The target string.
 	 * @param string $regex          The punctuation regular expression to use.
 	 * @param string $transform_type Whether to a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
-	protected function transform( $string, $regex, $transform_type = 'full' ) {
+	protected function transform( $text_string, $regex, $transform_type = 'full' ) {
 
 		switch ( $transform_type ) {
 			case 'case':
-				return strtolower( $string );
+				return strtolower( $text_string );
 
 			case 'punctuation':
-				return preg_replace( $regex, '_', $string );
+				return preg_replace( $regex, '_', $text_string );
 
 			case 'full':
 			default:
-				return preg_replace( $regex, '_', strtolower( $string ) );
+				return preg_replace( $regex, '_', strtolower( $text_string ) );
 		}
 	}
 
 	/**
 	 * Transform a complex string which may contain variable extrapolation.
 	 *
-	 * @param string $string         The target string.
+	 * @param string $text_string    The target string.
 	 * @param string $regex          The punctuation regular expression to use.
 	 * @param string $transform_type Whether to a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
-	protected function transform_complex_string( $string, $regex, $transform_type = 'full' ) {
-		$output = preg_split( '`([\{\}\$\[\] ])`', $string, -1, \PREG_SPLIT_DELIM_CAPTURE );
+	protected function transform_complex_string( $text_string, $regex, $transform_type = 'full' ) {
+		$output = preg_split( '`([\{\}\$\[\] ])`', $text_string, -1, \PREG_SPLIT_DELIM_CAPTURE );
 
 		$is_variable = false;
 		$has_braces  = false;

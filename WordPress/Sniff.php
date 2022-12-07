@@ -1256,7 +1256,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @param array $valid_functions List of valid function names.
 	 *                               Note: The keys to this array should be the function names
 	 *                               in lowercase. Values are irrelevant.
-	 * @param bool  $global          Optional. Whether to make sure that the function call is
+	 * @param bool  $global_function Optional. Whether to make sure that the function call is
 	 *                               to a global function. If `false`, calls to methods, be it static
 	 *                               `Class::method()` or via an object `$obj->method()`, and
 	 *                               namespaced function calls, like `MyNS\function_name()` will
@@ -1271,7 +1271,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *
 	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
 	 */
-	protected function is_in_function_call( $stackPtr, $valid_functions, $global = true, $allow_nested = false ) {
+	protected function is_in_function_call( $stackPtr, $valid_functions, $global_function = true, $allow_nested = false ) {
 		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 			return false;
 		}
@@ -1297,7 +1297,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				continue;
 			}
 
-			if ( false === $global ) {
+			if ( false === $global_function ) {
 				return $prev_non_empty;
 			}
 
