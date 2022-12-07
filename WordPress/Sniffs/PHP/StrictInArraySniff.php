@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
+use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
@@ -40,10 +41,8 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	/**
 	 * List of array functions to which a $strict parameter can be passed.
 	 *
-	 * The $strict parameter is the third and last parameter for each of these functions.
-	 *
 	 * The array_keys() function only requires the $strict parameter when the optional
-	 * second parameter $search has been set.
+	 * second parameter $filter_value has been set.
 	 *
 	 * @link http://php.net/in-array
 	 * @link http://php.net/array-search
@@ -51,13 +50,26 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.10.0
 	 * @since 0.11.0 Renamed from $array_functions to $target_functions.
+	 * @since 3.0.0  The format of the array value has changed from boolean to array.
 	 *
-	 * @var array <string function_name> => <bool always needed ?>
+	 * @var array<string, array{param_position: int, param_name: string, always_needed: bool}> Key is the function name.
 	 */
 	protected $target_functions = array(
-		'in_array'     => true,
-		'array_search' => true,
-		'array_keys'   => false,
+		'in_array'     => array(
+			'param_position' => 3,
+			'param_name'     => 'strict',
+			'always_needed'  => true,
+		),
+		'array_search' => array(
+			'param_position' => 3,
+			'param_name'     => 'strict',
+			'always_needed'  => true,
+		),
+		'array_keys'   => array(
+			'param_position' => 3,
+			'param_name'     => 'strict',
+			'always_needed'  => false,
+		),
 	);
 
 	/**
@@ -73,33 +85,41 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		// Check if the strict check is actually needed.
-		if ( false === $this->target_functions[ $matched_content ] ) {
-			if ( \count( $parameters ) === 1 ) {
+		$param_info = $this->target_functions[ $matched_content ];
+
+		/*
+		 * Check if the strict check is actually needed.
+		 *
+		 * Important! This check only applies to array_keys() in the current form of the sniff
+		 * and has been written to be specific to that function.
+		 * If more functions would be added with 'always_needed' set to `false`,
+		 * this code will need to be adjusted to handle those.
+		 */
+		if ( false === $param_info['always_needed'] ) {
+			$has_search = PassedParameters::getParameterFromStack( $parameters, 2, 'filter_value' );
+			if ( false === $has_search ) {
 				return;
 			}
 		}
 
-		// We're only interested in the third parameter.
-		if ( false === isset( $parameters[3] ) || 'true' !== strtolower( $parameters[3]['raw'] ) ) {
+		$found_parameter = PassedParameters::getParameterFromStack( $parameters, $param_info['param_position'], $param_info['param_name'] );
+		if ( false === $found_parameter || 'true' !== strtolower( $found_parameter['raw'] ) ) {
 			$errorcode = 'MissingTrueStrict';
 
 			/*
 			 * Use a different error code when `false` is found to allow for excluding
 			 * the warning as this will be a conscious choice made by the dev.
 			 */
-			if ( isset( $parameters[3] ) && 'false' === strtolower( $parameters[3]['raw'] ) ) {
+			if ( is_array( $found_parameter ) && 'false' === strtolower( $found_parameter['raw'] ) ) {
 				$errorcode = 'FoundNonStrictFalse';
 			}
 
 			$this->phpcsFile->addWarning(
-				'Not using strict comparison for %s; supply true for third argument.',
-				( isset( $parameters[3]['start'] ) ? $parameters[3]['start'] : $parameters[1]['start'] ),
+				'Not using strict comparison for %s; supply true for $%s argument.',
+				( isset( $found_parameter['start'] ) ? $found_parameter['start'] : $stackPtr ),
 				$errorcode,
-				array( $matched_content )
+				array( $matched_content, $param_info['param_name'] )
 			);
-			return;
 		}
 	}
-
 }
