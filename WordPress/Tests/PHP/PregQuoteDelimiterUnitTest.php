@@ -36,9 +36,10 @@ class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			6 => 1,
-			7 => 1,
+			6  => 1,
+			7  => 1,
+			13 => 1,
+			14 => 1,
 		);
 	}
-
 }
