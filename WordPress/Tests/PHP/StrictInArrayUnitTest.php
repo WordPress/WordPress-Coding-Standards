@@ -48,7 +48,9 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 			35 => 1,
 			36 => 1,
 			37 => 1,
+			44 => 1,
+			48 => 1,
+			49 => 1,
 		);
 	}
-
 }
