@@ -207,8 +207,6 @@
 	<!-- Rule: In a switch block, there must be no space between the case condition and the colon. -->
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
-	<!-- Rule: Similarly, there should be no space before the colon on return type declarations. -->
-
 	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside them. -->
 	<rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">
 		<properties>
@@ -341,6 +339,35 @@
 	<!-- Rule: Each parameter must take up no more than a single line. Multi-line parameter
 		 values must be assigned to a variable and then that variable should be passed to the function call.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1330 -->
+
+
+	<!--
+	#############################################################################
+	Handbook: Formatting - Type declarations.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#type-declarations
+	#############################################################################
+	-->
+	<!-- Covers rule: Type declarations must have exactly one space before and after the type. -->
+	<!-- Covered by the Squiz.Functions.FunctionDeclarationArgumentSpacing sniff. -->
+
+	<!-- Covers rule: There should be no space between the nullability operator and the actual type. -->
+	<rule ref="PSR12.Functions.NullableTypeDeclaration"/>
+
+	<!-- Rule: Class/interface/enum name based type declarations should use the case of the
+		 class/interface/enum name as declared... -->
+	<!-- Not sniffable except for PHP native names and known WP class names (this last part via
+		 the WordPress.WP.ClassNameCase sniff once switched to the (upcoming/future)
+		 PHPCSUtils AbstractClassUseSniff. -->
+
+	<!-- Covers rule: ... while the keyword-based type declarations should be lowercased. -->
+	<!-- Covered by the Generic.PHP.LowerCaseType sniff. -->
+
+	<!-- Covers rule: Return type declarations should have no space between the closing parenthesis
+		 of the function declaration and the colon starting a return type. -->
+	<rule ref="PSR12.Functions.ReturnTypeDeclaration"/>
+
+	<!-- Implied through the examples: There should no space around the union or intersection type operators. -->
+	<rule ref="Universal.Operators.TypeSeparatorSpacing"/>
 
 
 	<!--
