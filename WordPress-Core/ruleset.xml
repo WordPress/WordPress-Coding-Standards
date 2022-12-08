@@ -101,6 +101,9 @@
 	<rule ref="WordPress.NamingConventions.ValidHookName"/>
 	<rule ref="WordPress.NamingConventions.ValidVariableName"/>
 
+	<!-- Covers rule: It is _strongly recommended_ to avoid reserved keywords as function parameter names. -->
+	<rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
+
 	<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
 	<rule ref="PEAR.NamingConventions.ValidClassName"/>
 
