@@ -222,6 +222,13 @@
 		 no spaces between the operator and the variable it applies to. -->
 	<rule ref="Generic.WhiteSpace.IncrementDecrementSpacing"/>
 
+	<!-- Implied through the examples: Object operators should not have whitespace around them unless they are multi-line. -->
+	<rule ref="WordPress.WhiteSpace.ObjectOperatorSpacing">
+		<properties>
+			<property name="ignoreNewlines" value="true"/>
+		</properties>
+	</rule>
+
 
 	<!--
 	#############################################################################
@@ -382,9 +389,11 @@
 	<!-- Covers rule: The PHP native __*__ magic constants should be written in uppercase. -->
 	<rule ref="Universal.Constants.UppercaseMagicConstants"/>
 
-	<!-- Rule: When using the ::class constant for class name resolution, the class keyword should be in lowercase... -->
+	<!-- Covers rule: When using the ::class constant for class name resolution, the class keyword should be in lowercase... -->
+	<rule ref="Universal.Constants.LowercaseClassResolutionKeyword"/>
 
-	<!-- Rule: ... and there should be no spaces around the :: operator. -->
+	<!-- Covers rule: ... and there should be no spaces around the :: operator. -->
+	<!-- Covered by the WordPress.WhiteSpace.ObjectOperatorSpacing sniff. -->
 
 
 	<!--
@@ -717,13 +726,6 @@
 
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
-
-	<!-- Object operators should not have whitespace around them unless they are multi-line. -->
-	<rule ref="WordPress.WhiteSpace.ObjectOperatorSpacing">
-		<properties>
-			<property name="ignoreNewlines" value="true"/>
-		</properties>
-	</rule>
 
 	<!-- References to self in a class should be lower-case and not have extraneous spaces,
 		 per implicit conventions in the core codebase; the NotUsed code refers to using the
