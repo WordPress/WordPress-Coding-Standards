@@ -323,3 +323,24 @@ jobs:
           verify_min_age: "true" # verify base on cooldown period
           review: ${{ github.event_name == 'pull_request' }}
           reviewdog_level: "error"
+
+  yamllint:
+    permissions:
+      contents: read # To clone the repo.
+
+    name: 'Lint Yaml'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Ref: https://yamllint.readthedocs.io/en/stable/
+      - name: Run Yamllint on all yaml files in repo
+        run: yamllint . --format colored --strict
+
+      - name: Pipe Yamllint results on to GH for inline display
+        if: ${{ failure() }}
+        run: yamllint . --format github --strict
