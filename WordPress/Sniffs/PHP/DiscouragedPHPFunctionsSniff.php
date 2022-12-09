@@ -48,7 +48,7 @@ class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'urlencode' => array(
 				'type'      => 'warning',
-				'message'   => '%s() should only be used when dealing with legacy applications rawurlencode() should now be used instead. See http://php.net/manual/en/function.rawurlencode.php and http://www.faqs.org/rfcs/rfc3986.html',
+				'message'   => '%s() should only be used when dealing with legacy applications rawurlencode() should now be used instead. See https://www.php.net/function.rawurlencode and http://www.faqs.org/rfcs/rfc3986.html',
 				'functions' => array(
 					'urlencode',
 				),

@@ -16,7 +16,7 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 /**
  * Ensures filenames do not contain underscores.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
  * @package WPCS\WordPressCodingStandards
  *

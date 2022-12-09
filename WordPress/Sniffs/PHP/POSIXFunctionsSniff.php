@@ -15,8 +15,8 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * Perl compatible regular expressions (PCRE, preg_ functions) should be used in preference
  * to their POSIX counterparts.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#regular-expressions
- * @link    http://php.net/manual/en/ref.regex.php
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#regular-expressions
+ * @link    https://php-legacy-docs.zend.com/manual/php5/en/ref.regex
  *
  * @package WPCS\WordPressCodingStandards
  *

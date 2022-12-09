@@ -38,7 +38,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
-	 * These Regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 * These Regexes were originally copied from https://www.php.net/function.sprintf#93552
 	 * and adjusted for better precision and updated specs.
 	 */
 	const SPRINTF_PLACEHOLDER_REGEX = '/(?:

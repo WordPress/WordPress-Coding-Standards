@@ -194,7 +194,7 @@ __( '<b><i>Foo</i></b>', 'my-slug' ); // Bad
 __( '<foo>Foo</foo>', 'my-slug' ); // Good
 
 // Strings wrapped in `<a href="...">...</a>` aren't flagged, since the link target might require localization.
-__( '<a href="http://wordpress.org">WordPress</a>', 'my-slug' ); // Good
+__( '<a href="https://wordpress.org">WordPress</a>', 'my-slug' ); // Good
 __( '<a id="anchor">translatable text</a>', 'my-slug' ) // Bad, since no href
 __( '<a>translatable text</a>', 'my-slug' ) // Bad, since no href
 __( '<a href="%s">translatable text</a>', 'my-slug' ) // Good

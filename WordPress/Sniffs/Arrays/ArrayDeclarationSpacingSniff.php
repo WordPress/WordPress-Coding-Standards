@@ -24,7 +24,7 @@ use PHPCSUtils\Utils\PassedParameters;
  * - Checks that each array item in a multi-line array starts on a new line.
  * - Checks that the array closer in a multi-line array is on a new line.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
  * @package WPCS\WordPressCodingStandards
  *

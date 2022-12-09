@@ -19,7 +19,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * Additionally, the use of the (unset) and (binary) casts is discouraged.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/....
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
  *
  * @package WPCS\WordPressCodingStandards
  *

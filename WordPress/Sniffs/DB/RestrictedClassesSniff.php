@@ -19,7 +19,7 @@ use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
  *  helps keep your code forward-compatible and, in cases where results are cached in memory,
  *  it can be many times faster."
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
  *
  * @package WPCS\WordPressCodingStandards
  *

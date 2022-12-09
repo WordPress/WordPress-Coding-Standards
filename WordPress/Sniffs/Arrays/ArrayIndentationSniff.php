@@ -18,7 +18,7 @@ use PHPCSUtils\Utils\PassedParameters;
 /**
  * Enforces WordPress array indentation for multi-line arrays.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#indentation
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
  * @package WPCS\WordPressCodingStandards
  *

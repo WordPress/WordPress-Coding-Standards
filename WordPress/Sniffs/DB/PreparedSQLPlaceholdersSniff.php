@@ -44,7 +44,7 @@ use WordPressCS\WordPress\Sniff;
 class PreparedSQLPlaceholdersSniff extends Sniff {
 
 	/**
-	 * These regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 * These regexes were originally copied from https://www.php.net/function.sprintf#93552
 	 * and adjusted for limitations in `$wpdb->prepare()`.
 	 *
 	 * Near duplicate of the one used in the WP.I18n sniff, but with fewer types allowed.

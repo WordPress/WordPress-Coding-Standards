@@ -18,7 +18,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Verifies that all outputted strings are escaped.
  *
- * @link    http://codex.wordpress.org/Data_Validation Data Validation on WordPress Codex
+ * @link    https://developer.wordpress.org/apis/security/data-validation/ WordPress Developer Docs on Data Validation.
  *
  * @package WPCS\WordPressCodingStandards
  *

@@ -18,7 +18,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#formatting-sql-statements
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#formatting-sql-statements
  *
  * @package WPCS\WordPressCodingStandards
  *

@@ -7,7 +7,7 @@ curl_close( $ch ); // Warning.
 CURL_getinfo(); // Warning.
 curlyhair(); // Ok.
 
-parse_url( 'http://example.com/' ); // Warning.
+parse_url( 'https://example.com/' ); // Warning.
 
 $json = json_encode( $thing ); // Warning, use wp_json_encode instead.
 

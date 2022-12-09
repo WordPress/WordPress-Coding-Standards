@@ -6,9 +6,6 @@
     <standard>
     <![CDATA[
     When doing logical comparisons involving variables, the variable must be placed on the right side. All constants, literals, and function calls must be placed on the left side. If neither side is a variable, the order is unimportant.
-
-    For more information:
-    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#yoda-conditions
     ]]>
     </standard>
     <code_comparison>

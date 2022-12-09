@@ -14,7 +14,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Restricts the usage of extract().
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#dont-extract
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#dont-extract
  *
  * @package WPCS\WordPressCodingStandards
  *

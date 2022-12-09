@@ -3,8 +3,8 @@
 
 <?php
 
-?><link rel="stylesheet" href="http://someurl/somefile.css"><?php
-?><script src="http://someurl/somefile.js"></script><?php
+?><link rel="stylesheet" href="https://someurl/somefile.css"><?php
+?><script src="https://someurl/somefile.js"></script><?php
 
 
 echo '<script src="' . SOMESCRIPT . '">';
@@ -22,8 +22,8 @@ $head = <<<EOT
 EOT;
 
 $head = <<<"EOT"
-<link rel="stylesheet" href="http://someurl/somefile.css">
-<script src="http://someurl/somefile.js"></script>
+<link rel="stylesheet" href="https://someurl/somefile.css">
+<script src="https://someurl/somefile.js"></script>
 EOT;
 
 $head = <<<'EOD'
@@ -51,5 +51,5 @@ echo '<script type="text/javascript"
 	';
 
 // Test multi-line text string with multiple issues.
-echo '<link rel="stylesheet" href="http://someurl/somefile1.css"/>
-	<link rel="stylesheet" href="http://someurl/somefile2.css"/>';
+echo '<link rel="stylesheet" href="https://someurl/somefile1.css"/>
+	<link rel="stylesheet" href="https://someurl/somefile2.css"/>';
