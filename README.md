@@ -1,12 +1,12 @@
 <div aria-hidden="true">
 
-[![Latest Stable Version](https://poser.pugx.org/wp-coding-standards/wpcs/v/stable)](https://packagist.org/packages/wp-coding-standards/wpcs)
+[![Latest Stable Version](https://poser.pugx.org/wp-coding-standards/wpcs/v/stable)][packagist-wpcs]
 [![Release Date of the Latest Version](https://img.shields.io/github/release-date/WordPress/WordPress-Coding-Standards.svg?maxAge=1800)](https://github.com/WordPress/WordPress-Coding-Standards/releases)
 :construction:
 [![Latest Unstable Version](https://img.shields.io/badge/unstable-dev--develop-e68718.svg?maxAge=2419200)](https://packagist.org/packages/wp-coding-standards/wpcs#dev-develop)
 
 [![Basic QA checks](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/basic-qa.yml/badge.svg)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/basic-qa.yml)
-[![Unit Tests](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
+[![Unit Tests](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml/badge.svg)][gha-tests]
 [![codecov.io](https://codecov.io/gh/WordPress/WordPress-Coding-Standards/graph/badge.svg?token=UzFYn0RzVG&branch=develop)](https://codecov.io/gh/WordPress/WordPress-Coding-Standards?branch=develop)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
@@ -44,7 +44,7 @@
 
 ## Introduction
 
-This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
+This project is a collection of [PHP_CodeSniffer][gh-phpcs] rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
 
 ## Minimum Requirements
 
@@ -146,10 +146,10 @@ Information on custom properties which can be set for sniffs from PHP_CodeSniffe
 
 #### PHPCompatibility
 
-The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) ruleset and its subset [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) come highly recommended.
-The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) sniffs are designed to analyse your code for cross-version PHP compatibility.
+The [PHPCompatibility][gh-phpcompat] ruleset and its subset [PHPCompatibilityWP][gh-phpcompat-wp] come highly recommended.
+The [PHPCompatibility][gh-phpcompat] sniffs are designed to analyse your code for cross-version PHP compatibility.
 
-The [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) ruleset is based on PHPCompatibility, but specifically crafted to prevent false positives for projects which expect to run within the context of WordPress, i.e. core, plugins and themes.
+The [PHPCompatibilityWP][gh-phpcompat-wp] ruleset is based on PHPCompatibility, but specifically crafted to prevent false positives for projects which expect to run within the context of WordPress, i.e. core, plugins and themes.
 
 Install either as a separate ruleset and run it separately against your code or add it to your custom ruleset, like so:
 ```xml
@@ -163,7 +163,7 @@ Whichever way you run it, do make sure you set the `testVersion` to run the snif
 
 For more information about setting the `testVersion`, see:
 * [PHPCompatibility: Sniffing your code for compatibility with specific PHP version(s)](https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions)
-* [PHPCompatibility: Using a custom ruleset](https://github.com/PHPCompatibility/PHPCompatibility#using-a-custom-ruleset)
+* [PHPCompatibility: Using a custom ruleset][gh-phpcompat-ruleset-info]
 
 #### VariableAnalysis
 
@@ -251,3 +251,12 @@ See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit t
 ## License
 
 See [LICENSE](LICENSE) (MIT).
+
+
+[packagist-wpcs]:            https://packagist.org/packages/wp-coding-standards/wpcs
+[gha-tests]:                 https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml
+
+[gh-phpcs]:                  https://github.com/squizlabs/PHP_CodeSniffer
+[gh-phpcompat]:              https://github.com/PHPCompatibility/PHPCompatibility
+[gh-phpcompat-wp]:           https://github.com/PHPCompatibility/PHPCompatibilityWP
+[gh-phpcompat-ruleset-info]: https://github.com/PHPCompatibility/PHPCompatibility#using-a-custom-ruleset
