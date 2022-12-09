@@ -45,7 +45,7 @@ echo <<<EOD
 This is an {$explanation} about WordPress.
 EOD;
 
-echo 'http://wordpress.org/something'; // OK - part of a URL.
+echo 'https://wordpress.org/something'; // OK - part of a URL.
 ?>
 
 <div class="copyright"><?php printf( wp_kses_post( __( 'Powered by <a href="%s">WordPress</a>', 'theme-slug' ) ), 'https://wordpress.org/' ); ?></div><!-- OK. -->
@@ -127,7 +127,7 @@ $default_editor_settings = [
 			array(
 				'section' 		=> 'arouse_theme_info',
 				'label' 		=> __( 'Arouse Documentation', 'arouse' ),
-				'content' 		=> __( '<a class="button" href="http://themezhut.com/arouse-wordpress-theme-documentation/" target="_blank">Read the documentation.</a>', 'arouse' ), // OK.
+				'content' 		=> __( '<a class="button" href="https://themezhut.com/arouse-wordpress-theme-documentation/" target="_blank">Read the documentation.</a>', 'arouse' ), // OK.
 			)
 		) 
 	);	

@@ -71,7 +71,7 @@ class Debug_Bar {
  * @version     2.0.0
  *
  * @copyright   2013-2018 Juliette Reinders Folmer
- * @license     http://creativecommons.org/licenses/GPL/2.0/ GNU General Public License, version 2 or higher
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License, version 2 or higher
  *
  * @wordpress-plugin
  * Plugin Name	:	Debug Bar Constants
@@ -79,7 +79,7 @@ class Debug_Bar {
  * Description	:	Debug Bar Constants adds new panels to Debug Bar that display all the defined constants for the current request. Requires "Debug Bar" plugin.
  * Version		:	2.0.0
  * Author		:	Juliette Reinders Folmer
- * Author URI	:	http://www.adviesenzo.nl/
+ * Author URI	:	https://www.adviesenzo.nl/
  * Depends		:	Debug Bar
  * Text Domain	:	debug-bar-constants
  * Domain Path	:	/languages
@@ -102,11 +102,11 @@ class Debug_Bar {
 
 /**
  * Plugin Name: Missing text domain, docblock format.
- * Plugin URI: http://www.bigvoodoo.com
+ * Plugin URI: https://www.bigvoodoo.com/
  * Description: Ensures the Git repositories are kept current and up to date with uploads made within WordPress.
  * Author: Big Voodoo Interactive
  * Version: 0.1.0
- * Author URI: http://www.bigvoodoo.com
+ * Author URI: https://www.bigvoodoo.com/
  * @author Big Voodoo Interactive
  * @TODO error reporting
  */

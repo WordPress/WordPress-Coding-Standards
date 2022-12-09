@@ -16,7 +16,7 @@ if ( @&file_exists( $filename ) && @ /*comment*/ is_readable( $filename ) ) {
 	$file = @ \file( $filename );
 }
 
-$fp = @fopen('http://www.example.com', 'r', false);
+$fp = @fopen('https://www.example.com', 'r', false);
 @fpassthru($fp); // Bad.
 @fclose($fp); // Bad.
 

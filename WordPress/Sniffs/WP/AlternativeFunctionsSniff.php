@@ -33,7 +33,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Local input streams which should not be flagged for the file system function checks.
 	 *
-	 * @link http://php.net/manual/en/wrappers.php.php
+	 * @link https://www.php.net/wrappers.php
 	 *
 	 * @var array
 	 */
@@ -49,7 +49,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * Local input streams which should not be flagged for the file system function checks if
 	 * the $filename starts with them.
 	 *
-	 * @link http://php.net/manual/en/wrappers.php.php
+	 * @link https://www.php.net/wrappers.php
 	 *
 	 * @var array
 	 */
@@ -61,7 +61,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Local input stream constants which should not be flagged for the file system function checks.
 	 *
-	 * @link http://php.net/manual/en/wrappers.php.php
+	 * @link https://www.php.net/wrappers.php
 	 *
 	 * @var array
 	 */

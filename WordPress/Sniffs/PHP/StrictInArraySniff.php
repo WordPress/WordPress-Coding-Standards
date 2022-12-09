@@ -15,8 +15,6 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 /**
  * Flag calling in_array(), array_search() and array_keys() without true as the third parameter.
  *
- * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#using-in_array-without-strict-parameter
- *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.9.0
@@ -44,9 +42,9 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 	 * The array_keys() function only requires the $strict parameter when the optional
 	 * second parameter $filter_value has been set.
 	 *
-	 * @link http://php.net/in-array
-	 * @link http://php.net/array-search
-	 * @link http://php.net/array-keys
+	 * @link https://www.php.net/in-array
+	 * @link https://www.php.net/array-search
+	 * @link https://www.php.net/array-keys
 	 *
 	 * @since 0.10.0
 	 * @since 0.11.0 Renamed from $array_functions to $target_functions.

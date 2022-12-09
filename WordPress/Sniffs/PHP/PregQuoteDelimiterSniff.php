@@ -33,7 +33,7 @@ class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * List of functions this sniff should examine.
 	 *
-	 * @link http://php.net/preg_quote
+	 * @link https://www.php.net/preg_quote
 	 *
 	 * @since 1.0.0
 	 *
