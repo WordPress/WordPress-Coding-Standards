@@ -147,11 +147,29 @@
 		</properties>
 	</rule>
 
-
 	<!-- Prevent some typical mistakes people make accidentally.
-	     https://github.com/WordPress/WordPress-Coding-Standards/pull/1777 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1777 -->
 	<rule ref="WordPress.CodeAnalysis.EscapedNotTranslated"/>
 
+	<!-- Detects duplicate array keys in array declarations. -->
+	<rule ref="Universal.Arrays.DuplicateArrayKey"/>
+
+	<!-- Disallows return type declarations on constructor/destructor methods,
+		and constructor/destructor methods returning a value. -->
+	<rule ref="Universal.CodeAnalysis.ConstructorDestructorReturn"/>
+
+	<!-- Detects foreach control structures using the same variable for both key and value. -->
+	<rule ref="Universal.CodeAnalysis.ForeachUniqueAssignment"/>
+
+	<!-- Detects using static instead of self in object-oriented constructs which are final. -->
+	<rule ref="Universal.CodeAnalysis.StaticInFinalClass"/>
+
+	<!-- Disallow if statements, if they are the only statement in an else block. -->
+	<rule ref="Universal.ControlStructures.DisallowLonelyIf"/>
+
+	<!-- Enforce for a file to either declare (global/namespaced) functions
+		or declare object-oriented structures, but not both. -->
+	<rule ref="Universal.Files.SeparateFunctionsFromOO"/>
 
 	<!--
 	#############################################################################

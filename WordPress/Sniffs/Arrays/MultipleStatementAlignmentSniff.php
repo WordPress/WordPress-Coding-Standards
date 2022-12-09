@@ -465,12 +465,10 @@ class MultipleStatementAlignmentSniff extends Sniff {
 
 			if ( \T_WHITESPACE !== $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['code'] ) {
 				$before = 0;
+			} elseif ( $this->tokens[ $item['last_index_token'] ]['line'] !== $this->tokens[ $item['operatorPtr'] ]['line'] ) {
+				$before = 'newline';
 			} else {
-				if ( $this->tokens[ $item['last_index_token'] ]['line'] !== $this->tokens[ $item['operatorPtr'] ]['line'] ) {
-					$before = 'newline';
-				} else {
-					$before = $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['length'];
-				}
+				$before = $this->tokens[ ( $item['operatorPtr'] - 1 ) ]['length'];
 			}
 
 			/*

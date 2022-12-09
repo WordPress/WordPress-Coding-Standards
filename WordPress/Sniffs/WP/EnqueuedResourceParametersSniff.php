@@ -140,17 +140,15 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 				'MissingVersion',
 				array( $matched_content, $type )
 			);
-		} else {
 			// The version argument should have a non-false value.
-			if ( $this->is_falsy( $parameters[4]['start'], $parameters[4]['end'] ) ) {
-				$this->phpcsFile->addError(
-					'Version parameter is not explicitly set or has been set to an equivalent of "false" for %s; ' .
-					'This means that the WordPress core version will be used which is not recommended for plugin or theme development.',
-					$stackPtr,
-					'NoExplicitVersion',
-					array( $matched_content )
-				);
-			}
+		} elseif ( $this->is_falsy( $parameters[4]['start'], $parameters[4]['end'] ) ) {
+			$this->phpcsFile->addError(
+				'Version parameter is not explicitly set or has been set to an equivalent of "false" for %s; ' .
+				'This means that the WordPress core version will be used which is not recommended for plugin or theme development.',
+				$stackPtr,
+				'NoExplicitVersion',
+				array( $matched_content )
+			);
 		}
 
 		/*
