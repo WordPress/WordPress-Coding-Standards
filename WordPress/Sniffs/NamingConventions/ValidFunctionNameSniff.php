@@ -19,7 +19,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
  * @package WPCS\WordPressCodingStandards
  *

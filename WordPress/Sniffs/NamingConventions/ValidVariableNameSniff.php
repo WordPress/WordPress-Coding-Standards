@@ -17,7 +17,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Checks the naming of variables and member variables.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
  * @package WPCS\WordPressCodingStandards
  *

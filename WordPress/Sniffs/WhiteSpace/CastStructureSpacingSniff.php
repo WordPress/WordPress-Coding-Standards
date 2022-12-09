@@ -15,7 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 /**
  * Ensure cast statements are preceded by whitespace.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
  *
  * @package WPCS\WordPressCodingStandards
  *

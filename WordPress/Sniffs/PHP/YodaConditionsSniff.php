@@ -15,7 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 /**
  * Enforces Yoda conditional statements.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#yoda-conditions
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#yoda-conditions
  *
  * @package WPCS\WordPressCodingStandards
  *

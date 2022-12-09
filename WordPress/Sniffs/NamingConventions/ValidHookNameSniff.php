@@ -21,7 +21,7 @@ use PHPCSUtils\Utils\TextStrings;
  *
  * Hook names invoked with `do_action_deprecated()` and `apply_filters_deprecated()` are ignored.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#naming-conventions
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
  * @package WPCS\WordPressCodingStandards
  *

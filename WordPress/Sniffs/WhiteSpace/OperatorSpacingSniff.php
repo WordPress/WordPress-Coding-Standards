@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * "Always put spaces after commas, and on both sides of logical, comparison, string and assignment operators."
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#space-usage
+ * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
  *
  * @package WPCS\WordPressCodingStandards
  *

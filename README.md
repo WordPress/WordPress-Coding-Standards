@@ -127,13 +127,13 @@ The project encompasses a super-set of the sniffs that the WordPress community m
 You can use the following as standard names when invoking `phpcs` to select sniffs, fitting your needs:
 
 * `WordPress` - complete set with all of the sniffs in the project
-  - `WordPress-Core` - main ruleset for [WordPress core coding standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/)
-  - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/)
+  - `WordPress-Core` - main ruleset for [WordPress core coding standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/)
+  - `WordPress-Docs` - additional ruleset for [WordPress inline documentation standards](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/)
   - `WordPress-Extra` - extended ruleset for recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
 
 **Note:** The WPCS package used to include a `WordPress-VIP` ruleset and associated sniffs, prior to WPCS 2.0.0.
-The `WordPress-VIP` ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/), but has been superseded. It is recommended to use the [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead for checking code against the VIP platform requirements.
+The `WordPress-VIP` ruleset was originally intended to aid with the [WordPress.com VIP coding requirements](https://docs.wpvip.com/technical-references/code-review/), but has been superseded. It is recommended to use the [official VIP coding standards](https://github.com/Automattic/VIP-Coding-Standards) ruleset instead for checking code against the VIP platform requirements.
 
 ### Using a custom ruleset
 
