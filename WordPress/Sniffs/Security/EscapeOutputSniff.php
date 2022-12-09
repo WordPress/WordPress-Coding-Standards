@@ -425,13 +425,11 @@ class EscapeOutputSniff extends Sniff {
 					if ( $is_formatting_function ) {
 						$i     = ( $function_opener + 1 );
 						$watch = true;
+					} elseif ( isset( $this->tokens[ $function_opener ]['parenthesis_closer'] ) ) {
+						$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
 					} else {
-						if ( isset( $this->tokens[ $function_opener ]['parenthesis_closer'] ) ) {
-							$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
-						} else {
-							// Live coding or parse error.
-							break;
-						}
+						// Live coding or parse error.
+						break;
 					}
 				}
 
