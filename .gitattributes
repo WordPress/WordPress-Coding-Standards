@@ -8,6 +8,8 @@
 /.gitignore         export-ignore
 /.codecov.yml       export-ignore
 /.phpcs.xml.dist    export-ignore
+/.remarkignore      export-ignore
+/.remarkrc          export-ignore
 /CODE_OF_CONDUCT.md export-ignore
 /phpstan.neon.dist  export-ignore
 /phpunit.xml.dist   export-ignore

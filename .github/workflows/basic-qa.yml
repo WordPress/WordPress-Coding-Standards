@@ -188,3 +188,65 @@ jobs:
 
       - name: Run PHPStan
         run: phpstan analyse
+
+  remark:
+    name: 'QA Markdown'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up node and enable caching of dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # To make the command available on CLI, it needs to be installed globally.
+      - name: Install Remark CLI globally
+        run: npm install --global remark-cli --foreground-scripts true --fund false
+
+      # To allow for creating a custom config which references rules which are included
+      # in the presets, without having to install all rules individually, a local install
+      # works best (and installing the presets in the first place, of course).
+      #
+      # Note: the first group of packages are all part of the mono "Remark lint" repo.
+      # The second group of packages (heading-whitespace and down) are additional
+      # "external" rules/plugins.
+      - name: Install Remark rules locally
+        run: >
+          npm install --foreground-scripts true --fund false
+          remark-lint
+          remark-gfm
+          remark-preset-lint-consistent
+          remark-preset-lint-recommended
+          remark-preset-lint-markdown-style-guide
+          remark-lint-checkbox-content-indent
+          remark-lint-linebreak-style
+          remark-lint-no-duplicate-defined-urls
+          remark-lint-no-empty-url
+          remark-lint-no-heading-like-paragraph
+          remark-lint-no-reference-like-url
+          remark-lint-no-unneeded-full-reference-image
+          remark-lint-no-unneeded-full-reference-link
+          remark-lint-strikethrough-marker
+          remark-lint-heading-whitespace
+          remark-lint-list-item-punctuation
+          remark-lint-match-punctuation
+          remark-lint-no-hr-after-heading
+          remark-lint-are-links-valid-alive
+          remark-lint-are-links-valid-duplicate
+          remark-validate-links
+
+      - name: Run Remark-lint
+        run: remark . --frail
+
+      # @link https://github.com/reviewdog/action-remark-lint
+      - name: Show Remark-lint annotations in PR
+        if: ${{ failure() && github.event_name == 'pull_request' }}
+        uses: reviewdog/action-remark-lint@v5
+        with:
+          fail_on_error: true
+          install_deps: false
+          level: info
+          reporter: github-pr-check
