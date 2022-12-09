@@ -97,8 +97,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ 'latest' ]
-        phpcs_version: [ 'lowest', 'dev-master' ]
+        php: ['latest']
+        phpcs_version: ['lowest', 'dev-master']
 
     name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
 
@@ -250,3 +250,19 @@ jobs:
           install_deps: false
           level: info
           reporter: github-pr-check
+
+  yamllint:
+    name: 'Lint Yaml'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Ref: https://yamllint.readthedocs.io/en/stable/
+      - name: Run Yamllint on all yaml files in repo
+        run: yamllint . --format colored
+
+      - name: Pipe Yamllint results on to GH for inline display
+        if: ${{ failure() }}
+        run: yamllint . --format github

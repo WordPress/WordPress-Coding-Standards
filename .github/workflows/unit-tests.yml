@@ -21,9 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '8.0', '8.1', '8.2', '8.3' ]
-        phpcs_version: [ 'lowest', 'dev-master' ]
-        extensions: [ '' ]
+        php: ['5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '8.0', '8.1', '8.2', '8.3']
+        phpcs_version: ['lowest', 'dev-master']
+        extensions: ['']
         coverage: [false]
 
         include:
@@ -51,9 +51,9 @@ jobs:
             extensions: ''
             coverage: true
 
-          # Add extra build to test against PHPCS 4.
-          #- php: '7.4'
-          #  phpcs_version: '4.0.x-dev as 3.9.99'
+        #   Add extra build to test against PHPCS 4.
+        #  - php: '7.4'
+        #    phpcs_version: '4.0.x-dev as 3.9.99'
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 

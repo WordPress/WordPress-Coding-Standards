@@ -1,0 +1,22 @@
+# Details on the default config:
+# https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration
+extends: default
+
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+  - '.yamllint'
+
+# Rule documentation: https://yamllint.readthedocs.io/en/stable/rules.html
+rules:
+  colons:
+    max-spaces-after: -1  # Disabled to allow aligning of values.
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: {}
+  document-start:
+    present: false
+  line-length:
+    max: 145
+  truthy:
+    allowed-values: ["true", "false", "on", "off"]
