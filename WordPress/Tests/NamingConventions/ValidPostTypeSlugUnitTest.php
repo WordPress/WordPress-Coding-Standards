@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   2.2.0
  */
-class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
+final class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Set warnings level to 3 to trigger suggestions as warnings.

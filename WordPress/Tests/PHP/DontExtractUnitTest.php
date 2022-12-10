@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `Functions` category to the `PHP` category.
  */
-class DontExtractUnitTest extends AbstractSniffUnitTest {
+final class DontExtractUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

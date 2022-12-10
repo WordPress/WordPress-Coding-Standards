@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.11.0     Actually added tests ;-)
  * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class FileNameUnitTest extends AbstractSniffUnitTest {
+final class FileNameUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Error files with the expected nr of errors.

@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   1.0.0
  */
-class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
+final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

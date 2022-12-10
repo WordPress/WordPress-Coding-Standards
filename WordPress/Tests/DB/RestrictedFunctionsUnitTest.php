@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
+final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -21,7 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *                     The rest of the sniff is unit tested upstream.
  * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
+final class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

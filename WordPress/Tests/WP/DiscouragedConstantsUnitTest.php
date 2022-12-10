@@ -17,7 +17,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @package WPCS\WordPressCodingStandards
  * @since   0.14.0
  */
-class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
+final class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

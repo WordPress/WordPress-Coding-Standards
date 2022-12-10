@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   2.2.0
  */
-class CurrentTimeTimestampUnitTest extends AbstractSniffUnitTest {
+final class CurrentTimeTimestampUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
