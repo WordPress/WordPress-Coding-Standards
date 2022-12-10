@@ -155,14 +155,16 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		$option_value = TextStrings::stripQuotes( $value_param['clean'] );
 		if ( isset( $this->safe_options[ $option_name ] ) ) {
 			$safe_option = $this->safe_options[ $option_name ];
-			if ( ! isset( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
+			if ( empty( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
 				return;
 			}
 		}
 
 		if ( isset( $this->disallowed_options[ $option_name ] ) ) {
 			$disallowed_option = $this->disallowed_options[ $option_name ];
-			if ( ! isset( $disallowed_option['invalid_values'] ) || in_array( strtolower( $option_value ), $disallowed_option['invalid_values'], true ) ) {
+			if ( empty( $disallowed_option['invalid_values'] )
+				|| in_array( strtolower( $option_value ), $disallowed_option['invalid_values'], true )
+			) {
 				$this->phpcsFile->addError(
 					'%s(%s, %s) found. %s',
 					$stackPtr,
