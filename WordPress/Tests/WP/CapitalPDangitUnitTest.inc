@@ -222,3 +222,9 @@ $array[$var . 'wordpress' . $var] = 123;
  */
 enum WordPress: string implements CMS {} // OK.
 enum My_Wordpress_Enum {} // Bad.
+
+/*
+ * Safeguard that reserved keywords in namespaced names do not lead to PHP notices.
+ */
+namespace My\Class\WordPress;
+echo Some\Enum\WordPress::ENUM_CONSTANT;
