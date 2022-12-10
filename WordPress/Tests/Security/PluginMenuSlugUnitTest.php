@@ -41,7 +41,7 @@ class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 			3  => 1,
 			5  => 1,
 			9  => 2,
-			17 => 1,
+			20 => 1,
 		);
 	}
 }
