@@ -55,3 +55,15 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (binary) 123, true ); // OK.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), b'0', true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard support for PHP 8.0+ named parameters.
+wp_register_script(
+	ver      : 0, // Error - 0, false or NULL are not allowed.
+	in_footer: false,
+	src      : 'https://example.com/someScript.js',
+	handle   : 'someScript-js',
+);
+wp_enqueue_script(
+	src: 'https://example.com/someScript.js',
+	handle: 'script-name',
+); // Warning - missing $ver, Warning - missing $in_footer.

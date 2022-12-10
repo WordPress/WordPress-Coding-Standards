@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * This checks the enqueued 4th and 5th parameters to make sure the version and in_footer are set.
@@ -118,9 +119,9 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-
 		// Check to see if a source ($src) is specified.
-		if ( ! isset( $parameters[2] ) ) {
+		$src_param = PassedParameters::getParameterFromStack( $parameters, 2, 'src' );
+		if ( false === $src_param ) {
 			return;
 		}
 
@@ -128,7 +129,8 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 		 * Version Check: Check to make sure the version is set explicitly.
 		 */
 
-		if ( ! isset( $parameters[4] ) || 'null' === $parameters[4]['raw'] ) {
+		$version_param = PassedParameters::getParameterFromStack( $parameters, 4, 'ver' );
+		if ( false === $version_param || 'null' === $version_param['raw'] ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
 				$type = 'style';
@@ -141,7 +143,7 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 				array( $matched_content, $type )
 			);
 			// The version argument should have a non-false value.
-		} elseif ( $this->is_falsy( $parameters[4]['start'], $parameters[4]['end'] ) ) {
+		} elseif ( $this->is_falsy( $version_param['start'], $version_param['end'] ) ) {
 			$this->phpcsFile->addError(
 				'Version parameter is not explicitly set or has been set to an equivalent of "false" for %s; ' .
 				'This means that the WordPress core version will be used which is not recommended for plugin or theme development.',
@@ -164,7 +166,8 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( ! isset( $parameters[5] ) ) {
+		$infooter_param = PassedParameters::getParameterFromStack( $parameters, 5, 'in_footer' );
+		if ( false === $infooter_param ) {
 			// If in footer is not set, throw a warning about the default.
 			$this->phpcsFile->addWarning(
 				'In footer ($in_footer) is not set explicitly %s; ' .
