@@ -49,3 +49,12 @@ ini_set('short_open_tag', ); // Ok. Well not really, missing value param, but th
 ini_set(new_value: 0, option: 'short_open_tag', ); // Ok. Well not really, unrecognized param name, but that's not the concern of this sniff.
 ini_set(value: 1, option: 'short_open_tag', ); // Ok.
 ini_set(value: 0, option: 'short_open_tag', ); // Error.
+
+// Safeguard that comments in the parameters are ignored.
+ini_set('short_open_tag', /* allowed*/ 'on'); // Ok.
+ini_set(
+	// This affects all function calls to the BCMath extension.
+	'bcmath.scale',
+	// Set the number of decimals.
+	0
+); // Error.

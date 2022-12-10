@@ -151,8 +151,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$option_name  = TextStrings::stripQuotes( $option_param['raw'] );
-		$option_value = TextStrings::stripQuotes( $value_param['raw'] );
+		$option_name  = TextStrings::stripQuotes( $option_param['clean'] );
+		$option_value = TextStrings::stripQuotes( $value_param['clean'] );
 		if ( isset( $this->safe_options[ $option_name ] ) ) {
 			$safe_option = $this->safe_options[ $option_name ];
 			if ( ! isset( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
@@ -169,8 +169,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 					MessageHelper::stringToErrorcode( $option_name . '_Disallowed' ),
 					array(
 						$matched_content,
-						$option_param['raw'],
-						$value_param['raw'],
+						$option_param['clean'],
+						$value_param['clean'],
 						$disallowed_option['message'],
 					)
 				);
@@ -184,8 +184,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'Risky',
 			array(
 				$matched_content,
-				$option_param['raw'],
-				$value_param['raw'],
+				$option_param['clean'],
+				$value_param['clean'],
 			)
 		);
 	}
