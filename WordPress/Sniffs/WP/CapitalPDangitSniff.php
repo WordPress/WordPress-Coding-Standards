@@ -86,13 +86,14 @@ class CapitalPDangitSniff extends Sniff {
 		// Union the arrays - keeps the array keys.
 		$this->text_and_comment_tokens = ( Tokens::$textStringTokens + $this->comment_text_tokens );
 
-		$targets   = $this->text_and_comment_tokens;
-		$targets  += Tokens::$ooScopeTokens;
-		$targets[] = \T_NAMESPACE;
+		$targets                 = $this->text_and_comment_tokens;
+		$targets                += Tokens::$ooScopeTokens;
+		$targets[ \T_NAMESPACE ] = \T_NAMESPACE;
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
-		$targets += Collections::arrayOpenTokensBC();
-		$targets += Collections::listTokens();
+		$targets                          += Collections::arrayOpenTokensBC();
+		$targets                          += Collections::listTokens();
+		$targets[ \T_OPEN_SQUARE_BRACKET ] = \T_OPEN_SQUARE_BRACKET;
 
 		return $targets;
 	}
@@ -109,8 +110,8 @@ class CapitalPDangitSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		/*
-		 * Ignore tokens within array and list definitions as this
-		 * is a false positive in 80% of all cases.
+		 * Ignore tokens within array and list definitions as well as within
+		 * array keys as this is a false positive in 80% of all cases.
 		 *
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
@@ -122,7 +123,8 @@ class CapitalPDangitSniff extends Sniff {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			|| \T_OPEN_SQUARE_BRACKET === $this->tokens[ $stackPtr ]['code'] )
 			&& isset( $this->tokens[ $stackPtr ]['bracket_closer'] )
 		) {
 			return $this->tokens[ $stackPtr ]['bracket_closer'];
@@ -203,17 +205,6 @@ class CapitalPDangitSniff extends Sniff {
 			) {
 				// @link tag, so ignore.
 				return;
-			}
-		}
-
-		// Ignore any text strings which are array keys `$var['key']` as this is a false positive in 80% of all cases.
-		if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			$prevToken = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-			if ( false !== $prevToken && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $prevToken ]['code'] ) {
-				$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-				if ( false !== $nextToken && \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
-					return;
-				}
 			}
 		}
 

@@ -209,3 +209,10 @@ namespace My_Wordpresss_Plugin\Foo\Bar; // Bad.
  */
 list( 'wordpress' => $a, 'other' => $b ) = $array;
 [ 'wordpress' => $a, 'other' => $b ] = $array;
+
+/*
+ * Ensure that array keys which are not just and only plain text don't lead to false positives.
+ */
+$array['wordpress' . $var] = 123;
+$array[$var . 'wordpress'] = 123;
+$array[$var . 'wordpress' . $var] = 123;
