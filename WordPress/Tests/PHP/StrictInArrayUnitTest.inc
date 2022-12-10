@@ -47,3 +47,11 @@ array_keys( array: $testing ); // Ok.
 array_keys( strict: false, array: $testing ); // Ok, will cause fatal error, but that's not the concern of this sniff.
 array_keys( $testing, filter_value: 'my_key' ); // Warning.
 array_keys( $testing, strict: false, filter_value: 'my_key' ); // Warning.
+
+// Safeguard that comments in the parameter are ignored.
+in_array( 1, array( '1', 1 ), /* strict */ TRUE ); // Ok.
+array_search(
+	'needle',
+	$haystack,
+	true // Use strict typing.
+); // Ok.
