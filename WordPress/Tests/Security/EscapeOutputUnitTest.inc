@@ -300,3 +300,8 @@ trigger_error(); // Ignore.
 _deprecated_file(); // Ignore.
 
 \_deprecated_file( \basename( __FILE__ ), '1.3.0' ); // Ok.
+
+// Issue #1246.
+echo antispambot( 'john.doe@mysite.com' ); // OK.
+echo antispambot( esc_html( $email ) ); // OK.
+echo antispambot( $email ); // Bad.

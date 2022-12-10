@@ -358,14 +358,15 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @var array
 	 */
 	protected $formattingFunctions = array(
-		'array_fill' => true,
-		'ent2ncr'    => true,
-		'implode'    => true,
-		'join'       => true,
-		'nl2br'      => true,
-		'sprintf'    => true,
-		'vsprintf'   => true,
-		'wp_sprintf' => true,
+		'antispambot' => true,
+		'array_fill'  => true,
+		'ent2ncr'     => true,
+		'implode'     => true,
+		'join'        => true,
+		'nl2br'       => true,
+		'sprintf'     => true,
+		'vsprintf'    => true,
+		'wp_sprintf'  => true,
 	);
 
 	/**
