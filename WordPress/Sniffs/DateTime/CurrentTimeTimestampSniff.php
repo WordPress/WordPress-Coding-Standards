@@ -115,22 +115,9 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		$gmt_param = PassedParameters::getParameterFromStack( $parameters, 2, 'gmt' );
 		if ( is_array( $gmt_param ) ) {
 			$content_second = '';
-			if ( 'true' === $gmt_param['raw'] || '1' === $gmt_param['raw'] ) {
-				$content_second = $gmt_param['raw'];
+			if ( 'true' === $gmt_param['clean'] || '1' === $gmt_param['clean'] ) {
+				$content_second = $gmt_param['clean'];
 				$gmt_true       = true;
-			} else {
-				// Do a more extensive parameter check.
-				for ( $i = $gmt_param['start']; $i <= $gmt_param['end']; $i++ ) {
-					if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-						continue;
-					}
-
-					$content_second .= $this->tokens[ $i ]['content'];
-				}
-
-				if ( 'true' === $content_second || '1' === $content_second ) {
-					$gmt_true = true;
-				}
 			}
 		}
 
@@ -163,7 +150,6 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		if ( false !== $has_comment ) {
 			// If there are comments, we don't auto-fix as it would remove those comments.
 			$this->phpcsFile->addError( $error, $stackPtr, $error_code, array( $code_snippet ) );
-
 			return;
 		}
 
@@ -179,5 +165,4 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 			$this->phpcsFile->fixer->endChangeset();
 		}
 	}
-
 }
