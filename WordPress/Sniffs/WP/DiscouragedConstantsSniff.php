@@ -219,9 +219,16 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		$clean_content = TextStrings::stripQuotes( $found_param['clean'] );
 
 		if ( isset( $this->discouraged_constants[ $clean_content ] ) ) {
+			$first_non_empty = $this->phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				$found_param['start'],
+				( $found_param['end'] + 1 ),
+				true
+			);
+
 			$this->phpcsFile->addWarning(
 				'Found declaration of constant "%s". Use %s instead.',
-				$stackPtr,
+				$first_non_empty,
 				MessageHelper::stringToErrorcode( $clean_content . 'DeclarationFound' ),
 				array(
 					$clean_content,
