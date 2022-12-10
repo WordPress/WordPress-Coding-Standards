@@ -92,6 +92,7 @@ class CapitalPDangitSniff extends Sniff {
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
 		$targets += Collections::arrayOpenTokensBC();
+		$targets += Collections::listTokens();
 
 		return $targets;
 	}
@@ -108,12 +109,14 @@ class CapitalPDangitSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		/*
-		 * Ignore tokens within array definitions as this is a false positive in 80% of all cases.
+		 * Ignore tokens within array and list definitions as this
+		 * is a false positive in 80% of all cases.
 		 *
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
 		 */
-		if ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+			|| \T_LIST === $this->tokens[ $stackPtr ]['code'] )
 			&& isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] )
 		) {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];

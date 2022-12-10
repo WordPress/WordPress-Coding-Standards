@@ -203,3 +203,9 @@ namespace My_WordPress_Plugin; // OK.
 namespace Foo\Bar\Wordpress\; // Bad.
 namespace Foo\word_presss\Bar; // Bad.
 namespace My_Wordpresss_Plugin\Foo\Bar; // Bad.
+
+/*
+ * Ensure keys in list declarations are ignored
+ */
+list( 'wordpress' => $a, 'other' => $b ) = $array;
+[ 'wordpress' => $a, 'other' => $b ] = $array;
