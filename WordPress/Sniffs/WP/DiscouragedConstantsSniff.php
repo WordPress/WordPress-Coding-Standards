@@ -13,6 +13,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\MessageHelper;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 
@@ -50,11 +51,17 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * Array of functions to check.
 	 *
 	 * @since 0.14.0
+	 * @since 3.0.0  The format of the value has changed from an integer parameter
+	 *               position to an array with the parameter position and name.
 	 *
-	 * @var array <string function name> => <int parameter position>
+	 * @var array<string, <string, in|string>> Function name as key, array with target
+	 *                                         parameter and name as value.
 	 */
 	protected $target_functions = array(
-		'define' => 1,
+		'define' => array(
+			'position' => 1,
+			'name'     => 'constant_name',
+		),
 	);
 
 	/**
@@ -204,11 +211,12 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		$target_param  = $this->target_functions[ $function_name ];
 
 		// Was the target parameter passed ?
-		if ( ! isset( $parameters[ $target_param ] ) ) {
+		$found_param = PassedParameters::getParameterFromStack( $parameters, $target_param['position'], $target_param['name'] );
+		if ( false === $found_param ) {
 			return;
 		}
 
-		$raw_content = TextStrings::stripQuotes( $parameters[ $target_param ]['raw'] );
+		$raw_content = TextStrings::stripQuotes( $found_param['raw'] );
 
 		if ( isset( $this->discouraged_constants[ $raw_content ] ) ) {
 			$this->phpcsFile->addWarning(
