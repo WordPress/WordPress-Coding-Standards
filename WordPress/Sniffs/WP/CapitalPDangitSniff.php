@@ -9,10 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Namespaces;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Capital P Dangit!
@@ -90,8 +91,7 @@ class CapitalPDangitSniff extends Sniff {
 		$targets[] = \T_NAMESPACE;
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
-		$targets[ \T_ARRAY ]            = \T_ARRAY;
-		$targets[ \T_OPEN_SHORT_ARRAY ] = \T_OPEN_SHORT_ARRAY;
+		$targets += Collections::arrayOpenTokensBC();
 
 		return $targets;
 	}
@@ -108,19 +108,21 @@ class CapitalPDangitSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		/*
-		 * Ignore tokens within an array definition as this is a false positive in 80% of all cases.
+		 * Ignore tokens within array definitions as this is a false positive in 80% of all cases.
 		 *
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
 		 */
+		if ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+			&& isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] )
+		) {
+			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
+		}
+
 		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
 			&& isset( $this->tokens[ $stackPtr ]['bracket_closer'] )
 		) {
 			return $this->tokens[ $stackPtr ]['bracket_closer'];
-		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
-			&& isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] )
-		) {
-			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
 		}
 
 		/*
