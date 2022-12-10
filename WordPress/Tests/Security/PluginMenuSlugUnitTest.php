@@ -38,10 +38,10 @@ class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			3 => 1,
-			5 => 1,
-			9 => 2,
+			3  => 1,
+			5  => 1,
+			9  => 2,
+			17 => 1,
 		);
 	}
-
 }

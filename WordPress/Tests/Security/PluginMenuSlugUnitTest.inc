@@ -12,3 +12,11 @@ add_submenu_page( __FILE__ . 'parent', $page_title, $menu_title, $capability, __
 $my_class->add_dashboard_page( $page_title, $menu_title, $capability, __FILE__, $function); // Ok.
 Some_Class::add_dashboard_page( $page_title, $menu_title, $capability, __FILE__, $function); // Ok.
 \My_Namespace\add_dashboard_page( $page_title, $menu_title, $capability, __FILE__, $function); // Ok.
+
+// Safeguard support for PHP 8.0+ named parameters.
+add_submenu_page(
+	page_title: $page_title,
+	menu_title: $menu_title,
+	parent_slug: __FILE__, // Bad.
+	capability: $capability,
+);
