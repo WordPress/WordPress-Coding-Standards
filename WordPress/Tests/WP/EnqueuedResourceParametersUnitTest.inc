@@ -77,3 +77,9 @@ wp_register_script(
 	null,
 	true,
 );
+
+// Safeguard handling of PHP 7.4 numeric literals with underscores.
+wp_register_script( 'someScript-js', $url, [], 0_0.0_0, true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard handling of PHP 8.1 explicit octals.
+wp_register_script( 'someScript-js', $url, [], 0o0, true ); // Error - 0, false or NULL are not allowed.

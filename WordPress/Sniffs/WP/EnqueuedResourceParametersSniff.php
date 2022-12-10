@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Numbers;
 use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
@@ -213,6 +214,14 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 			}
 
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) === true ) {
+				continue;
+			}
+
+			// Make sure that PHP 7.4 numeric literals and PHP 8.1 explicit octals don't cause problems.
+			if ( \T_LNUMBER === $this->tokens[ $i ]['code'] || \T_DNUMBER === $this->tokens[ $i ]['code'] ) {
+				$number_info  = Numbers::getCompleteNumber( $this->phpcsFile, $i );
+				$code_string .= $number_info['decimal'];
+				$i            = $number_info['last_token'];
 				continue;
 			}
 

@@ -37,6 +37,8 @@ class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 			54 => 1,
 			57 => 1,
 			61 => 1,
+			82 => 1,
+			85 => 1,
 		);
 	}
 
