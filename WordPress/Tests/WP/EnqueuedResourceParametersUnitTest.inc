@@ -67,3 +67,13 @@ wp_enqueue_script(
 	src: 'https://example.com/someScript.js',
 	handle: 'script-name',
 ); // Warning - missing $ver, Warning - missing $in_footer.
+
+// Safeguard that comments in the parameters are ignored.
+wp_register_script(
+	'someScript-js',
+	'https://example.com/someScript.js',
+	array( 'jquery' ),
+	// Error - 0, false or NULL are not allowed.
+	null,
+	true,
+);

@@ -130,7 +130,7 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 		 */
 
 		$version_param = PassedParameters::getParameterFromStack( $parameters, 4, 'ver' );
-		if ( false === $version_param || 'null' === $version_param['raw'] ) {
+		if ( false === $version_param || 'null' === $version_param['clean'] ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
 				$type = 'style';
