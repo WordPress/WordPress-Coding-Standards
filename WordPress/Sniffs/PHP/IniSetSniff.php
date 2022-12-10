@@ -101,13 +101,13 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'message' => 'Changing the option value can break other plugins. Use the filter flag constants when calling the Filter functions instead.',
 		),
 		'iconv.input_encoding' => array(
-			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
+			'message' => 'This option is not supported since PHP 5.6 - use `iconv_set_encoding()` instead.',
 		),
 		'iconv.internal_encoding' => array(
-			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
+			'message' => 'This option is not supported since PHP 5.6 - use `iconv_set_encoding()` instead.',
 		),
 		'iconv.output_encoding' => array(
-			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
+			'message' => 'This option is not supported since PHP 5.6 - use `iconv_set_encoding()` instead.',
 		),
 		'ignore_user_abort' => array(
 			'message' => 'Use `ignore_user_abort()` instead.',
@@ -166,7 +166,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 				|| in_array( strtolower( $option_value ), $disallowed_option['invalid_values'], true )
 			) {
 				$this->phpcsFile->addError(
-					'%s(%s, %s) found. %s',
+					'Found: %s(%s, %s). %s',
 					$stackPtr,
 					MessageHelper::stringToErrorcode( $option_name . '_Disallowed' ),
 					array(
@@ -181,7 +181,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$this->phpcsFile->addWarning(
-			'%s(%s, %s) found. Changing configuration values at runtime is strongly discouraged.',
+			'Changing configuration values at runtime is strongly discouraged. Found: %s(%s, %s)',
 			$stackPtr,
 			'Risky',
 			array(
