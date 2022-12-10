@@ -9,9 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\DateTime;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Don't use current_time() to get a (timezone corrected) "timestamp".
@@ -74,7 +75,13 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		/*
 		 * Check whether the first parameter is a timestamp format.
 		 */
-		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+		$type_param = PassedParameters::getParameterFromStack( $parameters, 1, 'type' );
+		if ( false === $type_param ) {
+			// Type parameter not found. Bow out.
+			return;
+		}
+
+		for ( $i = $type_param['start']; $i <= $type_param['end']; $i++ ) {
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
@@ -105,14 +112,15 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		/*
 		 * Check whether the second parameter, $gmt, is a set to `true` or `1`.
 		 */
-		if ( isset( $parameters[2] ) ) {
+		$gmt_param = PassedParameters::getParameterFromStack( $parameters, 2, 'gmt' );
+		if ( is_array( $gmt_param ) ) {
 			$content_second = '';
-			if ( 'true' === $parameters[2]['raw'] || '1' === $parameters[2]['raw'] ) {
-				$content_second = $parameters[2]['raw'];
+			if ( 'true' === $gmt_param['raw'] || '1' === $gmt_param['raw'] ) {
+				$content_second = $gmt_param['raw'];
 				$gmt_true       = true;
 			} else {
 				// Do a more extensive parameter check.
-				for ( $i = $parameters[2]['start']; $i <= $parameters[2]['end']; $i++ ) {
+				for ( $i = $gmt_param['start']; $i <= $gmt_param['end']; $i++ ) {
 					if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 						continue;
 					}
