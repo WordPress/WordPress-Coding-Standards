@@ -216,16 +216,16 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$raw_content = TextStrings::stripQuotes( $found_param['raw'] );
+		$clean_content = TextStrings::stripQuotes( $found_param['clean'] );
 
-		if ( isset( $this->discouraged_constants[ $raw_content ] ) ) {
+		if ( isset( $this->discouraged_constants[ $clean_content ] ) ) {
 			$this->phpcsFile->addWarning(
 				'Found declaration of constant "%s". Use %s instead.',
 				$stackPtr,
-				MessageHelper::stringToErrorcode( $raw_content . 'DeclarationFound' ),
+				MessageHelper::stringToErrorcode( $clean_content . 'DeclarationFound' ),
 				array(
-					$raw_content,
-					$this->discouraged_constants[ $raw_content ],
+					$clean_content,
+					$this->discouraged_constants[ $clean_content ],
 				)
 			);
 		}
