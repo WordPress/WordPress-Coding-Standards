@@ -41,3 +41,11 @@ ini_set($test, 1230); // Warning.
 ini_alter('auto_detect_line_endings', true); // Ok.
 ini_alter('display_errors', false); // Error.
 ini_alter('report_memleaks', 1230); // Warning.
+
+// Ignore missing required parameters.
+ini_set('short_open_tag', ); // Ok. Well not really, missing value param, but that's not the concern of this sniff.
+
+// Safeguard support for PHP 8.0+ named parameters.
+ini_set(new_value: 0, option: 'short_open_tag', ); // Ok. Well not really, unrecognized param name, but that's not the concern of this sniff.
+ini_set(value: 1, option: 'short_open_tag', ); // Ok.
+ini_set(value: 0, option: 'short_open_tag', ); // Error.

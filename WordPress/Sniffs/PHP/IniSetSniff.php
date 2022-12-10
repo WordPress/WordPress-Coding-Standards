@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use PHPCSUtils\Utils\MessageHelper;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
@@ -38,7 +39,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 */
 	protected $target_functions = array(
 		'ini_set'   => true,
-		'ini_alter' => true,
+		'ini_alter' => true, // Alias function name.
 	);
 
 	/**
@@ -142,8 +143,16 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$option_name  = TextStrings::stripQuotes( $parameters[1]['raw'] );
-		$option_value = TextStrings::stripQuotes( $parameters[2]['raw'] );
+		$option_param = PassedParameters::getParameterFromStack( $parameters, 1, 'option' );
+		$value_param  = PassedParameters::getParameterFromStack( $parameters, 2, 'value' );
+
+		if ( false === $option_param || false === $value_param ) {
+			// Missing required param. Not the concern of this sniff. Bow out.
+			return;
+		}
+
+		$option_name  = TextStrings::stripQuotes( $option_param['raw'] );
+		$option_value = TextStrings::stripQuotes( $value_param['raw'] );
 		if ( isset( $this->safe_options[ $option_name ] ) ) {
 			$safe_option = $this->safe_options[ $option_name ];
 			if ( ! isset( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
@@ -160,8 +169,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 					MessageHelper::stringToErrorcode( $option_name . '_Disallowed' ),
 					array(
 						$matched_content,
-						$parameters[1]['raw'],
-						$parameters[2]['raw'],
+						$option_param['raw'],
+						$value_param['raw'],
 						$disallowed_option['message'],
 					)
 				);
@@ -175,8 +184,8 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'Risky',
 			array(
 				$matched_content,
-				$parameters[1]['raw'],
-				$parameters[2]['raw'],
+				$option_param['raw'],
+				$value_param['raw'],
 			)
 		);
 	}
