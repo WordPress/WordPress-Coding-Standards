@@ -130,6 +130,12 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 		 */
 
 		$version_param = PassedParameters::getParameterFromStack( $parameters, 4, 'ver' );
+
+		$error_ptr = $stackPtr;
+		if ( false !== $version_param ) {
+			$error_ptr = $this->phpcsFile->findNext( Tokens::$emptyTokens, $version_param['start'], ( $version_param['end'] + 1 ), true );
+		}
+
 		if ( false === $version_param || 'null' === $version_param['clean'] ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
@@ -138,7 +144,7 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 
 			$this->phpcsFile->addWarning(
 				'Resource version not set in call to %s(). This means new versions of the %s may not always be loaded due to browser caching.',
-				$stackPtr,
+				$error_ptr,
 				'MissingVersion',
 				array( $matched_content, $type )
 			);
@@ -147,7 +153,7 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 			$this->phpcsFile->addError(
 				'Version parameter is not explicitly set or has been set to an equivalent of "false" for %s; ' .
 				'This means that the WordPress core version will be used which is not recommended for plugin or theme development.',
-				$stackPtr,
+				$error_ptr,
 				'NoExplicitVersion',
 				array( $matched_content )
 			);
