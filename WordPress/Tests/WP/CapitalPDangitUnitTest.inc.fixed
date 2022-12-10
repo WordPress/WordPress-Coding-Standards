@@ -216,3 +216,9 @@ list( 'wordpress' => $a, 'other' => $b ) = $array;
 $array['wordpress' . $var] = 123;
 $array[$var . 'wordpress'] = 123;
 $array[$var . 'wordpress' . $var] = 123;
+
+/*
+ * Test recognizing misspellings in enum names.
+ */
+enum WordPress: string implements CMS {} // OK.
+enum My_Wordpress_Enum {} // Bad.

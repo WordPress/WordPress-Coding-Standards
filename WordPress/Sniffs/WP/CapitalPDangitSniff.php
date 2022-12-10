@@ -161,7 +161,7 @@ class CapitalPDangitSniff extends Sniff {
 		}
 
 		/*
-		 * Deal with misspellings in class/interface/trait names.
+		 * Deal with misspellings in class/interface/trait/enum names.
 		 * These are not auto-fixable, but need the attention of a developer.
 		 */
 		if ( isset( Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
@@ -175,7 +175,7 @@ class CapitalPDangitSniff extends Sniff {
 
 				if ( ! empty( $misspelled ) ) {
 					$this->phpcsFile->addWarning(
-						'Please spell "WordPress" correctly. Found: "%s" as part of the class/interface/trait name.',
+						'Please spell "WordPress" correctly. Found: "%s" as part of the class/interface/trait/enum name.',
 						$stackPtr,
 						'MisspelledClassName',
 						array( implode( ', ', $misspelled ) )

@@ -65,6 +65,7 @@ class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 			203 => 1,
 			204 => 1,
 			205 => 1,
+			224 => 1,
 		);
 	}
 
