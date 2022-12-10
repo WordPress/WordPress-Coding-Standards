@@ -1,6 +1,6 @@
 <?php
 
-wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ) ); // Error - missing $ver, Warning - In Footer is set to a falsy (default) value.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ) ); // Warning - missing $ver, Warning - In Footer is set to a falsy (default) value.
 
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), /* comment */ '1.1.1', true ); // OK.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), /* comment */ '0' /* another comment */, true ); // Error - 0, false or NULL are not allowed.
@@ -36,13 +36,13 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0', $in_footer ); // OK.
 
 wp_enqueue_script( 'script-name', 'https://example.com/someScript.js', false, '1.0.0', true ); // OK.
-wp_enqueue_script( 'script-name', 'https://example.com/someScript.js' ); // Error - missing $ver, Warning - missing $in_footer.
+wp_enqueue_script( 'script-name', 'https://example.com/someScript.js' ); // Warning - missing $ver, Warning - missing $in_footer.
 
 wp_register_style( 'script-name', 'https://example.com/someScript.js', false, '1.0.0' ); // OK.
-wp_register_style( 'script-name', 'https://example.com/someScript.js' ); // Error - missing $ver.
+wp_register_style( 'script-name', 'https://example.com/someScript.js' ); // Warning - missing $ver.
 
 wp_enqueue_style( 'script-name', 'https://example.com/someScript.js', false, '1.0.0'); // OK.
-wp_enqueue_style( 'script-name', 'https://example.com/someScript.js' ); // Error - missing $ver.
+wp_enqueue_style( 'script-name', 'https://example.com/someScript.js' ); // Warning - missing $ver.
 
 wp_register_script( 'someScript-js' ); // OK.
 wp_enqueue_script( 'someScript-js' ); // OK.

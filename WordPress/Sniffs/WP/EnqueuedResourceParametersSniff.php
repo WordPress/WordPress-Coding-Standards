@@ -134,8 +134,8 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 				$type = 'style';
 			}
 
-			$this->phpcsFile->addError(
-				'Resource version not set in call to %s(). This means new versions of the %s will not always be loaded due to browser caching.',
+			$this->phpcsFile->addWarning(
+				'Resource version not set in call to %s(). This means new versions of the %s may not always be loaded due to browser caching.',
 				$stackPtr,
 				'MissingVersion',
 				array( $matched_content, $type )
