@@ -73,3 +73,7 @@ const STYLESHEETPATH = 'something';
 
 // Ignore also as "not a global constant" when the nullsafe object operator is used.
 echo $obj?->STYLESHEETPATH;
+
+// Ignore enum names as not a global constant.
+enum STYLESHEETPATH {}
+enum BACKGROUND_COLOR: string implements Colorful {}

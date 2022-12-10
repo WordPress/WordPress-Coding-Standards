@@ -67,9 +67,6 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	private $preceding_tokens_to_ignore = array(
 		\T_NAMESPACE       => true,
 		\T_USE             => true,
-		\T_CLASS           => true,
-		\T_TRAIT           => true,
-		\T_INTERFACE       => true,
 		\T_EXTENDS         => true,
 		\T_IMPLEMENTS      => true,
 		\T_NEW             => true,
@@ -82,6 +79,7 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * Constructor to enrich a property.
 	 */
 	public function __construct() {
+		$this->preceding_tokens_to_ignore += Tokens::$ooScopeTokens;
 		$this->preceding_tokens_to_ignore += Collections::objectOperators();
 	}
 
