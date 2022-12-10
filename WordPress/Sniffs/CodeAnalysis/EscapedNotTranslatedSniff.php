@@ -22,7 +22,7 @@ use PHPCSUtils\Utils\GetTokensAsString;
  *
  * @since   2.2.0
  */
-class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
+final class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

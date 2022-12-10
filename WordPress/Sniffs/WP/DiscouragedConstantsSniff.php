@@ -24,7 +24,7 @@ use PHPCSUtils\Utils\TextStrings;
  *
  * @since   0.14.0
  */
-class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
+final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * List of discouraged WP constants and their replacements.

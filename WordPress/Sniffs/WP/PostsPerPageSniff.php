@@ -25,7 +25,7 @@ use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
  *                 limit being part of the WP category, and the check for pagination
  *                 disabling being part of the VIP category.
  */
-class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
+final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
 	 * Posts per page property

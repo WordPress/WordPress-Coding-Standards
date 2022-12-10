@@ -29,7 +29,7 @@ use PHPCSUtils\Utils\UseStatements;
  * to see if there are upstream fixes made from which this sniff can benefit, is warranted.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
-class ControlStructureSpacingSniff extends Sniff {
+final class ControlStructureSpacingSniff extends Sniff {
 
 	/**
 	 * Check for blank lines on start/end of control structures.

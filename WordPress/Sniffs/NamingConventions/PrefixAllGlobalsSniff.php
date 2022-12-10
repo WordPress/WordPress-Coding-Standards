@@ -45,7 +45,7 @@ use WordPressCS\WordPress\Helpers\WPHookHelper;
  *
  * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
-class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
+final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 	use IsUnitTestTrait;
 

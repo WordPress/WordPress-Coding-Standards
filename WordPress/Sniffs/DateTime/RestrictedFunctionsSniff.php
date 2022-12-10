@@ -18,7 +18,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since 2.2.0
  */
-class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.

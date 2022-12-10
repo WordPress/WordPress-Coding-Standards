@@ -28,7 +28,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *
  * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
-class CapabilitiesSniff extends AbstractFunctionParameterSniff {
+final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 
 	use MinimumWPVersionTrait;
 

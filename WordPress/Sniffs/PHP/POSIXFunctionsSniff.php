@@ -25,7 +25,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *                 `WordPress.PHP.DiscouragedPHPFunctions` sniffs.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.

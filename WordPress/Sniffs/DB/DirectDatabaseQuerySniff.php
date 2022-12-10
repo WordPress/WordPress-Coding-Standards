@@ -30,7 +30,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
  * @since   3.0.0  Support for the very sniff specific WPCS native ignore comment syntax has been removed.
  */
-class DirectDatabaseQuerySniff extends Sniff {
+final class DirectDatabaseQuerySniff extends Sniff {
 
 	/**
 	 * List of custom cache get functions.

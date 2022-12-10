@@ -32,7 +32,7 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  *
  * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
-class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	use MinimumWPVersionTrait;
 

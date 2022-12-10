@@ -33,7 +33,7 @@ use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
  * Last synced with base class January 2022 at commit 4b49a952bf0e2c3863d0a113256bae0d7fe63d52.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  */
-class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
+final class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 	/**
 	 * Mixed-case variables used by WordPress.

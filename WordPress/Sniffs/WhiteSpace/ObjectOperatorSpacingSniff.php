@@ -24,7 +24,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since 3.0.0
  * @link  https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php
  */
-class ObjectOperatorSpacingSniff extends Squiz_ObjectOperatorSpacingSniff {
+final class ObjectOperatorSpacingSniff extends Squiz_ObjectOperatorSpacingSniff {
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.

@@ -26,7 +26,7 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  *
  * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
-class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	use MinimumWPVersionTrait;
 

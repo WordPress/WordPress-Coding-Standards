@@ -27,7 +27,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   2.0.0 No longer checks that type casts are lowercase or short form.
  *                Relevant PHPCS native sniffs have been included in the rulesets instead.
  */
-class TypeCastsSniff extends Sniff {
+final class TypeCastsSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

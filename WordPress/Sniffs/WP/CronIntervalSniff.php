@@ -32,7 +32,7 @@ use PHPCSUtils\Utils\TextStrings;
  * @since   0.14.0 The minimum cron interval tested against is now configurable.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
  */
-class CronIntervalSniff extends Sniff {
+final class CronIntervalSniff extends Sniff {
 
 	/**
 	 * Minimum allowed cron interval in seconds.

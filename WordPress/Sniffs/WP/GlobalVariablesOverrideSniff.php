@@ -38,7 +38,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
-class GlobalVariablesOverrideSniff extends Sniff {
+final class GlobalVariablesOverrideSniff extends Sniff {
 
 	use IsUnitTestTrait;
 

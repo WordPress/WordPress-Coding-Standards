@@ -31,7 +31,7 @@ use WordPressCS\WordPress\Sniff;
  * {@internal This sniff should eventually be pulled upstream as part of a solution
  * for https://github.com/squizlabs/PHP_CodeSniffer/issues/582 }}
  */
-class MultipleStatementAlignmentSniff extends Sniff {
+final class MultipleStatementAlignmentSniff extends Sniff {
 
 	/**
 	 * Whether or not to ignore an array item for the purpose of alignment
