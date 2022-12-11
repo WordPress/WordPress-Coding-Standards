@@ -16,7 +16,7 @@ use WordPressCS\WordPress\Sniff;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 
 /**
- * Ensures filenames do not contain underscores.
+ * Ensures filenames do not contain underscores and where applicable are prefixed with `class-`.
  *
  * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
