@@ -141,7 +141,6 @@ class FileNameSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-
 		// Usage of `stripQuotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
 		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
 		if ( 'STDIN' === $file ) {
@@ -171,80 +170,127 @@ class FileNameSniff extends Sniff {
 			}
 		}
 
-		$fileName = basename( $file );
-		$expected = strtolower( str_replace( '_', '-', $fileName ) );
+		$file_name = basename( $file );
 
-		/*
-		 * Generic check for lowercase hyphenated file names.
-		 */
-		if ( $fileName !== $expected && ( false === $this->is_theme || 1 !== preg_match( self::THEME_EXCEPTIONS_REGEX, $fileName ) ) ) {
-			$this->phpcsFile->addError(
-				'Filenames should be all lowercase with hyphens as word separators. Expected %s, but found %s.',
-				0,
-				'NotHyphenatedLowercase',
-				array( $expected, $fileName )
-			);
-		}
-		unset( $expected );
+		$this->check_filename_is_hyphenated( $file_name );
 
-		/*
-		 * Check files containing a class for the "class-" prefix and that the rest of
-		 * the file name reflects the class name.
-		 */
-		if ( true === $this->strict_class_file_names ) {
-			$has_class = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
-			if ( false !== $has_class && false === $this->is_test_class( $this->phpcsFile, $has_class ) ) {
-				$class_name = $this->phpcsFile->getDeclarationName( $has_class );
-				$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
+		$class_ptr = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
 
-				if ( substr( $fileName, 0, -4 ) !== $expected && ! isset( $this->class_exceptions[ $fileName ] ) ) {
-					$this->phpcsFile->addError(
-						'Class file names should be based on the class name with "class-" prepended. Expected %s, but found %s.',
-						0,
-						'InvalidClassFileName',
-						array(
-							$expected . '.php',
-							$fileName,
-						)
-					);
-				}
-				unset( $expected );
-			}
+		if ( true === $this->strict_class_file_names && false !== $class_ptr ) {
+			$this->check_filename_has_class_prefix( $class_ptr, $file_name );
 		}
 
-		/*
-		 * Check non-class files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
-		 */
-		if ( false !== strpos( $file, \DIRECTORY_SEPARATOR . 'wp-includes' . \DIRECTORY_SEPARATOR ) ) {
-			$subpackage_tag = $this->phpcsFile->findNext( \T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
-			if ( false !== $subpackage_tag ) {
-				$subpackage = $this->phpcsFile->findNext( \T_DOC_COMMENT_STRING, $subpackage_tag );
-				if ( false !== $subpackage ) {
-					$fileName_end = substr( $fileName, -13 );
-					$has_class    = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
-
-					if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
-						&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
-						&& ( ( ! \defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
-						|| ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
-						&& false === $has_class
-					) {
-						$this->phpcsFile->addError(
-							'Files containing template tags should have "-template" appended to the end of the file name. Expected %s, but found %s.',
-							0,
-							'InvalidTemplateTagFileName',
-							array(
-								substr( $fileName, 0, -4 ) . '-template.php',
-								$fileName,
-							)
-						);
-					}
-				}
-			}
+		if ( false !== strpos( $file, \DIRECTORY_SEPARATOR . 'wp-includes' . \DIRECTORY_SEPARATOR )
+			&& false === $class_ptr
+		) {
+			$this->check_filename_for_template_suffix( $stackPtr, $file_name );
 		}
 
 		// Only run this sniff once per file, no need to run it again.
 		return ( $this->phpcsFile->numTokens + 1 );
 	}
 
+	/**
+	 * Generic check for lowercase hyphenated file names.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $file_name The name of the current file.
+	 *
+	 * @return void
+	 */
+	protected function check_filename_is_hyphenated( $file_name ) {
+		$expected = strtolower( str_replace( '_', '-', $file_name ) );
+		if ( $file_name === $expected ) {
+			return;
+		}
+
+		if ( true === $this->is_theme && 1 === preg_match( self::THEME_EXCEPTIONS_REGEX, $file_name ) ) {
+			return;
+		}
+
+		$this->phpcsFile->addError(
+			'Filenames should be all lowercase with hyphens as word separators. Expected %s, but found %s.',
+			0,
+			'NotHyphenatedLowercase',
+			array( $expected, $file_name )
+		);
+	}
+
+
+	/**
+	 * Check files containing a class for the "class-" prefix and that the rest of
+	 * the file name reflects the class name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int    $class_ptr Stack pointer to the first T_CLASS in the file.
+	 * @param string $file_name The name of the current file.
+	 *
+	 * @return void
+	 */
+	protected function check_filename_has_class_prefix( $class_ptr, $file_name ) {
+		if ( $this->is_test_class( $this->phpcsFile, $class_ptr ) ) {
+			return;
+		}
+
+		$class_name = $this->phpcsFile->getDeclarationName( $class_ptr );
+		$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
+
+		if ( substr( $file_name, 0, -4 ) === $expected
+			|| isset( $this->class_exceptions[ $file_name ] )
+		) {
+			return;
+		}
+
+		$this->phpcsFile->addError(
+			'Class file names should be based on the class name with "class-" prepended. Expected %s, but found %s.',
+			0,
+			'InvalidClassFileName',
+			array(
+				$expected . '.php',
+				$file_name,
+			)
+		);
+	}
+
+	/**
+	 * Check non-class files in "wp-includes" with a "@subpackage Template" tag for a "-template" suffix.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int    $stackPtr  Stack pointer to the first PHP open tag in the file.
+	 * @param string $file_name The name of the current file.
+	 *
+	 * @return void
+	 */
+	protected function check_filename_for_template_suffix( $stackPtr, $file_name ) {
+		$subpackage_tag = $this->phpcsFile->findNext( \T_DOC_COMMENT_TAG, $stackPtr, null, false, '@subpackage' );
+		if ( false === $subpackage_tag ) {
+			return;
+		}
+
+		$subpackage = $this->phpcsFile->findNext( \T_DOC_COMMENT_STRING, $subpackage_tag );
+		if ( false === $subpackage ) {
+			return;
+		}
+
+		$fileName_end = substr( $file_name, -13 );
+
+		if ( ( 'Template' === trim( $this->tokens[ $subpackage ]['content'] )
+			&& $this->tokens[ $subpackage_tag ]['line'] === $this->tokens[ $subpackage ]['line'] )
+			&& ( ( ! \defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.php' !== $fileName_end )
+			|| ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) && '-template.inc' !== $fileName_end ) )
+		) {
+			$this->phpcsFile->addError(
+				'Files containing template tags should have "-template" appended to the end of the file name. Expected %s, but found %s.',
+				0,
+				'InvalidTemplateTagFileName',
+				array(
+					substr( $file_name, 0, -4 ) . '-template.php',
+					$file_name,
+				)
+			);
+		}
+	}
 }
