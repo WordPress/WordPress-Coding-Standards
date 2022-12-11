@@ -60,7 +60,7 @@ class EnqueuedResourcesSniff extends Sniff {
 		if ( preg_match_all( '# rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {
 			foreach ( $matches[0] as $match ) {
 				$this->phpcsFile->addError(
-					'Stylesheets must be registered/enqueued via wp_enqueue_style',
+					'Stylesheets must be registered/enqueued via wp_enqueue_style()',
 					$this->find_token_in_multiline_string( $stackPtr, $content, $match[1] ),
 					'NonEnqueuedStylesheet'
 				);
@@ -70,7 +70,7 @@ class EnqueuedResourcesSniff extends Sniff {
 		if ( preg_match_all( '#<script[^>]*(?<=src=)#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {
 			foreach ( $matches[0] as $match ) {
 				$this->phpcsFile->addError(
-					'Scripts must be registered/enqueued via wp_enqueue_script',
+					'Scripts must be registered/enqueued via wp_enqueue_script()',
 					$this->find_token_in_multiline_string( $stackPtr, $content, $match[1] ),
 					'NonEnqueuedScript'
 				);
