@@ -89,3 +89,14 @@ define(
 	// Value.
 	'something'
 );
+
+// Safeguard that constants and methods in enums and traits are ignored.
+trait ContainsConst {
+	const STYLESHEETPATH = 'something';
+	private function &STYLESHEETPATH() {}
+}
+
+enum ContainsConst {
+	const STYLESHEETPATH = 'something';
+	private function STYLESHEETPATH() {}
+}
