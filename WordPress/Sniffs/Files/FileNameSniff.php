@@ -9,6 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\Files;
 
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
@@ -126,10 +128,7 @@ class FileNameSniff extends Sniff {
 			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
 		}
 
-		return array(
-			\T_OPEN_TAG,
-			\T_OPEN_TAG_WITH_ECHO,
-		);
+		return Collections::phpOpenTags();
 	}
 
 	/**
@@ -234,7 +233,7 @@ class FileNameSniff extends Sniff {
 			return;
 		}
 
-		$class_name = $this->phpcsFile->getDeclarationName( $class_ptr );
+		$class_name = ObjectDeclarations::getName( $this->phpcsFile, $class_ptr );
 		$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 
 		if ( substr( $file_name, 0, -4 ) === $expected
