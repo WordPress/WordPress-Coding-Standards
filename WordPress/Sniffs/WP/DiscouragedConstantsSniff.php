@@ -166,9 +166,8 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		if ( false !== $first_on_line && \T_USE === $this->tokens[ $first_on_line ]['code'] ) {
 			$next_on_line = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $first_on_line + 1 ), null, true );
 			if ( false !== $next_on_line ) {
-				if ( ( \T_STRING === $this->tokens[ $next_on_line ]['code']
-						&& 'const' === $this->tokens[ $next_on_line ]['content'] )
-					|| \T_CONST === $this->tokens[ $next_on_line ]['code'] // Happens in some PHPCS versions.
+				if ( \T_STRING === $this->tokens[ $next_on_line ]['code']
+					&& 'const' === $this->tokens[ $next_on_line ]['content']
 				) {
 					$has_ns_sep = $this->phpcsFile->findNext( \T_NS_SEPARATOR, ( $next_on_line + 1 ), $stackPtr );
 					if ( false !== $has_ns_sep ) {
