@@ -85,6 +85,7 @@ class FileNameUnitTest extends AbstractSniffUnitTest {
 		'test-sample-namespaced-extends.3.inc'       => 1, // Namespaced vs non-namespaced.
 		'test-sample-namespaced-extends.4.inc'       => 1, // Non-namespaced vs namespaced.
 		'test-sample-namespaced-extends.5.inc'       => 0,
+		'Test_Sample.inc'                            => 0,
 
 		/*
 		 * In /FileNameUnitTests/ThemeExceptions.

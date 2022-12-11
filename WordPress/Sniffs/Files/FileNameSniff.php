@@ -31,6 +31,7 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
  *                   specific exceptions if the `$is_theme` property is set to `true`.
  * @since   0.12.0 Now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since   3.0.0  Test class files are now completely exempt from this rule.
  *
  * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
@@ -146,6 +147,15 @@ class FileNameSniff extends Sniff {
 			return;
 		}
 
+		$class_ptr = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
+		if ( false !== $class_ptr && $this->is_test_class( $this->phpcsFile, $class_ptr ) ) {
+			/*
+			 * This rule should not be applied to test classes (at all).
+			 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1995
+			 */
+			return;
+		}
+
 		// Respect phpcs:disable comments as long as they are not accompanied by an enable.
 		$i = -1;
 		while ( $i = $this->phpcsFile->findNext( \T_PHPCS_DISABLE, ( $i + 1 ) ) ) {
@@ -172,8 +182,6 @@ class FileNameSniff extends Sniff {
 		$file_name = basename( $file );
 
 		$this->check_filename_is_hyphenated( $file_name );
-
-		$class_ptr = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
 
 		if ( true === $this->strict_class_file_names && false !== $class_ptr ) {
 			$this->check_filename_has_class_prefix( $class_ptr, $file_name );
@@ -229,10 +237,6 @@ class FileNameSniff extends Sniff {
 	 * @return void
 	 */
 	protected function check_filename_has_class_prefix( $class_ptr, $file_name ) {
-		if ( $this->is_test_class( $this->phpcsFile, $class_ptr ) ) {
-			return;
-		}
-
 		$class_name = ObjectDeclarations::getName( $this->phpcsFile, $class_ptr );
 		$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
 
