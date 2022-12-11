@@ -125,7 +125,7 @@ class FileNameSniff extends Sniff {
 	 */
 	public function register() {
 		if ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
-			$this->class_exceptions = array_merge( $this->class_exceptions, $this->unittest_class_exceptions );
+			$this->class_exceptions += $this->unittest_class_exceptions;
 		}
 
 		return Collections::phpOpenTags();
