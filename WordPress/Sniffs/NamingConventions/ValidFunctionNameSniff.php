@@ -128,7 +128,7 @@ class ValidFunctionNameSniff extends Sniff {
 	 *
 	 * @since 0.1.0
 	 * @since 3.0.0 Renamed from `processTokenWithinScope()` to `process_method_declaration()`.
-	 *              Method signature has been changed as well as this method no longer overloads
+	 *              Method signature has been changed as well, as this method no longer overloads
 	 *              a method from the PEAR sniff which was previously the sniff parent.
 	 *
 	 * @param int    $stackPtr   The position where this token was found.
