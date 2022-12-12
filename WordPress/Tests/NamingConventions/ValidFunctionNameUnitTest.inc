@@ -184,3 +184,14 @@ class UnderScoreHandling {
 	public function Multiple_______Underscores() {} // Bad, replacement suggestion should be: multiple_______underscores.
 	public function Trailing_Underscores___() {}// Bad, replacement suggestion should be: trailing_underscores___.
 }
+
+// Safeguard that functions with a name only consisting of underscores are always ignored.
+function __() {}
+
+class OnlyUnderscores {
+	public function _____() {}
+}
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+function
