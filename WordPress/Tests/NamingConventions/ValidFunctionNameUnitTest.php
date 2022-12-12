@@ -51,6 +51,8 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 			184 => 1,
 			185 => 1,
 			199 => 1,
+			208 => 2,
+			210 => 1,
 		);
 	}
 

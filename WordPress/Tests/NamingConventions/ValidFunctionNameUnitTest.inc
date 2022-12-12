@@ -199,6 +199,25 @@ class FooBÃÈ {
 	function FooBãè() {} // Bad - not PHP 4-type constructor, non ascii chars not in same case - POC: https://3v4l.org/YOc2R.
 }
 
+// Safeguard that methods in enums are correctly handled by the sniff.
+enum Suit {
+	case Hearts;
+	case Diamonds;
+
+	public function color(): string {} // OK.
+	public function __changeColor(): string {} // Bad
+
+	public function &getShape(): string // Bad.
+	{
+		return "Rectangle";
+	}
+
+	// These are the only three magic methods allowed in enums.
+	public function __call( $a, $b ) {} // Ok.
+	public static function __callStatic( $a, $b ) {} // Ok.
+	public function __invoke() {} // Ok.
+}
+
 // Live coding/parse error.
 // This has to be the last test in the file.
 function
