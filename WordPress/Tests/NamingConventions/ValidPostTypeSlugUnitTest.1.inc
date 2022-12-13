@@ -62,3 +62,9 @@ register_post_type(); // OK, ignore, presume live coding.
 register_post_type( args: array() ); // Bad. No post type slug.
 register_post_type( args: array(), post_type: 'my_own_post_type',  ); // OK.
 register_post_type( args: array(), post_type: 'my-own-post-type-too-long' ); // Bad.
+
+// Safeguard that the information displayed in the error message is cleaned of comments.
+register_post_type(
+	// Post type name.
+	$name,// Non string literal. Warning with severity: 3
+);

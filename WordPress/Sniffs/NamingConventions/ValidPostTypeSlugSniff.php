@@ -145,7 +145,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 				$stackPtr,
 				'NotStringLiteral',
 				array(
-					$post_type_param['raw'],
+					$post_type_param['clean'],
 				),
 				3
 			);
