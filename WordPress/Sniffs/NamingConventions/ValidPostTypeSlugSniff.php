@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
@@ -121,8 +122,9 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
+		$string_start = $this->phpcsFile->findNext( Collections::textStringStartTokens(), $parameters[1]['start'], ( $parameters[1]['end'] + 1 ) );
+		$string_pos   = $this->phpcsFile->findNext( Tokens::$textStringTokens, $parameters[1]['start'], ( $parameters[1]['end'] + 1 ) );
 
-		$string_pos         = $this->phpcsFile->findNext( Tokens::$textStringTokens, $parameters[1]['start'], ( $parameters[1]['end'] + 1 ) );
 		$has_invalid_tokens = $this->phpcsFile->findNext( $this->valid_tokens, $parameters[1]['start'], ( $parameters[1]['end'] + 1 ), true );
 		if ( false !== $has_invalid_tokens || false === $string_pos ) {
 			// Check for non string based slug parameter (we cannot determine if this is valid).
@@ -138,7 +140,11 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$post_type = TextStrings::stripQuotes( $this->tokens[ $string_pos ]['content'] );
+		$post_type = TextStrings::getCompleteTextString( $this->phpcsFile, $string_start );
+		if ( isset( Tokens::$heredocTokens[ $this->tokens[ $string_start ]['code'] ] ) ) {
+			// Trim off potential indentation from PHP 7.3 flexible heredoc/nowdoc content.
+			$post_type = ltrim( $post_type );
+		}
 
 		if ( strlen( $post_type ) === 0 ) {
 			// Error for using empty slug.
