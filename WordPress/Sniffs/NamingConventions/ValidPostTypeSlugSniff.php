@@ -155,7 +155,10 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		);
 
 		// Warn for dynamic parts in the slug parameter.
-		if ( 'T_DOUBLE_QUOTED_STRING' === $this->tokens[ $string_pos ]['type'] || ( 'T_HEREDOC' === $this->tokens[ $string_pos ]['type'] && strpos( $this->tokens[ $string_pos ]['content'], '$' ) !== false ) ) {
+		if ( 'T_DOUBLE_QUOTED_STRING' === $this->tokens[ $string_pos ]['type']
+			|| ( 'T_HEREDOC' === $this->tokens[ $string_pos ]['type']
+			&& strpos( $this->tokens[ $string_pos ]['content'], '$' ) !== false )
+		) {
 			$this->phpcsFile->addWarning(
 				'The post type slug may, or may not, get too long with dynamic contents and could contain invalid characters. Found: "%s".',
 				$string_pos,
