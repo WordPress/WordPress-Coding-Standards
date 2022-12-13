@@ -51,9 +51,12 @@ class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
 					36 => 1,
 					37 => 1,
 					39 => 1,
+					40 => 1,
 					49 => 1,
 					50 => 2,
 					52 => 1,
+					62 => 1,
+					64 => 1,
 				);
 
 			case 'ValidPostTypeSlugUnitTest.2.inc':
@@ -90,7 +93,6 @@ class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
 					31 => 1,
 					33 => 1,
 					34 => 1,
-					40 => 1,
 					45 => 1,
 					49 => 1,
 					55 => 1,
