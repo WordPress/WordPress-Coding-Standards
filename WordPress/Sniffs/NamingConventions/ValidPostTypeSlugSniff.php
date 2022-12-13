@@ -151,13 +151,13 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$data = array(
-			$this->tokens[ $string_pos ]['content'],
+			$post_type,
 		);
 
 		// Warn for dynamic parts in the slug parameter.
 		if ( 'T_DOUBLE_QUOTED_STRING' === $this->tokens[ $string_pos ]['type'] || ( 'T_HEREDOC' === $this->tokens[ $string_pos ]['type'] && strpos( $this->tokens[ $string_pos ]['content'], '$' ) !== false ) ) {
 			$this->phpcsFile->addWarning(
-				'The post type slug may, or may not, get too long with dynamic contents and could contain invalid characters. Found: %s.',
+				'The post type slug may, or may not, get too long with dynamic contents and could contain invalid characters. Found: "%s".',
 				$string_pos,
 				'PartiallyDynamic',
 				$data
@@ -168,7 +168,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		if ( preg_match( self::VALID_POST_TYPE_CHARACTERS, $post_type ) === 0 ) {
 			// Error for invalid characters.
 			$this->phpcsFile->addError(
-				'register_post_type() called with invalid post type %s. Post type contains invalid characters. Only lowercase alphanumeric characters, dashes, and underscores are allowed.',
+				'register_post_type() called with invalid post type "%s". Post type contains invalid characters. Only lowercase alphanumeric characters, dashes, and underscores are allowed.',
 				$string_pos,
 				'InvalidCharacters',
 				$data
@@ -178,7 +178,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		if ( isset( $this->reserved_names[ $post_type ] ) ) {
 			// Error for using reserved slug names.
 			$this->phpcsFile->addError(
-				'register_post_type() called with reserved post type %s. Reserved post types should not be used as they interfere with the functioning of WordPress itself.',
+				'register_post_type() called with reserved post type "%s". Reserved post types should not be used as they interfere with the functioning of WordPress itself.',
 				$string_pos,
 				'Reserved',
 				$data
@@ -186,7 +186,7 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		} elseif ( stripos( $post_type, 'wp_' ) === 0 ) {
 			// Error for using reserved slug prefix.
 			$this->phpcsFile->addError(
-				'The post type passed to register_post_type() uses a prefix reserved for WordPress itself. Found: %s.',
+				'The post type passed to register_post_type() uses a prefix reserved for WordPress itself. Found: "%s".',
 				$string_pos,
 				'ReservedPrefix',
 				$data
@@ -196,12 +196,12 @@ class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		// Error for slugs that are too long.
 		if ( strlen( $post_type ) > self::POST_TYPE_MAX_LENGTH ) {
 			$this->phpcsFile->addError(
-				'A post type slug must not exceed %d characters. Found: %s (%d characters).',
+				'A post type slug must not exceed %d characters. Found: "%s" (%d characters).',
 				$string_pos,
 				'TooLong',
 				array(
 					self::POST_TYPE_MAX_LENGTH,
-					$this->tokens[ $string_pos ]['content'],
+					$post_type,
 					strlen( $post_type ),
 				)
 			);
