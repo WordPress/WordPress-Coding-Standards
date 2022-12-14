@@ -113,3 +113,6 @@ $value = apply_filters(
 do_action( "admin_head_${Foo->{$Baz}}_action_$Post->ID" ); // OK.
 do_action( "admin_Head_${Foo?->{$Baz}}_Action_{$Post?->ID}_Bla" ); // Error - use lowercase.
 do_action( "admin_Head_${Foo->{"${'A'}"}}-Action_$Post[A]_Bla" ); // Error - use lowercase + warning about dash.
+
+// Safeguard that variable function calls are handled correctly.
+do_action( 'admin_head_' .  $fn( 'UPPERCASE', 'wrong-delimiter' ) . '_action' ); // Ok.

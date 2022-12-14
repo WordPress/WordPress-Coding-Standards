@@ -133,7 +133,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 			// Skip over parameters passed to function calls.
 			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
-				&& \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				&& ( \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				|| \T_VARIABLE === $this->tokens[ $last_non_empty ]['code'] )
 				&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
 			) {
 				$i              = $this->tokens[ $i ]['parenthesis_closer'];
