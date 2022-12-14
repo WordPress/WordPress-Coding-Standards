@@ -92,3 +92,11 @@ parse_url($url, PHP_URL_QUERY); // OK, $component param not yet available.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
 parse_url($url, PHP_URL_SCHEME); // Warning, using $component param, but also using WP 4.7+, so can switch over.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
+
+/*
+ * Tests for support for PHP 8.0+ named parameters.
+ */
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to strip_tags().
+strip_tags( allowed_tags: '<iframe>' ); // OK. Well not really, missing required param, but that's not the concern of this sniff.
+strip_tags( allowed_tags: '<iframe>', string: $something ); // OK.
+strip_tags( string: $something ); // Warning.

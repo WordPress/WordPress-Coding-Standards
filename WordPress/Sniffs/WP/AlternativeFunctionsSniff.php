@@ -230,12 +230,14 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			case 'strip_tags':
 				/*
 				 * The function `wp_strip_all_tags()` is only a valid alternative when
-				 * only the first parameter is passed to `strip_tags()`.
+				 * only the first parameter, `$string`, is passed to `strip_tags()`.
 				 */
-				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1 ) {
+				$has_allowed_tags = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 2, 'allowed_tags' );
+				if ( false !== $has_allowed_tags ) {
 					return;
 				}
 
+				unset( $has_allowed_tags );
 				break;
 
 			case 'parse_url':
