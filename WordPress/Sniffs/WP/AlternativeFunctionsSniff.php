@@ -35,6 +35,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @link https://www.php.net/wrappers.php
 	 *
+	 * @since 2.1.0
+	 *
 	 * @var array
 	 */
 	protected $allowed_local_streams = array(
@@ -51,6 +53,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @link https://www.php.net/wrappers.php
 	 *
+	 * @since 2.1.0
+	 *
 	 * @var array
 	 */
 	protected $allowed_local_stream_partials = array(
@@ -62,6 +66,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * Local input stream constants which should not be flagged for the file system function checks.
 	 *
 	 * @link https://www.php.net/wrappers.php
+	 *
+	 * @since 2.1.0
 	 *
 	 * @var array
 	 */
