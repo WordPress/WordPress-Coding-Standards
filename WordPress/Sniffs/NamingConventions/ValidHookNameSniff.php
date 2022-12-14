@@ -94,6 +94,11 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
+		$hook_name_param = WPHookHelper::get_hook_name_param( $matched_content, $parameters );
+		if ( false === $hook_name_param ) {
+			return;
+		}
+
 		$regex = $this->prepare_regex();
 
 		$case_errors    = 0;
@@ -102,7 +107,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		$expected       = array();
 		$last_non_empty = null;
 
-		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+		for ( $i = $hook_name_param['start']; $i <= $hook_name_param['end']; $i++ ) {
 			// Skip past comment tokens.
 			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
@@ -125,7 +130,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 					$i = $this->tokens[ $open_bracket ]['bracket_closer'];
 
-				} while ( isset( $this->tokens[ $i ] ) && $i <= $parameters[1]['end'] );
+				} while ( isset( $this->tokens[ $i ] ) && $i <= $hook_name_param['end'] );
 
 				$last_non_empty = $i;
 				continue;
@@ -185,8 +190,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 		$first_non_empty = $this->phpcsFile->findNext(
 			Tokens::$emptyTokens,
-			$parameters[1]['start'],
-			( $parameters[1]['end'] + 1 ),
+			$hook_name_param['start'],
+			( $hook_name_param['end'] + 1 ),
 			true
 		);
 
