@@ -1545,7 +1545,7 @@ class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			$this->phpcsFile,
 			$message,
 			$stackPtr,
-			( version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_wp_version, '<' ) ),
+			( $this->wp_version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_wp_version, '<' ) ),
 			MessageHelper::stringToErrorcode( $matched_content . 'Found' ),
 			$data
 		);

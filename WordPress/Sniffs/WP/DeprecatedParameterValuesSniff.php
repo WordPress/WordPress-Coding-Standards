@@ -208,7 +208,7 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 			$data[]   = $parameter_args[ $matched_parameter ]['alt'];
 		}
 
-		$is_error = version_compare( $parameter_args[ $matched_parameter ]['version'], $this->minimum_wp_version, '<' );
+		$is_error = $this->wp_version_compare( $parameter_args[ $matched_parameter ]['version'], $this->minimum_wp_version, '<' );
 		MessageHelper::addMessage(
 			$this->phpcsFile,
 			$message,

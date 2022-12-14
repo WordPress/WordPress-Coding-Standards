@@ -210,7 +210,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				 * @see https://developer.wordpress.org/reference/functions/wp_parse_url/#changelog
 				 */
 				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1
-					&& version_compare( $this->minimum_wp_version, '4.7.0', '<' )
+					&& $this->wp_version_compare( $this->minimum_wp_version, '4.7.0', '<' )
 				) {
 					return;
 				}
@@ -288,7 +288,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		// Verify if the alternative is available in the minimum supported WP version.
-		if ( version_compare( $this->groups[ $group_name ]['since'], $this->minimum_wp_version, '<=' ) ) {
+		if ( $this->wp_version_compare( $this->groups[ $group_name ]['since'], $this->minimum_wp_version, '<=' ) ) {
 			return parent::process_matched_token( $stackPtr, $group_name, $matched_content );
 		}
 	}

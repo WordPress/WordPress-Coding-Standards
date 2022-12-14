@@ -345,7 +345,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 			}
 
 			$message  = 'The parameter "%s" at position #%s of %s() has been deprecated since WordPress version %s.';
-			$is_error = version_compare( $parameter_args['version'], $this->minimum_wp_version, '<' );
+			$is_error = $this->wp_version_compare( $parameter_args['version'], $this->minimum_wp_version, '<' );
 			$code     = MessageHelper::stringToErrorcode( ucfirst( $matched_content ) . 'Param' . $position . 'Found' );
 
 			$data = array(
