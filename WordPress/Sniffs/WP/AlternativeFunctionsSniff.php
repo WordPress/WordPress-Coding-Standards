@@ -36,10 +36,11 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @link https://www.php.net/wrappers.php
 	 *
 	 * @since 2.1.0
+	 * @since 3.0.0 The visibility was changed from `protected` to `private`.
 	 *
 	 * @var array
 	 */
-	protected $allowed_local_streams = array(
+	private $allowed_local_streams = array(
 		'php://input'  => true,
 		'php://output' => true,
 		'php://stdin'  => true,
@@ -54,10 +55,11 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @link https://www.php.net/wrappers.php
 	 *
 	 * @since 2.1.0
+	 * @since 3.0.0 The visibility was changed from `protected` to `private`.
 	 *
 	 * @var array
 	 */
-	protected $allowed_local_stream_partials = array(
+	private $allowed_local_stream_partials = array(
 		'php://temp/',
 		'php://fd/',
 	);
@@ -68,10 +70,11 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @link https://www.php.net/wrappers.php
 	 *
 	 * @since 2.1.0
+	 * @since 3.0.0 The visibility was changed from `protected` to `private`.
 	 *
 	 * @var array
 	 */
-	protected $allowed_local_stream_constants = array(
+	private $allowed_local_stream_constants = array(
 		'STDIN'  => true,
 		'STDOUT' => true,
 		'STDERR' => true,
