@@ -471,23 +471,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * A list of functions that invoke WP hooks (filters/actions).
-	 *
-	 * @since 0.10.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $hookInvokeFunctions = array(
-		'do_action'                => true,
-		'do_action_ref_array'      => true,
-		'do_action_deprecated'     => true,
-		'apply_filters'            => true,
-		'apply_filters_ref_array'  => true,
-		'apply_filters_deprecated' => true,
-	);
-
-	/**
 	 * List of global WP variables.
 	 *
 	 * @since 0.3.0
