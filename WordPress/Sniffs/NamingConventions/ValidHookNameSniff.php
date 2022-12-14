@@ -104,14 +104,14 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
 			// Skip past comment tokens.
-			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) !== false ) {
+			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			// Skip past potential variable array access: $var['Key'].
+			// Skip past potential variable array access: `$var['key']`.
 			if ( \T_VARIABLE === $this->tokens[ $i ]['code'] ) {
 				do {
 					$open_bracket = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
@@ -119,6 +119,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 						|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
 						|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
 					) {
+						$last_non_empty = $i;
 						continue 2;
 					}
 
@@ -140,7 +141,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			// Skip past non-string tokens.
+			// Skip past non text string tokens.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
 				$last_non_empty = $i;
 				continue;
@@ -197,6 +198,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			$error = 'Hook names should be lowercase. Expected: %s, but found: %s.';
 			$this->phpcsFile->addError( $error, $first_non_empty, 'NotLowercase', $data );
 		}
+
 		if ( $underscores > 0 ) {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
 			$this->phpcsFile->addWarning( $error, $first_non_empty, 'UseUnderscores', $data );
