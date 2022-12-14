@@ -257,46 +257,16 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @return string
 	 */
 	protected function transform_complex_string( $text_string, $regex, $transform_type = 'full' ) {
-		$output = preg_split( '`([\{\}\$\[\] ])`', $text_string, -1, \PREG_SPLIT_DELIM_CAPTURE );
+		$plain_text = TextStrings::stripEmbeds( $text_string );
+		$embeds     = TextStrings::getEmbeds( $text_string );
 
-		$is_variable = false;
-		$has_braces  = false;
-		$braces      = 0;
+		$transformed_text = $this->transform( $plain_text, $regex, $transform_type );
 
-		foreach ( $output as $i => $part ) {
-			if ( \in_array( $part, array( '$', '{' ), true ) ) {
-				$is_variable = true;
-				if ( '{' === $part ) {
-					$has_braces = true;
-					++$braces;
-				}
-				continue;
-			}
-
-			if ( true === $is_variable ) {
-				if ( '[' === $part ) {
-					$has_braces = true;
-					++$braces;
-				}
-				if ( \in_array( $part, array( '}', ']' ), true ) ) {
-					--$braces;
-				}
-				if ( false === $has_braces && ' ' === $part ) {
-					$is_variable  = false;
-					$output[ $i ] = $this->transform( $part, $regex, $transform_type );
-				}
-
-				if ( ( true === $has_braces && 0 === $braces ) && false === \in_array( $output[ ( $i + 1 ) ], array( '{', '[' ), true ) ) {
-					$has_braces  = false;
-					$is_variable = false;
-				}
-				continue;
-			}
-
-			$output[ $i ] = $this->transform( $part, $regex, $transform_type );
+		// Inject the embeds back into the text string.
+		foreach ( $embeds as $offset => $embed ) {
+			$transformed_text = substr_replace( $transformed_text, $embed, $offset, 0 );
 		}
 
-		return implode( '', $output );
+		return $transformed_text;
 	}
-
 }

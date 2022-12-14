@@ -108,3 +108,8 @@ $value = apply_filters(
 	$value,
 	$attributes
 );
+
+// Test handling of more complex embedded variables and expressions.
+do_action( "admin_head_${Foo->{$Baz}}_action_$Post->ID" ); // OK.
+do_action( "admin_Head_${Foo?->{$Baz}}_Action_{$Post?->ID}_Bla" ); // Error - use lowercase.
+do_action( "admin_Head_${Foo->{"${'A'}"}}-Action_$Post[A]_Bla" ); // Error - use lowercase + warning about dash.
