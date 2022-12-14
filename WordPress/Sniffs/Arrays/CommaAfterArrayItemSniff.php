@@ -9,10 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces a comma after each array item and the spacing around it.
@@ -39,10 +40,7 @@ class CommaAfterArrayItemSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			\T_ARRAY,
-			\T_OPEN_SHORT_ARRAY,
-		);
+		return Collections::arrayOpenTokensBC();
 	}
 
 	/**
@@ -54,10 +52,10 @@ class CommaAfterArrayItemSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $stackPtr ]['code'] ] )
 			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
 		) {
-			// Short list, not short array.
+			// Short list or real square brackets, not short array.
 			return;
 		}
 
