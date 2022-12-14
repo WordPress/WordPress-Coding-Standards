@@ -9,6 +9,8 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
+use PHPCSUtils\Utils\PassedParameters;
+
 /**
  * Helper utilities for recognizing functions related to the WP Hook mechanism.
  *
@@ -26,16 +28,37 @@ final class WPHookHelper {
 	 * @since 3.0.0  - Moved from the Sniff class to this class.
 	 *               - The property visibility has changed from `protected` to `private static`.
 	 *                 Use the `get_function_names()` method for access.
+	 *               - The format of the value has changed from a non-relevant boolean to
+	 *                 an array with the parameter position and name(s) for the hook name parameter.
 	 *
-	 * @var array<string, bool>
+	 * @var array<string, <string, int|string|array>> Function name as key, array with target
+	 *                                                parameter position and name(s) as value.
 	 */
 	private static $hookInvokeFunctions = array(
-		'do_action'                => true,
-		'do_action_ref_array'      => true,
-		'do_action_deprecated'     => true,
-		'apply_filters'            => true,
-		'apply_filters_ref_array'  => true,
-		'apply_filters_deprecated' => true,
+		'do_action' => array(
+			'position' => 1,
+			'name'     => 'hook_name',
+		),
+		'do_action_ref_array' => array(
+			'position' => 1,
+			'name'     => 'hook_name',
+		),
+		'do_action_deprecated' => array(
+			'position' => 1,
+			'name'     => 'hook_name',
+		),
+		'apply_filters' => array(
+			'position' => 1,
+			'name'     => 'hook_name',
+		),
+		'apply_filters_ref_array' => array(
+			'position' => 1,
+			'name'     => 'hook_name',
+		),
+		'apply_filters_deprecated' => array(
+			'position' => 1,
+			'name'     => 'hook_name',
+		),
 	);
 
 	/**
@@ -50,7 +73,7 @@ final class WPHookHelper {
 	 * @return array<string, bool> Array with the function names as keys. The value is irrelevant.
 	 */
 	public static function get_functions( $include_deprecated = true ) {
-		$hooks = self::$hookInvokeFunctions;
+		$hooks = array_fill_keys( array_keys( self::$hookInvokeFunctions ), true );
 		if ( false === $include_deprecated ) {
 			unset(
 				$hooks['do_action_deprecated'],
@@ -59,5 +82,33 @@ final class WPHookHelper {
 		}
 
 		return $hooks;
+	}
+
+	/**
+	 * Retrieve the parameter information for the hook name parameter from a stack of parameters
+	 * passed to one of the WP hook functions.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $function_name The name of the WP hook function which the parameters were passed to.
+	 * @param array  $parameters    The output of a previous call to PassedParameters::getParameters().
+	 *
+	 * @return array|false Array with information on the parameter at the specified offset,
+	 *                     or with the specified name.
+	 *                     Or `FALSE` if the specified parameter is not found.
+	 *                     See the PHPCSUtils PassedParameters::getParameters() documentation
+	 *                     for the format of the returned (single-dimensional) array.
+	 */
+	public static function get_hook_name_param( $function_name, array $parameters ) {
+		$function_lc = strtolower( $function_name );
+		if ( isset( self::$hookInvokeFunctions[ $function_lc ] ) === false ) {
+			return false;
+		}
+
+		return PassedParameters::getParameterFromStack(
+			$parameters,
+			self::$hookInvokeFunctions[ $function_lc ]['position'],
+			self::$hookInvokeFunctions[ $function_lc ]['name']
+		);
 	}
 }
