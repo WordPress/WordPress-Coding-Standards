@@ -80,11 +80,15 @@ touch(); // Warning.
 fputs(); // Warning.
 
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
-parse_url( 'http://example.com/' ); // OK.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.6
+parse_url( 'http://example.com/' ); // OK, alternative was not yet available.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.4
+parse_url( 'http://example.com/' ); // Warning, not using $component param, so can switch over.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
 
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
-parse_url($url, PHP_URL_QUERY); // OK.
+parse_url($url, PHP_URL_QUERY); // OK, alternative was not yet available.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.5
+parse_url($url, PHP_URL_QUERY); // OK, $component param not yet available.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
-parse_url($url, PHP_URL_SCHEME); // Warning.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.6
+parse_url($url, PHP_URL_SCHEME); // Warning, using $component param, but also using WP 4.7+, so can switch over.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8

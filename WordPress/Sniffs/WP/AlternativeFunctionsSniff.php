@@ -238,7 +238,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 				break;
 
-			case 'wp_parse_url':
+			case 'parse_url':
 				/*
 				 * Before WP 4.7.0, the function `wp_parse_url()` was only a valid alternative
 				 * if no second param was passed to `parse_url()`.
