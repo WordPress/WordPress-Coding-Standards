@@ -27,3 +27,14 @@ echo bloginfo( function_name() );
 
 get_bloginfo( 'wpurl' ); // OK.
 add_settings_field( '', '', '', /* deliberately not passed */ ); // Valid for PHP 7.3+.
+
+// Safeguard support for PHP 8.0+ named parameters.
+add_settings_section( $id, $title, $callback, args: $args ); // OK, optional parameter skipped.
+add_settings_field( page: $page, section: $section, id: $id, title: $title, callback: $callback ); // OK, undetermined.
+add_settings_section( callback: $callback, page: 'general', section: $section, id: $id, title: $title, ); // OK, not the deprecated value.
+add_settings_field( page: 'misc', section: $section, id: $id, title: $title, callback: $callback ); // Error.
+
+get_bloginfo( filter: $filter ); // OK, optional parameter skipped.
+get_bloginfo( filter: $filter, show: $show, ); // OK, undetermined.
+get_bloginfo( filter: $filter, show: 'admin_email', ); // OK, not the deprecated value.
+get_bloginfo( filter: $filter, show: 'text_direction', ); // Error.
