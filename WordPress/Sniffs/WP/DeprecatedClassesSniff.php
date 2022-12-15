@@ -116,7 +116,7 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			$this->phpcsFile,
 			$message,
 			$stackPtr,
-			( version_compare( $this->deprecated_classes[ $class_name ]['version'], $this->minimum_wp_version, '<' ) ),
+			( $this->wp_version_compare( $this->deprecated_classes[ $class_name ]['version'], $this->minimum_wp_version, '<' ) ),
 			MessageHelper::stringToErrorcode( $class_name . 'Found' ),
 			$data
 		);
