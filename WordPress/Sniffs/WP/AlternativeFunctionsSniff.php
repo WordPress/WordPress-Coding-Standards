@@ -283,12 +283,20 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					break;
 				}
 
-				if ( preg_match( '`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`', $filename_param['raw'] ) === 1 ) {
+				$contains_wp_path_constant = preg_match(
+					'`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`',
+					$filename_param['raw']
+				);
+				if ( 1 === $contains_wp_path_constant ) {
 					// Using any of the constants matched in this regex is an indicator of a local file.
 					return;
 				}
 
-				if ( preg_match( '`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i', $filename_param['raw'] ) === 1 ) {
+				$contains_wp_path_function_call = preg_match(
+					'`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i',
+					$filename_param['raw']
+				);
+				if ( 1 === $contains_wp_path_function_call ) {
 					// Using any of the functions matched in the regex is an indicator of a local file.
 					return;
 				}
@@ -298,7 +306,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					return;
 				}
 
-				unset( $params, $use_include_path_param, $filename_param );
+				unset( $params, $use_include_path_param, $filename_param, $contains_wp_path_constant, $contains_wp_path_function_call );
 				break;
 
 			case 'file_put_contents':
