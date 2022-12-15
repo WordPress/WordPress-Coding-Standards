@@ -73,7 +73,20 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 	 *    );
 	 */
 	protected $target_functions = array(
-
+		'_future_post_hook' => array(
+			1 => array(
+				'name'    => 'deprecated',
+				'value'   => null,
+				'version' => '2.3.0',
+			),
+		),
+		'_load_remote_block_patterns' => array(
+			1 => array(
+				'name'    => 'deprecated',
+				'value'   => null,
+				'version' => '5.9.0',
+			),
+		),
 		'add_option' => array(
 			3 => array(
 				'name'    => 'deprecated',
@@ -139,7 +152,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 			3 => array(
 				'name'    => 'deprecated',
 				'value'   => '',
-				'version' => '2.3.0',
+				'version' => '3.0.0',
 			),
 		),
 		'get_wp_title_rss' => array(
@@ -232,7 +245,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 			),
 		),
 		'unregister_setting' => array(
-			4 => array(
+			3 => array(
 				'name'    => 'deprecated',
 				'value'   => '',
 				'version' => '4.7.0',
