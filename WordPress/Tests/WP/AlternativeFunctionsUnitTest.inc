@@ -129,3 +129,21 @@ $output_stream = fopen( mode: 'w', context: $stream, filename: STDOUT ); // OK.
 $bytes = readfile( use_include_path: false, context: $stream, filename: 'php://fd/3' ); // OK.
 file_put_contents( data: $data, flags : LOCK_EX, filename: STDERR ); // OK.
 $output_stream = fopen( mode: 'r', filename: $url, ); // Warning.
+
+// Safeguard that comments in the parameters are ignored for the custom logic related to file_get_contents().
+file_get_contents(
+	$local_file,
+	true // Using local include path.
+); // OK.
+file_get_contents(
+	// Not using an https: URL for reasons.
+	ABSPATH . 'wp-admin/css/some-file.css'
+); // OK.
+file_get_contents(
+	// Not using ABSPATH for reasons.
+	$url
+); // Warning.
+file_get_contents(
+	// Not using plugin_dir_path() for reasons.
+	$url
+); // Warning.
