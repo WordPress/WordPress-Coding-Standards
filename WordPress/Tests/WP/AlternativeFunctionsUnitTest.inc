@@ -1,7 +1,5 @@
 <?php
 
-
-
 curl_init(); // Warning.
 curl_close( $ch ); // Warning.
 CURL_getinfo(); // Warning.
