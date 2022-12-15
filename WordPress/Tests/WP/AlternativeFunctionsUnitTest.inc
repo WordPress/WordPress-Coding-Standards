@@ -121,3 +121,11 @@ file_get_contents( use_include_path: false, filename: 'https://wordpress.org' );
 file_get_contents( use_include_path: false, filename: ABSPATH . 'wp-admin/css/some-file.css'); // OK.
 file_get_contents( use_include_path: false, filename: 'php://input' ); // OK.
 file_get_contents(use_include_path: false, filename: MYABSPATH . 'plugin-file.json'); // Warning.
+
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to fopen(), readfile() and file_put_contents().
+fopen (mode: 'w'); // Warning. Missing required param, but that's not the concern of this sniff.
+$output_stream = fopen( mode: 'w', filename: 'php://output', ); // OK.
+$output_stream = fopen( mode: 'w', context: $stream, filename: STDOUT ); // OK.
+$bytes = readfile( use_include_path: false, context: $stream, filename: 'php://fd/3' ); // OK.
+file_put_contents( data: $data, flags : LOCK_EX, filename: STDERR ); // OK.
+$output_stream = fopen( mode: 'r', filename: $url, ); // Warning.

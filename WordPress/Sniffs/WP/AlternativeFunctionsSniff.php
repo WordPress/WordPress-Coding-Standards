@@ -314,21 +314,23 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			case 'readfile':
 				/*
 				 * Allow for handling raw data streams from the request body.
+				 *
+				 * Note: at this time (December 2022) these three functions use the same parameter name for their
+				 * first parameter. If this would change at any point in the future, this code will need to
+				 * be made more modular and will need to pass the parameter name based on the function call detected.
 				 */
-				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
-
-				if ( false === $first_param ) {
+				$filename_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1, 'filename' );
+				if ( false === $filename_param ) {
 					// If the file to work with is not set, local data streams don't come into play.
 					break;
 				}
 
-				if ( $this->is_local_data_stream( $first_param['raw'] ) === true ) {
+				if ( $this->is_local_data_stream( $filename_param['raw'] ) === true ) {
 					// Local data stream.
 					return;
 				}
 
-				unset( $first_param );
-
+				unset( $filename_param );
 				break;
 		}
 
