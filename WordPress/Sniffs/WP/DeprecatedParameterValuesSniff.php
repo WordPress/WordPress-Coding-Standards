@@ -66,6 +66,21 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 	 *     );
 	 */
 	protected $target_functions = array(
+		'add_option' => array(
+			1 => array(
+				'name'   => 'option',
+				'values' => array(
+					'blacklist_keys' => array(
+						'alt'     => 'disallowed_keys',
+						'version' => '5.5.0',
+					),
+					'comment_whitelist' => array(
+						'alt'     => 'comment_previously_approved',
+						'version' => '5.5.0',
+					),
+				),
+			),
+		),
 		'add_settings_field' => array(
 			4 => array(
 				'name'   => 'page',
@@ -134,6 +149,21 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 				),
 			),
 		),
+		'get_option' => array(
+			1 => array(
+				'name'   => 'option',
+				'values' => array(
+					'blacklist_keys' => array(
+						'alt'     => 'disallowed_keys',
+						'version' => '5.5.0',
+					),
+					'comment_whitelist' => array(
+						'alt'     => 'comment_previously_approved',
+						'version' => '5.5.0',
+					),
+				),
+			),
+		),
 		'register_setting' => array(
 			1 => array(
 				'name'   => 'option_group',
@@ -160,6 +190,21 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 					'privacy' => array(
 						'alt'     => 'another settings group',
 						'version' => '3.5.0',
+					),
+				),
+			),
+		),
+		'update_option' => array(
+			1 => array(
+				'name'   => 'option',
+				'values' => array(
+					'blacklist_keys' => array(
+						'alt'     => 'disallowed_keys',
+						'version' => '5.5.0',
+					),
+					'comment_whitelist' => array(
+						'alt'     => 'comment_previously_approved',
+						'version' => '5.5.0',
 					),
 				),
 			),

@@ -38,3 +38,14 @@ get_bloginfo( filter: $filter ); // OK, optional parameter skipped.
 get_bloginfo( filter: $filter, show: $show, ); // OK, undetermined.
 get_bloginfo( filter: $filter, show: 'admin_email', ); // OK, not the deprecated value.
 get_bloginfo( filter: $filter, show: 'text_direction', ); // Error.
+
+// Parameter values which have been deprecated in WP 5.5. All will give an error as the `minimum_wp_version` > 5.5.
+add_option('blacklist_keys');
+add_option('comment_whitelist', $value);
+add_option(value: $value, option: 'blacklist_keys');
+get_option('blacklist_keys');
+get_option('comment_whitelist', $default);
+get_option(default: $default, option: 'comment_whitelist');
+update_option('blacklist_keys', $value);
+update_option('comment_whitelist', $value);
+update_option(autoload: true, value: $value, option: 'blacklist_keys');

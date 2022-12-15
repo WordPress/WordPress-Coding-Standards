@@ -43,6 +43,15 @@ class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 			18 => 1,
 			35 => 1,
 			40 => 1,
+			43 => 1,
+			44 => 1,
+			45 => 1,
+			46 => 1,
+			47 => 1,
+			48 => 1,
+			49 => 1,
+			50 => 1,
+			51 => 1,
 		);
 	}
 
