@@ -109,3 +109,15 @@ parse_url(url : $url); // Warning.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
 parse_url(component: PHP_URL_SCHEME, url: $url, ); // Warning.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
+
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to file_get_contents().
+file_get_contents( use_include_path: true, filename: $local_file, ); // OK.
+file_get_contents( use_include_path: false, filename: $url, ); // Warning.
+
+file_get_contents( use_include_path: false ); // OK, well not really, missing required param, but that's not the concern of this sniff.
+
+file_get_contents( use_include_path: false, filename: 'http://remoteurl.com/file/?w=1' ); // Warning.
+file_get_contents( use_include_path: false, filename: 'https://wordpress.org' ); // Warning.
+file_get_contents( use_include_path: false, filename: ABSPATH . 'wp-admin/css/some-file.css'); // OK.
+file_get_contents( use_include_path: false, filename: 'php://input' ); // OK.
+file_get_contents(use_include_path: false, filename: MYABSPATH . 'plugin-file.json'); // Warning.

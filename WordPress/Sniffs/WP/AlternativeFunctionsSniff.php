@@ -264,40 +264,41 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				 */
 				$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
-				if ( isset( $params[2] ) && 'true' === $params[2]['raw'] ) {
+				$use_include_path_param = PassedParameters::getParameterFromStack( $params, 2, 'use_include_path' );
+				if ( false !== $use_include_path_param && 'true' === $use_include_path_param['raw'] ) {
 					// Setting `$use_include_path` to `true` is only relevant for local files.
 					return;
 				}
 
-				if ( isset( $params[1] ) === false ) {
+				$filename_param = PassedParameters::getParameterFromStack( $params, 1, 'filename' );
+				if ( false === $filename_param ) {
 					// If the file to get is not set, this is a non-issue anyway.
 					return;
 				}
 
-				if ( strpos( $params[1]['raw'], 'http:' ) !== false
-					|| strpos( $params[1]['raw'], 'https:' ) !== false
+				if ( strpos( $filename_param['raw'], 'http:' ) !== false
+					|| strpos( $filename_param['raw'], 'https:' ) !== false
 				) {
 					// Definitely a URL, throw notice.
 					break;
 				}
 
-				if ( preg_match( '`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`', $params[1]['raw'] ) === 1 ) {
+				if ( preg_match( '`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`', $filename_param['raw'] ) === 1 ) {
 					// Using any of the constants matched in this regex is an indicator of a local file.
 					return;
 				}
 
-				if ( preg_match( '`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i', $params[1]['raw'] ) === 1 ) {
+				if ( preg_match( '`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i', $filename_param['raw'] ) === 1 ) {
 					// Using any of the functions matched in the regex is an indicator of a local file.
 					return;
 				}
 
-				if ( $this->is_local_data_stream( $params[1]['raw'] ) === true ) {
+				if ( $this->is_local_data_stream( $filename_param['raw'] ) === true ) {
 					// Local data stream.
 					return;
 				}
 
-				unset( $params );
-
+				unset( $params, $use_include_path_param, $filename_param );
 				break;
 
 			case 'file_put_contents':
