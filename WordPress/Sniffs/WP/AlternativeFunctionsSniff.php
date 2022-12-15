@@ -325,7 +325,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					break;
 				}
 
-				if ( $this->is_local_data_stream( $filename_param['raw'] ) === true ) {
+				if ( $this->is_local_data_stream( $filename_param['clean'] ) === true ) {
 					// Local data stream.
 					return;
 				}
