@@ -471,46 +471,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * A list of functions that invoke WP hooks (filters/actions).
-	 *
-	 * @since 0.10.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $hookInvokeFunctions = array(
-		'do_action'                => true,
-		'do_action_ref_array'      => true,
-		'do_action_deprecated'     => true,
-		'apply_filters'            => true,
-		'apply_filters_ref_array'  => true,
-		'apply_filters_deprecated' => true,
-	);
-
-	/**
-	 * A list of functions that are used to interact with the WP plugins API.
-	 *
-	 * @since 0.10.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array <string function name> => <int position of the hook name argument in function signature>
-	 */
-	protected $hookFunctions = array(
-		'has_filter'         => 1,
-		'add_filter'         => 1,
-		'remove_filter'      => 1,
-		'remove_all_filters' => 1,
-		'doing_filter'       => 1, // Hook name optional.
-		'has_action'         => 1,
-		'add_action'         => 1,
-		'doing_action'       => 1, // Hook name optional.
-		'did_action'         => 1,
-		'remove_action'      => 1,
-		'remove_all_actions' => 1,
-		'current_filter'     => 0, // No hook name argument.
-	);
-
-	/**
 	 * List of global WP variables.
 	 *
 	 * @since 0.3.0

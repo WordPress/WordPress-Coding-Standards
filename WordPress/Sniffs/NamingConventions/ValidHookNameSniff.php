@@ -9,9 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\WPHookHelper;
 
 /**
  * Use lowercase letters in action and filter names. Separate words via underscores.
@@ -73,13 +74,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @return array
 	 */
 	public function getGroups() {
-		$this->target_functions = $this->hookInvokeFunctions;
-
-		// No need to examine the names of deprecated hooks.
-		unset(
-			$this->target_functions['do_action_deprecated'],
-			$this->target_functions['apply_filters_deprecated']
-		);
+		// Only retrieve functions which are not used for deprecated hooks.
+		$this->target_functions = WPHookHelper::get_functions( false );
 
 		return parent::getGroups();
 	}
