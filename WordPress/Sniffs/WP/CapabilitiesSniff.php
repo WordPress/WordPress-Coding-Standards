@@ -15,6 +15,7 @@ use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
  * Check that capabilities are used correctly.
@@ -427,7 +428,7 @@ class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Check if additional capabilities were registered via the ruleset and if the found capability matches any of those.
-		$custom_capabilities = $this->merge_custom_array( $this->custom_capabilities, array() );
+		$custom_capabilities = RulesetPropertyHelper::merge_custom_array( $this->custom_capabilities, array() );
 		if ( isset( $custom_capabilities[ $matched_parameter ] ) ) {
 			return;
 		}

@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Flag Database direct queries.
@@ -275,7 +276,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget'] ) {
-			$this->cacheGetFunctions = $this->merge_custom_array(
+			$this->cacheGetFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheGetFunctions,
 				$this->cacheGetFunctions
 			);
@@ -284,7 +285,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset'] ) {
-			$this->cacheSetFunctions = $this->merge_custom_array(
+			$this->cacheSetFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheSetFunctions,
 				$this->cacheSetFunctions
 			);
@@ -293,7 +294,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] ) {
-			$this->cacheDeleteFunctions = $this->merge_custom_array(
+			$this->cacheDeleteFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);

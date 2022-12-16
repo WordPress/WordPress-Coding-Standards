@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -478,9 +479,9 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	protected function mergeFunctionLists() {
 		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape'] ) {
-			$customEscapeFunctions = $this->merge_custom_array( $this->customEscapingFunctions, array(), false );
+			$customEscapeFunctions = RulesetPropertyHelper::merge_custom_array( $this->customEscapingFunctions, array(), false );
 
-			$this->escapingFunctions = $this->merge_custom_array(
+			$this->escapingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$customEscapeFunctions,
 				$this->escapingFunctions
 			);
@@ -489,7 +490,7 @@ class EscapeOutputSniff extends Sniff {
 		}
 
 		if ( $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] ) {
-			$this->autoEscapedFunctions = $this->merge_custom_array(
+			$this->autoEscapedFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customAutoEscapedFunctions,
 				$this->autoEscapedFunctions
 			);
@@ -499,7 +500,7 @@ class EscapeOutputSniff extends Sniff {
 
 		if ( $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] ) {
 
-			$this->printingFunctions = $this->merge_custom_array(
+			$this->printingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customPrintingFunctions,
 				$this->printingFunctions
 			);

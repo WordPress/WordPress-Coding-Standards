@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\ObjectDeclarations;
-use WordPressCS\WordPress\Sniff as WPCS_Sniff;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
  * Helper utilities for sniffs which need to take into account whether the
@@ -127,7 +127,7 @@ trait IsUnitTestTrait {
 		}
 
 		// Add any potentially extra custom test classes to the known test classes list.
-		$known_test_classes = WPCS_Sniff::merge_custom_array(
+		$known_test_classes = RulesetPropertyHelper::merge_custom_array(
 			$this->custom_test_classes,
 			$this->known_test_classes
 		);
