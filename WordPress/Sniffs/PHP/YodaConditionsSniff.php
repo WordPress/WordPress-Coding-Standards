@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 
 /**
  * Enforces Yoda conditional statements.
@@ -29,10 +30,11 @@ class YodaConditionsSniff extends Sniff {
 	 * The tokens that indicate the start of a condition.
 	 *
 	 * @since 0.12.0
+	 * @since 3.0.0  This property is now `private`.
 	 *
 	 * @var array
 	 */
-	protected $condition_start_tokens;
+	private $condition_start_tokens;
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -81,7 +83,7 @@ class YodaConditionsSniff extends Sniff {
 				continue;
 			}
 
-			// If this is a variable or array, we've seen all we need to see.
+			// If this is a variable or array assignment, we've seen all we need to see.
 			if ( \T_VARIABLE === $this->tokens[ $i ]['code']
 				|| \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $i ]['code']
 			) {
@@ -106,7 +108,7 @@ class YodaConditionsSniff extends Sniff {
 			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true );
 		}
 
-		if ( \in_array( $this->tokens[ $next_non_empty ]['code'], array( \T_SELF, \T_PARENT, \T_STATIC ), true ) ) {
+		if ( isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $next_non_empty ]['code'] ] ) === true ) {
 			$next_non_empty = $this->phpcsFile->findNext(
 				( Tokens::$emptyTokens + array( \T_DOUBLE_COLON => \T_DOUBLE_COLON ) ),
 				( $next_non_empty + 1 ),
