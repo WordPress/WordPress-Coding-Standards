@@ -231,3 +231,37 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 // Allow for PHP 7.4+ arrow functions as callbacks.
 add_filter( 'cron_schedules', fn ( $schedules ) => $schedules + array( 'every_9_mins' => array( 'interval' => 9 * 60, ) ) ); // Warning: 9 min.
 add_filter( 'cron_schedules', fn ( $schedules ) => array_merge( $schedules, array( 'weekly' => array( 'interval' => WEEK_IN_SECONDS ) ) ) ); // OK: > 10 min.
+
+// Allow for PHP 7.4+ numeric literals with underscores.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_day'] = array(
+		'interval' => 86_400, // 24 hours.
+		'display' => __( 'Once every day' )
+	);
+	return $schedules;
+} ); // OK
+
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_12_mins'] = array(
+		'interval' => 7_2_0, // 12 minutes.
+		'display' => __( 'Once every 12 minutes' )
+	);
+	return $schedules;
+} ); // Warning: 12 min.
+
+// Allow for PHP 8.1 explicit octal notation.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_six_hours'] = array(
+		'interval' => 0o6 * HOUR_IN_SECONDS, // 6 hours.
+		'display' => __( 'Once every six hours' )
+	);
+	return $schedules;
+} ); // OK
+
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_83 seconds'] = array(
+		'interval' => 0O123, // 83 second.
+		'display' => __( 'Once every 83 seconds' )
+	);
+	return $schedules;
+} ); // Warning: 83 seconds.

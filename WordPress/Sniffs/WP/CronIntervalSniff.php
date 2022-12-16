@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\FunctionDeclarations;
+use PHPCSUtils\Utils\Numbers;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 
@@ -197,6 +198,16 @@ class CronIntervalSniff extends Sniff {
 
 						if ( $j === $valueEnd && \T_COMMA === $this->tokens[ $j ]['code'] ) {
 							break;
+						}
+
+						// Make sure that PHP 7.4 numeric literals and PHP 8.1 explicit octals don't cause problems.
+						if ( \T_LNUMBER === $this->tokens[ $j ]['code']
+							|| \T_DNUMBER === $this->tokens[ $j ]['code']
+						) {
+							$number_info = Numbers::getCompleteNumber( $this->phpcsFile, $j );
+							$value      .= $number_info['decimal'];
+							$j           = $number_info['last_token'];
+							continue;
 						}
 
 						if ( \T_OPEN_PARENTHESIS === $this->tokens[ $j ]['code'] ) {
