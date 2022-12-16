@@ -202,3 +202,12 @@ class FQNConstants {
 		return $schedules;
 	}
 }
+
+// Test some edge case/invalid code situations.
+add_filter( 'cron_schedules', array() ); // Warning: time undetermined. Callback is an array, but can't determined method name.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_8_minutes'] = [
+		'interval',
+	];
+	return $schedules;
+} ); // Warning: time undetermined. Found 'interval', but no value.
