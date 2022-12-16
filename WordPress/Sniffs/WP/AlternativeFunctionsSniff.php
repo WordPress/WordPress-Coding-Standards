@@ -135,6 +135,15 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
+			'rename' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Use WP_Filesystem::move method to rename a file.',
+				'since'     => '2.5.0',
+				'functions' => array(
+					'rename',
+				),
+			),
+
 			'file_system_operations' => array(
 				'type'      => 'warning',
 				'message'   => 'File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: %s()',
@@ -146,7 +155,6 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'is_writable',
 					'is_writeable',
 					'mkdir',
-					'rename',
 					'rmdir',
 					'touch',
 					'readfile',
