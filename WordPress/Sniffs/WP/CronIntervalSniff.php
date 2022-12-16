@@ -104,7 +104,7 @@ class CronIntervalSniff extends Sniff {
 			return;
 		}
 
-		if ( $stackPtr >= $callback['start'] ) {
+		if ( $stackPtr >= $callback['start'] && $stackPtr <= $callback['end'] ) {
 			// "cron_schedules" found in the second parameter, not the first.
 			return;
 		}

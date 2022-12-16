@@ -60,6 +60,8 @@ class CronIntervalUnitTest extends AbstractSniffUnitTest {
 			232 => 1,
 			244 => 1,
 			261 => 1,
+			279 => 1,
+			280 => 1,
 		);
 	}
 }

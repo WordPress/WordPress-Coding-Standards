@@ -265,3 +265,16 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	);
 	return $schedules;
 } ); // Warning: 83 seconds.
+
+// Safeguard support for PHP 8.0+ named parameters.
+add_filter( callback: array( $place, 'cron_schedules' ), hook_name: 'some_hook', ); // OK, not the hook we're looking for.
+
+function prefix_cron_schedules( $schedules ) {
+	$schedules['every_2_mins'] = array(
+		'interval' => 120,
+		'display' => __( 'Once every 2 minutes' )
+	);
+	return $schedules;
+}
+add_filter(priority: 8, callback : 'prefix_cron_schedules', hook_name : 'cron_schedules', accepted_args: 1 ); // Warning: 2 min.
+add_filter( callback: 'prefix_cron_schedules', hook_name: 'cron_schedules' ); // Warning: 2 min.
