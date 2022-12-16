@@ -278,3 +278,51 @@ function prefix_cron_schedules( $schedules ) {
 }
 add_filter(priority: 8, callback : 'prefix_cron_schedules', hook_name : 'cron_schedules', accepted_args: 1 ); // Warning: 2 min.
 add_filter( callback: 'prefix_cron_schedules', hook_name: 'cron_schedules' ); // Warning: 2 min.
+
+// Allow for PHP 8.1+ first class callables as callbacks.
+class FirstClassCallables {
+	public function add_schedules() {
+		add_filter( 'cron_schedules', $this->cron_weekly_schedule(...) ); // Ok: > 15 min.
+		add_filter( 'cron_schedules', $this->cron_eight_minute_schedule(...) ); // Warning: 8 min.
+		add_filter( 'cron_schedules', self::cron_weekly_schedule(...) ); // Ok: > 15 min.
+		add_filter( 'cron_schedules', static::cron_eight_minute_schedule(...) ); // Warning: 8 min.
+		add_filter( 'cron_schedules', [$this, 'cron_weekly_schedule'](...) ); // Ok: > 15 min.
+		add_filter( 'cron_schedules', array($this, 'cron_eight_minute_schedule')(...) ); // Warning: 8 min.
+	}
+
+	public static function cron_weekly_schedule( $schedules ) {
+		$schedules['weekly'] = [
+			'interval' => \WEEK_IN_SECONDS,
+			'display'  => \__( 'Once Weekly', 'text-domain' ),
+		];
+		return $schedules;
+	}
+
+	public static function cron_eight_minute_schedule( $schedules ) {
+		$schedules['every_8_minutes'] = [
+			'interval' => (8 * \MINUTE_IN_SECONDS),
+			'display' => __( 'Once every 8 minutes' )
+		];
+		return $schedules;
+	}
+}
+
+function first_class_weekly_schedule( $schedules ) {
+	$schedules['weekly'] = array(
+		'interval' => WEEK_IN_SECONDS,
+		'display' => __( 'Once Weekly' )
+	);
+	return $schedules;
+}
+add_filter( 'cron_schedules', 'first_class_weekly_schedule'(...)); // Ok: > 15 min.
+add_filter( 'cron_schedules', first_class_weekly_schedule(...)); // Ok: > 15 min.
+
+function first_class_six_min_schedule( $schedules ) {
+	$schedules['every_6_mins'] = array(
+		'interval' => 360,
+		'display' => __( 'Once every 6 minutes' )
+	);
+	return $schedules;
+}
+add_filter( 'cron_schedules', first_class_six_min_schedule(...)); // Warning: 6 min.
+add_filter( 'cron_schedules', 'first_class_six_min_schedule'(...)); // Warning: 6 min.

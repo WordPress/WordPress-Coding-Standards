@@ -130,10 +130,11 @@ class CronIntervalSniff extends Sniff {
 		unset( $functionPtr );
 
 		// Search for the function in tokens.
-		$search               = Tokens::$stringTokens;
-		$search[ \T_CLOSURE ] = \T_CLOSURE;
-		$search[ \T_FN ]      = \T_FN;
-		$callbackFunctionPtr  = $this->phpcsFile->findNext( $search, $callback['start'], ( $callback['end'] + 1 ) );
+		$search                = Tokens::$stringTokens;
+		$search[ \T_CLOSURE ]  = \T_CLOSURE;
+		$search[ \T_FN ]       = \T_FN;
+		$search[ \T_ELLIPSIS ] = \T_ELLIPSIS;
+		$callbackFunctionPtr   = $this->phpcsFile->findNext( $search, $callback['start'], ( $callback['end'] + 1 ) );
 
 		if ( false === $callbackFunctionPtr ) {
 			$this->confused( $stackPtr );
@@ -144,20 +145,28 @@ class CronIntervalSniff extends Sniff {
 			|| \T_FN === $this->tokens[ $callbackFunctionPtr ]['code']
 		) {
 			$functionPtr = $callbackFunctionPtr;
-		} else {
-			$functionName = TextStrings::stripQuotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
-
-			for ( $ptr = 0; $ptr < $this->phpcsFile->numTokens; $ptr++ ) {
-				if ( \T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
-					$foundName = FunctionDeclarations::getName( $this->phpcsFile, $ptr );
-					if ( $foundName === $functionName ) {
-						$functionPtr = $ptr;
-						break;
-					} elseif ( isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
-						// Skip to the end of the function definition.
-						$ptr = $this->tokens[ $ptr ]['scope_closer'];
+		} elseif ( \T_ELLIPSIS === $this->tokens[ $callbackFunctionPtr ]['code'] ) {
+			// Check if this is a PHP 8.1 first class callable.
+			$before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $callbackFunctionPtr - 1 ), null, true );
+			$after  = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $callbackFunctionPtr + 1 ), null, true );
+			if ( ( false !== $before && \T_OPEN_PARENTHESIS === $this->tokens[ $before ]['code'] )
+				&& ( false !== $after && \T_CLOSE_PARENTHESIS === $this->tokens[ $after ]['code'] )
+			) {
+				// Ok, now see if we can find the function name.
+				$beforeOpen = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $before - 1 ), null, true );
+				if ( false !== $beforeOpen && \T_STRING === $this->tokens[ $beforeOpen ]['code'] ) {
+					$found_function = $this->find_function_by_name( $this->tokens[ $beforeOpen ]['content'] );
+					if ( false !== $found_function ) {
+						$functionPtr = $found_function;
 					}
 				}
+			}
+			unset( $before, $after, $beforeOpen );
+		} else {
+			$functionName   = TextStrings::stripQuotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
+			$found_function = $this->find_function_by_name( $functionName );
+			if ( false !== $found_function ) {
+				$functionPtr = $found_function;
 			}
 		}
 
@@ -268,6 +277,32 @@ class CronIntervalSniff extends Sniff {
 			);
 			return;
 		}
+	}
+
+	/**
+	 * Find a declared function in a file based on the function name.
+	 *
+	 * @param string $functionName The name of the function to find.
+	 *
+	 * @return int|false Integer stack pointer to the function keyword token or
+	 *                   false if not found.
+	 */
+	private function find_function_by_name( $functionName ) {
+		$functionPtr = false;
+		for ( $ptr = 0; $ptr < $this->phpcsFile->numTokens; $ptr++ ) {
+			if ( \T_FUNCTION === $this->tokens[ $ptr ]['code'] ) {
+				$foundName = FunctionDeclarations::getName( $this->phpcsFile, $ptr );
+				if ( $foundName === $functionName ) {
+					$functionPtr = $ptr;
+					break;
+				} elseif ( isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
+					// Skip to the end of the function definition.
+					$ptr = $this->tokens[ $ptr ]['scope_closer'];
+				}
+			}
+		}
+
+		return $functionPtr;
 	}
 
 	/**
