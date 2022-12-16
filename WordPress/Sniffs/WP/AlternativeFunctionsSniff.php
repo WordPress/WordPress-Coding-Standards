@@ -157,9 +157,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'file_put_contents',
 					'fsockopen',
 					'pfsockopen',
-					// 'fputcsv',
-					// 'fputs',
-					// 'ftruncate',
+					'fputs',
 				),
 			),
 
