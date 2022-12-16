@@ -227,3 +227,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	);
 	return $schedules;
 } ); // OK.
+
+// Allow for PHP 7.4+ arrow functions as callbacks.
+add_filter( 'cron_schedules', fn ( $schedules ) => $schedules + array( 'every_9_mins' => array( 'interval' => 9 * 60, ) ) ); // Warning: 9 min.
+add_filter( 'cron_schedules', fn ( $schedules ) => array_merge( $schedules, array( 'weekly' => array( 'interval' => WEEK_IN_SECONDS ) ) ) ); // OK: > 10 min.

@@ -131,6 +131,7 @@ class CronIntervalSniff extends Sniff {
 		// Search for the function in tokens.
 		$search               = Tokens::$stringTokens;
 		$search[ \T_CLOSURE ] = \T_CLOSURE;
+		$search[ \T_FN ]      = \T_FN;
 		$callbackFunctionPtr  = $this->phpcsFile->findNext( $search, $callback['start'], ( $callback['end'] + 1 ) );
 
 		if ( false === $callbackFunctionPtr ) {
@@ -138,7 +139,9 @@ class CronIntervalSniff extends Sniff {
 			return;
 		}
 
-		if ( \T_CLOSURE === $this->tokens[ $callbackFunctionPtr ]['code'] ) {
+		if ( \T_CLOSURE === $this->tokens[ $callbackFunctionPtr ]['code']
+			|| \T_FN === $this->tokens[ $callbackFunctionPtr ]['code']
+		) {
 			$functionPtr = $callbackFunctionPtr;
 		} else {
 			$functionName = TextStrings::stripQuotes( $this->tokens[ $callbackFunctionPtr ]['content'] );
