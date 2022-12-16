@@ -99,6 +99,8 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			$error = 'Array keys must be surrounded by spaces unless they contain a string or an integer.';
 			$fix   = $this->phpcsFile->addFixableError( $error, $stackPtr, 'NoSpacesAroundArrayKeys' );
 			if ( true === $fix ) {
+				$this->phpcsFile->fixer->beginChangeset();
+
 				if ( false === $has_space_after_opener ) {
 					$this->phpcsFile->fixer->addContent( $stackPtr, ' ' );
 				}
@@ -106,6 +108,8 @@ class ArrayKeySpacingRestrictionsSniff extends Sniff {
 				if ( false === $has_space_before_close ) {
 					$this->phpcsFile->fixer->addContentBefore( $token['bracket_closer'], ' ' );
 				}
+
+				$this->phpcsFile->fixer->endChangeset();
 			}
 		} elseif ( false === $needs_spaces && ( $has_space_after_opener || $has_space_before_close ) ) {
 			$error = 'Array keys must NOT be surrounded by spaces if they only contain a string or an integer.';
