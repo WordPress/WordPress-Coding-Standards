@@ -211,3 +211,19 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 	];
 	return $schedules;
 } ); // Warning: time undetermined. Found 'interval', but no value.
+
+// Safeguard fix to prevent an "Parse error: Unmatched ')'" bug in the eval-ed code.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_8_minutes'] = array(
+		'interval' => \WEEK_IN_SECONDS
+	);
+	return $schedules;
+} ); // OK.
+
+// Safeguard fix to prevent an "Parse error: syntax error, unexpected token ";"" bug in the eval-ed code.
+add_filter( 'cron_schedules', function ( $schedules ) {
+	$schedules['every_8_minutes'] = array(
+		'interval' => ( 2 * ( \WEEK_IN_SECONDS + 4 ) )
+	);
+	return $schedules;
+} ); // OK.

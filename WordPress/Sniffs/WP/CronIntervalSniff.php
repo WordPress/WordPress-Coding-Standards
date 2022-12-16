@@ -178,9 +178,10 @@ class CronIntervalSniff extends Sniff {
 						return;
 					}
 
-					$valueStart = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true, null, true );
-					$valueEnd   = $this->phpcsFile->findNext( array( \T_COMMA, \T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
-					$value      = '';
+					$valueStart        = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true, null, true );
+					$valueEnd          = $this->phpcsFile->findNext( array( \T_COMMA, \T_CLOSE_PARENTHESIS ), ( $valueStart + 1 ) );
+					$value             = '';
+					$parentheses_count = 0;
 					for ( $j = $valueStart; $j <= $valueEnd; $j++ ) {
 						if ( isset( Tokens::$emptyTokens[ $this->tokens[ $j ]['code'] ] ) ) {
 							continue;
@@ -195,7 +196,27 @@ class CronIntervalSniff extends Sniff {
 							break;
 						}
 
+						if ( \T_OPEN_PARENTHESIS === $this->tokens[ $j ]['code'] ) {
+							$value .= $this->tokens[ $j ]['content'];
+							++$parentheses_count;
+							continue;
+						}
+
+						if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $j ]['code'] ) {
+							// Only add a close parenthesis if there are open parentheses.
+							if ( $parentheses_count > 0 ) {
+								$value .= $this->tokens[ $j ]['content'];
+								--$parentheses_count;
+							}
+							continue;
+						}
+
 						$value .= $this->tokens[ $j ]['content'];
+					}
+
+					if ( $parentheses_count > 0 ) {
+						// Make sure all open parenthesis are closed.
+						$value .= str_repeat( ')', $parentheses_count );
 					}
 
 					if ( is_numeric( $value ) ) {
