@@ -533,63 +533,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if this variable is being assigned a value.
-	 *
-	 * E.g., $var = 'foo';
-	 *
-	 * Also handles array assignments to arbitrary depth:
-	 *
-	 * $array['key'][ $foo ][ something() ] = $bar;
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param int $stackPtr The index of the token in the stack. This must point to
-	 *                      either a T_VARIABLE or T_CLOSE_SQUARE_BRACKET token.
-	 *
-	 * @return bool Whether the token is a variable being assigned a value.
-	 */
-	protected function is_assignment( $stackPtr ) {
-
-		static $valid = array(
-			\T_VARIABLE             => true,
-			\T_CLOSE_SQUARE_BRACKET => true,
-		);
-
-		// Must be a variable, constant or closing square bracket (see below).
-		if ( ! isset( $valid[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
-			return false;
-		}
-
-		$next_non_empty = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			( $stackPtr + 1 ),
-			null,
-			true,
-			null,
-			true
-		);
-
-		// No token found.
-		if ( false === $next_non_empty ) {
-			return false;
-		}
-
-		// If the next token is an assignment, that's all we need to know.
-		if ( isset( Tokens::$assignmentTokens[ $this->tokens[ $next_non_empty ]['code'] ] ) ) {
-			return true;
-		}
-
-		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
-		if ( \T_OPEN_SQUARE_BRACKET === $this->tokens[ $next_non_empty ]['code']
-			&& isset( $this->tokens[ $next_non_empty ]['bracket_closer'] )
-		) {
-			return $this->is_assignment( $this->tokens[ $next_non_empty ]['bracket_closer'] );
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
 	 *
 	 * @since 0.5.0

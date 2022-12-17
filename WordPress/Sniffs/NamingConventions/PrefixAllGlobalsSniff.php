@@ -21,6 +21,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\DeprecationHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper;
 use WordPressCS\WordPress\Helpers\WPHookHelper;
 
@@ -628,7 +629,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		 * we need a separate check for that.
 		 */
 		if ( false === $in_list
-			&& false === $this->is_assignment( $stackPtr )
+			&& false === VariableHelper::is_assignment( $this->phpcsFile, $stackPtr )
 			&& Context::inForeachCondition( $this->phpcsFile, $stackPtr ) !== 'afterAs'
 		) {
 			return;

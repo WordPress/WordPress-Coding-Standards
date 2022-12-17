@@ -130,7 +130,7 @@ class NonceVerificationSniff extends Sniff {
 			return;
 		}
 
-		if ( $this->is_assignment( $stackPtr ) ) {
+		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 

@@ -120,7 +120,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// If we're overriding a superglobal with an assignment, no need to test.
-		if ( $this->is_assignment( $stackPtr ) ) {
+		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
