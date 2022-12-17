@@ -9,7 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
-use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\MessageHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -178,16 +179,9 @@ class NonceVerificationSniff extends Sniff {
 		$end   = $stackPtr;
 
 		// If we're in a function, only look inside of it.
-		// Once PHPCS 3.5.0 comes out this should be changed to the new Conditions::GetLastCondition() method.
-		if ( isset( $this->tokens[ $stackPtr ]['conditions'] ) === true ) {
-			$conditions = $this->tokens[ $stackPtr ]['conditions'];
-			$conditions = array_reverse( $conditions, true );
-			foreach ( $conditions as $tokenPtr => $condition ) {
-				if ( \T_FUNCTION === $condition || \T_CLOSURE === $condition ) {
-					$start = $this->tokens[ $tokenPtr ]['scope_opener'];
-					break;
-				}
-			}
+		$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+		if ( false !== $functionPtr ) {
+			$start = $this->tokens[ $functionPtr ]['scope_opener'];
 		}
 
 		$allow_nonce_after = false;
@@ -233,10 +227,7 @@ class NonceVerificationSniff extends Sniff {
 		// Loop through the tokens looking for nonce verification functions.
 		for ( $i = $search_start; $i < $end; $i++ ) {
 			// Skip over nested closed scope constructs.
-			if ( \T_FUNCTION === $this->tokens[ $i ]['code']
-				|| \T_CLOSURE === $this->tokens[ $i ]['code']
-				|| isset( Tokens::$ooScopeTokens[ $this->tokens[ $i ]['code'] ] )
-			) {
+			if ( isset( Collections::closedScopes()[ $this->tokens[ $i ]['code'] ] ) ) {
 				if ( isset( $this->tokens[ $i ]['scope_closer'] ) ) {
 					$i = $this->tokens[ $i ]['scope_closer'];
 				}
