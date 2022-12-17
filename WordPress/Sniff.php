@@ -423,54 +423,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * A list of functions that get data from the cache.
-	 *
-	 * @since 0.6.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $cacheGetFunctions = array(
-		'wp_cache_get' => true,
-	);
-
-	/**
-	 * A list of functions that set data in the cache.
-	 *
-	 * @since 0.6.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $cacheSetFunctions = array(
-		'wp_cache_set' => true,
-		'wp_cache_add' => true,
-	);
-
-	/**
-	 * A list of functions that delete data from the cache.
-	 *
-	 * @since 0.6.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $cacheDeleteFunctions = array(
-		'wp_cache_delete'         => true,
-		'clean_attachment_cache'  => true,
-		'clean_blog_cache'        => true,
-		'clean_bookmark_cache'    => true,
-		'clean_category_cache'    => true,
-		'clean_comment_cache'     => true,
-		'clean_network_cache'     => true,
-		'clean_object_term_cache' => true,
-		'clean_page_cache'        => true,
-		'clean_post_cache'        => true,
-		'clean_term_cache'        => true,
-		'clean_user_cache'        => true,
-	);
-
-	/**
 	 * List of global WP variables.
 	 *
 	 * @since 0.3.0
