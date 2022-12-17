@@ -16,6 +16,7 @@ use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
+use WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -55,7 +56,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	public $treat_files_as_scoped = false;
 
 	/**
-	 * Allow select variables from the Sniff::$wp_globals array to be overwritten.
+	 * Allow select variables from the WPGlobalVariablesHelper::$wp_globals array to be overwritten.
 	 *
 	 * A few select variables in WP Core are _intended_ to be overwritten
 	 * by themes/plugins. This sniff should not throw an error for those.
@@ -250,7 +251,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Is this one of the WP global variables ?
 		 */
-		if ( isset( $this->wp_globals[ $var_name ] ) === false ) {
+		if ( WPGlobalVariablesHelper::is_wp_global( $var_name ) === false ) {
 			return;
 		}
 
@@ -325,7 +326,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 
 			if ( \T_VARIABLE === $var['code'] ) {
 				$var_name = substr( $var['content'], 1 );
-				if ( isset( $this->wp_globals[ $var_name ] )
+				if ( WPGlobalVariablesHelper::is_wp_global( $var_name )
 					&& isset( $this->override_allowed[ $var_name ] ) === false
 				) {
 					$search[] = $var['content'];
