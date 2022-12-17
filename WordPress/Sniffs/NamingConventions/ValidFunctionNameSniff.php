@@ -14,6 +14,7 @@ use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\DeprecationHelper;
+use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -115,7 +116,7 @@ class ValidFunctionNameSniff extends Sniff {
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
-				$this->get_snake_case_name_suggestion( $functionName ),
+				SnakeCaseHelper::get_suggestion( $functionName ),
 			);
 			$this->phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
@@ -182,7 +183,7 @@ class ValidFunctionNameSniff extends Sniff {
 			$errorData = array(
 				$methodName,
 				$className,
-				$this->get_snake_case_name_suggestion( $methodName ),
+				SnakeCaseHelper::get_suggestion( $methodName ),
 			);
 			$this->phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}
