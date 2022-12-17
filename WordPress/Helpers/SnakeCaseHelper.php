@@ -39,10 +39,8 @@ final class SnakeCaseHelper {
 	 * @return string
 	 */
 	public static function get_suggestion( $name ) {
-		$suggested = preg_replace( '`([A-Z])`', '_$1', $name );
+		$suggested = preg_replace( '`(?<!_|^)([A-Z])`', '_$1', $name );
 		$suggested = strtolower( $suggested );
-		$suggested = str_replace( '__', '_', $suggested );
-		$suggested = trim( $suggested, '_' );
 		return $suggested;
 	}
 }

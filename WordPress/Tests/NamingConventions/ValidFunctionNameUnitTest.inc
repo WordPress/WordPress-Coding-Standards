@@ -177,3 +177,10 @@ class DeprecatedWithAttribute {
 	#[AnotherAttribute]
 	public static function __deprecatedMethod() {}
 }
+
+// Safeguard that the suggested replacement name does not suggest undue changes to underscores in the name.
+class UnderScoreHandling {
+	public function ___Leading_Underscores() {} // Bad, replacement suggestion should be: ___leading_underscores.
+	public function Multiple_______Underscores() {} // Bad, replacement suggestion should be: multiple_______underscores.
+	public function Trailing_Underscores___() {}// Bad, replacement suggestion should be: trailing_underscores___.
+}
