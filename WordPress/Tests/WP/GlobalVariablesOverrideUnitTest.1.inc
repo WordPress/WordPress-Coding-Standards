@@ -262,3 +262,8 @@ function global_import_ended_by_close_tag_false_positive() {
 
 // Safeguard correct handling of PHP 7.4+ arrow functions.
 $arrow = fn($urls = []) => $urls + ['extra']; // OK, default value assignment to arrow function parameter should be disregarded.
+
+function recognize_nullcoalesce_equals() {
+	global $tax;
+	$tax ??= 'other'; // Bad, potentially overrides the variable.
+}
