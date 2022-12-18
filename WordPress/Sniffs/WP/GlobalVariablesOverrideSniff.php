@@ -208,7 +208,10 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		if ( 'GLOBALS' === $var_name ) {
 			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-			if ( false === $bracketPtr || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
+			if ( false === $bracketPtr
+				|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code']
+				|| ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] )
+			) {
 				return;
 			}
 
