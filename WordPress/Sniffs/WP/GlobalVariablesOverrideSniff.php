@@ -312,7 +312,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				if ( WPGlobalVariablesHelper::is_wp_global( $var_name )
 					&& isset( $this->override_allowed[ $var_name ] ) === false
 				) {
-					$search[] = $var['content'];
+					$search[ $var['content'] ] = true;
 				}
 			}
 
@@ -369,7 +369,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 						$var_name = '$' . TextStrings::stripQuotes( VariableHelper::get_array_access_key( $this->phpcsFile, $ptr ) );
 					}
 
-					if ( \in_array( $var_name, $search, true ) ) {
+					if ( isset( $search[ $var_name ] ) ) {
 						$this->process_variable_assignment( $ptr, true );
 					}
 				}
@@ -383,7 +383,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				continue;
 			}
 
-			if ( \in_array( $this->tokens[ $ptr ]['content'], $search, true ) === false ) {
+			if ( isset( $search[ $this->tokens[ $ptr ]['content'] ] ) === false ) {
 				// Not one of the variables we're interested in.
 				continue;
 			}
