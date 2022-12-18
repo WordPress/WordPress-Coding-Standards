@@ -259,3 +259,6 @@ function global_import_ended_by_close_tag_false_positive() {
 	$post = '2016'; // Ok, non-global variable in function scope. Would previously be seen as part of the global statement...
 	$post = '2017'; // Ok, non-global variable in function scope.
 }
+
+// Safeguard correct handling of PHP 7.4+ arrow functions.
+$arrow = fn($urls = []) => $urls + ['extra']; // OK, default value assignment to arrow function parameter should be disregarded.

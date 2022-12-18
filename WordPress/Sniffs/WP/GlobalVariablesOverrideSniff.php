@@ -131,6 +131,13 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 * on that.
 		 * Examine variables not within a function scope and access to the `$GLOBALS`
 		 * variable based on the variable token.
+		 *
+		 * Note: No special handling here for code found within PHP 7.4+ arrow functions.
+		 * Arrow functions are "open", i.e. they have by value access to variables in the
+		 * surrounding scope, but they cannot modify the value.
+		 * Additionally, as they can only have one statement, a `global` statement _within_
+		 * an arrow function declaration will lead to a parse error as the result is
+		 * not a returnable value.
 		 */
 		$in_function_scope = Conditions::hasCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 
@@ -263,7 +270,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 * including when they are being assigned a default value.
 		 */
 		if ( false === $in_list ) {
-			$functionPtr = Parentheses::getLastOwner( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+			$functionPtr = Parentheses::getLastOwner( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
 			if ( false !== $functionPtr ) {
 				return;
 			}
@@ -323,7 +330,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 */
 		$start = $ptr;
 		if ( true === $in_function_scope ) {
-			$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+			$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
 			if ( isset( $this->tokens[ $functionPtr ]['scope_closer'] ) === false ) {
 				// Live coding or parse error.
 				return;
