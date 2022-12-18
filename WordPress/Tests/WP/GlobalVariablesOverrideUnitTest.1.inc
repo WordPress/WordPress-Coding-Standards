@@ -267,3 +267,12 @@ function recognize_nullcoalesce_equals() {
 	global $tax;
 	$tax ??= 'other'; // Bad, potentially overrides the variable.
 }
+
+// Safeguard that assignments to properties using PHP 8.0+ constructor property promotion don't lead to false positives.
+class ConstructorPropertyPromotion {
+	public function __construct(
+		public int $timestart = 0,
+		protected int|bool $timeend = false,
+		$post = null
+	) {} // Ok.
+}
