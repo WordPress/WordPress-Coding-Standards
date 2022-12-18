@@ -276,3 +276,21 @@ class ConstructorPropertyPromotion {
 		$post = null
 	) {} // Ok.
 }
+
+/*
+ * Safeguard that assignment in PHP 8.1+ enums are treated correctly.
+ * Note: enums cannot contain property declaration.
+ */
+enum Suit: string implements Colorful {
+	case Hearts = 'H';
+	case Diamonds = 'D';
+	case Clubs = 'C';
+	case Spades = 'S';
+
+	public function color( $_wp_admin_css_colors = 'red' ): string { // OK, parameter, not the global variable.
+		global $status, $mode;
+		$status = 'something'; // Bad, global variable in function scope.
+		$post = '2017'; // Ok, non-global variable in function scope.
+		[$mode] = $array; // Bad, global variable in function scope.
+	}
+}
