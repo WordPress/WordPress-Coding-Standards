@@ -240,3 +240,7 @@ list( $active_signup, list( $s => $typenow, $GLOBALS['status'], ), $ignore ) = $
 
 // List with array assignments.
 [ $path[ $type ], , ] = $array; // Bad x 1.
+
+function use_of_globals_without_key() {
+	$keys = array_keys( $GLOBALS ); // OK, this is just about handling the $GLOBALS without a key.
+}
