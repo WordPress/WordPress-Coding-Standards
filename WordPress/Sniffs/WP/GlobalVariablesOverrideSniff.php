@@ -297,28 +297,22 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Collect the variables to watch for.
 		 */
-		$search = array();
-		$ptr    = ( $stackPtr + 1 );
-		while ( isset( $this->tokens[ $ptr ] ) ) {
-			$var = $this->tokens[ $ptr ];
+		$search           = array();
+		$ptr              = ( $stackPtr + 1 );
+		$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $ptr );
 
-			// Halt the loop at end of statement.
-			if ( \T_SEMICOLON === $var['code'] ) {
-				break;
-			}
-
-			if ( \T_VARIABLE === $var['code'] ) {
-				$var_name = substr( $var['content'], 1 );
+		while ( isset( $this->tokens[ $ptr ] ) && $ptr < $end_of_statement ) {
+			if ( \T_VARIABLE === $this->tokens[ $ptr ]['code'] ) {
+				$var_name = substr( $this->tokens[ $ptr ]['content'], 1 );
 				if ( WPGlobalVariablesHelper::is_wp_global( $var_name )
 					&& isset( $this->override_allowed[ $var_name ] ) === false
 				) {
-					$search[ $var['content'] ] = true;
+					$search[ $this->tokens[ $ptr ]['content'] ] = true;
 				}
 			}
 
 			++$ptr;
 		}
-		unset( $var );
 
 		if ( empty( $search ) ) {
 			return;

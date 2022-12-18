@@ -244,3 +244,18 @@ list( $active_signup, list( $s => $typenow, $GLOBALS['status'], ), $ignore ) = $
 function use_of_globals_without_key() {
 	$keys = array_keys( $GLOBALS ); // OK, this is just about handling the $GLOBALS without a key.
 }
+
+function global_import_ended_by_close_tag_false_negative() {
+	global $pagenow ?>
+	<div>Some HTML</div>
+	<?php
+	$pagenow = 'test'; // Bad, global variable in function scope.
+}
+
+function global_import_ended_by_close_tag_false_positive() {
+	global $pagenow ?>
+	<div>Some HTML</div>
+	<?php
+	$post = '2016'; // Ok, non-global variable in function scope. Would previously be seen as part of the global statement...
+	$post = '2017'; // Ok, non-global variable in function scope.
+}
