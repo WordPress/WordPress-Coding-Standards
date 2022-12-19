@@ -126,11 +126,37 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				),
 			),
 
-			'file_system_read' => array(
+			'unlink' => array(
 				'type'      => 'warning',
-				'message'   => 'File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: %s()',
+				'message'   => '%s() is discouraged. Use wp_delete_file() to delete a file.',
+				'since'     => '4.2.0',
+				'functions' => array(
+					'unlink',
+				),
+			),
+
+			'rename' => array(
+				'type'      => 'warning',
+				'message'   => '%s() is discouraged. Use WP_Filesystem::move() to rename a file.',
 				'since'     => '2.5.0',
 				'functions' => array(
+					'rename',
+				),
+			),
+
+			'file_system_operations' => array(
+				'type'      => 'warning',
+				'message'   => 'File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: %s().',
+				'since'     => '2.5.0',
+				'functions' => array(
+					'chgrp',
+					'chmod',
+					'chown',
+					'is_writable',
+					'is_writeable',
+					'mkdir',
+					'rmdir',
+					'touch',
 					'readfile',
 					'fclose',
 					'fopen',
@@ -139,6 +165,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'file_put_contents',
 					'fsockopen',
 					'pfsockopen',
+					'fputs',
 				),
 			),
 
