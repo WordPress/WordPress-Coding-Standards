@@ -146,7 +146,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'file_system_operations' => array(
 				'type'      => 'warning',
-				'message'   => 'File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: %s()',
+				'message'   => 'File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: %s().',
 				'since'     => '2.5.0',
 				'functions' => array(
 					'chgrp',
