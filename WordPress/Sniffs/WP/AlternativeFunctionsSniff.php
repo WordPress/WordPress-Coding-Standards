@@ -137,7 +137,7 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 			'rename' => array(
 				'type'      => 'warning',
-				'message'   => '%s() is discouraged. Use WP_Filesystem::move method to rename a file.',
+				'message'   => '%s() is discouraged. Use WP_Filesystem::move() to rename a file.',
 				'since'     => '2.5.0',
 				'functions' => array(
 					'rename',
