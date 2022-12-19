@@ -81,12 +81,12 @@ use function curl_init as curl_version; // Bad.
 
 unlink(); // Warning.
 rename(); // Warning.
-chgrp(); // Warning
-chmod(); // Warning
-chown(); // Warning
-is_writable(); // Warning
-is_writeable(); // Warning
-mkdir(); // Warning
-rmdir(); // Warning
-touch(); // Warning
-fputs(); // Warning
+chgrp(); // Warning.
+chmod(); // Warning.
+chown(); // Warning.
+is_writable(); // Warning.
+is_writeable(); // Warning.
+mkdir(); // Warning.
+rmdir(); // Warning.
+touch(); // Warning.
+fputs(); // Warning.
