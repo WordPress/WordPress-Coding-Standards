@@ -243,16 +243,18 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			case 'parse_url':
 				/*
 				 * Before WP 4.7.0, the function `wp_parse_url()` was only a valid alternative
-				 * if no second param was passed to `parse_url()`.
+				 * if the second param - `$component` - was not passed to `parse_url()`.
 				 *
 				 * @see https://developer.wordpress.org/reference/functions/wp_parse_url/#changelog
 				 */
-				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1
+				$has_component = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 2, 'component' );
+				if ( false !== $has_component
 					&& $this->wp_version_compare( $this->minimum_wp_version, '4.7.0', '<' )
 				) {
 					return;
 				}
 
+				unset( $has_component );
 				break;
 
 			case 'file_get_contents':

@@ -100,3 +100,12 @@ parse_url($url, PHP_URL_SCHEME); // Warning, using $component param, but also us
 strip_tags( allowed_tags: '<iframe>' ); // OK. Well not really, missing required param, but that's not the concern of this sniff.
 strip_tags( allowed_tags: '<iframe>', string: $something ); // OK.
 strip_tags( string: $something ); // Warning.
+
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to parse_url().
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.4
+parse_url(component : PHP_URL_QUERY); // OK. Well, not really, missing required parameter, but that's not the concern of this sniff.
+parse_url(component : PHP_URL_QUERY, url : $url); // OK.
+parse_url(url : $url); // Warning.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
+parse_url(component: PHP_URL_SCHEME, url: $url, ); // Warning.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
