@@ -152,20 +152,20 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'chgrp',
 					'chmod',
 					'chown',
+					'fclose',
+					'file_put_contents',
+					'fopen',
+					'fputs',
+					'fread',
+					'fsockopen',
+					'fwrite',
 					'is_writable',
 					'is_writeable',
 					'mkdir',
+					'pfsockopen',
+					'readfile',
 					'rmdir',
 					'touch',
-					'readfile',
-					'fclose',
-					'fopen',
-					'fread',
-					'fwrite',
-					'file_put_contents',
-					'fsockopen',
-					'pfsockopen',
-					'fputs',
 				),
 			),
 
@@ -183,8 +183,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => '%s() is discouraged. Rand seeding is not necessary when using the wp_rand() function (as you should).',
 				'since'     => '2.6.2',
 				'functions' => array(
-					'srand',
 					'mt_srand',
+					'srand',
 				),
 			),
 
@@ -193,8 +193,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => '%s() is discouraged. Use the far less predictable wp_rand() instead.',
 				'since'     => '2.6.2',
 				'functions' => array(
-					'rand',
 					'mt_rand',
+					'rand',
 				),
 			),
 		);
@@ -287,9 +287,9 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 				break;
 
-			case 'readfile':
-			case 'fopen':
 			case 'file_put_contents':
+			case 'fopen':
+			case 'readfile':
 				/*
 				 * Allow for handling raw data streams from the request body.
 				 */
