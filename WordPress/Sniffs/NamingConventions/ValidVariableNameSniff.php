@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -288,9 +289,9 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	protected function merge_allow_lists() {
 		if ( $this->allowed_custom_properties !== $this->addedCustomProperties['properties'] ) {
 			// Fix property potentially passed as comma-delimited string.
-			$customProperties = Sniff::merge_custom_array( $this->allowed_custom_properties, array(), false );
+			$customProperties = RulesetPropertyHelper::merge_custom_array( $this->allowed_custom_properties, array(), false );
 
-			$this->allowed_mixed_case_member_var_names = Sniff::merge_custom_array(
+			$this->allowed_mixed_case_member_var_names = RulesetPropertyHelper::merge_custom_array(
 				$customProperties,
 				$this->allowed_mixed_case_member_var_names
 			);

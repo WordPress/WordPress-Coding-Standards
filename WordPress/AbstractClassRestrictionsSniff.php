@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress;
 
 use PHPCSUtils\Utils\Namespaces;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
  * Restricts usage of some classes.
@@ -93,7 +94,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		// Reset the temporary storage before processing the token.
 		unset( $this->classname );
 
-		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
+		$this->excluded_groups = RulesetPropertyHelper::merge_custom_array( $this->exclude );
 		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.

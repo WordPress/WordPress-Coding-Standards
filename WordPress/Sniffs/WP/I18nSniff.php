@@ -15,6 +15,7 @@ use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use XMLReader;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
  * Makes sure WP internationalization functions are used properly.
@@ -202,7 +203,7 @@ class I18nSniff extends AbstractFunctionRestrictionsSniff {
 			}
 		}
 
-		$this->text_domain = $this->merge_custom_array( $this->text_domain, array(), false );
+		$this->text_domain = RulesetPropertyHelper::merge_custom_array( $this->text_domain, array(), false );
 
 		if ( ! empty( $this->text_domain ) ) {
 			if ( \in_array( 'default', $this->text_domain, true ) ) {

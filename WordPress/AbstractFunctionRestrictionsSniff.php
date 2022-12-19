@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -183,7 +184,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
+		$this->excluded_groups = RulesetPropertyHelper::merge_custom_array( $this->exclude );
 		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.

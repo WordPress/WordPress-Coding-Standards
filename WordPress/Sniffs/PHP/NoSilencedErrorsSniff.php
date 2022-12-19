@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Discourage the use of the PHP error silencing operator.
@@ -183,7 +184,7 @@ class NoSilencedErrorsSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		// Handle the user-defined custom function list.
-		$this->customAllowedFunctionsList = $this->merge_custom_array( $this->customAllowedFunctionsList, array(), false );
+		$this->customAllowedFunctionsList = RulesetPropertyHelper::merge_custom_array( $this->customAllowedFunctionsList, array(), false );
 		$this->customAllowedFunctionsList = array_map( 'strtolower', $this->customAllowedFunctionsList );
 
 		/*

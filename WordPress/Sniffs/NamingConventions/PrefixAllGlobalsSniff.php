@@ -20,6 +20,7 @@ use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\DeprecationHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\WPHookHelper;
 
 /**
@@ -283,7 +284,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 		}
 
-		$this->prefixes = $this->merge_custom_array( $this->prefixes, array(), false );
+		$this->prefixes = RulesetPropertyHelper::merge_custom_array( $this->prefixes, array(), false );
 		if ( empty( $this->prefixes ) ) {
 			// No prefixes passed, nothing to do.
 			return;

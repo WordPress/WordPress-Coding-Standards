@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -212,7 +213,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 */
 	protected function mergeFunctionLists() {
 		if ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] ) {
-			$this->sanitizingFunctions = $this->merge_custom_array(
+			$this->sanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customSanitizingFunctions,
 				$this->sanitizingFunctions
 			);
@@ -221,7 +222,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		if ( $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] ) {
-			$this->unslashingSanitizingFunctions = $this->merge_custom_array(
+			$this->unslashingSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customUnslashingSanitizingFunctions,
 				$this->unslashingSanitizingFunctions
 			);

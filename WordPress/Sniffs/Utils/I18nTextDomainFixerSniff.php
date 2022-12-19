@@ -9,9 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\Utils;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
  * Comprehensive I18n text domain fixer tool.
@@ -281,7 +282,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->old_text_domain ) ) {
-			$this->old_text_domain = $this->merge_custom_array( $this->old_text_domain, array(), false );
+			$this->old_text_domain = RulesetPropertyHelper::merge_custom_array( $this->old_text_domain, array(), false );
 
 			if ( ! is_array( $this->old_text_domain )
 				|| array() === $this->old_text_domain
