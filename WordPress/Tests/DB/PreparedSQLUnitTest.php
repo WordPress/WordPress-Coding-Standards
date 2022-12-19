@@ -53,6 +53,10 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			108 => 1,
 			109 => 1,
 			112 => 1,
+			115 => 1,
+			118 => 1,
+			120 => 1,
+			121 => 1,
 		);
 	}
 
@@ -66,5 +70,4 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }
