@@ -101,14 +101,14 @@ class StrictInArraySniff extends AbstractFunctionParameterSniff {
 		}
 
 		$found_parameter = PassedParameters::getParameterFromStack( $parameters, $param_info['param_position'], $param_info['param_name'] );
-		if ( false === $found_parameter || 'true' !== strtolower( $found_parameter['raw'] ) ) {
+		if ( false === $found_parameter || 'true' !== strtolower( $found_parameter['clean'] ) ) {
 			$errorcode = 'MissingTrueStrict';
 
 			/*
 			 * Use a different error code when `false` is found to allow for excluding
 			 * the warning as this will be a conscious choice made by the dev.
 			 */
-			if ( is_array( $found_parameter ) && 'false' === strtolower( $found_parameter['raw'] ) ) {
+			if ( is_array( $found_parameter ) && 'false' === strtolower( $found_parameter['clean'] ) ) {
 				$errorcode = 'FoundNonStrictFalse';
 			}
 
