@@ -23,3 +23,10 @@ current_time( 'timestamp', $gmt ); // Warning.
 current_time( 'timestamp', false ); // Warning.
 current_time( 'U', 0 ); // Warning.
 current_time( 'U' ); // Warning.
+
+// Safeguard support for PHP 8.0+ named parameters.
+current_time( gmt: false ); // OK. Well not really (missing required $type), but not our concern.
+current_time( gmt: true, type: 'mysql', ); // OK.
+current_time( type: 'Y-m-d' ); // OK.
+current_time( gmt: true, type: 'timestamp' ); // Error.
+current_time( gmt: 0, type : 'U' ); // Warning.
