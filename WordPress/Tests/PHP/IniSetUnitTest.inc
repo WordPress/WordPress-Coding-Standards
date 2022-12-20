@@ -41,3 +41,20 @@ ini_set($test, 1230); // Warning.
 ini_alter('auto_detect_line_endings', true); // Ok.
 ini_alter('display_errors', false); // Error.
 ini_alter('report_memleaks', 1230); // Warning.
+
+// Ignore missing required parameters.
+ini_set('short_open_tag', ); // Ok. Well not really, missing value param, but that's not the concern of this sniff.
+
+// Safeguard support for PHP 8.0+ named parameters.
+ini_set(new_value: 0, option: 'short_open_tag', ); // Ok. Well not really, unrecognized param name, but that's not the concern of this sniff.
+ini_set(value: 1, option: 'short_open_tag', ); // Ok.
+ini_set(value: 0, option: 'short_open_tag', ); // Error.
+
+// Safeguard that comments in the parameters are ignored.
+ini_set('short_open_tag', /* allowed*/ 'on'); // Ok.
+ini_set(
+	// This affects all function calls to the BCMath extension.
+	'bcmath.scale',
+	// Set the number of decimals.
+	0
+); // Error.

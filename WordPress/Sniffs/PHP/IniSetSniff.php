@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use PHPCSUtils\Utils\MessageHelper;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
@@ -38,7 +39,7 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 */
 	protected $target_functions = array(
 		'ini_set'   => true,
-		'ini_alter' => true,
+		'ini_alter' => true, // Alias function name.
 	);
 
 	/**
@@ -100,13 +101,13 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 			'message' => 'Changing the option value can break other plugins. Use the filter flag constants when calling the Filter functions instead.',
 		),
 		'iconv.input_encoding' => array(
-			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
+			'message' => 'This option is not supported since PHP 5.6 - use `iconv_set_encoding()` instead.',
 		),
 		'iconv.internal_encoding' => array(
-			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
+			'message' => 'This option is not supported since PHP 5.6 - use `iconv_set_encoding()` instead.',
 		),
 		'iconv.output_encoding' => array(
-			'message' => 'PHP < 5.6 only - use `iconv_set_encoding()` instead.',
+			'message' => 'This option is not supported since PHP 5.6 - use `iconv_set_encoding()` instead.',
 		),
 		'ignore_user_abort' => array(
 			'message' => 'Use `ignore_user_abort()` instead.',
@@ -142,26 +143,36 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$option_name  = TextStrings::stripQuotes( $parameters[1]['raw'] );
-		$option_value = TextStrings::stripQuotes( $parameters[2]['raw'] );
+		$option_param = PassedParameters::getParameterFromStack( $parameters, 1, 'option' );
+		$value_param  = PassedParameters::getParameterFromStack( $parameters, 2, 'value' );
+
+		if ( false === $option_param || false === $value_param ) {
+			// Missing required param. Not the concern of this sniff. Bow out.
+			return;
+		}
+
+		$option_name  = TextStrings::stripQuotes( $option_param['clean'] );
+		$option_value = TextStrings::stripQuotes( $value_param['clean'] );
 		if ( isset( $this->safe_options[ $option_name ] ) ) {
 			$safe_option = $this->safe_options[ $option_name ];
-			if ( ! isset( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
+			if ( empty( $safe_option['valid_values'] ) || in_array( strtolower( $option_value ), $safe_option['valid_values'], true ) ) {
 				return;
 			}
 		}
 
 		if ( isset( $this->disallowed_options[ $option_name ] ) ) {
 			$disallowed_option = $this->disallowed_options[ $option_name ];
-			if ( ! isset( $disallowed_option['invalid_values'] ) || in_array( strtolower( $option_value ), $disallowed_option['invalid_values'], true ) ) {
+			if ( empty( $disallowed_option['invalid_values'] )
+				|| in_array( strtolower( $option_value ), $disallowed_option['invalid_values'], true )
+			) {
 				$this->phpcsFile->addError(
-					'%s(%s, %s) found. %s',
+					'Found: %s(%s, %s). %s',
 					$stackPtr,
 					MessageHelper::stringToErrorcode( $option_name . '_Disallowed' ),
 					array(
 						$matched_content,
-						$parameters[1]['raw'],
-						$parameters[2]['raw'],
+						$option_param['clean'],
+						$value_param['clean'],
 						$disallowed_option['message'],
 					)
 				);
@@ -170,13 +181,13 @@ class IniSetSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$this->phpcsFile->addWarning(
-			'%s(%s, %s) found. Changing configuration values at runtime is strongly discouraged.',
+			'Changing configuration values at runtime is strongly discouraged. Found: %s(%s, %s)',
 			$stackPtr,
 			'Risky',
 			array(
 				$matched_content,
-				$parameters[1]['raw'],
-				$parameters[2]['raw'],
+				$option_param['clean'],
+				$value_param['clean'],
 			)
 		);
 	}
