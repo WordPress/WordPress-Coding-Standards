@@ -21,6 +21,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\DeprecationHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper;
 use WordPressCS\WordPress\Helpers\WPHookHelper;
 
 /**
@@ -941,7 +942,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	private function variable_prefixed_or_allowed( $stackPtr, $name ) {
 		// Ignore superglobals and WP global variables.
-		if ( isset( $this->superglobals[ $name ] ) || isset( $this->wp_globals[ $name ] ) ) {
+		if ( isset( $this->superglobals[ $name ] ) || WPGlobalVariablesHelper::is_wp_global( $name ) ) {
 			return true;
 		}
 
