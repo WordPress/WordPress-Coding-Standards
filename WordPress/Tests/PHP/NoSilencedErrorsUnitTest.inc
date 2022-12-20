@@ -80,3 +80,7 @@ $decoded = @hex2bin( $data );
 // phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[]
 
 // phpcs:set WordPress.PHP.NoSilencedErrors usePHPFunctionsList true
+
+// phpcs:set WordPress.PHP.NoSilencedErrors context_length 0
+echo @some_userland_function( $param ); // Bad.
+// phpcs:set WordPress.PHP.NoSilencedErrors context_length 6

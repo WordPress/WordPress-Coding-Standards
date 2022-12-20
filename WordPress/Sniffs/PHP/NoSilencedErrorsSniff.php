@@ -10,6 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\BCFile;
+use PHPCSUtils\Utils\GetTokensAsString;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -216,13 +218,12 @@ class NoSilencedErrorsSniff extends Sniff {
 		}
 
 		// Prepare the "Found" string to display.
-		$end_of_statement = $this->phpcsFile->findEndOfStatement( $stackPtr, \T_COMMA );
+		$end_of_statement = BCFile::findEndOfStatement( $this->phpcsFile, $stackPtr, \T_COMMA );
 		if ( ( $end_of_statement - $stackPtr ) < $context_length ) {
 			$context_length = ( $end_of_statement - $stackPtr );
 		}
-		$found = $this->phpcsFile->getTokensAsString( $stackPtr, $context_length );
-		$found = str_replace( array( "\t", "\n", "\r" ), ' ', $found ) . '...';
 
+		$found     = GetTokensAsString::compact( $this->phpcsFile, $stackPtr, ( $stackPtr + $context_length - 1 ), true ) . '...';
 		$error_msg = 'Silencing errors is strongly discouraged. Use proper error checking instead.';
 		$data      = array();
 		if ( $this->context_length > 0 ) {
@@ -243,5 +244,4 @@ class NoSilencedErrorsSniff extends Sniff {
 			$this->phpcsFile->recordMetric( $stackPtr, 'Error silencing', $found );
 		}
 	}
-
 }
