@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
+use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
@@ -41,25 +42,61 @@ class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.3.0
 	 * @since 0.11.0 Renamed from $add_menu_functions to $target_functions
 	 *               and changed visibility to protected.
+	 * @since 3.0.0  The format of the value has changed from a numerically indexed
+	 *               array containing parameter positions to an array with the parameter
+	 *               position as the index and the parameter name as value.
 	 *
-	 * @var array <string function name> => <array target parameter positions>
+	 * @var array<string, <int, string|array>> Key is the name of the functions being targetted.
+	 *                                         Value is an array with parameter positions as the
+	 *                                         keys and parameter names as the values
 	 */
 	protected $target_functions = array(
-		'add_menu_page'       => array( 4 ),
-		'add_object_page'     => array( 4 ),
-		'add_utility_page'    => array( 4 ),
-		'add_submenu_page'    => array( 1, 5 ),
-		'add_dashboard_page'  => array( 4 ),
-		'add_posts_page'      => array( 4 ),
-		'add_media_page'      => array( 4 ),
-		'add_links_page'      => array( 4 ),
-		'add_pages_page'      => array( 4 ),
-		'add_comments_page'   => array( 4 ),
-		'add_theme_page'      => array( 4 ),
-		'add_plugins_page'    => array( 4 ),
-		'add_users_page'      => array( 4 ),
-		'add_management_page' => array( 4 ),
-		'add_options_page'    => array( 4 ),
+		'add_menu_page'       => array(
+			4 => 'menu_slug',
+		),
+		'add_object_page'     => array(
+			4 => 'menu_slug',
+		),
+		'add_utility_page'    => array(
+			4 => 'menu_slug',
+		),
+		'add_submenu_page'    => array(
+			1 => 'parent_slug',
+			5 => 'menu_slug',
+		),
+		'add_dashboard_page'  => array(
+			4 => 'menu_slug',
+		),
+		'add_posts_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_media_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_links_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_pages_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_comments_page'   => array(
+			4 => 'menu_slug',
+		),
+		'add_theme_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_plugins_page'    => array(
+			4 => 'menu_slug',
+		),
+		'add_users_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_management_page' => array(
+			4 => 'menu_slug',
+		),
+		'add_options_page'    => array(
+			4 => 'menu_slug',
+		),
 	);
 
 	/**
@@ -75,13 +112,15 @@ class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		foreach ( $this->target_functions[ $matched_content ] as $position ) {
-			if ( isset( $parameters[ $position ] ) ) {
-				$file_constant = $this->phpcsFile->findNext( \T_FILE, $parameters[ $position ]['start'], ( $parameters[ $position ]['end'] + 1 ) );
+		foreach ( $this->target_functions[ $matched_content ] as $position => $param_name ) {
+			$found_param = PassedParameters::getParameterFromStack( $parameters, $position, $param_name );
+			if ( false === $found_param ) {
+				continue;
+			}
 
-				if ( false !== $file_constant ) {
-					$this->phpcsFile->addWarning( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $stackPtr, 'Using__FILE__' );
-				}
+			$file_constant = $this->phpcsFile->findNext( \T_FILE, $found_param['start'], ( $found_param['end'] + 1 ) );
+			if ( false !== $file_constant ) {
+				$this->phpcsFile->addWarning( 'Using __FILE__ for menu slugs risks exposing filesystem structure.', $file_constant, 'Using__FILE__' );
 			}
 		}
 	}
