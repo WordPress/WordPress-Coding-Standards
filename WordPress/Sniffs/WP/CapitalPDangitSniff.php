@@ -9,10 +9,11 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Namespaces;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Capital P Dangit!
@@ -85,13 +86,14 @@ class CapitalPDangitSniff extends Sniff {
 		// Union the arrays - keeps the array keys.
 		$this->text_and_comment_tokens = ( Tokens::$textStringTokens + $this->comment_text_tokens );
 
-		$targets   = $this->text_and_comment_tokens;
-		$targets  += Tokens::$ooScopeTokens;
-		$targets[] = \T_NAMESPACE;
+		$targets                 = $this->text_and_comment_tokens;
+		$targets                += Tokens::$ooScopeTokens;
+		$targets[ \T_NAMESPACE ] = \T_NAMESPACE;
 
 		// Also sniff for array tokens to make skipping anything within those more efficient.
-		$targets[ \T_ARRAY ]            = \T_ARRAY;
-		$targets[ \T_OPEN_SHORT_ARRAY ] = \T_OPEN_SHORT_ARRAY;
+		$targets                          += Collections::arrayOpenTokensBC();
+		$targets                          += Collections::listTokens();
+		$targets[ \T_OPEN_SQUARE_BRACKET ] = \T_OPEN_SQUARE_BRACKET;
 
 		return $targets;
 	}
@@ -108,19 +110,24 @@ class CapitalPDangitSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		/*
-		 * Ignore tokens within an array definition as this is a false positive in 80% of all cases.
+		 * Ignore tokens within array and list definitions as well as within
+		 * array keys as this is a false positive in 80% of all cases.
 		 *
 		 * The return values skip to the end of the array.
 		 * This prevents the sniff "hanging" on very long configuration arrays.
 		 */
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
-			&& isset( $this->tokens[ $stackPtr ]['bracket_closer'] )
-		) {
-			return $this->tokens[ $stackPtr ]['bracket_closer'];
-		} elseif ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( ( \T_ARRAY === $this->tokens[ $stackPtr ]['code']
+			|| \T_LIST === $this->tokens[ $stackPtr ]['code'] )
 			&& isset( $this->tokens[ $stackPtr ]['parenthesis_closer'] )
 		) {
 			return $this->tokens[ $stackPtr ]['parenthesis_closer'];
+		}
+
+		if ( ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+			|| \T_OPEN_SQUARE_BRACKET === $this->tokens[ $stackPtr ]['code'] )
+			&& isset( $this->tokens[ $stackPtr ]['bracket_closer'] )
+		) {
+			return $this->tokens[ $stackPtr ]['bracket_closer'];
 		}
 
 		/*
@@ -154,7 +161,7 @@ class CapitalPDangitSniff extends Sniff {
 		}
 
 		/*
-		 * Deal with misspellings in class/interface/trait names.
+		 * Deal with misspellings in class/interface/trait/enum names.
 		 * These are not auto-fixable, but need the attention of a developer.
 		 */
 		if ( isset( Tokens::$ooScopeTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
@@ -168,7 +175,7 @@ class CapitalPDangitSniff extends Sniff {
 
 				if ( ! empty( $misspelled ) ) {
 					$this->phpcsFile->addWarning(
-						'Please spell "WordPress" correctly. Found: "%s" as part of the class/interface/trait name.',
+						'Please spell "WordPress" correctly. Found: "%s" as part of the class/interface/trait/enum name.',
 						$stackPtr,
 						'MisspelledClassName',
 						array( implode( ', ', $misspelled ) )
@@ -198,17 +205,6 @@ class CapitalPDangitSniff extends Sniff {
 			) {
 				// @link tag, so ignore.
 				return;
-			}
-		}
-
-		// Ignore any text strings which are array keys `$var['key']` as this is a false positive in 80% of all cases.
-		if ( \T_CONSTANT_ENCAPSED_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			$prevToken = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-			if ( false !== $prevToken && \T_OPEN_SQUARE_BRACKET === $this->tokens[ $prevToken ]['code'] ) {
-				$nextToken = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
-				if ( false !== $nextToken && \T_CLOSE_SQUARE_BRACKET === $this->tokens[ $nextToken ]['code'] ) {
-					return;
-				}
 			}
 		}
 

@@ -203,3 +203,28 @@ namespace My_WordPress_Plugin; // OK.
 namespace Foo\Bar\Wordpress\; // Bad.
 namespace Foo\word_presss\Bar; // Bad.
 namespace My_Wordpresss_Plugin\Foo\Bar; // Bad.
+
+/*
+ * Ensure keys in list declarations are ignored
+ */
+list( 'wordpress' => $a, 'other' => $b ) = $array;
+[ 'wordpress' => $a, 'other' => $b ] = $array;
+
+/*
+ * Ensure that array keys which are not just and only plain text don't lead to false positives.
+ */
+$array['wordpress' . $var] = 123;
+$array[$var . 'wordpress'] = 123;
+$array[$var . 'wordpress' . $var] = 123;
+
+/*
+ * Test recognizing misspellings in enum names.
+ */
+enum WordPress: string implements CMS {} // OK.
+enum My_Wordpress_Enum {} // Bad.
+
+/*
+ * Safeguard that reserved keywords in namespaced names do not lead to PHP notices.
+ */
+namespace My\Class\WordPress;
+echo Some\Enum\WordPress::ENUM_CONSTANT;
