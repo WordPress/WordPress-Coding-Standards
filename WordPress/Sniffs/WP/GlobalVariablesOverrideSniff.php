@@ -266,7 +266,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 * Check if the variable value is being changed.
 		 */
 		if ( false === $in_list
-			&& false === $this->is_assignment( $stackPtr )
+			&& false === VariableHelper::is_assignment( $this->phpcsFile, $stackPtr )
 			&& Context::inForeachCondition( $this->phpcsFile, $stackPtr ) !== 'afterAs'
 		) {
 			return;
@@ -414,7 +414,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				continue;
 			}
 
-			if ( true === $this->is_assignment( $ptr ) ) {
+			if ( true === VariableHelper::is_assignment( $this->phpcsFile, $ptr ) ) {
 				$this->add_error( $ptr );
 				continue;
 			}

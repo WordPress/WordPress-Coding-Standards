@@ -179,4 +179,60 @@ final class VariableHelper {
 
 		return false;
 	}
+
+	/**
+	 * Check if this variable is being assigned a value.
+	 *
+	 * E.g., $var = 'foo';
+	 *
+	 * Also handles array assignments to arbitrary depth:
+	 *
+	 * $array['key'][ $foo ][ something() ] = $bar;
+	 *
+	 * @since 0.5.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - Visibility is now `public` (was `protected`) and the method `static`.
+	 *              - The $phpcsFile parameter was added.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *                                               This must point to either a T_VARIABLE or
+	 *                                               T_CLOSE_SQUARE_BRACKET token.
+	 *
+	 * @return bool Whether the token is a variable being assigned a value.
+	 */
+	public static function is_assignment( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		static $valid = array(
+			\T_VARIABLE             => true,
+			\T_CLOSE_SQUARE_BRACKET => true,
+		);
+
+		// Must be a variable, constant or closing square bracket (see below).
+		if ( ! isset( $valid[ $tokens[ $stackPtr ]['code'] ] ) ) {
+			return false;
+		}
+
+		$next_non_empty = $phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true, null, true );
+
+		// No token found.
+		if ( false === $next_non_empty ) {
+			return false;
+		}
+
+		// If the next token is an assignment, that's all we need to know.
+		if ( isset( Tokens::$assignmentTokens[ $tokens[ $next_non_empty ]['code'] ] ) ) {
+			return true;
+		}
+
+		// Check if this is an array assignment, e.g., `$var['key'] = 'val';` .
+		if ( \T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code']
+			&& isset( $tokens[ $next_non_empty ]['bracket_closer'] )
+		) {
+			return self::is_assignment( $phpcsFile, $tokens[ $next_non_empty ]['bracket_closer'] );
+		}
+
+		return false;
+	}
 }
