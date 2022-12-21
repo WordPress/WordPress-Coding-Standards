@@ -35,9 +35,12 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @link https://www.php.net/wrappers.php
 	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 The visibility was changed from `protected` to `private`.
+	 *
 	 * @var array
 	 */
-	protected $allowed_local_streams = array(
+	private $allowed_local_streams = array(
 		'php://input'  => true,
 		'php://output' => true,
 		'php://stdin'  => true,
@@ -51,9 +54,12 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @link https://www.php.net/wrappers.php
 	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 The visibility was changed from `protected` to `private`.
+	 *
 	 * @var array
 	 */
-	protected $allowed_local_stream_partials = array(
+	private $allowed_local_stream_partials = array(
 		'php://temp/',
 		'php://fd/',
 	);
@@ -63,9 +69,12 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @link https://www.php.net/wrappers.php
 	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 The visibility was changed from `protected` to `private`.
+	 *
 	 * @var array
 	 */
-	protected $allowed_local_stream_constants = array(
+	private $allowed_local_stream_constants = array(
 		'STDIN'  => true,
 		'STDOUT' => true,
 		'STDERR' => true,
@@ -152,20 +161,20 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 					'chgrp',
 					'chmod',
 					'chown',
+					'fclose',
+					'file_put_contents',
+					'fopen',
+					'fputs',
+					'fread',
+					'fsockopen',
+					'fwrite',
 					'is_writable',
 					'is_writeable',
 					'mkdir',
+					'pfsockopen',
+					'readfile',
 					'rmdir',
 					'touch',
-					'readfile',
-					'fclose',
-					'fopen',
-					'fread',
-					'fwrite',
-					'file_put_contents',
-					'fsockopen',
-					'pfsockopen',
-					'fputs',
 				),
 			),
 
@@ -183,8 +192,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => '%s() is discouraged. Rand seeding is not necessary when using the wp_rand() function (as you should).',
 				'since'     => '2.6.2',
 				'functions' => array(
-					'srand',
 					'mt_srand',
+					'srand',
 				),
 			),
 
@@ -193,8 +202,8 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				'message'   => '%s() is discouraged. Use the far less predictable wp_rand() instead.',
 				'since'     => '2.6.2',
 				'functions' => array(
-					'rand',
 					'mt_rand',
+					'rand',
 				),
 			),
 		);
@@ -221,27 +230,31 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			case 'strip_tags':
 				/*
 				 * The function `wp_strip_all_tags()` is only a valid alternative when
-				 * only the first parameter is passed to `strip_tags()`.
+				 * only the first parameter, `$string`, is passed to `strip_tags()`.
 				 */
-				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1 ) {
+				$has_allowed_tags = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 2, 'allowed_tags' );
+				if ( false !== $has_allowed_tags ) {
 					return;
 				}
 
+				unset( $has_allowed_tags );
 				break;
 
-			case 'wp_parse_url':
+			case 'parse_url':
 				/*
 				 * Before WP 4.7.0, the function `wp_parse_url()` was only a valid alternative
-				 * if no second param was passed to `parse_url()`.
+				 * if the second param - `$component` - was not passed to `parse_url()`.
 				 *
 				 * @see https://developer.wordpress.org/reference/functions/wp_parse_url/#changelog
 				 */
-				if ( PassedParameters::getParameterCount( $this->phpcsFile, $stackPtr ) !== 1
+				$has_component = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 2, 'component' );
+				if ( false !== $has_component
 					&& $this->wp_version_compare( $this->minimum_wp_version, '4.7.0', '<' )
 				) {
 					return;
 				}
 
+				unset( $has_component );
 				break;
 
 			case 'file_get_contents':
@@ -251,62 +264,73 @@ class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 				 */
 				$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
-				if ( isset( $params[2] ) && 'true' === $params[2]['raw'] ) {
+				$use_include_path_param = PassedParameters::getParameterFromStack( $params, 2, 'use_include_path' );
+				if ( false !== $use_include_path_param && 'true' === $use_include_path_param['clean'] ) {
 					// Setting `$use_include_path` to `true` is only relevant for local files.
 					return;
 				}
 
-				if ( isset( $params[1] ) === false ) {
+				$filename_param = PassedParameters::getParameterFromStack( $params, 1, 'filename' );
+				if ( false === $filename_param ) {
 					// If the file to get is not set, this is a non-issue anyway.
 					return;
 				}
 
-				if ( strpos( $params[1]['raw'], 'http:' ) !== false
-					|| strpos( $params[1]['raw'], 'https:' ) !== false
+				if ( strpos( $filename_param['clean'], 'http:' ) !== false
+					|| strpos( $filename_param['clean'], 'https:' ) !== false
 				) {
 					// Definitely a URL, throw notice.
 					break;
 				}
 
-				if ( preg_match( '`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`', $params[1]['raw'] ) === 1 ) {
+				$contains_wp_path_constant = preg_match(
+					'`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`',
+					$filename_param['clean']
+				);
+				if ( 1 === $contains_wp_path_constant ) {
 					// Using any of the constants matched in this regex is an indicator of a local file.
 					return;
 				}
 
-				if ( preg_match( '`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i', $params[1]['raw'] ) === 1 ) {
+				$contains_wp_path_function_call = preg_match(
+					'`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i',
+					$filename_param['clean']
+				);
+				if ( 1 === $contains_wp_path_function_call ) {
 					// Using any of the functions matched in the regex is an indicator of a local file.
 					return;
 				}
 
-				if ( $this->is_local_data_stream( $params[1]['raw'] ) === true ) {
+				if ( $this->is_local_data_stream( $filename_param['clean'] ) === true ) {
 					// Local data stream.
 					return;
 				}
 
-				unset( $params );
-
+				unset( $params, $use_include_path_param, $filename_param, $contains_wp_path_constant, $contains_wp_path_function_call );
 				break;
 
-			case 'readfile':
-			case 'fopen':
 			case 'file_put_contents':
+			case 'fopen':
+			case 'readfile':
 				/*
 				 * Allow for handling raw data streams from the request body.
+				 *
+				 * Note: at this time (December 2022) these three functions use the same parameter name for their
+				 * first parameter. If this would change at any point in the future, this code will need to
+				 * be made more modular and will need to pass the parameter name based on the function call detected.
 				 */
-				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
-
-				if ( false === $first_param ) {
+				$filename_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1, 'filename' );
+				if ( false === $filename_param ) {
 					// If the file to work with is not set, local data streams don't come into play.
 					break;
 				}
 
-				if ( $this->is_local_data_stream( $first_param['raw'] ) === true ) {
+				if ( $this->is_local_data_stream( $filename_param['clean'] ) === true ) {
 					// Local data stream.
 					return;
 				}
 
-				unset( $first_param );
-
+				unset( $filename_param );
 				break;
 		}
 
