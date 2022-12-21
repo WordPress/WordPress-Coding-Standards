@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Run the unit tests.
+#
+# This ensures that the logic in the VIP sniffs is correct,
+# by running them against the .inc files in /tests.
+#
+# EXAMPLE TO RUN LOCALLY:
+#
+#   ./bin/unit-tests
+#
+# The script allows to pass additional PHPUnit CLI arguments.
+# For instance, if you only want to run the tests for one particular sniff,
+# use the following, replacing "SniffName" with the name of the target sniff:
+#
+#   ./bin/unit-tests --filter SniffName
+#
+
+if [[ $(php -r 'echo PHP_VERSION_ID;') -ge 80100 ]]; then
+	"$(pwd)/vendor/phpunit/phpunit/phpunit" --filter WordPress "$(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php" --no-coverage --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests $@
+else
+	"$(pwd)/vendor/phpunit/phpunit/phpunit" --filter WordPress "$(pwd)/vendor/squizlabs/php_codesniffer/tests/AllTests.php" --no-coverage $@
+fi
