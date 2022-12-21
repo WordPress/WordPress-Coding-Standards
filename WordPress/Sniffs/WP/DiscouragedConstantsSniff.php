@@ -11,7 +11,9 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\MessageHelper;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 
@@ -49,33 +51,44 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * Array of functions to check.
 	 *
 	 * @since 0.14.0
+	 * @since 3.0.0  The format of the value has changed from an integer parameter
+	 *               position to an array with the parameter position and name.
 	 *
-	 * @var array <string function name> => <int parameter position>
+	 * @var array<string, <string, in|string>> Function name as key, array with target
+	 *                                         parameter and name as value.
 	 */
 	protected $target_functions = array(
-		'define' => 1,
+		'define' => array(
+			'position' => 1,
+			'name'     => 'constant_name',
+		),
 	);
 
 	/**
 	 * Array of tokens which if found preceding the $stackPtr indicate that a T_STRING is not a constant.
+	 *
+	 * Additional tokens are added from within the contructor.
 	 *
 	 * @var array
 	 */
 	private $preceding_tokens_to_ignore = array(
 		\T_NAMESPACE       => true,
 		\T_USE             => true,
-		\T_CLASS           => true,
-		\T_TRAIT           => true,
-		\T_INTERFACE       => true,
 		\T_EXTENDS         => true,
 		\T_IMPLEMENTS      => true,
 		\T_NEW             => true,
 		\T_FUNCTION        => true,
-		\T_DOUBLE_COLON    => true,
-		\T_OBJECT_OPERATOR => true,
 		\T_INSTANCEOF      => true,
 		\T_GOTO            => true,
 	);
+
+	/**
+	 * Constructor to enrich a property.
+	 */
+	public function __construct() {
+		$this->preceding_tokens_to_ignore += Tokens::$ooScopeTokens;
+		$this->preceding_tokens_to_ignore += Collections::objectOperators();
+	}
 
 	/**
 	 * Processes this test, when one of its tokens is encountered.
@@ -153,9 +166,8 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		if ( false !== $first_on_line && \T_USE === $this->tokens[ $first_on_line ]['code'] ) {
 			$next_on_line = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $first_on_line + 1 ), null, true );
 			if ( false !== $next_on_line ) {
-				if ( ( \T_STRING === $this->tokens[ $next_on_line ]['code']
-						&& 'const' === $this->tokens[ $next_on_line ]['content'] )
-					|| \T_CONST === $this->tokens[ $next_on_line ]['code'] // Happens in some PHPCS versions.
+				if ( \T_STRING === $this->tokens[ $next_on_line ]['code']
+					&& 'const' === $this->tokens[ $next_on_line ]['content']
 				) {
 					$has_ns_sep = $this->phpcsFile->findNext( \T_NS_SEPARATOR, ( $next_on_line + 1 ), $stackPtr );
 					if ( false !== $has_ns_sep ) {
@@ -198,20 +210,28 @@ class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 		$target_param  = $this->target_functions[ $function_name ];
 
 		// Was the target parameter passed ?
-		if ( ! isset( $parameters[ $target_param ] ) ) {
+		$found_param = PassedParameters::getParameterFromStack( $parameters, $target_param['position'], $target_param['name'] );
+		if ( false === $found_param ) {
 			return;
 		}
 
-		$raw_content = TextStrings::stripQuotes( $parameters[ $target_param ]['raw'] );
+		$clean_content = TextStrings::stripQuotes( $found_param['clean'] );
 
-		if ( isset( $this->discouraged_constants[ $raw_content ] ) ) {
+		if ( isset( $this->discouraged_constants[ $clean_content ] ) ) {
+			$first_non_empty = $this->phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				$found_param['start'],
+				( $found_param['end'] + 1 ),
+				true
+			);
+
 			$this->phpcsFile->addWarning(
 				'Found declaration of constant "%s". Use %s instead.',
-				$stackPtr,
-				MessageHelper::stringToErrorcode( $raw_content . 'DeclarationFound' ),
+				$first_non_empty,
+				MessageHelper::stringToErrorcode( $clean_content . 'DeclarationFound' ),
 				array(
-					$raw_content,
-					$this->discouraged_constants[ $raw_content ],
+					$clean_content,
+					$this->discouraged_constants[ $clean_content ],
 				)
 			);
 		}
