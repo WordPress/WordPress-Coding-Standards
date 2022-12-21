@@ -108,3 +108,16 @@ $value = apply_filters(
 	$value,
 	$attributes
 );
+
+// Test handling of more complex embedded variables and expressions.
+do_action( "admin_head_${Foo->{$Baz}}_action_$Post->ID" ); // OK.
+do_action( "admin_Head_${Foo?->{$Baz}}_Action_{$Post?->ID}_Bla" ); // Error - use lowercase.
+do_action( "admin_Head_${Foo->{"${'A'}"}}-Action_$Post[A]_Bla" ); // Error - use lowercase + warning about dash.
+
+// Safeguard that variable function calls are handled correctly.
+do_action( 'admin_head_' .  $fn( 'UPPERCASE', 'wrong-delimiter' ) . '_action' ); // Ok.
+
+// Safeguard support for PHP 8.0+ named parameters.
+do_action_ref_array( hook: 'My-Hook', args: $args ); // OK. Well, not really, but using the wrong parameter name, so not our concern.
+do_action_ref_array( args: $args, hook_name: 'my_hook', ); // OK.
+do_action_ref_array( args: $args, hook_name: 'My-Hook', ); // Error - use lowercase + warning about dash.

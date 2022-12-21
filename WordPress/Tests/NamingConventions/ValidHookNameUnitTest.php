@@ -70,6 +70,9 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					81  => 1,
 					89  => 1,
 					107 => 1,
+					114 => 1,
+					115 => 1,
+					123 => 1,
 				);
 
 			case 'ValidHookNameUnitTest.2.inc':
@@ -99,6 +102,8 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					77  => 1,
 					95  => 1,
 					107 => 1,
+					115 => 1,
+					123 => 1,
 				);
 
 			case 'ValidHookNameUnitTest.2.inc':
@@ -114,5 +119,4 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

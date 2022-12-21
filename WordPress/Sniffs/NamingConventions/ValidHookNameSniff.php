@@ -94,6 +94,11 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
+		$hook_name_param = WPHookHelper::get_hook_name_param( $matched_content, $parameters );
+		if ( false === $hook_name_param ) {
+			return;
+		}
+
 		$regex = $this->prepare_regex();
 
 		$case_errors    = 0;
@@ -102,16 +107,16 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 		$expected       = array();
 		$last_non_empty = null;
 
-		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+		for ( $i = $hook_name_param['start']; $i <= $hook_name_param['end']; $i++ ) {
 			// Skip past comment tokens.
-			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) !== false ) {
+			if ( isset( Tokens::$commentTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
 			$content[ $i ]  = $this->tokens[ $i ]['content'];
 			$expected[ $i ] = $this->tokens[ $i ]['content'];
 
-			// Skip past potential variable array access: $var['Key'].
+			// Skip past potential variable array access: `$var['key']`.
 			if ( \T_VARIABLE === $this->tokens[ $i ]['code'] ) {
 				do {
 					$open_bracket = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
@@ -119,12 +124,13 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 						|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $open_bracket ]['code']
 						|| ! isset( $this->tokens[ $open_bracket ]['bracket_closer'] )
 					) {
+						$last_non_empty = $i;
 						continue 2;
 					}
 
 					$i = $this->tokens[ $open_bracket ]['bracket_closer'];
 
-				} while ( isset( $this->tokens[ $i ] ) && $i <= $parameters[1]['end'] );
+				} while ( isset( $this->tokens[ $i ] ) && $i <= $hook_name_param['end'] );
 
 				$last_non_empty = $i;
 				continue;
@@ -132,7 +138,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 			// Skip over parameters passed to function calls.
 			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
-				&& \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				&& ( \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				|| \T_VARIABLE === $this->tokens[ $last_non_empty ]['code'] )
 				&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
 			) {
 				$i              = $this->tokens[ $i ]['parenthesis_closer'];
@@ -140,7 +147,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			// Skip past non-string tokens.
+			// Skip past non text string tokens.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
 				$last_non_empty = $i;
 				continue;
@@ -183,8 +190,8 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 		$first_non_empty = $this->phpcsFile->findNext(
 			Tokens::$emptyTokens,
-			$parameters[1]['start'],
-			( $parameters[1]['end'] + 1 ),
+			$hook_name_param['start'],
+			( $hook_name_param['end'] + 1 ),
 			true
 		);
 
@@ -197,6 +204,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 			$error = 'Hook names should be lowercase. Expected: %s, but found: %s.';
 			$this->phpcsFile->addError( $error, $first_non_empty, 'NotLowercase', $data );
 		}
+
 		if ( $underscores > 0 ) {
 			$error = 'Words in hook names should be separated using underscores. Expected: %s, but found: %s.';
 			$this->phpcsFile->addWarning( $error, $first_non_empty, 'UseUnderscores', $data );
@@ -255,46 +263,16 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 * @return string
 	 */
 	protected function transform_complex_string( $text_string, $regex, $transform_type = 'full' ) {
-		$output = preg_split( '`([\{\}\$\[\] ])`', $text_string, -1, \PREG_SPLIT_DELIM_CAPTURE );
+		$plain_text = TextStrings::stripEmbeds( $text_string );
+		$embeds     = TextStrings::getEmbeds( $text_string );
 
-		$is_variable = false;
-		$has_braces  = false;
-		$braces      = 0;
+		$transformed_text = $this->transform( $plain_text, $regex, $transform_type );
 
-		foreach ( $output as $i => $part ) {
-			if ( \in_array( $part, array( '$', '{' ), true ) ) {
-				$is_variable = true;
-				if ( '{' === $part ) {
-					$has_braces = true;
-					++$braces;
-				}
-				continue;
-			}
-
-			if ( true === $is_variable ) {
-				if ( '[' === $part ) {
-					$has_braces = true;
-					++$braces;
-				}
-				if ( \in_array( $part, array( '}', ']' ), true ) ) {
-					--$braces;
-				}
-				if ( false === $has_braces && ' ' === $part ) {
-					$is_variable  = false;
-					$output[ $i ] = $this->transform( $part, $regex, $transform_type );
-				}
-
-				if ( ( true === $has_braces && 0 === $braces ) && false === \in_array( $output[ ( $i + 1 ) ], array( '{', '[' ), true ) ) {
-					$has_braces  = false;
-					$is_variable = false;
-				}
-				continue;
-			}
-
-			$output[ $i ] = $this->transform( $part, $regex, $transform_type );
+		// Inject the embeds back into the text string.
+		foreach ( $embeds as $offset => $embed ) {
+			$transformed_text = substr_replace( $transformed_text, $embed, $offset, 0 );
 		}
 
-		return implode( '', $output );
+		return $transformed_text;
 	}
-
 }
