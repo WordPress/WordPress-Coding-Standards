@@ -47,6 +47,9 @@
 		<exclude name="WordPress.DB"/>
 		<exclude name="WordPress.Security"/>
 		<exclude name="WordPress.WP"/>
+
+		<!-- Linting is done in a separate CI job, no need to duplicate it. -->
+		<exclude name="Generic.PHP.Syntax"/>
 	</rule>
 
 	<!-- Check code for cross-version PHP compatibility. -->
