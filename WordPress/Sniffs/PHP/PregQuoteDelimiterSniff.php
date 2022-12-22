@@ -63,7 +63,7 @@ class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$this->phpcsFile->addWarning(
-			'Passing the $delimiter to preg_quote() is strongly recommended.',
+			'Passing the $delimiter parameter to preg_quote() is strongly recommended.',
 			$stackPtr,
 			'Missing'
 		);

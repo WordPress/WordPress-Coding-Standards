@@ -81,7 +81,7 @@ class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 		);
 
 		$this->phpcsFile->addWarning(
-			'%s() expects only one parameter. Did you mean to use %s() ? Found: %s',
+			'%s() expects only a $text parameter. Did you mean to use %s() ? Found: %s',
 			$stackPtr,
 			'Found',
 			$data
