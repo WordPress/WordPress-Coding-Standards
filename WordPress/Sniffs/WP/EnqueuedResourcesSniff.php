@@ -9,7 +9,6 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
@@ -47,24 +46,21 @@ class EnqueuedResourcesSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int Integer stack pointer to skip forward to.
 	 */
 	public function process_token( $stackPtr ) {
 
+		$end_ptr = $stackPtr;
 		$content = $this->tokens[ $stackPtr ]['content'];
 		if ( \T_INLINE_HTML !== $this->tokens[ $stackPtr ]['code'] ) {
-			try {
-				$content = TextStrings::getCompleteTextString( $this->phpcsFile, $stackPtr );
-			} catch ( RuntimeException $e ) {
-				// Not the first token in a multi-line text string. Any issues will already have been reported.
-				return;
-			}
+			$end_ptr = TextStrings::getEndOfCompleteTextString( $this->phpcsFile, $stackPtr );
+			$content = TextStrings::getCompleteTextString( $this->phpcsFile, $stackPtr );
 		}
 
 		if ( preg_match_all( '# rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {
 			foreach ( $matches[0] as $match ) {
 				$this->phpcsFile->addError(
-					'Stylesheets must be registered/enqueued via wp_enqueue_style',
+					'Stylesheets must be registered/enqueued via wp_enqueue_style()',
 					$this->find_token_in_multiline_string( $stackPtr, $content, $match[1] ),
 					'NonEnqueuedStylesheet'
 				);
@@ -74,12 +70,14 @@ class EnqueuedResourcesSniff extends Sniff {
 		if ( preg_match_all( '#<script[^>]*(?<=src=)#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {
 			foreach ( $matches[0] as $match ) {
 				$this->phpcsFile->addError(
-					'Scripts must be registered/enqueued via wp_enqueue_script',
+					'Scripts must be registered/enqueued via wp_enqueue_script()',
 					$this->find_token_in_multiline_string( $stackPtr, $content, $match[1] ),
 					'NonEnqueuedScript'
 				);
 			}
 		}
+
+		return ( $end_ptr + 1 );
 	}
 
 	/**
@@ -104,5 +102,4 @@ class EnqueuedResourcesSniff extends Sniff {
 
 		return ( $stackPtr + $newline_count );
 	}
-
 }
