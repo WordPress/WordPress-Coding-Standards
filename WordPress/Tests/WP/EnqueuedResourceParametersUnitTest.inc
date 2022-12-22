@@ -55,3 +55,31 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (binary) 123, true ); // OK.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), b'0', true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard support for PHP 8.0+ named parameters.
+wp_register_script(
+	ver      : 0, // Error - 0, false or NULL are not allowed.
+	in_footer: false,
+	src      : 'https://example.com/someScript.js',
+	handle   : 'someScript-js',
+);
+wp_enqueue_script(
+	src: 'https://example.com/someScript.js',
+	handle: 'script-name',
+); // Warning - missing $ver, Warning - missing $in_footer.
+
+// Safeguard that comments in the parameters are ignored.
+wp_register_script(
+	'someScript-js',
+	'https://example.com/someScript.js',
+	array( 'jquery' ),
+	// Error - 0, false or NULL are not allowed.
+	null,
+	true,
+);
+
+// Safeguard handling of PHP 7.4 numeric literals with underscores.
+wp_register_script( 'someScript-js', $url, [], 0_0.0_0, true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard handling of PHP 8.1 explicit octals.
+wp_register_script( 'someScript-js', $url, [], 0o0, true ); // Error - 0, false or NULL are not allowed.

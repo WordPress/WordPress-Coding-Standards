@@ -9,8 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Numbers;
+use PHPCSUtils\Utils\PassedParameters;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * This checks the enqueued 4th and 5th parameters to make sure the version and in_footer are set.
@@ -118,9 +120,9 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-
 		// Check to see if a source ($src) is specified.
-		if ( ! isset( $parameters[2] ) ) {
+		$src_param = PassedParameters::getParameterFromStack( $parameters, 2, 'src' );
+		if ( false === $src_param ) {
 			return;
 		}
 
@@ -128,7 +130,14 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 		 * Version Check: Check to make sure the version is set explicitly.
 		 */
 
-		if ( ! isset( $parameters[4] ) || 'null' === $parameters[4]['raw'] ) {
+		$version_param = PassedParameters::getParameterFromStack( $parameters, 4, 'ver' );
+
+		$error_ptr = $stackPtr;
+		if ( false !== $version_param ) {
+			$error_ptr = $this->phpcsFile->findNext( Tokens::$emptyTokens, $version_param['start'], ( $version_param['end'] + 1 ), true );
+		}
+
+		if ( false === $version_param || 'null' === $version_param['clean'] ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
 				$type = 'style';
@@ -136,16 +145,16 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 
 			$this->phpcsFile->addWarning(
 				'Resource version not set in call to %s(). This means new versions of the %s may not always be loaded due to browser caching.',
-				$stackPtr,
+				$error_ptr,
 				'MissingVersion',
 				array( $matched_content, $type )
 			);
 			// The version argument should have a non-false value.
-		} elseif ( $this->is_falsy( $parameters[4]['start'], $parameters[4]['end'] ) ) {
+		} elseif ( $this->is_falsy( $version_param['start'], $version_param['end'] ) ) {
 			$this->phpcsFile->addError(
 				'Version parameter is not explicitly set or has been set to an equivalent of "false" for %s; ' .
 				'This means that the WordPress core version will be used which is not recommended for plugin or theme development.',
-				$stackPtr,
+				$error_ptr,
 				'NoExplicitVersion',
 				array( $matched_content )
 			);
@@ -164,7 +173,8 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( ! isset( $parameters[5] ) ) {
+		$infooter_param = PassedParameters::getParameterFromStack( $parameters, 5, 'in_footer' );
+		if ( false === $infooter_param ) {
 			// If in footer is not set, throw a warning about the default.
 			$this->phpcsFile->addWarning(
 				'In footer ($in_footer) is not set explicitly %s; ' .
@@ -204,6 +214,14 @@ class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 			}
 
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) === true ) {
+				continue;
+			}
+
+			// Make sure that PHP 7.4 numeric literals and PHP 8.1 explicit octals don't cause problems.
+			if ( \T_LNUMBER === $this->tokens[ $i ]['code'] || \T_DNUMBER === $this->tokens[ $i ]['code'] ) {
+				$number_info  = Numbers::getCompleteNumber( $this->phpcsFile, $i );
+				$code_string .= $number_info['decimal'];
+				$i            = $number_info['last_token'];
 				continue;
 			}
 
