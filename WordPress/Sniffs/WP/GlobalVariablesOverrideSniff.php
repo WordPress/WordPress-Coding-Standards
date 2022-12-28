@@ -10,8 +10,11 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\Lists;
+use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
@@ -71,19 +74,6 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	);
 
 	/**
-	 * Scoped object and function structures to skip over as
-	 * variables will have a different scope within those.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @var array
-	 */
-	private $skip_over = array(
-		\T_FUNCTION => true,
-		\T_CLOSURE  => true,
-	);
-
-	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.3.0
@@ -92,15 +82,11 @@ class GlobalVariablesOverrideSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		// Add the OO scope tokens to the $skip_over property.
-		$this->skip_over += Tokens::$ooScopeTokens;
-
-		$targets = array(
+		$targets  = array(
 			\T_GLOBAL,
 			\T_VARIABLE,
-			\T_LIST,
-			\T_OPEN_SHORT_ARRAY,
 		);
+		$targets += Collections::listOpenTokensBC();
 
 		// Only used to skip over test classes.
 		$targets += Tokens::$ooScopeTokens;
@@ -145,10 +131,17 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 * on that.
 		 * Examine variables not within a function scope and access to the `$GLOBALS`
 		 * variable based on the variable token.
+		 *
+		 * Note: No special handling here for code found within PHP 7.4+ arrow functions.
+		 * Arrow functions are "open", i.e. they have by value access to variables in the
+		 * surrounding scope, but they cannot modify the value.
+		 * Additionally, as they can only have one statement, a `global` statement _within_
+		 * an arrow function declaration will lead to a parse error as the result is
+		 * not a returnable value.
 		 */
-		$in_function_scope = $this->phpcsFile->hasCondition( $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+		$in_function_scope = Conditions::hasCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 
-		if ( ( \T_LIST === $token['code'] || \T_OPEN_SHORT_ARRAY === $token['code'] )
+		if ( isset( Collections::listOpenTokensBC()[ $token['code'] ] )
 			&& false === $in_function_scope
 			&& false === $this->treat_files_as_scoped
 		) {
@@ -215,7 +208,10 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		if ( 'GLOBALS' === $var_name ) {
 			$bracketPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-			if ( false === $bracketPtr || \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code'] || ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] ) ) {
+			if ( false === $bracketPtr
+				|| \T_OPEN_SQUARE_BRACKET !== $this->tokens[ $bracketPtr ]['code']
+				|| ! isset( $this->tokens[ $bracketPtr ]['bracket_closer'] )
+			) {
 				return;
 			}
 
@@ -276,16 +272,13 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 * Function parameters with the same name as a WP global variable are fine,
 		 * including when they are being assigned a default value.
 		 */
-		if ( false === $in_list && isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			foreach ( $this->tokens[ $stackPtr ]['nested_parenthesis'] as $opener => $closer ) {
-				if ( isset( $this->tokens[ $opener ]['parenthesis_owner'] )
-					&& ( \T_FUNCTION === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code']
-						|| \T_CLOSURE === $this->tokens[ $this->tokens[ $opener ]['parenthesis_owner'] ]['code'] )
-				) {
-					return;
-				}
+		if ( false === $in_list ) {
+			$functionPtr = Parentheses::getLastOwner( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
+			if ( false !== $functionPtr ) {
+				return;
 			}
-			unset( $opener, $closer );
+
+			unset( $functionPtr );
 		}
 
 		/*
@@ -314,28 +307,22 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		/*
 		 * Collect the variables to watch for.
 		 */
-		$search = array();
-		$ptr    = ( $stackPtr + 1 );
-		while ( isset( $this->tokens[ $ptr ] ) ) {
-			$var = $this->tokens[ $ptr ];
+		$search           = array();
+		$ptr              = ( $stackPtr + 1 );
+		$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $ptr );
 
-			// Halt the loop at end of statement.
-			if ( \T_SEMICOLON === $var['code'] ) {
-				break;
-			}
-
-			if ( \T_VARIABLE === $var['code'] ) {
-				$var_name = substr( $var['content'], 1 );
+		while ( isset( $this->tokens[ $ptr ] ) && $ptr < $end_of_statement ) {
+			if ( \T_VARIABLE === $this->tokens[ $ptr ]['code'] ) {
+				$var_name = substr( $this->tokens[ $ptr ]['content'], 1 );
 				if ( WPGlobalVariablesHelper::is_wp_global( $var_name )
 					&& isset( $this->override_allowed[ $var_name ] ) === false
 				) {
-					$search[] = $var['content'];
+					$search[ $this->tokens[ $ptr ]['content'] ] = true;
 				}
 			}
 
 			++$ptr;
 		}
-		unset( $var );
 
 		if ( empty( $search ) ) {
 			return;
@@ -346,23 +333,21 @@ class GlobalVariablesOverrideSniff extends Sniff {
 		 */
 		$start = $ptr;
 		if ( true === $in_function_scope ) {
-			$function_cond = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
-			$closure_cond  = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-			$scope_cond    = max( $function_cond, $closure_cond ); // If false, it will evaluate as zero, so this is fine.
-			if ( isset( $this->tokens[ $scope_cond ]['scope_closer'] ) === false ) {
+			$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
+			if ( isset( $this->tokens[ $functionPtr ]['scope_closer'] ) === false ) {
 				// Live coding or parse error.
 				return;
 			}
-			$end = $this->tokens[ $scope_cond ]['scope_closer'];
+			$end = $this->tokens[ $functionPtr ]['scope_closer'];
 		} else {
-			// Global statement in the global namespace with file is being treated as scoped.
+			// Global statement in the global namespace in a file which is being treated as scoped.
 			$end = $this->phpcsFile->numTokens;
 		}
 
 		for ( $ptr = $start; $ptr < $end; $ptr++ ) {
 
 			// Skip over nested functions, classes and the likes.
-			if ( isset( $this->skip_over[ $this->tokens[ $ptr ]['code'] ] ) ) {
+			if ( isset( Collections::closedScopes()[ $this->tokens[ $ptr ]['code'] ] ) ) {
 				if ( ! isset( $this->tokens[ $ptr ]['scope_closer'] ) ) {
 					// Live coding or parse error.
 					break;
@@ -373,9 +358,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Make sure to recognize assignments to variables in a list construct.
-			if ( \T_LIST === $this->tokens[ $ptr ]['code']
-				|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $ptr ]['code']
-			) {
+			if ( isset( Collections::listOpenTokensBC()[ $this->tokens[ $ptr ]['code'] ] ) ) {
 				$list_open_close = Lists::getOpenClose( $this->phpcsFile, $ptr );
 
 				if ( false === $list_open_close ) {
@@ -390,7 +373,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 						$var_name = '$' . TextStrings::stripQuotes( VariableHelper::get_array_access_key( $this->phpcsFile, $ptr ) );
 					}
 
-					if ( \in_array( $var_name, $search, true ) ) {
+					if ( isset( $search[ $var_name ] ) ) {
 						$this->process_variable_assignment( $ptr, true );
 					}
 				}
@@ -404,7 +387,7 @@ class GlobalVariablesOverrideSniff extends Sniff {
 				continue;
 			}
 
-			if ( \in_array( $this->tokens[ $ptr ]['content'], $search, true ) === false ) {
+			if ( isset( $search[ $this->tokens[ $ptr ]['content'] ] ) === false ) {
 				// Not one of the variables we're interested in.
 				continue;
 			}

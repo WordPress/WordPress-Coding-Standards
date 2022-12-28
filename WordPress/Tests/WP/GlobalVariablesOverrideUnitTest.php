@@ -62,6 +62,10 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					234 => 2,
 					239 => 3,
 					242 => 1,
+					252 => 1,
+					268 => 1,
+					292 => 1,
+					294 => 1,
 				);
 
 			case 'GlobalVariablesOverrideUnitTest.2.inc':

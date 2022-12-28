@@ -240,3 +240,57 @@ list( $active_signup, list( $s => $typenow, $GLOBALS['status'], ), $ignore ) = $
 
 // List with array assignments.
 [ $path[ $type ], , ] = $array; // Bad x 1.
+
+function use_of_globals_without_key() {
+	$keys = array_keys( $GLOBALS ); // OK, this is just about handling the $GLOBALS without a key.
+}
+
+function global_import_ended_by_close_tag_false_negative() {
+	global $pagenow ?>
+	<div>Some HTML</div>
+	<?php
+	$pagenow = 'test'; // Bad, global variable in function scope.
+}
+
+function global_import_ended_by_close_tag_false_positive() {
+	global $pagenow ?>
+	<div>Some HTML</div>
+	<?php
+	$post = '2016'; // Ok, non-global variable in function scope. Would previously be seen as part of the global statement...
+	$post = '2017'; // Ok, non-global variable in function scope.
+}
+
+// Safeguard correct handling of PHP 7.4+ arrow functions.
+$arrow = fn($urls = []) => $urls + ['extra']; // OK, default value assignment to arrow function parameter should be disregarded.
+
+function recognize_nullcoalesce_equals() {
+	global $tax;
+	$tax ??= 'other'; // Bad, potentially overrides the variable.
+}
+
+// Safeguard that assignments to properties using PHP 8.0+ constructor property promotion don't lead to false positives.
+class ConstructorPropertyPromotion {
+	public function __construct(
+		public int $timestart = 0,
+		protected int|bool $timeend = false,
+		$post = null
+	) {} // Ok.
+}
+
+/*
+ * Safeguard that assignment in PHP 8.1+ enums are treated correctly.
+ * Note: enums cannot contain property declaration.
+ */
+enum Suit: string implements Colorful {
+	case Hearts = 'H';
+	case Diamonds = 'D';
+	case Clubs = 'C';
+	case Spades = 'S';
+
+	public function color( $_wp_admin_css_colors = 'red' ): string { // OK, parameter, not the global variable.
+		global $status, $mode;
+		$status = 'something'; // Bad, global variable in function scope.
+		$post = '2017'; // Ok, non-global variable in function scope.
+		[$mode] = $array; // Bad, global variable in function scope.
+	}
+}
