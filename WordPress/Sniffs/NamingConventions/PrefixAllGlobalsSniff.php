@@ -446,10 +446,6 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							$error_text = 'Traits declared';
 							$error_code = 'NonPrefixedTraitFound';
 							break;
-
-						default:
-							// Left empty on purpose.
-							break;
 					}
 
 					break;
