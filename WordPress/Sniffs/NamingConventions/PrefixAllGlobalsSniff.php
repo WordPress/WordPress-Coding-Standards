@@ -473,7 +473,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					break;
 
 				case \T_CONST:
-					// Constants in a class do not need to be prefixed.
+					// Constants in an OO construct do not need to be prefixed.
 					if ( true === Scopes::isOOConstant( $this->phpcsFile, $stackPtr ) ) {
 						return;
 					}

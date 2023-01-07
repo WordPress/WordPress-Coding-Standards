@@ -618,4 +618,9 @@ enum AcronymExample { // OK.
 	}
 }
 
+// Safeguard that the sniff ignores PHP 8.2+ constants in traits correctly.
+trait Acronym_Has_Constant {
+	final const NON_PREFIXED = true; // OK.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
