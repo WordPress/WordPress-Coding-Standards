@@ -599,4 +599,23 @@ class Acronym_ConstructorPropertyPromotion {
 	) {} // Ok.
 }
 
+/*
+ * Safeguard that PHP 8.1+ enums are treated correctly.
+ */
+enum Example {} // Bad.
+enum Another_Example: int {} // Bad.
+
+enum Acronym: string implements SomeInterface {} // OK.
+enum AcronymExample { // OK.
+	// Constants and methods declared within an enum do not need to be prefixed. (Properties are not allowed)
+	const SOME_CONSTANT = 'value'; // OK.
+	public function do_something( $param = 'default' ) {} // OK x2.
+
+	// Global constants and hook names still do need to be prefixed when defined within an enum.
+	protected function hello() {
+		define( 'FOO', 'value' ); // Bad.
+		apply_filters( 'foo', $args ); // Bad.
+	}
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

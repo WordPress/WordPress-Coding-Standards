@@ -424,6 +424,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				case \T_CLASS:
 				case \T_INTERFACE:
 				case \T_TRAIT:
+				case \T_ENUM:
 					$item_name  = ObjectDeclarations::getName( $this->phpcsFile, $stackPtr );
 					$error_text = 'Classes declared';
 					$error_code = 'NonPrefixedClassFound';
@@ -455,6 +456,17 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 							$error_text = 'Traits declared';
 							$error_code = 'NonPrefixedTraitFound';
+							break;
+
+						case \T_ENUM:
+							// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.enum_existsFound
+							if ( function_exists( '\enum_exists' ) && enum_exists( '\\' . $item_name, false ) ) {
+								// Backfill for PHP native enum.
+								return;
+							}
+
+							$error_text = 'Enums declared';
+							$error_code = 'NonPrefixedEnumFound';
 							break;
 					}
 
