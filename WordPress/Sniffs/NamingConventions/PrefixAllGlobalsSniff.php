@@ -968,8 +968,13 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			// Validate the prefix against characters allowed for function, class, constant names etc.
-			if ( preg_match( '`^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\\\\]*$`', $prefix ) !== 1 ) {
+			/*
+			 * Validate the prefix against characters allowed for function, class, constant names etc.
+			 * Note: this does not use the PHPCSUtils `NamingConventions::isValidIdentifierName()` method
+			 * as we want to allow namespace separators in the prefixes.
+			 */
+			if ( preg_match( '`^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff\\\\]*$`', $prefix ) !== 1 ) {
+
 				$this->phpcsFile->addWarning(
 					'The "%s" prefix is not a valid namespace/function/class/variable/constant prefix in PHP.',
 					0,
