@@ -82,6 +82,8 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					464 => 2,
 					465 => 1,
 					468 => 1,
+					550 => 1,
+					551 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.4.inc':

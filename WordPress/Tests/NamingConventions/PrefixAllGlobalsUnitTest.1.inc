@@ -532,4 +532,24 @@ const E_DEPRECATED = 8192; // Introduced in PHP 5.3.0.
 
 apply_filters( /* name missing */, $var ); // Ignore as undetermined.
 
+/*
+ * Safeguard correct handling (ignoring) of PHP 7.4+ arrow functions.
+ */
+// Parameters in a arrow function declaration do not need to be prefixed.
+$acronym_fn = fn($foo = 10, $bar = 20) => $foo;
+
+// Variable variables local to the arrow function do not need to be prefixed.
+$acronym_fn = fn($acronym_name, $acronym_value) => $$acronym_name = $acronym_value;
+
+// Function local variables in a arrow function declaration do not need to be prefixed.
+$acronym_fn = fn($acronym_name, $acronym_value) => $new = $acronym_value;
+
+// The `$GLOBAL['my_key']` assignment and the function declaration within the closure should still be flagged.
+$acronym_fn = fn($a, $b) =>
+	$no_prefix = function($a, $b) { // The `$no_prefix` variable should be ignored.
+		$GLOBALS['my_key'] = 10; // Bad.
+		function named() {} // Bad.
+		return $a + $b;
+	};
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

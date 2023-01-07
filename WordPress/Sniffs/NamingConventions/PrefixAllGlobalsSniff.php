@@ -219,11 +219,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 		// Set the sniff targets.
 		$targets  = array(
-			\T_NAMESPACE        => \T_NAMESPACE,
-			\T_FUNCTION         => \T_FUNCTION,
-			\T_CONST            => \T_CONST,
-			\T_VARIABLE         => \T_VARIABLE,
-			\T_DOLLAR           => \T_DOLLAR, // Variable variables.
+			\T_NAMESPACE => \T_NAMESPACE,
+			\T_FUNCTION  => \T_FUNCTION,
+			\T_CONST     => \T_CONST,
+			\T_VARIABLE  => \T_VARIABLE,
+			\T_DOLLAR    => \T_DOLLAR, // Variable variables.
+			\T_FN_ARROW  => \T_FN_ARROW, // T_FN_ARROW is only used for skipping over (for now).
 		);
 		$targets += Tokens::$ooScopeTokens; // T_ANON_CLASS is only used for skipping over test classes.
 		$targets += Collections::listOpenTokensBC();
@@ -299,6 +300,29 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		if ( \T_ANON_CLASS === $this->tokens[ $stackPtr ]['code'] ) {
 			// Token was only registered to allow skipping over test classes.
 			return;
+		}
+
+		/*
+		 * Ignore the contents of arrow functions which do not declare closures.
+		 *
+		 * - Parameters declared by arrow functions do not need to be prefixed (handled elsewhere).
+		 * - New variables declared within an arrow function are local to the arrow function, so can be ignored.
+		 * - A `global` statement is not allowed within an arrow function.
+		 *
+		 * Note: this does mean some convoluted code may get ignored (false negatives), but this is currently
+		 * not reliably solvable as PHPCS does not add arrow functions to the 'conditions' array.
+		 */
+		if ( \T_FN_ARROW === $this->tokens[ $stackPtr ]['code']
+			&& isset( $this->tokens[ $stackPtr ]['scope_closer'] )
+		) {
+			$has_closure = $this->phpcsFile->findNext( \T_CLOSURE, ( $stackPtr + 1 ), $this->tokens[ $stackPtr ]['scope_closer'] );
+			if ( false !== $has_closure ) {
+				// Skip to the start of the closure.
+				return $has_closure;
+			}
+
+			// Skip the arrow function completely.
+			return $this->tokens[ $stackPtr ]['scope_closer'];
 		}
 
 		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
@@ -665,7 +689,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		} else {
 			// Function parameters do not need to be prefixed.
 			if ( false === $in_list ) {
-				$functionPtr = Parentheses::getLastOwner( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+				$functionPtr = Parentheses::getLastOwner( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
 				if ( false !== $functionPtr ) {
 					return;
 				}
