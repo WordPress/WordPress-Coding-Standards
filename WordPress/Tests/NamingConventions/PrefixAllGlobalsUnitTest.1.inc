@@ -590,4 +590,13 @@ do_action( /* test */ 'add_meta_boxes' );
 
 define( /* test */ 'FORCE_SSL_ADMIN', true );
 
+// Safeguard that assignments to properties using PHP 8.0+ constructor property promotion don't lead to false positives.
+class Acronym_ConstructorPropertyPromotion {
+	public function __construct(
+		public int $timestart = 0,
+		protected int|bool $timeend = false,
+		$post = null
+	) {} // Ok.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
