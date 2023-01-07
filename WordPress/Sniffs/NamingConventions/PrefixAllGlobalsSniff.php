@@ -385,8 +385,8 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$error_text = 'Unknown syntax used';
 			$error_code = 'NonPrefixedSyntaxFound';
 
-			switch ( $this->tokens[ $stackPtr ]['type'] ) {
-				case 'T_FUNCTION':
+			switch ( $this->tokens[ $stackPtr ]['code'] ) {
+				case \T_FUNCTION:
 					// Methods in a class do not need to be prefixed.
 					if ( $this->phpcsFile->hasCondition( $stackPtr, Tokens::$ooScopeTokens ) === true ) {
 						return;
@@ -411,22 +411,22 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					$error_code = 'NonPrefixedFunctionFound';
 					break;
 
-				case 'T_CLASS':
-				case 'T_INTERFACE':
-				case 'T_TRAIT':
+				case \T_CLASS:
+				case \T_INTERFACE:
+				case \T_TRAIT:
 					$item_name  = $this->phpcsFile->getDeclarationName( $stackPtr );
 					$error_text = 'Classes declared';
 					$error_code = 'NonPrefixedClassFound';
 
-					switch ( $this->tokens[ $stackPtr ]['type'] ) {
-						case 'T_CLASS':
+					switch ( $this->tokens[ $stackPtr ]['code'] ) {
+						case \T_CLASS:
 							if ( class_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native class.
 								return;
 							}
 							break;
 
-						case 'T_INTERFACE':
+						case \T_INTERFACE:
 							if ( interface_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native interface.
 								return;
@@ -436,7 +436,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 							$error_code = 'NonPrefixedInterfaceFound';
 							break;
 
-						case 'T_TRAIT':
+						case \T_TRAIT:
 							// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.trait_existsFound
 							if ( function_exists( '\trait_exists' ) && trait_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native trait.
@@ -454,7 +454,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 					break;
 
-				case 'T_CONST':
+				case \T_CONST:
 					// Constants in a class do not need to be prefixed.
 					if ( true === Scopes::isOOConstant( $this->phpcsFile, $stackPtr ) ) {
 						return;
