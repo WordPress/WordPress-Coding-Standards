@@ -192,11 +192,11 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$endOfStatement = $this->phpcsFile->findNext( \T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
+		$endOfStatement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), ( $stackPtr + 1 ) );
 
 		// Check for Database Schema Changes.
 		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
-			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
+			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement );
 			if ( false === $_pos ) {
 				break;
 			}

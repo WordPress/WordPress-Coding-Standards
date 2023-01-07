@@ -301,3 +301,9 @@ function ignore_comments() {
 		insert( 'table', array( 'column' => 'foo', 'field' => 'bar' ) ); // Warning direct DB call.
 }
 
+function correctly_determine_end_of_statement() {
+	global $wpdb;
+	$wpdb->get_col( $query, $col ) ?><-- Warning x 2 -->
+	<?php
+	$next_query = 'ALTER TABLE TO ADD SOME FIELDS' ); // Should not be flagged as not in a call to $wpdb.
+}

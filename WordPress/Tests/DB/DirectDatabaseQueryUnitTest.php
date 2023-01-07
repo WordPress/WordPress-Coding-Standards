@@ -88,6 +88,7 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 			287 => 2,
 			288 => 1,
 			300 => 1,
+			306 => 2,
 		);
 	}
 }
