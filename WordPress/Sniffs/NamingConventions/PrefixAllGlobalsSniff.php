@@ -724,7 +724,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				}
 
 				// Ok, this may be an imported global variable.
-				$end_of_statement = $this->phpcsFile->findNext( \T_SEMICOLON, ( $has_global + 1 ) );
+				$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), ( $has_global + 1 ) );
 				if ( false === $end_of_statement ) {
 					// No semi-colon - live coding.
 					return;

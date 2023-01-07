@@ -623,4 +623,15 @@ trait Acronym_Has_Constant {
 	final const NON_PREFIXED = true; // OK.
 }
 
+// Safeguard improved finding of end of global statement.
+function acronym_close_tag_can_end_global_statement() {
+	global $something, $acronym_else ?>
+
+	<?php
+	echo $breakOutOfTheStatement;
+	$acronym_else = 'value'; // OK.
+	$something = 'value'; // Bad.
+	$breakOutOfTheStatement = 'value'; // OK.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
