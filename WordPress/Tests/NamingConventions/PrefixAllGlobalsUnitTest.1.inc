@@ -584,4 +584,10 @@ apply_filters_ref_array( args: $var, hook_name: 'acronym_filter', ); // OK.
 apply_filters_ref_array( args: $var, hook_name: 'theme_filter', ); // Bad.
 apply_filters_ref_array( hook_name: 'theme_filter_' . $acronym_filter_var ); // Bad.
 
+// Safeguard that comments in the parameters are ignored.
+apply_filters( /* test */ 'widget_title', $title );
+do_action( /* test */ 'add_meta_boxes' );
+
+define( /* test */ 'FORCE_SSL_ADMIN', true );
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

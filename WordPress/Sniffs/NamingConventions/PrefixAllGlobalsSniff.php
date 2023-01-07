@@ -808,18 +808,18 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$is_error    = true;
-		$raw_content = TextStrings::stripQuotes( $target_param['raw'] );
+		$is_error      = true;
+		$clean_content = TextStrings::stripQuotes( $target_param['clean'] );
 
 		if ( ( 'define' !== $matched_content
-			&& isset( $this->allowed_core_hooks[ $raw_content ] ) )
+			&& isset( $this->allowed_core_hooks[ $clean_content ] ) )
 			|| ( 'define' === $matched_content
-			&& isset( $this->allowed_core_constants[ $raw_content ] ) )
+			&& isset( $this->allowed_core_constants[ $clean_content ] ) )
 		) {
 			return;
 		}
 
-		if ( $this->is_prefixed( $target_param['start'], $raw_content ) === true ) {
+		if ( $this->is_prefixed( $target_param['start'], $clean_content ) === true ) {
 			return;
 		} else {
 			// This may be a dynamic hook/constant name.
@@ -863,12 +863,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( 'define' === $matched_content ) {
-			if ( \defined( '\\' . $raw_content ) ) {
+			if ( \defined( '\\' . $clean_content ) ) {
 				// Backfill for PHP native constant.
 				return;
 			}
 
-			if ( strpos( $raw_content, '\\' ) !== false ) {
+			if ( strpos( $clean_content, '\\' ) !== false ) {
 				// Namespaced or unreachable constant.
 				return;
 			}
@@ -886,12 +886,12 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			}
 		}
 
-		$data[] = $raw_content;
+		$data[] = $clean_content;
 
 		$recorded = MessageHelper::addMessage( $this->phpcsFile, self::ERROR_MSG, $first_non_empty, $is_error, $error_code, $data );
 
 		if ( true === $recorded ) {
-			$this->record_potential_prefix_metric( $stackPtr, $raw_content );
+			$this->record_potential_prefix_metric( $stackPtr, $clean_content );
 		}
 	}
 
