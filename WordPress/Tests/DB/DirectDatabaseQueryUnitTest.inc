@@ -274,3 +274,9 @@ EOD
 		wp_cache_add( 'baz', $baz );
 	}
 }
+
+// Non-cachable call should bow out after `DirectQuery` warning.
+function non_cachable() {
+	global $wpdb;
+	$wpdb->insert( 'table', array( 'column' => 'foo', 'field' => 'bar' ) ); // Warning direct DB call.
+}
