@@ -552,4 +552,9 @@ $acronym_fn = fn($a, $b) =>
 		return $a + $b;
 	};
 
+// Safeguard that assignments using the PHP 7.4+ null coalesce equals operator are handled correctly.
+function acronym_null_coalesce_equals() {
+	$GLOBALS['my_key'] ??= 10; // Bad.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
