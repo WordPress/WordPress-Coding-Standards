@@ -557,4 +557,7 @@ function acronym_null_coalesce_equals() {
 	$GLOBALS['my_key'] ??= 10; // Bad.
 }
 
+// Safeguard that property assignments using the PHP 8.0 nullsafe object operator do not trigger false positives.
+$acronym_object??->property = 10;
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
