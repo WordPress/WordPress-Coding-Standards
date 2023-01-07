@@ -557,7 +557,31 @@ function acronym_null_coalesce_equals() {
 	$GLOBALS['my_key'] ??= 10; // Bad.
 }
 
-// Safeguard that property assignments using the PHP 8.0 nullsafe object operator do not trigger false positives.
+// Safeguard that property assignments using the PHP 8.0+ nullsafe object operator do not trigger false positives.
 $acronym_object??->property = 10;
+
+/*
+ * Safeguard support for function calls using PHP 8.0+ named parameters.
+ */
+define( value: 0 ); // OK. Well, not really as missing a required param, but that's not the concern of this sniff.
+define(
+	value        : 'not_prefixed',
+	constant_name: 'NOT_PREFIXED', // Bad.
+);
+define(
+	case_insensitive: true,
+	constant_name: 'ACRONYM_PREFIXED', // OK.
+	value: 0,
+);
+
+do_action_ref_array( hook: 'My-Hook', args: $args ); // OK. Well, not really, but using the wrong parameter name, so not our concern.
+do_action_ref_array( args: $args, hook_name: 'acronym_hook', ); // OK.
+do_action_ref_array( args: $args, hook_name: 'My-Hook', ); // Bad.
+do_action( hook_name: "acronym_plugin_action_{$acronym_filter_var}" ); // OK.
+
+apply_filters_ref_array( args: $args ); // OK. Well, not really, but missing required parameter, so not our concern.
+apply_filters_ref_array( args: $var, hook_name: 'acronym_filter', ); // OK.
+apply_filters_ref_array( args: $var, hook_name: 'theme_filter', ); // Bad.
+apply_filters_ref_array( hook_name: 'theme_filter_' . $acronym_filter_var ); // Bad.
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

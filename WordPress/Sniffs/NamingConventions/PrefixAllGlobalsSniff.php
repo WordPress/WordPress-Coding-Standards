@@ -20,6 +20,7 @@ use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Namespaces;
 use PHPCSUtils\Utils\Parentheses;
+use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use PHPCSUtils\Utils\Variables;
@@ -796,14 +797,19 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
+		if ( 'define' === $matched_content ) {
+			$target_param = PassedParameters::getParameterFromStack( $parameters, 1, 'constant_name' );
 
-		// No matter whether it is a constant definition or a hook call, both use the first parameter.
-		if ( ! isset( $parameters[1] ) ) {
+		} else {
+			$target_param = WPHookHelper::get_hook_name_param( $matched_content, $parameters );
+		}
+
+		if ( false === $target_param ) {
 			return;
 		}
 
 		$is_error    = true;
-		$raw_content = TextStrings::stripQuotes( $parameters[1]['raw'] );
+		$raw_content = TextStrings::stripQuotes( $target_param['raw'] );
 
 		if ( ( 'define' !== $matched_content
 			&& isset( $this->allowed_core_hooks[ $raw_content ] ) )
@@ -813,14 +819,14 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( $this->is_prefixed( $parameters[1]['start'], $raw_content ) === true ) {
+		if ( $this->is_prefixed( $target_param['start'], $raw_content ) === true ) {
 			return;
 		} else {
 			// This may be a dynamic hook/constant name.
 			$first_non_empty = $this->phpcsFile->findNext(
 				Tokens::$emptyTokens,
-				$parameters[1]['start'],
-				( $parameters[1]['end'] + 1 ),
+				$target_param['start'],
+				( $target_param['end'] + 1 ),
 				true
 			);
 
@@ -832,7 +838,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 			// Try again with just the first token if it's a text string.
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $first_non_empty ]['code'] ] )
-				&& $this->is_prefixed( $parameters[1]['start'], $first_non_empty_content ) === true
+				&& $this->is_prefixed( $target_param['start'], $first_non_empty_content ) === true
 			) {
 				return;
 			}
@@ -843,7 +849,7 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 				$exploded = explode( '$', $first_non_empty_content );
 				$first    = rtrim( $exploded[0], '{' );
 				if ( '' !== $first ) {
-					if ( $this->is_prefixed( $parameters[1]['start'], $first ) === true ) {
+					if ( $this->is_prefixed( $target_param['start'], $first ) === true ) {
 						return;
 					}
 				} else {
