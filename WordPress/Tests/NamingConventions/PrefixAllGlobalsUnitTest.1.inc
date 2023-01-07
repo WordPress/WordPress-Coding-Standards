@@ -519,4 +519,17 @@ function 😊_do_something(){}
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
 function 😊😊_do_something(){}
 
+// Reset to the standard test prefixes.
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
+
+if ( ! interface_exists( 'Serializable' ) ) {
+	interface Serializable {} // Introduced in PHP 5.1.0.
+}
+
+// Not wrapped in a `defined()` as the `const` keyword can only be used in the top-level scope.
+// Just presume the file containing this code is included conditionally ;-)
+const E_DEPRECATED = 8192; // Introduced in PHP 5.3.0.
+
+apply_filters( /* name missing */, $var ); // Ignore as undetermined.
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
