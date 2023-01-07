@@ -294,3 +294,10 @@ function stabilize_token_walking($other_db) {
 	// This test is making sure that the `$other_db->query` code is not flagged as if it were a call to a `$wpdb` method.
 	$wpdb = $other_db->query;
 }
+
+function ignore_comments() {
+	global $wpdb;
+	$wpdb-> // Let's pretend this is a method-chain (this is the comment which should not confuse the sniff).
+		insert( 'table', array( 'column' => 'foo', 'field' => 'bar' ) ); // Warning direct DB call.
+}
+
