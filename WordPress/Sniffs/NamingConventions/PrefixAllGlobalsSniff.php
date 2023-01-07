@@ -718,8 +718,10 @@ class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
 			if ( false !== $functionPtr ) {
 				$has_global = $this->phpcsFile->findPrevious( \T_GLOBAL, ( $stackPtr - 1 ), $this->tokens[ $functionPtr ]['scope_opener'] );
-				if ( false === $has_global ) {
-					// No variable import happening.
+				if ( false === $has_global
+					|| Conditions::getLastCondition( $this->phpcsFile, $has_global, Collections::functionDeclarationTokens() ) !== $functionPtr
+				) {
+					// No variable import happening in the current scope.
 					return;
 				}
 

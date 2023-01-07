@@ -634,4 +634,14 @@ function acronym_close_tag_can_end_global_statement() {
 	$breakOutOfTheStatement = 'value'; // OK.
 }
 
+// Safeguard improved checking if global statement is in the current scope.
+function acronym_only_check_global_statement_in_current_scope() {
+	$closure = function() {
+		global $something;
+		return $something;
+	};
+
+	$something = 'value'; // OK, global statement is in different scope.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
