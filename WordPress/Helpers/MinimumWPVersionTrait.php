@@ -100,8 +100,7 @@ trait MinimumWPVersionTrait {
 	/**
 	 * Compares two version numbers.
 	 *
-	 * Ensures that the version numbers are comparable via the PHP version_compare() function
-	 * by making sure they comply with the minimum "PHP-standardized" version number requirements.
+	 * @since 3.0.0
 	 *
 	 * @param string $version1 First version number.
 	 * @param string $version2 Second version number.
@@ -110,14 +109,31 @@ trait MinimumWPVersionTrait {
 	 * @return bool
 	 */
 	protected function wp_version_compare( $version1, $version2, $operator ) {
-		if ( preg_match( '`^\d+\.\d+$`', $version1 ) ) {
-			$version1 .= '.0';
-		}
-
-		if ( preg_match( '`^\d+\.\d+$`', $version2 ) ) {
-			$version2 .= '.0';
-		}
+		$version1 = $this->normalize_version_number( $version1 );
+		$version2 = $this->normalize_version_number( $version2 );
 
 		return version_compare( $version1, $version2, $operator );
+	}
+
+	/**
+	 * Normalize a version number.
+	 *
+	 * Ensures that a version number is comparable via the PHP version_compare() function
+	 * by making sure it complies with the minimum "PHP-standardized" version number requirements.
+	 *
+	 * Presumes the input is a numeric version number string. The behaviour with other input is undetermined.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $version Version number.
+	 *
+	 * @return string
+	 */
+	private function normalize_version_number( $version ) {
+		if ( preg_match( '`^\d+\.\d+$`', $version ) ) {
+			$version .= '.0';
+		}
+
+		return $version;
 	}
 }
