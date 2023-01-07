@@ -307,3 +307,13 @@ function correctly_determine_end_of_statement() {
 	<?php
 	$next_query = 'ALTER TABLE TO ADD SOME FIELDS' ); // Should not be flagged as not in a call to $wpdb.
 }
+
+function stay_silent_for_truncate_query() {
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare(
+			'TRUNCATE TABLE `%1$s`',
+			plugin_get_table_name( 'Name' )
+		)
+	);
+}

@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Conditions;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -194,11 +195,16 @@ class DirectDatabaseQuerySniff extends Sniff {
 
 		$endOfStatement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), ( $stackPtr + 1 ) );
 
-		// Check for Database Schema Changes.
+		// Check for Database Schema Changes/ table truncation.
 		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
 			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement );
 			if ( false === $_pos ) {
 				break;
+			}
+
+			if ( strpos( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ), 'TRUNCATE ' ) === 0 ) {
+				// Ignore queries to truncate the database as caching those is irrelevant and they need a direct db query.
+				return;
 			}
 
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
