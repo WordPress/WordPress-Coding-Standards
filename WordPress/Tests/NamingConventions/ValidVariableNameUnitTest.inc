@@ -127,7 +127,7 @@ echo "This is a $comment_ID"; // Bad
 echo "This is $PHP_SELF with $HTTP_RAW_POST_DATA"; // Ok.
 
 /*
- * Ignoring unit tests.
+ * Testing custom properties.
  */
 // phpcs:set WordPress.NamingConventions.ValidVariableName allowed_custom_properties[] varName,DOMProperty
 echo MyClass::$varName; // Ok, allowed.
