@@ -214,7 +214,7 @@ class PreparedSQLSniff extends Sniff {
 				) {
 
 					// Find the opening parenthesis.
-					$opening_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $this->i + 1 ), null, true, null, true );
+					$opening_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $this->i + 1 ), null, true );
 
 					if ( false !== $opening_paren
 						&& \T_OPEN_PARENTHESIS === $this->tokens[ $opening_paren ]['code']
