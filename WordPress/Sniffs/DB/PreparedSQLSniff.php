@@ -49,6 +49,38 @@ class PreparedSQLSniff extends Sniff {
 	);
 
 	/**
+	 * Functions that escape values for use in SQL queries.
+	 *
+	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
+	 * @since 3.0.0  - Moved from the Sniff class to this class.
+	 *               - The property visibility has changed from `protected` to `private`.
+	 *
+	 * @var array<string, bool>
+	 */
+	private $SQLEscapingFunctions = array(
+		'absint'      => true,
+		'esc_sql'     => true,
+		'floatval'    => true,
+		'intval'      => true,
+		'like_escape' => true,
+	);
+
+	/**
+	 * Functions whose output is automatically escaped for use in SQL queries.
+	 *
+	 * @since 0.9.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
+	 * @since 3.0.0  - Moved from the Sniff class to this class.
+	 *               - The property visibility has changed from `protected` to `private`.
+	 *
+	 * @var array<string, bool>
+	 */
+	private $SQLAutoEscapedFunctions = array(
+		'count' => true,
+	);
+
+	/**
 	 * Tokens that we don't flag when they are found in a $wpdb method call.
 	 *
 	 * @since 0.9.0
