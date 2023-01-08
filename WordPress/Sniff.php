@@ -381,34 +381,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * Functions that escape values for use in SQL queries.
-	 *
-	 * @since 0.9.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $SQLEscapingFunctions = array(
-		'absint'      => true,
-		'esc_sql'     => true,
-		'floatval'    => true,
-		'intval'      => true,
-		'like_escape' => true,
-	);
-
-	/**
-	 * Functions whose output is automatically escaped for use in SQL queries.
-	 *
-	 * @since 0.9.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $SQLAutoEscapedFunctions = array(
-		'count' => true,
-	);
-
-	/**
 	 * A list of superglobals that incorporate user input.
 	 *
 	 * @since 0.5.0

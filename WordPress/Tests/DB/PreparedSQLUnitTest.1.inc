@@ -120,5 +120,20 @@ $wpdb?->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "'
 WPDB::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
 $wpdb->Query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
 
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . {$foo} . ";" ); // Bad - on $foo, not on the {}.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . (array) $foo . ";" ); // Bad - on $foo, not on the (array).
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . -10 . ";" ); // OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . +1.0 . ";" ); // OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . 10 / 2.5 . ";" ); // OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . ++$foo . ";" ); // Bad - on $foo, not on the ++.
+
+// Safeguard handling of PHP 8.0+ nullsafe object operators found within a query.
+$wpdb->query( $wpdb->prepare( 'SELECT * FROM ' . $wpdb::TABLE_NAME . " WHERE post_title LIKE '%s';", '%something' ) ); // OK.
+$wpdb->query( $wpdb->prepare( 'SELECT * FROM ' . $notwpdb?->posts . " WHERE post_title LIKE '%s';", '%something' ) ); // Bad.
+
+// Safeguard handling of PHP 7.4+ numeric literals with undersocres and PHP 8.1 explicit octals.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . 10_000 . ";" ); // OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . 0o34 . ";" ); // OK.
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts
