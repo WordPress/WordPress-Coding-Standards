@@ -274,3 +274,46 @@ EOD
 		wp_cache_add( 'baz', $baz );
 	}
 }
+
+// Non-cachable call should bow out after `DirectQuery` warning.
+function non_cachable() {
+	global $wpdb;
+	$wpdb->insert( 'table', array( 'column' => 'foo', 'field' => 'bar' ) ); // Warning direct DB call.
+}
+
+// Safeguard recognition of PHP 8.0+ nullsafe object operator.
+function nullsafe_object_operator() {
+	global $wpdb;
+	$listofthings = $wpdb?->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning x 2.
+	$last = $wpdb?->insert( $wpdb->users, $data, $where ); // Warning x 1.
+}
+
+function stabilize_token_walking($other_db) {
+	global $wpdb;
+	// Overwritting $wpdb is bad, of course, but that's not the concern of this sniff.
+	// This test is making sure that the `$other_db->query` code is not flagged as if it were a call to a `$wpdb` method.
+	$wpdb = $other_db->query;
+}
+
+function ignore_comments() {
+	global $wpdb;
+	$wpdb-> // Let's pretend this is a method-chain (this is the comment which should not confuse the sniff).
+		insert( 'table', array( 'column' => 'foo', 'field' => 'bar' ) ); // Warning direct DB call.
+}
+
+function correctly_determine_end_of_statement() {
+	global $wpdb;
+	$wpdb->get_col( $query, $col ) ?><-- Warning x 2 -->
+	<?php
+	$next_query = 'ALTER TABLE TO ADD SOME FIELDS' ); // Should not be flagged as not in a call to $wpdb.
+}
+
+function stay_silent_for_truncate_query() {
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare(
+			'TRUNCATE TABLE `%1$s`',
+			plugin_get_table_name( 'Name' )
+		)
+	);
+}

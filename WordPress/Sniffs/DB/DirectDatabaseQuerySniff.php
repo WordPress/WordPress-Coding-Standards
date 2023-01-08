@@ -10,6 +10,9 @@
 namespace WordPressCS\WordPress\Sniffs\DB;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Conditions;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -172,12 +175,16 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$is_object_call = $this->phpcsFile->findNext( \T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
-		if ( false === $is_object_call ) {
-			return; // This is not a call to the wpdb object.
+		$is_object_call = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $is_object_call
+			|| ( \T_OBJECT_OPERATOR !== $this->tokens[ $is_object_call ]['code']
+				&& \T_NULLSAFE_OBJECT_OPERATOR !== $this->tokens[ $is_object_call ]['code'] )
+		) {
+			// This is not a call to the wpdb object.
+			return;
 		}
 
-		$methodPtr = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
+		$methodPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $is_object_call + 1 ), null, true );
 		$method    = $this->tokens[ $methodPtr ]['content'];
 
 		$this->mergeFunctionLists();
@@ -186,24 +193,18 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$endOfStatement   = $this->phpcsFile->findNext( \T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
-		$endOfLineComment = '';
-		for ( $i = ( $endOfStatement + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
+		$endOfStatement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), ( $stackPtr + 1 ) );
 
-			if ( $this->tokens[ $i ]['line'] !== $this->tokens[ $endOfStatement ]['line'] ) {
-				break;
-			}
-
-			if ( \T_COMMENT === $this->tokens[ $i ]['code'] ) {
-				$endOfLineComment .= $this->tokens[ $i ]['content'];
-			}
-		}
-
-		// Check for Database Schema Changes.
+		// Check for Database Schema Changes/ table truncation.
 		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
-			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
+			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement );
 			if ( false === $_pos ) {
 				break;
+			}
+
+			if ( strpos( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ), 'TRUNCATE ' ) === 0 ) {
+				// Ignore queries to truncate the database as caching those is irrelevant and they need a direct db query.
+				return;
 			}
 
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
@@ -219,36 +220,30 @@ class DirectDatabaseQuerySniff extends Sniff {
 
 		$cached       = false;
 		$wp_cache_get = false;
-		if ( ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
-			$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
 
-			if ( false === $scope_function ) {
-				$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-			}
+		$scope_function = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
+		if ( false !== $scope_function ) {
+			$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
+			$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
 
-			if ( false !== $scope_function ) {
-				$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
-				$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
+			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
+				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
-				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
-					if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-						if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
+							$cached = true;
+							break;
+						}
+					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-							if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
-								$cached = true;
-								break;
-							}
-						} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+						$wp_cache_get = true;
 
-							$wp_cache_get = true;
+					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-						} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
-
-							if ( $wp_cache_get ) {
-								$cached = true;
-								break;
-							}
+						if ( $wp_cache_get ) {
+							$cached = true;
+							break;
 						}
 					}
 				}
