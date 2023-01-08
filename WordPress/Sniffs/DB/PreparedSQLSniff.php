@@ -84,10 +84,11 @@ class PreparedSQLSniff extends Sniff {
 	 * Tokens that we don't flag when they are found in a $wpdb method call.
 	 *
 	 * @since 0.9.0
+	 * @since 3.0.0 The property visibility has changed from `protected` to `private`.
 	 *
 	 * @var array
 	 */
-	protected $ignored_tokens = array(
+	private $ignored_tokens = array(
 		\T_OBJECT_OPERATOR          => true,
 		\T_OPEN_PARENTHESIS         => true,
 		\T_CLOSE_PARENTHESIS        => true,
