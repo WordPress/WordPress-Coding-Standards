@@ -27,7 +27,7 @@ use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
  * @since   2.0.0  - Defers to the upstream `$phpReservedVars` property.
  *                 - Now offers name suggestions for variables in violation.
  *
- * Last synced with base class June 2018 at commit 78ddbae97cac078f09928bf89e3ab9e53ad2ace0.
+ * Last synced with base class January 2022 at commit 4b49a952bf0e2c3863d0a113256bae0d7fe63d52.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  *
  * @uses PHP_CodeSniffer\Sniffs\AbstractVariableSniff::$phpReservedVars

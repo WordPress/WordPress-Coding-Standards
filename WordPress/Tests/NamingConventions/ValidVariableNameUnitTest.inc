@@ -11,19 +11,19 @@ class MyClass {
 	var $_varName = 'hello'; // Bad.
 
 	public $varNamf  = 'hello'; // Bad.
-	public $var_namf = 'hello';
+	public bool $var_namf = 'hello';
 	public $varnamf  = 'hello';
 	public $_varNamf = 'hello'; // Bad.
 
 	protected $varNamg  = 'hello'; // Bad.
 	protected $var_namg = 'hello';
 	protected $varnamg  = 'hello';
-	protected $_varNamg = 'hello'; // Bad.
+	protected string $_varNamg = 'hello'; // Bad.
 
 	private $_varNamh  = 'hello'; // Bad.
 	private $_var_namh = 'hello';
 	private $_varnamh  = 'hello';
-	private $varNamh   = 'hello'; // Bad.
+	private int|string $varNamh   = 'hello'; // Bad.
 }
 
 echo $varName; // Bad.
