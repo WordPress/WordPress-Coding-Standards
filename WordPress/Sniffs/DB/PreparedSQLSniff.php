@@ -90,12 +90,8 @@ class PreparedSQLSniff extends Sniff {
 	 */
 	private $ignored_tokens = array(
 		\T_OBJECT_OPERATOR          => true,
-		\T_OPEN_PARENTHESIS         => true,
-		\T_CLOSE_PARENTHESIS        => true,
 		\T_STRING_CONCAT            => true,
 		\T_CONSTANT_ENCAPSED_STRING => true,
-		\T_OPEN_SQUARE_BRACKET      => true,
-		\T_CLOSE_SQUARE_BRACKET     => true,
 		\T_COMMA                    => true,
 		\T_LNUMBER                  => true,
 		\T_START_HEREDOC            => true,
@@ -139,7 +135,8 @@ class PreparedSQLSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-
+		// Enrich the array of tokens which can be safely ignored.
+		$this->ignored_tokens += Tokens::$bracketTokens;
 		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		return array(
