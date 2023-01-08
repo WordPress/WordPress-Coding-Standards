@@ -9,9 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
 
@@ -199,21 +200,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @return void
 	 */
 	protected function processMemberVar( File $phpcs_file, $stack_ptr ) {
-
-		$tokens = $phpcs_file->getTokens();
-
-		$var_name     = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
-		$member_props = $phpcs_file->getMemberProperties( $stack_ptr );
-		if ( empty( $member_props ) ) {
-			// Couldn't get any info about this variable, which
-			// generally means it is invalid or possibly has a parse
-			// error. Any errors will be reported by the core, so
-			// we can ignore it.
+		// Make sure this is actually an OO property and not an OO method parameter or illegal property declaration.
+		if ( Scopes::isOOProperty( $phpcs_file, $stack_ptr ) === false ) {
 			return;
 		}
 
 		// Merge any custom variables with the defaults.
 		$this->merge_allow_lists();
+
+		$tokens   = $phpcs_file->getTokens();
+		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
 		if ( ! isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
 			$error = 'Member variable "$%s" is not in valid snake_case format, try "$%s"';

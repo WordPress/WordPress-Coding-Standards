@@ -95,7 +95,7 @@ echo $comment->comment_author_IP;
 class Foo {
 	public $_public_leading_underscore;
 	private $private_no_underscore_loading;
-	
+
 	function Bar( $VARname ) { // Bad.
 		$localVariable = false; // Bad.
 		echo Some_Class::$VarName; // Bad.
@@ -176,7 +176,7 @@ class MultiVarDeclarations {
 		$multiVar5 = false, // Bad.
 		$multiVar6 = 123, // Bad.
 		$multi_var7 = 'string'; // Ok.
-		
+
 	public function testMultiGlobalAndStatic() {
 		global $multiGlobal1, $multi_global2, // Bad x 1.
 			$multiGlobal3; // Bad.
@@ -188,3 +188,8 @@ class MultiVarDeclarations {
 }
 
 echo "This is $post_ID with $ThisShouldBeFlagged"; // Bad.
+
+// Safeguard that illegal property declarations are ignored.
+interface PropertiesNotAllowed {
+	public $notAllowed;
+}
