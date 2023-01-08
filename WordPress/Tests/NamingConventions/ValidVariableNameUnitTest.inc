@@ -211,3 +211,9 @@ $arrow = fn ( $without_default, $with_default = 'default' ) => 10; // OK.
 function has_params( $withoutDefault, $withDefault = 'default' ) {} // Bad x 2.
 $closure = function ( $withoutDefault, $withDefault = 'default' ) {}; // Bad x 2.
 $arrow = fn ( $withoutDefault, $withDefault = 'default' ) => 10; // Bad x 2.
+
+// Safeguard recognizing property access using PHP 8.0 nullsafe operator.
+echo $this?->varName2; // Bad.
+echo $this?->var_name2;
+echo $this?->varname2;
+echo $this?->_varName2; // Bad.

@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use PHPCSUtils\Utils\Variables;
@@ -126,7 +127,9 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		}
 
 		$obj_operator = $phpcs_file->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
-		if ( \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+		if ( \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code']
+			|| \T_NULLSAFE_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code']
+		) {
 			// Check to see if we are using a variable from an object.
 			$var = $phpcs_file->findNext( Tokens::$emptyTokens, ( $obj_operator + 1 ), null, true );
 			if ( \T_STRING === $tokens[ $var ]['code'] ) {
@@ -156,7 +159,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 		$in_class     = false;
 		$obj_operator = $phpcs_file->findPrevious( Tokens::$emptyTokens, ( $stack_ptr - 1 ), null, true );
-		if ( \T_DOUBLE_COLON === $tokens[ $obj_operator ]['code'] || \T_OBJECT_OPERATOR === $tokens[ $obj_operator ]['code'] ) {
+		if ( isset( Collections::objectOperators()[ $tokens[ $obj_operator ]['code'] ] ) ) {
 			// The variable lives within a class, and is referenced like
 			// this: MyClass::$_variable or $class->variable.
 			$in_class = true;
@@ -300,5 +303,4 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			$this->addedCustomProperties['properties'] = $this->allowed_custom_properties;
 		}
 	}
-
 }

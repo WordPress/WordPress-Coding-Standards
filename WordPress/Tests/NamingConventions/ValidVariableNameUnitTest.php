@@ -90,6 +90,8 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 			211 => 2,
 			212 => 2,
 			213 => 2,
+			216 => 1,
+			219 => 1,
 		);
 	}
 
