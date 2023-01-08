@@ -99,9 +99,6 @@ class PreparedSQLSniff extends Sniff {
 		\T_START_NOWDOC             => true,
 		\T_NOWDOC                   => true,
 		\T_END_NOWDOC               => true,
-		\T_INT_CAST                 => true,
-		\T_DOUBLE_CAST              => true,
-		\T_BOOL_CAST                => true,
 		\T_NS_SEPARATOR             => true,
 	);
 
@@ -137,6 +134,7 @@ class PreparedSQLSniff extends Sniff {
 	public function register() {
 		// Enrich the array of tokens which can be safely ignored.
 		$this->ignored_tokens += Tokens::$bracketTokens;
+		$this->ignored_tokens += Tokens::$castTokens;
 		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		return array(
