@@ -83,8 +83,6 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @since 0.8.0
-	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {

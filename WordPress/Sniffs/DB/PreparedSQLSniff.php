@@ -38,7 +38,7 @@ class PreparedSQLSniff extends Sniff {
 	 * @since 0.8.0
 	 * @since 0.11.0 Changed from static to non-static.
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	protected $methods = array(
 		'get_var'     => true,
@@ -83,6 +83,8 @@ class PreparedSQLSniff extends Sniff {
 
 	/**
 	 * Tokens that we don't flag when they are found in a $wpdb method call.
+	 *
+	 * This token array is augmented from within the register() method.
 	 *
 	 * @since 0.9.0
 	 * @since 3.0.0 The property visibility has changed from `protected` to `private`.
@@ -218,7 +220,7 @@ class PreparedSQLSniff extends Sniff {
 						&& \T_OPEN_PARENTHESIS === $this->tokens[ $opening_paren ]['code']
 						&& isset( $this->tokens[ $opening_paren ]['parenthesis_closer'] )
 					) {
-						// Skip past the end of the function.
+						// Skip past to the end of the function call.
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
