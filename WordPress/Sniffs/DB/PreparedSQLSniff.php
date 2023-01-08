@@ -90,7 +90,6 @@ class PreparedSQLSniff extends Sniff {
 	 * @var array
 	 */
 	private $ignored_tokens = array(
-		\T_OBJECT_OPERATOR          => true,
 		\T_STRING_CONCAT            => true,
 		\T_CONSTANT_ENCAPSED_STRING => true,
 		\T_COMMA                    => true,
@@ -135,6 +134,7 @@ class PreparedSQLSniff extends Sniff {
 		$this->ignored_tokens += Tokens::$castTokens;
 		$this->ignored_tokens += Tokens::$arithmeticTokens;
 		$this->ignored_tokens += Collections::incrementDecrementOperators();
+		$this->ignored_tokens += Collections::objectOperators();
 		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		// The contents of heredoc tokens needs to be examined.

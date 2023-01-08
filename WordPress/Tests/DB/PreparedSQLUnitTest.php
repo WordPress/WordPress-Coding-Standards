@@ -60,6 +60,7 @@ class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 			123 => 1,
 			124 => 1,
 			128 => 1,
+			132 => 2,
 		);
 	}
 
