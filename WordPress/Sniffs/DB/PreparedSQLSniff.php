@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\DB;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\WPDBTrait;
 use WordPressCS\WordPress\Sniff;
@@ -133,6 +134,7 @@ class PreparedSQLSniff extends Sniff {
 		$this->ignored_tokens += Tokens::$heredocTokens;
 		$this->ignored_tokens += Tokens::$castTokens;
 		$this->ignored_tokens += Tokens::$arithmeticTokens;
+		$this->ignored_tokens += Collections::incrementDecrementOperators();
 		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		// The contents of heredoc tokens needs to be examined.
