@@ -94,11 +94,6 @@ class PreparedSQLSniff extends Sniff {
 		\T_CONSTANT_ENCAPSED_STRING => true,
 		\T_COMMA                    => true,
 		\T_LNUMBER                  => true,
-		\T_START_HEREDOC            => true,
-		\T_END_HEREDOC              => true,
-		\T_START_NOWDOC             => true,
-		\T_NOWDOC                   => true,
-		\T_END_NOWDOC               => true,
 		\T_NS_SEPARATOR             => true,
 	);
 
@@ -134,8 +129,12 @@ class PreparedSQLSniff extends Sniff {
 	public function register() {
 		// Enrich the array of tokens which can be safely ignored.
 		$this->ignored_tokens += Tokens::$bracketTokens;
+		$this->ignored_tokens += Tokens::$heredocTokens;
 		$this->ignored_tokens += Tokens::$castTokens;
 		$this->ignored_tokens += Tokens::$emptyTokens;
+
+		// The contents of heredoc tokens needs to be examined.
+		unset( $this->ignored_tokens[ \T_HEREDOC ] );
 
 		return array(
 			\T_VARIABLE,
