@@ -122,6 +122,9 @@ $wpdb->Query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';
 
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . {$foo} . ";" ); // Bad - on $foo, not on the {}.
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . (array) $foo . ";" ); // Bad - on $foo, not on the (array).
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . -10 . ";" ); // OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . +1.0 . ";" ); // OK.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . 10 / 2.5 . ";" ); // OK.
 
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts

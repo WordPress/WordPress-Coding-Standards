@@ -94,6 +94,7 @@ class PreparedSQLSniff extends Sniff {
 		\T_CONSTANT_ENCAPSED_STRING => true,
 		\T_COMMA                    => true,
 		\T_LNUMBER                  => true,
+		\T_DNUMBER                  => true,
 		\T_NS_SEPARATOR             => true,
 	);
 
@@ -131,6 +132,7 @@ class PreparedSQLSniff extends Sniff {
 		$this->ignored_tokens += Tokens::$bracketTokens;
 		$this->ignored_tokens += Tokens::$heredocTokens;
 		$this->ignored_tokens += Tokens::$castTokens;
+		$this->ignored_tokens += Tokens::$arithmeticTokens;
 		$this->ignored_tokens += Tokens::$emptyTokens;
 
 		// The contents of heredoc tokens needs to be examined.
