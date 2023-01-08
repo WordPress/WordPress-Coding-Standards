@@ -83,7 +83,7 @@ fputs(); // Warning.
 parse_url( 'http://example.com/' ); // OK, alternative was not yet available.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.4
 parse_url( 'http://example.com/' ); // Warning, not using $component param, so can switch over.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version
 
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
 parse_url($url, PHP_URL_QUERY); // OK, alternative was not yet available.
@@ -91,7 +91,7 @@ parse_url($url, PHP_URL_QUERY); // OK, alternative was not yet available.
 parse_url($url, PHP_URL_QUERY); // OK, $component param not yet available.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
 parse_url($url, PHP_URL_SCHEME); // Warning, using $component param, but also using WP 4.7+, so can switch over.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version
 
 /*
  * Tests for support for PHP 8.0+ named parameters.
@@ -108,7 +108,7 @@ parse_url(component : PHP_URL_QUERY, url : $url); // OK.
 parse_url(url : $url); // Warning.
 // phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
 parse_url(component: PHP_URL_SCHEME, url: $url, ); // Warning.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 5.8
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version
 
 // Safeguard support for PHP 8.0+ named parameters for the custom logic related to file_get_contents().
 file_get_contents( use_include_path: true, filename: $local_file, ); // OK.

@@ -68,7 +68,22 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_wp_version = '5.8';
+	public $minimum_wp_version;
+
+	/**
+	 * Default minimum supported WordPress version.
+	 *
+	 * By default, the minimum_wp_version presumes that a project will support the current
+	 * WP version and up to three releases before.
+	 *
+	 * {@internal This should be a constant, but constants in traits are not supported
+	 *            until PHP 8.2.}}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string WordPress version.
+	 */
+	private $default_minimum_wp_version = '5.8';
 
 	/**
 	 * Overrule the minimum supported WordPress version with a command-line/config value.
@@ -83,18 +98,25 @@ trait MinimumWPVersionTrait {
 	 *               - Renamed from `get_wp_version_from_cl()` to `get_wp_version_from_cli()`.
 	 */
 	protected function get_wp_version_from_cli() {
+		$minimum_wp_version = '';
+
+		// Use a ruleset provided value if available.
+		if ( ! empty( $this->minimum_wp_version ) ) {
+			$minimum_wp_version = $this->minimum_wp_version;
+		}
+
+		// A CLI provided value overrules a ruleset provided value.
 		$cli_supported_version = Helper::getConfigData( 'minimum_wp_version' );
-
-		if ( empty( $cli_supported_version ) ) {
-			return;
+		if ( ! empty( $cli_supported_version ) ) {
+			$minimum_wp_version = $cli_supported_version;
 		}
 
-		$cli_supported_version = trim( $cli_supported_version );
-		if ( ! empty( $cli_supported_version )
-			&& filter_var( $cli_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
-		) {
-			$this->minimum_wp_version = $cli_supported_version;
+		// If no valid value was provided, use the default.
+		if ( filter_var( $minimum_wp_version, \FILTER_VALIDATE_FLOAT ) === false ) {
+			$minimum_wp_version = $this->default_minimum_wp_version;
 		}
+
+		$this->minimum_wp_version = $minimum_wp_version;
 	}
 
 	/**
