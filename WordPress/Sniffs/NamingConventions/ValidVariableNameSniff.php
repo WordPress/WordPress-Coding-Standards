@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Scopes;
+use PHPCSUtils\Utils\Variables;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
 
@@ -25,13 +26,10 @@ use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
  *
  * @since   0.9.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   2.0.0  - Defers to the upstream `$phpReservedVars` property.
- *                 - Now offers name suggestions for variables in violation.
+ * @since   2.0.0  Now offers name suggestions for variables in violation.
  *
  * Last synced with base class January 2022 at commit 4b49a952bf0e2c3863d0a113256bae0d7fe63d52.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
- *
- * @uses PHP_CodeSniffer\Sniffs\AbstractVariableSniff::$phpReservedVars
  */
 class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
@@ -109,17 +107,17 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @return void
 	 */
 	protected function processVariable( File $phpcs_file, $stack_ptr ) {
-
-		$tokens   = $phpcs_file->getTokens();
-		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
+		$tokens = $phpcs_file->getTokens();
 
 		// If it's a php reserved var, then its ok.
-		if ( isset( $this->phpReservedVars[ $var_name ] ) ) {
+		if ( Variables::isPHPReservedVarName( $tokens[ $stack_ptr ]['content'] ) ) {
 			return;
 		}
 
 		// Merge any custom variables with the defaults.
 		$this->merge_allow_lists();
+
+		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
 		// Likewise if it is a mixed-case var used by WordPress core.
 		if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
@@ -241,7 +239,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 			foreach ( $matches[1] as $var_name ) {
 				// If it's a php reserved var, then its ok.
-				if ( isset( $this->phpReservedVars[ $var_name ] ) ) {
+				if ( Variables::isPHPReservedVarName( $var_name ) ) {
 					continue;
 				}
 
