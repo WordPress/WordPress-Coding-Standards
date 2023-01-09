@@ -97,7 +97,7 @@ class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->get_wp_version_from_cli();
+		$this->set_minimum_wp_version();
 
 		$class_name = ltrim( strtolower( $matched_content ), '\\' );
 

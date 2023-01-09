@@ -17,7 +17,7 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * Usage instructions:
  * - Add appropriate `use` statement(s) to the file/class which intends to use this functionality.
- * - Call the `MinimumWPVersionTrait::get_wp_version_from_cli()` method in the `process()`/`process_token()`
+ * - Call the `MinimumWPVersionTrait::set_minimum_wp_version()` method in the `process()`/`process_token()`
  *   method.
  * - After that, the `MinimumWPVersionTrait::$minimum_wp_version` property can be freely used
  *   in the sniff.
@@ -95,9 +95,9 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @since 0.14.0
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
-	 *               - Renamed from `get_wp_version_from_cl()` to `get_wp_version_from_cli()`.
+	 *               - Renamed from `get_wp_version_from_cl()` to `set_minimum_wp_version()`.
 	 */
-	protected function get_wp_version_from_cli() {
+	protected function set_minimum_wp_version() {
 		$minimum_wp_version = '';
 
 		// Use a ruleset provided value if available.

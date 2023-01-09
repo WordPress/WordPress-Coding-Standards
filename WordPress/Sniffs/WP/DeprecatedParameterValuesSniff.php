@@ -224,7 +224,7 @@ class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$this->get_wp_version_from_cli();
+		$this->set_minimum_wp_version();
 
 		foreach ( $this->target_functions[ $matched_content ] as $position => $parameter_args ) {
 			$found_param = PassedParameters::getParameterFromStack( $parameters, $position, $parameter_args['name'] );
