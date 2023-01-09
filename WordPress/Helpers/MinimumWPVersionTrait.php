@@ -17,7 +17,7 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * Usage instructions:
  * - Add appropriate `use` statement(s) to the file/class which intends to use this functionality.
- * - Call the `MinimumWPVersionTrait::get_wp_version_from_cli()` method in the `process()`/`process_token()`
+ * - Call the `MinimumWPVersionTrait::set_minimum_wp_version()` method in the `process()`/`process_token()`
  *   method.
  * - After that, the `MinimumWPVersionTrait::$minimum_wp_version` property can be freely used
  *   in the sniff.
@@ -68,7 +68,22 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @var string WordPress version.
 	 */
-	public $minimum_wp_version = '5.8';
+	public $minimum_wp_version;
+
+	/**
+	 * Default minimum supported WordPress version.
+	 *
+	 * By default, the minimum_wp_version presumes that a project will support the current
+	 * WP version and up to three releases before.
+	 *
+	 * {@internal This should be a constant, but constants in traits are not supported
+	 *            until PHP 8.2.}}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string WordPress version.
+	 */
+	private $default_minimum_wp_version = '5.8';
 
 	/**
 	 * Overrule the minimum supported WordPress version with a command-line/config value.
@@ -80,28 +95,34 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @since 0.14.0
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
-	 *               - Renamed from `get_wp_version_from_cl()` to `get_wp_version_from_cli()`.
+	 *               - Renamed from `get_wp_version_from_cl()` to `set_minimum_wp_version()`.
 	 */
-	protected function get_wp_version_from_cli() {
+	protected function set_minimum_wp_version() {
+		$minimum_wp_version = '';
+
+		// Use a ruleset provided value if available.
+		if ( ! empty( $this->minimum_wp_version ) ) {
+			$minimum_wp_version = $this->minimum_wp_version;
+		}
+
+		// A CLI provided value overrules a ruleset provided value.
 		$cli_supported_version = Helper::getConfigData( 'minimum_wp_version' );
-
-		if ( empty( $cli_supported_version ) ) {
-			return;
+		if ( ! empty( $cli_supported_version ) ) {
+			$minimum_wp_version = $cli_supported_version;
 		}
 
-		$cli_supported_version = trim( $cli_supported_version );
-		if ( ! empty( $cli_supported_version )
-			&& filter_var( $cli_supported_version, \FILTER_VALIDATE_FLOAT ) !== false
-		) {
-			$this->minimum_wp_version = $cli_supported_version;
+		// If no valid value was provided, use the default.
+		if ( filter_var( $minimum_wp_version, \FILTER_VALIDATE_FLOAT ) === false ) {
+			$minimum_wp_version = $this->default_minimum_wp_version;
 		}
+
+		$this->minimum_wp_version = $minimum_wp_version;
 	}
 
 	/**
 	 * Compares two version numbers.
 	 *
-	 * Ensures that the version numbers are comparable via the PHP version_compare() function
-	 * by making sure they comply with the minimum "PHP-standardized" version number requirements.
+	 * @since 3.0.0
 	 *
 	 * @param string $version1 First version number.
 	 * @param string $version2 Second version number.
@@ -110,14 +131,31 @@ trait MinimumWPVersionTrait {
 	 * @return bool
 	 */
 	protected function wp_version_compare( $version1, $version2, $operator ) {
-		if ( preg_match( '`^\d+\.\d+$`', $version1 ) ) {
-			$version1 .= '.0';
-		}
-
-		if ( preg_match( '`^\d+\.\d+$`', $version2 ) ) {
-			$version2 .= '.0';
-		}
+		$version1 = $this->normalize_version_number( $version1 );
+		$version2 = $this->normalize_version_number( $version2 );
 
 		return version_compare( $version1, $version2, $operator );
+	}
+
+	/**
+	 * Normalize a version number.
+	 *
+	 * Ensures that a version number is comparable via the PHP version_compare() function
+	 * by making sure it complies with the minimum "PHP-standardized" version number requirements.
+	 *
+	 * Presumes the input is a numeric version number string. The behaviour with other input is undetermined.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $version Version number.
+	 *
+	 * @return string
+	 */
+	private function normalize_version_number( $version ) {
+		if ( preg_match( '`^\d+\.\d+$`', $version ) ) {
+			$version .= '.0';
+		}
+
+		return $version;
 	}
 }

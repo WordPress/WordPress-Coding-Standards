@@ -323,7 +323,7 @@ class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
 
-		$this->get_wp_version_from_cli();
+		$this->set_minimum_wp_version();
 
 		$paramCount = \count( $parameters );
 		foreach ( $this->target_functions[ $matched_content ] as $position => $parameter_args ) {
