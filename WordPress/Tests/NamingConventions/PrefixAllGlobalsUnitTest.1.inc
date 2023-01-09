@@ -519,4 +519,129 @@ function 😊_do_something(){}
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
 function 😊😊_do_something(){}
 
+// Reset to the standard test prefixes.
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
+
+if ( ! interface_exists( 'Serializable' ) ) {
+	interface Serializable {} // Introduced in PHP 5.1.0.
+}
+
+// Not wrapped in a `defined()` as the `const` keyword can only be used in the top-level scope.
+// Just presume the file containing this code is included conditionally ;-)
+const E_DEPRECATED = 8192; // Introduced in PHP 5.3.0.
+
+apply_filters( /* name missing */, $var ); // Ignore as undetermined.
+
+/*
+ * Safeguard correct handling (ignoring) of PHP 7.4+ arrow functions.
+ */
+// Parameters in a arrow function declaration do not need to be prefixed.
+$acronym_fn = fn($foo = 10, $bar = 20) => $foo;
+
+// Variable variables local to the arrow function do not need to be prefixed.
+$acronym_fn = fn($acronym_name, $acronym_value) => $$acronym_name = $acronym_value;
+
+// Function local variables in a arrow function declaration do not need to be prefixed.
+$acronym_fn = fn($acronym_name, $acronym_value) => $new = $acronym_value;
+
+// The `$GLOBAL['my_key']` assignment and the function declaration within the closure should still be flagged.
+$acronym_fn = fn($a, $b) =>
+	$no_prefix = function($a, $b) { // The `$no_prefix` variable should be ignored.
+		$GLOBALS['my_key'] = 10; // Bad.
+		function named() {} // Bad.
+		return $a + $b;
+	};
+
+// Safeguard that assignments using the PHP 7.4+ null coalesce equals operator are handled correctly.
+function acronym_null_coalesce_equals() {
+	$GLOBALS['my_key'] ??= 10; // Bad.
+}
+
+// Safeguard that property assignments using the PHP 8.0+ nullsafe object operator do not trigger false positives.
+$acronym_object??->property = 10;
+
+/*
+ * Safeguard support for function calls using PHP 8.0+ named parameters.
+ */
+define( value: 0 ); // OK. Well, not really as missing a required param, but that's not the concern of this sniff.
+define(
+	value        : 'not_prefixed',
+	constant_name: 'NOT_PREFIXED', // Bad.
+);
+define(
+	case_insensitive: true,
+	constant_name: 'ACRONYM_PREFIXED', // OK.
+	value: 0,
+);
+
+do_action_ref_array( hook: 'My-Hook', args: $args ); // OK. Well, not really, but using the wrong parameter name, so not our concern.
+do_action_ref_array( args: $args, hook_name: 'acronym_hook', ); // OK.
+do_action_ref_array( args: $args, hook_name: 'My-Hook', ); // Bad.
+do_action( hook_name: "acronym_plugin_action_{$acronym_filter_var}" ); // OK.
+
+apply_filters_ref_array( args: $args ); // OK. Well, not really, but missing required parameter, so not our concern.
+apply_filters_ref_array( args: $var, hook_name: 'acronym_filter', ); // OK.
+apply_filters_ref_array( args: $var, hook_name: 'theme_filter', ); // Bad.
+apply_filters_ref_array( hook_name: 'theme_filter_' . $acronym_filter_var ); // Bad.
+
+// Safeguard that comments in the parameters are ignored.
+apply_filters( /* test */ 'widget_title', $title );
+do_action( /* test */ 'add_meta_boxes' );
+
+define( /* test */ 'FORCE_SSL_ADMIN', true );
+
+// Safeguard that assignments to properties using PHP 8.0+ constructor property promotion don't lead to false positives.
+class Acronym_ConstructorPropertyPromotion {
+	public function __construct(
+		public int $timestart = 0,
+		protected int|bool $timeend = false,
+		$post = null
+	) {} // Ok.
+}
+
+/*
+ * Safeguard that PHP 8.1+ enums are treated correctly.
+ */
+enum Example {} // Bad.
+enum Another_Example: int {} // Bad.
+
+enum Acronym: string implements SomeInterface {} // OK.
+enum AcronymExample { // OK.
+	// Constants and methods declared within an enum do not need to be prefixed. (Properties are not allowed)
+	const SOME_CONSTANT = 'value'; // OK.
+	public function do_something( $param = 'default' ) {} // OK x2.
+
+	// Global constants and hook names still do need to be prefixed when defined within an enum.
+	protected function hello() {
+		define( 'FOO', 'value' ); // Bad.
+		apply_filters( 'foo', $args ); // Bad.
+	}
+}
+
+// Safeguard that the sniff ignores PHP 8.2+ constants in traits correctly.
+trait Acronym_Has_Constant {
+	final const NON_PREFIXED = true; // OK.
+}
+
+// Safeguard improved finding of end of global statement.
+function acronym_close_tag_can_end_global_statement() {
+	global $something, $acronym_else ?>
+
+	<?php
+	echo $breakOutOfTheStatement;
+	$acronym_else = 'value'; // OK.
+	$something = 'value'; // Bad.
+	$breakOutOfTheStatement = 'value'; // OK.
+}
+
+// Safeguard improved checking if global statement is in the current scope.
+function acronym_only_check_global_statement_in_current_scope() {
+	$closure = function() {
+		global $something;
+		return $something;
+	};
+
+	$something = 'value'; // OK, global statement is in different scope.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

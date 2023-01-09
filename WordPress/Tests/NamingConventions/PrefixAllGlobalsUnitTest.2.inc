@@ -17,4 +17,6 @@ trait T_Example {}
 // Issue #1056.
 define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
 
+enum E_Example {}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
