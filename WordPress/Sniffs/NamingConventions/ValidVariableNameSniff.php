@@ -251,7 +251,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 				// Likewise if it is a mixed-case var used by WordPress core.
 				if ( isset( $this->wordpress_mixed_case_vars[ $var_name ] ) ) {
-					return;
+					continue;
 				}
 
 				if ( false === self::isSnakeCase( $var_name ) ) {

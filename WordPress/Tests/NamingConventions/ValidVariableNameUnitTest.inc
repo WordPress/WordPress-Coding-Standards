@@ -186,3 +186,5 @@ class MultiVarDeclarations {
 			$multiStatic3 = ''; // Bad.
 	}
 }
+
+echo "This is $post_ID with $ThisShouldBeFlagged"; // Bad.
