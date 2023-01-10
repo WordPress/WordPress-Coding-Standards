@@ -43,6 +43,9 @@ class AssignmentInTernaryConditionUnitTest extends AbstractSniffUnitTest {
 			16 => 1,
 			17 => 2,
 			18 => 3,
+			51 => 2,
+			53 => 1,
+			54 => 1,
 		);
 	}
 }

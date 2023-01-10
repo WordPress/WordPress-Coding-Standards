@@ -41,3 +41,14 @@ $content = preg_replace_callback(
 	},
 	$content
 );
+
+$array = array(
+	'key' => $key = true ?: $alt // OK, well, not really, but currently not checked for lack of usable parenthesis start/end points.
+);
+
+$mode = ( isOn() = true ) ? 'on' : 'off'; // OK, well, not really, but this is a fatal error, so not the concern of this sniff.
+
+$mode = ( $a = $b = 'on' ) ? 'on' : 'off'; // Multi-assignment. Error x 2.
+
+$mode = ( $a['key'] = 'on' ) ? 'on' : 'off'; // Bad.
+$mode = ( $a->prop = 'on' ) ? 'on' : 'off'; // Bad.
