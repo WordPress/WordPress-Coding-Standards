@@ -9,8 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Parentheses;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Detects variable assignments being made within conditions.
@@ -96,8 +97,8 @@ class AssignmentInTernaryConditionSniff extends Sniff {
 			$opener = $this->tokens[ $prev ]['parenthesis_opener'];
 			$closer = $prev;
 		} elseif ( isset( $token['nested_parenthesis'] ) ) {
-			$closer = end( $token['nested_parenthesis'] );
-			$opener = key( $token['nested_parenthesis'] );
+			$opener = Parentheses::getLastOpener( $this->phpcsFile, $stackPtr );
+			$closer = Parentheses::getLastCloser( $this->phpcsFile, $stackPtr );
 
 			$next_statement_closer = $this->phpcsFile->findEndOfStatement( $stackPtr, array( \T_COLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_SQUARE_BRACKET ) );
 			if ( false !== $next_statement_closer && $next_statement_closer < $closer ) {
