@@ -226,22 +226,14 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 			$classname = substr( $classname, 10 );
 		}
 
-		$namespace_keyword = $this->phpcsFile->findPrevious( \T_NAMESPACE, $search_from );
-		if ( false === $namespace_keyword ) {
+		$namespace = Namespaces::determineNamespace( $this->phpcsFile, $search_from );
+		if ( '' === $namespace ) {
 			// No namespace keyword found at all, so global namespace.
 			$classname = '\\' . $classname;
 		} else {
-			$namespace = Namespaces::determineNamespace( $this->phpcsFile, $search_from );
-
-			if ( ! empty( $namespace ) ) {
-				$classname = '\\' . $namespace . '\\' . $classname;
-			} else {
-				// No actual namespace found, so global namespace.
-				$classname = '\\' . $classname;
-			}
+			$classname = '\\' . $namespace . '\\' . $classname;
 		}
 
 		return $classname;
 	}
-
 }
