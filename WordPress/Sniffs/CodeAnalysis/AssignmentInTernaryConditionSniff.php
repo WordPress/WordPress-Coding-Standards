@@ -88,11 +88,6 @@ class AssignmentInTernaryConditionSniff extends Sniff {
 
 		// Check if the condition for the ternary is bracketed.
 		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false === $prev ) {
-			// Shouldn't happen, but in that case we don't have anything to examine anyway.
-			return;
-		}
-
 		if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $prev ]['code'] ) {
 			if ( ! isset( $this->tokens[ $prev ]['parenthesis_opener'] ) ) {
 				return;
