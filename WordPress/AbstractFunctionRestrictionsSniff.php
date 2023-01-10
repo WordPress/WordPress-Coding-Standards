@@ -225,14 +225,14 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
 		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
-		// Skip sniffing on function, class definitions or for function aliases in use statements.
-		$skipped = array(
-			\T_FUNCTION        => \T_FUNCTION,
-			\T_CLASS           => \T_CLASS,
-			\T_AS              => \T_AS, // Use declaration alias.
+		// Skip sniffing on function, OO definitions or for function aliases in use statements.
+		$invalid_tokens  = Tokens::$ooScopeTokens;
+		$invalid_tokens += array(
+			\T_FUNCTION => \T_FUNCTION,
+			\T_AS       => \T_AS, // Use declaration alias.
 		);
 
-		if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
+		if ( isset( $invalid_tokens[ $this->tokens[ $prev ]['code'] ] ) ) {
 			return false;
 		}
 

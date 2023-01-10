@@ -21,3 +21,9 @@ namespace\query_posts(); // OK, not the global function.
 
 // Ensure the sniff doesn't act on functions not listed in the target functions array.
 query_post(); // OK, not one of the target functions.
+
+// Ignore, not a function call.
+class WP_Reset_Query {}
+interface Query_Posts {}
+trait WP_Reset_Query {}
+enum Query_Posts {}
