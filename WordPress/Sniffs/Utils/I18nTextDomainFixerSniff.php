@@ -157,23 +157,26 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *            required (true) or optional (false) header.
 	 */
 	private $theme_headers = array(
-		'Theme Name'  => true,
-		'Theme URI'   => false,
-		'Author'      => true,
-		'Author URI'  => false,
-		'Description' => true,
-		'Version'     => true,
-		'License'     => true,
-		'License URI' => true,
-		'Tags'        => false,
-		'Text Domain' => true,
-		'Domain Path' => false,
+		'Theme Name'        => true,
+		'Theme URI'         => false,
+		'Author'            => true,
+		'Author URI'        => false,
+		'Description'       => true,
+		'Version'           => true,
+		'Requires at least' => true,
+		'Tested up to'      => true,
+		'Requires PHP'      => true,
+		'License'           => true,
+		'License URI'       => true,
+		'Text Domain'       => true,
+		'Tags'              => false,
+		'Domain Path'       => false,
 	);
 
 	/**
 	 * Possible headers for a plugin.
 	 *
-	 * @link https://developer.wordpress.org/plugins/the-basics/header-requirements/
+	 * @link https://developer.wordpress.org/plugins/plugin-basics/header-requirements/
 	 *
 	 * @since 1.2.0
 	 *
@@ -181,17 +184,20 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *            required (true) or optional (false) header.
 	 */
 	private $plugin_headers = array(
-		'Plugin Name' => true,
-		'Plugin URI'  => false,
-		'Description' => false,
-		'Version'     => false,
-		'Author'      => false,
-		'Author URI'  => false,
-		'License'     => false,
-		'License URI' => false,
-		'Text Domain' => false,
-		'Domain Path' => false,
-		'Network'     => false,
+		'Plugin Name'       => true,
+		'Plugin URI'        => false,
+		'Description'       => false,
+		'Version'           => false,
+		'Requires at least' => false,
+		'Requires PHP'      => false,
+		'Author'            => false,
+		'Author URI'        => false,
+		'License'           => false,
+		'License URI'       => false,
+		'Text Domain'       => false,
+		'Domain Path'       => false,
+		'Network'           => false,
+		'Update URI'        => false,
 	);
 
 	/**
