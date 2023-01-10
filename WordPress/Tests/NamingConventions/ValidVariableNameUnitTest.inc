@@ -217,3 +217,13 @@ echo $this?->varName2; // Bad.
 echo $this?->var_name2;
 echo $this?->varname2;
 echo $this?->_varName2; // Bad.
+
+// Safeguard handling of PHP 8.1 enums.
+enum EnumExample {
+	public $notAllowed; // OK, well, not really, but properties are not allowed in enums, so ignore.
+
+	public function method( $paramName ) { // Bad.
+		$local_variable = 'OK';
+		$localVariable  = 'Bad';
+	}
+}
