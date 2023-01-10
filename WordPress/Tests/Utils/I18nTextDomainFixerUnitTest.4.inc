@@ -207,5 +207,15 @@ translate_with_context( $text, 'third-text-domain' ); // Error.
 load_script_textdomain( $handle, 'something-else', '/path/to/languages/' ); // OK.
 load_script_textdomain( $handle, 'third-text-domain', '/path/to/languages/' ); // Error.
 
+// Test ignoring multi-token text domains.
+__( $text, 'my' 'domain' ); // Parse error, but not our concern.
+
+// Test with space based code indentation
+function foo() {
+    unload_textdomain(
+        /* Missing domain. */
+    );
+}
+
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false
