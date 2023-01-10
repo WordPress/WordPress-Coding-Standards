@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
-use WordPressCS\WordPress\Sniff;
+use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
 
 /**
  * Checks the naming of variables and member variables.
@@ -146,7 +146,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 						$error = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
 						$data  = array(
 							$original_var_name,
-							Sniff::get_snake_case_name_suggestion( $original_var_name ),
+							SnakeCaseHelper::get_suggestion( $original_var_name ),
 						);
 						$phpcs_file->addError( $error, $var, 'UsedPropertyNotSnakeCase', $data );
 					}
@@ -182,7 +182,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			if ( isset( $error, $error_name ) ) {
 				$data = array(
 					$original_var_name,
-					Sniff::get_snake_case_name_suggestion( $original_var_name ),
+					SnakeCaseHelper::get_suggestion( $original_var_name ),
 				);
 				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
 			}
@@ -219,7 +219,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			$error = 'Member variable "$%s" is not in valid snake_case format, try "$%s"';
 			$data  = array(
 				$var_name,
-				Sniff::get_snake_case_name_suggestion( $var_name ),
+				SnakeCaseHelper::get_suggestion( $var_name ),
 			);
 			$phpcs_file->addError( $error, $stack_ptr, 'PropertyNotSnakeCase', $data );
 		}
@@ -258,7 +258,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 					$error = 'Variable "$%s" is not in valid snake_case format, try "$%s"';
 					$data  = array(
 						$var_name,
-						Sniff::get_snake_case_name_suggestion( $var_name ),
+						SnakeCaseHelper::get_suggestion( $var_name ),
 					);
 					$phpcs_file->addError( $error, $stack_ptr, 'InterpolatedVariableNotSnakeCase', $data );
 				}

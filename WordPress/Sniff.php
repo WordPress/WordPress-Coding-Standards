@@ -460,25 +460,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Transform the name of a PHP construct (function, variable etc) to one in snake_case.
-	 *
-	 * @since 2.0.0 Moved from the `WordPress.NamingConventions.ValidFunctionName` sniff
-	 *              to this class, renamed from `get_name_suggestion` and made static
-	 *              so it can also be used by classes which don't extend this class.
-	 *
-	 * @param string $name The construct name.
-	 *
-	 * @return string
-	 */
-	public static function get_snake_case_name_suggestion( $name ) {
-		$suggested = preg_replace( '`([A-Z])`', '_$1', $name );
-		$suggested = strtolower( $suggested );
-		$suggested = str_replace( '__', '_', $suggested );
-		$suggested = trim( $suggested, '_' );
-		return $suggested;
-	}
-
-	/**
 	 * Get the last pointer in a line.
 	 *
 	 * @since 0.4.0
