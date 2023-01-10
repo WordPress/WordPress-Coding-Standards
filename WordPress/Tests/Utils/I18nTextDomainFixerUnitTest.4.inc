@@ -203,5 +203,9 @@ __ngettext( $singular, $plural, $number ); // Error.
 __ngettext_noop( $singular, $plural, 'other-text-domain' ); // Error.
 translate_with_context( $text, 'third-text-domain' ); // Error.
 
+// New WP function.
+load_script_textdomain( $handle, 'something-else', '/path/to/languages/' ); // OK.
+load_script_textdomain( $handle, 'third-text-domain', '/path/to/languages/' ); // Error.
+
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

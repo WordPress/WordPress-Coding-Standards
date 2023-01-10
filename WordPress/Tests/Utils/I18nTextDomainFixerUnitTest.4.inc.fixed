@@ -207,5 +207,9 @@ __ngettext( $singular, $plural, $number, 'something-else' ); // Error.
 __ngettext_noop( $singular, $plural, 'something-else' ); // Error.
 translate_with_context( $text, 'something-else' ); // Error.
 
+// New WP function.
+load_script_textdomain( $handle, 'something-else', '/path/to/languages/' ); // OK.
+load_script_textdomain( $handle, 'something-else', '/path/to/languages/' ); // Error.
+
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

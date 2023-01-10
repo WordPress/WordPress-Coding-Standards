@@ -81,6 +81,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		'load_muplugin_textdomain'               => 1,
 		'load_theme_textdomain'                  => 1,
 		'load_child_theme_textdomain'            => 1,
+		'load_script_textdomain'                 => 2,
 		'unload_textdomain'                      => 1,
 
 		'__'                                     => 2,

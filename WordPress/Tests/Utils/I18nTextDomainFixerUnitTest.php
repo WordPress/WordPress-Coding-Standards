@@ -140,6 +140,7 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 					202 => 1,
 					203 => 1,
 					204 => 1,
+					208 => 1,
 				);
 
 			default:
