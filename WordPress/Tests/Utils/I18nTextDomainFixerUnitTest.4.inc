@@ -217,5 +217,34 @@ function foo() {
     );
 }
 
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+// Missing domain parameter.
+_n( plural: $plural, single: $single ); // Error.
+esc_attr_x(
+	context : $context
+	text    : $text,
+);
+
+// Has correct domain parameter.
+load_textdomain( mofile: '/path/to/file.mo', domain: 'something-else', );
+_e( $text, domain: 'something-else' );
+_nx_noop(
+	domain: 'something-else',
+	context: $context,
+	singular: $singular,
+	plural: $plural,
+);
+
+// Has incorrect domain parameter.
+load_muplugin_textdomain( mu_plugin_rel_path: '/languages/', domain: 'other-text-domain', );
+__( $text, domain: 'text-domain' );
+esc_html_x(
+	$text,
+	domain: 'text-domain',
+	context: $context,
+);
+
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false
