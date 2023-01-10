@@ -223,7 +223,10 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			return false;
 		}
 
-		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		$search                   = Tokens::$emptyTokens;
+		$search[ \T_BITWISE_AND ] = \T_BITWISE_AND;
+
+		$prev = $this->phpcsFile->findPrevious( $search, ( $stackPtr - 1 ), null, true );
 
 		// Skip sniffing on function, OO definitions or for function aliases in use statements.
 		$invalid_tokens  = Tokens::$ooScopeTokens;
