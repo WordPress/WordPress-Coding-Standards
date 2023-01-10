@@ -22,13 +22,13 @@ use PHP_CodeSniffer\Util\Tokens;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.14.0
+ * @since   3.0.0  - The generic "assignment in condition" logic has been removed from the sniff
+ *                   in favour of the upstream `Generic.CodeAnalysis.AssignmentInCondition` sniff.
+ *                 - The sniff has been renamed from `AssignmentInCondition` to `AssignmentInTernaryCondition`.
  *
- * {@internal This sniff is a duplicate of the same sniff as pulled upstream.
- * Once the upstream sniff has been merged and the minimum WPCS PHPCS requirement has gone up to
- * the version in which the sniff was merged, this version can be safely removed.
- * {@link https://github.com/squizlabs/PHP_CodeSniffer/pull/1594} }}
+ * @link https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 Upstream sniff.
  */
-class AssignmentInConditionSniff extends Sniff {
+class AssignmentInTernaryConditionSniff extends Sniff {
 
 	/**
 	 * Assignment tokens to trigger on.
@@ -69,12 +69,6 @@ class AssignmentInConditionSniff extends Sniff {
 		$this->condition_start_tokens = $starters;
 
 		return array(
-			\T_IF,
-			\T_ELSEIF,
-			\T_FOR,
-			\T_SWITCH,
-			\T_CASE,
-			\T_WHILE,
 			\T_INLINE_THEN,
 		);
 	}
@@ -92,79 +86,42 @@ class AssignmentInConditionSniff extends Sniff {
 
 		$token = $this->tokens[ $stackPtr ];
 
-		// Find the condition opener/closer.
-		if ( \T_FOR === $token['code'] ) {
-			if ( isset( $token['parenthesis_opener'], $token['parenthesis_closer'] ) === false ) {
+		// Check if the condition for the ternary is bracketed.
+		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( false === $prev ) {
+			// Shouldn't happen, but in that case we don't have anything to examine anyway.
+			return;
+		}
+
+		if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $prev ]['code'] ) {
+			if ( ! isset( $this->tokens[ $prev ]['parenthesis_opener'] ) ) {
 				return;
 			}
 
-			$semicolon = $this->phpcsFile->findNext( \T_SEMICOLON, ( $token['parenthesis_opener'] + 1 ), $token['parenthesis_closer'] );
-			if ( false === $semicolon ) {
+			$opener = $this->tokens[ $prev ]['parenthesis_opener'];
+			$closer = $prev;
+		} elseif ( isset( $token['nested_parenthesis'] ) ) {
+			$closer = end( $token['nested_parenthesis'] );
+			$opener = key( $token['nested_parenthesis'] );
+
+			$next_statement_closer = $this->phpcsFile->findEndOfStatement( $stackPtr, array( \T_COLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_SQUARE_BRACKET ) );
+			if ( false !== $next_statement_closer && $next_statement_closer < $closer ) {
+				// Parentheses are unrelated to the ternary.
 				return;
 			}
 
-			$opener    = $semicolon;
-			$semicolon = $this->phpcsFile->findNext( \T_SEMICOLON, ( $opener + 1 ), $token['parenthesis_closer'] );
-			if ( false === $semicolon ) {
+			$prev_statement_closer = $this->phpcsFile->findStartOfStatement( $stackPtr, array( \T_COLON, \T_OPEN_PARENTHESIS, \T_OPEN_SQUARE_BRACKET ) );
+			if ( false !== $prev_statement_closer && $opener < $prev_statement_closer ) {
+				// Parentheses are unrelated to the ternary.
 				return;
 			}
 
-			$closer = $semicolon;
-			unset( $semicolon );
-
-		} elseif ( \T_CASE === $token['code'] ) {
-			if ( isset( $token['scope_opener'] ) === false ) {
-				return;
-			}
-
-			$opener = $stackPtr;
-			$closer = $token['scope_opener'];
-
-		} elseif ( \T_INLINE_THEN === $token['code'] ) {
-			// Check if the condition for the ternary is bracketed.
-			$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-			if ( false === $prev ) {
-				// Shouldn't happen, but in that case we don't have anything to examine anyway.
-				return;
-			}
-
-			if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $prev ]['code'] ) {
-				if ( ! isset( $this->tokens[ $prev ]['parenthesis_opener'] ) ) {
-					return;
-				}
-
-				$opener = $this->tokens[ $prev ]['parenthesis_opener'];
-				$closer = $prev;
-			} elseif ( isset( $token['nested_parenthesis'] ) ) {
-				$closer = end( $token['nested_parenthesis'] );
-				$opener = key( $token['nested_parenthesis'] );
-
-				$next_statement_closer = $this->phpcsFile->findEndOfStatement( $stackPtr, array( \T_COLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_SQUARE_BRACKET ) );
-				if ( false !== $next_statement_closer && $next_statement_closer < $closer ) {
-					// Parentheses are unrelated to the ternary.
-					return;
-				}
-
-				$prev_statement_closer = $this->phpcsFile->findStartOfStatement( $stackPtr, array( \T_COLON, \T_OPEN_PARENTHESIS, \T_OPEN_SQUARE_BRACKET ) );
-				if ( false !== $prev_statement_closer && $opener < $prev_statement_closer ) {
-					// Parentheses are unrelated to the ternary.
-					return;
-				}
-
-				if ( $closer > $stackPtr ) {
-					$closer = $stackPtr;
-				}
-			} else {
-				// No parenthesis found, can't determine where the conditional part of the ternary starts.
-				return;
+			if ( $closer > $stackPtr ) {
+				$closer = $stackPtr;
 			}
 		} else {
-			if ( isset( $token['parenthesis_opener'], $token['parenthesis_closer'] ) === false ) {
-				return;
-			}
-
-			$opener = $token['parenthesis_opener'];
-			$closer = $token['parenthesis_closer'];
+			// No parenthesis found, can't determine where the conditional part of the ternary starts.
+			return;
 		}
 
 		$startPos = $opener;
@@ -207,17 +164,10 @@ class AssignmentInConditionSniff extends Sniff {
 			}
 
 			if ( true === $hasVariable ) {
-				$errorCode = 'Found';
-				if ( \T_WHILE === $token['code'] ) {
-					$errorCode = 'FoundInWhileCondition';
-				} elseif ( \T_INLINE_THEN === $token['code'] ) {
-					$errorCode = 'FoundInTernaryCondition';
-				}
-
 				$this->phpcsFile->addWarning(
 					'Variable assignment found within a condition. Did you mean to do a comparison?',
 					$hasAssignment,
-					$errorCode
+					'FoundInTernaryCondition'
 				);
 			}
 
@@ -225,5 +175,4 @@ class AssignmentInConditionSniff extends Sniff {
 
 		} while ( $startPos < $closer );
 	}
-
 }
