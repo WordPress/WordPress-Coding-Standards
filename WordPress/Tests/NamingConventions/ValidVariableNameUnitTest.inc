@@ -227,3 +227,8 @@ enum EnumExample {
 		$localVariable  = 'Bad';
 	}
 }
+
+// Safeguard ignoring of allowed mixed case property names.
+class Has_Mixed_Case_Property {
+	public $post_ID; // OK.
+}
