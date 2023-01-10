@@ -202,3 +202,12 @@ echo "This is {${getName()}}"; // OK, expression, should be ignored.
 echo "This is $Foo?->bar"; // Bad, expression, but the $Foo in it should still be flagged.
 echo "This is {$foo['bar']?->baz()()}"; // OK.
 echo "This is {$Foo['bar']?->baz()()}"; // Bad, expression, but the $Foo in it should still be flagged.
+
+// Safeguard that parameters in all types of function declarations, including PHP 7.4+ arrow functions, are flagged.
+function has_params( $without_default, $with_default = 'default' ) {} // OK.
+$closure = function ( $without_default, $with_default = 'default' ) {}; // OK.
+$arrow = fn ( $without_default, $with_default = 'default' ) => 10; // OK.
+
+function has_params( $withoutDefault, $withDefault = 'default' ) {} // Bad x 2.
+$closure = function ( $withoutDefault, $withDefault = 'default' ) {}; // Bad x 2.
+$arrow = fn ( $withoutDefault, $withDefault = 'default' ) => 10; // Bad x 2.
