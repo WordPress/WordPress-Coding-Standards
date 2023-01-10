@@ -52,3 +52,6 @@ $mode = ( $a = $b = 'on' ) ? 'on' : 'off'; // Multi-assignment. Error x 2.
 
 $mode = ( $a['key'] = 'on' ) ? 'on' : 'off'; // Bad.
 $mode = ( $a->prop = 'on' ) ? 'on' : 'off'; // Bad.
+
+// Safeguard recognition of PHP 7.4+ null coalesce equals.
+$mode = ( $a ??= 'on' ) ? 'on' : 'off';
