@@ -137,19 +137,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 				if ( \T_OPEN_PARENTHESIS !== $tokens[ $bracket ]['code'] ) {
 					$obj_var_name = $tokens[ $var ]['content'];
 
-					// There is no way for us to know if the var is public or
-					// private, so we have to ignore a leading underscore if there is
-					// one and just check the main part of the variable name.
-					$original_var_name = $obj_var_name;
-					if ( '_' === substr( $obj_var_name, 0, 1 ) ) {
-						$obj_var_name = substr( $obj_var_name, 1 );
+					if ( isset( $this->allowed_mixed_case_member_var_names[ $obj_var_name ] ) ) {
+						return;
 					}
 
-					if ( ! isset( $this->allowed_mixed_case_member_var_names[ $obj_var_name ] ) && self::isSnakeCase( $obj_var_name ) === false ) {
+					$suggested_name = SnakeCaseHelper::get_suggestion( $obj_var_name );
+					if ( $suggested_name !== $obj_var_name ) {
 						$error = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
 						$data  = array(
-							$original_var_name,
-							SnakeCaseHelper::get_suggestion( $original_var_name ),
+							$obj_var_name,
+							$suggested_name,
 						);
 						$phpcs_file->addError( $error, $var, 'UsedPropertyNotSnakeCase', $data );
 					}
@@ -165,15 +162,8 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			$in_class = true;
 		}
 
-		// There is no way for us to know if the var is public or private,
-		// so we have to ignore a leading underscore if there is one and just
-		// check the main part of the variable name.
-		$original_var_name = $var_name;
-		if ( '_' === substr( $var_name, 0, 1 ) && true === $in_class ) {
-			$var_name = substr( $var_name, 1 );
-		}
-
-		if ( self::isSnakeCase( $var_name ) === false ) {
+		$suggested_name = SnakeCaseHelper::get_suggestion( $var_name );
+		if ( $suggested_name !== $var_name ) {
 			if ( $in_class && ! isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) ) {
 				$error      = 'Object property "$%s" is not in valid snake_case format, try "$%s"';
 				$error_name = 'UsedPropertyNotSnakeCase';
@@ -184,8 +174,8 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 
 			if ( isset( $error, $error_name ) ) {
 				$data = array(
-					$original_var_name,
-					SnakeCaseHelper::get_suggestion( $original_var_name ),
+					$var_name,
+					$suggested_name,
 				);
 				$phpcs_file->addError( $error, $stack_ptr, $error_name, $data );
 			}
@@ -213,11 +203,16 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 		$tokens   = $phpcs_file->getTokens();
 		$var_name = ltrim( $tokens[ $stack_ptr ]['content'], '$' );
 
-		if ( ! isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) && false === self::isSnakeCase( $var_name ) ) {
+		if ( isset( $this->allowed_mixed_case_member_var_names[ $var_name ] ) ) {
+			return;
+		}
+
+		$suggested_name = SnakeCaseHelper::get_suggestion( $var_name );
+		if ( $suggested_name !== $var_name ) {
 			$error = 'Member variable "$%s" is not in valid snake_case format, try "$%s"';
 			$data  = array(
 				$var_name,
-				SnakeCaseHelper::get_suggestion( $var_name ),
+				$suggested_name,
 			);
 			$phpcs_file->addError( $error, $stack_ptr, 'PropertyNotSnakeCase', $data );
 		}
@@ -258,26 +253,17 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 					continue;
 				}
 
-				if ( false === self::isSnakeCase( $var_name ) ) {
+				$suggested_name = SnakeCaseHelper::get_suggestion( $var_name );
+				if ( $suggested_name !== $var_name ) {
 					$error = 'Variable "$%s" is not in valid snake_case format, try "$%s"';
 					$data  = array(
 						$var_name,
-						SnakeCaseHelper::get_suggestion( $var_name ),
+						$suggested_name,
 					);
 					$phpcs_file->addError( $error, $stack_ptr, 'InterpolatedVariableNotSnakeCase', $data );
 				}
 			}
 		}
-	}
-
-	/**
-	 * Return whether the variable is in snake_case.
-	 *
-	 * @param string $var_name Variable name.
-	 * @return bool
-	 */
-	public static function isSnakeCase( $var_name ) {
-		return (bool) preg_match( '/^[a-z0-9_]+$/', $var_name );
 	}
 
 	/**
