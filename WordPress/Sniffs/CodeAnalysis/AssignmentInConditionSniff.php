@@ -219,12 +219,6 @@ class AssignmentInConditionSniff extends Sniff {
 					$hasAssignment,
 					$errorCode
 				);
-			} else {
-				$this->phpcsFile->addWarning(
-					'Assignment found within a condition. Did you mean to do a comparison?',
-					$hasAssignment,
-					'NonVariableAssignmentFound'
-				);
 			}
 
 			$startPos = $hasAssignment;

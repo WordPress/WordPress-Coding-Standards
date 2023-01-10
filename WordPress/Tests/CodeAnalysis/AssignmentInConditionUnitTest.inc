@@ -75,25 +75,6 @@ while ( $sample = false ) {}
 if ($a = 123) :
 endif;
 
-// Non-variable assignment found.
-if (123 = $a) {}
-if (strtolower($b) = $b) {}
-if (array( 1 => 'a', 2 => 'b' ) = $b) {}
-
-if (SOME_CONSTANT = 123) {
-} else if(self::SOME_CONSTANT -= 10) {}
-
-if ( $a() = 123 ) {
-} else if ( $b->something() = 123 ) {
-} elseif ( $c::something() = 123 ) {}
-
-switch ( true ) {
-	case 'something' = $sample:
-		break;
-}
-
-while (list($field_name, $file_names) = each($formfiles)) {}
-
 /*
  * Ternaries should also be checked, but can only be reliably done when in parenthesis.
  */
@@ -135,19 +116,3 @@ $content = preg_replace_callback(
 	},
 	$content
 );
-
-$array = array(
-	'a' => 1 = 2 ? 'a' : 'b', // OK: no relevant parenthesis found, so can't determine start/end of ternary.
-	'b' => (1 = 2) ? 'a' : 'b', // Bad.
-	'c' => (1 = 2 ? 'a' : 'b'), // Bad.
-	'd' => (1 === 2) ? 'a' : 'b', // OK.
-);
-
-$print = ( function () {
-?>
-<div id=<?php echo 1 = 2 ? 'a' : 'b' ?><!-- OK: no relevant parenthesis, so can't determine start/end of ternary. -->
-<div id=<?php echo (1 = 2) ? 'a' : 'b' ?><!-- Bad. -->
-<div id=<?php echo (1 = 2 ? 'a' : 'b') ?><!-- Bad. -->
-<div id=<?php echo (1 === 2 ? 'a' : 'b') ?><!-- OK. -->
-<?php
-});
