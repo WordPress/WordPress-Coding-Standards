@@ -193,3 +193,12 @@ echo "This is $post_ID with $ThisShouldBeFlagged"; // Bad.
 interface PropertiesNotAllowed {
 	public $notAllowed;
 }
+
+echo "This is \$someName"; // OK, variable is literal text.
+
+echo "This is ${$someName}"; // Bad.
+echo "This is ${Foo}"; // Bad.
+echo "This is {${getName()}}"; // OK, expression, should be ignored.
+echo "This is $Foo?->bar"; // Bad, expression, but the $Foo in it should still be flagged.
+echo "This is {$foo['bar']?->baz()()}"; // OK.
+echo "This is {$Foo['bar']?->baz()()}"; // Bad, expression, but the $Foo in it should still be flagged.

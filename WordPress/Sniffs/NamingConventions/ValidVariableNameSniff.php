@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Scopes;
+use PHPCSUtils\Utils\TextStrings;
 use PHPCSUtils\Utils\Variables;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
@@ -220,7 +221,7 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	}
 
 	/**
-	 * Processes the variable found within a double quoted string.
+	 * Processes the variables found within a double quoted string.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcs_file The file being scanned.
 	 * @param int                         $stack_ptr  The position of the double quoted
@@ -229,15 +230,21 @@ class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @return void
 	 */
 	protected function processVariableInString( File $phpcs_file, $stack_ptr ) {
-
 		$tokens = $phpcs_file->getTokens();
 
-		if ( preg_match_all( '|[^\\\]\${?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)|', $tokens[ $stack_ptr ]['content'], $matches ) > 0 ) {
+		// There will always be embeds if the processVariableInString() was called.
+		$embeds = TextStrings::getEmbeds( $tokens[ $stack_ptr ]['content'] );
 
-			// Merge any custom variables with the defaults.
-			$this->merge_allow_lists();
+		// Merge any custom variables with the defaults.
+		$this->merge_allow_lists();
 
-			foreach ( $matches[1] as $var_name ) {
+		foreach ( $embeds as $embed ) {
+			// Grab any variables contained in the embed.
+			if ( preg_match_all( '`\$(\{)?(?<name>[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(?(1)\})`', $embed, $matches ) === 0 ) {
+				continue;
+			}
+
+			foreach ( $matches['name'] as $var_name ) {
 				// If it's a php reserved var, then its ok.
 				if ( Variables::isPHPReservedVarName( $var_name ) ) {
 					continue;
