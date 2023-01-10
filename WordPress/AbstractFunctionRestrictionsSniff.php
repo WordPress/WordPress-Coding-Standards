@@ -214,11 +214,6 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @return bool
 	 */
 	public function is_targetted_token( $stackPtr ) {
-
-		if ( \T_STRING !== $this->tokens[ $stackPtr ]['code'] ) {
-			return false;
-		}
-
 		// Exclude function definitions, class methods, and namespaced calls.
 		if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
@@ -229,17 +224,16 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false !== $prev ) {
-			// Skip sniffing on function, class definitions or for function aliases in use statements.
-			$skipped = array(
-				\T_FUNCTION        => \T_FUNCTION,
-				\T_CLASS           => \T_CLASS,
-				\T_AS              => \T_AS, // Use declaration alias.
-			);
 
-			if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
-				return false;
-			}
+		// Skip sniffing on function, class definitions or for function aliases in use statements.
+		$skipped = array(
+			\T_FUNCTION        => \T_FUNCTION,
+			\T_CLASS           => \T_CLASS,
+			\T_AS              => \T_AS, // Use declaration alias.
+		);
+
+		if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
+			return false;
 		}
 
 		// Check if this could even be a function call.
