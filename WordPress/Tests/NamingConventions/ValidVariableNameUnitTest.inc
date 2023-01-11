@@ -11,19 +11,19 @@ class MyClass {
 	var $_varName = 'hello'; // Bad.
 
 	public $varNamf  = 'hello'; // Bad.
-	public $var_namf = 'hello';
+	public bool $var_namf = 'hello';
 	public $varnamf  = 'hello';
 	public $_varNamf = 'hello'; // Bad.
 
 	protected $varNamg  = 'hello'; // Bad.
 	protected $var_namg = 'hello';
 	protected $varnamg  = 'hello';
-	protected $_varNamg = 'hello'; // Bad.
+	protected string $_varNamg = 'hello'; // Bad.
 
 	private $_varNamh  = 'hello'; // Bad.
 	private $_var_namh = 'hello';
 	private $_varnamh  = 'hello';
-	private $varNamh   = 'hello'; // Bad.
+	private int|string $varNamh   = 'hello'; // Bad.
 }
 
 echo $varName; // Bad.
@@ -95,7 +95,7 @@ echo $comment->comment_author_IP;
 class Foo {
 	public $_public_leading_underscore;
 	private $private_no_underscore_loading;
-	
+
 	function Bar( $VARname ) { // Bad.
 		$localVariable = false; // Bad.
 		echo Some_Class::$VarName; // Bad.
@@ -127,7 +127,7 @@ echo "This is a $comment_ID"; // Bad
 echo "This is $PHP_SELF with $HTTP_RAW_POST_DATA"; // Ok.
 
 /*
- * Ignoring unit tests.
+ * Testing custom properties.
  */
 // phpcs:set WordPress.NamingConventions.ValidVariableName allowed_custom_properties[] varName,DOMProperty
 echo MyClass::$varName; // Ok, allowed.
@@ -176,7 +176,7 @@ class MultiVarDeclarations {
 		$multiVar5 = false, // Bad.
 		$multiVar6 = 123, // Bad.
 		$multi_var7 = 'string'; // Ok.
-		
+
 	public function testMultiGlobalAndStatic() {
 		global $multiGlobal1, $multi_global2, // Bad x 1.
 			$multiGlobal3; // Bad.
@@ -185,4 +185,50 @@ class MultiVarDeclarations {
 			// Comment.
 			$multiStatic3 = ''; // Bad.
 	}
+}
+
+echo "This is $post_ID with $ThisShouldBeFlagged"; // Bad.
+
+// Safeguard that illegal property declarations are ignored.
+interface PropertiesNotAllowed {
+	public $notAllowed;
+}
+
+echo "This is \$someName"; // OK, variable is literal text.
+
+echo "This is ${$someName}"; // Bad.
+echo "This is ${Foo}"; // Bad.
+echo "This is {${getName()}}"; // OK, expression, should be ignored.
+echo "This is $Foo?->bar"; // Bad, expression, but the $Foo in it should still be flagged.
+echo "This is {$foo['bar']?->baz()()}"; // OK.
+echo "This is {$Foo['bar']?->baz()()}"; // Bad, expression, but the $Foo in it should still be flagged.
+
+// Safeguard that parameters in all types of function declarations, including PHP 7.4+ arrow functions, are flagged.
+function has_params( $without_default, $with_default = 'default' ) {} // OK.
+$closure = function ( $without_default, $with_default = 'default' ) {}; // OK.
+$arrow = fn ( $without_default, $with_default = 'default' ) => 10; // OK.
+
+function has_params( $withoutDefault, $withDefault = 'default' ) {} // Bad x 2.
+$closure = function ( $withoutDefault, $withDefault = 'default' ) {}; // Bad x 2.
+$arrow = fn ( $withoutDefault, $withDefault = 'default' ) => 10; // Bad x 2.
+
+// Safeguard recognizing property access using PHP 8.0 nullsafe operator.
+echo $this?->varName2; // Bad.
+echo $this?->var_name2;
+echo $this?->varname2;
+echo $this?->_varName2; // Bad.
+
+// Safeguard handling of PHP 8.1 enums.
+enum EnumExample {
+	public $notAllowed; // OK, well, not really, but properties are not allowed in enums, so ignore.
+
+	public function method( $paramName ) { // Bad.
+		$local_variable = 'OK';
+		$localVariable  = 'Bad';
+	}
+}
+
+// Safeguard ignoring of allowed mixed case property names.
+class Has_Mixed_Case_Property {
+	public $post_ID; // OK.
 }
