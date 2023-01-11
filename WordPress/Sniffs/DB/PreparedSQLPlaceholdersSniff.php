@@ -685,19 +685,26 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 	 */
 	protected function analyse_implode( $implode_token ) {
 		$implode_params = PassedParameters::getParameters( $this->phpcsFile, $implode_token );
-
 		if ( empty( $implode_params ) || \count( $implode_params ) !== 2 ) {
 			return false;
 		}
 
-		if ( preg_match( '`^(["\']), ?\1$`', $implode_params[1]['clean'] ) !== 1 ) {
+		$implode_separator_param = PassedParameters::getParameterFromStack( $implode_params, 1, 'separator' );
+		if ( false === $implode_separator_param
+			|| preg_match( '`^(["\']), ?\1$`', $implode_separator_param['clean'] ) !== 1
+		) {
+			return false;
+		}
+
+		$implode_array_param = PassedParameters::getParameterFromStack( $implode_params, 2, 'array' );
+		if ( false === $implode_array_param ) {
 			return false;
 		}
 
 		$array_fill = $this->phpcsFile->findNext(
 			Tokens::$emptyTokens + array( \T_NS_SEPARATOR => \T_NS_SEPARATOR ),
-			$implode_params[2]['start'],
-			$implode_params[2]['end'],
+			$implode_array_param['start'],
+			$implode_array_param['end'],
 			true
 		);
 

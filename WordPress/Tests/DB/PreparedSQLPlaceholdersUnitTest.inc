@@ -427,3 +427,36 @@ $query = $wpdb->prepare(
 		FROM ' . $wpdb->posts . '
 		WHERE post_type = %s',
 ); // Ignore, incorrect name used for named param `query`, so param not recognized.
+
+// Implode() with named params.
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( array: array_fill( 0, count( $post_types ), '%s' ), separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Okay.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( array: $something, separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - `array` param is not an array_fill() function call.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( arrays: array_fill( 0, count( $post_types ), '%s' ), separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - incorrect name used for named param `array`, so param not recognized.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - missing `array` param.
