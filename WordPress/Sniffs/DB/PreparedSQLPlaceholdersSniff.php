@@ -10,6 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\DB;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
@@ -552,7 +554,8 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 			if ( false !== $next
 				&& ( \T_ARRAY === $this->tokens[ $next ]['code']
-					|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $next ]['code'] )
+					|| ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $next ]['code'] ] )
+						&& Arrays::isShortArray( $this->phpcsFile, $next ) === true ) )
 			) {
 				$replacements = PassedParameters::getParameters( $this->phpcsFile, $next );
 			}
