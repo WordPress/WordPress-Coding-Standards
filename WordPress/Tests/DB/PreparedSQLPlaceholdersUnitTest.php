@@ -95,6 +95,13 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			278 => 1, // UnsupportedIdentifierPlaceholder.
 			279 => 2, // UnsupportedIdentifierPlaceholder + QuotedIdentifierPlaceholder.
 			280 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+
+			288 => 1,
+			295 => 1,
+			302 => 1,
+			309 => 1,
+			316 => 1,
+			323 => 1,
 		);
 	}
 
@@ -138,6 +145,7 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			234 => 1, // UnfinishedPrepare.
 			246 => 1, // UnfinishedPrepare.
 			258 => 1, // ReplacementsWrongNumber.
+			300 => 1,
 		);
 	}
 }

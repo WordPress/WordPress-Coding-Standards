@@ -280,3 +280,55 @@ $wpdb->prepare( "WHERE '%10i' IS NULL", $field ); // UnsupportedIdentifierPlaceh
 $wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )', $fields ); // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
 
 // phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version
+
+$wpdb->prepare(); // Ignore.
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode()
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (no params).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_status IN ('"
+		. implode( ',' )
+		. '\') AND {$wpdb->posts}.post_id = %s',
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (missing second param).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_status IN ('"
+		. implode( '|', array_fill( 0, count($post_stati), '%s' ) )
+		. '\') AND {$wpdb->posts}.post_id = %s',
+	$post_id
+); // Bad x2, dynamic placeholder generation quotes with invalid implode call (separator parameter does not contain expected ',' value).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode( ',', $array_fill )
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (array param is not call to array_fill).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode( ',', array_fill() )
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (array param is call to array_fill() without params).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode( ',', array_fill( 0, count($post_types) ) )
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (array param is call to array_fill(), but missing third param).
+
+// Safeguard that short array as $args is handled correctly.
+$wpdb->get_col(
+	$wpdb->prepare(
+		"SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s LIMIT %d",
+		[ 'taxonomy_name', $limit ]
+	) // Ok.
+);
