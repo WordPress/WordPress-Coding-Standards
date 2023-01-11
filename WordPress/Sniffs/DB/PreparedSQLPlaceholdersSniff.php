@@ -192,7 +192,11 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
-		$query                    = $parameters[1];
+		$query = PassedParameters::getParameterFromStack( $parameters, 1, 'query' );
+		if ( false === $query ) {
+			return;
+		}
+
 		$text_string_tokens_found = false;
 		$variable_found           = false;
 		$sql_wildcard_found       = false;
@@ -545,14 +549,15 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		}
 
 		$replacements = $parameters;
-		array_shift( $replacements ); // Remove the query.
+		unset( $replacements['query'], $replacements[1] ); // Remove the query param, whether passed positionally or named.
 
-		// The parameters may have been passed as an array in parameter 2.
-		if ( isset( $parameters[2] ) && 2 === $total_parameters ) {
+		// The parameters may have been passed as an array in the variadic $args parameter.
+		$args_param = PassedParameters::getParameterFromStack( $parameters, 2, 'args' );
+		if ( false !== $args_param && 2 === $total_parameters ) {
 			$next = $this->phpcsFile->findNext(
 				Tokens::$emptyTokens,
-				$parameters[2]['start'],
-				( $parameters[2]['end'] + 1 ),
+				$args_param['start'],
+				( $args_param['end'] + 1 ),
 				true
 			);
 

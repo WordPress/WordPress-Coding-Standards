@@ -403,3 +403,27 @@ $where = $wpdb->prepare(
 		. ')',
 	array_merge( $post_types, $post_statusses )
 ); // OK.
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+// WPDB::prepare() with named params. Named args not supported with ...$args, but that's not the concern of this sniff.
+$query = $wpdb->prepare(
+	args  : $replacements,
+	query : 'SELECT ID
+		FROM ' . $wpdb->posts . '
+		WHERE post_type = %s',
+); // OK, named args not supported with ...$args, but that's not the concern of this sniff.
+
+$query = $wpdb->prepare(
+	query : 'SELECT ID
+		FROM ' . $wpdb->posts . '
+		WHERE post_type = %s',
+); // Bad, missing replacements.
+
+$query = $wpdb->prepare(
+	args  : $replacements,
+	queri : 'SELECT ID
+		FROM ' . $wpdb->posts . '
+		WHERE post_type = %s',
+); // Ignore, incorrect name used for named param `query`, so param not recognized.
