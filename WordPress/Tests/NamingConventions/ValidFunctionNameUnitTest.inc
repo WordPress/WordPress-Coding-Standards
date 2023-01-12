@@ -184,3 +184,40 @@ class UnderScoreHandling {
 	public function Multiple_______Underscores() {} // Bad, replacement suggestion should be: multiple_______underscores.
 	public function Trailing_Underscores___() {}// Bad, replacement suggestion should be: trailing_underscores___.
 }
+
+// Safeguard that functions with a name only consisting of underscores are always ignored.
+function __() {}
+
+class OnlyUnderscores {
+	public function _____() {}
+}
+
+// Class vs function name PHP case-sensitivity quirks.
+class FooBÃÈ {
+	function FooBÃÈ() {} // OK, same case.
+	function fOOBÃÈ() {} // OK, same case for the non-ascii chars.
+	function FooBãè() {} // Bad - not PHP 4-type constructor, non ascii chars not in same case - POC: https://3v4l.org/YOc2R.
+}
+
+// Safeguard that methods in enums are correctly handled by the sniff.
+enum Suit {
+	case Hearts;
+	case Diamonds;
+
+	public function color(): string {} // OK.
+	public function __changeColor(): string {} // Bad
+
+	public function &getShape(): string // Bad.
+	{
+		return "Rectangle";
+	}
+
+	// These are the only three magic methods allowed in enums.
+	public function __call( $a, $b ) {} // Ok.
+	public static function __callStatic( $a, $b ) {} // Ok.
+	public function __invoke() {} // Ok.
+}
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+function
