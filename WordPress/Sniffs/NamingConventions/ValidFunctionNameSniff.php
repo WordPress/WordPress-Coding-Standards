@@ -100,7 +100,6 @@ class ValidFunctionNameSniff extends Sniff {
 	 * @return void
 	 */
 	protected function process_function_declaration( $stackPtr, $functionName ) {
-
 		// PHP magic functions are exempt from our rules.
 		if ( FunctionDeclarations::isMagicFunctionName( $functionName ) === true ) {
 			return;
@@ -113,11 +112,12 @@ class ValidFunctionNameSniff extends Sniff {
 			$this->phpcsFile->addError( $error, $stackPtr, 'FunctionDoubleUnderscore', $errorData );
 		}
 
-		if ( strtolower( $functionName ) !== $functionName ) {
+		$suggested_name = SnakeCaseHelper::get_suggestion( $functionName );
+		if ( $suggested_name !== $functionName ) {
 			$error     = 'Function name "%s" is not in snake case format, try "%s"';
 			$errorData = array(
 				$functionName,
-				SnakeCaseHelper::get_suggestion( $functionName ),
+				$suggested_name,
 			);
 			$this->phpcsFile->addError( $error, $stackPtr, 'FunctionNameInvalid', $errorData );
 		}
@@ -176,12 +176,13 @@ class ValidFunctionNameSniff extends Sniff {
 		}
 
 		// Check for all lowercase.
-		if ( strtolower( $methodName ) !== $methodName ) {
+		$suggested_name = SnakeCaseHelper::get_suggestion( $methodName );
+		if ( $suggested_name !== $methodName ) {
 			$error     = 'Method name "%s" in class %s is not in snake case format, try "%s"';
 			$errorData = array(
 				$methodName,
 				$className,
-				SnakeCaseHelper::get_suggestion( $methodName ),
+				$suggested_name,
 			);
 			$this->phpcsFile->addError( $error, $stackPtr, 'MethodNameInvalid', $errorData );
 		}

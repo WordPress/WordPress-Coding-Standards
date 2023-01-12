@@ -9,6 +9,8 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
+use PHPCSUtils\BackCompat\Helper;
+
 /**
  * Helper utilities for checking if a name is in snake_case.
  *
@@ -40,7 +42,17 @@ final class SnakeCaseHelper {
 	 */
 	public static function get_suggestion( $name ) {
 		$suggested = preg_replace( '`(?<!_|^)([A-Z])`', '_$1', $name );
-		$suggested = strtolower( $suggested );
+
+		if ( preg_match( '`^[a-z0-9_]+$i`', $suggested ) === 1 ) {
+			// If the name only contains ASCII characters, we can safely lowercase it.
+			$suggested = strtolower( $suggested );
+		} elseif ( function_exists( 'mb_strtolower' ) ) {
+			$suggested = mb_strtolower( $suggested, Helper::getEncoding() );
+		} else {
+			// If the name contains non-ASCII chars and Mbstring is not available, only transliterate the ASCII chars.
+			$suggested = strtr( $suggested, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz' );
+		}
+
 		return $suggested;
 	}
 }

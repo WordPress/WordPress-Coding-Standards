@@ -218,6 +218,11 @@ enum Suit {
 	public function __invoke() {} // Ok.
 }
 
+// Related to #1891 - ensure the sniff does not throw an error if the suggested alternative would be the same as the original name.
+function lähtöaika() {} // OK.
+function lÄhtÖaika() {} // Bad, but only handled by the sniff if Mbstring is available.
+function lÄhtOaika() {} // Bad, handled via transliteration of non-ASCII chars if Mbstring is not available.
+
 // Live coding/parse error.
 // This has to be the last test in the file.
 function

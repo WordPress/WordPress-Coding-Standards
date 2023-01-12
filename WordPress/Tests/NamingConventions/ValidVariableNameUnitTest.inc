@@ -232,3 +232,8 @@ enum EnumExample {
 class Has_Mixed_Case_Property {
 	public $post_ID; // OK.
 }
+
+// Issue #1891 - ensure the sniff does not throw an error if the suggested alternative would be the same as the original name.
+$lähtöaika = true; // OK.
+$lÄhtÖaika = true; // Bad, but only handled by the sniff if Mbstring is available.
+$lÄhtOaika = true; // Bad, handled via transliteration of non-ASCII chars if Mbstring is not available.
