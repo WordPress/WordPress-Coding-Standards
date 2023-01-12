@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
 
@@ -76,10 +77,7 @@ class ArrayIndentationSniff extends Sniff {
 		unset( $this->ignore_tokens[ \T_START_HEREDOC ], $this->ignore_tokens[ \T_START_NOWDOC ] );
 		$this->ignore_tokens[ \T_INLINE_HTML ] = \T_INLINE_HTML;
 
-		return array(
-			\T_ARRAY,
-			\T_OPEN_SHORT_ARRAY,
-		);
+		return Collections::arrayOpenTokensBC();
 	}
 
 	/**
@@ -95,7 +93,7 @@ class ArrayIndentationSniff extends Sniff {
 			$this->tab_width = Helper::getTabWidth( $this->phpcsFile );
 		}
 
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $stackPtr ]['code'] ] )
 			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
 		) {
 			// Short list, not short array.
@@ -431,9 +429,7 @@ class ArrayIndentationSniff extends Sniff {
 		 * If it's a subsequent line of a multi-line sting, it will not start with a quote
 		 * character, nor just *be* a quote character.
 		 */
-		if ( \T_CONSTANT_ENCAPSED_STRING === $token_code
-			|| \T_DOUBLE_QUOTED_STRING === $token_code
-		) {
+		if ( isset( Tokens::$stringTokens[ $token_code ] ) === true ) {
 			// Deal with closing quote of a multi-line string being on its own line.
 			if ( "'" === $this->tokens[ $ptr ]['content']
 				|| '"' === $this->tokens[ $ptr ]['content']

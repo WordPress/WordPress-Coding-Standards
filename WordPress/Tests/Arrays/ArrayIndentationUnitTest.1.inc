@@ -442,3 +442,7 @@ $bad = array(
 	'key1' => 'value1', /* comment
 	end */ 'key2' => 'value2',
 );
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+$array = array(
