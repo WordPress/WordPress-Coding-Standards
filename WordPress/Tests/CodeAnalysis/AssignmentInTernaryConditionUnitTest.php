@@ -12,13 +12,13 @@ namespace WordPressCS\WordPress\Tests\CodeAnalysis;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the AssignmentInCondition sniff.
+ * Unit test class for the AssignmentInTernaryCondition sniff.
  *
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.14.0
  */
-class AssignmentInConditionUnitTest extends AbstractSniffUnitTest {
+class AssignmentInTernaryConditionUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -36,47 +36,17 @@ class AssignmentInConditionUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			29 => 1,
-			30 => 1,
-			31 => 1,
-			32 => 1,
-			33 => 1,
-			34 => 1,
-			35 => 1,
-			36 => 1,
-			37 => 1,
-			38 => 1,
-			39 => 1,
-			40 => 1,
-			41 => 1,
-			42 => 1,
-			43 => 1,
-			44 => 2,
-			46 => 1,
-			47 => 1,
-			50 => 1,
-			51 => 1,
-			52 => 1,
+			12 => 1,
+			13 => 1,
+			14 => 2,
+			15 => 1,
+			16 => 1,
+			17 => 2,
+			18 => 3,
+			51 => 2,
 			53 => 1,
 			54 => 1,
-			55 => 1,
-			56 => 1,
-			58 => 1,
-			60 => 1,
-			63 => 2,
-			67 => 1,
-			68 => 2,
-			71 => 1,
-			73 => 1,
-			75 => 1,
-			87 => 1,
-			88 => 1,
-			89 => 2,
-			90 => 1,
-			91 => 1,
-			92 => 2,
-			93 => 3,
+			57 => 1,
 		);
 	}
-
 }

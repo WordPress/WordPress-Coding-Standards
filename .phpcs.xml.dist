@@ -40,7 +40,7 @@
 		<exclude name="WordPress.NamingConventions.ValidVariableName"/>
 
 		<!-- While conditions with assignments are a typical way to walk the token stream. -->
-		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
+		<exclude name="Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition"/>
 
 		<!-- The code in this project is run in the context of PHPCS, not WP. -->
 		<exclude name="WordPress.DateTime"/>
