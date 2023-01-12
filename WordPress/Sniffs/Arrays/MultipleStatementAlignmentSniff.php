@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\Sniff;
@@ -149,10 +150,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array(
-			\T_ARRAY,
-			\T_OPEN_SHORT_ARRAY,
-		);
+		return Collections::arrayOpenTokensBC();
 	}
 
 	/**
@@ -167,7 +165,7 @@ class MultipleStatementAlignmentSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $stackPtr ]['code'] ] )
 			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
 		) {
 			// Short list, not short array.
@@ -295,34 +293,9 @@ class MultipleStatementAlignmentSniff extends Sniff {
 		$total_items       = \count( $items );
 
 		foreach ( $items as $key => $item ) {
-			if ( strpos( $item['raw'], '=>' ) === false ) {
-				// Ignore items without assignment operators.
-				unset( $items[ $key ] );
-				continue;
-			}
-
-			// Find the position of the first double arrow.
-			$double_arrow = $this->phpcsFile->findNext(
-				\T_DOUBLE_ARROW,
-				$item['start'],
-				( $item['end'] + 1 )
-			);
-
+			// Find the double arrow if there is one.
+			$double_arrow = Arrays::getDoubleArrowPtr( $this->phpcsFile, $item['start'], $item['end'] );
 			if ( false === $double_arrow ) {
-				// Shouldn't happen, just in case.
-				unset( $items[ $key ] );
-				continue;
-			}
-
-			// Make sure the arrow is for this item and not for a nested array value assignment.
-			$has_array_opener = $this->phpcsFile->findNext(
-				$this->register(),
-				$item['start'],
-				$double_arrow
-			);
-
-			if ( false !== $has_array_opener ) {
-				// Double arrow is for a nested array.
 				unset( $items[ $key ] );
 				continue;
 			}
@@ -334,12 +307,6 @@ class MultipleStatementAlignmentSniff extends Sniff {
 				$item['start'],
 				true
 			);
-
-			if ( false === $last_index_token ) {
-				// Shouldn't happen, but just in case.
-				unset( $items[ $key ] );
-				continue;
-			}
 
 			if ( true === $this->ignoreNewlines
 				&& $this->tokens[ $last_index_token ]['line'] !== $this->tokens[ $double_arrow ]['line']

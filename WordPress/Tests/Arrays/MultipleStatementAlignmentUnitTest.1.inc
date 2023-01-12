@@ -580,3 +580,9 @@ list(
 ) = $some_var;
 
 // phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems always
+
+$array = array();
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+$array = array(
