@@ -234,7 +234,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param string $text_string    The target string.
 	 * @param string $regex          The punctuation regular expression to use.
-	 * @param string $transform_type Whether to a partial or complete transform.
+	 * @param string $transform_type Whether to do a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */
@@ -258,7 +258,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param string $text_string    The target string.
 	 * @param string $regex          The punctuation regular expression to use.
-	 * @param string $transform_type Whether to a partial or complete transform.
+	 * @param string $transform_type Whether to do a partial or complete transform.
 	 *                               Valid values are: 'full', 'case', 'punctuation'.
 	 * @return string
 	 */

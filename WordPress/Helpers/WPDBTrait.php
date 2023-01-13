@@ -17,11 +17,10 @@ use PHPCSUtils\Tokens\Collections;
 /**
  * Helper utilities for sniffs which examine WPDB method calls.
  *
- * {@internal The method in this trait was previously contained in the
- * `WordPressCS\WordPress\Sniff` class and has been moved here.}
- *
  * @package WPCS\WordPressCodingStandards
- * @since   3.0.0
+ *
+ * @since   3.0.0 The method in this trait was previously contained in the
+ *                `WordPressCS\WordPress\Sniff` class and has been moved here.
  */
 trait WPDBTrait {
 

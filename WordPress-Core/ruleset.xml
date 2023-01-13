@@ -67,7 +67,7 @@
 	<!--
 	#############################################################################
 	Handbook: General - Writing include/require statements.
-	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#single-and-double-quotes
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#writing-include-require-statements
 	#############################################################################
 	-->
 
@@ -104,7 +104,7 @@
 	<!-- Covers rule: It is _strongly recommended_ to avoid reserved keywords as function parameter names. -->
 	<rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
 
-	<!-- Covers rule: Class names should use capitalized words separated by underscores. -->
+	<!-- Covers rule: Class, trait, interface, enum names should use capitalized words separated by underscores. -->
 	<rule ref="PEAR.NamingConventions.ValidClassName"/>
 
 	<!-- Covers rule: Constants should be in all upper-case with underscores separating words. -->
@@ -145,7 +145,7 @@
 	#############################################################################
 	-->
 	<!-- Covers rule: Always put spaces after commas, and on both sides of logical,
-		 comparison, string and assignment operators. -->
+		 arithmetic, comparison, string and assignment operators. -->
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="Squiz.Strings.ConcatenationSpacing">
 		<properties>
@@ -177,7 +177,6 @@
 		<severity>0</severity>
 	</rule>
 
-
 	<!-- Covers rule: Call a function, like so: my_function( $param1, func_param( $param2 ) ); -->
 	<rule ref="PEAR.Functions.FunctionCallSignature">
 		<properties>
@@ -207,7 +206,7 @@
 	<!-- Covers rule: ... array items, only include a space around the index if it is a variable. -->
 	<rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
 
-	<!-- Rule: In a switch block, there must be no space between the case condition and the colon. -->
+	<!-- Covers rule: In a switch block, there must be no space between the case condition and the colon. -->
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
 	<!-- Covers rule: Unless otherwise specified, parentheses should have spaces inside them. -->
@@ -531,7 +530,7 @@
 		 An exception would be using ! empty(), as testing for false here is generally more intuitive.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/643 -->
 
-	<!-- Rule: The short ternary operator must not be used. -->
+	<!-- Covers rule: The short ternary operator must not be used. -->
 	<rule ref="Universal.Operators.DisallowShortTernary"/>
 
 
@@ -587,7 +586,7 @@
 		 as possible, preferably by using $wpdb->prepare(). -->
 	<rule ref="WordPress.DB.PreparedSQL"/>
 
-	<!-- Rule: in $wpdb->prepare - %s is used for string placeholders and %d is used for integer
+	<!-- Covers rule: in $wpdb->prepare - %s is used for string placeholders and %d is used for integer
 		 placeholders. Note that they are not 'quoted'! -->
 	<rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
 
@@ -606,41 +605,41 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#clever-code
 	#############################################################################
 	-->
-	<!-- Rule: In general, readability is more important than cleverness or brevity.
+	<!-- Covers rule: In general, readability is more important than cleverness or brevity.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/607 -->
 	<rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
-	<!-- Rule: Unless absolutely necessary, loose comparisons should not be used,
+	<!-- Covers rule: Unless absolutely necessary, loose comparisons should not be used,
 		 as their behaviour can be misleading. -->
 	<rule phpcs-only="true" ref="Universal.Operators.StrictComparisons">
 		<type>warning</type>
 	</rule>
 	<rule ref="WordPress.PHP.StrictInArray"/>
 
-	<!-- Rule: Assignments must not be placed in conditionals.
+	<!-- Covers rule: Assignments must not be placed in conditionals.
 		 The "assignment in ternary" part of the sniff is currently not yet covered in
 		 the upstream version, which is why there is still a WP native sniff as well. -->
 	<rule ref="Generic.CodeAnalysis.AssignmentInCondition"/>
 	<rule ref="WordPress.CodeAnalysis.AssignmentInTernaryCondition"/>
 
-	<!-- Rule: In a switch statement... If a case contains a block, then falls through
+	<!-- Covers rule: In a switch statement... If a case contains a block, then falls through
 		 to the next block, this must be explicitly commented. -->
 	<!-- Covered by the PSR2.ControlStructures.SwitchDeclaration sniff. -->
 
-	<!-- Rule: The goto statement must never be used. -->
+	<!-- Covers rule: The goto statement must never be used. -->
 	<rule ref="Generic.PHP.DiscourageGoto">
 		<type>error</type>
 		<message>The "goto" language construct should not be used.</message>
 	</rule>
 
-	<!-- Rule: The eval() construct is very dangerous, and is impossible to secure. ... these must not be used. -->
+	<!-- Covers rule: The eval() construct is very dangerous, and is impossible to secure. ... these must not be used. -->
 	<rule ref="Squiz.PHP.Eval.Discouraged">
 		<type>error</type>
 		<message>eval() is a security risk so not allowed.</message>
 	</rule>
 
-	<!-- Rule: create_function() function, which internally performs an eval(),
+	<!-- Covers rule: create_function() function, which internally performs an eval(),
 		 is deprecated in PHP 7.2 and has been removed in PHP 8.0. ... these must not be used. -->
 	<rule ref="WordPress.PHP.RestrictedPHPFunctions"/>
 
@@ -668,8 +667,8 @@
 	<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/632 -->
 
-	<!-- Rule: It's most convenient to use single-quoted strings for regular expressions.
-		 Already covered by Squiz.Strings.DoubleQuoteUsage -->
+	<!-- Covers rule: It's most convenient to use single-quoted strings for regular expressions. -->
+	<!-- Covered by the Squiz.Strings.DoubleQuoteUsage sniff. -->
 
 
 	<!--

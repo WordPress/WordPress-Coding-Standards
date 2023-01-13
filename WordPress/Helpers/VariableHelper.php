@@ -102,7 +102,7 @@ final class VariableHelper {
 	 *              - The $phpcsFile parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The index of the token in the stack.
+	 * @param int                         $stackPtr  The index of the variable token in the stack.
 	 *
 	 * @return string|false The array index key whose value is being accessed.
 	 */

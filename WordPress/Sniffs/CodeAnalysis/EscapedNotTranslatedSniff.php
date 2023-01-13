@@ -43,7 +43,7 @@ final class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var array <string function_name> => <string alternative function>
+	 * @var array<string, string> Key is the name of the function being matched, value the alternative to use.
 	 */
 	protected $target_functions = array(
 		'esc_html' => 'esc_html__',
