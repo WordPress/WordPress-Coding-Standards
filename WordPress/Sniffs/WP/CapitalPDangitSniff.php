@@ -26,7 +26,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   3.0.0  Now also checks namespace names.
  */
-class CapitalPDangitSniff extends Sniff {
+final class CapitalPDangitSniff extends Sniff {
 
 	/**
 	 * Regex to match a large number or spelling variations of WordPress in text strings.

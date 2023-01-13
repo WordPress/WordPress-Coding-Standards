@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   1.1.0
  */
-class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
+final class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

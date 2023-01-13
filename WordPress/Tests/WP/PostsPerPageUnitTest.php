@@ -22,7 +22,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *                 limit being part of the WP category, and the check for pagination
  *                 disabling being part of the VIP category.
  */
-class PostsPerPageUnitTest extends AbstractSniffUnitTest {
+final class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

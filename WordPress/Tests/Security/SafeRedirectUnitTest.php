@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   1.0.0
  */
-class SafeRedirectUnitTest extends AbstractSniffUnitTest {
+final class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

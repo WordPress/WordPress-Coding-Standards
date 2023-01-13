@@ -27,7 +27,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   3.0.0  Added a check for a complete text string in the case where it
  *                 spans two lines.
  */
-class EnqueuedResourcesSniff extends Sniff {
+final class EnqueuedResourcesSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

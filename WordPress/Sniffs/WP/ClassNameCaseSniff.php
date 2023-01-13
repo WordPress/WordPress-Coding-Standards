@@ -18,7 +18,7 @@ use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
  *
  * @since 3.0.0
  */
-class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
+final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 
 	/**
 	 * List of all WP native classes.

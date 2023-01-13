@@ -42,7 +42,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * @since   0.14.0
  */
-class PreparedSQLPlaceholdersSniff extends Sniff {
+final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 	use WPDBTrait;
 

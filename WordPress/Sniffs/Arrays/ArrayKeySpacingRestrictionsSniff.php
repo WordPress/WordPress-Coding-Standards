@@ -25,7 +25,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   2.2.0  The sniff now also checks the size of the spacing, if applicable.
  */
-class ArrayKeySpacingRestrictionsSniff extends Sniff {
+final class ArrayKeySpacingRestrictionsSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

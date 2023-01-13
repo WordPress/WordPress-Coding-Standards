@@ -25,7 +25,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @since 2.1.0
  */
-class IniSetSniff extends AbstractFunctionParameterSniff {
+final class IniSetSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Array of functions that must be checked.

@@ -35,7 +35,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * Last verified with base class July 2020 at commit a957a73e3533353451eb9fd62ee58bd0aba2773c.
  * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php
  */
-class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
+final class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
 
 	/**
 	 * Allow newlines instead of spaces.

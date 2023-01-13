@@ -25,7 +25,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * @since   0.11.0 Refactored to extend the new WordPressCS native `AbstractFunctionParameterSniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class StrictInArraySniff extends AbstractFunctionParameterSniff {
+final class StrictInArraySniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

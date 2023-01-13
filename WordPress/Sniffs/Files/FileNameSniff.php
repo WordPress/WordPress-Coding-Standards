@@ -35,7 +35,7 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
  *
  * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
-class FileNameSniff extends Sniff {
+final class FileNameSniff extends Sniff {
 
 	use IsUnitTestTrait;
 

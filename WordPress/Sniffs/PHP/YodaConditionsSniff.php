@@ -24,7 +24,7 @@ use PHPCSUtils\Tokens\Collections;
  * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class YodaConditionsSniff extends Sniff {
+final class YodaConditionsSniff extends Sniff {
 
 	/**
 	 * The tokens that indicate the start of a condition.

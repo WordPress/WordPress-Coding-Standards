@@ -25,7 +25,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  */
-class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
+final class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

@@ -70,6 +70,13 @@
 	<!-- Enforce PSR1 compatible namespaces. -->
 	<rule ref="PSR1.Classes.ClassDeclaration"/>
 
+	<!-- Enforce that classes are abstract or final. -->
+	<rule ref="Universal.Classes.RequireFinalClass">
+		<!-- ... with the exception of four sniffs which are known to be extended by external standards. -->
+		<exclude-pattern>/WordPress/Sniffs/NamingConventions/ValidHookNameSniff\.php$</exclude-pattern>
+		<exclude-pattern>/WordPress/Sniffs/Security/(EscapeOutput|NonceVerification|ValidatedSanitizedInput)Sniff\.php$</exclude-pattern>
+	</rule>
+
 
 	<!--
 	#############################################################################

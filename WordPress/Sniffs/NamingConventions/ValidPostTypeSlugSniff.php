@@ -27,7 +27,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @since 2.2.0
  */
-class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
+final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Max length of a post type name is limited by the SQL field.

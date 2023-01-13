@@ -18,7 +18,7 @@ use PHPCSUtils\BackCompat\Helper;
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0
  */
-class CapabilitiesUnitTest extends AbstractSniffUnitTest {
+final class CapabilitiesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Adjust the config to allow for testing with specific CLI arguments.

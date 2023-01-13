@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   1.0.0
  */
-class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
+final class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

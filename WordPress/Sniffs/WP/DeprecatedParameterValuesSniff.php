@@ -25,7 +25,7 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
  *
  * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
-class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
+final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 
 	use MinimumWPVersionTrait;
 

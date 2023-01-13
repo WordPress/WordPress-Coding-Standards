@@ -19,7 +19,7 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * @since   1.2.0
  */
-class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
+final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * The tab width to use during testing.

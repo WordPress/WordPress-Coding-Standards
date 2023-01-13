@@ -20,7 +20,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   0.14.0 `create_function` was moved to the PHP.RestrictedFunctions sniff.
  */
-class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to discourage.

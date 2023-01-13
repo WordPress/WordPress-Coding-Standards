@@ -18,7 +18,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *
  * @since   1.0.0
  */
-class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
+final class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.

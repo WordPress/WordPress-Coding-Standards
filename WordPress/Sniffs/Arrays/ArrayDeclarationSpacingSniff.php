@@ -41,7 +41,7 @@ use PHPCSUtils\Utils\PassedParameters;
  *                 "must be multi-line" rule. This behaviour can be changed using the
  *                 `allow_single_item_single_line_associative_arrays` property.
  */
-class ArrayDeclarationSpacingSniff extends Sniff {
+final class ArrayDeclarationSpacingSniff extends Sniff {
 
 	/**
 	 * Whether or not to allow single item associative arrays to be single line.

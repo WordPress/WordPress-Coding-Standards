@@ -19,7 +19,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @since   1.0.0
  */
-class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
+final class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

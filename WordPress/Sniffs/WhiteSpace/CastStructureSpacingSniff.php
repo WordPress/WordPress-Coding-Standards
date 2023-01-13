@@ -28,7 +28,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *                 upstream `Generic.Formatting.SpaceAfterCast.NoSpace` error.
  * @since   2.2.0  Added exception for whitespace between spread operator and cast.
  */
-class CastStructureSpacingSniff extends Sniff {
+final class CastStructureSpacingSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

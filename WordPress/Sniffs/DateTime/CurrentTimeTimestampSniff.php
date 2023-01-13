@@ -30,7 +30,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @since   2.2.0
  */
-class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
+final class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

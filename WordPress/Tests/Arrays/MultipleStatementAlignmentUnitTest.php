@@ -22,7 +22,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.14.0
  */
-class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest {
+final class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * The tab width to use during testing.

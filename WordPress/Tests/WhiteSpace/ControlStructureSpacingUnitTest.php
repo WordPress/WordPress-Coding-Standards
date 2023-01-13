@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   2013-06-11
  * @since   0.13.0     Class name changed: this class is now namespaced.
  */
-class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
+final class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

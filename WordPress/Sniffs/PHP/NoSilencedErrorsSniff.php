@@ -26,7 +26,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * @since   1.1.0
  */
-class NoSilencedErrorsSniff extends Sniff {
+final class NoSilencedErrorsSniff extends Sniff {
 
 	/**
 	 * Number of tokens to display in the error message to show

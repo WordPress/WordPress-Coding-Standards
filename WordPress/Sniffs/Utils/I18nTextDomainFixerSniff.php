@@ -29,7 +29,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *
  * @since   1.2.0
  */
-class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
+final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.

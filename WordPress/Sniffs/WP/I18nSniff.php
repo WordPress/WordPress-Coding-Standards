@@ -36,7 +36,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *                 The parent `exclude` property is, however, disabled as it
  *                 would disable the whole sniff.
  */
-class I18nSniff extends AbstractFunctionRestrictionsSniff {
+final class I18nSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * These Regexes were originally copied from https://www.php.net/function.sprintf#93552

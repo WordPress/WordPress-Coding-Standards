@@ -29,7 +29,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * @link https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 Upstream sniff.
  */
-class AssignmentInTernaryConditionSniff extends Sniff {
+final class AssignmentInTernaryConditionSniff extends Sniff {
 
 	/**
 	 * Assignment tokens to trigger on.

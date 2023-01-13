@@ -33,7 +33,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   3.0.0  This sniff has been refactored and no longer extends the upstream
  *                 PEAR.NamingConventions.ValidFunctionName sniff.
  */
-class ValidFunctionNameSniff extends Sniff {
+final class ValidFunctionNameSniff extends Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

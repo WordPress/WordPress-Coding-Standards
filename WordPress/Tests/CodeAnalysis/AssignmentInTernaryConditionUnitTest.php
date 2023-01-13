@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   0.14.0
  */
-class AssignmentInTernaryConditionUnitTest extends AbstractSniffUnitTest {
+final class AssignmentInTernaryConditionUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

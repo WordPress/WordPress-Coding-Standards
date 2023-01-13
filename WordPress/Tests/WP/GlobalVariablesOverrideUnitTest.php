@@ -21,7 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
  */
-class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
+final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.

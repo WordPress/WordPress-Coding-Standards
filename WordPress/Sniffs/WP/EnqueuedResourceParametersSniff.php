@@ -29,7 +29,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @since 1.0.0
  */
-class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
+final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

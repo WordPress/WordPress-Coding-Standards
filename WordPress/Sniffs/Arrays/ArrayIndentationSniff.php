@@ -29,7 +29,7 @@ use PHPCSUtils\Utils\PassedParameters;
  * {@internal This sniff should eventually be pulled upstream as part of a solution
  * for https://github.com/squizlabs/PHP_CodeSniffer/issues/582 }}
  */
-class ArrayIndentationSniff extends Sniff {
+final class ArrayIndentationSniff extends Sniff {
 
 	/**
 	 * Should tabs be used for indenting?
