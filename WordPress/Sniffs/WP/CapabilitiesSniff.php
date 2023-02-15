@@ -468,7 +468,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 		}
 
 		$this->phpcsFile->addWarning(
-			'Found unknown capability "%s" in function call to %s(). Please check the spelling of the capability. If this is a custom capability, please verify the capability is registered with WordPress via a call to WP_Role(s)->add_cap().' . \PHP_EOL . 'Custom capabilities can be made known to this sniff by setting the "custom_capabilities" property in the PHPCS ruleset.',
+			'Found unknown capability "%s" in function call to %s(). Please check the spelling of the capability. If this is a custom capability, please verify the capability is registered with WordPress via a call to WP_Roles()->add_cap().' . \PHP_EOL . 'Custom capabilities can be made known to this sniff by setting the "custom_capabilities" property in the PHPCS ruleset.',
 			$first_non_empty,
 			'Unknown',
 			array(
