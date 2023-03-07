@@ -162,7 +162,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		 * `$foo = array( 'bar' => 'taz' );`
 		 * `$foo['bar'] = $taz;`
 		 */
-		if ( \in_array( $token['code'], array( \T_CLOSE_SQUARE_BRACKET, \T_DOUBLE_ARROW ), true ) ) {
+		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] || \T_DOUBLE_ARROW === $token['code'] ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 				$operator = $this->phpcsFile->findNext( \T_EQUAL, ( $stackPtr + 1 ) );
@@ -177,7 +177,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$val            = TextStrings::stripQuotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
-		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
+		} elseif ( isset( Tokens::$stringTokens[ $token['code'] ] ) ) {
 			/*
 			 * Covers assignments via query parameters: `$foo = 'bar=taz&other=thing';`.
 			 */
