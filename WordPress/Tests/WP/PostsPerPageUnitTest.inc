@@ -18,13 +18,13 @@ $query_args['numberposts'] = '-1'; // OK.
 $query_args['my_posts_per_page'] = -1; // OK.
 
 // phpcs:set WordPress.WP.PostsPerPage posts_per_page 50
- $query_args['posts_per_page'] = 50; // OK.
- $query_args['posts_per_page'] = 100; // Bad.
- $query_args['posts_per_page'] = 200; // Bad.
- $query_args['posts_per_page'] = 300; // Bad.
+$query_args['posts_per_page'] = 50; // OK.
+$query_args['posts_per_page'] = 100; // Bad.
+$query_args['posts_per_page'] = 200; // Bad.
+$query_args['posts_per_page'] = 300; // Bad.
 // phpcs:set WordPress.WP.PostsPerPage posts_per_page 200
- $query_args['posts_per_page'] = 50; // OK.
- $query_args['posts_per_page'] = 100; // OK.
- $query_args['posts_per_page'] = 200; // OK.
- $query_args['posts_per_page'] = 300; // Bad.
+$query_args['posts_per_page'] = 50; // OK.
+$query_args['posts_per_page'] = 100; // OK.
+$query_args['posts_per_page'] = 200; // OK.
+$query_args['posts_per_page'] = 300; // Bad.
 // phpcs:set WordPress.WP.PostsPerPage posts_per_page 100
