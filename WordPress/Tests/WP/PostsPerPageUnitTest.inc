@@ -75,3 +75,9 @@ $query_args['posts_per_page'] ??= 200; // Bad.
 $val = match($val) {
 	'posts_per_page' => 999, // OK, not an array assignment.
 };
+
+// Verify handling of arrays without trailing comma after the last array item.
+$args = array( 'posts_per_page' => 999 ); // Bad.
+$args = [
+	'posts_per_page' => 999
+]; // Bad.

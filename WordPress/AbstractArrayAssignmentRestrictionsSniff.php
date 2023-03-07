@@ -174,10 +174,18 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $keyIdx ]['code'] ] )
 				&& ! is_numeric( $this->tokens[ $keyIdx ]['content'] )
 			) {
-				$key            = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
-				$valStart       = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true );
-				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
-				$val            = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, ( $valEnd - 1 ), true ) );
+				$key      = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
+				$valStart = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true );
+				$valEnd   = $this->phpcsFile->findEndOfStatement( $valStart, \T_COLON );
+				if ( \T_COMMA === $this->tokens[ $valEnd ]['code']
+					|| \T_SEMICOLON === $this->tokens[ $valEnd ]['code']
+				) {
+					// FindEndOfStatement includes the comma/semi-colon if that's the end of the statement.
+					// That's not what we want (and inconsistent), so remove it.
+					--$valEnd;
+				}
+
+				$val          = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, $valEnd, true ) );
 				$val          = TextStrings::stripQuotes( $val );
 				$inst[ $key ] = array(
 					'value'  => $val,
