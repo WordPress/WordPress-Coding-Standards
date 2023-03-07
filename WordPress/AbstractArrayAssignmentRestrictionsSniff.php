@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
@@ -146,7 +147,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-			$equal = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+			$equal = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 			if ( \T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
 				// This is not an assignment. Bow out.
 				return;
@@ -167,7 +168,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$operator = $this->phpcsFile->findNext( \T_EQUAL, ( $stackPtr + 1 ) );
 			}
 
-			$keyIdx = $this->phpcsFile->findPrevious( array( \T_WHITESPACE, \T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
+			$keyIdx = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
 				$key            = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart       = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $operator + 1 ), null, true );

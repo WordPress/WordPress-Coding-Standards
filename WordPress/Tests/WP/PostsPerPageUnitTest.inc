@@ -42,3 +42,14 @@ _query_posts( 'numberposts' ); // OK.
 
 // Assignments to non-string keys should be ignored.
 $var[10] = 300; // OK.
+
+
+
+// Ensure the sniff disregards comments.
+$query_args['posts_per_page' /* high */ ] = 999; // Bad.
+
+$query_args['posts_per_page'] /* high */  = 999; // Bad.
+
+$args = array(
+	'posts_per_page' /* high */ => 999, // Bad.
+);
