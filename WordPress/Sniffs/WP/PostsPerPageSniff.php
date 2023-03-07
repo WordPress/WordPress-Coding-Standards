@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 
 /**
@@ -67,6 +68,12 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 * @return bool FALSE if no match, TRUE if matches.
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		return ( $val > (int) $this->posts_per_page );
+		$val = TextStrings::stripQuotes( $val );
+		if ( preg_match( '`^[-]?[0-9]+$`', $val ) !== 1 ) {
+			// Not a purely numeric value, so any comparison would be a false comparison.
+			return false;
+		}
+
+		return ( (int) $val > (int) $this->posts_per_page );
 	}
 }

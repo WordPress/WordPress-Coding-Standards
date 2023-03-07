@@ -81,3 +81,24 @@ $args = array( 'posts_per_page' => 999 ); // Bad.
 $args = [
 	'posts_per_page' => 999
 ]; // Bad.
+
+// Verify that the complete value is being captured correctly and that non-numeric values are disregarded.
+$args = array(
+	'posts_per_page' => min( max( $first, $last ), $default_min ), // Should be ignored as undetermined.
+	'posts_per_page' => 10 + $extra, // Should be ignored as undetermined.
+	'posts_per_page' => $value[0][1], // Should be ignored as undetermined.
+	'posts_per_page' => $value ? 10 * $value : 300, // Should be ignored as undetermined.
+	'posts_per_page' => get_value( name: 'post_per_page', type: 'query' ), // Should be ignored as undetermined.
+	'posts_per_page' => function($a): int {
+		return do_something( $a );
+	}, // Should be ignored as undetermined.
+	'posts_per_page' => [ 100, 200, 300 ], // Should be ignored as undetermined.
+	'posts_per_page' => array(100, 200, 300), // Should be ignored as undetermined.
+);
+$query_args['posts_per_page'] = my\get_posts_per_page(); // Should be ignored as undetermined.
+$query_args['posts_per_page'] = '1e3'; // Should be ignored as undetermined. Would evaluate to 1000 with an int cast, but WP doesn't cast the value.
+
+// Purely numeric strings should probably be accepted still as this won't make a difference for the database query.
+$query_args['posts_per_page'] = '50'; // OK.
+$query_args['posts_per_page'] = '200'; // Bad.
+$query_args['posts_per_page'] = "200"; // Bad.
