@@ -102,3 +102,9 @@ $query_args['posts_per_page'] = '1e3'; // Should be ignored as undetermined. Wou
 $query_args['posts_per_page'] = '50'; // OK.
 $query_args['posts_per_page'] = '200'; // Bad.
 $query_args['posts_per_page'] = "200"; // Bad.
+
+// Verify handling of explicitly positive numbers.
+$args = array(
+	'posts_per_page' => +50, // OK.
+	'posts_per_page' => +200, // Bad.
+);

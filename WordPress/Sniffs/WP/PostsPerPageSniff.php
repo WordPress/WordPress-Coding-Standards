@@ -69,7 +69,7 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 */
 	public function callback( $key, $val, $line, $group ) {
 		$val = TextStrings::stripQuotes( $val );
-		if ( preg_match( '`^[-]?[0-9]+$`', $val ) !== 1 ) {
+		if ( preg_match( '`^[+-]?[0-9]+$`', $val ) !== 1 ) {
 			// Not a purely numeric value, so any comparison would be a false comparison.
 			return false;
 		}
