@@ -40,10 +40,10 @@ $firstChars = $text[0] . $text[1]; // OK.
 // Text strings which are not query strings should be ignored.
 _query_posts( 'numberposts' ); // OK.
 
-// Assignments to non-string keys should be ignored.
+// Assignments to non-string keys should be ignored. Note: PHP will auto-cast numeric strings to ints, so those should also be disregarded.
 $var[10] = 300; // OK.
-
-
+$var[] = 400; // OK.
+$var['239'] = 500; // OK.
 
 // Ensure the sniff disregards comments.
 $query_args['posts_per_page' /* high */ ] = 999; // Bad.

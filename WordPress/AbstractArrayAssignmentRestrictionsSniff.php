@@ -169,7 +169,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			}
 
 			$keyIdx = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $keyIdx ]['code'] ] )
+				&& ! is_numeric( $this->tokens[ $keyIdx ]['content'] )
+			) {
 				$key            = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart       = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true );
 				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
