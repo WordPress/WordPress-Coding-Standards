@@ -223,5 +223,25 @@ __( "{$foo['bar']->baz()()}", 'my-slug' );
 __( "${foo->bar}", 'my-slug' );
 __( "${foo["${bar['baz']}"]}", 'my-slug' );
 
+// Safeguard defensive coding.
+__( /* comment */, 'my-slug' ); // Bad, missing first param (parse error).
+
+// phpcs:set WordPress.WP.I18n text_domain[] default
+
+// Safeguard that a comment after a "default" text domain is not removed.
+__( 'String default text domain.' /*comment*/ ); // Warning, text domain can be omitted.
+
+// Test mismatched placeholders.
+_n_noop( 'I have %1$d cat and %2$d dog.' ); // Bad, missing $plural argument, ignore for single/plural placeholder check.
+_n_noop( 'I have %1$d cat and %2$d dog.', $plural ); // Bad, non singular string $plural argument, ignore for single/plural placeholder check.
+_n_noop( 'I have %1$d cat and %2$d dog.', $plural . $text ); // Bad, non singular string $plural argument, ignore for single/plural placeholder check.
+
+_n_noop( 'I have %1$d cat and %2$d dog.', 'I have %1$d cats and %2$d dog.' ); // Ok.
+_n_noop( 'I have %2$d cat and %1$d dog.', 'I have %1$d cats and %2$d dog.' ); // Ok, or at least not something we flag.
+_n_noop( 'I have %1$d cat and %3$d dog.', 'I have %1$d cats and %2$d dog.' ); // Bad, different placeholders used in single vs plural text.
+_n_noop( 'I have %1$d cat, %2$d dog and %3$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched placeholders count.
+_n_noop( 'I have %1$d cat, %2$d dog and %3$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched numbered placeholders count.
+_n_noop( 'I have %1$d cat, %2$d dog and %2$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched numbered placeholders count.
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true

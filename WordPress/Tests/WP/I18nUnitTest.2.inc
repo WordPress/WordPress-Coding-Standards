@@ -107,4 +107,7 @@ _e(); // Bad.
 // phpcs:ignore Standard.Category.Sniff -- testing that the PHPCS annotations are handled correctly.
 printf( __( 'There are %1$d monkeys in the %2$s', 'my-slug' ), intval( $number ), esc_html( $string ) ); // Bad.
 
+__( $notStringLiteral, 'my-slug' ); // Ignore for translators comment, $text not single string literal.
+__( 'text %s' . 'more text', 'my-slug' ); // Ignore for translators comment, $text not single string literal.
+
 // phpcs:set WordPress.WP.I18n text_domain[]

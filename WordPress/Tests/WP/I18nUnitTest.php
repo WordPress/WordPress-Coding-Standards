@@ -125,11 +125,18 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					222 => 1,
 					223 => 1,
 					224 => 1,
+					227 => 1,
+					235 => 1,
+					236 => 1,
+					237 => 1,
+					242 => 2,
 				);
 
 			case 'I18nUnitTest.2.inc':
 				return array(
 					104 => 2,
+					110 => 1,
+					111 => 1,
 				);
 
 			case 'I18nUnitTest.3.inc':
@@ -163,10 +170,6 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 				return array(
 					69  => 1,
 					70  => 1,
-					100 => 1,
-					101 => 1,
-					102 => 1,
-					103 => 1,
 					154 => 1,
 					158 => 1,
 					159 => 1,
@@ -176,6 +179,11 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					194 => 1,
 					198 => 1,
 					199 => 1,
+					232 => 1,
+					241 => 1,
+					242 => 1,
+					243 => 1,
+					244 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
