@@ -235,10 +235,7 @@ final class I18nSniff extends AbstractFunctionRestrictionsSniff {
 	public function process_matched_token( $stack_ptr, $group_name, $matched_content ) {
 
 		$func_open_paren_token = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stack_ptr + 1 ), null, true );
-		if ( false === $func_open_paren_token
-			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $func_open_paren_token ]['code']
-			|| ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] )
-		) {
+		if ( ! isset( $this->tokens[ $func_open_paren_token ]['parenthesis_closer'] ) ) {
 			// Live coding, parse error or not a function call.
 			return;
 		}
