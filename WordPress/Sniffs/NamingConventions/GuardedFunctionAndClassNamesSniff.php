@@ -66,6 +66,16 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 
 		$content = $phpcsFile->getTokensAsString( $wrappingIfToken, $nameToken - $wrappingIfToken );
 
+		$regexp = sprintf( '/if\s*\(\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $name ) );
+		$result = preg_match( $regexp, $content );
+		if ( 1 === $result ) {
+			$returnToken = $phpcsFile->findNext( T_RETURN, $wrappingIfToken );
+			if ( false !== $returnToken && $this->checkIfTokenInsideControlStructure( $phpcsFile, $returnToken, $wrappingIfToken ) ) {
+				// The class was guarded against redeclaration, so bail.
+				return;
+			}
+		}
+
 		$regexp = sprintf( '/if\s*\(\s*!\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $name ) );
 		$result = preg_match( $regexp, $content );
 		if ( 1 !== $result ) {
