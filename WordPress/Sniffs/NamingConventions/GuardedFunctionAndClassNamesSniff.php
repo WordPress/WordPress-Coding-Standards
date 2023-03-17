@@ -40,7 +40,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	}
 
 	private function processFunction( File $phpcsFile, $stackPointer ) {
-		$tokens    = $phpcsFile->getTokens();
+		$tokens        = $phpcsFile->getTokens();
 		$functionToken = $phpcsFile->findNext( T_STRING, $stackPointer );
 
 		$wrappingTokensToCheck = array(
@@ -83,9 +83,9 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	}
 
 	private function processClass( File $phpcsFile, $stackPointer ) {
-		$tokens    = $phpcsFile->getTokens();
+		$tokens     = $phpcsFile->getTokens();
 		$classToken = $phpcsFile->findNext( T_STRING, $stackPointer );
-		$className      = $tokens[ $classToken ]['content'];
+		$className  = $tokens[ $classToken ]['content'];
 
 		foreach ( $this->classesWhiteList as $classnameRegExp ) {
 			if ( preg_match( $classnameRegExp, $className ) ) {
@@ -99,9 +99,9 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		$wrappingIfToken = $phpcsFile->getCondition( $classToken, T_IF, false );
 		if ( false !== $wrappingIfToken ) {
 			$endOfWrappingIfToken = $phpcsFile->findEndOfStatement( $wrappingIfToken );
-			$content = $phpcsFile->getTokensAsString( $wrappingIfToken, $endOfWrappingIfToken - $wrappingIfToken );
-			$regexp = sprintf( '/if\s*\(\s*!\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className ) );
-			$result = preg_match( $regexp, $content );
+			$content              = $phpcsFile->getTokensAsString( $wrappingIfToken, $endOfWrappingIfToken - $wrappingIfToken );
+			$regexp               = sprintf( '/if\s*\(\s*!\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className ) );
+			$result               = preg_match( $regexp, $content );
 			if ( 1 === $result ) {
 				return;
 			}
@@ -115,9 +115,9 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		}
 
 		$endOfPreviousIfToken = $phpcsFile->findEndOfStatement( $previousIfToken );
-		$content = $phpcsFile->getTokensAsString( $previousIfToken, $endOfPreviousIfToken - $previousIfToken );
-		$regexp = sprintf( '/if\s*\(\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className ) );
-		$result = preg_match( $regexp, $content );
+		$content              = $phpcsFile->getTokensAsString( $previousIfToken, $endOfPreviousIfToken - $previousIfToken );
+		$regexp               = sprintf( '/if\s*\(\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className ) );
+		$result               = preg_match( $regexp, $content );
 
 		if ( 1 === $result ) {
 			$returnToken = $phpcsFile->findNext( T_RETURN, $previousIfToken, $endOfPreviousIfToken );
@@ -136,6 +136,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 
 	private static function sanitizeArray( $array ) {
 		$array = array_map( 'trim', $array );
+
 		return array_filter( $array );
 	}
 }
