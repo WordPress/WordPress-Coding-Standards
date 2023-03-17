@@ -1,6 +1,6 @@
 <?php
 
-namespace WordPressCS\WordPress\Sniffs\NamingConventions;
+namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
