@@ -7,11 +7,18 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class GuardedFunctionAndClassNamesSniff implements Sniff {
 	/**
+	 * A list of functions to ignore.
+	 *
+	 * @var integer
+	 */
+	public $functionsWhiteList = array();
+
+	/**
 	 * A list of error codes to ignore.
 	 *
 	 * @var integer
 	 */
-	public $functionPrefixesWhitelist = array();
+	public $classesWhiteList = array();
 
 	public function register() {
 		$this->onRegisterHook();
@@ -28,24 +35,32 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		}
 
 		if ( 'T_CLASS' === $token['type'] ) {
-			//$this->processClass( $phpcsFile, $stackPtr );
+			$this->processClass( $phpcsFile, $stackPtr );
 		}
 	}
 
 	private function processFunction( File $phpcsFile, $stackPtr ) {
 		$tokens    = $phpcsFile->getTokens();
 		$nameToken = $phpcsFile->findNext( T_STRING, $stackPtr );
-		$name      = $tokens[ $nameToken ]['content'];
 
-		foreach ( $this->functionPrefixesWhitelist as $functionPrefix ) {
-			if ( static::str_starts_with( $name, $functionPrefix ) ) {
+		$wrappingClassToken = $phpcsFile->getCondition( $nameToken, T_CLASS, false );
+		$wrappingInterfaceToken = $phpcsFile->getCondition( $nameToken, T_INTERFACE, false );
+		$wrappingTraitToken = $phpcsFile->getCondition( $nameToken, T_TRAIT, false );
+		if ( $wrappingClassToken || $wrappingInterfaceToken || $wrappingTraitToken ) {
+			// This sniff only processes functions, not class methods.
+			return;
+		}
+
+		$name      = $tokens[ $nameToken ]['content'];
+		foreach ( $this->functionsWhiteList as $functionPrefix ) {
+			if ( preg_match( $functionPrefix, $name ) ) {
 				return;
 			}
 		}
 
 		$errorMessage = sprintf( 'The "%s()" function should be guarded against redeclaration.', $name );
 
-		$wrappingIfToken = $phpcsFile->findPrevious( T_IF, $nameToken );
+		$wrappingIfToken = $phpcsFile->getCondition( $nameToken, T_IF, true );
 		if ( false === $wrappingIfToken ) {
 			$phpcsFile->addError( $errorMessage, $nameToken, 'FunctionNotGuardedAgainstRedeclaration' );
 
@@ -57,12 +72,6 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		$regexp = sprintf( '/if\s*\(\s*!\s*function_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $name ) );
 		$result = preg_match( $regexp, $content );
 		if ( 1 !== $result ) {
-			$phpcsFile->addError( $errorMessage, $nameToken, 'FunctionNotGuardedAgainstRedeclaration' );
-
-			return;
-		}
-
-		if ( ! $this->checkIfTokenInsideControlStructure( $phpcsFile, $stackPtr, $wrappingIfToken ) ) {
 			$phpcsFile->addError( $errorMessage, $nameToken, 'FunctionNotGuardedAgainstRedeclaration' );
 		}
 	}
@@ -97,43 +106,16 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		$result = preg_match( $regexp, $content );
 		if ( 1 !== $result ) {
 			$phpcsFile->addError( $errorMessage, $nameToken, 'ClassNotGuardedAgainstRedeclaration' );
-
-			return;
 		}
-
-		if ( ! $this->checkIfTokenInsideControlStructure( $phpcsFile, $stackPtr, $wrappingIfToken ) ) {
-			$phpcsFile->addError( $errorMessage, $nameToken, 'ClassNotGuardedAgainstRedeclaration' );
-		}
-	}
-
-	private function checkIfTokenInsideControlStructure( File $phpcsFile, $tokenToCheck, $startToken ) {
-		$tokens          = $phpcsFile->getTokens();
-		$tokensToProcess = array_slice( $tokens, $startToken, $tokenToCheck - $startToken, true );
-
-		$nestingLevel = 0;
-
-		/** @var array $token */
-		foreach ( $tokensToProcess as $token ) {
-			if ( 'T_OPEN_CURLY_BRACKET' === $token['type'] ) {
-				++ $nestingLevel;
-			}
-
-			if ( 'T_CLOSE_CURLY_BRACKET' === $token['type'] ) {
-				-- $nestingLevel;
-				if ( 0 === $nestingLevel ) {
-					return false;
-				}
-			}
-		}
-
-		return 0 < $nestingLevel;
 	}
 
 	private function onRegisterHook() {
-		$this->functionPrefixesWhitelist = array_filter( array_map( 'trim', $this->functionPrefixesWhitelist ) );
+		$this->functionsWhiteList = static::sanitizeArray($this->functionsWhiteList );
+		$this->classesWhiteList   = static::sanitizeArray($this->classesWhiteList );
 	}
 
-	private static function str_starts_with( string $haystack, string $needle ) {
-		return 0 === strncmp( $haystack, $needle, strlen( $needle ) );
+	private static function sanitizeArray($array) {
+		$array = array_map( 'trim', $array );
+		return array_filter( $array );
 	}
 }
