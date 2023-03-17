@@ -14,7 +14,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	public $functionsWhiteList = array();
 
 	/**
-	 * A list of error codes to ignore.
+	 * A list of classes to ignore.
 	 *
 	 * @var integer
 	 */
