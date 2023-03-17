@@ -6,7 +6,16 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 class GuardedFunctionAndClassNamesSniff implements Sniff {
+	/**
+	 * A list of error codes to ignore.
+	 *
+	 * @var integer
+	 */
+	public $functionPrefixesWhitelist = array();
+
 	public function register() {
+		$this->onRegisterHook();
+
 		return array( T_FUNCTION, T_CLASS );
 	}
 
@@ -15,18 +24,25 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		$token  = $tokens[ $stackPtr ];
 
 		if ( 'T_FUNCTION' === $token['type'] ) {
-			$this->processFunctions( $phpcsFile, $stackPtr );
+			$this->processFunction( $phpcsFile, $stackPtr );
 		}
 
 		if ( 'T_CLASS' === $token['type'] ) {
-			$this->processClasses( $phpcsFile, $stackPtr );
+			//$this->processClass( $phpcsFile, $stackPtr );
 		}
 	}
 
-	private function processFunctions( File $phpcsFile, $stackPtr ) {
-		$tokens       = $phpcsFile->getTokens();
-		$nameToken    = $phpcsFile->findNext( T_STRING, $stackPtr );
-		$name         = $tokens[ $nameToken ]['content'];
+	private function processFunction( File $phpcsFile, $stackPtr ) {
+		$tokens    = $phpcsFile->getTokens();
+		$nameToken = $phpcsFile->findNext( T_STRING, $stackPtr );
+		$name      = $tokens[ $nameToken ]['content'];
+
+		foreach ( $this->functionPrefixesWhitelist as $functionPrefix ) {
+			if ( static::str_starts_with( $name, $functionPrefix ) ) {
+				return;
+			}
+		}
+
 		$errorMessage = sprintf( 'The "%s()" function should be guarded against redeclaration.', $name );
 
 		$wrappingIfToken = $phpcsFile->findPrevious( T_IF, $nameToken );
@@ -51,10 +67,11 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		}
 	}
 
-	private function processClasses( File $phpcsFile, $stackPtr ) {
-		$tokens       = $phpcsFile->getTokens();
-		$nameToken    = $phpcsFile->findNext( T_STRING, $stackPtr );
-		$name         = $tokens[ $nameToken ]['content'];
+	private function processClass( File $phpcsFile, $stackPtr ) {
+		$tokens    = $phpcsFile->getTokens();
+		$nameToken = $phpcsFile->findNext( T_STRING, $stackPtr );
+		$name      = $tokens[ $nameToken ]['content'];
+
 		$errorMessage = sprintf( 'The "%s" class should be guarded against redeclaration.', $name );
 
 		$wrappingIfToken = $phpcsFile->findPrevious( T_IF, $nameToken );
@@ -71,7 +88,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		if ( 1 === $result ) {
 			$returnToken = $phpcsFile->findNext( T_RETURN, $wrappingIfToken );
 			if ( false !== $returnToken && $this->checkIfTokenInsideControlStructure( $phpcsFile, $returnToken, $wrappingIfToken ) ) {
-				// The class was guarded against redeclaration, so bail.
+				// The class is guarded against redeclaration, so let's bail.
 				return;
 			}
 		}
@@ -110,5 +127,13 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		}
 
 		return 0 < $nestingLevel;
+	}
+
+	private function onRegisterHook() {
+		$this->functionPrefixesWhitelist = array_filter( array_map( 'trim', $this->functionPrefixesWhitelist ) );
+	}
+
+	private static function str_starts_with( string $haystack, string $needle ) {
+		return 0 === strncmp( $haystack, $needle, strlen( $needle ) );
 	}
 }
