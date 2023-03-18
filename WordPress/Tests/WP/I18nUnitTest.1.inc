@@ -243,5 +243,46 @@ _n_noop( 'I have %d cat, %d dog and %d canaries.', 'I have %d cats, %d dog and c
 _n_noop( 'I have %1$d cat, %2$d dog and %3$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched numbered placeholders count.
 _n_noop( 'I have %1$d cat, %2$d dog and %2$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched numbered placeholders count.
 
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ * Each of these function calls uses named parameters with an unconventional param order to test this properly.
+ */
+// phpcs:set WordPress.WP.I18n text_domain[] my-slug
+translate( domain: 'my-slug', text: 'translate me', extra: 'default' ); // Bad: too many arguments + use of translate().
+__( domain: 'my-slug' ); // Bad: missing $text argument.
+__( single: 'translate me', domain: 'my-slug' ); // Bad: missing $text argument (invalid 'single' named arg).
+esc_attr__(
+	domain: 'my-slug',
+	text: 'translate
+me multi line', // OK, multi-line text string.
+);
+esc_html__(
+	domain: PLUGIN_TEXTDOMAIN, // Bad: not single text string literal.
+	text: 'translate ' . 'me', // Bad: not single text string literal.
+);
+_e(
+	domain: 'my-slug',
+	text: $translateMe, // Bad: not single text string literal.
+);
+esc_attr_e(
+	domain: 'my-slug',
+	text: "translate
+$me multi line", // Bad: interpolated variable found.
+);
+esc_html_e(
+	domain: 'different-slug', // Bad: wrong text domain.
+	text: 'translate me',
+);
+esc_html_x(
+	context: 'context',
+	domain: 'my-slug',
+	text: 'trans %s late %1$s me', // Bad: mixing ordered and non-ordered placeholders.
+);
+_x( context: 'context', text: 'translate %s me %s', domain:  'my-slug' ); // Bad: multiple placeholders, but no ordering.
+_ex( domain: 'my-slug', text: '%s', context: 'context', ); // Bad: no translatable content.
+esc_attr_x( domain: 'my-slug', context: 'context', text: '<div>translate me</div>', ); // Bad: wrapped in HTML.
+_n( number: $i, domain: 'my-slug', single: 'translate me', plural: 'translate %s me' ); // Bad: missing singular placeholder.
+_nx( number: $i, domain: 'my-slug', plural: 'translate %s me', single: 'translate %1$s me', context: 'context', ); // Bad: mismatch between single/plural placeholders.
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true

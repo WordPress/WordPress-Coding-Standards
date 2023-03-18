@@ -110,4 +110,19 @@ printf( __( 'There are %1$d monkeys in the %2$s', 'my-slug' ), intval( $number )
 __( $notStringLiteral, 'my-slug' ); // Ignore for translators comment, $text not single string literal.
 __( 'text %s' . 'more text', 'my-slug' ); // Ignore for translators comment, $text not single string literal.
 
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+/* translators: %d: number of cats. */
+_n_noop( domain: 'my-slug', singular: 'I have %d cat.', plural: "I have %d cats.", ); // OK.
+
+esc_attr_e( domain: 'my-slug', translate: 'Text to translate to %1$d languages.' ); // Bad, missing $text param, missing translators comment is ignored.
+
+_n_noop(  // Bad, missing translators comment.
+	domain: 'my-slug',
+	plural: "I have %d cats.",
+	singular: 'I have %d cat.',
+);
+
 // phpcs:set WordPress.WP.I18n text_domain[]
