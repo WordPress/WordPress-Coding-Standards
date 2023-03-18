@@ -669,9 +669,19 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 			);
 
 			if ( true === $fix ) {
+				$this->phpcsFile->fixer->beginChangeset();
+
 				$fixed_str = preg_replace( $replace_regexes, $replacements, $content, 1 );
 
 				$this->phpcsFile->fixer->replaceToken( $first_non_empty, $fixed_str );
+
+				$i = ( $first_non_empty + 1 );
+				while ( $i <= $param_info['end'] && isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
+					$this->phpcsFile->fixer->replaceToken( $i, '' );
+					++$i;
+				}
+
+				$this->phpcsFile->fixer->endChangeset();
 			}
 		}
 	}

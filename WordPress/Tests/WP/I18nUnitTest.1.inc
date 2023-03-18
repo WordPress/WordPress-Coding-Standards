@@ -301,5 +301,11 @@ __( text: 'translate me', domain: /*comment*/ 'default' ); // Bad: superfluous d
 _n_noop( domain: 'default' /*comment*/, singular: 'translate me', plural: 'translate me', ); // Bad: superfluous domain.
 _nx_noop( singular: 'translate me', domain /*comment*/: 'default', plural: 'translate me', context: 'context', ); // Bad: superfluous domain.
 
+// Safeguard bug fix: replacing placeholders in multi-line text strings.
+_nx( 'I have
+%d cat and %d dog.', 'I have
+%d cats and %d dogs.', $number, 'Not
+really.' ); // Bad, multiple arguments should be numbered.
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
