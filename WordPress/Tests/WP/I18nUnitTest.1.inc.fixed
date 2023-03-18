@@ -215,13 +215,13 @@ __( '<b><i>Foo</b></i>', 'my-slug' );
 __( '<b><i>Foo</b></i></b>', 'my-slug' );
 __( '<foo>Foo</bar>', 'my-slug' );
 
-// phpcs:set WordPress.WP.I18n text_domain[]
-// phpcs:set WordPress.WP.I18n check_translator_comments true
-
-// Test handling of more complex embedded variables and expressions.
+// Test handling of more complex embedded variables and expressions. All of these should throw an error.
 __( "${foo}", 'my-slug' );
 __( "{$foo['bar']}", 'my-slug' );
 __( "{$foo->bar()}", 'my-slug' );
 __( "{$foo['bar']->baz()()}", 'my-slug' );
 __( "${foo->bar}", 'my-slug' );
 __( "${foo["${bar['baz']}"]}", 'my-slug' );
+
+// phpcs:set WordPress.WP.I18n text_domain[]
+// phpcs:set WordPress.WP.I18n check_translator_comments true
