@@ -123,18 +123,6 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Toggle whether or not to check for translators comments for text string containing placeholders.
-	 *
-	 * Intended to make this part of the sniff unit testable, but can be used by end-users too,
-	 * though they can just as easily disable this via the sniff code.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var bool
-	 */
-	public $check_translator_comments = true;
-
-	/**
 	 * Whether or not the `default` text domain is one of the allowed text domains.
 	 *
 	 * @since 0.14.0
@@ -411,9 +399,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 		/*
 		 * Check if a translators comments is necessary and if so, if it exists.
 		 */
-		if ( true === $this->check_translator_comments ) {
-			$this->check_for_translator_comment( $stackPtr, $matched_content, $parameter_details );
-		}
+		$this->check_for_translator_comment( $stackPtr, $matched_content, $parameter_details );
 	}
 
 	/**

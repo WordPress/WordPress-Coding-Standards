@@ -1,6 +1,6 @@
 <?php
 
-// phpcs:set WordPress.WP.I18n check_translator_comments false
+// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment -- Translator comment issues are tested in test case file 2.
 
 __( 'string' ); // OK - no text domain known, so not checked.
 __( 'string', 'something' ); // OK - no text domain known, so not checked.
@@ -302,4 +302,4 @@ _n_noop( domain: 'default' /*comment*/, singular: 'translate me', plural: 'trans
 _nx_noop( singular: 'translate me', domain /*comment*/: 'default', plural: 'translate me', context: 'context', ); // Bad: superfluous domain.
 
 // phpcs:set WordPress.WP.I18n text_domain[]
-// phpcs:set WordPress.WP.I18n check_translator_comments true
+// phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
