@@ -290,5 +290,16 @@ _nx( number: $i, domain: 'my-slug', plural: 'translate %s me', single: 'translat
 __( 'translate me', 'default', ); // Bad: superfluous domain (positional with trailing comma).
 __( 'translate me', 'default' /*comment*/, ); // Bad: superfluous domain (positional with trailing comma and comment).
 
+// Safeguard handling of named params by the SuperfluousDefaultTextDomain fixer.
+__( text: 'translate me', domain: 'default' ); // Bad: superfluous domain.
+__( text: 'translate me', domain: 'default', ); // Bad: superfluous domain (with trailing comma).
+_n_noop( domain: 'default', singular: 'translate me', plural: 'translate me', ); // Bad: superfluous domain.
+_nx_noop( singular: 'translate me', domain: 'default' /*comment*/, plural: 'translate me', context: 'context', ); // Bad: superfluous domain.
+
+// These should not be auto-fixable as we don't want to remove the comment.
+__( text: 'translate me', domain: /*comment*/ 'default' ); // Bad: superfluous domain.
+_n_noop( domain: 'default' /*comment*/, singular: 'translate me', plural: 'translate me', ); // Bad: superfluous domain.
+_nx_noop( singular: 'translate me', domain /*comment*/: 'default', plural: 'translate me', context: 'context', ); // Bad: superfluous domain.
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true

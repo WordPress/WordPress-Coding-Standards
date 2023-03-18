@@ -578,8 +578,28 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 
 			$first_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
 
-			$before_param = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $first_non_empty - 1 ), null, true );
-			if ( \T_COMMA === $this->tokens[ $before_param ]['code'] ) {
+			// Prevent removing comments when auto-fixing.
+			$remove_from = ( $param_info['start'] - 1 );
+			$remove_to   = $first_non_empty;
+
+			if ( isset( $param_info['name_token'] ) ) {
+				$remove_from = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $param_info['name_token'] - 1 ), null, true );
+				if ( \T_OPEN_PARENTHESIS === $this->tokens[ $remove_from ]['code'] ) {
+					++$remove_from; // Don't remove the open parenthesis.
+
+					/*
+					 * Named param as first param in the function call, if we fix this, we need to
+					 * remove the comma _after_ the parameter as well to prevent creating a parse error.
+					 */
+					$remove_to = $param_info['end'];
+					if ( \T_COMMA === $this->tokens[ ( $param_info['end'] + 1 ) ]['code'] ) {
+						++$remove_to; // Include the comma.
+					}
+				}
+			}
+
+			// Now, make sure there are no comments in the tokens we want to remove.
+			if ( $this->phpcsFile->findNext( Tokens::$commentTokens, $remove_from, ( $remove_to + 1 ) ) === false ) {
 				$fixable = true;
 			}
 
@@ -590,9 +610,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 
 			$fix = $this->phpcsFile->addFixableWarning( $error, $first_non_empty, $error_code, $data );
 			if ( true === $fix ) {
-				// Remove preceeding comma, whitespace and the text domain token.
 				$this->phpcsFile->fixer->beginChangeset();
-				for ( $i = $before_param; $i <= $first_non_empty; $i++ ) {
+				for ( $i = $remove_from; $i <= $remove_to; $i++ ) {
 					$this->phpcsFile->fixer->replaceToken( $i, '' );
 				}
 				$this->phpcsFile->fixer->endChangeset();
