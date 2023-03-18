@@ -361,7 +361,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			if ( 'domain' === $param_name && ! empty( $this->text_domain ) ) {
+			if ( 'domain' === $param_name ) {
 				$this->check_textdomain_matches( $matched_content, $param_name, $param_info );
 			}
 
@@ -543,6 +543,21 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 */
 	private function check_textdomain_matches( $matched_content, $param_name, $param_info ) {
 		$stripped_content = TextStrings::stripQuotes( $param_info['clean'] );
+
+		if ( empty( $this->text_domain ) && '' === $stripped_content ) {
+			$first_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
+
+			$this->phpcsFile->addError(
+				'The passed $domain should never be an empty string. Either pass a text domain or remove the parameter.',
+				$first_non_empty,
+				'EmptyTextDomain'
+			);
+		}
+
+		if ( empty( $this->text_domain ) ) {
+			// Nothing more to do, the other checks all depend on a text domain being known.
+			return;
+		}
 
 		if ( ! \in_array( $stripped_content, $this->text_domain, true ) ) {
 			$first_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
