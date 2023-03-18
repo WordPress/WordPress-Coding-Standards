@@ -284,5 +284,11 @@ esc_attr_x( domain: 'my-slug', context: 'context', text: '<div>translate me</div
 _n( number: $i, domain: 'my-slug', single: 'translate me', plural: 'translate %s me' ); // Bad: missing singular placeholder.
 _nx( number: $i, domain: 'my-slug', plural: 'translate %s me', single: 'translate %1$s me', context: 'context', ); // Bad: mismatch between single/plural placeholders.
 
+// Safeguard that the SuperfluousDefaultTextDomain fixer handles trailing commas correctly.
+// Note: if the original code contained a trailing comma, it is fine for the fixed code to also contain a trailing comma.
+// phpcs:set WordPress.WP.I18n text_domain[] default
+__( 'translate me', ); // Bad: superfluous domain (positional with trailing comma).
+__( 'translate me' /*comment*/, ); // Bad: superfluous domain (positional with trailing comma and comment).
+
 // phpcs:set WordPress.WP.I18n text_domain[]
 // phpcs:set WordPress.WP.I18n check_translator_comments true
