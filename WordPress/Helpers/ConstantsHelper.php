@@ -70,15 +70,15 @@ final class ConstantsHelper {
 
 		// Array of tokens which if found preceding the $stackPtr indicate that a T_STRING is not a global constant.
 		$tokens_to_ignore  = array(
-			\T_NAMESPACE       => true,
-			\T_USE             => true,
-			\T_EXTENDS         => true,
-			\T_IMPLEMENTS      => true,
-			\T_NEW             => true,
-			\T_FUNCTION        => true,
-			\T_INSTANCEOF      => true,
-			\T_INSTEADOF       => true,
-			\T_GOTO            => true,
+			\T_NAMESPACE  => true,
+			\T_USE        => true,
+			\T_EXTENDS    => true,
+			\T_IMPLEMENTS => true,
+			\T_NEW        => true,
+			\T_FUNCTION   => true,
+			\T_INSTANCEOF => true,
+			\T_INSTEADOF  => true,
+			\T_GOTO       => true,
 		);
 		$tokens_to_ignore += Tokens::$ooScopeTokens;
 		$tokens_to_ignore += Collections::objectOperators();

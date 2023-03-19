@@ -960,7 +960,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 				}
 
-				unset( $has_global, $end_of_statement, $ptr, $imported );
+				unset( $has_global, $end_of_statement, $ptr );
 			}
 		}
 

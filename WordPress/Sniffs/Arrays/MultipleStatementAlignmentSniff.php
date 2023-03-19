@@ -336,7 +336,7 @@ final class MultipleStatementAlignmentSniff extends Sniff {
 				++$double_arrow_cols[ $this->tokens[ $double_arrow ]['column'] ];
 			}
 		}
-		unset( $key, $item, $double_arrow, $has_array_opener, $last_index_token );
+		unset( $key, $item, $double_arrow, $last_index_token );
 
 		if ( empty( $items ) || empty( $index_end_cols ) ) {
 			// No actionable array items found.

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
-use PHPCSUtils\BackCompat\BCTokens;
+use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\NamingConventions;
 use PHPCSUtils\Utils\ObjectDeclarations;
@@ -76,7 +76,7 @@ final class ValidFunctionNameSniff extends Sniff {
 			return;
 		}
 
-		$ooPtr = Scopes::validDirectScope( $this->phpcsFile, $stackPtr, BCTokens::ooScopeTokens() );
+		$ooPtr = Scopes::validDirectScope( $this->phpcsFile, $stackPtr, Tokens::$ooScopeTokens );
 		if ( false === $ooPtr ) {
 			$this->process_function_declaration( $stackPtr, $name );
 		} else {

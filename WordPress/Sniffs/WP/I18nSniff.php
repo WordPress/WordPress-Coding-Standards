@@ -274,12 +274,21 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( 'typos' === $group_name && '_' === $matched_content ) {
-			$this->phpcsFile->addError( 'Found single-underscore "_()" function when double-underscore expected.', $stackPtr, 'SingleUnderscoreGetTextFunction' );
+			$this->phpcsFile->addError(
+				'Found single-underscore "_()" function when double-underscore expected.',
+				$stackPtr,
+				'SingleUnderscoreGetTextFunction'
+			);
 			return;
 		}
 
-		if ( \in_array( $matched_content, array( 'translate', 'translate_with_gettext_context' ), true ) ) {
-			$this->phpcsFile->addWarning( 'Use of the "%s()" function is reserved for low-level API usage.', $stackPtr, 'LowLevelTranslationFunction', array( $matched_content ) );
+		if ( 'translate' === $matched_content || 'translate_with_gettext_context' === $matched_content ) {
+			$this->phpcsFile->addWarning(
+				'Use of the "%s()" function is reserved for low-level API usage.',
+				$stackPtr,
+				'LowLevelTranslationFunction',
+				array( $matched_content )
+			);
 		}
 
 		parent::process_matched_token( $stackPtr, $group_name, $matched_content );
