@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\ObjectOperatorSpacingSniff as Squiz_ObjectOperatorSpacingSniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\ObjectOperatorSpacingSniff as Squiz_ObjectOperatorSpacingSniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 /**

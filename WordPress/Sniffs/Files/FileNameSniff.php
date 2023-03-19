@@ -12,8 +12,8 @@ namespace WordPressCS\WordPress\Sniffs\Files;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\TextStrings;
-use WordPressCS\WordPress\Sniff;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Ensures filenames do not contain underscores and where applicable are prefixed with `class-`.

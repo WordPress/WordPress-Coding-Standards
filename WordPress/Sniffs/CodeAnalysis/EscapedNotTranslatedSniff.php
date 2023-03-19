@@ -9,9 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\GetTokensAsString;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Flag calls to escaping functions which look like they may have been intended

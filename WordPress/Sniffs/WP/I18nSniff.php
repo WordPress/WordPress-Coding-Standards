@@ -14,9 +14,9 @@ use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
-use XMLReader;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use XMLReader;
 
 /**
  * Makes sure WP internationalization functions are used properly.

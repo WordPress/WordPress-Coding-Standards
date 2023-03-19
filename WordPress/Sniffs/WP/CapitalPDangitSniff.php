@@ -11,8 +11,8 @@ namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
-use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Namespaces;
+use PHPCSUtils\Utils\ObjectDeclarations;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Sniff;
 
