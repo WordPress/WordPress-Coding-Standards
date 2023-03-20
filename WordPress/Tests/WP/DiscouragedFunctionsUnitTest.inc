@@ -38,6 +38,12 @@ use function someOtherFunction as wp_reset_query; // OK, alias, not our target.
 function &query_posts() {} // OK, function declaration, not function use.
 $obj = new WP_Reset_Query(); // OK, class instantiation, not function call.
 
+// Prevent false positives on class instantiations in PHP 8.0+ attributes.
+class AttributesShouldBeIgnored {
+	#[WP_Reset_Query()]
+	public function foo() {}
+}
+
 // Live coding/parse error.
 // This has to be the last test in the file!!!
 \query_posts

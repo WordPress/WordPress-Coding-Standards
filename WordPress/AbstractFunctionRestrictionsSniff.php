@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\MessageHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -220,6 +221,11 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $stackPtr ) === true ) {
+			return false;
+		}
+
+		if ( Context::inAttribute( $this->phpcsFile, $stackPtr ) ) {
+			// Class instantiation or constant in attribute, not function call.
 			return false;
 		}
 
