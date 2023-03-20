@@ -186,7 +186,9 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					52  => 1,
 					74  => 1,
 					85  => 1,
+					94  => 1,
 					108 => 1,
+					121 => 1,
 				);
 
 			default:
