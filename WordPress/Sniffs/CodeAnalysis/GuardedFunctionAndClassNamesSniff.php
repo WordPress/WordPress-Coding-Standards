@@ -106,7 +106,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 *     return;
 	 * }
 	 *
-	 * or
+	 * or, alternatively:
 	 *
 	 * if ( ! class_exists( 'WP_Navigation' ) ) {
 	 *    class WP_Navigation { ... }
