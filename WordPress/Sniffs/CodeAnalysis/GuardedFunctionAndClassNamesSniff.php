@@ -32,6 +32,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 
 		if ( 'T_FUNCTION' === $token['type'] ) {
 			$this->processFunction( $phpcsFile, $stackPtr );
+			return;
 		}
 
 		if ( 'T_CLASS' === $token['type'] ) {
@@ -134,6 +135,9 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		$this->classesWhiteList   = static::sanitizeArray( $this->classesWhiteList );
 	}
 
+	/**
+	 * Input data needs to be sanitized.
+	 */
 	private static function sanitizeArray( $array ) {
 		$array = array_map( 'trim', $array );
 
