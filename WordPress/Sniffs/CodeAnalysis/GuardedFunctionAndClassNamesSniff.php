@@ -6,11 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
- * Implements the Gutenberg coding standard for checking if
- * functions and classes are wrapped with !function_exists() and !class_exists().
- * This sniff checks if functions and classes are already defined
- * and recommends wrapping them with !function_exists() and !class_exists()
- * to avoid fatal errors that may occur when merging the feature to the Core.
+ * The sniff implements the Gutenberg coding standard to verify whether functions and classes
+ * are enclosed with function_exists() and !class_exists(). This check ensures that the functions
+ * and classes are not already defined, and recommends the use of function_exists() and class_exists()
+ * to prevent fatal errors during the integration of the feature to the Core.
  *
  * @link https://github.com/WordPress/gutenberg/blob/trunk/lib/README.md#wrap-functions-and-classes-with--function_exists-and--class_exists
  */
