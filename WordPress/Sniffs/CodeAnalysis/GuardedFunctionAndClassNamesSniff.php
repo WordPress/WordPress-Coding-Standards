@@ -50,7 +50,11 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	}
 
 	/**
-	 * Process function tokens.
+	 * Functions should be wrapped with !function_exists() to avoid fatal errors.
+	 * E.g.:
+	 * if ( ! function_exists( 'wp_get_navigation' ) ) {
+	 *     function wp_get_navigation( $slug ) { ... }
+	 * }
 	 */
 	private function processFunction( File $phpcsFile, $stackPointer ) {
 		$tokens        = $phpcsFile->getTokens();
@@ -96,7 +100,17 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	}
 
 	/**
-	 * Process class tokens.
+	 * Classes should be wrapped with !function_exists() to avoid fatal errors.
+	 * E.g.:
+	 * if ( class_exists( 'WP_Navigation' ) ) {
+	 *     return;
+	 * }
+	 *
+	 * or
+	 *
+	 * if ( ! class_exists( 'WP_Navigation' ) ) {
+	 *    class WP_Navigation { ... }
+	 * }
 	 */
 	private function processClass( File $phpcsFile, $stackPointer ) {
 		$tokens     = $phpcsFile->getTokens();
