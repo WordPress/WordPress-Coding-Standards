@@ -12,6 +12,10 @@ use PHP_CodeSniffer\Sniffs\Sniff;
  * to prevent fatal errors during the integration of the feature to the Core.
  *
  * @link https://github.com/WordPress/gutenberg/blob/trunk/lib/README.md#wrap-functions-and-classes-with--function_exists-and--class_exists
+ *
+ * @package WPCS\WordPressCodingStandards
+ *
+ * @since   3.0.0
  */
 class GuardedFunctionAndClassNamesSniff implements Sniff {
 	/**
