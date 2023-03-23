@@ -50,6 +50,8 @@
 
 		<!-- Linting is done in a separate CI job, no need to duplicate it. -->
 		<exclude name="Generic.PHP.Syntax"/>
+		<!--This rule should only be applied to code that is intended to be merged into Core. -->
+		<exclude name="WordPress.CodeAnalysis.GuardedFunctionAndClassNames"/>
 	</rule>
 
 	<!-- Check code for cross-version PHP compatibility. -->
