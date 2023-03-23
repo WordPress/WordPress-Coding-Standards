@@ -198,8 +198,8 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	}
 
 	private function onRegisterEvent() {
-		$this->functionsWhiteList = static::sanitize( $this->functionsWhiteList );
-		$this->classesWhiteList   = static::sanitize( $this->classesWhiteList );
+		$this->functionsWhiteList = self::sanitize( $this->functionsWhiteList );
+		$this->classesWhiteList   = self::sanitize( $this->classesWhiteList );
 	}
 
 	/**
