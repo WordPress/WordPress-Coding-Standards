@@ -55,7 +55,9 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	/**
 	 * Processes function and class tokens.
 	 *
-	 * @since 3.0.0
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The position of the current token
+	 *                                               in the stack passed in $tokens.
 	 *
 	 * @return void
 	 */
