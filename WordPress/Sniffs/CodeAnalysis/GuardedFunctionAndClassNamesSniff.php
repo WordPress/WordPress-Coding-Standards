@@ -1,4 +1,11 @@
 <?php
+/**
+ * WordPress Coding Standard.
+ *
+ * @package WPCS\WordPressCodingStandards
+ * @link    https://github.com/WordPress/WordPress-Coding-Standards
+ * @license https://opensource.org/licenses/MIT MIT
+ */
 
 namespace WordPressCS\WordPress\Sniffs\CodeAnalysis;
 
@@ -17,7 +24,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
  *
  * @since   3.0.0
  */
-class GuardedFunctionAndClassNamesSniff implements Sniff {
+final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	/**
 	 * A list of functions to ignore.
 	 *
