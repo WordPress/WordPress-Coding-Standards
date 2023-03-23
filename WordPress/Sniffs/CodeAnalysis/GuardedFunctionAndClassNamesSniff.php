@@ -55,9 +55,9 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	/**
 	 * Processes function and class tokens.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The position of the current token
-	 *                                               in the stack passed in $tokens.
+	 * @param File  $phpcsFile  The file being scanned.
+	 * @param int   $stackPtr   The position of the current token
+	 *                          in the stack passed in $tokens.
 	 *
 	 * @return void
 	 */
@@ -81,6 +81,12 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 * if ( ! function_exists( 'wp_get_navigation' ) ) {
 	 *     function wp_get_navigation( $slug ) { ... }
 	 * }
+	 *
+	 * @param File  $phpcsFile      The file being scanned.
+	 * @param int   $stackPointer   The position of the current token
+	 *                              in the stack passed in $tokens.
+	 *
+	 * @return void
 	 */
 	private function processFunctionToken( File $phpcsFile, $stackPointer ) {
 		$tokens        = $phpcsFile->getTokens();
@@ -137,6 +143,12 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 * if ( ! class_exists( 'WP_Navigation' ) ) {
 	 *    class WP_Navigation { ... }
 	 * }
+	 *
+	 * @param File  $phpcsFile      The file being scanned.
+	 * @param int   $stackPointer   The position of the current token
+	 *                              in the stack passed in $tokens.
+	 *
+	 * @return void
 	 */
 	private function processClassToken( File $phpcsFile, $stackPointer ) {
 		$tokens     = $phpcsFile->getTokens();
