@@ -170,9 +170,9 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	/**
 	 * Input data needs to be sanitized.
 	 */
-	private static function sanitize( $array ) {
-		$array = array_map( 'trim', $array );
+	private static function sanitize( $values ) {
+		$values = array_map( 'trim', $values );
 
-		return array_filter( $array );
+		return array_filter( $values );
 	}
 }
