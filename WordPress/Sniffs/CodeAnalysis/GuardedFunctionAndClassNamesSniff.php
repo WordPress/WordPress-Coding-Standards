@@ -95,7 +95,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 
 		$content = $phpcsFile->getTokensAsString( $wrappingIfToken, $functionToken - $wrappingIfToken );
 
-		$regexp = sprintf( '/if\s*\(\s*!\s*function_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $name ) );
+		$regexp = sprintf( '/if\s*\(\s*!\s*function_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $name, '/' ) );
 		$result = preg_match( $regexp, $content );
 		if ( 1 !== $result ) {
 			$phpcsFile->addError( $errorMessage, $functionToken, 'FunctionNotGuardedAgainstRedeclaration' );
@@ -133,7 +133,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 		if ( false !== $wrappingIfToken ) {
 			$endOfWrappingIfToken = $phpcsFile->findEndOfStatement( $wrappingIfToken );
 			$content              = $phpcsFile->getTokensAsString( $wrappingIfToken, $endOfWrappingIfToken - $wrappingIfToken );
-			$regexp               = sprintf( '/if\s*\(\s*!\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className ) );
+			$regexp               = sprintf( '/if\s*\(\s*!\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className, '/' ) );
 			$result               = preg_match( $regexp, $content );
 			if ( 1 === $result ) {
 				return;
@@ -149,7 +149,7 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 
 		$endOfPreviousIfToken = $phpcsFile->findEndOfStatement( $previousIfToken );
 		$content              = $phpcsFile->getTokensAsString( $previousIfToken, $endOfPreviousIfToken - $previousIfToken );
-		$regexp               = sprintf( '/if\s*\(\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className ) );
+		$regexp               = sprintf( '/if\s*\(\s*class_exists\s*\(\s*(\'|")%s(\'|")/', preg_quote( $className, '/' ) );
 		$result               = preg_match( $regexp, $content );
 
 		if ( 1 === $result ) {
@@ -163,14 +163,14 @@ class GuardedFunctionAndClassNamesSniff implements Sniff {
 	}
 
 	private function onRegisterEvent() {
-		$this->functionsWhiteList = static::sanitizeArray( $this->functionsWhiteList );
-		$this->classesWhiteList   = static::sanitizeArray( $this->classesWhiteList );
+		$this->functionsWhiteList = static::sanitize( $this->functionsWhiteList );
+		$this->classesWhiteList   = static::sanitize( $this->classesWhiteList );
 	}
 
 	/**
 	 * Input data needs to be sanitized.
 	 */
-	private static function sanitizeArray( $array ) {
+	private static function sanitize( $array ) {
 		$array = array_map( 'trim', $array );
 
 		return array_filter( $array );
