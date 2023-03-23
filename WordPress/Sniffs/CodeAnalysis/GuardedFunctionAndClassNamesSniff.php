@@ -39,23 +39,37 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 */
 	public $classesWhiteList = array();
 
+	/**
+	 * Registers the tokens that this sniff wants to listen for.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array
+	 */
 	public function register() {
 		$this->onRegisterEvent();
 
 		return array( T_FUNCTION, T_CLASS );
 	}
 
+	/**
+	 * Processes function and class tokens.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return void
+	 */
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
 		if ( 'T_FUNCTION' === $token['type'] ) {
-			$this->processFunction( $phpcsFile, $stackPtr );
+			$this->processFunctionToken( $phpcsFile, $stackPtr );
 			return;
 		}
 
 		if ( 'T_CLASS' === $token['type'] ) {
-			$this->processClass( $phpcsFile, $stackPtr );
+			$this->processClassToken( $phpcsFile, $stackPtr );
 		}
 	}
 
@@ -66,7 +80,7 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 *     function wp_get_navigation( $slug ) { ... }
 	 * }
 	 */
-	private function processFunction( File $phpcsFile, $stackPointer ) {
+	private function processFunctionToken( File $phpcsFile, $stackPointer ) {
 		$tokens        = $phpcsFile->getTokens();
 		$functionToken = $phpcsFile->findNext( T_STRING, $stackPointer );
 
@@ -122,7 +136,7 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 *    class WP_Navigation { ... }
 	 * }
 	 */
-	private function processClass( File $phpcsFile, $stackPointer ) {
+	private function processClassToken( File $phpcsFile, $stackPointer ) {
 		$tokens     = $phpcsFile->getTokens();
 		$classToken = $phpcsFile->findNext( T_STRING, $stackPointer );
 		$className  = $tokens[ $classToken ]['content'];
