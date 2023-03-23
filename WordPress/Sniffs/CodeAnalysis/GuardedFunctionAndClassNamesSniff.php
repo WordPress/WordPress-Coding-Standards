@@ -138,7 +138,7 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 	 *     return;
 	 * }
 	 *
-	 * or, alternatively:
+	 * Alternatively:
 	 *
 	 * if ( ! class_exists( 'WP_Navigation' ) ) {
 	 *    class WP_Navigation { ... }
@@ -197,6 +197,10 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 		$phpcsFile->addError( $errorMessage, $classToken, 'ClassNotGuardedAgainstRedeclaration' );
 	}
 
+	/**
+	 * The purpose of this method is to sanitize the input data
+	 * after the properties have been set.
+	 */
 	private function onRegisterEvent() {
 		$this->functionsWhiteList = self::sanitize( $this->functionsWhiteList );
 		$this->classesWhiteList   = self::sanitize( $this->classesWhiteList );
@@ -204,6 +208,10 @@ final class GuardedFunctionAndClassNamesSniff implements Sniff {
 
 	/**
 	 * Input data needs to be sanitized.
+	 *
+	 * @param array $values The values being sanitized.
+	 *
+	 * @return array
 	 */
 	private static function sanitize( $values ) {
 		$values = array_map( 'trim', $values );
