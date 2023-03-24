@@ -17,10 +17,12 @@ echo 'Hello world';
 
 $a = function_call();
 
+// phpcs:disable WordPress.CodeAnalysis.GuardedFunctionAndClassNames
+
 /**
  * Class docblock.
  */
-class Ruleset_Test { // phpcs:ignore WordPress.CodeAnalysis.GuardedFunctionAndClassNames
+class Ruleset_Test {
 	/**
 	 * Constant docblock.
 	 *
