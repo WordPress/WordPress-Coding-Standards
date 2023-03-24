@@ -26,7 +26,10 @@ final class GuardedFunctionAndClassNamesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of errors>
 	 */
 	public function getErrorList() {
-		return array();
+		return array(
+			17 => 1,
+			25 => 1,
+		);
 	}
 
 	/**
@@ -35,10 +38,7 @@ final class GuardedFunctionAndClassNamesUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array(
-			17 => 1,
-			25 => 1,
-		);
+		return array();
 	}
 
 }
