@@ -69,7 +69,7 @@ jobs:
         if: ${{ matrix.php >= 8.0 || matrix.php == 'latest' }}
         uses: ramsey/composer-install@v2
         with:
-          composer-options: --ignore-platform-reqs
+          composer-options: --ignore-platform-req=php+
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: Lint PHP files against parse errors
