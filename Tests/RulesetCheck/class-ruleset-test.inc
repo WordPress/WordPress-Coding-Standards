@@ -20,7 +20,7 @@ $a = function_call();
 /**
  * Class docblock.
  */
-class Ruleset_Test {
+class Ruleset_Test { // phpcs:ignore WordPress.CodeAnalysis.GuardedFunctionAndClassNames
 	/**
 	 * Constant docblock.
 	 *
