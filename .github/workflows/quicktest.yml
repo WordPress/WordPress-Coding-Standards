@@ -24,12 +24,7 @@ jobs:
     strategy:
       matrix:
         php: [ '5.4', 'latest' ]
-        phpcs_version: [ 'dev-master' ]
-        include:
-          - php: '7.3'
-            phpcs_version: '3.7.1'
-          - php: '5.4'
-            phpcs_version: '3.7.1'
+        phpcs_version: [ '3.7.1', 'dev-master' ]
 
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
