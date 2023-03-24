@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         php: [ '5.4', 'latest' ]
-        phpcs_version: [ '3.7.1', 'dev-master' ]
+        phpcs_version: [ 'lowest', 'dev-master' ]
 
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
@@ -50,7 +50,8 @@ jobs:
           ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
           coverage: none
 
-      - name: Set PHPCS version
+      - name: "Set PHPCS version (master)"
+        if: ${{ matrix.phpcs_version != 'lowest' }}
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies (PHP < 8.0 )
@@ -66,6 +67,10 @@ jobs:
         with:
           composer-options: --ignore-platform-req=php+
           custom-cache-suffix: $(date -u "+%Y-%m")
+
+      - name: "Set PHPCS version (lowest)"
+        if: ${{ matrix.phpcs_version == 'lowest' }}
+        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_version == 'dev-master' }}

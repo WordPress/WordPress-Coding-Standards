@@ -98,7 +98,7 @@ jobs:
     strategy:
       matrix:
         php: [ 'latest' ]
-        phpcs_version: [ '3.7.1', 'dev-master' ]
+        phpcs_version: [ 'lowest', 'dev-master' ]
 
     name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
 
@@ -114,7 +114,8 @@ jobs:
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
           coverage: none
 
-      - name: Set PHPCS version
+      - name: "Set PHPCS version (master)"
+        if: ${{ matrix.phpcs_version != 'lowest' }}
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
@@ -123,6 +124,10 @@ jobs:
           composer-options: --no-dev
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
+
+      - name: "Set PHPCS version (lowest)"
+        if: ${{ matrix.phpcs_version == 'lowest' }}
+        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
 
       - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
