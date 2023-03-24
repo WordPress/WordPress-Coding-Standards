@@ -22,6 +22,5 @@ if ( ! function_exists( 'quux' ) ) {
 	}
 }
 
-
 function blarg() {
 }

@@ -36,9 +36,8 @@ final class GuardedFunctionAndClassNamesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			6 => 1,
-			7 => 1,
-			8 => 1,
+			17 => 1,
+			25 => 1,
 		);
 	}
 
