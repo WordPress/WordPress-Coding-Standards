@@ -1,6 +1,6 @@
 <?php
 
-// phpcs:set WordPress.WP.I18n check_translator_comments false
+// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment -- Translator comment issues are tested in test case file 2.
 
 __( 'string' ); // OK - no text domain known, so not checked.
 __( 'string', 'something' ); // OK - no text domain known, so not checked.
@@ -215,13 +215,103 @@ __( '<b><i>Foo</b></i>', 'my-slug' );
 __( '<b><i>Foo</b></i></b>', 'my-slug' );
 __( '<foo>Foo</bar>', 'my-slug' );
 
-// phpcs:set WordPress.WP.I18n text_domain[]
-// phpcs:set WordPress.WP.I18n check_translator_comments true
-
-// Test handling of more complex embedded variables and expressions.
+// Test handling of more complex embedded variables and expressions. All of these should throw an error.
 __( "${foo}", 'my-slug' );
 __( "{$foo['bar']}", 'my-slug' );
 __( "{$foo->bar()}", 'my-slug' );
 __( "{$foo['bar']->baz()()}", 'my-slug' );
 __( "${foo->bar}", 'my-slug' );
 __( "${foo["${bar['baz']}"]}", 'my-slug' );
+
+// Safeguard defensive coding.
+__( /* comment */, 'my-slug' ); // Bad, missing first param (parse error).
+
+// phpcs:set WordPress.WP.I18n text_domain[] default
+
+// Safeguard that a comment after a "default" text domain is not removed.
+__( 'String default text domain.' /*comment*/ ); // Warning, text domain can be omitted.
+
+// Test mismatched placeholders.
+_n_noop( 'I have %1$d cat and %2$d dog.' ); // Bad, missing $plural argument, ignore for single/plural placeholder check.
+_n_noop( 'I have %1$d cat and %2$d dog.', $plural ); // Bad, non singular string $plural argument, ignore for single/plural placeholder check.
+_n_noop( 'I have %1$d cat and %2$d dog.', $plural . $text ); // Bad, non singular string $plural argument, ignore for single/plural placeholder check.
+
+_n_noop( 'I have %1$d cat and %2$d dog.', 'I have %1$d cats and %2$d dog.' ); // Ok.
+_n_noop( 'I have %2$d cat and %1$d dog.', 'I have %1$d cats and %2$d dog.' ); // Ok, or at least not something we flag.
+_n_noop( 'I have %1$d cat and %3$d dog.', 'I have %1$d cats and %2$d dog.' ); // Bad, different placeholders used in single vs plural text.
+_n_noop( 'I have %1$d cat, %2$d dog and %3$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched placeholders count.
+_n_noop( 'I have %1$d cat, %2$d dog and %3$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched numbered placeholders count.
+_n_noop( 'I have %1$d cat, %2$d dog and %2$d canaries.', 'I have %1$d cats, %2$d dog and canaries.' ); // Bad, mismatched numbered placeholders count.
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ * Each of these function calls uses named parameters with an unconventional param order to test this properly.
+ */
+// phpcs:set WordPress.WP.I18n text_domain[] my-slug
+translate( domain: 'my-slug', text: 'translate me', extra: 'default' ); // Bad: too many arguments + use of translate().
+__( domain: 'my-slug' ); // Bad: missing $text argument.
+__( single: 'translate me', domain: 'my-slug' ); // Bad: missing $text argument (invalid 'single' named arg).
+esc_attr__(
+	domain: 'my-slug',
+	text: 'translate
+me multi line', // OK, multi-line text string.
+);
+esc_html__(
+	domain: PLUGIN_TEXTDOMAIN, // Bad: not single text string literal.
+	text: 'translate ' . 'me', // Bad: not single text string literal.
+);
+_e(
+	domain: 'my-slug',
+	text: $translateMe, // Bad: not single text string literal.
+);
+esc_attr_e(
+	domain: 'my-slug',
+	text: "translate
+$me multi line", // Bad: interpolated variable found.
+);
+esc_html_e(
+	domain: 'different-slug', // Bad: wrong text domain.
+	text: 'translate me',
+);
+esc_html_x(
+	context: 'context',
+	domain: 'my-slug',
+	text: 'trans %s late %1$s me', // Bad: mixing ordered and non-ordered placeholders.
+);
+_x( context: 'context', text: 'translate %1$s me %2$s', domain:  'my-slug' ); // Bad: multiple placeholders, but no ordering.
+_ex( domain: 'my-slug', text: '%s', context: 'context', ); // Bad: no translatable content.
+esc_attr_x( domain: 'my-slug', context: 'context', text: '<div>translate me</div>', ); // Bad: wrapped in HTML.
+_n( number: $i, domain: 'my-slug', single: 'translate me', plural: 'translate %s me' ); // Bad: missing singular placeholder.
+_nx( number: $i, domain: 'my-slug', plural: 'translate %s me', single: 'translate %1$s me', context: 'context', ); // Bad: mismatch between single/plural placeholders.
+
+// Safeguard that the SuperfluousDefaultTextDomain fixer handles trailing commas correctly.
+// Note: if the original code contained a trailing comma, it is fine for the fixed code to also contain a trailing comma.
+// phpcs:set WordPress.WP.I18n text_domain[] default
+__( 'translate me', ); // Bad: superfluous domain (positional with trailing comma).
+__( 'translate me' /*comment*/, ); // Bad: superfluous domain (positional with trailing comma and comment).
+
+// Safeguard handling of named params by the SuperfluousDefaultTextDomain fixer.
+__( text: 'translate me' ); // Bad: superfluous domain.
+__( text: 'translate me', ); // Bad: superfluous domain (with trailing comma).
+_n_noop( singular: 'translate me', plural: 'translate me', ); // Bad: superfluous domain.
+_nx_noop( singular: 'translate me' /*comment*/, plural: 'translate me', context: 'context', ); // Bad: superfluous domain.
+
+// These should not be auto-fixable as we don't want to remove the comment.
+__( text: 'translate me', domain: /*comment*/ 'default' ); // Bad: superfluous domain.
+_n_noop( domain: 'default' /*comment*/, singular: 'translate me', plural: 'translate me', ); // Bad: superfluous domain.
+_nx_noop( singular: 'translate me', domain /*comment*/: 'default', plural: 'translate me', context: 'context', ); // Bad: superfluous domain.
+
+// Safeguard bug fix: replacing placeholders in multi-line text strings.
+_nx( 'I have
+%1$d cat and %2$d dog.', 'I have
+%1$d cats and %2$d dogs.', $number, 'Not
+really.' ); // Bad, multiple arguments should be numbered.
+
+// Show an error when the text domain is an empty string.
+esc_html_e( 'foo', '' ); // Bad: text domain mismatch.
+
+// Issue #1948 - Show an error when the text domain is an empty string and no text domain has been passed.
+// phpcs:set WordPress.WP.I18n text_domain[]
+esc_html_e( 'foo', '' ); // Bad: text-domain can not be empty.
+
+// phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment

@@ -119,17 +119,41 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					178 => 1,
 					181 => 3,
 					184 => 1,
+					219 => 1,
+					220 => 1,
+					221 => 1,
 					222 => 1,
 					223 => 1,
 					224 => 1,
-					225 => 1,
-					226 => 1,
 					227 => 1,
+					235 => 1,
+					236 => 1,
+					237 => 1,
+					242 => 2,
+					251 => 1,
+					252 => 1,
+					253 => 1,
+					260 => 1,
+					261 => 1,
+					265 => 1,
+					269 => 1,
+					273 => 1,
+					279 => 1,
+					281 => 1,
+					282 => 1,
+					284 => 1,
+					305 => 1,
+					306 => 1,
+					311 => 1,
+					315 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
 				return array(
 					104 => 2,
+					110 => 1,
+					111 => 1,
+					120 => 1,
 				);
 
 			case 'I18nUnitTest.3.inc':
@@ -144,6 +168,7 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					18 => 1,
 					20 => 1,
 					21 => 1,
+					27 => 1,
 				);
 
 			default:
@@ -163,10 +188,6 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 				return array(
 					69  => 1,
 					70  => 1,
-					100 => 1,
-					101 => 1,
-					102 => 1,
-					103 => 1,
 					154 => 1,
 					158 => 1,
 					159 => 1,
@@ -176,6 +197,23 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					194 => 1,
 					198 => 1,
 					199 => 1,
+					232 => 1,
+					241 => 1,
+					242 => 1,
+					243 => 1,
+					244 => 1,
+					251 => 1,
+					283 => 1,
+					285 => 1,
+					290 => 1,
+					291 => 1,
+					294 => 1,
+					295 => 1,
+					296 => 1,
+					297 => 1,
+					300 => 1,
+					301 => 1,
+					302 => 1,
 				);
 
 			case 'I18nUnitTest.2.inc':
@@ -187,6 +225,7 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 					74  => 1,
 					85  => 1,
 					108 => 1,
+					122 => 1,
 				);
 
 			default:
