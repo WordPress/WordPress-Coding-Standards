@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
-        phpcs_version: [ '3.7.1', 'dev-master' ]
+        phpcs_version: [ 'lowest', 'dev-master' ]
         extensions: [ '' ]
 
         include:
@@ -61,7 +61,8 @@ jobs:
           coverage: none
           tools: cs2pr
 
-      - name: Set PHPCS version
+      - name: "Set PHPCS version (master)"
+        if: ${{ matrix.phpcs_version != 'lowest' }}
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies (PHP < 8.0 )
@@ -75,8 +76,12 @@ jobs:
         if: ${{ matrix.php >= 8.0 }}
         uses: ramsey/composer-install@v2
         with:
-          composer-options: --ignore-platform-reqs
+          composer-options: --ignore-platform-req=php+
           custom-cache-suffix: $(date -u "+%Y-%m")
+
+      - name: "Set PHPCS version (lowest)"
+        if: ${{ matrix.phpcs_version == 'lowest' }}
+        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_version == 'dev-master' }}
