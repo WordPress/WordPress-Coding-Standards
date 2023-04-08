@@ -21,6 +21,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   3.0.0  Renamed the fixtures to create compatibility with PHPCS 4.x/PHPUnit >=8.
  *
+ * @covers \WordPressCS\WordPress\Helpers\RulesetPropertyHelper
  * @covers \WordPressCS\WordPress\Sniffs\DB\RestrictedClassesSniff
  */
 final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
