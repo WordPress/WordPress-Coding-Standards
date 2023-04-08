@@ -460,3 +460,46 @@ $where = $wpdb->prepare(
 	),
 	array_merge( $post_types, $post_statusses )
 ); // Bad - will throw incorrect nr of replacements error - missing `array` param.
+
+// Array_fill() with named params.
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', array_fill( start_index: 0, count: count($post_types), value: '%s' ) ) // Expected order.
+		. ") AND {$wpdb->posts}.post_status IN ("
+		. implode( ',', array_fill( value: '%s', start_index: 0, count: count($post_statusses), ) ) // Unconventional order.
+		. ')',
+	array_merge( $post_types, $post_statusses )
+); // OK.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( start_index: 0, count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - missing $value param in array_fill().
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( start_index: 0, values: '%s', count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - incorrect $values param name in array_fill().
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( value: 's', start_index: 0, count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - $value param name in array_fill() does not contain placeholder.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( value: $s, start_index: 0, count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - $value param name in array_fill() does not contain plain text placeholder.
+

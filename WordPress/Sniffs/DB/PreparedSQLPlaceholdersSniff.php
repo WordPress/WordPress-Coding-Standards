@@ -714,16 +714,15 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		$array_fill_params = PassedParameters::getParameters( $this->phpcsFile, $array_fill );
-
-		if ( empty( $array_fill_params ) || \count( $array_fill_params ) !== 3 ) {
+		$array_fill_value_param = PassedParameters::getParameter( $this->phpcsFile, $array_fill, 3, 'value' );
+		if ( false === $array_fill_value_param ) {
 			return false;
 		}
 
-		if ( "'%i'" === $array_fill_params[3]['clean']
-			|| '"%i"' === $array_fill_params[3]['clean']
+		if ( "'%i'" === $array_fill_value_param['clean']
+			|| '"%i"' === $array_fill_value_param['clean']
 		) {
-			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $array_fill_params[3]['start'], $array_fill_params[3]['end'], true );
+			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $array_fill_value_param['start'], $array_fill_value_param['end'], true );
 
 			$this->phpcsFile->addError(
 				'The %i placeholder cannot be used within SQL `IN()` clauses.',
@@ -733,6 +732,6 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		return (bool) preg_match( '`^(["\'])%[dfFs]\1$`', $array_fill_params[3]['clean'] );
+		return (bool) preg_match( '`^(["\'])%[dfFs]\1$`', $array_fill_value_param['clean'] );
 	}
 }
