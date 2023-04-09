@@ -43,7 +43,7 @@ final class SnakeCaseHelper {
 	public static function get_suggestion( $name ) {
 		$suggested = preg_replace( '`(?<!_|^)([A-Z])`', '_$1', $name );
 
-		if ( preg_match( '`^[a-z0-9_]+$i`', $suggested ) === 1 ) {
+		if ( preg_match( '`^[a-z0-9_]+$`i', $suggested ) === 1 ) {
 			// If the name only contains ASCII characters, we can safely lowercase it.
 			$suggested = strtolower( $suggested );
 		} elseif ( function_exists( 'mb_strtolower' ) ) {
