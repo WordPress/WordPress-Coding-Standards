@@ -7,3 +7,7 @@ $wpdb->query( <<<EOT
 		WHERE ID = {$foo};
 	EOT
 ); // Bad.
+
+// Live coding.
+// This needs to be the last test in a file.
+$wpdb->
