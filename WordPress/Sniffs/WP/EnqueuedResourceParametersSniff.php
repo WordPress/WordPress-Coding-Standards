@@ -135,6 +135,9 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 		$error_ptr = $stackPtr;
 		if ( false !== $version_param ) {
 			$error_ptr = $this->phpcsFile->findNext( Tokens::$emptyTokens, $version_param['start'], ( $version_param['end'] + 1 ), true );
+			if ( false === $error_ptr ) {
+				$error_ptr = $version_param['start'];
+			}
 		}
 
 		if ( false === $version_param || 'null' === $version_param['clean'] ) {
