@@ -228,3 +228,6 @@ enum My_Wordpress_Enum {} // Bad.
  */
 namespace My\Class\WordPress;
 echo Some\Enum\WordPress::ENUM_CONSTANT;
+
+// Safeguard that the sniff doesn't act on anonymous classes.
+$anon = new class() {};
