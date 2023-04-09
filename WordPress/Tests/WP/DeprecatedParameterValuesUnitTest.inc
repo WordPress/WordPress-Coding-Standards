@@ -49,3 +49,6 @@ get_option(default: $default, option: 'comment_whitelist');
 update_option('blacklist_keys', $value);
 update_option('comment_whitelist', $value);
 update_option(autoload: true, value: $value, option: 'blacklist_keys');
+
+// Live coding/parse error.
+get_bloginfo( show: /*to do*/, );
