@@ -19,9 +19,9 @@ use WordPressCS\WordPress\Helpers\WPDBTrait;
 use WordPressCS\WordPress\Sniff;
 
 /**
- * Check for incorrect use of the $wpdb->prepare method.
+ * Checks for incorrect use of the $wpdb->prepare method.
  *
- * Check the following issues:
+ * Checks the following issues:
  * - The only placeholders supported are: %d, %f (%F), %s, %i, and their variations.
  * - Literal % signs need to be properly escaped as `%%`.
  * - Simple placeholders (%d, %f, %F, %s, %i) should be left unquoted in the query string.
