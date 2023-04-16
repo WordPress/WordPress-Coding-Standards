@@ -65,21 +65,14 @@ final class ContextHelper {
 	 * @return bool
 	 */
 	public static function is_token_namespaced( File $phpcsFile, $stackPtr ) {
-		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-		if ( false === $prev ) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
+		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+
 		if ( \T_NS_SEPARATOR !== $tokens[ $prev ]['code'] ) {
 			return false;
 		}
 
-		$before_prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
-		if ( false === $before_prev ) {
-			return false;
-		}
-
+		$before_prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
 		if ( \T_STRING !== $tokens[ $before_prev ]['code']
 			&& \T_NAMESPACE !== $tokens[ $before_prev ]['code']
 		) {
