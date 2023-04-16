@@ -16,6 +16,7 @@ use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 
 /**
@@ -508,34 +509,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a particular token is a (static or non-static) call to a class method or property.
-	 *
-	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
-	 * a global function!
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return bool
-	 */
-	protected function is_class_object_call( $stackPtr ) {
-		$before = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-
-		if ( false === $before ) {
-			return false;
-		}
-
-		if ( \T_OBJECT_OPERATOR !== $this->tokens[ $before ]['code']
-			&& \T_DOUBLE_COLON !== $this->tokens[ $before ]['code']
-		) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Check if a particular token is prefixed with a namespace.
 	 *
 	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
@@ -637,7 +610,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			/*
 			 * Now, make sure it is a global function.
 			 */
-			if ( $this->is_class_object_call( $prev_non_empty ) === true ) {
+			if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $prev_non_empty ) === true ) {
 				continue;
 			}
 
@@ -1026,7 +999,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						continue 2;
 					}
 
-					if ( $this->is_class_object_call( $i ) === true ) {
+					if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $i ) === true ) {
 						// Method call.
 						continue 2;
 					}

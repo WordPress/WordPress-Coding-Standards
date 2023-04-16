@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
@@ -269,7 +270,7 @@ class NonceVerificationSniff extends Sniff {
 				/*
 				 * Now, make sure it is a call to a global function.
 				 */
-				if ( $this->is_class_object_call( $i ) === true ) {
+				if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $i ) === true ) {
 					continue;
 				}
 

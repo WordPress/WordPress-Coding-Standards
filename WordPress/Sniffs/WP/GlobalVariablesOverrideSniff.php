@@ -17,6 +17,7 @@ use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper;
@@ -393,7 +394,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Don't throw false positives for static class properties.
-			if ( $this->is_class_object_call( $ptr ) === true ) {
+			if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $ptr ) === true ) {
 				continue;
 			}
 
