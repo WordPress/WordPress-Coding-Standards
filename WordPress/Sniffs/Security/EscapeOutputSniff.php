@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
@@ -375,7 +376,7 @@ class EscapeOutputSniff extends Sniff {
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( isset( $this->safe_casts[ $this->tokens[ $i ]['code'] ] ) ) {
+			if ( isset( ContextHelper::$safe_casts[ $this->tokens[ $i ]['code'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
