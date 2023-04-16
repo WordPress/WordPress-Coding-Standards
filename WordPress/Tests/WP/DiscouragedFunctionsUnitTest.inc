@@ -18,3 +18,6 @@ namespace\query_posts(); // OK, not the global function.
 
 // ... but does act on fully qualified function calls.
 \query_posts(); // Warning.
+
+// Ensure the sniff doesn't act on functions not listed in the target functions array.
+query_post(); // OK, not one of the target functions.
