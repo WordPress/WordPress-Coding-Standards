@@ -254,8 +254,14 @@ final class ContextHelper {
 
 		$functionPtr = self::is_in_function_call( $phpcsFile, $stackPtr, self::$key_exists_functions );
 		if ( false !== $functionPtr ) {
-			$second_param = PassedParameters::getParameter( $phpcsFile, $functionPtr, 2 );
-			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
+			/*
+			 * Both functions being checked have the same parameters. If the function list would
+			 * be expanded, this needs to be revisited.
+			 */
+			$array_param = PassedParameters::getParameter( $phpcsFile, $functionPtr, 2, 'array' );
+			if ( false !== $array_param
+				&& ( $stackPtr >= $array_param['start'] && $stackPtr <= $array_param['end'] )
+			) {
 				return true;
 			}
 		}

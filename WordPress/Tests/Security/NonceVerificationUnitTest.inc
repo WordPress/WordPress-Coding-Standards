@@ -342,3 +342,23 @@ function disallow_in_custom_key_exists_before_noncecheck() {
 
 	wp_verify_nonce( 'some_action' );
 }
+
+function disallow_in_array_key_exists_before_noncecheck_when_not_in_array_param() {
+	if ( array_key_exists( $_POST, $GLOBALS ) === false ) { // Bad (not that it makes sense anyhow).
+		return;
+	}
+
+	if ( array_key_exists( arrays: $_POST, key: 'foo', ) === false ) { // Bad (typo in param label).
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function allow_in_array_key_exists_before_noncecheck_with_named_params() {
+	if (array_key_exists( array: $_POST, key: 'foo', ) === false) { // OK.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
