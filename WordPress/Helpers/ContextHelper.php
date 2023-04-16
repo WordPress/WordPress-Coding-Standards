@@ -28,6 +28,40 @@ use PHPCSUtils\Tokens\Collections;
 final class ContextHelper {
 
 	/**
+	 * List of PHP native functions to test the type of a variable.
+	 *
+	 * Using these functions is safe in combination with superglobals without
+	 * unslashing or sanitization.
+	 *
+	 * They should, however, not be regarded as unslashing or sanitization functions.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The property visibility was changed from `protected` to `private static`.
+	 *
+	 * @var array
+	 */
+	private static $typeTestFunctions = array(
+		'is_array'     => true,
+		'is_bool'      => true,
+		'is_callable'  => true,
+		'is_countable' => true,
+		'is_double'    => true,
+		'is_float'     => true,
+		'is_int'       => true,
+		'is_integer'   => true,
+		'is_iterable'  => true,
+		'is_long'      => true,
+		'is_null'      => true,
+		'is_numeric'   => true,
+		'is_object'    => true,
+		'is_real'      => true,
+		'is_resource'  => true,
+		'is_scalar'    => true,
+		'is_string'    => true,
+	);
+
+	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
 	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
@@ -162,5 +196,26 @@ final class ContextHelper {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if a token is inside of an is_...() statement.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is being type tested.
+	 */
+	public static function is_in_type_test( File $phpcsFile, $stackPtr ) {
+		/*
+		 * Casting the potential integer stack pointer return value to boolean here is fine.
+		 * The return can never be `0` as there will always be a PHP open tag before the
+		 * function call.
+		 */
+		return (bool) self::is_in_function_call( $phpcsFile, $stackPtr, self::$typeTestFunctions );
 	}
 }
