@@ -12,10 +12,10 @@ namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff as PHPCS_AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Tokens;
-use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use PHPCSUtils\Utils\Variables;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
 
@@ -154,9 +154,8 @@ final class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 			}
 		}
 
-		$in_class     = false;
-		$obj_operator = $phpcs_file->findPrevious( Tokens::$emptyTokens, ( $stack_ptr - 1 ), null, true );
-		if ( isset( Collections::objectOperators()[ $tokens[ $obj_operator ]['code'] ] ) ) {
+		$in_class = false;
+		if ( ContextHelper::has_object_operator_before( $phpcs_file, $stack_ptr ) === true ) {
 			// The variable lives within a class, and is referenced like
 			// this: MyClass::$_variable or $class->variable.
 			$in_class = true;
