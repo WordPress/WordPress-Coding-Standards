@@ -23,6 +23,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_function_call
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_type_test
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_isset_or_empty
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_array_comparison
  * @covers \WordPressCS\WordPress\Sniffs\Security\NonceVerificationSniff
  */
 final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
@@ -74,7 +75,8 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	 * @return array <int line number> => <int number of warnings>
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			375 => 1,
+		);
 	}
-
 }

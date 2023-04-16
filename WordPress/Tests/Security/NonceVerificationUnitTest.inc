@@ -362,3 +362,18 @@ function allow_in_array_key_exists_before_noncecheck_with_named_params() {
 
 	wp_verify_nonce( 'some_action' );
 }
+
+// Tests specifically for the ContextHelper::is_in_array_comparison().
+function allow_for_array_comparison_in_condition() {
+	if ( array_keys( $_GET['actions'], 'my_action', true ) ) { // OK.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
+
+function disallow_for_non_array_comparison_in_condition() {
+	if ( array_keys( $_GET['actions'] ) ) { // Bad.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}

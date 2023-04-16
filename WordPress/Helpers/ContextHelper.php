@@ -92,6 +92,24 @@ final class ContextHelper {
 	);
 
 	/**
+	 * Array functions to compare a $needle to a predefined set of values.
+	 *
+	 * If the value is set to an integer, the function needs to have at least that
+	 * many parameters for it to be considered as a comparison.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The property visibility was changed from `protected` to `private static`.
+	 *
+	 * @var array <string function name> => <true|int>
+	 */
+	private static $arrayCompareFunctions = array(
+		'in_array'     => true,
+		'array_search' => true,
+		'array_keys'   => 2,
+	);
+
+	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
 	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
@@ -302,5 +320,37 @@ final class ContextHelper {
 		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		return isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] );
+	}
+
+	/**
+	 * Check if a token is inside of an array-value comparison function.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is (part of) a parameter to an
+	 *              array-value comparison function.
+	 */
+	public static function is_in_array_comparison( File $phpcsFile, $stackPtr ) {
+		$function_ptr = self::is_in_function_call( $phpcsFile, $stackPtr, self::$arrayCompareFunctions, true, true );
+		if ( false === $function_ptr ) {
+			return false;
+		}
+
+		$tokens        = $phpcsFile->getTokens();
+		$function_name = $tokens[ $function_ptr ]['content'];
+		if ( true === self::$arrayCompareFunctions[ $function_name ] ) {
+			return true;
+		}
+
+		if ( PassedParameters::getParameterCount( $phpcsFile, $function_ptr ) >= self::$arrayCompareFunctions[ $function_name ] ) {
+			return true;
+		}
+
+		return false;
 	}
 }

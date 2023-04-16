@@ -269,22 +269,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * Array functions to compare a $needle to a predefined set of values.
-	 *
-	 * If the value is set to an integer, the function needs to have at least that
-	 * many parameters for it to be considered as a comparison.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @var array <string function name> => <true|int>
-	 */
-	protected $arrayCompareFunctions = array(
-		'in_array'     => true,
-		'array_search' => true,
-		'array_keys'   => 2,
-	);
-
-	/**
 	 * Functions that format strings.
 	 *
 	 * These functions are often used for formatting values just before output, and
@@ -833,34 +817,6 @@ abstract class Sniff implements PHPCS_Sniff {
 					// Right variable, correct key.
 					return true;
 			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if a token is inside of an array-value comparison function.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return bool Whether the token is (part of) a parameter to an
-	 *              array-value comparison function.
-	 */
-	protected function is_in_array_comparison( $stackPtr ) {
-		$function_ptr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->arrayCompareFunctions, true, true );
-		if ( false === $function_ptr ) {
-			return false;
-		}
-
-		$function_name = $this->tokens[ $function_ptr ]['content'];
-		if ( true === $this->arrayCompareFunctions[ $function_name ] ) {
-			return true;
-		}
-
-		if ( PassedParameters::getParameterCount( $this->phpcsFile, $function_ptr ) >= $this->arrayCompareFunctions[ $function_name ] ) {
-			return true;
 		}
 
 		return false;
