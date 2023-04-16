@@ -460,32 +460,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Get the last pointer in a line.
-	 *
-	 * @since 0.4.0
-	 *
-	 * @param integer $stackPtr The position of the current token in the stack passed
-	 *                          in $tokens.
-	 *
-	 * @return integer Position of the last pointer on that line.
-	 */
-	protected function get_last_ptr_on_line( $stackPtr ) {
-
-		$tokens      = $this->tokens;
-		$currentLine = $tokens[ $stackPtr ]['line'];
-		$nextPtr     = ( $stackPtr + 1 );
-
-		while ( isset( $tokens[ $nextPtr ] ) && $tokens[ $nextPtr ]['line'] === $currentLine ) {
-			++$nextPtr;
-			// Do nothing, we just want the last token of the line.
-		}
-
-		// We've made it to the next line, back up one to the last in the previous line.
-		// We do this for micro-optimization of the above loop.
-		return ( $nextPtr - 1 );
-	}
-
-	/**
 	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
 	 *
 	 * @since 0.5.0
