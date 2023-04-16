@@ -342,7 +342,7 @@ final class ContextHelper {
 		}
 
 		$tokens        = $phpcsFile->getTokens();
-		$function_name = $tokens[ $function_ptr ]['content'];
+		$function_name = strtolower( $tokens[ $function_ptr ]['content'] );
 		if ( true === self::$arrayCompareFunctions[ $function_name ] ) {
 			return true;
 		}
