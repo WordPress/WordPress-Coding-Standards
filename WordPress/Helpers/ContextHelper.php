@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\PassedParameters;
 
 /**
@@ -247,23 +248,7 @@ final class ContextHelper {
 	 * @return bool Whether the token is inside an isset() or empty() statement.
 	 */
 	public static function is_in_isset_or_empty( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			return false;
-		}
-
-		$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
-
-		end( $nested_parenthesis );
-		$open_parenthesis = key( $nested_parenthesis );
-
-		$previous_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
-		if ( false === $previous_non_empty ) {
-			return false;
-		}
-
-		$previous_code = $tokens[ $previous_non_empty ]['code'];
-		if ( \T_ISSET === $previous_code || \T_EMPTY === $previous_code ) {
+		if ( Parentheses::lastOwnerIn( $phpcsFile, $stackPtr, array( \T_ISSET, \T_EMPTY ) ) !== false ) {
 			return true;
 		}
 
