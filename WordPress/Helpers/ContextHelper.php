@@ -63,6 +63,18 @@ final class ContextHelper {
 	);
 
 	/**
+	 * List of PHP native functions to check if an array index exists.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array
+	 */
+	private static $key_exists_functions = array(
+		'array_key_exists' => true,
+		'key_exists'       => true, // Alias.
+	);
+
+	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
 	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
@@ -255,12 +267,7 @@ final class ContextHelper {
 			return true;
 		}
 
-		$valid_functions = array(
-			'array_key_exists' => true,
-			'key_exists'       => true, // Alias.
-		);
-
-		$functionPtr = self::is_in_function_call( $phpcsFile, $stackPtr, $valid_functions );
+		$functionPtr = self::is_in_function_call( $phpcsFile, $stackPtr, self::$key_exists_functions );
 		if ( false !== $functionPtr ) {
 			$second_param = PassedParameters::getParameter( $phpcsFile, $functionPtr, 2 );
 			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
