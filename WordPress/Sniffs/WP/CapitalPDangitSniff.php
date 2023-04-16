@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Namespaces;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Sniff;
 
 /**
@@ -209,7 +210,7 @@ final class CapitalPDangitSniff extends Sniff {
 		}
 
 		// Ignore constant declarations via define().
-		if ( $this->is_in_function_call( $stackPtr, array( 'define' => true ), true, true ) ) {
+		if ( ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, array( 'define' => true ), true, true ) ) {
 			return;
 		}
 

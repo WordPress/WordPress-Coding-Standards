@@ -204,7 +204,7 @@ class NonceVerificationSniff extends Sniff {
 			|| $this->is_in_type_test( $stackPtr )
 			|| VariableHelper::is_comparison( $this->phpcsFile, $stackPtr )
 			|| $this->is_in_array_comparison( $stackPtr )
-			|| $this->is_in_function_call( $stackPtr, $this->unslashingFunctions ) !== false
+			|| ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->unslashingFunctions ) !== false
 			|| $this->is_only_sanitized( $stackPtr )
 		) {
 			$allow_nonce_after = true;

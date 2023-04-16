@@ -497,91 +497,12 @@ abstract class Sniff implements PHPCS_Sniff {
 			'key_exists'       => true, // Alias.
 		);
 
-		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
+		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
 		if ( false !== $functionPtr ) {
 			$second_param = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, 2 );
 			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
 				return true;
 			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
-	 *
-	 * This is useful, for instance, when trying to determine the context a variable is used in.
-	 *
-	 * For example: this function could be used to determine if the variable `$foo` is used
-	 * in a global function call to the function `is_foo()`.
-	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
-	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
-	 * the following code `is_bar( $foo, 'some_other_param' )`.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int   $stackPtr        The index of the token in the stack.
-	 * @param array $valid_functions List of valid function names.
-	 *                               Note: The keys to this array should be the function names
-	 *                               in lowercase. Values are irrelevant.
-	 * @param bool  $global_function Optional. Whether to make sure that the function call is
-	 *                               to a global function. If `false`, calls to methods, be it static
-	 *                               `Class::method()` or via an object `$obj->method()`, and
-	 *                               namespaced function calls, like `MyNS\function_name()` will
-	 *                               also be accepted.
-	 *                               Defaults to `true`.
-	 * @param bool  $allow_nested    Optional. Whether to allow for nested function calls within the
-	 *                               call to this function.
-	 *                               I.e. when checking whether a token is within a function call
-	 *                               to `strtolower()`, whether to accept `strtolower( trim( $var ) )`
-	 *                               or only `strtolower( $var )`.
-	 *                               Defaults to `false`.
-	 *
-	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
-	 */
-	protected function is_in_function_call( $stackPtr, $valid_functions, $global_function = true, $allow_nested = false ) {
-		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			return false;
-		}
-
-		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-		if ( false === $allow_nested ) {
-			$nested_parenthesis = array_reverse( $nested_parenthesis, true );
-		}
-
-		foreach ( $nested_parenthesis as $open => $close ) {
-
-			$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true, null, true );
-			if ( false === $prev_non_empty || \T_STRING !== $this->tokens[ $prev_non_empty ]['code'] ) {
-				continue;
-			}
-
-			if ( isset( $valid_functions[ strtolower( $this->tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
-				if ( false === $allow_nested ) {
-					// Function call encountered, but not to one of the allowed functions.
-					return false;
-				}
-
-				continue;
-			}
-
-			if ( false === $global_function ) {
-				return $prev_non_empty;
-			}
-
-			/*
-			 * Now, make sure it is a global function.
-			 */
-			if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $prev_non_empty ) === true ) {
-				continue;
-			}
-
-			if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $prev_non_empty ) === true ) {
-				continue;
-			}
-
-			return $prev_non_empty;
 		}
 
 		return false;
@@ -602,7 +523,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		 * The return can never be `0` as there will always be a PHP open tag before the
 		 * function call.
 		 */
-		return (bool) $this->is_in_function_call( $stackPtr, $this->typeTestFunctions );
+		return (bool) ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->typeTestFunctions );
 	}
 
 	/**
@@ -708,7 +629,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$valid_functions += $this->unslashingFunctions;
 		$valid_functions += $this->arrayWalkingFunctions;
 
-		$functionPtr = $this->is_in_function_call( $stackPtr, $valid_functions );
+		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
 
 		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
 		if ( false === $functionPtr ) {
@@ -730,7 +651,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			$valid_functions = array_diff_key( $valid_functions, $this->unslashingFunctions );
 
 			// Check is any of the remaining (sanitizing) functions is used.
-			$higherFunctionPtr = $this->is_in_function_call( $functionPtr, $valid_functions );
+			$higherFunctionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $functionPtr, $valid_functions );
 
 			// If there is no other valid function being used, this value is unsanitized.
 			if ( false === $higherFunctionPtr ) {
@@ -1067,7 +988,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *              array-value comparison function.
 	 */
 	protected function is_in_array_comparison( $stackPtr ) {
-		$function_ptr = $this->is_in_function_call( $stackPtr, $this->arrayCompareFunctions, true, true );
+		$function_ptr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->arrayCompareFunctions, true, true );
 		if ( false === $function_ptr ) {
 			return false;
 		}

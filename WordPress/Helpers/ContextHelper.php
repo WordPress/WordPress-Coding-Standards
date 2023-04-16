@@ -81,4 +81,86 @@ final class ContextHelper {
 
 		return true;
 	}
+
+	/**
+	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
+	 *
+	 * This is useful, for instance, when trying to determine the context a variable is used in.
+	 *
+	 * For example: this function could be used to determine if the variable `$foo` is used
+	 * in a global function call to the function `is_foo()`.
+	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
+	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
+	 * the following code `is_bar( $foo, 'some_other_param' )`.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile       The file being scanned.
+	 * @param int                         $stackPtr        The index of the token in the stack.
+	 * @param array                       $valid_functions List of valid function names.
+	 *                                                     Note: The keys to this array should be the function names
+	 *                                                     in lowercase. Values are irrelevant.
+	 * @param bool                        $global_function Optional. Whether to make sure that the function call is
+	 *                                                     to a global function. If `false`, calls to methods, be it static
+	 *                                                     `Class::method()` or via an object `$obj->method()`, and
+	 *                                                     namespaced function calls, like `MyNS\function_name()` will
+	 *                                                     also be accepted.
+	 *                                                     Defaults to `true`.
+	 * @param bool                        $allow_nested    Optional. Whether to allow for nested function calls within the
+	 *                                                     call to this function.
+	 *                                                     I.e. when checking whether a token is within a function call
+	 *                                                     to `strtolower()`, whether to accept `strtolower( trim( $var ) )`
+	 *                                                     or only `strtolower( $var )`.
+	 *                                                     Defaults to `false`.
+	 *
+	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
+	 */
+	public static function is_in_function_call( File $phpcsFile, $stackPtr, array $valid_functions, $global_function = true, $allow_nested = false ) {
+		$tokens = $phpcsFile->getTokens();
+		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
+		if ( false === $allow_nested ) {
+			$nested_parenthesis = array_reverse( $nested_parenthesis, true );
+		}
+
+		foreach ( $nested_parenthesis as $open => $close ) {
+			$prev_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true );
+			if ( false === $prev_non_empty || \T_STRING !== $tokens[ $prev_non_empty ]['code'] ) {
+				continue;
+			}
+
+			if ( isset( $valid_functions[ strtolower( $tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
+				if ( false === $allow_nested ) {
+					// Function call encountered, but not to one of the allowed functions.
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( false === $global_function ) {
+				return $prev_non_empty;
+			}
+
+			/*
+			 * Now, make sure it is a global function.
+			 */
+			if ( self::has_object_operator_before( $phpcsFile, $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			if ( self::is_token_namespaced( $phpcsFile, $prev_non_empty ) === true ) {
+				continue;
+			}
+
+			return $prev_non_empty;
+		}
+
+		return false;
+	}
 }
