@@ -232,6 +232,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		$invalid_tokens  = Tokens::$ooScopeTokens;
 		$invalid_tokens += array(
 			\T_FUNCTION => \T_FUNCTION,
+			\T_NEW      => \T_NEW,
 			\T_AS       => \T_AS, // Use declaration alias.
 		);
 

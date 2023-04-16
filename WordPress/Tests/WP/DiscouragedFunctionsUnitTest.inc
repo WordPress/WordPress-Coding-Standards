@@ -34,8 +34,9 @@ use function wp_reset_query; // Warning.
 use function wp_reset_query as myFunction; // Warning.
 use function someOtherFunction as wp_reset_query; // OK, alias, not our target.
 
-// Bug fix: prevent false positive for functions declared to return by reference.
+// Bug fixes: prevent false positives for functions declared to return by reference or class instantiations.
 function &query_posts() {} // OK, function declaration, not function use.
+$obj = new WP_Reset_Query(); // OK, class instantiation, not function call.
 
 // Live coding/parse error.
 // This has to be the last test in the file!!!
