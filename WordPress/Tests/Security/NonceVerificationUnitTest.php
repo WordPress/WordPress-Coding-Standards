@@ -22,6 +22,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_function_call
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_type_test
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_isset_or_empty
  * @covers \WordPressCS\WordPress\Sniffs\Security\NonceVerificationSniff
  */
 final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
@@ -60,6 +61,8 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			269 => 1,
 			306 => 1,
 			312 => 1,
+			335 => 1,
+			339 => 1,
 		);
 	}
 

@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Helper utilities for checking the context in which a token is used.
@@ -217,5 +218,56 @@ final class ContextHelper {
 		 * function call.
 		 */
 		return (bool) self::is_in_function_call( $phpcsFile, $stackPtr, self::$typeTestFunctions );
+	}
+
+	/**
+	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
+	 *
+	 * @since 0.5.0
+	 * @since 2.1.0 Now checks for the token being used as the array parameter
+	 *              in function calls to array_key_exists() and key_exists() as well.
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is inside an isset() or empty() statement.
+	 */
+	public static function is_in_isset_or_empty( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
+
+		end( $nested_parenthesis );
+		$open_parenthesis = key( $nested_parenthesis );
+
+		$previous_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
+		if ( false === $previous_non_empty ) {
+			return false;
+		}
+
+		$previous_code = $tokens[ $previous_non_empty ]['code'];
+		if ( \T_ISSET === $previous_code || \T_EMPTY === $previous_code ) {
+			return true;
+		}
+
+		$valid_functions = array(
+			'array_key_exists' => true,
+			'key_exists'       => true, // Alias.
+		);
+
+		$functionPtr = self::is_in_function_call( $phpcsFile, $stackPtr, $valid_functions );
+		if ( false !== $functionPtr ) {
+			$second_param = PassedParameters::getParameter( $phpcsFile, $functionPtr, 2 );
+			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

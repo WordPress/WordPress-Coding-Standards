@@ -313,3 +313,32 @@ function disallow_custom_unslash_before_noncecheck_via_namespaced_function() {
 	wp_verify_nonce( $var );
 	echo $var;
 }
+
+// Tests specifically for the ContextHelper::is_in_isset_or_empty().
+function allow_in_array_key_exists_before_noncecheck() {
+	if (array_key_exists('foo', $_POST) === false) { // OK.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function allow_in_key_exists_before_noncecheck() {
+	if (key_exists('foo', $_POST['subset']) === false) { // OK.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function disallow_in_custom_key_exists_before_noncecheck() {
+	if (My\key_exists('foo', $_POST['subset']) === false) { // Bad.
+		return;
+	}
+
+	if ($obj?->array_key_exists('foo', $_POST['subset']) === false) { // Bad.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
