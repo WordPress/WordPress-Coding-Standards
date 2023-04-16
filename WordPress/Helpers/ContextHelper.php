@@ -298,20 +298,9 @@ final class ContextHelper {
 	 * @return bool Whether the token being casted.
 	 */
 	public static function is_safe_casted( File $phpcsFile, $stackPtr ) {
-		// Get the last non-empty token.
-		$prev = $phpcsFile->findPrevious(
-			Tokens::$emptyTokens,
-			( $stackPtr - 1 ),
-			null,
-			true
-		);
-
-		if ( false === $prev ) {
-			return false;
-		}
-
-		// Check if it is a safe cast.
 		$tokens = $phpcsFile->getTokens();
+		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+
 		return isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] );
 	}
 }
