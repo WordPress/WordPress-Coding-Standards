@@ -44,6 +44,24 @@ class AttributesShouldBeIgnored {
 	public function foo() {}
 }
 
+/*
+ * Test exclude property.
+ */
+// Exclude one group:
+// phpcs:set WordPress.WP.DiscouragedFunctions exclude[] query_posts
+query_posts(); // OK, excluded group.
+\wp_reset_query(); // Warning.
+
+// Exclude all groups:
+// phpcs:set WordPress.WP.DiscouragedFunctions exclude[] query_posts,wp_reset_query
+query_posts(); // OK, excluded group.
+wp_reset_query(); // OK, excluded group.
+
+// Reset group exclusions.
+// phpcs:set WordPress.WP.DiscouragedFunctions exclude[]
+\query_posts(); // Warning.
+
+
 // Live coding/parse error.
 // This has to be the last test in the file!!!
 \query_posts

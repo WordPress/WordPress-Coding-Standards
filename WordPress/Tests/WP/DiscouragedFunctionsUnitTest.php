@@ -47,6 +47,8 @@ final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
 			20 => 1,
 			33 => 1,
 			34 => 1,
+			53 => 1,
+			62 => 1,
 		);
 	}
 }
