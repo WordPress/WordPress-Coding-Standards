@@ -274,7 +274,7 @@ class NonceVerificationSniff extends Sniff {
 					continue;
 				}
 
-				if ( $this->is_token_namespaced( $i ) === true ) {
+				if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $i ) === true ) {
 					continue;
 				}
 

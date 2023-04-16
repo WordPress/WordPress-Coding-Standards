@@ -11,3 +11,10 @@ wp_reset_query(); // Warning, use wp_reset_postdata instead.
 $obj->query_posts(); // OK, not the global function.
 MyClass::wp_reset_query(); // OK, not the global function.
 $obj?->query_posts(); // OK, not the global function.
+
+// Ensure the sniff doesn't act on namespaced calls.
+MyNamespace\query_posts(); // OK, not the global function.
+namespace\query_posts(); // OK, not the global function.
+
+// ... but does act on fully qualified function calls.
+\query_posts(); // Warning.
