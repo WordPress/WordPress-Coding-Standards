@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 
 /**
  * Helper utilities for checking the context in which a token is used.
@@ -42,18 +43,9 @@ final class ContextHelper {
 	 * @return bool
 	 */
 	public static function has_object_operator_before( File $phpcsFile, $stackPtr ) {
-		$before = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-		if ( false === $before ) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
-		if ( \T_OBJECT_OPERATOR !== $tokens[ $before ]['code']
-			&& \T_DOUBLE_COLON !== $tokens[ $before ]['code']
-		) {
-			return false;
-		}
+		$before = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
-		return true;
+		return isset( Collections::objectOperators()[ $tokens[ $before ]['code'] ] );
 	}
 }
