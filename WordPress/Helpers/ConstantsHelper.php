@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 
@@ -66,30 +67,25 @@ final class ConstantsHelper {
 		}
 
 		// Array of tokens which if found preceding the $stackPtr indicate that a T_STRING is not a global constant.
-		$tokens_to_ignore = array(
-			'T_NAMESPACE'       => true,
-			'T_USE'             => true,
-			'T_CLASS'           => true,
-			'T_TRAIT'           => true,
-			'T_INTERFACE'       => true,
-			'T_EXTENDS'         => true,
-			'T_IMPLEMENTS'      => true,
-			'T_NEW'             => true,
-			'T_FUNCTION'        => true,
-			'T_DOUBLE_COLON'    => true,
-			'T_OBJECT_OPERATOR' => true,
-			'T_INSTANCEOF'      => true,
-			'T_INSTEADOF'       => true,
-			'T_GOTO'            => true,
-			'T_AS'              => true,
-			'T_PUBLIC'          => true,
-			'T_PROTECTED'       => true,
-			'T_PRIVATE'         => true,
+		$tokens_to_ignore  = array(
+			\T_NAMESPACE       => true,
+			\T_USE             => true,
+			\T_EXTENDS         => true,
+			\T_IMPLEMENTS      => true,
+			\T_NEW             => true,
+			\T_FUNCTION        => true,
+			\T_INSTANCEOF      => true,
+			\T_INSTEADOF       => true,
+			\T_GOTO            => true,
+			\T_AS              => true,
 		);
+		$tokens_to_ignore += Tokens::$ooScopeTokens;
+		$tokens_to_ignore += Collections::objectOperators();
+		$tokens_to_ignore += Tokens::$scopeModifiers;
 
 		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 		if ( false !== $prev
-			&& isset( $tokens_to_ignore[ $tokens[ $prev ]['type'] ] )
+			&& isset( $tokens_to_ignore[ $tokens[ $prev ]['code'] ] )
 		) {
 			// Not the use of a constant.
 			return false;
