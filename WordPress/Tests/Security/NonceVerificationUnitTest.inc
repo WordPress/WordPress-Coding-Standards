@@ -377,3 +377,17 @@ function disallow_for_non_array_comparison_in_condition() {
 		foo();
 	}
 }
+
+function allow_for_array_comparison_in_condition_with_named_params() {
+	if ( array_keys( filter_value: 'my_action', array: $_GET['actions'], strict: true, ) ) { // OK.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
+
+function disallow_for_non_array_comparison_in_condition_with_named_params() {
+	if ( array_keys( strict: true, array: $_GET['actions'], ) ) { // Bad, missing $filter_value param. Invalid function call, but not our concern.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}

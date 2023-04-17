@@ -77,6 +77,7 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array(
 			375 => 1,
+			389 => 1,
 		);
 	}
 }

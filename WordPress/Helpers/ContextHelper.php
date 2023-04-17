@@ -94,19 +94,22 @@ final class ContextHelper {
 	/**
 	 * Array functions to compare a $needle to a predefined set of values.
 	 *
-	 * If the value is set to an integer, the function needs to have at least that
-	 * many parameters for it to be considered as a comparison.
+	 * If the value is set to an array, the parameter specified in the array is
+	 * required for the function call to be considered as a comparison.
 	 *
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The property visibility was changed from `protected` to `private static`.
 	 *
-	 * @var array <string function name> => <true|int>
+	 * @var array <string function name> => <true|array>
 	 */
 	private static $arrayCompareFunctions = array(
 		'in_array'     => true,
 		'array_search' => true,
-		'array_keys'   => 2,
+		'array_keys'   => array(
+			'position' => 2,
+			'name'     => 'filter_value',
+		),
 	);
 
 	/**
@@ -347,7 +350,9 @@ final class ContextHelper {
 			return true;
 		}
 
-		if ( PassedParameters::getParameterCount( $phpcsFile, $function_ptr ) >= self::$arrayCompareFunctions[ $function_name ] ) {
+		$target_param = self::$arrayCompareFunctions[ $function_name ];
+		$found_param  = PassedParameters::getParameter( $phpcsFile, $function_ptr, $target_param['position'], $target_param['name'] );
+		if ( false !== $found_param ) {
 			return true;
 		}
 
