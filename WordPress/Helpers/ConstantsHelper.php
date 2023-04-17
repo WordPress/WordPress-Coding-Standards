@@ -84,9 +84,7 @@ final class ConstantsHelper {
 		$tokens_to_ignore += Tokens::$scopeModifiers;
 
 		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false !== $prev
-			&& isset( $tokens_to_ignore[ $tokens[ $prev ]['code'] ] )
-		) {
+		if ( isset( $tokens_to_ignore[ $tokens[ $prev ]['code'] ] ) ) {
 			// Not the use of a constant.
 			return false;
 		}
@@ -96,8 +94,7 @@ final class ConstantsHelper {
 			return false;
 		}
 
-		if ( false !== $prev
-			&& \T_CONST === $tokens[ $prev ]['code']
+		if ( \T_CONST === $tokens[ $prev ]['code']
 			&& Scopes::isOOConstant( $phpcsFile, $prev )
 		) {
 			// Class constant declaration of the same name.
