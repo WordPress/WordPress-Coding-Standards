@@ -5,4 +5,7 @@
     <rule ref="Generic.PHP.DisallowShortOpenTag.EchoFound">
 	    <severity>0</severity>
     </rule>
+    <rule ref="Squiz.Commenting">
+	    <severity>0</severity>
+    </rule>
 </ruleset>
