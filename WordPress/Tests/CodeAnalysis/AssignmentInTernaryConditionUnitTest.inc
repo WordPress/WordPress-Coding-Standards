@@ -55,3 +55,7 @@ $mode = ( $a->prop = 'on' ) ? 'on' : 'off'; // Bad.
 
 // Safeguard recognition of PHP 7.4+ null coalesce equals.
 $mode = ( $a ??= 'on' ) ? 'on' : 'off';
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+$var = $a = $foo ) ? 'on' : 'off';

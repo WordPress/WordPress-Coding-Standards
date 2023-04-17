@@ -65,6 +65,7 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		'partial-file-disable.inc'                   => 1,
 		'rule-disable.inc'                           => 0,
 		'wordpress-disable.inc'                      => 0,
+		'disable-non-matching-enable.inc'            => 0,
 
 		/*
 		 * In /FileNameUnitTests/TestFiles.

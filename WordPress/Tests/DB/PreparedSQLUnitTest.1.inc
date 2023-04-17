@@ -135,5 +135,13 @@ $wpdb->query( $wpdb->prepare( 'SELECT * FROM ' . $notwpdb?->posts . " WHERE post
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . 10_000 . ";" ); // OK.
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE value = " . 0o34 . ";" ); // OK.
 
+// Not a method call.
+$wpdb = new WPDB();
+$foo = $wpdb->propertyAccess;
+echo $wpdb::CONSTANT_NAME;
+
+// Not an identifyable method call.
+$wpdb->{$methodName}('query');
+
 // Don't throw an error during live coding.
 wpdb::prepare( "SELECT * FROM $wpdb->posts
