@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress-Websimple">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  name="WordPress-Websimple" namespace="WordPressCS\WordPress" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
     <description>Custom WordPress coding standards by Websimple.</description>
     <rule ref="WordPress"/>
     <rule ref="Generic.PHP.DisallowShortOpenTag.EchoFound">
