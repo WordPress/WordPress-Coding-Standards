@@ -9,7 +9,9 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\File;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Lists;
 
 /**
@@ -38,65 +40,59 @@ final class ListHelper {
 	 * @since 2.2.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$list_open_close` parameter was dropped.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile       The file being scanned.
-	 * @param int                         $stackPtr        The position of the T_LIST or T_OPEN_SHORT_ARRAY
-	 *                                                     token in the stack.
-	 * @param array                       $list_open_close Optional. Array containing the token pointers to
-	 *                                                     the list opener and closer.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The position of the T_LIST or T_OPEN_SHORT_ARRAY
+	 *                                               token in the stack.
 	 *
 	 * @return array Array with the stack pointers to the variables or an empty
 	 *               array when not a (short) list.
 	 */
-	public static function get_list_variables( File $phpcsFile, $stackPtr, $list_open_close = array() ) {
+	public static function get_list_variables( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
-		if ( \T_LIST !== $tokens[ $stackPtr ]['code']
-			&& \T_OPEN_SHORT_ARRAY !== $tokens[ $stackPtr ]['code']
+		// Is this one of the tokens this function handles ?
+		if ( isset( Collections::listOpenTokensBC()[ $tokens[ $stackPtr ]['code'] ] ) === false ) {
+			return array();
+		}
+
+		if ( isset( Collections::shortArrayListOpenTokensBC()[ $tokens[ $stackPtr ]['code'] ] )
+			&& Lists::isShortList( $phpcsFile, $stackPtr ) === false
 		) {
 			return array();
 		}
 
-		if ( empty( $list_open_close ) ) {
-			$list_open_close = Lists::getOpenClose( $phpcsFile, $stackPtr );
-			if ( false === $list_open_close ) {
-				// Not a (short) list.
-				return array();
-			}
+		try {
+			$assignments = Lists::getAssignments( $phpcsFile, $stackPtr );
+		} catch ( RuntimeException $e ) {
+			// Parse error/live coding.
+			return array();
 		}
 
 		$var_pointers = array();
-		$current      = $list_open_close['opener'];
-		$closer       = $list_open_close['closer'];
-		$last         = false;
-		do {
-			++$current;
-			$next_comma = $phpcsFile->findNext( \T_COMMA, $current, $closer );
-			if ( false === $next_comma ) {
-				$next_comma = $closer;
-				$last       = true;
+
+		foreach ( $assignments as $assign ) {
+			if ( true === $assign['is_empty'] ) {
+				continue;
 			}
 
-			// Skip over the "key" part in keyed lists.
-			$arrow = $phpcsFile->findNext( \T_DOUBLE_ARROW, $current, $next_comma );
-			if ( false !== $arrow ) {
-				$current = ( $arrow + 1 );
+			if ( true === $assign['is_nested_list'] ) {
+				/*
+				 * Recurse into the nested list and get the variables.
+				 * No need to `catch` any errors as only lists can be nested in lists.
+				 */
+				$var_pointers += self::get_list_variables( $phpcsFile, $assign['assignment_token'] );
+				continue;
 			}
 
 			/*
-			 * Each list item can only have one variable to which an assignment is being made.
-			 * This can be an array with a (variable) index, but that doesn't matter, we're only
-			 * concerned with the actual variable.
+			 * Ok, so this must be a "normal" assignment in the list.
+			 * Set the variable pointer both as the key as well as the value, so we can use array join
+			 * for nested lists (above).
 			 */
-			$var = $phpcsFile->findNext( \T_VARIABLE, $current, $next_comma );
-			if ( false !== $var ) {
-				// Not an empty list item.
-				$var_pointers[] = $var;
-			}
-
-			$current = $next_comma;
-
-		} while ( false === $last );
+			$var_pointers[ $assign['assignment_token'] ] = $assign['assignment_token'];
+		}
 
 		return $var_pointers;
 	}

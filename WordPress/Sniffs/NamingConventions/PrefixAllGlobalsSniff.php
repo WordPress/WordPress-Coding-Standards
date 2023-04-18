@@ -790,7 +790,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $stackPtr, $list_open_close );
+		$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $stackPtr );
 		foreach ( $var_pointers as $ptr ) {
 			$this->process_variable_assignment( $ptr, true );
 		}

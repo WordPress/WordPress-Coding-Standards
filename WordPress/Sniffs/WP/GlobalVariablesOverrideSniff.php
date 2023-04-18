@@ -180,7 +180,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			return;
 		}
 
-		$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $stackPtr, $list_open_close );
+		$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $stackPtr );
 		foreach ( $var_pointers as $ptr ) {
 			$this->process_variable_assignment( $ptr, true );
 		}
@@ -368,7 +368,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 					continue;
 				}
 
-				$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $ptr, $list_open_close );
+				$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $ptr );
 				foreach ( $var_pointers as $ptr ) {
 					$var_name = $this->tokens[ $ptr ]['content'];
 					if ( '$GLOBALS' === $var_name ) {
