@@ -48,6 +48,9 @@
 			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
 		],
 		"run-tests": [
+			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php --no-coverage"
+		],
+		"coverage": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
 		],
 		"check-complete": [
@@ -67,7 +70,8 @@
 		"lint": "Lint PHP files against parse errors.",
 		"check-cs": "Run the PHPCS script against the entire codebase.",
 		"fix-cs": "Run the PHPCBF script to fix all the autofixable violations on the codebase.",
-		"run-tests": "Run all the unit tests for the WordPress Coding Standards sniffs.",
+		"run-tests": "Run all the unit tests for the WordPress Coding Standards sniffs without code coverage.",
+		"coverage": "Run all the unit tests for the WordPress Coding Standards sniffs with code coverage.",
 		"check-complete": "Check if all the sniffs have tests.",
 		"check-complete-strict": "Check if all the sniffs have unit tests and XML documentation.",
 		"check-all": "Run all checks (lint, phpcs, feature completeness) and tests."

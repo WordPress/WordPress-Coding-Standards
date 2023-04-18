@@ -21,6 +21,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.14.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\Arrays\MultipleStatementAlignmentSniff
  */
 final class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest {
 
