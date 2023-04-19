@@ -224,7 +224,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			return false;
 		}
 
-		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
+		if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
 		}
 

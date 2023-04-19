@@ -9,13 +9,14 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 
 /**
  * Warns against usage of discouraged WP CONSTANTS and recommends alternatives.
@@ -140,7 +141,7 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
+		if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $stackPtr ) === true ) {
 			// Namespaced constant of the same name.
 			return;
 		}

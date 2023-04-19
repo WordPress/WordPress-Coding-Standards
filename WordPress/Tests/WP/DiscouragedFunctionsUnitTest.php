@@ -21,6 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\AbstractFunctionRestrictionsSniff
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::has_object_operator_before
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_token_namespaced
  * @covers \WordPressCS\WordPress\Sniffs\WP\DiscouragedFunctionsSniff
  */
 final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
@@ -41,8 +42,9 @@ final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			3 => 1,
-			4 => 1,
+			3  => 1,
+			4  => 1,
+			20 => 1,
 		);
 	}
 }

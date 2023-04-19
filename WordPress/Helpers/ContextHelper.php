@@ -48,4 +48,37 @@ final class ContextHelper {
 
 		return isset( Collections::objectOperators()[ $tokens[ $before ]['code'] ] );
 	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace.
+	 *
+	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
+	 * with `namespace\`.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	public static function is_token_namespaced( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+
+		if ( \T_NS_SEPARATOR !== $tokens[ $prev ]['code'] ) {
+			return false;
+		}
+
+		$before_prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
+		if ( \T_STRING !== $tokens[ $before_prev ]['code']
+			&& \T_NAMESPACE !== $tokens[ $before_prev ]['code']
+		) {
+			return false;
+		}
+
+		return true;
+	}
 }

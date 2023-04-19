@@ -509,43 +509,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a particular token is prefixed with a namespace.
-	 *
-	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
-	 * with `namespace\`.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return bool
-	 */
-	protected function is_token_namespaced( $stackPtr ) {
-		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true, null, true );
-
-		if ( false === $prev ) {
-			return false;
-		}
-
-		if ( \T_NS_SEPARATOR !== $this->tokens[ $prev ]['code'] ) {
-			return false;
-		}
-
-		$before_prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
-		if ( false === $before_prev ) {
-			return false;
-		}
-
-		if ( \T_STRING !== $this->tokens[ $before_prev ]['code']
-			&& \T_NAMESPACE !== $this->tokens[ $before_prev ]['code']
-		) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
 	 *
 	 * This is useful, for instance, when trying to determine the context a variable is used in.
@@ -614,7 +577,7 @@ abstract class Sniff implements PHPCS_Sniff {
 				continue;
 			}
 
-			if ( $this->is_token_namespaced( $prev_non_empty ) === true ) {
+			if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $prev_non_empty ) === true ) {
 				continue;
 			}
 
@@ -1004,7 +967,7 @@ abstract class Sniff implements PHPCS_Sniff {
 						continue 2;
 					}
 
-					if ( $this->is_token_namespaced( $i ) === true ) {
+					if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $i ) === true ) {
 						// Namespaced function call.
 						continue 2;
 					}
@@ -1180,7 +1143,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			return false;
 		}
 
-		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
+		if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $stackPtr ) === true ) {
 			// Namespaced constant of the same name.
 			return false;
 		}
