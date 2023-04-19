@@ -20,6 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
  * @covers \WordPressCS\WordPress\AbstractFunctionRestrictionsSniff
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::has_object_operator_before
  * @covers \WordPressCS\WordPress\Sniffs\WP\DiscouragedFunctionsSniff
  */
 final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
@@ -41,8 +42,7 @@ final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array(
 			3 => 1,
-			5 => 1,
+			4 => 1,
 		);
 	}
-
 }

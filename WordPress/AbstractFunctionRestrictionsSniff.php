@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -219,7 +220,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		}
 
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( $this->is_class_object_call( $stackPtr ) === true ) {
+		if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
 		}
 
