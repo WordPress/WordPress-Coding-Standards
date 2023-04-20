@@ -20,6 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
  *
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_function_call
  * @covers \WordPressCS\WordPress\Sniffs\Security\NonceVerificationSniff
  */
 final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
@@ -56,6 +57,8 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 			202 => 1,
 			252 => 1,
 			269 => 1,
+			306 => 1,
+			312 => 1,
 		);
 	}
 

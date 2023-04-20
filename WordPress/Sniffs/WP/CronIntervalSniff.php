@@ -9,7 +9,6 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
@@ -17,6 +16,8 @@ use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\Numbers;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Flag cron schedules less than 15 minutes.
@@ -94,7 +95,7 @@ final class CronIntervalSniff extends Sniff {
 		}
 
 		// Check if the text was found within a function call to add_filter().
-		$functionPtr = $this->is_in_function_call( $stackPtr, $this->valid_functions );
+		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->valid_functions );
 		if ( false === $functionPtr ) {
 			return;
 		}
