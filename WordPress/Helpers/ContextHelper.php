@@ -12,6 +12,8 @@ namespace WordPressCS\WordPress\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Parentheses;
+use PHPCSUtils\Utils\PassedParameters;
 
 /**
  * Helper utilities for checking the context in which a token is used.
@@ -59,6 +61,18 @@ final class ContextHelper {
 		'is_resource'  => true,
 		'is_scalar'    => true,
 		'is_string'    => true,
+	);
+
+	/**
+	 * List of PHP native functions to check if an array index exists.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array
+	 */
+	private static $key_exists_functions = array(
+		'array_key_exists' => true,
+		'key_exists'       => true, // Alias.
 	);
 
 	/**
@@ -217,5 +231,41 @@ final class ContextHelper {
 		 * function call.
 		 */
 		return (bool) self::is_in_function_call( $phpcsFile, $stackPtr, self::$typeTestFunctions );
+	}
+
+	/**
+	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
+	 *
+	 * @since 0.5.0
+	 * @since 2.1.0 Now checks for the token being used as the array parameter
+	 *              in function calls to array_key_exists() and key_exists() as well.
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is inside an isset() or empty() statement.
+	 */
+	public static function is_in_isset_or_empty( File $phpcsFile, $stackPtr ) {
+		if ( Parentheses::lastOwnerIn( $phpcsFile, $stackPtr, array( \T_ISSET, \T_EMPTY ) ) !== false ) {
+			return true;
+		}
+
+		$functionPtr = self::is_in_function_call( $phpcsFile, $stackPtr, self::$key_exists_functions );
+		if ( false !== $functionPtr ) {
+			/*
+			 * Both functions being checked have the same parameters. If the function list would
+			 * be expanded, this needs to be revisited.
+			 */
+			$array_param = PassedParameters::getParameter( $phpcsFile, $functionPtr, 2, 'array' );
+			if ( false !== $array_param
+				&& ( $stackPtr >= $array_param['start'] && $stackPtr <= $array_param['end'] )
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

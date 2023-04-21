@@ -126,7 +126,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// This superglobal is being validated.
-		if ( $this->is_in_isset_or_empty( $stackPtr ) ) {
+		if ( ContextHelper::is_in_isset_or_empty( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 

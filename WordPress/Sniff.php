@@ -429,54 +429,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	}
 
 	/**
-	 * Check if a token is inside of an isset(), empty() or array_key_exists() statement.
-	 *
-	 * @since 0.5.0
-	 * @since 2.1.0 Now checks for the token being used as the array parameter
-	 *              in function calls to array_key_exists() and key_exists() as well.
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return bool Whether the token is inside an isset() or empty() statement.
-	 */
-	protected function is_in_isset_or_empty( $stackPtr ) {
-
-		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
-			return false;
-		}
-
-		$nested_parenthesis = $this->tokens[ $stackPtr ]['nested_parenthesis'];
-
-		end( $nested_parenthesis );
-		$open_parenthesis = key( $nested_parenthesis );
-
-		$previous_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open_parenthesis - 1 ), null, true, null, true );
-		if ( false === $previous_non_empty ) {
-			return false;
-		}
-
-		$previous_code = $this->tokens[ $previous_non_empty ]['code'];
-		if ( \T_ISSET === $previous_code || \T_EMPTY === $previous_code ) {
-			return true;
-		}
-
-		$valid_functions = array(
-			'array_key_exists' => true,
-			'key_exists'       => true, // Alias.
-		);
-
-		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
-		if ( false !== $functionPtr ) {
-			$second_param = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, 2 );
-			if ( $stackPtr >= $second_param['start'] && $stackPtr <= $second_param['end'] ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check if something is only being sanitized.
 	 *
 	 * @since 0.5.0
