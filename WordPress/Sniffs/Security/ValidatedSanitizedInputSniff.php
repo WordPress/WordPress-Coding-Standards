@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
@@ -177,7 +178,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// If this variable is being tested with one of the `is_..()` functions, sanitization isn't needed.
-		if ( $this->is_in_type_test( $stackPtr ) ) {
+		if ( ContextHelper::is_in_type_test( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
