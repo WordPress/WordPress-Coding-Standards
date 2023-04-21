@@ -314,4 +314,7 @@ esc_html_e( 'foo', '' ); // Bad: text domain mismatch.
 // phpcs:set WordPress.WP.I18n text_domain[]
 esc_html_e( 'foo', '' ); // Bad: text-domain can not be empty.
 
+// PHP 8.0+: safeguard handling of newly introduced placeholders.
+__( 'There are %1$h monkeys in the %H', 'my-slug' ); // Bad: multiple arguments should be numbered.
+
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment

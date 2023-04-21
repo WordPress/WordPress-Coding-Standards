@@ -63,7 +63,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				[0-9]+                     # Width specifier.
 				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
 			)
-			[bcdeEfFgGosuxX]           # Type specifier.
+			[bcdeEfFgGhHosuxX]           # Type specifier.
 		)
 	)/x';
 
@@ -85,7 +85,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 			[0-9]+                     # Width specifier.
 			(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
 		)
-		[bcdeEfFgGosuxX]           # Type specifier.
+		[bcdeEfFgGhHosuxX]           # Type specifier.
 	)/x';
 
 	/**
