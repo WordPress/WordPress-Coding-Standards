@@ -30,6 +30,22 @@ use PHPCSUtils\Utils\PassedParameters;
 final class ContextHelper {
 
 	/**
+	 * Tokens which when they preceed code indicate the value is safely casted.
+	 *
+	 * @since 1.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The property visibility was changed from `protected` to `public static`.
+	 *
+	 * @var array
+	 */
+	public static $safe_casts = array(
+		\T_INT_CAST    => true,
+		\T_DOUBLE_CAST => true,
+		\T_BOOL_CAST   => true,
+		\T_UNSET_CAST  => true,
+	);
+
+	/**
 	 * List of PHP native functions to test the type of a variable.
 	 *
 	 * Using these functions is safe in combination with superglobals without
@@ -267,5 +283,24 @@ final class ContextHelper {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if something is being casted to a safe value.
+	 *
+	 * @since 0.5.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token being casted.
+	 */
+	public static function is_safe_casted( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+
+		return isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] );
 	}
 }

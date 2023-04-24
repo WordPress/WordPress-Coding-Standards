@@ -250,20 +250,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * Token which when they preceed code indicate the value is safely casted.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @var array
-	 */
-	protected $safe_casts = array(
-		\T_INT_CAST    => true,
-		\T_DOUBLE_CAST => true,
-		\T_BOOL_CAST   => true,
-		\T_UNSET_CAST  => true,
-	);
-
-	/**
 	 * List of array functions which apply a callback to the array.
 	 *
 	 * These are often used for sanitization/escaping an array variable.
@@ -452,40 +438,13 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// At this point we're expecting the value to have not been casted. If it
 		// was, it wasn't *only* casted, because it's also in a function.
-		if ( $this->is_safe_casted( $stackPtr ) ) {
+		if ( ContextHelper::is_safe_casted( $this->phpcsFile, $stackPtr ) ) {
 			return false;
 		}
 
 		// The only parentheses should belong to the sanitizing function. If there's
 		// more than one set, this isn't *only* sanitization.
 		return ( \count( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) === 1 );
-	}
-
-	/**
-	 * Check if something is being casted to a safe value.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 *
-	 * @return bool Whether the token being casted.
-	 */
-	protected function is_safe_casted( $stackPtr ) {
-
-		// Get the last non-empty token.
-		$prev = $this->phpcsFile->findPrevious(
-			Tokens::$emptyTokens,
-			( $stackPtr - 1 ),
-			null,
-			true
-		);
-
-		if ( false === $prev ) {
-			return false;
-		}
-
-		// Check if it is a safe cast.
-		return isset( $this->safe_casts[ $this->tokens[ $prev ]['code'] ] );
 	}
 
 	/**
@@ -502,7 +461,7 @@ abstract class Sniff implements PHPCS_Sniff {
 	protected function is_sanitized( $stackPtr, $require_unslash = false ) {
 
 		// First we check if it is being casted to a safe value.
-		if ( $this->is_safe_casted( $stackPtr ) ) {
+		if ( ContextHelper::is_safe_casted( $this->phpcsFile, $stackPtr ) ) {
 			return true;
 		}
 
