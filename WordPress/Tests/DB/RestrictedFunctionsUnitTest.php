@@ -40,6 +40,12 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 				'message'   => 'Detected usage of %s.',
 				'functions' => array(),
 			),
+			'test_allow-key-handled-case-insensitively' => array(
+				'type'      => 'error',
+				'message'   => 'Detected usage of %s.',
+				'functions' => array( 'myFiction*' ),
+				'allow'     => array( 'myFictional' => true ),
+			),
 		);
 	}
 
@@ -106,6 +112,8 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 			74 => 1,
 			75 => 1,
 			76 => 1,
+
+			94 => 1,
 		);
 	}
 

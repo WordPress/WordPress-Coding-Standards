@@ -155,13 +155,23 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		foreach ( $this->groups as $groupName => $group ) {
 			if ( empty( $group[ $key ] ) ) {
 				unset( $this->groups[ $groupName ] );
-			} else {
-				$items       = array_map( array( $this, 'prepare_name_for_regex' ), $group[ $key ] );
-				$all_items[] = $items;
-				$items       = implode( '|', $items );
-
-				$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
+				continue;
 			}
+
+			// Lowercase the items and potential allows as the comparisons should be done case-insensitively.
+			// Note: this disregards non-ascii names, but as we don't have any of those, that is okay for now.
+			$items                              = array_map( 'strtolower', $group[ $key ] );
+			$this->groups[ $groupName ][ $key ] = $items;
+
+			if ( ! empty( $group['allow'] ) ) {
+				$this->groups[ $groupName ]['allow'] = array_change_key_case( $group['allow'], \CASE_LOWER );
+			}
+
+			$items       = array_map( array( $this, 'prepare_name_for_regex' ), $items );
+			$all_items[] = $items;
+			$items       = implode( '|', $items );
+
+			$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
 		}
 
 		if ( empty( $this->groups ) ) {
