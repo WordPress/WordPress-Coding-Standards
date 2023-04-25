@@ -27,3 +27,9 @@ class WP_Reset_Query {}
 interface Query_Posts {}
 trait WP_Reset_Query {}
 enum Query_Posts {}
+
+// Ensure the sniff flags function `use` statements, but not class `use` statements or aliases.
+use Query_Posts; // OK.
+use function wp_reset_query; // Warning.
+use function wp_reset_query as myFunction; // Warning.
+use function someOtherFunction as wp_reset_query; // OK, alias, not our target.
