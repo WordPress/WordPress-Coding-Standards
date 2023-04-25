@@ -19,6 +19,7 @@ use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
+use WordPressCS\WordPress\Helpers\ListHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper;
 use WordPressCS\WordPress\Sniff;
@@ -179,7 +180,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			return;
 		}
 
-		$var_pointers = $this->get_list_variables( $stackPtr, $list_open_close );
+		$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $stackPtr );
 		foreach ( $var_pointers as $ptr ) {
 			$this->process_variable_assignment( $ptr, true );
 		}
@@ -367,7 +368,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 					continue;
 				}
 
-				$var_pointers = $this->get_list_variables( $ptr, $list_open_close );
+				$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $ptr );
 				foreach ( $var_pointers as $ptr ) {
 					$var_name = $this->tokens[ $ptr ]['content'];
 					if ( '$GLOBALS' === $var_name ) {
