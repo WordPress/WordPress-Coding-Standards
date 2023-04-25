@@ -92,6 +92,27 @@ final class ContextHelper {
 	);
 
 	/**
+	 * Array functions to compare a $needle to a predefined set of values.
+	 *
+	 * If the value is set to an array, the parameter specified in the array is
+	 * required for the function call to be considered as a comparison.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The property visibility was changed from `protected` to `private static`.
+	 *
+	 * @var array <string function name> => <true|array>
+	 */
+	private static $arrayCompareFunctions = array(
+		'in_array'     => true,
+		'array_search' => true,
+		'array_keys'   => array(
+			'position' => 2,
+			'name'     => 'filter_value',
+		),
+	);
+
+	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
 	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
@@ -302,5 +323,39 @@ final class ContextHelper {
 		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		return isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] );
+	}
+
+	/**
+	 * Check if a token is inside of an array-value comparison function.
+	 *
+	 * @since 2.1.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is (part of) a parameter to an
+	 *              array-value comparison function.
+	 */
+	public static function is_in_array_comparison( File $phpcsFile, $stackPtr ) {
+		$function_ptr = self::is_in_function_call( $phpcsFile, $stackPtr, self::$arrayCompareFunctions, true, true );
+		if ( false === $function_ptr ) {
+			return false;
+		}
+
+		$tokens        = $phpcsFile->getTokens();
+		$function_name = strtolower( $tokens[ $function_ptr ]['content'] );
+		if ( true === self::$arrayCompareFunctions[ $function_name ] ) {
+			return true;
+		}
+
+		$target_param = self::$arrayCompareFunctions[ $function_name ];
+		$found_param  = PassedParameters::getParameter( $phpcsFile, $function_ptr, $target_param['position'], $target_param['name'] );
+		if ( false !== $found_param ) {
+			return true;
+		}
+
+		return false;
 	}
 }

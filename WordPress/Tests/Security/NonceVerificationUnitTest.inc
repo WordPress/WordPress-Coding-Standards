@@ -362,3 +362,32 @@ function allow_in_array_key_exists_before_noncecheck_with_named_params() {
 
 	wp_verify_nonce( 'some_action' );
 }
+
+// Tests specifically for the ContextHelper::is_in_array_comparison().
+function allow_for_array_comparison_in_condition() {
+	if ( Array_Keys( $_GET['actions'], 'my_action', true ) ) { // OK.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
+
+function disallow_for_non_array_comparison_in_condition() {
+	if ( array_keys( $_GET['actions'] ) ) { // Bad.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
+
+function allow_for_array_comparison_in_condition_with_named_params() {
+	if ( array_keys( filter_value: 'my_action', array: $_GET['actions'], strict: true, ) ) { // OK.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}
+
+function disallow_for_non_array_comparison_in_condition_with_named_params() {
+	if ( array_keys( strict: true, array: $_GET['actions'], ) ) { // Bad, missing $filter_value param. Invalid function call, but not our concern.
+		check_admin_referer( 'foo' );
+		foo();
+	}
+}

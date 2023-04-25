@@ -188,7 +188,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// If this is a comparison using the array comparison functions, sanitization isn't needed.
-		if ( $this->is_in_array_comparison( $stackPtr ) ) {
+		if ( ContextHelper::is_in_array_comparison( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
