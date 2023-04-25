@@ -61,6 +61,8 @@ wp_reset_query(); // OK, excluded group.
 // phpcs:set WordPress.WP.DiscouragedFunctions exclude[]
 \query_posts(); // Warning.
 
+// Safeguard that a function used as a PHP 8.1+ first class callable is also flagged.
+call_user_func( query_posts(...), $param ); // Warning.
 
 // Live coding/parse error.
 // This has to be the last test in the file!!!
