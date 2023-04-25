@@ -82,9 +82,15 @@ maxdb_stat();
 
 // WP Native function which was named a bit unfortunately.
 mysql_to_rfc3339(); // Ok.
+Mysql_to_RFC3339(); // Ok, comparison should be done case insensitively.
 
 // Other WP Native functions which shouldn't give a problem anyway.
 mysql2date(); // Ok.
 wp_check_mysql_version(); // Ok.
 wp_check_php_mysql_version(); // Ok.
 WP_Date_Query::build_mysql_datetime(); // Ok.
+
+// Verify the "allow" key in the function groups is handled case-insensitively.
+myFictionFunction(); // Bad.
+myFictional(); // OK.
+Myfictional(); // OK.

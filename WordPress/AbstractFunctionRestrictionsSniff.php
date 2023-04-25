@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\MessageHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -154,13 +155,23 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		foreach ( $this->groups as $groupName => $group ) {
 			if ( empty( $group[ $key ] ) ) {
 				unset( $this->groups[ $groupName ] );
-			} else {
-				$items       = array_map( array( $this, 'prepare_name_for_regex' ), $group[ $key ] );
-				$all_items[] = $items;
-				$items       = implode( '|', $items );
-
-				$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
+				continue;
 			}
+
+			// Lowercase the items and potential allows as the comparisons should be done case-insensitively.
+			// Note: this disregards non-ascii names, but as we don't have any of those, that is okay for now.
+			$items                              = array_map( 'strtolower', $group[ $key ] );
+			$this->groups[ $groupName ][ $key ] = $items;
+
+			if ( ! empty( $group['allow'] ) ) {
+				$this->groups[ $groupName ]['allow'] = array_change_key_case( $group['allow'], \CASE_LOWER );
+			}
+
+			$items       = array_map( array( $this, 'prepare_name_for_regex' ), $items );
+			$all_items[] = $items;
+			$items       = implode( '|', $items );
+
+			$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
 		}
 
 		if ( empty( $this->groups ) ) {
@@ -214,11 +225,6 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @return bool
 	 */
 	public function is_targetted_token( $stackPtr ) {
-
-		if ( \T_STRING !== $this->tokens[ $stackPtr ]['code'] ) {
-			return false;
-		}
-
 		// Exclude function definitions, class methods, and namespaced calls.
 		if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
@@ -228,18 +234,26 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			return false;
 		}
 
-		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false !== $prev ) {
-			// Skip sniffing on function, class definitions or for function aliases in use statements.
-			$skipped = array(
-				\T_FUNCTION        => \T_FUNCTION,
-				\T_CLASS           => \T_CLASS,
-				\T_AS              => \T_AS, // Use declaration alias.
-			);
+		if ( Context::inAttribute( $this->phpcsFile, $stackPtr ) ) {
+			// Class instantiation or constant in attribute, not function call.
+			return false;
+		}
 
-			if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
-				return false;
-			}
+		$search                   = Tokens::$emptyTokens;
+		$search[ \T_BITWISE_AND ] = \T_BITWISE_AND;
+
+		$prev = $this->phpcsFile->findPrevious( $search, ( $stackPtr - 1 ), null, true );
+
+		// Skip sniffing on function, OO definitions or for function aliases in use statements.
+		$invalid_tokens  = Tokens::$ooScopeTokens;
+		$invalid_tokens += array(
+			\T_FUNCTION => \T_FUNCTION,
+			\T_NEW      => \T_NEW,
+			\T_AS       => \T_AS, // Use declaration alias.
+		);
+
+		if ( isset( $invalid_tokens[ $this->tokens[ $prev ]['code'] ] ) ) {
+			return false;
 		}
 
 		// Check if this could even be a function call.
