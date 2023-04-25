@@ -33,3 +33,7 @@ use Query_Posts; // OK.
 use function wp_reset_query; // Warning.
 use function wp_reset_query as myFunction; // Warning.
 use function someOtherFunction as wp_reset_query; // OK, alias, not our target.
+
+// Live coding/parse error.
+// This has to be the last test in the file!!!
+\query_posts
