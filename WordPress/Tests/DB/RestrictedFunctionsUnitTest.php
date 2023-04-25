@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Tests\DB;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
  * Unit test class for the DB_RestrictedFunctions sniff.
@@ -19,9 +20,38 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  *
+ * @covers \WordPressCS\WordPress\AbstractFunctionRestrictionsSniff
  * @covers \WordPressCS\WordPress\Sniffs\DB\RestrictedFunctionsSniff
  */
 final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
+
+	/**
+	 * Add a number of extra restricted functions to unit test the abstract
+	 * AbstractFunctionRestrictionsSniff class.
+	 *
+	 * @before
+	 */
+	protected function enhanceGroups() {
+		parent::setUp();
+
+		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
+			'test-empty-funtions-array' => array(
+				'type'      => 'error',
+				'message'   => 'Detected usage of %s.',
+				'functions' => array(),
+			),
+		);
+	}
+
+	/**
+	 * Reset the $groups property.
+	 *
+	 * @after
+	 */
+	protected function resetGroups() {
+		AbstractFunctionRestrictionsSniff::$unittest_groups = array();
+		parent::tearDown();
+	}
 
 	/**
 	 * Returns the lines where errors should occur.
