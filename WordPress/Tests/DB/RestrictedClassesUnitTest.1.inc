@@ -77,3 +77,8 @@ class NotOurTarget extends SomethingElse {
 		) {}
 	}
 }
+
+// Bug fix: false negative when an object instantiation ends on a PHP close tag without whitespace.
+$db1 = new mysqli?><!-- Error. -->
+<div>Something</div>
+<?php
