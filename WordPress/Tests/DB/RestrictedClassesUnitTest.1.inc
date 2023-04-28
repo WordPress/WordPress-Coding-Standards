@@ -67,3 +67,13 @@ class YourMysqliC extends \mysqli {} // Error.
 
 // Bug fix: namespace keyword as operator is case-insensitive.
 class YourMysqliC extends NameSpace\mysqli {} // Error.
+
+// Issue #2184 Prevent false positives when searching for the class name before a double colon.
+class NotOurTarget extends SomethingElse {
+	public function doSomething() {
+		echo mysqli();
+		if (self::$property === static::$property
+			|| $obj::$property === parent::$property
+		) {}
+	}
+}
