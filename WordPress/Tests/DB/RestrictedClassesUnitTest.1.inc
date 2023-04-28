@@ -86,3 +86,6 @@ $db1 = new mysqli?><!-- Error. -->
 // Bug fix: prevent false negatives on object instantiation with chaining.
 $db10 = (new PDO)->exec(); // Error.
 $db11 = (new PDO)?->exec(); // Error.
+
+// Safeguard handling of class which extends and implements.
+class MyMysqliWithArrayAccess extends mysqli implements ArrayAccess {} // Error.
