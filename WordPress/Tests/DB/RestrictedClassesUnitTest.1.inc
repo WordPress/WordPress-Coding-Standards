@@ -82,3 +82,7 @@ class NotOurTarget extends SomethingElse {
 $db1 = new mysqli?><!-- Error. -->
 <div>Something</div>
 <?php
+
+// Bug fix: prevent false negatives on object instantiation with chaining.
+$db10 = (new PDO)->exec(); // Error.
+$db11 = (new PDO)?->exec(); // Error.
