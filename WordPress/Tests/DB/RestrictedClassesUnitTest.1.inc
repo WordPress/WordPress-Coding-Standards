@@ -89,3 +89,8 @@ $db11 = (new PDO)?->exec(); // Error.
 
 // Safeguard handling of class which extends and implements.
 class MyMysqliWithArrayAccess extends mysqli implements ArrayAccess {} // Error.
+
+// Safeguard handling of new with hierarchy keywords.
+$obj = new self();
+$obj = new parent();
+$obj = new static();
