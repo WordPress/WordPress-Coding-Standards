@@ -10,6 +10,8 @@
 namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\Namespaces;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -143,13 +145,9 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 				return false;
 			}
 
-			$nameStart = ( $this->phpcsFile->findPrevious( array( \T_STRING, \T_NS_SEPARATOR, \T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
-			$length    = ( $nameEnd - ( $nameStart - 1 ) );
-			$classname = $this->phpcsFile->getTokensAsString( $nameStart, $length );
-
-			if ( \T_NS_SEPARATOR !== $this->tokens[ $nameStart ]['code'] ) {
-				$classname = $this->get_namespaced_classname( $classname, ( $nameStart - 1 ) );
-			}
+			$nameStart = ( $this->phpcsFile->findPrevious( Collections::namespacedNameTokens(), ( $nameEnd - 1 ), null, true ) + 1 );
+			$classname = GetTokensAsString::noEmpties( $this->phpcsFile, $nameStart, $nameEnd );
+			$classname = $this->get_namespaced_classname( $classname, ( $nameStart - 1 ) );
 		}
 
 		// Stop if we couldn't determine a classname.
