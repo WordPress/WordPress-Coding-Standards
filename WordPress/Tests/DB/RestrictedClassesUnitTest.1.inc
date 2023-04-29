@@ -94,3 +94,10 @@ class MyMysqliWithArrayAccess extends mysqli implements ArrayAccess {} // Error.
 $obj = new self();
 $obj = new Parent();
 $obj = new STATIC();
+
+// Safeguard handling of PHP 7.0+ anonymous classes.
+$anon = new class {
+	public function PDO() {} // OK.
+};
+
+$anon = new class extends PDOStatement {}; // Error.
