@@ -96,6 +96,7 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 					63 => 1,
 					65 => 1,
 					66 => 1,
+					69 => 1,
 				);
 
 			case 'RestrictedClassesUnitTest.2.inc':

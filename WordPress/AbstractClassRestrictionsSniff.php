@@ -222,7 +222,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		// Remove the namespace keyword if used.
-		if ( 0 === strpos( $classname, 'namespace\\' ) ) {
+		if ( 0 === stripos( $classname, 'namespace\\' ) ) {
 			$classname = substr( $classname, 10 );
 		}
 

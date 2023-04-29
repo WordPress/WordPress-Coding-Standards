@@ -64,3 +64,6 @@ $db9 = new \My\DBlayer; // Error.
 
 echo mysqli::$affected_rows; // Error.
 class YourMysqliC extends \mysqli {} // Error.
+
+// Bug fix: namespace keyword as operator is case-insensitive.
+class YourMysqliC extends NameSpace\mysqli {} // Error.
