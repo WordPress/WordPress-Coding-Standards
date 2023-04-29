@@ -156,7 +156,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		// Nothing to do if one of the hierarchy keywords - 'parent', 'self' or 'static' - is used.
-		if ( \in_array( $classname, array( '\parent', '\self', '\static' ), true ) ) {
+		if ( \in_array( strtolower( $classname ), array( '\parent', '\self', '\static' ), true ) ) {
 			return false;
 		}
 

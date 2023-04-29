@@ -92,5 +92,5 @@ class MyMysqliWithArrayAccess extends mysqli implements ArrayAccess {} // Error.
 
 // Safeguard handling of new with hierarchy keywords.
 $obj = new self();
-$obj = new parent();
-$obj = new static();
+$obj = new Parent();
+$obj = new STATIC();
