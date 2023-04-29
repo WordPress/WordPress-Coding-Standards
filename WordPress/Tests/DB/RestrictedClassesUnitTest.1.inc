@@ -101,3 +101,6 @@ $anon = new class {
 };
 
 $anon = new class extends PDOStatement {}; // Error.
+
+// PHP 8.1: enums can implement.
+enum MysqliEnum implements mysqli {} // Error.
