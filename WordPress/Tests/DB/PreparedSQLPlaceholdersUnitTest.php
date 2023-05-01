@@ -60,6 +60,38 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			205 => 1,
 			207 => 2,
 			209 => 1,
+
+			215 => 1, // UnsupportedPlaceholder.
+
+			220 => 1, // QuotedSimplePlaceholder.
+			221 => 1, // QuotedSimplePlaceholder.
+			222 => 1, // QuotedSimplePlaceholder.
+			223 => 1, // QuotedSimplePlaceholder.
+			224 => 1, // QuotedSimplePlaceholder.
+			225 => 1, // QuotedSimplePlaceholder.
+
+			227 => 1, // QuotedIdentifierPlaceholder.
+			228 => 1, // QuotedIdentifierPlaceholder.
+			229 => 1, // QuotedIdentifierPlaceholder.
+			230 => 1, // QuotedIdentifierPlaceholder.
+
+			234 => 1, // UnescapedLiteral.
+			238 => 1, // UnsupportedPlaceholder.
+
+			244 => 1, // QuotedIdentifierPlaceholder.
+			245 => 1, // QuotedIdentifierPlaceholder.
+			246 => 1, // UnescapedLiteral.
+			247 => 1, // QuotedIdentifierPlaceholder.
+			248 => 1, // QuotedIdentifierPlaceholder.
+			249 => 1, // QuotedIdentifierPlaceholder.
+			250 => 2, // QuotedIdentifierPlaceholder.
+			251 => 1, // QuotedIdentifierPlaceholder.
+			252 => 1, // QuotedIdentifierPlaceholder.
+
+			254 => 2, // QuotedIdentifierPlaceholder x2.
+			261 => 1, // IdentifierWithinIN.
+			267 => 1, // IdentifierWithinIN.
+			272 => 1, // IdentifierWithinIN.
 		);
 	}
 
@@ -95,6 +127,14 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			160 => 2,
 			161 => 2,
 			177 => 1,
+			214 => 1,
+			215 => 1,
+			216 => 1,
+			217 => 1,
+			218 => 1,
+			234 => 1, // UnfinishedPrepare.
+			246 => 1, // UnfinishedPrepare.
+			258 => 1, // ReplacementsWrongNumber.
 		);
 	}
 
