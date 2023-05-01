@@ -9,6 +9,9 @@
 
 namespace WordPressCS\WordPress;
 
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\Namespaces;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -122,28 +125,25 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 		if ( \in_array( $token['code'], array( \T_NEW, \T_EXTENDS, \T_IMPLEMENTS ), true ) ) {
 			if ( \T_NEW === $token['code'] ) {
-				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_OBJECT_OPERATOR ), ( $stackPtr + 2 ) ) - 1 );
+				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_TAG ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_CLOSE_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
 			}
 
-			$length    = ( $nameEnd - ( $stackPtr + 1 ) );
-			$classname = $this->phpcsFile->getTokensAsString( ( $stackPtr + 2 ), $length );
-
-			if ( \T_NS_SEPARATOR !== $this->tokens[ ( $stackPtr + 2 ) ]['code'] ) {
-				$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
-			}
+			$classname = GetTokensAsString::noEmpties( $this->phpcsFile, ( $stackPtr + 2 ), $nameEnd );
+			$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
 		}
 
 		if ( \T_DOUBLE_COLON === $token['code'] ) {
-			$nameEnd   = $this->phpcsFile->findPrevious( \T_STRING, ( $stackPtr - 1 ) );
-			$nameStart = ( $this->phpcsFile->findPrevious( array( \T_STRING, \T_NS_SEPARATOR, \T_NAMESPACE ), ( $nameEnd - 1 ), null, true, null, true ) + 1 );
-			$length    = ( $nameEnd - ( $nameStart - 1 ) );
-			$classname = $this->phpcsFile->getTokensAsString( $nameStart, $length );
-
-			if ( \T_NS_SEPARATOR !== $this->tokens[ $nameStart ]['code'] ) {
-				$classname = $this->get_namespaced_classname( $classname, ( $nameStart - 1 ) );
+			$nameEnd = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+			if ( \T_STRING !== $this->tokens[ $nameEnd ]['code'] ) {
+				// Hierarchy keyword or object stored in variable.
+				return false;
 			}
+
+			$nameStart = ( $this->phpcsFile->findPrevious( Collections::namespacedNameTokens(), ( $nameEnd - 1 ), null, true ) + 1 );
+			$classname = GetTokensAsString::noEmpties( $this->phpcsFile, $nameStart, $nameEnd );
+			$classname = $this->get_namespaced_classname( $classname, ( $nameStart - 1 ) );
 		}
 
 		// Stop if we couldn't determine a classname.
@@ -152,7 +152,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		// Nothing to do if one of the hierarchy keywords - 'parent', 'self' or 'static' - is used.
-		if ( \in_array( $classname, array( 'parent', 'self', 'static' ), true ) ) {
+		if ( \in_array( strtolower( $classname ), array( '\parent', '\self', '\static' ), true ) ) {
 			return false;
 		}
 
@@ -222,26 +222,18 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 		}
 
 		// Remove the namespace keyword if used.
-		if ( 0 === strpos( $classname, 'namespace\\' ) ) {
+		if ( 0 === stripos( $classname, 'namespace\\' ) ) {
 			$classname = substr( $classname, 10 );
 		}
 
-		$namespace_keyword = $this->phpcsFile->findPrevious( \T_NAMESPACE, $search_from );
-		if ( false === $namespace_keyword ) {
+		$namespace = Namespaces::determineNamespace( $this->phpcsFile, $search_from );
+		if ( '' === $namespace ) {
 			// No namespace keyword found at all, so global namespace.
 			$classname = '\\' . $classname;
 		} else {
-			$namespace = Namespaces::determineNamespace( $this->phpcsFile, $search_from );
-
-			if ( ! empty( $namespace ) ) {
-				$classname = '\\' . $namespace . '\\' . $classname;
-			} else {
-				// No actual namespace found, so global namespace.
-				$classname = '\\' . $classname;
-			}
+			$classname = '\\' . $namespace . '\\' . $classname;
 		}
 
 		return $classname;
 	}
-
 }
