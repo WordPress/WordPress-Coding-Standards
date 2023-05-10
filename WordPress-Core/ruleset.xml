@@ -705,8 +705,8 @@
 		</properties>
 	</rule>
 
-	<!-- All files should end with a new line. -->
-	<rule ref="Generic.Files.EndFileNewline"/>
+	<!-- All files should end with a new line, but only one. -->
+	<rule ref="PSR2.Files.EndFileNewline"/>
 
 	<!-- No whitespace should come before semicolons. -->
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
