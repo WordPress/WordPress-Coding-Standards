@@ -146,7 +146,15 @@ jobs:
       # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
       - name: Test for fixer conflicts (fixes expected)
         if: ${{ matrix.phpcs_version == 'dev-master' }}
+        id: phpcbf
         continue-on-error: true
         run: |
+          set +e
           $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
-          if [ $? -eq 1 ]; then exit 0; fi
+          exitcode="$?"
+          echo "EXITCODE=$exitcode" >> $GITHUB_OUTPUT
+          exit "$exitcode"
+
+      - name: Fail the build on fixer conflicts and other errors
+        if: ${{ steps.phpcbf.outputs.EXITCODE != 0 && steps.phpcbf.outputs.EXITCODE != 1 }}
+        run: exit ${{ steps.phpcbf.outputs.EXITCODE }}
