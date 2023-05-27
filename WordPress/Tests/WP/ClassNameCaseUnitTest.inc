@@ -28,7 +28,7 @@ WP_Customize_New_Menu_Control::foo();
 $obj = new getID3;
 class MyMailer extends PHPMailer\PHPMailer\PHPMailer {}
 $obj = new Requests_Cookie_Jar();
-$anon = class extends SimplePie_IRI {};
+$anon = new class extends SimplePie_IRI {};
 
 
 /*
@@ -46,7 +46,7 @@ WP_Customize_NEW_Menu_Control::foo();
 $obj = new GetID3();
 class MyMailer extends PhpMailer\PhpMailer\PhpMailer {}
 $obj = new Requests_cookie_jar();
-$anon = class extends SimplePie_Iri {};
+$anon = new class extends SimplePie_Iri {};
 
 
 /*

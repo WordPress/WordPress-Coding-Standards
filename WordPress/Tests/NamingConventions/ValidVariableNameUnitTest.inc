@@ -11,7 +11,7 @@ class MyClass {
 	var $_varName = 'hello'; // Bad.
 
 	public $varNamf  = 'hello'; // Bad.
-	public bool $var_namf = 'hello';
+	public bool $var_namf = true;
 	public $varnamf  = 'hello';
 	public $_varNamf = 'hello'; // Bad.
 

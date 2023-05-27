@@ -235,7 +235,7 @@ function allow_for_nonce_check_within_switch() {
 }
 
 function allow_for_array_compare_before_noncecheck() {
-	if ( array_search( array( 'subscribe', 'unsubscribe', $_POST['action'], true ) // OK.
+	if ( array_search( array( 'subscribe', 'unsubscribe' ), $_POST['action'], true ) // OK.
 		&& wp_verify_nonce( $_POST['newsletter_nonce'] )
 	) {}
 }

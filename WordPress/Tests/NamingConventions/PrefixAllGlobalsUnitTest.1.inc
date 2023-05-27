@@ -376,7 +376,7 @@ function acronymFunction() {
 
 // Issue #1311 - allow for overrulable WP Core constants.
 define( 'FORCE_SSL_ADMIN', true );
-const SCRIPT_DEBUG = $develop_src;
+const SCRIPT_DEBUG = true;
 
 // Allow for hook name prefixes with less conventional separators.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] test-this,myplugin\
@@ -558,7 +558,7 @@ function acronym_null_coalesce_equals() {
 }
 
 // Safeguard that property assignments using the PHP 8.0+ nullsafe object operator do not trigger false positives.
-$acronym_object??->property = 10;
+$acronym_object?->property = 10;
 
 /*
  * Safeguard support for function calls using PHP 8.0+ named parameters.

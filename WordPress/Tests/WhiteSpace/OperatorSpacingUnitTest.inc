@@ -39,9 +39,9 @@ if ( $a === $b xor $b === $c ) {}
 // Logical operators: Too little space.
 if ( $a === $b&&$b === $c ) {}
 if ( $a === $b||$b === $c ) {}
-if ( $a === {$b}and$b === $c ) {}
-if ( $a === {$b}or$b === $c ) {}
-if ( $a === {$b}xor$b === $c ) {}
+if ( $a === ($b)and$b === $c ) {}
+if ( $a === ($b)or$b === $c ) {}
+if ( $a === ($b)xor$b === $c ) {}
 
 // Logical operators: Too much space.
 if ( $a === $b     &&     $b === $c ) {}

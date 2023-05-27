@@ -142,7 +142,7 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 
 Custom::add_filter( 'cron_schedules', array( $class, $method ) ); // OK, not the WP function.
 add_filter( 'some_hook', array( $place, 'cron_schedules' ) ); // OK, not the hook we're looking for.
-add_filter( function() { return get_hook_name('cron_schedules'); }(), array( $class, $method ) ); // OK, nested in another function call.
+add_filter( (function() { return get_hook_name('cron_schedules'); })(), array( $class, $method ) ); // OK, nested in another function call.
 
 // Deal correctly with the time calculations within parentheses.
 add_filter( 'cron_schedules', function ( $schedules ) {
