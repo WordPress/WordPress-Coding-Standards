@@ -69,7 +69,7 @@ if ( $a === $b or
 function foo( int|float $param ) : string|false {}
 
 // Safeguard that the "&" in PHP 8.1 intersection types is disregarded.
-function foo( TypeA&namespace\TypeB $param ) : \TypeC&Partially\Qualified {}
+function fooBar( TypeA&namespace\TypeB $param ) : \TypeC&Partially\Qualified {}
 
 // Safeguard handling of union type separator for readonly properties.
 class Foo {

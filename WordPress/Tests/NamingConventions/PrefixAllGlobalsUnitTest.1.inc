@@ -164,7 +164,7 @@ $_POST['something'] = 'value';
 do_action_deprecated( 'set_current_user' ); // Deprecated hook, ignored.
 
 // WP global variables, override warning is handled by another sniff.
-function acronym_do_something() {
+function acronym_do_another_thing() {
 	global $post;
 	$post = 'value';
 	$GLOBALS['post'] = 'value';
@@ -511,7 +511,7 @@ function aa_do_something(){}
 
 // The following line mimicks an empty prefix value.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
-function aa_do_something(){}
+function aaa_do_something(){}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊
 function 😊_do_something(){}

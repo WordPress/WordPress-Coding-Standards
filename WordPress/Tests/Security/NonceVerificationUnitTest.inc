@@ -265,12 +265,12 @@ function allow_for_unslash_in_sanitization() {
 	echo $var;
 }
 
-function dont_allow_bypass_nonce_via_sanitization() {
+function dont_allow_bypass_nonce_via_sanitization_bad() {
 	$var = sanitize_text_field( $_POST['foo'] ); // Bad.
 	echo $var;
 }
 
-function dont_allow_bypass_nonce_via_sanitization() {
+function dont_allow_bypass_nonce_via_sanitization_good() {
 	$var = sanitize_text_field( $_POST['foo'] ); // OK.
 	wp_verify_nonce( $var );
 	echo $var;
@@ -364,7 +364,7 @@ function allow_in_array_key_exists_before_noncecheck_with_named_params() {
 }
 
 // Tests specifically for the ContextHelper::is_in_array_comparison().
-function allow_for_array_comparison_in_condition() {
+function allow_for_array_comparison_in_condition_non_lowercase_function_call() {
 	if ( Array_Keys( $_GET['actions'], 'my_action', true ) ) { // OK.
 		check_admin_referer( 'foo' );
 		foo();
