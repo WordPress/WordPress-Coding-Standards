@@ -228,9 +228,9 @@ function test_more_safe_functions() {
 
 function test_allow_array_key_exists_alias() {
 	if ( key_exists( 'my_field1', $_POST ) ) {
-	$id = (int) $_POST['my_field1']; // OK.
+		$id = (int) $_POST['my_field1']; // OK.
+	}
 }
-
 function test_correct_multi_level_array_validation() {
 	if ( isset( $_POST['toplevel']['sublevel'] ) ) {
 		$id = (int) $_POST['toplevel']; // OK, if a subkey exists, the top level key *must* also exist.

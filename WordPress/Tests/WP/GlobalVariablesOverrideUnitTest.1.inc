@@ -55,7 +55,7 @@ add_filter( 'comments_open', function( $open, $post_id ) {
 	return 'page' === $page->post_type;
 }, 10, 2 );
 
-$closure = function() { $page = 'test' }; // Ok, check against cross-contaminiation from within a closure.
+$closure = function() { $page = 'test'; }; // Ok, check against cross-contaminiation from within a closure.
 
 // Allow overriding globals in functions within unit test classes.
 // https://github.com/WordPress/WordPress-Coding-Standards/issues/300#issuecomment-158778606

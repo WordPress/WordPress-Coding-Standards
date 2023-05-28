@@ -223,7 +223,7 @@ function foo() {
 // Missing domain parameter.
 _n( plural: $plural, single: $single ); // Error.
 esc_attr_x(
-	context : $context
+	context : $context,
 	text    : $text,
 );
 
