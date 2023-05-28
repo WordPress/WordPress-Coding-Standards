@@ -144,13 +144,15 @@ jobs:
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
       # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
+      #
+      # Note: the ValidVariableNameUnitTest.inc file is temporarily ignored until upstream PHPCS PR 3833 has been merged.
       - name: Test for fixer conflicts (fixes expected)
         if: ${{ matrix.phpcs_version == 'dev-master' }}
         id: phpcbf
         continue-on-error: true
         run: |
           set +e
-          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary
+          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/NamingConventions/ValidVariableNameUnitTest.inc
           exitcode="$?"
           echo "EXITCODE=$exitcode" >> $GITHUB_OUTPUT
           exit "$exitcode"
