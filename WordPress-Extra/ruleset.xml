@@ -155,7 +155,7 @@
 	<rule ref="Universal.Arrays.DuplicateArrayKey"/>
 
 	<!-- Disallows return type declarations on constructor/destructor methods,
-		and constructor/destructor methods returning a value. -->
+		 and constructor/destructor methods returning a value. -->
 	<rule ref="Universal.CodeAnalysis.ConstructorDestructorReturn"/>
 
 	<!-- Detects foreach control structures using the same variable for both key and value. -->
@@ -168,7 +168,7 @@
 	<rule ref="Universal.ControlStructures.DisallowLonelyIf"/>
 
 	<!-- Enforce for a file to either declare (global/namespaced) functions
-		or declare object-oriented structures, but not both. -->
+		 or declare object-oriented structures, but not both. -->
 	<rule ref="Universal.Files.SeparateFunctionsFromOO"/>
 
 	<!-- Detect useless "echo sprintf(...)". -->
