@@ -414,6 +414,29 @@
 
 	<!--
 	#############################################################################
+	Handbook: Declare Statements, Namespace, and Import Statements - Namespace declarations.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#namespace-declarations
+	#############################################################################
+	-->
+	<!-- Rule: Each part of a namespace name should consist of capitalized words separated by underscores. -->
+
+	<!-- Rule: Namespace declarations should have exactly one blank line before the declaration and at least one blank line after. -->
+
+	<!-- Covers rule: There should be only one namespace declaration per file... -->
+	<rule ref="Universal.Namespaces.OneDeclarationPerFile"/>
+
+	<!-- Rule: ... and it should be at the top of the file.
+		 Note: with only one namespace declaration, it not being at the top of the file would be a parse error. -->
+
+	<!-- Covers rule: Namespace declarations using curly brace syntax are not allowed. -->
+	<rule ref="Universal.Namespaces.DisallowCurlyBraceSyntax"/>
+
+	<!-- Covers rule: Explicit global namespace declaration (namespace declaration without name) are also not allowed. -->
+	<rule ref="Universal.Namespaces.DisallowDeclarationWithoutName"/>
+
+
+	<!--
+	#############################################################################
 	Handbook: Object-Oriented Programming - Only One Object Structure (Class/Interface/Trait) per File.
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#only-one-object-structure-class-interface-trait-per-file
 	#############################################################################
