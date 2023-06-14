@@ -13,9 +13,9 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
-use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
 use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
+use WordPressCS\WordPress\Helpers\PrintingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -38,15 +38,7 @@ use WordPressCS\WordPress\Sniff;
 class EscapeOutputSniff extends Sniff {
 
 	use EscapingFunctionsTrait;
-
-	/**
-	 * Custom list of functions which print output incorporating the passed values.
-	 *
-	 * @since 0.4.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customPrintingFunctions = array();
+	use PrintingFunctionsTrait;
 
 	/**
 	 * Printing functions that incorporate unsafe values.
@@ -59,22 +51,6 @@ class EscapeOutputSniff extends Sniff {
 	protected $unsafePrintingFunctions = array(
 		'_e'  => 'esc_html_e() or esc_attr_e()',
 		'_ex' => 'echo esc_html_x() or echo esc_attr_x()',
-	);
-
-	/**
-	 * Cache of previously added custom functions.
-	 *
-	 * Prevents having to do the same merges over and over again.
-	 *
-	 * @since 0.4.0
-	 * @since 0.11.0 - Changed from public static to protected non-static.
-	 *               - Changed the format from simple bool to array.
-	 *
-	 * @var array
-	 */
-	protected $addedCustomFunctions = array(
-		'sanitize'   => array(),
-		'print'      => array(),
 	);
 
 	/**
@@ -163,8 +139,6 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$this->mergeFunctionLists();
-
 		$function = $this->tokens[ $stackPtr ]['content'];
 
 		// Find the opening parenthesis (if present; T_ECHO might not have it).
@@ -173,7 +147,7 @@ class EscapeOutputSniff extends Sniff {
 		// If function, not T_ECHO nor T_PRINT.
 		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if it is a function but is not one of the printing functions.
-			if ( ! isset( $this->printingFunctions[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
+			if ( ! $this->is_printing_function( $this->tokens[ $stackPtr ]['content'] ) ) {
 				return;
 			}
 
@@ -454,24 +428,4 @@ class EscapeOutputSniff extends Sniff {
 
 		return $end_of_statement;
 	}
-
-	/**
-	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
-	 *
-	 * @since 0.11.0 Split out from the `process()` method.
-	 *
-	 * @return void
-	 */
-	protected function mergeFunctionLists() {
-		if ( $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] ) {
-
-			$this->printingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customPrintingFunctions,
-				$this->printingFunctions
-			);
-
-			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
-		}
-	}
-
 }
