@@ -14,6 +14,7 @@ use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\ConstantsHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -339,7 +340,7 @@ class EscapeOutputSniff extends Sniff {
 			// Handle safe PHP native constants.
 			if ( \T_STRING === $this->tokens[ $i ]['code']
 				&& isset( $this->safe_php_constants[ $this->tokens[ $i ]['content'] ] )
-				&& $this->is_use_of_global_constant( $i )
+				&& ConstantsHelper::is_use_of_global_constant( $this->phpcsFile, $i )
 			) {
 				continue;
 			}
