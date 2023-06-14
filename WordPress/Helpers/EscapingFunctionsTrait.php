@@ -214,7 +214,7 @@ trait EscapingFunctionsTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_escaping_function( $functionName ) {
+	final public function is_escaping_function( $functionName ) {
 		if ( array() === $this->allEscapingFunctions
 			|| $this->customEscapingFunctions !== $this->addedCustomEscapingFunctions['escape']
 		) {
@@ -238,7 +238,7 @@ trait EscapingFunctionsTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_auto_escaped_function( $functionName ) {
+	final public function is_auto_escaped_function( $functionName ) {
 		if ( array() === $this->allAutoEscapedFunctions
 			|| $this->customAutoEscapedFunctions !== $this->addedCustomEscapingFunctions['autoescape']
 		) {

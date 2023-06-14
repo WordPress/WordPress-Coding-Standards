@@ -127,7 +127,7 @@ trait IsUnitTestTrait {
 	 *
 	 * @return array<string, bool>
 	 */
-	protected function get_all_test_classes() {
+	final protected function get_all_test_classes() {
 		if ( array() === $this->all_test_classes
 			|| $this->custom_test_classes !== $this->added_custom_test_classes
 		) {
@@ -179,7 +179,7 @@ trait IsUnitTestTrait {
 	 *
 	 * @return bool True if the class is a unit test class, false otherwise.
 	 */
-	protected function is_test_class( File $phpcsFile, $stackPtr ) {
+	final protected function is_test_class( File $phpcsFile, $stackPtr ) {
 
 		$tokens = $phpcsFile->getTokens();
 

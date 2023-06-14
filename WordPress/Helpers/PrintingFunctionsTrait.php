@@ -92,7 +92,7 @@ trait PrintingFunctionsTrait {
 	 *
 	 * @return array<string, bool>
 	 */
-	public function get_printing_functions() {
+	final public function get_printing_functions() {
 		if ( array() === $this->allPrintingFunctions
 			|| $this->customPrintingFunctions !== $this->addedCustomPrintingFunctions
 		) {
@@ -116,7 +116,7 @@ trait PrintingFunctionsTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_printing_function( $functionName ) {
+	final public function is_printing_function( $functionName ) {
 		return isset( $this->get_printing_functions()[ strtolower( $functionName ) ] );
 	}
 }
