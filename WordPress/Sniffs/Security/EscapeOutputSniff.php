@@ -15,6 +15,7 @@ use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
 use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
+use WordPressCS\WordPress\Helpers\FormattingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\PrintingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
@@ -345,7 +346,7 @@ class EscapeOutputSniff extends Sniff {
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
 				$function_opener        = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
-				$is_formatting_function = isset( $this->formattingFunctions[ $functionName ] );
+				$is_formatting_function = FormattingFunctionsHelper::is_formatting_function( $functionName );
 
 				if ( false !== $function_opener ) {
 

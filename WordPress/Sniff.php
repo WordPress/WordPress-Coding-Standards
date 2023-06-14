@@ -151,32 +151,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * Functions that format strings.
-	 *
-	 * These functions are often used for formatting values just before output, and
-	 * it is common practice to escape the individual parameters passed to them as
-	 * needed instead of escaping the entire result. This is especially true when the
-	 * string being formatted contains HTML, which makes escaping the full result
-	 * more difficult.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $formattingFunctions = array(
-		'antispambot' => true,
-		'array_fill'  => true,
-		'ent2ncr'     => true,
-		'implode'     => true,
-		'join'        => true,
-		'nl2br'       => true,
-		'sprintf'     => true,
-		'vsprintf'    => true,
-		'wp_sprintf'  => true,
-	);
-
-	/**
 	 * A list of superglobals that incorporate user input.
 	 *
 	 * @since 0.5.0
