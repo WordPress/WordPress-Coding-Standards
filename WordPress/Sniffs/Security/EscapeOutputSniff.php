@@ -15,6 +15,7 @@ use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
+use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -36,23 +37,7 @@ use WordPressCS\WordPress\Sniff;
  */
 class EscapeOutputSniff extends Sniff {
 
-	/**
-	 * Custom list of functions which escape values for output.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customEscapingFunctions = array();
-
-	/**
-	 * Custom list of functions whose return values are pre-escaped for output.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customAutoEscapedFunctions = array();
+	use EscapingFunctionsTrait;
 
 	/**
 	 * Custom list of functions which print output incorporating the passed values.
@@ -88,8 +73,6 @@ class EscapeOutputSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'escape'     => array(),
-		'autoescape' => array(),
 		'sanitize'   => array(),
 		'print'      => array(),
 	);
@@ -439,8 +422,8 @@ class EscapeOutputSniff extends Sniff {
 				// If this is a safe function, we don't flag it.
 				if (
 					$is_formatting_function
-					|| isset( $this->autoEscapedFunctions[ $functionName ] )
-					|| isset( $this->escapingFunctions[ $functionName ] )
+					|| $this->is_escaping_function( $functionName )
+					|| $this->is_auto_escaped_function( $functionName )
 				) {
 					continue;
 				}
@@ -480,26 +463,6 @@ class EscapeOutputSniff extends Sniff {
 	 * @return void
 	 */
 	protected function mergeFunctionLists() {
-		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape'] ) {
-			$customEscapeFunctions = RulesetPropertyHelper::merge_custom_array( $this->customEscapingFunctions, array(), false );
-
-			$this->escapingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$customEscapeFunctions,
-				$this->escapingFunctions
-			);
-
-			$this->addedCustomFunctions['escape'] = $this->customEscapingFunctions;
-		}
-
-		if ( $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] ) {
-			$this->autoEscapedFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customAutoEscapedFunctions,
-				$this->autoEscapedFunctions
-			);
-
-			$this->addedCustomFunctions['autoescape'] = $this->customAutoEscapedFunctions;
-		}
-
 		if ( $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] ) {
 
 			$this->printingFunctions = RulesetPropertyHelper::merge_custom_array(
