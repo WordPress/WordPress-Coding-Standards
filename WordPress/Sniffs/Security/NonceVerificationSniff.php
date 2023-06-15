@@ -55,24 +55,6 @@ class NonceVerificationSniff extends Sniff {
 	public $customNonceVerificationFunctions = array();
 
 	/**
-	 * Custom list of functions that sanitize the values passed to them.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customSanitizingFunctions = array();
-
-	/**
-	 * Custom sanitizing functions that implicitly unslash the values passed to them.
-	 *
-	 * @since 0.11.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customUnslashingSanitizingFunctions = array();
-
-	/**
 	 * Cache of previously added custom functions.
 	 *
 	 * Prevents having to do the same merges over and over again.
@@ -84,9 +66,7 @@ class NonceVerificationSniff extends Sniff {
 	 * @var array
 	 */
 	protected $addedCustomFunctions = array(
-		'nonce'           => array(),
-		'sanitize'        => array(),
-		'unslashsanitize' => array(),
+		'nonce' => array(),
 	);
 
 	/**
@@ -304,24 +284,6 @@ class NonceVerificationSniff extends Sniff {
 			);
 
 			$this->addedCustomFunctions['nonce'] = $this->customNonceVerificationFunctions;
-		}
-
-		if ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] ) {
-			$this->sanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customSanitizingFunctions,
-				$this->sanitizingFunctions
-			);
-
-			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
-		}
-
-		if ( $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] ) {
-			$this->unslashingSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customUnslashingSanitizingFunctions,
-				$this->unslashingSanitizingFunctions
-			);
-
-			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}
 }
