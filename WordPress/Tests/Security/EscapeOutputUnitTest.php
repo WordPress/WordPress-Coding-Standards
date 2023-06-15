@@ -21,6 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   1.0.0      This sniff has been moved from the `XSS` category to the `Security` category.
  *
  * @covers \WordPressCS\WordPress\Helpers\ConstantsHelper::is_use_of_global_constant
+ * @covers \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait
  * @covers \WordPressCS\WordPress\Sniffs\Security\EscapeOutputSniff
  */
 final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
