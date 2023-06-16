@@ -29,9 +29,9 @@ trait PrintingFunctionsTrait {
 	 * Custom list of functions which print output incorporating the passed values.
 	 *
 	 * @since 0.4.0
-	 * @since 3.0.0 Moved from the EscapeOutput Sniff class to this class.
+	 * @since 3.0.0 Moved from the EscapeOutput Sniff class to this trait.
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customPrintingFunctions = array();
 
@@ -40,10 +40,10 @@ trait PrintingFunctionsTrait {
 	 *
 	 * @since 0.5.0
 	 * @since 0.11.0 Changed from public static to protected non-static.
-	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 * @since 3.0.0 - Moved from the Sniff class to this trait.
 	 *              - Visibility changed from protected to private.
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $printingFunctions = array(
 		'_deprecated_argument'    => true,
@@ -70,10 +70,10 @@ trait PrintingFunctionsTrait {
 	 * @since 0.4.0
 	 * @since 0.11.0 - Changed from public static to protected non-static.
 	 *               - Changed the format from simple bool to array.
-	 * @since 3.0.0  - Moved from the EscapeOutput Sniff class to this class.
+	 * @since 3.0.0  - Moved from the EscapeOutput Sniff class to this trait.
 	 *               - Visibility changed from protected to private.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private $addedCustomPrintingFunctions = array();
 
@@ -82,7 +82,7 @@ trait PrintingFunctionsTrait {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $allPrintingFunctions = array();
 

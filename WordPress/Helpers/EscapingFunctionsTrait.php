@@ -20,7 +20,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  * - `customAutoEscapedFunctions`
  *
  * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The properties this trait were previously contained partially in the
+ * @since   3.0.0 The properties in this trait were previously contained partially in the
  *                `WordPressCS\WordPress\Sniff` class and partially in the `EscapeOutputSniff`
  *                class and have been moved here.
  */
@@ -30,9 +30,9 @@ trait EscapingFunctionsTrait {
 	 * Custom list of functions which escape values for display.
 	 *
 	 * @since 0.5.0
-	 * @since 3.0.0 Moved from the EscapeOutput Sniff class to this class.
+	 * @since 3.0.0 Moved from the EscapeOutput Sniff class to this trait.
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customEscapingFunctions = array();
 
@@ -40,9 +40,9 @@ trait EscapingFunctionsTrait {
 	 * Custom list of functions whose return values are pre-escaped for display.
 	 *
 	 * @since 0.3.0
-	 * @since 3.0.0 Moved from the EscapeOutput Sniff class to this class.
+	 * @since 3.0.0 Moved from the EscapeOutput Sniff class to this trait.
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customAutoEscapedFunctions = array();
 
@@ -51,10 +51,10 @@ trait EscapingFunctionsTrait {
 	 *
 	 * @since 0.5.0
 	 * @since 0.11.0 Changed from public static to protected non-static.
-	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 * @since 3.0.0 - Moved from the Sniff class to this trait.
 	 *              - Visibility changed from protected to private.
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $escapingFunctions = array(
 		'absint'                     => true,
@@ -100,10 +100,10 @@ trait EscapingFunctionsTrait {
 	 *
 	 * @since 0.5.0
 	 * @since 0.11.0 Changed from public static to protected non-static.
-	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 * @since 3.0.0 - Moved from the Sniff class to this trait.
 	 *              - Visibility changed from protected to private.
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $autoEscapedFunctions = array(
 		'allowed_tags'              => true,
@@ -174,10 +174,10 @@ trait EscapingFunctionsTrait {
 	 * @since 0.4.0
 	 * @since 0.11.0 - Changed from public static to protected non-static.
 	 *               - Changed the format from simple bool to array.
-	 * @since 3.0.0  - Moved from the EscapeOutput Sniff class to this class.
+	 * @since 3.0.0  - Moved from the EscapeOutput Sniff class to this trait.
 	 *               - Visibility changed from protected to private.
 	 *
-	 * @var array
+	 * @var array<string, string[]>
 	 */
 	private $addedCustomEscapingFunctions = array(
 		'escape'     => array(),
@@ -189,7 +189,7 @@ trait EscapingFunctionsTrait {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $allEscapingFunctions = array();
 
@@ -198,7 +198,7 @@ trait EscapingFunctionsTrait {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $allAutoEscapedFunctions = array();
 
