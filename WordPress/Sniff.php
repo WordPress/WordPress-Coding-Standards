@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 
@@ -129,25 +130,6 @@ abstract class Sniff implements PHPCS_Sniff {
 		'stripslashes_deep'              => true,
 		'stripslashes_from_strings_only' => true,
 		'wp_unslash'                     => true,
-	);
-
-	/**
-	 * List of array functions which apply a callback to the array.
-	 *
-	 * These are often used for sanitization/escaping an array variable.
-	 *
-	 * Note: functions which alter the array by reference are not listed here on purpose.
-	 * These cannot easily be used for sanitization as they can't be combined with unslashing.
-	 * Similarly, they cannot be used for late escaping as the return value is a boolean, not
-	 * the altered array.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @var array <string function name> => <int parameter position of the callback parameter>
-	 */
-	protected $arrayWalkingFunctions = array(
-		'array_map' => 1,
-		'map_deep'  => 2,
 	);
 
 	/**
@@ -303,7 +285,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$valid_functions  = $this->sanitizingFunctions;
 		$valid_functions += $this->unslashingSanitizingFunctions;
 		$valid_functions += $this->unslashingFunctions;
-		$valid_functions += $this->arrayWalkingFunctions;
+		$valid_functions += ArrayWalkingFunctionsHelper::get_array_walking_functions();
 
 		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
 
@@ -342,10 +324,10 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// Arrays might be sanitized via an array walking function using a callback.
-		if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
+		if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
 
 			// Get the callback parameter.
-			$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, $this->arrayWalkingFunctions[ $functionName ] );
+			$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, ArrayWalkingFunctionsHelper::get_array_walking_functions()[ $functionName ] );
 
 			if ( ! empty( $callback ) ) {
 				/*

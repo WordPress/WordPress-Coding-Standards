@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
 use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
@@ -354,13 +355,13 @@ class EscapeOutputSniff extends Sniff {
 
 				if ( false !== $function_opener ) {
 
-					if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
+					if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
 
 						// Get the callback parameter.
 						$callback = PassedParameters::getParameter(
 							$this->phpcsFile,
 							$ptr,
-							$this->arrayWalkingFunctions[ $functionName ]
+							ArrayWalkingFunctionsHelper::get_array_walking_functions()[ $functionName ]
 						);
 
 						if ( ! empty( $callback ) ) {
