@@ -9,6 +9,9 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use PHPCSUtils\Utils\PassedParameters;
+
 /**
  * Helper functions and function lists for checking whether a function applies a callback to an array.
  *
@@ -31,12 +34,20 @@ final class ArrayWalkingFunctionsHelper {
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - Visibility changed from protected to private and property made static.
+	 *              - The value has changed from an integer to an array containing the integer
+	 *                parameter position + its name.
 	 *
-	 * @var array <string function name> => <int parameter position of the callback parameter>
+	 * @var array<string, array>
 	 */
 	private static $arrayWalkingFunctions = array(
-		'array_map' => 1,
-		'map_deep'  => 2,
+		'array_map' => array(
+			'position' => 1,
+			'name'     => 'callback',
+		),
+		'map_deep'  => array(
+			'position' => 2,
+			'name'     => 'callback',
+		),
 	);
 
 	/**
@@ -44,10 +55,10 @@ final class ArrayWalkingFunctionsHelper {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return array<string, int>
+	 * @return array<string, bool>
 	 */
 	public static function get_array_walking_functions() {
-		return self::$arrayWalkingFunctions;
+		return \array_fill_keys( \array_keys( self::$arrayWalkingFunctions ), true );
 	}
 
 	/**
@@ -61,5 +72,37 @@ final class ArrayWalkingFunctionsHelper {
 	 */
 	public static function is_array_walking_function( $functionName ) {
 		return isset( self::$arrayWalkingFunctions[ $functionName ] );
+	}
+
+	/**
+	 * Retrieve the parameter information for the callback parameter for an array walking function.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file where this token was found.
+	 * @param int                         $stackPtr  The position of function call name token.
+	 *
+	 * @return array|false Array with information on the callback parameter.
+	 *                     Or `FALSE` if the parameter is not found.
+	 *                     See the PHPCSUtils PassedParameters::getParameters() documentation
+	 *                     for the format of the returned (single-dimensional) array.
+	 */
+	public static function get_callback_parameter( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
+		$functionName = $tokens[ $stackPtr ]['content'];
+		if ( isset( self::$arrayWalkingFunctions[ $functionName ] ) === false ) {
+			return false;
+		}
+
+		return PassedParameters::getParameter(
+			$phpcsFile,
+			$stackPtr,
+			self::$arrayWalkingFunctions[ $functionName ]['position'],
+			self::$arrayWalkingFunctions[ $functionName ]['name']
+		);
 	}
 }

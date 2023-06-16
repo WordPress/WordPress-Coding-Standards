@@ -305,3 +305,15 @@ _deprecated_file(); // Ignore.
 echo antispambot( 'john.doe@mysite.com' ); // OK.
 echo antispambot( esc_html( $email ) ); // OK.
 echo antispambot( $email ); // Bad.
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters for array walking functions.
+ */
+echo implode( '<br>', map_deep( callback: 'esc_html', value: $items ) ); // Ok.
+echo implode( '<br>', map_deep( value: $items ) ); // Bad, missing callback param, so escaping can not be verified.
+echo implode( '<br>', map_deep( call_back: 'esc_html', value: $items ) ); // Bad, wrong param name, so escaping can not be verified.
+echo implode( '<br>', map_deep( callback: 'foo', value: $items, ) ); // Bad, non-escaping function as callback.
+
+// Note: named params not supported due to the `...$arrays` in array_map()`, but that's not the concern of this sniff.
+echo implode( '<br>', array_map( array: $items, callback: 'esc_html', ) ); // Ok.
+echo implode( '<br>', array_map( array: $items, callback: 'foo', ) ); // Bad.

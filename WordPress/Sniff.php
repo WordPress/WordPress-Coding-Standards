@@ -327,7 +327,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
 
 			// Get the callback parameter.
-			$callback = PassedParameters::getParameter( $this->phpcsFile, $functionPtr, ArrayWalkingFunctionsHelper::get_array_walking_functions()[ $functionName ] );
+			$callback = ArrayWalkingFunctionsHelper::get_callback_parameter( $this->phpcsFile, $functionPtr );
 
 			if ( ! empty( $callback ) ) {
 				/*
