@@ -22,6 +22,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Helpers\ConstantsHelper::is_use_of_global_constant
  * @covers \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait
+ * @covers \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait
  * @covers \WordPressCS\WordPress\Sniffs\Security\EscapeOutputSniff
  */
 final class EscapeOutputUnitTest extends AbstractSniffUnitTest {

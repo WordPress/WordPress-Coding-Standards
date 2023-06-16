@@ -177,31 +177,6 @@ abstract class Sniff implements PHPCS_Sniff {
 	);
 
 	/**
-	 * Functions which print output incorporating the values passed to them.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $printingFunctions = array(
-		'_deprecated_argument'    => true,
-		'_deprecated_constructor' => true,
-		'_deprecated_file'        => true,
-		'_deprecated_function'    => true,
-		'_deprecated_hook'        => true,
-		'_doing_it_wrong'         => true,
-		'_e'                      => true,
-		'_ex'                     => true,
-		'printf'                  => true,
-		'trigger_error'           => true,
-		'user_error'              => true,
-		'vprintf'                 => true,
-		'wp_die'                  => true,
-		'wp_dropdown_pages'       => true,
-	);
-
-	/**
 	 * A list of superglobals that incorporate user input.
 	 *
 	 * @since 0.5.0
