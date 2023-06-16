@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\MessageHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -184,7 +185,7 @@ class NonceVerificationSniff extends Sniff {
 			|| ContextHelper::is_in_type_test( $this->phpcsFile, $stackPtr )
 			|| VariableHelper::is_comparison( $this->phpcsFile, $stackPtr )
 			|| ContextHelper::is_in_array_comparison( $this->phpcsFile, $stackPtr )
-			|| ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->unslashingFunctions ) !== false
+			|| ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, UnslashingFunctionsHelper::get_unslashing_functions() ) !== false
 			|| $this->is_only_sanitized( $stackPtr )
 		) {
 			$allow_nonce_after = true;
