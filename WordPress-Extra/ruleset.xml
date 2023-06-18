@@ -171,6 +171,9 @@
 		or declare object-oriented structures, but not both. -->
 	<rule ref="Universal.Files.SeparateFunctionsFromOO"/>
 
+	<!-- Detect useless "echo sprintf(...)". -->
+	<rule ref="Universal.CodeAnalysis.NoEchoSprintf"/>
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.
