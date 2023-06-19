@@ -34,6 +34,10 @@ use WordPressCS\WordPress\Sniff;
  *                 echo tags `<?=`.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `XSS` category to the `Security` category.
+ *
+ * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customEscapingFunctions
+ * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customAutoEscapedFunctions
+ * @uses    \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait::$customPrintingFunctions
  */
 class EscapeOutputSniff extends Sniff {
 
