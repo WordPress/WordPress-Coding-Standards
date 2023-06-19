@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\ValidationHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -130,7 +131,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		if ( false === $validated ) {
-			$validated = $this->is_validated( $stackPtr, $array_keys, $this->check_validation_in_scope_only );
+			$validated = ValidationHelper::is_validated( $this->phpcsFile, $stackPtr, $array_keys, $this->check_validation_in_scope_only );
 		}
 
 		if ( false === $validated ) {
