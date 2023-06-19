@@ -194,7 +194,7 @@ if ( array_key_exists( 'my_field1', $_POST ) ) {
 	$id = (int) $_POST['my_field1']; // OK.
 }
 
-if ( \array_key_exists( 'my_field2', $_POST ) ) {
+if ( \Array_Key_Exists( 'my_field2', $_POST ) ) {
 	$id = (int) $_POST['my_field2']; // OK.
 }
 

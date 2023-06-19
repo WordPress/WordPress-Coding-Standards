@@ -43,6 +43,18 @@ final class ValidationHelper {
 	);
 
 	/**
+	 * List of PHP native functions to check if an array index exists.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<string, bool>
+	 */
+	private static $key_exists_functions = array(
+		'array_key_exists' => true,
+		'key_exists'       => true, // Alias.
+	);
+
+	/**
 	 * Check if the existence of a variable is validated with isset(), empty(), array_key_exists()
 	 * or key_exists().
 	 *
@@ -177,9 +189,7 @@ final class ValidationHelper {
 
 				case 'function_call':
 					// Only check calls to array_key_exists() and key_exists().
-					if ( 'array_key_exists' !== $tokens[ $i ]['content']
-						&& 'key_exists' !== $tokens[ $i ]['content']
-					) {
+					if ( isset( self::$key_exists_functions[ strtolower( $tokens[ $i ]['content'] ) ] ) === false ) {
 						continue 2;
 					}
 
