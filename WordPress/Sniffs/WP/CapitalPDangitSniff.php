@@ -266,10 +266,15 @@ final class CapitalPDangitSniff extends Sniff {
 				return;
 			}
 
+			$code = 'MisspelledInText';
+			if ( isset( Tokens::$commentTokens[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
+				$code = 'MisspelledInComment';
+			}
+
 			$fix = $this->phpcsFile->addFixableWarning(
 				'Please spell "WordPress" correctly. Found %s misspelling(s): %s',
 				$stackPtr,
-				'Misspelled',
+				$code,
 				array(
 					\count( $misspelled ),
 					implode( ', ', $misspelled ),
