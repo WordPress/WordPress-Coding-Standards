@@ -59,5 +59,4 @@ final class OperatorSpacingSniff extends PHPCS_Squiz_OperatorSpacingSniff {
 
 		return $tokens;
 	}
-
 }

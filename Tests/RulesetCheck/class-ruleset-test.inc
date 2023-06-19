@@ -110,5 +110,4 @@ class Ruleset_Test {
 		end:
 		echo 'This is a goto - it needs to be here to prevent parse errors';
 	}
-
 }

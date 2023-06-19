@@ -231,5 +231,4 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}
-
 }

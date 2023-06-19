@@ -111,5 +111,4 @@ final class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

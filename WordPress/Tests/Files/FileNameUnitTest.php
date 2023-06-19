@@ -158,5 +158,4 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

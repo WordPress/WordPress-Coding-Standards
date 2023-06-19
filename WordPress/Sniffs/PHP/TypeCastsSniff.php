@@ -89,5 +89,4 @@ final class TypeCastsSniff extends Sniff {
 				break;
 		}
 	}
-
 }

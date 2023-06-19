@@ -575,5 +575,4 @@ final class ControlStructureSpacingSniff extends Sniff {
 			}
 		}
 	}
-
 }

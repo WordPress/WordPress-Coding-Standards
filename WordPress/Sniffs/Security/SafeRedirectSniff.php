@@ -44,5 +44,4 @@ final class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

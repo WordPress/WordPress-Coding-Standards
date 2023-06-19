@@ -55,5 +55,4 @@ final class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

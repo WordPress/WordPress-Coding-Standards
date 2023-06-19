@@ -241,5 +241,4 @@ final class PreparedSQLSniff extends Sniff {
 
 		return $this->end;
 	}
-
 }

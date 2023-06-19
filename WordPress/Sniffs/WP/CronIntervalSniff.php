@@ -318,5 +318,4 @@ final class CronIntervalSniff extends Sniff {
 			'ChangeDetected'
 		);
 	}
-
 }

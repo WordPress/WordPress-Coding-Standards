@@ -235,5 +235,4 @@ final class I18nUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

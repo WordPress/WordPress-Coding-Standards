@@ -121,5 +121,4 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			$data
 		);
 	}
-
 }

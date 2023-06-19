@@ -477,5 +477,4 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 			)
 		);
 	}
-
 }

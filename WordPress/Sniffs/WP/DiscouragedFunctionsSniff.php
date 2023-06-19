@@ -53,5 +53,4 @@ final class DiscouragedFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 			),
 		);
 	}
-
 }

@@ -170,5 +170,4 @@ final class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest {
 			570 => 1,
 		);
 	}
-
 }

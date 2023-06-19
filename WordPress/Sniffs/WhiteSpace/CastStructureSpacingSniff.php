@@ -58,5 +58,4 @@ final class CastStructureSpacingSniff extends Sniff {
 			}
 		}
 	}
-
 }

@@ -47,5 +47,4 @@ final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

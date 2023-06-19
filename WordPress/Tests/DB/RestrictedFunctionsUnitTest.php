@@ -125,5 +125,4 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

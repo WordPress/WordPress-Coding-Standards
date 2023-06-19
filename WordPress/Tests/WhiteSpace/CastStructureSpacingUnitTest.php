@@ -48,5 +48,4 @@ final class CastStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

@@ -65,5 +65,4 @@ final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

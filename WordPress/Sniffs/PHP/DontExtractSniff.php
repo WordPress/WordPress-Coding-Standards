@@ -51,5 +51,4 @@ final class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
 
 		);
 	}
-
 }

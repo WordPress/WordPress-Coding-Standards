@@ -466,5 +466,4 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 			$end_of_last_item = $end_of_this_item;
 		}
 	}
-
 }

@@ -110,5 +110,4 @@ final class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

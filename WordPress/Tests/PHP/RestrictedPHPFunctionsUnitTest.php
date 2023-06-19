@@ -41,5 +41,4 @@ final class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

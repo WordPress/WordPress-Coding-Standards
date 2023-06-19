@@ -435,5 +435,4 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			$data
 		);
 	}
-
 }

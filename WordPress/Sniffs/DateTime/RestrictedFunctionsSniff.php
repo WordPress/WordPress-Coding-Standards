@@ -58,5 +58,4 @@ final class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

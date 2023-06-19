@@ -60,5 +60,4 @@ final class YodaConditionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

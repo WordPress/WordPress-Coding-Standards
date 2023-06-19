@@ -99,5 +99,4 @@ final class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSni
 			),
 		);
 	}
-
 }

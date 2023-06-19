@@ -162,5 +162,4 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

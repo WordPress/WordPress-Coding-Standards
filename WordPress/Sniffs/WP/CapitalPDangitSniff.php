@@ -309,5 +309,4 @@ final class CapitalPDangitSniff extends Sniff {
 
 		return $misspelled;
 	}
-
 }
