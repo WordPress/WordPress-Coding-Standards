@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\FormattingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\WPDBTrait;
 use WordPressCS\WordPress\Sniff;
 
@@ -225,7 +226,7 @@ final class PreparedSQLSniff extends Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-				} elseif ( isset( $this->formattingFunctions[ $this->tokens[ $this->i ]['content'] ] ) ) {
+				} elseif ( FormattingFunctionsHelper::is_formatting_function( $this->tokens[ $this->i ]['content'] ) ) {
 					continue;
 				}
 			}
