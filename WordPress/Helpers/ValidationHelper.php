@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
@@ -75,16 +76,13 @@ final class ValidationHelper {
 			 * This is a stricter check, requiring the variable to be used only
 			 * within the validation condition.
 			 */
-			// If there are no conditions, there's no validation.
-			if ( empty( $tokens[ $stackPtr ]['conditions'] ) ) {
+			$conditionPtr = Conditions::getLastCondition( $phpcsFile, $stackPtr );
+			if ( false === $conditionPtr ) {
+				// If there are no conditions, there's no validation.
 				return false;
 			}
 
-			$conditions = $tokens[ $stackPtr ]['conditions'];
-			end( $conditions ); // Get closest condition.
-			$conditionPtr = key( $conditions );
-			$condition    = $tokens[ $conditionPtr ];
-
+			$condition = $tokens[ $conditionPtr ];
 			if ( ! isset( $condition['parenthesis_opener'] ) ) {
 				// Live coding or parse error.
 				return false;
@@ -101,19 +99,11 @@ final class ValidationHelper {
 			$scope_start = 0;
 
 			// Check if we are in a function.
-			$function = $phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
+			$function = Conditions::getLastCondition( $phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 
 			// If so, we check only within the function, otherwise the whole file.
 			if ( false !== $function ) {
 				$scope_start = $tokens[ $function ]['scope_opener'];
-			} else {
-				// Check if we are in a closure.
-				$closure = $phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-
-				// If so, we check only within the closure.
-				if ( false !== $closure ) {
-					$scope_start = $tokens[ $closure ]['scope_opener'];
-				}
 			}
 
 			$scope_end = $stackPtr;
