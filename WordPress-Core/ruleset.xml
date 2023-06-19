@@ -425,14 +425,44 @@
 	<!-- Covers rule: There should be only one namespace declaration per file... -->
 	<rule ref="Universal.Namespaces.OneDeclarationPerFile"/>
 
-	<!-- Rule: ... and it should be at the top of the file.
+	<!-- Covers rule: ... and it should be at the top of the file.
 		 Note: with only one namespace declaration, it not being at the top of the file would be a parse error. -->
+	<!-- When in the file header, covered by PSR12.Files.FileHeader.IncorrectOrder. -->
 
 	<!-- Covers rule: Namespace declarations using curly brace syntax are not allowed. -->
 	<rule ref="Universal.Namespaces.DisallowCurlyBraceSyntax"/>
 
 	<!-- Covers rule: Explicit global namespace declaration (namespace declaration without name) are also not allowed. -->
 	<rule ref="Universal.Namespaces.DisallowDeclarationWithoutName"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: Declare Statements, Namespace, and Import Statements - Using import use statements.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#using-import-use-statements
+	#############################################################################
+	-->
+	<!-- Covers rule: Import use statements should be at the top of the file and follow the (optional) namespace declaration. -->
+	<rule ref="PSR12.Files.FileHeader.IncorrectOrder"/>
+
+	<!-- Covers rule: Import use statements should follow a specific order based on the type of the import:
+		 1. use statements for namespaces, classes, interfaces, traits and enums
+		 2. use statements for functions
+		 3. use statements for constants -->
+	<!-- Not yet covered: use statements which are not part of the file header. -->
+	<rule ref="PSR12.Files.FileHeader.IncorrectGrouping"/>
+
+	<!-- Rule: When using aliases, make sure the aliases follow the WordPress naming convention and are unique. -->
+
+	<!-- Rule: (example based rules, group use formatting, spacing around keywords) -->
+	<!-- Spacing after "use" keyword: covered by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
+
+	<!-- Implied through the examples: Names in an import use statement should not start with a leading backslash. -->
+	<rule ref="Universal.UseStatements.NoLeadingBackslash"/>
+
+	<!-- Implied through the examples: The use, function, const and as keywords should be lowercase.
+		 For the "use" and "as" keywords, this is covered via the Generic.PHP.LowerCaseKeyword sniff. -->
+	<rule ref="Universal.UseStatements.LowercaseFunctionConst"/>
 
 
 	<!--
