@@ -141,7 +141,7 @@ final class ValidationHelper {
 			$array_keys = (array) $array_keys;
 		}
 
-		$bare_array_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $array_keys );
+		$bare_array_keys = self::strip_quotes_from_array_values( $array_keys );
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
@@ -175,7 +175,7 @@ final class ValidationHelper {
 						// $_POST['hello']), that must match too. Quote-style, however, doesn't matter.
 						if ( ! empty( $bare_array_keys ) ) {
 							$found_keys = VariableHelper::get_array_access_keys( $phpcsFile, $i );
-							$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
+							$found_keys = self::strip_quotes_from_array_values( $found_keys );
 							$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 							if ( ! empty( $diff ) ) {
 								continue;
@@ -233,7 +233,7 @@ final class ValidationHelper {
 						 * parameter, so we need to check both options.
 						 */
 						$found_keys = VariableHelper::get_array_access_keys( $phpcsFile, $param2_first_token );
-						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
+						$found_keys = self::strip_quotes_from_array_values( $found_keys );
 
 						// First try matching the complete set against the second parameter.
 						$diff = array_diff_assoc( $bare_array_keys, $found_keys );
@@ -277,7 +277,7 @@ final class ValidationHelper {
 
 					if ( ! empty( $bare_array_keys ) ) {
 						$found_keys = VariableHelper::get_array_access_keys( $phpcsFile, $prev );
-						$found_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $found_keys );
+						$found_keys = self::strip_quotes_from_array_values( $found_keys );
 						$diff       = array_diff_assoc( $bare_array_keys, $found_keys );
 						if ( ! empty( $diff ) ) {
 							continue 2;
@@ -290,5 +290,16 @@ final class ValidationHelper {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Strip quotes of all the values in an array containing only text strings.
+	 *
+	 * @param string[] $text_strings The input array.
+	 *
+	 * @var array
+	 */
+	private static function strip_quotes_from_array_values( array $text_strings ) {
+		return array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $text_strings );
 	}
 }
