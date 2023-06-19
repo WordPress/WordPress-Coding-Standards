@@ -27,6 +27,22 @@ use WordPressCS\WordPress\Helpers\VariableHelper;
 final class ValidationHelper {
 
 	/**
+	 * The tokens the function looks for to determine whether a token is validated.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<int|string, string>
+	 */
+	private static $targets = array(
+		\T_ISSET          => 'construct',
+		\T_EMPTY          => 'construct',
+		\T_UNSET          => 'construct',
+		\T_STRING         => 'function_call',
+		\T_COALESCE       => 'coalesce',
+		\T_COALESCE_EQUAL => 'coalesce',
+	);
+
+	/**
 	 * Check if the existence of a variable is validated with isset(), empty(), array_key_exists()
 	 * or key_exists().
 	 *
@@ -114,23 +130,15 @@ final class ValidationHelper {
 		}
 
 		$bare_array_keys = array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $array_keys );
-		$targets         = array(
-			\T_ISSET          => 'construct',
-			\T_EMPTY          => 'construct',
-			\T_UNSET          => 'construct',
-			\T_STRING         => 'function_call',
-			\T_COALESCE       => 'coalesce',
-			\T_COALESCE_EQUAL => 'coalesce',
-		);
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
 
-			if ( isset( $targets[ $tokens[ $i ]['code'] ] ) === false ) {
+			if ( isset( self::$targets[ $tokens[ $i ]['code'] ] ) === false ) {
 				continue;
 			}
 
-			switch ( $targets[ $tokens[ $i ]['code'] ] ) {
+			switch ( self::$targets[ $tokens[ $i ]['code'] ] ) {
 				case 'construct':
 					$issetOpener = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
 					if ( false === $issetOpener || \T_OPEN_PARENTHESIS !== $tokens[ $issetOpener ]['code'] ) {
