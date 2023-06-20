@@ -107,6 +107,7 @@ final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 			case 'ValidatedSanitizedInputUnitTest.2.inc':
 			case 'ValidatedSanitizedInputUnitTest.3.inc':
 			case 'ValidatedSanitizedInputUnitTest.4.inc':
+			case 'ValidatedSanitizedInputUnitTest.5.inc':
 				return array(
 					7 => 3,
 				);

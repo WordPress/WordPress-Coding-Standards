@@ -159,8 +159,11 @@ final class ValidationHelper {
 
 			switch ( self::$targets[ $tokens[ $i ]['code'] ] ) {
 				case 'construct':
-					$issetOpener = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
-					if ( false === $issetOpener || \T_OPEN_PARENTHESIS !== $tokens[ $issetOpener ]['code'] ) {
+					$issetOpener = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+					if ( false === $issetOpener
+						|| \T_OPEN_PARENTHESIS !== $tokens[ $issetOpener ]['code']
+						|| isset( $tokens[ $issetOpener ]['parenthesis_closer'] ) === false
+					) {
 						// Parse error or live coding.
 						continue 2;
 					}
@@ -200,7 +203,7 @@ final class ValidationHelper {
 						continue 2;
 					}
 
-					$next_non_empty = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
+					$next_non_empty = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
 					if ( false === $next_non_empty || \T_OPEN_PARENTHESIS !== $tokens[ $next_non_empty ]['code'] ) {
 						// Not a function call.
 						continue 2;
@@ -275,7 +278,7 @@ final class ValidationHelper {
 				case 'coalesce':
 					$prev = $i;
 					do {
-						$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true, null, true );
+						$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $prev - 1 ), null, true );
 						// Skip over array keys, like `$_GET['key']['subkey']`.
 						if ( \T_CLOSE_SQUARE_BRACKET === $tokens[ $prev ]['code'] ) {
 							$prev = $tokens[ $prev ]['bracket_opener'];
