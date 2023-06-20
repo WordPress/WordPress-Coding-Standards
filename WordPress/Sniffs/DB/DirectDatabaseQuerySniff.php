@@ -297,5 +297,4 @@ final class DirectDatabaseQuerySniff extends Sniff {
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}
 	}
-
 }

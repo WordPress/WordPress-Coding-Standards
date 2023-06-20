@@ -96,5 +96,4 @@ final class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

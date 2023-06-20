@@ -778,6 +778,18 @@
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
 
+	<!-- Implied via examples: one space after keywords in class declaration, class declaration on one line,
+		 close brace on line by itself and no blank lines between OO structure body and close brace. -->
+	<rule ref="PSR2.Classes.ClassDeclaration"/>
+	<rule ref="PSR2.Classes.ClassDeclaration.OpenBraceNewLine">
+		<!-- WP expects open brace on same line as class keyword. -->
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.Classes.ClassDeclaration.OpenBraceWrongLine">
+		<!-- WP expects open brace on same line as class keyword. -->
+		<severity>0</severity>
+	</rule>
+
 	<!-- References to self in a class should be lower-case and not have extraneous spaces,
 		 per implicit conventions in the core codebase; the NotUsed code refers to using the
 		 fully-qualified class name instead of self, for which there are instances in core. -->

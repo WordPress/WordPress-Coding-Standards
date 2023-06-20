@@ -105,5 +105,4 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 
 		return $warnings;
 	}
-
 }

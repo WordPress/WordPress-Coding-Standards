@@ -97,5 +97,4 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			177 => 1,
 		);
 	}
-
 }

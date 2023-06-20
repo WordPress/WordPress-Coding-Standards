@@ -288,5 +288,4 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 			$data
 		);
 	}
-
 }

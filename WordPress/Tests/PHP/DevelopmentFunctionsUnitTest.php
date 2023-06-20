@@ -56,5 +56,4 @@ final class DevelopmentFunctionsUnitTest extends AbstractSniffUnitTest {
 			34 => 1,
 		);
 	}
-
 }

@@ -178,5 +178,4 @@ trait IsUnitTestTrait {
 
 		return false;
 	}
-
 }

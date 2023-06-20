@@ -166,5 +166,4 @@ final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

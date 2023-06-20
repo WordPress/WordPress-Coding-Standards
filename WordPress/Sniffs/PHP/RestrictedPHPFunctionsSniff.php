@@ -44,5 +44,4 @@ final class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSnif
 			),
 		);
 	}
-
 }

@@ -240,5 +240,4 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *                       with custom error message passed to ->process().
 	 */
 	abstract public function callback( $key, $val, $line, $group );
-
 }

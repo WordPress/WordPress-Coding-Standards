@@ -64,5 +64,4 @@ final class DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 			39 => 1,
 		);
 	}
-
 }

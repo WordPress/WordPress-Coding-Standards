@@ -356,5 +356,4 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
 		return $function_name;
 	}
-
 }

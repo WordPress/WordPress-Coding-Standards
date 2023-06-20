@@ -197,5 +197,4 @@ final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

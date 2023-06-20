@@ -87,5 +87,4 @@ final class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 			$data
 		);
 	}
-
 }

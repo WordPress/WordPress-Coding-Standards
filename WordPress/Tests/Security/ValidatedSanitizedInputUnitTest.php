@@ -97,5 +97,4 @@ final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

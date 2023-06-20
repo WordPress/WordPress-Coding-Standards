@@ -58,5 +58,4 @@ final class SlowDBQuerySniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function callback( $key, $val, $line, $group ) {
 		return true;
 	}
-
 }

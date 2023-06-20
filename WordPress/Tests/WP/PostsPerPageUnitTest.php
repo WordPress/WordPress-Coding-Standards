@@ -53,5 +53,4 @@ final class PostsPerPageUnitTest extends AbstractSniffUnitTest {
 			29 => 1,
 		);
 	}
-
 }

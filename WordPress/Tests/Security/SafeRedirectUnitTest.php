@@ -41,5 +41,4 @@ final class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 			3 => 1,
 		);
 	}
-
 }

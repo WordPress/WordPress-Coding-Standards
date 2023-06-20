@@ -48,5 +48,4 @@ final class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

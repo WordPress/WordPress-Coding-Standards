@@ -237,5 +237,4 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			);
 		}
 	}
-
 }

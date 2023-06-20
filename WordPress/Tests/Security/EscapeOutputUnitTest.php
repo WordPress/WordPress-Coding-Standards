@@ -106,5 +106,4 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

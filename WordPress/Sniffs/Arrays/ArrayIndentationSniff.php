@@ -545,5 +545,4 @@ final class ArrayIndentationSniff extends Sniff {
 			$this->phpcsFile->fixer->replaceToken( ( $ptr - 1 ), $new_indent );
 		}
 	}
-
 }

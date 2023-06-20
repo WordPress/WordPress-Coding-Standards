@@ -74,5 +74,4 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 
 		return false;
 	}
-
 }

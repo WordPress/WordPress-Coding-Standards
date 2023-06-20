@@ -309,5 +309,4 @@ final class CommaAfterArrayItemSniff extends Sniff {
 			}
 		}
 	}
-
 }

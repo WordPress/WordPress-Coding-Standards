@@ -72,5 +72,4 @@ final class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

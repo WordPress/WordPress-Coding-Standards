@@ -1550,5 +1550,4 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			$data
 		);
 	}
-
 }

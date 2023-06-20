@@ -161,5 +161,4 @@ final class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

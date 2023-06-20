@@ -580,5 +580,4 @@ final class MultipleStatementAlignmentSniff extends Sniff {
 		// Reset to the default if an invalid value was received.
 		$this->alignMultilineItems = 'always';
 	}
-
 }

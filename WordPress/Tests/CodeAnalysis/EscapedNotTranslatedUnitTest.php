@@ -43,5 +43,4 @@ final class EscapedNotTranslatedUnitTest extends AbstractSniffUnitTest {
 			8 => 1,
 		);
 	}
-
 }

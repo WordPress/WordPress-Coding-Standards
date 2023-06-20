@@ -104,5 +104,4 @@ final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }
