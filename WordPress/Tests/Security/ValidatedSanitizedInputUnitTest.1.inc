@@ -396,3 +396,11 @@ function test_ignore_array_key_exists_in_attribute() {
 	$callback = function() {};
 	$id = (int) $_POST['foo']; // Bad.
 }
+
+/*
+ * Ensure the sniff doesn't examine PHP 8.1 first class callables.
+ */
+function test_ignore_array_key_exists_as_first_class_callable() {
+	$callback = array_key_exists(...);
+	$id = (int) $_POST['foo']; // Bad.
+}
