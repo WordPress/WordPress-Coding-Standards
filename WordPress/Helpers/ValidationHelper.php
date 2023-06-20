@@ -126,7 +126,13 @@ final class ValidationHelper {
 			 */
 			$scope_start = 0;
 
-			// Check if we are in a function.
+			/*
+			 * Check if we are in a function.
+			 *
+			 * Note: PHP 7.4+ arrow functions are not taken into account as those are not
+			 * included in the "conditions" array. Additionally, arrow functions have
+			 * access to variables outside their direct scope.
+			 */
 			$function = Conditions::getLastCondition( $phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 
 			// If so, we check only within the function, otherwise the whole file.
