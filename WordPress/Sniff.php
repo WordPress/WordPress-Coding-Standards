@@ -16,7 +16,7 @@ use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
-use WordPressCS\WordPress\Helpers\SanitizationFunctionsTrait;
+use WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 
 /**
@@ -40,7 +40,7 @@ use WordPressCS\WordPress\Helpers\VariableHelper;
  */
 abstract class Sniff implements PHPCS_Sniff {
 
-	use SanitizationFunctionsTrait;
+	use SanitizingFunctionsTrait;
 
 	/**
 	 * Functions which unslash the data passed to them.
@@ -205,8 +205,8 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		$valid_functions  = $this->get_sanitization_functions();
-		$valid_functions += $this->get_sanitization_and_unslashing_functions();
+		$valid_functions  = $this->get_sanitizing_functions();
+		$valid_functions += $this->get_sanitizing_and_unslashing_functions();
 		$valid_functions += $this->unslashingFunctions;
 		$valid_functions += ArrayWalkingFunctionsHelper::get_array_walking_functions();
 
@@ -271,12 +271,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// If slashing is required, give an error.
-		if ( ! $is_unslashed && $require_unslash && ! $this->is_sanitization_and_unslashing_function( $functionName ) ) {
+		if ( ! $is_unslashed && $require_unslash && ! $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
 			$this->add_unslash_error( $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
-		if ( $this->is_sanitization_function( $functionName ) || $this->is_sanitization_and_unslashing_function( $functionName ) ) {
+		if ( $this->is_sanitizing_function( $functionName ) || $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
 			return true;
 		}
 

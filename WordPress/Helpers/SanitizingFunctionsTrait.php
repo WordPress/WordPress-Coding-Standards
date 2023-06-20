@@ -12,7 +12,7 @@ namespace WordPressCS\WordPress\Helpers;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
- * Helper functions and function lists for checking whether a sanitization function is being used.
+ * Helper functions and function lists for checking whether a sanitizing function is being used.
  *
  * Any sniff class which incorporates this trait will automatically support the
  * following `public` properties which can be changed from within a custom ruleset:
@@ -24,7 +24,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *                `WordPressCS\WordPress\Sniff` class and partially in the `NonceVerificationSniff`
  *                and the `ValidatedSanitizedInputSniff` classes and have been moved here.
  */
-trait SanitizationFunctionsTrait {
+trait SanitizingFunctionsTrait {
 
 	/**
 	 * Custom list of functions that sanitize the values passed to them.
@@ -149,7 +149,7 @@ trait SanitizationFunctionsTrait {
 	);
 
 	/**
-	 * Combined list of WP/PHP native and custom sanitization functions.
+	 * Combined list of WP/PHP native and custom sanitizing functions.
 	 *
 	 * @since 3.0.0
 	 *
@@ -158,7 +158,7 @@ trait SanitizationFunctionsTrait {
 	private $allSanitizingFunctions = array();
 
 	/**
-	 * Combined list of WP/PHP native and custom sanitization and unslashing functions.
+	 * Combined list of WP/PHP native and custom sanitizing and unslashing functions.
 	 *
 	 * @since 3.0.0
 	 *
@@ -167,13 +167,13 @@ trait SanitizationFunctionsTrait {
 	private $allUnslashingSanitizingFunctions = array();
 
 	/**
-	 * Retrieve a list of all known sanitization functions.
+	 * Retrieve a list of all known sanitizing functions.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var array<string, bool>
 	 */
-	public function get_sanitization_functions() {
+	public function get_sanitizing_functions() {
 		if ( array() === $this->allSanitizingFunctions
 			|| $this->customSanitizingFunctions !== $this->addedCustomSanitizingFunctions['sanitize']
 		) {
@@ -189,13 +189,13 @@ trait SanitizationFunctionsTrait {
 	}
 
 	/**
-	 * Retrieve a list of all known sanitization and unslashing functions.
+	 * Retrieve a list of all known sanitizing and unslashing functions.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var array<string, bool>
 	 */
-	public function get_sanitization_and_unslashing_functions() {
+	public function get_sanitizing_and_unslashing_functions() {
 		if ( array() === $this->allUnslashingSanitizingFunctions
 			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomSanitizingFunctions['unslashsanitize']
 		) {
@@ -211,7 +211,7 @@ trait SanitizationFunctionsTrait {
 	}
 
 	/**
-	 * Check if a particular function is regarded as a sanitization function.
+	 * Check if a particular function is regarded as a sanitizing function.
 	 *
 	 * @since 3.0.0
 	 *
@@ -219,12 +219,12 @@ trait SanitizationFunctionsTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_sanitization_function( $functionName ) {
-		return isset( $this->get_sanitization_functions()[ $functionName ] );
+	public function is_sanitizing_function( $functionName ) {
+		return isset( $this->get_sanitizing_functions()[ $functionName ] );
 	}
 
 	/**
-	 * Check if a particular function is regarded as a sanitization and unslashing function.
+	 * Check if a particular function is regarded as a sanitizing and unslashing function.
 	 *
 	 * @since 3.0.0
 	 *
@@ -232,7 +232,7 @@ trait SanitizationFunctionsTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_sanitization_and_unslashing_function( $functionName ) {
-		return isset( $this->get_sanitization_and_unslashing_functions()[ $functionName ] );
+	public function is_sanitizing_and_unslashing_function( $functionName ) {
+		return isset( $this->get_sanitizing_and_unslashing_functions()[ $functionName ] );
 	}
 }
