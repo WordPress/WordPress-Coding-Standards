@@ -52,7 +52,7 @@ trait SanitizationFunctionsTrait {
 	 * This list is complementary to the `$unslashingSanitizingFunctions`
 	 * list.
 	 * Sanitizing functions should be added to this list if they do *not*
-	 * implicitely unslash data and to the `$unslashingsanitizingFunctions`
+	 * implicitly unslash data and to the `$unslashingsanitizingFunctions`
 	 * list if they do.
 	 *
 	 * @since 0.5.0
