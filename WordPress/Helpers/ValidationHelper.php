@@ -216,14 +216,17 @@ final class ValidationHelper {
 					}
 
 					$params = PassedParameters::getParameters( $phpcsFile, $i );
-					if ( count( $params ) < 2 ) {
+
+					// As `key_exists()` is an alias of `array_key_exists()`, the param positions and names are the same.
+					$array_param = PassedParameters::getParameterFromStack( $params, 2, 'array' );
+					if ( false === $array_param ) {
 						continue 2;
 					}
 
-					$param2_first_token = $phpcsFile->findNext( Tokens::$emptyTokens, $params[2]['start'], ( $params[2]['end'] + 1 ), true );
-					if ( false === $param2_first_token
-						|| \T_VARIABLE !== $tokens[ $param2_first_token ]['code']
-						|| $tokens[ $param2_first_token ]['content'] !== $tokens[ $stackPtr ]['content']
+					$array_param_first_token = $phpcsFile->findNext( Tokens::$emptyTokens, $array_param['start'], ( $array_param['end'] + 1 ), true );
+					if ( false === $array_param_first_token
+						|| \T_VARIABLE !== $tokens[ $array_param_first_token ]['code']
+						|| $tokens[ $array_param_first_token ]['content'] !== $tokens[ $stackPtr ]['content']
 					) {
 						continue 2;
 					}
@@ -235,21 +238,25 @@ final class ValidationHelper {
 
 						/*
 						 * For multi-level array access, the complete set of keys could be split between
-						 * the first and the second parameter, but could also be completely in the second
+						 * the $key and the $array parameter, but could also be completely in the $array
 						 * parameter, so we need to check both options.
 						 */
-						$found_keys = VariableHelper::get_array_access_keys( $phpcsFile, $param2_first_token );
+						$found_keys = VariableHelper::get_array_access_keys( $phpcsFile, $array_param_first_token );
 						$found_keys = self::strip_quotes_from_array_values( $found_keys );
 
-						// First try matching the complete set against the second parameter.
+						// First try matching the complete set against the array parameter.
 						$diff = array_diff_assoc( $bare_array_keys, $found_keys );
 						if ( empty( $diff ) ) {
 							return true;
 						}
 
 						// If that failed, try getting an exact match for the subset against the
-						// second parameter and the last key against the first.
-						if ( $bare_keys === $found_keys && TextStrings::stripQuotes( $params[1]['raw'] ) === $last_key ) {
+						// $array parameter and the last key against the first.
+						$key_param = PassedParameters::getParameterFromStack( $params, 1, 'key' );
+						if ( false !== $key_param
+							&& $bare_keys === $found_keys
+							&& TextStrings::stripQuotes( $key_param['raw'] ) === $last_key
+						) {
 							return true;
 						}
 
