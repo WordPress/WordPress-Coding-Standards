@@ -387,3 +387,12 @@ function test_allow_array_key_exists_with_named_params_multilevel_access_test() 
 		$id = (int) $_POST['foo']['bar']['baz']; // Bad x 1 - validate.
 	}
 }
+
+/*
+ * Prevent the sniff trying to examine PHP 8.0 attributes.
+ */
+function test_ignore_array_key_exists_in_attribute() {
+	#[Array_Key_Exists('key', ['a', 2])]
+	$callback = function() {};
+	$id = (int) $_POST['foo']; // Bad.
+}

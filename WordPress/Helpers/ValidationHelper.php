@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\Conditions;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
@@ -202,6 +203,11 @@ final class ValidationHelper {
 					$next_non_empty = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true, null, true );
 					if ( false === $next_non_empty || \T_OPEN_PARENTHESIS !== $tokens[ $next_non_empty ]['code'] ) {
 						// Not a function call.
+						continue 2;
+					}
+
+					if ( Context::inAttribute( $phpcsFile, $i ) === true ) {
+						// Definitely not the function call as those are not allowed in attributes.
 						continue 2;
 					}
 
