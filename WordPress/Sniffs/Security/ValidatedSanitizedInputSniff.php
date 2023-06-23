@@ -12,7 +12,6 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
-use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -37,40 +36,6 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * @var boolean
 	 */
 	public $check_validation_in_scope_only = false;
-
-	/**
-	 * Custom list of functions that sanitize the values passed to them.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customSanitizingFunctions = array();
-
-	/**
-	 * Custom sanitizing functions that implicitly unslash the values passed to them.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customUnslashingSanitizingFunctions = array();
-
-	/**
-	 * Cache of previously added custom functions.
-	 *
-	 * Prevents having to do the same merges over and over again.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 - Changed from static to non-static.
-	 *               - Changed the format from simple bool to array.
-	 *
-	 * @var array
-	 */
-	protected $addedCustomFunctions = array(
-		'sanitize'        => array(),
-		'unslashsanitize' => array(),
-	);
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -192,8 +157,6 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
-		$this->mergeFunctionLists();
-
 		// Now look for sanitizing functions.
 		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
 			$this->phpcsFile->addError(
@@ -202,33 +165,6 @@ class ValidatedSanitizedInputSniff extends Sniff {
 				'InputNotSanitized',
 				$error_data
 			);
-		}
-	}
-
-	/**
-	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
-	 *
-	 * @since 0.11.0 Split out from the `process()` method.
-	 *
-	 * @return void
-	 */
-	protected function mergeFunctionLists() {
-		if ( $this->customSanitizingFunctions !== $this->addedCustomFunctions['sanitize'] ) {
-			$this->sanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customSanitizingFunctions,
-				$this->sanitizingFunctions
-			);
-
-			$this->addedCustomFunctions['sanitize'] = $this->customSanitizingFunctions;
-		}
-
-		if ( $this->customUnslashingSanitizingFunctions !== $this->addedCustomFunctions['unslashsanitize'] ) {
-			$this->unslashingSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customUnslashingSanitizingFunctions,
-				$this->unslashingSanitizingFunctions
-			);
-
-			$this->addedCustomFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
 		}
 	}
 }

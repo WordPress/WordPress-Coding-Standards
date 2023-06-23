@@ -16,6 +16,7 @@ use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 
 /**
@@ -39,85 +40,7 @@ use WordPressCS\WordPress\Helpers\VariableHelper;
  */
 abstract class Sniff implements PHPCS_Sniff {
 
-	/**
-	 * Functions that sanitize values.
-	 *
-	 * This list is complementary to the `$unslashingSanitizingFunctions`
-	 * list.
-	 * Sanitizing functions should be added to this list if they do *not*
-	 * implicitely unslash data and to the `$unslashingsanitizingFunctions`
-	 * list if they do.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $sanitizingFunctions = array(
-		'_wp_handle_upload'          => true,
-		'esc_url_raw'                => true,
-		'filter_input'               => true,
-		'filter_var'                 => true,
-		'hash_equals'                => true,
-		'is_email'                   => true,
-		'number_format'              => true,
-		'sanitize_bookmark_field'    => true,
-		'sanitize_bookmark'          => true,
-		'sanitize_email'             => true,
-		'sanitize_file_name'         => true,
-		'sanitize_hex_color_no_hash' => true,
-		'sanitize_hex_color'         => true,
-		'sanitize_html_class'        => true,
-		'sanitize_meta'              => true,
-		'sanitize_mime_type'         => true,
-		'sanitize_option'            => true,
-		'sanitize_sql_orderby'       => true,
-		'sanitize_term_field'        => true,
-		'sanitize_term'              => true,
-		'sanitize_text_field'        => true,
-		'sanitize_textarea_field'    => true,
-		'sanitize_title_for_query'   => true,
-		'sanitize_title_with_dashes' => true,
-		'sanitize_title'             => true,
-		'sanitize_user_field'        => true,
-		'sanitize_user'              => true,
-		'validate_file'              => true,
-		'wp_handle_sideload'         => true,
-		'wp_handle_upload'           => true,
-		'wp_kses_allowed_html'       => true,
-		'wp_kses_data'               => true,
-		'wp_kses_post'               => true,
-		'wp_kses'                    => true,
-		'wp_parse_id_list'           => true,
-		'wp_redirect'                => true,
-		'wp_safe_redirect'           => true,
-		'wp_sanitize_redirect'       => true,
-		'wp_strip_all_tags'          => true,
-	);
-
-	/**
-	 * Sanitizing functions that implicitly unslash the data passed to them.
-	 *
-	 * This list is complementary to the `$sanitizingFunctions` list.
-	 * Sanitizing functions should be added to this list if they also
-	 * implicitely unslash data and to the `$sanitizingFunctions` list
-	 * if they don't.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed from public static to protected non-static.
-	 *
-	 * @var array
-	 */
-	protected $unslashingSanitizingFunctions = array(
-		'absint'       => true,
-		'boolval'      => true,
-		'count'        => true,
-		'doubleval'    => true,
-		'floatval'     => true,
-		'intval'       => true,
-		'sanitize_key' => true,
-		'sizeof'       => true,
-	);
+	use SanitizingFunctionsTrait;
 
 	/**
 	 * Functions which unslash the data passed to them.
@@ -282,8 +205,8 @@ abstract class Sniff implements PHPCS_Sniff {
 			return true;
 		}
 
-		$valid_functions  = $this->sanitizingFunctions;
-		$valid_functions += $this->unslashingSanitizingFunctions;
+		$valid_functions  = $this->get_sanitizing_functions();
+		$valid_functions += $this->get_sanitizing_and_unslashing_functions();
 		$valid_functions += $this->unslashingFunctions;
 		$valid_functions += ArrayWalkingFunctionsHelper::get_array_walking_functions();
 
@@ -348,12 +271,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		// If slashing is required, give an error.
-		if ( ! $is_unslashed && $require_unslash && ! isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( ! $is_unslashed && $require_unslash && ! $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
 			$this->add_unslash_error( $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
-		if ( isset( $this->sanitizingFunctions[ $functionName ] ) || isset( $this->unslashingSanitizingFunctions[ $functionName ] ) ) {
+		if ( $this->is_sanitizing_function( $functionName ) || $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
 			return true;
 		}
 
