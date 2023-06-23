@@ -17,6 +17,7 @@ use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait;
+use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 
 /**
@@ -26,34 +27,10 @@ use WordPressCS\WordPress\Helpers\VariableHelper;
  *
  * @package WPCS\WordPressCodingStandards
  * @since   0.4.0
- *
- * {@internal This class contains numerous properties where the array format looks
- *            like `'string' => true`, i.e. the array item is set as the array key.
- *            This allows for sniffs to verify whether something is in one of these
- *            lists using `isset()` rather than `in_array()` which is a much more
- *            efficient (faster) check to execute and therefore improves the
- *            performance of the sniffs.
- *            The `true` value in those cases is used as a placeholder and has no
- *            meaning in and of itself.
- *            In the rare few cases where the array values *do* have meaning, this
- *            is documented in the property documentation.}}
  */
 abstract class Sniff implements PHPCS_Sniff {
 
 	use SanitizingFunctionsTrait;
-
-	/**
-	 * Functions which unslash the data passed to them.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @var array
-	 */
-	protected $unslashingFunctions = array(
-		'stripslashes_deep'              => true,
-		'stripslashes_from_strings_only' => true,
-		'wp_unslash'                     => true,
-	);
 
 	/**
 	 * A list of superglobals that incorporate user input.
@@ -207,7 +184,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$valid_functions  = $this->get_sanitizing_functions();
 		$valid_functions += $this->get_sanitizing_and_unslashing_functions();
-		$valid_functions += $this->unslashingFunctions;
+		$valid_functions += UnslashingFunctionsHelper::get_unslashing_functions();
 		$valid_functions += ArrayWalkingFunctionsHelper::get_array_walking_functions();
 
 		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
@@ -224,12 +201,12 @@ abstract class Sniff implements PHPCS_Sniff {
 		$functionName = $this->tokens[ $functionPtr ]['content'];
 
 		// Check if an unslashing function is being used.
-		if ( isset( $this->unslashingFunctions[ $functionName ] ) ) {
+		if ( UnslashingFunctionsHelper::is_unslashing_function( $functionName ) ) {
 
 			$is_unslashed = true;
 
 			// Remove the unslashing functions.
-			$valid_functions = array_diff_key( $valid_functions, $this->unslashingFunctions );
+			$valid_functions = array_diff_key( $valid_functions, UnslashingFunctionsHelper::get_unslashing_functions() );
 
 			// Check is any of the remaining (sanitizing) functions is used.
 			$higherFunctionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $functionPtr, $valid_functions );
