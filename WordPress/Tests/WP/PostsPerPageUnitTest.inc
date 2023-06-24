@@ -28,3 +28,17 @@ $query_args['posts_per_page'] = 100; // OK.
 $query_args['posts_per_page'] = 200; // OK.
 $query_args['posts_per_page'] = 300; // Bad.
 // phpcs:set WordPress.WP.PostsPerPage posts_per_page 100
+
+// phpcs:set WordPress.WP.PostsPerPage exclude[] posts_per_page
+$query_args['posts_per_page'] = 300; // OK, group excluded.
+// phpcs:set WordPress.WP.PostsPerPage exclude[]
+
+// Ensure there will be no false positive for array access brackets when not used for an assignment.
+$var = $query_args['posts_per_page']; // OK.
+$firstChars = $text[0] . $text[1]; // OK.
+
+// Text strings which are not query strings should be ignored.
+_query_posts( 'numberposts' ); // OK.
+
+// Assignments to non-string keys should be ignored.
+$var[10] = 300; // OK.
