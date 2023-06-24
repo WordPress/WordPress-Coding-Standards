@@ -182,6 +182,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', TextStrings::stripQuotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
 			}
+
 			foreach ( $matches[1] as $i => $_k ) {
 				$inst[ $_k ][] = array( $matches[2][ $i ], $token['line'] );
 			}
