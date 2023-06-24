@@ -147,8 +147,8 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-			$equal = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-			if ( \T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
+			$equalPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			if ( \T_EQUAL !== $this->tokens[ $equalPtr ]['code'] ) {
 				// This is not an assignment. Bow out.
 				return;
 			}
@@ -165,7 +165,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] || \T_DOUBLE_ARROW === $token['code'] ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-				$operator = $this->phpcsFile->findNext( \T_EQUAL, ( $stackPtr + 1 ) );
+				$operator = $equalPtr;
 			}
 
 			$keyIdx = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
