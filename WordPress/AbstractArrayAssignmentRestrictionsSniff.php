@@ -36,7 +36,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * @since 1.0.0 This property now expects to be passed an array.
 	 *              Previously a comma-delimited string was expected.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	public $exclude = array();
 
@@ -45,7 +45,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * Don't use this in extended classes, override getGroups() instead.
 	 * This is only used for Unit tests.
 	 *
-	 * @var array
+	 * @var array<string, array>
 	 */
 	public static $groups = array();
 
@@ -54,7 +54,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	protected $excluded_groups = array();
 
@@ -63,7 +63,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * @since 0.13.0
 	 *
-	 * @var array
+	 * @var array<string, array>
 	 */
 	protected $groups_cache = array();
 
@@ -94,13 +94,13 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * Example: groups => array(
 	 *  'groupname' => array(
 	 *      'type'     => 'error' | 'warning',
-	 *      'message'  => 'Dont use this one please!',
+	 *      'message'  => 'Descriptive error message. The error message will be passed the $key and $val of the current array assignment.',
 	 *      'keys'     => array( 'key1', 'another_key' ),
 	 *      'callback' => array( 'class', 'method' ), // Optional.
 	 *  )
 	 * )
 	 *
-	 * @return array
+	 * @return array<string, array>
 	 */
 	abstract public function getGroups();
 
@@ -147,11 +147,12 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 			$equal = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 			if ( \T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
-				return; // This is not an assignment!
+				// This is not an assignment. Bow out.
+				return;
 			}
 		}
 
-		// Instances: Multi-dimensional array, keyed by line.
+		// Instances: Multi-dimensional array.
 		$inst = array();
 
 		/*
@@ -175,7 +176,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
 		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-			// Covers assignments via query parameters: `$foo = 'bar=taz&other=thing';`.
+			/*
+			 * Covers assignments via query parameters: `$foo = 'bar=taz&other=thing';`.
+			 */
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', TextStrings::stripQuotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
 			}
@@ -232,12 +235,13 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * This method must be extended to add the logic to check assignment value.
 	 *
-	 * @param  string $key   Array index / key.
-	 * @param  mixed  $val   Assigned value.
-	 * @param  int    $line  Token line.
-	 * @param  array  $group Group definition.
-	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
-	 *                       with custom error message passed to ->process().
+	 * @param string $key   Array index / key.
+	 * @param mixed  $val   Assigned value.
+	 * @param int    $line  Token line.
+	 * @param array  $group Group definition.
+	 *
+	 * @return mixed FALSE if no match, TRUE if matches, STRING if matches
+	 *               with custom error message passed to ->process().
 	 */
 	abstract public function callback( $key, $val, $line, $group );
 }
