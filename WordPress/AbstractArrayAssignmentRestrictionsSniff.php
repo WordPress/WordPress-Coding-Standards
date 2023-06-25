@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress;
 
+use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -171,7 +172,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$key            = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart       = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $operator + 1 ), null, true );
 				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
-				$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
+				$val            = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, ( $valEnd - 1 ), true ) );
 				$val            = TextStrings::stripQuotes( $val );
 				$inst[ $key ][] = array( $val, $token['line'] );
 			}
