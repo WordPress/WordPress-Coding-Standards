@@ -148,7 +148,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
 			$equalPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-			if ( \T_EQUAL !== $this->tokens[ $equalPtr ]['code'] ) {
+			if ( \T_EQUAL !== $this->tokens[ $equalPtr ]['code']
+				&& \T_COALESCE_EQUAL !== $this->tokens[ $equalPtr ]['code']
+			) {
 				// This is not an assignment. Bow out.
 				return;
 			}
