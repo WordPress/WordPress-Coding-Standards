@@ -177,7 +177,10 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 				$val            = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, ( $valEnd - 1 ), true ) );
 				$val          = TextStrings::stripQuotes( $val );
-				$inst[ $key ] = array( $val, $token['line'] );
+				$inst[ $key ] = array(
+					'value' => $val,
+					'line'  => $token['line'],
+				);
 			}
 		} elseif ( isset( Tokens::$stringTokens[ $token['code'] ] ) ) {
 			/*
@@ -187,8 +190,11 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				return; // No assignments here, nothing to check.
 			}
 
-			foreach ( $matches[1] as $i => $_k ) {
-				$inst[ $_k ] = array( $matches[2][ $i ], $token['line'] );
+			foreach ( $matches[1] as $match_nr => $key ) {
+				$inst[ $key ] = array(
+					'value' => $matches[2][ $match_nr ],
+					'line'  => $token['line'],
+				);
 			}
 		}
 
@@ -209,9 +215,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 					continue;
 				}
 
-				list( $val, $line ) = $assignment;
-
-				$output = \call_user_func( $callback, $key, $val, $line, $group );
+				$output = \call_user_func( $callback, $key, $assignment['value'], $assignment['line'], $group );
 
 				if ( ! isset( $output ) || false === $output ) {
 					continue;
@@ -227,7 +231,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 					$stackPtr,
 					( 'error' === $group['type'] ),
 					MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
-					array( $key, $val )
+					array( $key, $assignment['value'] )
 				);
 			}
 		}
