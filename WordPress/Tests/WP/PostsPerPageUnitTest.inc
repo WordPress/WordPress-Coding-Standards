@@ -61,3 +61,8 @@ $args = array(
 
 // Safeguard that when a query string contains duplicate key, the value of the last one is used.
 _query_posts( 'posts_per_page=999&nopaging=true&posts_per_page=50' ); // OK.
+
+// Ensure the error gets reported on the key pointer.
+$query_args[
+	'posts_per_page'
+] = 300; // Bad, error should be reported on the above line.

@@ -178,8 +178,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$val            = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, ( $valEnd - 1 ), true ) );
 				$val          = TextStrings::stripQuotes( $val );
 				$inst[ $key ] = array(
-					'value' => $val,
-					'line'  => $token['line'],
+					'value'  => $val,
+					'line'   => $token['line'],
+					'keyptr' => $keyIdx,
 				);
 			}
 		} elseif ( isset( Tokens::$stringTokens[ $token['code'] ] ) ) {
@@ -192,8 +193,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 			foreach ( $matches[1] as $match_nr => $key ) {
 				$inst[ $key ] = array(
-					'value' => $matches[2][ $match_nr ],
-					'line'  => $token['line'],
+					'value'  => $matches[2][ $match_nr ],
+					'line'   => $token['line'],
+					'keyptr' => $stackPtr,
 				);
 			}
 		}
@@ -228,7 +230,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				MessageHelper::addMessage(
 					$this->phpcsFile,
 					$message,
-					$stackPtr,
+					$assignment['keyptr'],
 					( 'error' === $group['type'] ),
 					MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
 					array( $key, $assignment['value'] )
