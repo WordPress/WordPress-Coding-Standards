@@ -58,3 +58,6 @@ $query_args['posts_per_page'] = /* high */ 999; // Bad.
 $args = array(
 	'posts_per_page' => /* high */ 999, // Bad.
 );
+
+// Safeguard that when a query string contains duplicate key, the value of the last one is used.
+_query_posts( 'posts_per_page=999&nopaging=true&posts_per_page=50' ); // OK.

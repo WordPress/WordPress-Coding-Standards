@@ -176,8 +176,8 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				$valStart       = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true );
 				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
 				$val            = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, ( $valEnd - 1 ), true ) );
-				$val            = TextStrings::stripQuotes( $val );
-				$inst[ $key ][] = array( $val, $token['line'] );
+				$val          = TextStrings::stripQuotes( $val );
+				$inst[ $key ] = array( $val, $token['line'] );
 			}
 		} elseif ( isset( Tokens::$stringTokens[ $token['code'] ] ) ) {
 			/*
@@ -188,7 +188,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			}
 
 			foreach ( $matches[1] as $i => $_k ) {
-				$inst[ $_k ][] = array( $matches[2][ $i ], $token['line'] );
+				$inst[ $_k ] = array( $matches[2][ $i ], $token['line'] );
 			}
 		}
 
@@ -204,33 +204,31 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 			$callback = ( isset( $group['callback'] ) && is_callable( $group['callback'] ) ) ? $group['callback'] : array( $this, 'callback' );
 
-			foreach ( $inst as $key => $assignments ) {
+			foreach ( $inst as $key => $assignment ) {
 				if ( ! \in_array( $key, $group['keys'], true ) ) {
 					continue;
 				}
 
-				foreach ( $assignments as $occurance ) {
-					list( $val, $line ) = $occurance;
+				list( $val, $line ) = $assignment;
 
-					$output = \call_user_func( $callback, $key, $val, $line, $group );
+				$output = \call_user_func( $callback, $key, $val, $line, $group );
 
-					if ( ! isset( $output ) || false === $output ) {
-						continue;
-					} elseif ( true === $output ) {
-						$message = $group['message'];
-					} else {
-						$message = $output;
-					}
-
-					MessageHelper::addMessage(
-						$this->phpcsFile,
-						$message,
-						$stackPtr,
-						( 'error' === $group['type'] ),
-						MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
-						array( $key, $val )
-					);
+				if ( ! isset( $output ) || false === $output ) {
+					continue;
+				} elseif ( true === $output ) {
+					$message = $group['message'];
+				} else {
+					$message = $output;
 				}
+
+				MessageHelper::addMessage(
+					$this->phpcsFile,
+					$message,
+					$stackPtr,
+					( 'error' === $group['type'] ),
+					MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
+					array( $key, $val )
+				);
 			}
 		}
 	}
