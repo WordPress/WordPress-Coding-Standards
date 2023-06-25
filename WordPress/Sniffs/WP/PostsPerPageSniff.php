@@ -68,7 +68,7 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function callback( $key, $val, $line, $group ) {
 		$this->posts_per_page = (int) $this->posts_per_page;
 
-		if ( $val > $this->posts_per_page ) {
+		if ( $val > $this->posts_per_page || '-1' === $val ) {
 			return 'Detected high pagination limit, `%s` is set to `%s`';
 		}
 
