@@ -70,3 +70,8 @@ $query_args[
 // Ensure that PHP 7.4 null coalesce equals get picked up on.
 $query_args['posts_per_page'] ??= 50; // OK.
 $query_args['posts_per_page'] ??= 200; // Bad.
+
+// Ensure that the sniff does not report on PHP 8.0 match arms.
+$val = match($val) {
+	'posts_per_page' => 999, // OK, not an array assignment.
+};
