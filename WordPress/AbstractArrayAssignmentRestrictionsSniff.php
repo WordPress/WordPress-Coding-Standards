@@ -203,12 +203,12 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			$callback = ( isset( $group['callback'] ) && is_callable( $group['callback'] ) ) ? $group['callback'] : array( $this, 'callback' );
 
 			foreach ( $inst as $key => $assignments ) {
+				if ( ! \in_array( $key, $group['keys'], true ) ) {
+					continue;
+				}
+
 				foreach ( $assignments as $occurance ) {
 					list( $val, $line ) = $occurance;
-
-					if ( ! \in_array( $key, $group['keys'], true ) ) {
-						continue;
-					}
 
 					$output = \call_user_func( $callback, $key, $val, $line, $group );
 
