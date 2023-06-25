@@ -108,3 +108,19 @@ $args = array(
 	'posts_per_page' => +50, // OK.
 	'posts_per_page' => +200, // Bad.
 );
+
+// Verify handling of PHP 7.4+ numeric literals, PHP 8.1 octal literals, non-decimal numbers and floats.
+$args = array(
+	'posts_per_page' => 0b1001011, // OK (75).
+	'posts_per_page' => 0b10010110, // Bad (150).
+	'posts_per_page' => 0x4B, // OK (75).
+	'posts_per_page' => 0x96, // Bad (150).
+	'posts_per_page' => 0113, // OK (75).
+	'posts_per_page' => 0226, // Bad (150).
+	'posts_per_page' => 0O113, // OK (75).
+	'posts_per_page' => 0o226, // Bad (150).
+	'posts_per_page' => 7_5, // OK (75).
+	'posts_per_page' => 1_50, // Bad (150).
+	'posts_per_page' => 75.0, // OK (75).
+	'posts_per_page' => 150.000, // Bad (150).
+);
