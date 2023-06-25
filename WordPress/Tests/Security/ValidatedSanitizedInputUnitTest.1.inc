@@ -128,7 +128,7 @@ function test_this() {
 	if ( ! isset( $_POST['abc_field'] ) ) {
 		return;
 	}
-	
+
 	$abc = sanitize_color( wp_unslash( $_POST['abc_field'] ) ); // Bad x1 - sanitize.
 
 	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_twitter_handle
@@ -194,7 +194,7 @@ if ( array_key_exists( 'my_field1', $_POST ) ) {
 	$id = (int) $_POST['my_field1']; // OK.
 }
 
-if ( \array_key_exists( 'my_field2', $_POST ) ) {
+if ( \Array_Key_Exists( 'my_field2', $_POST ) ) {
 	$id = (int) $_POST['my_field2']; // OK.
 }
 
@@ -344,4 +344,63 @@ function test_handling_embeds() {
 	echo <<<"EOD"
 Do ${(_POST)} and ${_GET["${bar}"]} and ${_FILES["${bar['baz']}"]}
 EOD;
+}
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+function test_allow_array_key_exists_with_named_params_wrong_param_name_array() {
+	if ( array_key_exists( arrays: $_POST, key: 'my_field1',  ) ) {
+		$id = (int) $_POST['my_field1']; // Bad.
+	}
+}
+
+function test_allow_array_key_exists_with_named_params_correct_param_name() {
+	if ( array_key_exists( array: $_POST, key: 'my_field1',  ) ) {
+		$id = (int) $_POST['my_field1']; // OK.
+	}
+}
+
+function test_allow_array_key_exists_with_named_params_empty_array_param() {
+	if ( array_key_exists( array: /*comment*/, key: 'my_field1',  ) ) {
+		$id = (int) $_POST['my_field1']; // Bad.
+	}
+}
+
+function test_allow_array_key_exists_with_named_params_array_param_first_token_not_variable() {
+	if ( array_key_exists( array: [1, 2], key: 'my_field1',  ) ) {
+		$id = (int) $_POST['my_field1']; // Bad.
+	}
+}
+
+function test_allow_array_key_exists_with_named_params_multilevel_access_wrong_param_name_key() {
+	if ( array_key_exists( array: $_POST['foo'], keys: 'bar' ) ) {
+		$id = (int) $_POST['foo']['bar']; // Bad.
+	}
+}
+
+function test_allow_array_key_exists_with_named_params_multilevel_access_test() {
+	if ( array_key_exists( array: $_POST['foo'], key: 'bar' ) ) {
+		$id = (int) $_POST['bar']; // Bad x 1 - validate.
+		$id = (int) $_POST['foo']; // OK.
+		$id = (int) $_POST['foo']['bar']; // OK.
+		$id = (int) $_POST['foo']['bar']['baz']; // Bad x 1 - validate.
+	}
+}
+
+/*
+ * Prevent the sniff trying to examine PHP 8.0 attributes.
+ */
+function test_ignore_array_key_exists_in_attribute() {
+	#[Array_Key_Exists('key', ['a', 2])]
+	$callback = function() {};
+	$id = (int) $_POST['foo']; // Bad.
+}
+
+/*
+ * Ensure the sniff doesn't examine PHP 8.1 first class callables.
+ */
+function test_ignore_array_key_exists_as_first_class_callable() {
+	$callback = array_key_exists(...);
+	$id = (int) $_POST['foo']; // Bad.
 }
