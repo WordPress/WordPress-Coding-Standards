@@ -46,8 +46,9 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function getGroups() {
 		return array(
 			'posts_per_page' => array(
-				'type' => 'warning',
-				'keys' => array(
+				'type'    => 'warning',
+				'message' => 'Detected high pagination limit, `%s` is set to `%s`',
+				'keys'    => array(
 					'posts_per_page',
 					'numberposts',
 				),
@@ -62,16 +63,10 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 * @param  mixed  $val   Assigned value.
 	 * @param  int    $line  Token line.
 	 * @param  array  $group Group definition.
-	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
-	 *                       with custom error message passed to ->process().
+	 *
+	 * @return bool FALSE if no match, TRUE if matches.
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		$this->posts_per_page = (int) $this->posts_per_page;
-
-		if ( $val > $this->posts_per_page ) {
-			return 'Detected high pagination limit, `%s` is set to `%s`';
-		}
-
-		return false;
+		return ( $val > (int) $this->posts_per_page );
 	}
 }
