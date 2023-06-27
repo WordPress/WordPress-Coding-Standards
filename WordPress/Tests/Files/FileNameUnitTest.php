@@ -75,7 +75,11 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		'test-sample-phpunit.inc'                    => 0,
 		'test-sample-phpunit6.inc'                   => 0,
 		'test-sample-wpunit.inc'                     => 0,
-		'test-sample-custom-unit.inc'                => 0,
+		'test-sample-custom-unit.1.inc'              => 0,
+		'test-sample-custom-unit.2.inc'              => 0,
+		'test-sample-custom-unit.3.inc'              => 0,
+		'test-sample-custom-unit.4.inc'              => 0,
+		'test-sample-custom-unit.5.inc'              => 1, // Namespaced vs non-namespaced.
 		'test-sample-namespaced-declaration.1.inc'   => 0,
 		'test-sample-namespaced-declaration.2.inc'   => 1, // Namespaced vs non-namespaced.
 		'test-sample-namespaced-declaration.3.inc'   => 1, // Wrong namespace.
