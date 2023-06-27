@@ -186,7 +186,6 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				}
 
 				$val          = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, $valEnd, true ) );
-				$val          = TextStrings::stripQuotes( $val );
 				$inst[ $key ] = array(
 					'value'  => $val,
 					'line'   => $token['line'],
