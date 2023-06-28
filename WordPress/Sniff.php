@@ -183,7 +183,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		$valid_functions  = $this->get_sanitizing_functions();
 		$valid_functions += $this->get_sanitizing_and_unslashing_functions();
 		$valid_functions += UnslashingFunctionsHelper::get_unslashing_functions();
-		$valid_functions += ArrayWalkingFunctionsHelper::get_array_walking_functions();
+		$valid_functions += ArrayWalkingFunctionsHelper::get_functions();
 
 		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
 
