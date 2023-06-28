@@ -182,7 +182,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		$valid_functions  = $this->get_sanitizing_functions();
 		$valid_functions += $this->get_sanitizing_and_unslashing_functions();
-		$valid_functions += UnslashingFunctionsHelper::get_unslashing_functions();
+		$valid_functions += UnslashingFunctionsHelper::get_functions();
 		$valid_functions += ArrayWalkingFunctionsHelper::get_functions();
 
 		$functionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $valid_functions );
@@ -204,7 +204,7 @@ abstract class Sniff implements PHPCS_Sniff {
 			$is_unslashed = true;
 
 			// Remove the unslashing functions.
-			$valid_functions = array_diff_key( $valid_functions, UnslashingFunctionsHelper::get_unslashing_functions() );
+			$valid_functions = array_diff_key( $valid_functions, UnslashingFunctionsHelper::get_functions() );
 
 			// Check is any of the remaining (sanitizing) functions is used.
 			$higherFunctionPtr = ContextHelper::is_in_function_call( $this->phpcsFile, $functionPtr, $valid_functions );
