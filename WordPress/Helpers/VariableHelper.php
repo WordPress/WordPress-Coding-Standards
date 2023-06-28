@@ -53,7 +53,9 @@ final class VariableHelper {
 		$tokens = $phpcsFile->getTokens();
 		$keys   = array();
 
-		if ( \T_VARIABLE !== $tokens[ $stackPtr ]['code'] ) {
+		if ( isset( $tokens[ $stackPtr ] ) === false
+			|| \T_VARIABLE !== $tokens[ $stackPtr ]['code']
+		) {
 			return $keys;
 		}
 
@@ -140,7 +142,11 @@ final class VariableHelper {
 	 * @return bool Whether this is a comparison.
 	 */
 	public static function is_comparison( File $phpcsFile, $stackPtr, $include_coalesce = true ) {
-		$tokens           = $phpcsFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
 		$comparisonTokens = Tokens::$comparisonTokens;
 		if ( false === $include_coalesce ) {
 			unset( $comparisonTokens[ \T_COALESCE ] );
@@ -203,6 +209,9 @@ final class VariableHelper {
 	 */
 	public static function is_assignment( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
 
 		static $valid = array(
 			\T_VARIABLE             => true,

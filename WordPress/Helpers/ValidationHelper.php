@@ -99,6 +99,9 @@ final class ValidationHelper {
 	 */
 	public static function is_validated( File $phpcsFile, $stackPtr, $array_keys = array(), $in_condition_only = false ) {
 		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
 
 		if ( $in_condition_only ) {
 			/*

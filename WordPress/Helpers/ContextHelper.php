@@ -129,6 +129,10 @@ final class ContextHelper {
 	 */
 	public static function has_object_operator_before( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
 		$before = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		return isset( Collections::objectOperators()[ $tokens[ $before ]['code'] ] );
@@ -151,7 +155,11 @@ final class ContextHelper {
 	 */
 	public static function is_token_namespaced( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
-		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
+		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		if ( \T_NS_SEPARATOR !== $tokens[ $prev ]['code'] ) {
 			return false;
@@ -320,7 +328,11 @@ final class ContextHelper {
 	 */
 	public static function is_safe_casted( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
-		$prev   = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
+		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		return isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] );
 	}
