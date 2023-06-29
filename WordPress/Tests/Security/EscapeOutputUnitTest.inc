@@ -303,7 +303,7 @@ _deprecated_file(); // Ignore.
 
 // Issue #1246.
 echo antispambot( 'john.doe@mysite.com' ); // OK.
-echo antispambot( esc_html( $email ) ); // OK.
+echo antiSpambot( esc_html( $email ) ); // OK.
 echo antispambot( $email ); // Bad.
 
 /*

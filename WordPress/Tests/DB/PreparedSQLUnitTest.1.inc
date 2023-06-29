@@ -79,7 +79,7 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf( <<<'ND'
 		AND `post_id` IN (%s)
 ND
 	, $wpdb->postmeta,
-	implode( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+	IMPLODE( ',', array_fill( 0, count( $post_ids ), '%d' ) )
 ), $post_ids ) ); // OK.
 
 wpdb::prepare( "SELECT * FROM $wpdb?->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
