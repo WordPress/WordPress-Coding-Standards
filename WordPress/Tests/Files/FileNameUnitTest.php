@@ -74,6 +74,7 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		 */
 		'test-sample-phpunit.inc'                    => 0,
 		'test-sample-phpunit6.inc'                   => 0,
+		'test-sample-phpunit6-case-insensitive.inc'  => 0,
 		'test-sample-wpunit.inc'                     => 0,
 		'test-sample-custom-unit.1.inc'              => 0,
 		'test-sample-custom-unit.2.inc'              => 0,
