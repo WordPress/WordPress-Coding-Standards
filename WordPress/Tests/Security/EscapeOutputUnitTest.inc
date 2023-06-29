@@ -15,7 +15,7 @@ while ( have_posts() ) {
 ?>
 
 <h2><?php echo $title; // Bad. ?></h2>
-<h2><?php echo esc_html( $title ); // OK. ?></h2>
+<h2><?php echo esc_HTML( $title ); // OK. ?></h2>
 <h2><?php echo apply_filters( 'the_title', $title ); // Bad, no escaping function. ?></h2>
 
 <?php
@@ -138,7 +138,7 @@ _doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument " . esc_html(
 trigger_error( "There was an error: {$message}", E_USER_NOTICE ); // Bad.
 trigger_error( "There was an error: " . esc_html( $message ), E_USER_NOTICE ); // Ok.
 
-echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . esc_url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>'; // Ok.
+echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . Esc_Url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>'; // Ok.
 
 echo '<br/><strong>' . sprintf( esc_html__( 'Found %d results', 'textdomain' ), (int) $result_count ) . '</strong><br/><br/>'; // Ok.
 

@@ -223,7 +223,7 @@ trait EscapingFunctionsTrait {
 			$this->addedCustomEscapingFunctions['escape'] = $this->customEscapingFunctions;
 		}
 
-		return isset( $this->allEscapingFunctions[ $functionName ] );
+		return isset( $this->allEscapingFunctions[ strtolower( $functionName ) ] );
 	}
 
 	/**
@@ -247,6 +247,6 @@ trait EscapingFunctionsTrait {
 			$this->addedCustomEscapingFunctions['autoescape'] = $this->customAutoEscapedFunctions;
 		}
 
-		return isset( $this->allAutoEscapedFunctions[ $functionName ] );
+		return isset( $this->allAutoEscapedFunctions[ strtolower( $functionName ) ] );
 	}
 }
