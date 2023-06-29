@@ -54,6 +54,6 @@ final class UnslashingFunctionsHelper {
 	 * @return bool
 	 */
 	public static function is_unslashing_function( $functionName ) {
-		return isset( self::$unslashingFunctions[ $functionName ] );
+		return isset( self::$unslashingFunctions[ strtolower( $functionName ) ] );
 	}
 }
