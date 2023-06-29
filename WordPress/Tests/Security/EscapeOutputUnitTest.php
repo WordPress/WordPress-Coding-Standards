@@ -21,6 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   1.0.0      This sniff has been moved from the `XSS` category to the `Security` category.
  *
  * @covers \WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::get_safe_cast_tokens
  * @covers \WordPressCS\WordPress\Helpers\ConstantsHelper::is_use_of_global_constant
  * @covers \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait
  * @covers \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait

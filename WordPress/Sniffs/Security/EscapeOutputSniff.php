@@ -340,7 +340,7 @@ class EscapeOutputSniff extends Sniff {
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( isset( ContextHelper::$safe_casts[ $this->tokens[ $i ]['code'] ] ) ) {
+			if ( isset( ContextHelper::get_safe_cast_tokens()[ $this->tokens[ $i ]['code'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
