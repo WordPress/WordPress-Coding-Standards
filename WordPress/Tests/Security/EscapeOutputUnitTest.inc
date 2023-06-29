@@ -128,7 +128,7 @@ echo $html_fragment; // WPCS: XSS whitelist.
 ?><?php echo $html_fragment; // XSS pass. ?><?php
 
 _deprecated_function( __FUNCTION__, '1.3.0', 'another_func' ); // Ok.
-_deprecated_function( __FUNCTION__, '1.3.0', $another_func ); // Bad.
+_Deprecated_Function( __FUNCTION__, '1.3.0', $another_func ); // Bad.
 _deprecated_function( __FUNCTION__, '1.3.0', esc_html( $another_func ) ); // Ok.
 _deprecated_file( __FILE__, '1.3.0' ); // Ok.
 _deprecated_argument( __METHOD__, '1.3.0', 'The $arg is deprecated.' ); // Ok.
@@ -261,7 +261,7 @@ echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
 echo PHP_VERSION_ID, PHP_VERSION, PHP_EOL, PHP_EXTRA_VERSION; // OK.
 
 trigger_error( 'DEBUG INFO - ' . __METHOD__ . '::internal_domains: domain = ' . $domain ); // Bad.
-trigger_error( $domain ); // Bad.
+Trigger_ERROR( $domain ); // Bad.
 
 vprintf( 'Hello %s', [ $foo ] ); // Bad.
 vprintf( 'Hello %s', [ esc_html( $foo ) ] ); // Ok.
