@@ -171,7 +171,7 @@ echo implode( '<br>', urlencode_deep( $items ) ); // Ok.
 echo implode( '<br>', array_map( 'esc_html', $items ) ); // Ok.
 echo implode( '<br>', array_map( 'foo', $items ) ); // Bad.
 echo join( '<br>', $items ); // Bad.
-echo join( '<br>', array_map( 'esc_html', $items ) ); // Ok.
+echo join( '<br>', Array_Map( 'esc_html', $items ) ); // Ok.
 
 echo '<option name="' . esc_attr( $name ) . '"' .
      ( $name === $selected ? ' selected' : '' ) .

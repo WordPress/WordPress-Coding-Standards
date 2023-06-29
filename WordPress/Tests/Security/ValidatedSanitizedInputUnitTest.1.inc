@@ -103,7 +103,7 @@ $current_tax_slug = isset( $_GET['a'] ) ? sanitize_text_field( wp_unslash( $_GET
 
 echo sanitize_text_field( $_POST['foo545'] ); // Error for no validation, unslashing.
 echo array_map( 'sanitize_text_field', $_GET['test'] ); // Bad, no unslashing.
-echo array_map( 'sanitize_key', $_GET['test'] ); // Ok.
+echo Array_Map( 'sanitize_key', $_GET['test'] ); // Ok.
 
 foo( absint( $_GET['foo'] ) ); // Ok.
 $ids = array_map( 'absint', $_GET['test'] ); // Ok.
