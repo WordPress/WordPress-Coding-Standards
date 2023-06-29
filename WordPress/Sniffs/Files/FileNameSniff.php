@@ -207,8 +207,13 @@ final class FileNameSniff extends Sniff {
 	 * @return void
 	 */
 	protected function check_filename_is_hyphenated( $file_name ) {
-		$expected = strtolower( str_replace( '_', '-', $file_name ) );
-		if ( $file_name === $expected ) {
+		$extension = strrchr( $file_name, '.' );
+		$name      = substr( $file_name, 0, ( strlen( $file_name ) - strlen( $extension ) ) );
+
+		$expected = strtolower( preg_replace( '`[[:punct:]]`', '-', $name ) ) . $extension;
+		if ( $file_name === $expected
+			|| isset( $this->class_exceptions[ $file_name ] )
+		) {
 			return;
 		}
 
