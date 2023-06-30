@@ -242,10 +242,11 @@ final class FileNameSniff extends Sniff {
 	 * @return void
 	 */
 	protected function check_filename_has_class_prefix( $class_ptr, $file_name ) {
+		$extension  = strrchr( $file_name, '.' );
 		$class_name = ObjectDeclarations::getName( $this->phpcsFile, $class_ptr );
-		$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) );
+		$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . $extension;
 
-		if ( substr( $file_name, 0, -4 ) === $expected
+		if ( $file_name === $expected
 			|| isset( $this->class_exceptions[ $file_name ] )
 		) {
 			return;
@@ -256,7 +257,7 @@ final class FileNameSniff extends Sniff {
 			0,
 			'InvalidClassFileName',
 			array(
-				$expected . '.php',
+				$expected,
 				$file_name,
 			)
 		);

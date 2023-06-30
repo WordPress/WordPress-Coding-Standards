@@ -42,6 +42,7 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		'SomeView.inc'                               => 1,
 		'class.with.dot.not.underscore.inc'          => 2,
 		'class@with#other+punctuation.inc'           => 2,
+		'class-wrong-with-different-extension.php3'  => 1,
 
 		// Class file names.
 		'my-class.inc'                               => 1,
@@ -131,6 +132,11 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 
 		$sep        = \DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', \GLOB_BRACE );
+
+		$php3_test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.php3', \GLOB_BRACE );
+		foreach ( $php3_test_files as $file ) {
+			$test_files[] = $file;
+		}
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
