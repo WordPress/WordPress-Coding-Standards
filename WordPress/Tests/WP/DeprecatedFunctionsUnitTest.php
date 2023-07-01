@@ -85,7 +85,7 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		$start_line = 362;
-		$end_line   = 386;
+		$end_line   = 413;
 		$warnings   = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
@@ -95,7 +95,9 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$warnings[367],
 			$warnings[373],
 			$warnings[375],
-			$warnings[377]
+			$warnings[377],
+			$warnings[387],
+			$warnings[390]
 		);
 
 		// Temporarily until PHPCS supports PHP 8.2.
