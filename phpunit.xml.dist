@@ -17,7 +17,6 @@
 	<filter>
 		<whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="false">
 			<file>./WordPress/Sniff.php</file>
-			<file>./WordPress/PHPCSHelper.php</file>
 			<file>./WordPress/AbstractArrayAssignmentRestrictionsSniff.php</file>
 			<file>./WordPress/AbstractClassRestrictionsSniff.php</file>
 			<file>./WordPress/AbstractFunctionParameterSniff.php</file>
