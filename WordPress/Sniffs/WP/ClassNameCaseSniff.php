@@ -23,12 +23,11 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	/**
 	 * List of all WP native classes.
 	 *
-	 * List is sorted alphabetically and based on the WIP autoloading PR.
-	 * {@link https://github.com/WordPress/wordpress-develop/pull/3470}
+	 * List is sorted alphabetically and based on a draft sniff to autogenerate this list.
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -39,6 +38,9 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'_WP_Dependency',
 		'_WP_Editors',
 		'_WP_List_Table_Compat',
+		'AtomEntry',
+		'AtomFeed',
+		'AtomParser',
 		'Automatic_Upgrader_Skin',
 		'Bulk_Plugin_Upgrader_Skin',
 		'Bulk_Theme_Upgrader_Skin',
@@ -46,7 +48,10 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Core_Upgrader',
 		'Custom_Background',
 		'Custom_Image_Header',
+		'Featured_Content',
 		'File_Upload_Upgrader',
+		'ftp',
+		'ftp_base',
 		'ftp_pure',
 		'ftp_sockets',
 		'Gettext_Translations',
@@ -63,17 +68,38 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Language_Pack_Upgrader',
 		'Language_Pack_Upgrader_Skin',
 		'MO',
+		'MagpieRSS',
 		'NOOP_Translations',
-		'Plugin_Installer_Skin',
-		'Plugin_Upgrader',
-		'Plugin_Upgrader_Skin',
-		'Plural_Forms',
 		'PO',
 		'POMO_CachedFileReader',
 		'POMO_CachedIntFileReader',
 		'POMO_FileReader',
 		'POMO_Reader',
 		'POMO_StringReader',
+		'POP3',
+		'PasswordHash',
+		'PclZip',
+		'Plugin_Installer_Skin',
+		'Plugin_Upgrader',
+		'Plugin_Upgrader_Skin',
+		'Plural_Forms',
+		'RSSCache',
+		'Services_JSON',
+		'Services_JSON_Error',
+		'Snoopy',
+		'Text_Diff',
+		'Text_Diff_Engine_native',
+		'Text_Diff_Engine_shell',
+		'Text_Diff_Engine_string',
+		'Text_Diff_Engine_xdiff',
+		'Text_Diff_Op',
+		'Text_Diff_Op_add',
+		'Text_Diff_Op_change',
+		'Text_Diff_Op_copy',
+		'Text_Diff_Op_delete',
+		'Text_Diff_Renderer',
+		'Text_Diff_Renderer_inline',
+		'Text_MappedDiff',
 		'Theme_Installer_Skin',
 		'Theme_Upgrader',
 		'Theme_Upgrader_Skin',
@@ -81,8 +107,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Translations',
 		'Walker',
 		'Walker_Category',
-		'Walker_Category_Checklist',
 		'Walker_CategoryDropdown',
+		'Walker_Category_Checklist',
 		'Walker_Comment',
 		'Walker_Nav_Menu',
 		'Walker_Nav_Menu_Checklist',
@@ -109,6 +135,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Block_Template',
 		'WP_Block_Type',
 		'WP_Block_Type_Registry',
+		'WP_Classic_To_Block_Menu_Converter',
 		'WP_Comment',
 		'WP_Comment_Query',
 		'WP_Comments_List_Table',
@@ -156,6 +183,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Date_Query',
 		'WP_Debug_Data',
 		'WP_Dependencies',
+		'WP_Duotone',
 		'WP_Embed',
 		'WP_Error',
 		'WP_Fatal_Error_Handler',
@@ -164,19 +192,23 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Filesystem_Base',
 		'WP_Filesystem_Direct',
 		'WP_Filesystem_FTPext',
-		'WP_Filesystem_ftpsockets',
 		'WP_Filesystem_SSH2',
-		'WP_Hook',
-		'WP_Http',
-		'WP_Http_Cookie',
-		'WP_Http_Curl',
-		'WP_Http_Encoding',
+		'WP_Filesystem_ftpsockets',
+		'WP_HTML_Attribute_Token',
+		'WP_HTML_Span',
+		'WP_HTML_Tag_Processor',
+		'WP_HTML_Text_Replacement',
 		'WP_HTTP_Fsockopen',
 		'WP_HTTP_IXR_Client',
 		'WP_HTTP_Proxy',
 		'WP_HTTP_Requests_Hooks',
 		'WP_HTTP_Requests_Response',
 		'WP_HTTP_Response',
+		'WP_Hook',
+		'WP_Http',
+		'WP_Http_Cookie',
+		'WP_Http_Curl',
+		'WP_Http_Encoding',
 		'WP_Http_Streams',
 		'WP_Image_Editor',
 		'WP_Image_Editor_GD',
@@ -188,19 +220,18 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_List_Util',
 		'WP_Locale',
 		'WP_Locale_Switcher',
+		'WP_MS_Sites_List_Table',
+		'WP_MS_Themes_List_Table',
+		'WP_MS_Users_List_Table',
 		'WP_MatchesMapRegex',
 		'WP_Media_List_Table',
 		'WP_Meta_Query',
 		'WP_Metadata_Lazyloader',
-		'WP_MS_Sites_List_Table',
-		'WP_MS_Themes_List_Table',
-		'WP_MS_Users_List_Table',
 		'WP_Nav_Menu_Widget',
+		'WP_Navigation_Fallback',
 		'WP_Network',
 		'WP_Network_Query',
 		'WP_Object_Cache',
-		'WP_oEmbed',
-		'WP_oEmbed_Controller',
 		'WP_Paused_Extensions_Storage',
 		'WP_Plugin_Install_List_Table',
 		'WP_Plugins_List_Table',
@@ -215,11 +246,6 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Privacy_Policy_Content',
 		'WP_Privacy_Requests_Table',
 		'WP_Query',
-		'WP_Recovery_Mode',
-		'WP_Recovery_Mode_Cookie_Service',
-		'WP_Recovery_Mode_Email_Service',
-		'WP_Recovery_Mode_Key_Service',
-		'WP_Recovery_Mode_Link_Service',
 		'WP_REST_Application_Passwords_Controller',
 		'WP_REST_Attachments_Controller',
 		'WP_REST_Autosaves_Controller',
@@ -234,10 +260,12 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_REST_Controller',
 		'WP_REST_Edit_Site_Export_Controller',
 		'WP_REST_Global_Styles_Controller',
+		'WP_REST_Global_Styles_Revisions_Controller',
 		'WP_REST_Menu_Items_Controller',
 		'WP_REST_Menu_Locations_Controller',
 		'WP_REST_Menus_Controller',
 		'WP_REST_Meta_Fields',
+		'WP_REST_Navigation_Fallback_Controller',
 		'WP_REST_Pattern_Directory_Controller',
 		'WP_REST_Plugins_Controller',
 		'WP_REST_Post_Format_Search_Handler',
@@ -266,6 +294,11 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_REST_Users_Controller',
 		'WP_REST_Widget_Types_Controller',
 		'WP_REST_Widgets_Controller',
+		'WP_Recovery_Mode',
+		'WP_Recovery_Mode_Cookie_Service',
+		'WP_Recovery_Mode_Email_Service',
+		'WP_Recovery_Mode_Key_Service',
+		'WP_Recovery_Mode_Link_Service',
 		'WP_Rewrite',
 		'WP_Role',
 		'WP_Roles',
@@ -300,8 +333,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Term',
 		'WP_Term_Query',
 		'WP_Terms_List_Table',
-		'WP_Text_Diff_Renderer_inline',
 		'WP_Text_Diff_Renderer_Table',
+		'WP_Text_Diff_Renderer_inline',
 		'WP_Textdomain_Registry',
 		'WP_Theme',
 		'WP_Theme_Install_List_Table',
@@ -335,12 +368,15 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Widget_Media_Video',
 		'WP_Widget_Meta',
 		'WP_Widget_Pages',
+		'WP_Widget_RSS',
 		'WP_Widget_Recent_Comments',
 		'WP_Widget_Recent_Posts',
-		'WP_Widget_RSS',
 		'WP_Widget_Search',
 		'WP_Widget_Tag_Cloud',
 		'WP_Widget_Text',
+		'WP_oEmbed',
+		'WP_oEmbed_Controller',
+		'wp_atom_server',
 		'wp_xmlrpc_server',
 		'wpdb',
 	);
@@ -350,7 +386,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -386,7 +422,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -404,7 +440,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -412,13 +448,20 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *               The constructor will add the lowercased class name as a key to each entry.
 	 */
 	private $requests_classes = array(
-		// Interfaces.
+		// Interfaces, Requests v1.
 		'Requests_Auth',
 		'Requests_Hooker',
 		'Requests_Proxy',
 		'Requests_Transport',
 
-		// Classes.
+		// Interfaces, Requests v2.
+		'WpOrg\\Requests\\Auth',
+		'WpOrg\\Requests\\Capability',
+		'WpOrg\\Requests\\HookManager',
+		'WpOrg\\Requests\\Proxy',
+		'WpOrg\\Requests\\Transport',
+
+		// Classes, Requests v1.
 		'Requests',
 		'Requests_Auth_Basic',
 		'Requests_Cookie',
@@ -473,6 +516,67 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Requests_Transport_fsockopen',
 		'Requests_Utility_CaseInsensitiveDictionary',
 		'Requests_Utility_FilteredIterator',
+
+		// Classes, Requests v2.
+		'WpOrg\Requests\Auth\Basic',
+		'WpOrg\Requests\Autoload',
+		'WpOrg\Requests\Cookie',
+		'WpOrg\Requests\Cookie\Jar',
+		'WpOrg\Requests\Exception',
+		'WpOrg\Requests\Exception\ArgumentCount',
+		'WpOrg\Requests\Exception\Http',
+		'WpOrg\Requests\Exception\Http\Status304',
+		'WpOrg\Requests\Exception\Http\Status305',
+		'WpOrg\Requests\Exception\Http\Status306',
+		'WpOrg\Requests\Exception\Http\Status400',
+		'WpOrg\Requests\Exception\Http\Status401',
+		'WpOrg\Requests\Exception\Http\Status402',
+		'WpOrg\Requests\Exception\Http\Status403',
+		'WpOrg\Requests\Exception\Http\Status404',
+		'WpOrg\Requests\Exception\Http\Status405',
+		'WpOrg\Requests\Exception\Http\Status406',
+		'WpOrg\Requests\Exception\Http\Status407',
+		'WpOrg\Requests\Exception\Http\Status408',
+		'WpOrg\Requests\Exception\Http\Status409',
+		'WpOrg\Requests\Exception\Http\Status410',
+		'WpOrg\Requests\Exception\Http\Status411',
+		'WpOrg\Requests\Exception\Http\Status412',
+		'WpOrg\Requests\Exception\Http\Status413',
+		'WpOrg\Requests\Exception\Http\Status414',
+		'WpOrg\Requests\Exception\Http\Status415',
+		'WpOrg\Requests\Exception\Http\Status416',
+		'WpOrg\Requests\Exception\Http\Status417',
+		'WpOrg\Requests\Exception\Http\Status418',
+		'WpOrg\Requests\Exception\Http\Status428',
+		'WpOrg\Requests\Exception\Http\Status429',
+		'WpOrg\Requests\Exception\Http\Status431',
+		'WpOrg\Requests\Exception\Http\Status500',
+		'WpOrg\Requests\Exception\Http\Status501',
+		'WpOrg\Requests\Exception\Http\Status502',
+		'WpOrg\Requests\Exception\Http\Status503',
+		'WpOrg\Requests\Exception\Http\Status504',
+		'WpOrg\Requests\Exception\Http\Status505',
+		'WpOrg\Requests\Exception\Http\Status511',
+		'WpOrg\Requests\Exception\Http\StatusUnknown',
+		'WpOrg\Requests\Exception\InvalidArgument',
+		'WpOrg\Requests\Exception\Transport',
+		'WpOrg\Requests\Exception\Transport\Curl',
+		'WpOrg\Requests\Hooks',
+		'WpOrg\Requests\IdnaEncoder',
+		'WpOrg\Requests\Ipv6',
+		'WpOrg\Requests\Iri',
+		'WpOrg\Requests\Port',
+		'WpOrg\Requests\Proxy\Http',
+		'WpOrg\Requests\Requests',
+		'WpOrg\Requests\Response',
+		'WpOrg\Requests\Response\Headers',
+		'WpOrg\Requests\Session',
+		'WpOrg\Requests\Ssl',
+		'WpOrg\Requests\Transport\Curl',
+		'WpOrg\Requests\Transport\Fsockopen',
+		'WpOrg\Requests\Utility\CaseInsensitiveDictionary',
+		'WpOrg\Requests\Utility\FilteredIterator',
+		'WpOrg\Requests\Utility\InputValidator',
 	);
 
 	/**
@@ -480,7 +584,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -488,34 +592,44 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *               The constructor will add the lowercased class name as a key to each entry.
 	 */
 	private $simplepie_classes = array(
+		// Interfaces.
+		'SimplePie_Cache_Base',
+
+		// Classes.
 		'SimplePie',
 		'SimplePie_Author',
 		'SimplePie_Cache',
+		'SimplePie_Cache_DB',
+		'SimplePie_Cache_File',
+		'SimplePie_Cache_Memcache',
+		'SimplePie_Cache_Memcached',
+		'SimplePie_Cache_MySQL',
+		'SimplePie_Cache_Redis',
 		'SimplePie_Caption',
 		'SimplePie_Category',
+		'SimplePie_Content_Type_Sniffer',
 		'SimplePie_Copyright',
 		'SimplePie_Core',
 		'SimplePie_Credit',
+		'SimplePie_Decode_HTML_Entities',
 		'SimplePie_Enclosure',
 		'SimplePie_Exception',
 		'SimplePie_File',
-		'SimplePie_gzdecode',
+		'SimplePie_HTTP_Parser',
 		'SimplePie_IRI',
 		'SimplePie_Item',
 		'SimplePie_Locator',
 		'SimplePie_Misc',
+		'SimplePie_Net_IPv6',
+		'SimplePie_Parse_Date',
 		'SimplePie_Parser',
 		'SimplePie_Rating',
 		'SimplePie_Registry',
 		'SimplePie_Restriction',
 		'SimplePie_Sanitize',
 		'SimplePie_Source',
-		'SimplePie_Content_Type_Sniffer',
-		'SimplePie_Decode_HTML_Entities',
-		'SimplePie_HTTP_Parser',
-		'SimplePie_Net_IPv6',
-		'SimplePie_Parse_Date',
 		'SimplePie_XML_Declaration_Parser',
+		'SimplePie_gzdecode',
 	);
 
 	/**
