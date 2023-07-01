@@ -382,6 +382,38 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	);
 
 	/**
+	 * List of all WP native classes as shipped with themes included in WP Core.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $wp_themes_classes = array(
+		'TwentyNineteen_SVG_Icons',
+		'TwentyNineteen_Walker_Comment',
+		'TwentyTwenty_Customize',
+		'TwentyTwenty_Non_Latin_Languages',
+		'TwentyTwenty_SVG_Icons',
+		'TwentyTwenty_Script_Loader',
+		'TwentyTwenty_Separator_Control',
+		'TwentyTwenty_Walker_Comment',
+		'TwentyTwenty_Walker_Page',
+		'Twenty_Eleven_Ephemera_Widget',
+		'Twenty_Fourteen_Ephemera_Widget',
+		'Twenty_Twenty_One_Custom_Colors',
+		'Twenty_Twenty_One_Customize',
+		'Twenty_Twenty_One_Customize_Color_Control',
+		'Twenty_Twenty_One_Customize_Notice_Control',
+		'Twenty_Twenty_One_Dark_Mode',
+		'Twenty_Twenty_One_SVG_Icons',
+	);
+
+	/**
 	 * List of all GetID3 classes include in WP Core.
 	 *
 	 * Note: this list will be enhanced in the class constructor.
@@ -644,6 +676,17 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	private $wp_classes_lc = array();
 
 	/**
+	 * List of all WP native classes as shipped with themes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $wp_themes_classes property.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $wp_themes_classes_lc = array();
+
+	/**
 	 * List of all GetID3 classes in lowercase.
 	 *
 	 * This array is automatically generated in the class constructor based on the $phpmailer_classes property.
@@ -698,6 +741,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 */
 	private $class_groups = array(
 		'wp_classes',
+		'wp_themes_classes',
 		'getid3_classes',
 		'phpmailer_classes',
 		'requests_classes',
