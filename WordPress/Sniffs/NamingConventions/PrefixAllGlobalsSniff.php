@@ -196,6 +196,201 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
+	 * A list of functions declared in WP core as "Pluggable", i.e. overloadable from a plugin.
+	 *
+	 * Note: deprecated functions should still be included in this list as plugins may support older WP versions.
+	 *
+	 * @since 3.0.0.
+	 *
+	 * @var array<string, bool>
+	 */
+	protected $pluggable_functions = array(
+		'auth_redirect'                                  => true,
+		'cache_users'                                    => true,
+		'check_admin_referer'                            => true,
+		'check_ajax_referer'                             => true,
+		'get_avatar'                                     => true,
+		'get_currentuserinfo'                            => true, // Deprecated.
+		'get_user_by'                                    => true,
+		'get_user_by_email'                              => true, // Deprecated.
+		'get_userdata'                                   => true,
+		'get_userdatabylogin'                            => true, // Deprecated.
+		'graceful_fail'                                  => true,
+		'install_global_terms'                           => true,
+		'install_network'                                => true,
+		'is_user_logged_in'                              => true,
+		// 'lowercase_octets'                            => true, => unclear if this function is meant to be publicly pluggable.
+		'maybe_add_column'                               => true,
+		'maybe_create_table'                             => true,
+		'set_current_user'                               => true, // Deprecated.
+		'twenty_twenty_one_entry_meta_footer'            => true,
+		'twenty_twenty_one_post_thumbnail'               => true,
+		'twenty_twenty_one_post_title'                   => true,
+		'twenty_twenty_one_posted_by'                    => true,
+		'twenty_twenty_one_posted_on'                    => true,
+		'twenty_twenty_one_setup'                        => true,
+		'twenty_twenty_one_the_posts_navigation'         => true,
+		'twentyeleven_admin_header_image'                => true,
+		'twentyeleven_admin_header_style'                => true,
+		'twentyeleven_comment'                           => true,
+		'twentyeleven_content_nav'                       => true,
+		'twentyeleven_continue_reading_link'             => true,
+		'twentyeleven_header_style'                      => true,
+		'twentyeleven_posted_on'                         => true,
+		'twentyeleven_setup'                             => true,
+		'twentyfifteen_comment_nav'                      => true,
+		'twentyfifteen_entry_meta'                       => true,
+		'twentyfifteen_excerpt_more'                     => true,
+		'twentyfifteen_fonts_url'                        => true,
+		'twentyfifteen_get_color_scheme'                 => true,
+		'twentyfifteen_get_color_scheme_choices'         => true,
+		'twentyfifteen_get_link_url'                     => true,
+		'twentyfifteen_header_style'                     => true,
+		'twentyfifteen_post_thumbnail'                   => true,
+		'twentyfifteen_sanitize_color_scheme'            => true,
+		'twentyfifteen_setup'                            => true,
+		'twentyfifteen_the_custom_logo'                  => true,
+		'twentyfourteen_admin_header_image'              => true,
+		'twentyfourteen_admin_header_style'              => true,
+		'twentyfourteen_excerpt_more'                    => true,
+		'twentyfourteen_font_url'                        => true,
+		'twentyfourteen_header_style'                    => true,
+		'twentyfourteen_list_authors'                    => true,
+		'twentyfourteen_paging_nav'                      => true,
+		'twentyfourteen_post_nav'                        => true,
+		'twentyfourteen_post_thumbnail'                  => true,
+		'twentyfourteen_posted_on'                       => true,
+		'twentyfourteen_setup'                           => true,
+		'twentyfourteen_the_attached_image'              => true,
+		'twentynineteen_comment_count'                   => true,
+		'twentynineteen_comment_form'                    => true,
+		'twentynineteen_discussion_avatars_list'         => true,
+		'twentynineteen_entry_footer'                    => true,
+		'twentynineteen_get_user_avatar_markup'          => true,
+		'twentynineteen_post_thumbnail'                  => true,
+		'twentynineteen_posted_by'                       => true,
+		'twentynineteen_posted_on'                       => true,
+		'twentynineteen_setup'                           => true,
+		'twentynineteen_the_posts_navigation'            => true,
+		'twentyseventeen_edit_link'                      => true,
+		'twentyseventeen_entry_footer'                   => true,
+		'twentyseventeen_fonts_url'                      => true,
+		'twentyseventeen_header_style'                   => true,
+		'twentyseventeen_posted_on'                      => true,
+		'twentyseventeen_time_link'                      => true,
+		'twentysixteen_categorized_blog'                 => true,
+		'twentysixteen_entry_date'                       => true,
+		'twentysixteen_entry_meta'                       => true,
+		'twentysixteen_entry_taxonomies'                 => true,
+		'twentysixteen_excerpt'                          => true,
+		'twentysixteen_excerpt_more'                     => true,
+		'twentysixteen_fonts_url'                        => true,
+		'twentysixteen_get_color_scheme'                 => true,
+		'twentysixteen_get_color_scheme_choices'         => true,
+		'twentysixteen_header_style'                     => true,
+		'twentysixteen_post_thumbnail'                   => true,
+		'twentysixteen_sanitize_color_scheme'            => true,
+		'twentysixteen_setup'                            => true,
+		'twentysixteen_the_custom_logo'                  => true,
+		'twentyten_admin_header_style'                   => true,
+		'twentyten_comment'                              => true,
+		'twentyten_continue_reading_link'                => true,
+		'twentyten_posted_in'                            => true,
+		'twentyten_posted_on'                            => true,
+		'twentyten_setup'                                => true,
+		'twentythirteen_entry_date'                      => true,
+		'twentythirteen_entry_meta'                      => true,
+		'twentythirteen_excerpt_more'                    => true,
+		'twentythirteen_fonts_url'                       => true,
+		'twentythirteen_paging_nav'                      => true,
+		'twentythirteen_post_nav'                        => true,
+		'twentythirteen_the_attached_image'              => true,
+		'twentytwelve_comment'                           => true,
+		'twentytwelve_content_nav'                       => true,
+		'twentytwelve_entry_meta'                        => true,
+		'twentytwelve_get_font_url'                      => true,
+		'twentytwenty_customize_partial_blogdescription' => true,
+		'twentytwenty_customize_partial_blogname'        => true,
+		'twentytwenty_customize_partial_site_logo'       => true,
+		'twentytwenty_generate_css'                      => true,
+		'twentytwenty_get_customizer_css'                => true,
+		'twentytwenty_get_theme_svg'                     => true,
+		'twentytwenty_the_theme_svg'                     => true,
+		'twentytwentytwo_styles'                         => true,
+		'twentytwentytwo_support'                        => true,
+		'wp_authenticate'                                => true,
+		'wp_cache_add_multiple'                          => true,
+		'wp_cache_delete_multiple'                       => true,
+		'wp_cache_flush_group'                           => true,
+		'wp_cache_flush_runtime'                         => true,
+		'wp_cache_get_multiple'                          => true,
+		'wp_cache_set_multiple'                          => true,
+		'wp_cache_supports'                              => true,
+		'wp_check_password'                              => true,
+		'wp_clear_auth_cookie'                           => true,
+		'wp_clearcookie'                                 => true, // Deprecated.
+		'wp_create_nonce'                                => true,
+		'wp_generate_auth_cookie'                        => true,
+		'wp_generate_password'                           => true,
+		'wp_get_cookie_login'                            => true, // Deprecated.
+		'wp_get_current_user'                            => true,
+		// 'wp_handle_upload_error'                      => true, => unclear if this function is meant to be publicly pluggable.
+		'wp_hash'                                        => true,
+		'wp_hash_password'                               => true,
+		'wp_install'                                     => true,
+		'wp_install_defaults'                            => true,
+		'wp_login'                                       => true, // Deprecated.
+		'wp_logout'                                      => true,
+		'wp_mail'                                        => true,
+		'wp_new_blog_notification'                       => true,
+		'wp_new_user_notification'                       => true,
+		'wp_nonce_tick'                                  => true,
+		'wp_notify_moderator'                            => true,
+		'wp_notify_postauthor'                           => true,
+		'wp_parse_auth_cookie'                           => true,
+		'wp_password_change_notification'                => true,
+		'wp_rand'                                        => true,
+		'wp_redirect'                                    => true,
+		'wp_safe_redirect'                               => true,
+		'wp_salt'                                        => true,
+		'wp_sanitize_redirect'                           => true,
+		'wp_set_auth_cookie'                             => true,
+		'wp_set_current_user'                            => true,
+		'wp_set_password'                                => true,
+		'wp_setcookie'                                   => true, // Deprecated.
+		'wp_text_diff'                                   => true,
+		'wp_upgrade'                                     => true,
+		'wp_validate_auth_cookie'                        => true,
+		'wp_validate_redirect'                           => true,
+		'wp_verify_nonce'                                => true,
+	);
+
+	/**
+	 * A list of classes declared in WP core as "Pluggable", i.e. overloadable from a plugin.
+	 *
+	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/pluggable.php}
+	 * and {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/pluggable-deprecated.php}
+	 *
+	 * Note: deprecated classes should still be included in this list as plugins may support older WP versions.
+	 *
+	 * @since 3.0.0.
+	 *
+	 * @var array<string, bool>
+	 */
+	protected $pluggable_classes = array(
+		'TwentyTwenty_Customize'           => true,
+		'TwentyTwenty_Non_Latin_Languages' => true,
+		'TwentyTwenty_SVG_Icons'           => true,
+		'TwentyTwenty_Script_Loader'       => true,
+		'TwentyTwenty_Separator_Control'   => true,
+		'TwentyTwenty_Walker_Comment'      => true,
+		'TwentyTwenty_Walker_Page'         => true,
+		'Twenty_Twenty_One_Customize'      => true,
+		'WP_User_Search'                   => true,
+		'wp_atom_server'                   => true, // Deprecated.
+	);
+
+	/**
 	 * List of all PHP native functions.
 	 *
 	 * Using this list rather than a call to `function_exists()` prevents
@@ -219,6 +414,10 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$all_functions            = get_defined_functions();
 		$this->built_in_functions = array_flip( $all_functions['internal'] );
 		$this->built_in_functions = array_change_key_case( $this->built_in_functions, \CASE_LOWER );
+
+		// Make sure the pluggable functions and classes list can be easily compared.
+		$this->pluggable_functions = array_change_key_case( $this->pluggable_functions, \CASE_LOWER );
+		$this->pluggable_classes   = array_change_key_case( $this->pluggable_classes, \CASE_LOWER );
 
 		// Set the sniff targets.
 		$targets  = array(
@@ -420,6 +619,11 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 						return;
 					}
 
+					if ( isset( $this->pluggable_functions[ $item_lc ] ) ) {
+						// Pluggable function should not be prefixed.
+						return;
+					}
+
 					$error_text = 'Functions declared in the global namespace';
 					$error_code = 'NonPrefixedFunctionFound';
 					break;
@@ -434,6 +638,11 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 
 					switch ( $this->tokens[ $stackPtr ]['code'] ) {
 						case \T_CLASS:
+							if ( isset( $this->pluggable_classes[ strtolower( $item_name ) ] ) ) {
+								// Pluggable class should not be prefixed.
+								return;
+							}
+
 							if ( class_exists( '\\' . $item_name, false ) ) {
 								// Backfill for PHP native class.
 								return;

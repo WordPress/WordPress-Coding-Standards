@@ -651,4 +651,26 @@ if ( function_exists( 'stripos' ) ) {
 	function striPos() {}
 }
 
+/*
+ * Safeguard that pluggable functions and classes can be declared without a prefix.
+ */
+function wp_hash_password( $password ) {
+	// Do something.
+	return $hash;
+}
+
+function WP_Mail() {}
+
+class WP_User_Search {}
+
+class WP_Atom_Server {
+	public function __call( $name, $arguments ) {
+		// Do something.
+	}
+
+	public static function __callStatic( $name, $arguments ) {
+		// Do something.
+	}
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
