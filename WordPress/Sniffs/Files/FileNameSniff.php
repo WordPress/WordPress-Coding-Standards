@@ -96,27 +96,39 @@ final class FileNameSniff extends Sniff {
 	/**
 	 * Historical exceptions in WP core to the class name rule.
 	 *
+	 * Note: these files were renamed to comply with the naming conventions in
+	 * WP 6.1.0.
+	 * This means we no longer need to make an exception for them in the
+	 * `check_filename_has_class_prefix()` check, however, we do still need to
+	 * make an exception in the `check_filename_is_hyphenated()` check.
+	 *
 	 * @since 0.11.0
+	 * @since 3.0.0  Property has been renamed from `$class_exceptions` to `$hyphenation_exceptions`,
 	 *
 	 * @var array
 	 */
-	private $class_exceptions = array(
+	private $hyphenation_exceptions = array(
 		'class.wp-dependencies.php' => true,
 		'class.wp-scripts.php'      => true,
 		'class.wp-styles.php'       => true,
+		'functions.wp-scripts.php'  => true,
+		'functions.wp-styles.php'   => true,
 	);
 
 	/**
 	 * Unit test version of the historical exceptions in WP core.
 	 *
 	 * @since 0.11.0
+	 * @since 3.0.0  Property has been renamed from `$unittest_class_exceptions` to `$unittest_hyphenation_exceptions`,
 	 *
 	 * @var array
 	 */
-	private $unittest_class_exceptions = array(
+	private $unittest_hyphenation_exceptions = array(
 		'class.wp-dependencies.inc' => true,
 		'class.wp-scripts.inc'      => true,
 		'class.wp-styles.inc'       => true,
+		'functions.wp-scripts.inc'  => true,
+		'functions.wp-styles.inc'   => true,
 	);
 
 	/**
@@ -126,7 +138,7 @@ final class FileNameSniff extends Sniff {
 	 */
 	public function register() {
 		if ( \defined( '\PHP_CODESNIFFER_IN_TESTS' ) ) {
-			$this->class_exceptions += $this->unittest_class_exceptions;
+			$this->hyphenation_exceptions += $this->unittest_hyphenation_exceptions;
 		}
 
 		return Collections::phpOpenTags();
@@ -212,7 +224,7 @@ final class FileNameSniff extends Sniff {
 
 		$expected = strtolower( preg_replace( '`[[:punct:]]`', '-', $name ) ) . $extension;
 		if ( $file_name === $expected
-			|| isset( $this->class_exceptions[ $file_name ] )
+			|| isset( $this->hyphenation_exceptions[ $file_name ] )
 		) {
 			return;
 		}
@@ -246,9 +258,7 @@ final class FileNameSniff extends Sniff {
 		$class_name = ObjectDeclarations::getName( $this->phpcsFile, $class_ptr );
 		$expected   = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . $extension;
 
-		if ( $file_name === $expected
-			|| isset( $this->class_exceptions[ $file_name ] )
-		) {
+		if ( $file_name === $expected ) {
 			return;
 		}
 
