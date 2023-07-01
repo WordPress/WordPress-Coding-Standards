@@ -43,6 +43,8 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Version numbers should be fully qualified.
 	 *
+	 * Last update: July 2023 for WP 6.3 at https://github.com/WordPress/wordpress-develop/commit/6281ce432c50345a57768bf53854d9b65b6cdd52
+	 *
 	 * @var array
 	 */
 	private $deprecated_classes = array(
@@ -53,8 +55,14 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 			'version' => '3.1.0',
 		),
 
+		// WP 3.7.0.
+		'WP_HTTP_Fsockopen' => array(
+			'alt'     => 'WP_HTTP::request()',
+			'version' => '3.7.0',
+		),
+
 		// WP 4.9.0.
-		'Customize_New_Menu_Section' => array(
+		'WP_Customize_New_Menu_Section' => array(
 			'version' => '4.9.0',
 		),
 		'WP_Customize_New_Menu_Control' => array(
@@ -62,12 +70,23 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 		),
 
 		// WP 5.3.0.
+		'WP_Privacy_Data_Export_Requests_Table' => array(
+			'alt'     => 'WP_Privacy_Data_Export_Requests_List_Table',
+			'version' => '5.3.0',
+		),
+		'WP_Privacy_Data_Removal_Requests_Table' => array(
+			'alt'     => 'WP_Privacy_Data_Removal_Requests_List_Table',
+			'version' => '5.3.0',
+		),
 		'Services_JSON' => array(
 			'alt'     => 'The PHP native JSON extension',
 			'version' => '5.3.0',
 		),
+		'Services_JSON_Error' => array(
+			'alt'     => 'The PHP native JSON extension',
+			'version' => '5.3.0',
+		),
 	);
-
 
 	/**
 	 * Groups of classes to restrict.

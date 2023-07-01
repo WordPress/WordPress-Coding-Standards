@@ -30,11 +30,11 @@ final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		$start_line = 9;
-		$end_line   = 20;
+		$end_line   = 25;
 		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
-		unset( $errors[16], $errors[19] );
+		unset( $errors[16], $errors[18], $errors[21] );
 
 		return $errors;
 	}
