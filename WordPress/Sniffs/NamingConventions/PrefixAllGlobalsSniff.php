@@ -218,6 +218,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		// Get a list of all PHP native functions.
 		$all_functions            = get_defined_functions();
 		$this->built_in_functions = array_flip( $all_functions['internal'] );
+		$this->built_in_functions = array_change_key_case( $this->built_in_functions, \CASE_LOWER );
 
 		// Set the sniff targets.
 		$targets  = array(
@@ -413,7 +414,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 
 					$item_name = FunctionDeclarations::getName( $this->phpcsFile, $stackPtr );
-					if ( isset( $this->built_in_functions[ $item_name ] ) ) {
+					$item_lc   = strtolower( $item_name );
+					if ( isset( $this->built_in_functions[ $item_lc ] ) ) {
 						// Backfill for PHP native function.
 						return;
 					}

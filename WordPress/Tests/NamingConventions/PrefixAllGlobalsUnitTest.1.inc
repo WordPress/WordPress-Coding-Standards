@@ -644,4 +644,11 @@ function acronym_only_check_global_statement_in_current_scope() {
 	$something = 'value'; // OK, global statement is in different scope.
 }
 
+/*
+ * Safeguard that function name comparisons for PHP native function polyfills are done case-insensitively.
+ */
+if ( function_exists( 'stripos' ) ) {
+	function striPos() {}
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
