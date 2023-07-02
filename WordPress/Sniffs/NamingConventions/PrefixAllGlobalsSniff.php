@@ -149,6 +149,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
+	 * Last update: July 2023 for WP 6.3 at https://github.com/WordPress/wordpress-develop/commit/6281ce432c50345a57768bf53854d9b65b6cdd52
+	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
 	 *
@@ -163,12 +165,12 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'COOKIE_DOMAIN'        => true,
 		'EMPTY_TRASH_DAYS'     => true,
 		'FORCE_SSL_ADMIN'      => true,
-		'FORCE_SSL_LOGIN'      => true,
+		'FORCE_SSL_LOGIN'      => true, // Deprecated.
 		'LOGGED_IN_COOKIE'     => true,
 		'MEDIA_TRASH'          => true,
-		'MUPLUGINDIR'          => true,
+		'MUPLUGINDIR'          => true, // Deprecated.
 		'PASS_COOKIE'          => true,
-		'PLUGINDIR'            => true,
+		'PLUGINDIR'            => true, // Deprecated.
 		'PLUGINS_COOKIE_PATH'  => true,
 		'RECOVERY_MODE_COOKIE' => true,
 		'SCRIPT_DEBUG'         => true,
@@ -187,11 +189,13 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'WP_DEBUG_DISPLAY'     => true,
 		'WP_DEBUG_LOG'         => true,
 		'WP_DEFAULT_THEME'     => true,
+		'WP_DEVELOPMENT_MODE'  => true,
 		'WP_MAX_MEMORY_LIMIT'  => true,
 		'WP_MEMORY_LIMIT'      => true,
 		'WP_PLUGIN_DIR'        => true,
 		'WP_PLUGIN_URL'        => true,
 		'WP_POST_REVISIONS'    => true,
+		'WP_START_TIMESTAMP'   => true,
 	);
 
 	/**
