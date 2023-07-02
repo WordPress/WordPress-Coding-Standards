@@ -63,25 +63,27 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Array of reserved post type names which can not be used by themes and plugins.
 	 *
+	 * Source: {@link https://developer.wordpress.org/reference/functions/register_post_type/#reserved-post-types}
+	 *
 	 * @since 2.2.0
 	 *
 	 * @var array
 	 */
 	protected $reserved_names = array(
-		'post'                => true,
-		'page'                => true,
+		'action'              => true, // Not a WP post type, but prevents other problems.
 		'attachment'          => true,
-		'revision'            => true,
-		'nav_menu_item'       => true,
+		'author'              => true, // Not a WP post type, but prevents other problems.
 		'custom_css'          => true,
 		'customize_changeset' => true,
+		'nav_menu_item'       => true,
 		'oembed_cache'        => true,
+		'order'               => true, // Not a WP post type, but prevents other problems.
+		'page'                => true,
+		'post'                => true,
+		'revision'            => true,
+		'theme'               => true, // Not a WP post type, but prevents other problems.
 		'user_request'        => true,
 		'wp_block'            => true,
-		'action'              => true,
-		'author'              => true,
-		'order'               => true,
-		'theme'               => true,
 	);
 
 	/**
