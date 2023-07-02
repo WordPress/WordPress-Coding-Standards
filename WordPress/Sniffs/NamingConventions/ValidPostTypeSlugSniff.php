@@ -65,6 +65,8 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Source: {@link https://developer.wordpress.org/reference/functions/register_post_type/#reserved-post-types}
 	 *
+	 * Last update: July 2023 for WP 6.3 at https://github.com/WordPress/wordpress-develop/commit/6281ce432c50345a57768bf53854d9b65b6cdd52
+	 *
 	 * @since 2.2.0
 	 *
 	 * @var array
@@ -84,6 +86,10 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		'theme'               => true, // Not a WP post type, but prevents other problems.
 		'user_request'        => true,
 		'wp_block'            => true,
+		'wp_global_styles'    => true,
+		'wp_navigation'       => true,
+		'wp_template'         => true,
+		'wp_template_part'    => true,
 	);
 
 	/**
