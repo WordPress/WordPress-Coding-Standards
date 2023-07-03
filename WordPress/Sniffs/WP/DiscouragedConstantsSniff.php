@@ -10,13 +10,11 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
-use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\PassedParameters;
-use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
-use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\ConstantsHelper;
 
 /**
  * Warns against usage of discouraged WP CONSTANTS and recommends alternatives.
@@ -66,32 +64,6 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Array of tokens which if found preceding the $stackPtr indicate that a T_STRING is not a constant.
-	 *
-	 * Additional tokens are added from within the contructor.
-	 *
-	 * @var array
-	 */
-	private $preceding_tokens_to_ignore = array(
-		\T_NAMESPACE       => true,
-		\T_USE             => true,
-		\T_EXTENDS         => true,
-		\T_IMPLEMENTS      => true,
-		\T_NEW             => true,
-		\T_FUNCTION        => true,
-		\T_INSTANCEOF      => true,
-		\T_GOTO            => true,
-	);
-
-	/**
-	 * Constructor to enrich a property.
-	 */
-	public function __construct() {
-		$this->preceding_tokens_to_ignore += Tokens::$ooScopeTokens;
-		$this->preceding_tokens_to_ignore += Collections::objectOperators();
-	}
-
-	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @since 0.14.0
@@ -129,60 +101,10 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 			return;
 		}
 
-		$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-		if ( false !== $next && \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code'] ) {
-			// Function call or declaration.
+		if ( ConstantsHelper::is_use_of_global_constant( $this->phpcsFile, $stackPtr ) === false ) {
 			return;
 		}
 
-		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false !== $prev && isset( $this->preceding_tokens_to_ignore[ $this->tokens[ $prev ]['code'] ] ) ) {
-			// Not the use of a constant.
-			return;
-		}
-
-		if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $stackPtr ) === true ) {
-			// Namespaced constant of the same name.
-			return;
-		}
-
-		if ( false !== $prev
-			&& \T_CONST === $this->tokens[ $prev ]['code']
-			&& true === Scopes::isOOConstant( $this->phpcsFile, $prev )
-		) {
-			// Class constant of the same name.
-			return;
-		}
-
-		/*
-		 * Deal with a number of variations of use statements.
-		 */
-		for ( $i = $stackPtr; $i > 0; $i-- ) {
-			if ( $this->tokens[ $i ]['line'] !== $this->tokens[ $stackPtr ]['line'] ) {
-				break;
-			}
-		}
-
-		$first_on_line = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
-		if ( false !== $first_on_line && \T_USE === $this->tokens[ $first_on_line ]['code'] ) {
-			$next_on_line = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $first_on_line + 1 ), null, true );
-			if ( false !== $next_on_line ) {
-				if ( \T_STRING === $this->tokens[ $next_on_line ]['code']
-					&& 'const' === $this->tokens[ $next_on_line ]['content']
-				) {
-					$has_ns_sep = $this->phpcsFile->findNext( \T_NS_SEPARATOR, ( $next_on_line + 1 ), $stackPtr );
-					if ( false !== $has_ns_sep ) {
-						// Namespaced const (group) use statement.
-						return;
-					}
-				} else {
-					// Not a const use statement.
-					return;
-				}
-			}
-		}
-
-		// Ok, this is really one of the discouraged constants.
 		$this->phpcsFile->addWarning(
 			'Found usage of constant "%s". Use %s instead.',
 			$stackPtr,
