@@ -9,6 +9,8 @@
 
 namespace WordPressCS\WordPress;
 
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
@@ -36,7 +38,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * @since 1.0.0 This property now expects to be passed an array.
 	 *              Previously a comma-delimited string was expected.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	public $exclude = array();
 
@@ -45,7 +47,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * Don't use this in extended classes, override getGroups() instead.
 	 * This is only used for Unit tests.
 	 *
-	 * @var array
+	 * @var array<string, array>
 	 */
 	public static $groups = array();
 
@@ -54,7 +56,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	protected $excluded_groups = array();
 
@@ -63,7 +65,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * @since 0.13.0
 	 *
-	 * @var array
+	 * @var array<string, array>
 	 */
 	protected $groups_cache = array();
 
@@ -94,13 +96,13 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 * Example: groups => array(
 	 *  'groupname' => array(
 	 *      'type'     => 'error' | 'warning',
-	 *      'message'  => 'Dont use this one please!',
+	 *      'message'  => 'Descriptive error message. The error message will be passed the $key and $val of the current array assignment.',
 	 *      'keys'     => array( 'key1', 'another_key' ),
 	 *      'callback' => array( 'class', 'method' ), // Optional.
 	 *  )
 	 * )
 	 *
-	 * @return array
+	 * @return array<string, array>
 	 */
 	abstract public function getGroups();
 
@@ -145,13 +147,16 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		$token = $this->tokens[ $stackPtr ];
 
 		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-			$equal = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), null, true );
-			if ( \T_EQUAL !== $this->tokens[ $equal ]['code'] ) {
-				return; // This is not an assignment!
+			$equalPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			if ( \T_EQUAL !== $this->tokens[ $equalPtr ]['code']
+				&& \T_COALESCE_EQUAL !== $this->tokens[ $equalPtr ]['code']
+			) {
+				// This is not an assignment. Bow out.
+				return;
 			}
 		}
 
-		// Instances: Multi-dimensional array, keyed by line.
+		// Instances: Multi-dimensional array.
 		$inst = array();
 
 		/*
@@ -159,28 +164,48 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		 * `$foo = array( 'bar' => 'taz' );`
 		 * `$foo['bar'] = $taz;`
 		 */
-		if ( \in_array( $token['code'], array( \T_CLOSE_SQUARE_BRACKET, \T_DOUBLE_ARROW ), true ) ) {
+		if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] || \T_DOUBLE_ARROW === $token['code'] ) {
 			$operator = $stackPtr; // T_DOUBLE_ARROW.
 			if ( \T_CLOSE_SQUARE_BRACKET === $token['code'] ) {
-				$operator = $this->phpcsFile->findNext( \T_EQUAL, ( $stackPtr + 1 ) );
+				$operator = $equalPtr;
 			}
 
-			$keyIdx = $this->phpcsFile->findPrevious( array( \T_WHITESPACE, \T_CLOSE_SQUARE_BRACKET ), ( $operator - 1 ), null, true );
-			if ( ! is_numeric( $this->tokens[ $keyIdx ]['content'] ) ) {
-				$key            = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
-				$valStart       = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $operator + 1 ), null, true );
-				$valEnd         = $this->phpcsFile->findNext( array( \T_COMMA, \T_SEMICOLON ), ( $valStart + 1 ), null, false, null, true );
-				$val            = $this->phpcsFile->getTokensAsString( $valStart, ( $valEnd - $valStart ) );
-				$val            = TextStrings::stripQuotes( $val );
-				$inst[ $key ][] = array( $val, $token['line'] );
+			$keyIdx = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+			if ( isset( Tokens::$stringTokens[ $this->tokens[ $keyIdx ]['code'] ] )
+				&& ! is_numeric( $this->tokens[ $keyIdx ]['content'] )
+			) {
+				$key      = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
+				$valStart = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true );
+				$valEnd   = $this->phpcsFile->findEndOfStatement( $valStart, \T_COLON );
+				if ( \T_COMMA === $this->tokens[ $valEnd ]['code']
+					|| \T_SEMICOLON === $this->tokens[ $valEnd ]['code']
+				) {
+					// FindEndOfStatement includes the comma/semi-colon if that's the end of the statement.
+					// That's not what we want (and inconsistent), so remove it.
+					--$valEnd;
+				}
+
+				$val          = trim( GetTokensAsString::compact( $this->phpcsFile, $valStart, $valEnd, true ) );
+				$inst[ $key ] = array(
+					'value'  => $val,
+					'line'   => $token['line'],
+					'keyptr' => $keyIdx,
+				);
 			}
-		} elseif ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
-			// Covers assignments via query parameters: `$foo = 'bar=taz&other=thing';`.
+		} elseif ( isset( Tokens::$stringTokens[ $token['code'] ] ) ) {
+			/*
+			 * Covers assignments via query parameters: `$foo = 'bar=taz&other=thing';`.
+			 */
 			if ( preg_match_all( '#(?:^|&)([a-z_]+)=([^&]*)#i', TextStrings::stripQuotes( $token['content'] ), $matches ) <= 0 ) {
 				return; // No assignments here, nothing to check.
 			}
-			foreach ( $matches[1] as $i => $_k ) {
-				$inst[ $_k ][] = array( $matches[2][ $i ], $token['line'] );
+
+			foreach ( $matches[1] as $match_nr => $key ) {
+				$inst[ $key ] = array(
+					'value'  => $matches[2][ $match_nr ],
+					'line'   => $token['line'],
+					'keyptr' => $stackPtr,
+				);
 			}
 		}
 
@@ -196,33 +221,29 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 
 			$callback = ( isset( $group['callback'] ) && is_callable( $group['callback'] ) ) ? $group['callback'] : array( $this, 'callback' );
 
-			foreach ( $inst as $key => $assignments ) {
-				foreach ( $assignments as $occurance ) {
-					list( $val, $line ) = $occurance;
-
-					if ( ! \in_array( $key, $group['keys'], true ) ) {
-						continue;
-					}
-
-					$output = \call_user_func( $callback, $key, $val, $line, $group );
-
-					if ( ! isset( $output ) || false === $output ) {
-						continue;
-					} elseif ( true === $output ) {
-						$message = $group['message'];
-					} else {
-						$message = $output;
-					}
-
-					MessageHelper::addMessage(
-						$this->phpcsFile,
-						$message,
-						$stackPtr,
-						( 'error' === $group['type'] ),
-						MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
-						array( $key, $val )
-					);
+			foreach ( $inst as $key => $assignment ) {
+				if ( ! \in_array( $key, $group['keys'], true ) ) {
+					continue;
 				}
+
+				$output = \call_user_func( $callback, $key, $assignment['value'], $assignment['line'], $group );
+
+				if ( ! isset( $output ) || false === $output ) {
+					continue;
+				} elseif ( true === $output ) {
+					$message = $group['message'];
+				} else {
+					$message = $output;
+				}
+
+				MessageHelper::addMessage(
+					$this->phpcsFile,
+					$message,
+					$assignment['keyptr'],
+					( 'error' === $group['type'] ),
+					MessageHelper::stringToErrorcode( $groupName . '_' . $key ),
+					array( $key, $assignment['value'] )
+				);
 			}
 		}
 	}
@@ -232,12 +253,13 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * This method must be extended to add the logic to check assignment value.
 	 *
-	 * @param  string $key   Array index / key.
-	 * @param  mixed  $val   Assigned value.
-	 * @param  int    $line  Token line.
-	 * @param  array  $group Group definition.
-	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
-	 *                       with custom error message passed to ->process().
+	 * @param string $key   Array index / key.
+	 * @param mixed  $val   Assigned value.
+	 * @param int    $line  Token line.
+	 * @param array  $group Group definition.
+	 *
+	 * @return mixed FALSE if no match, TRUE if matches, STRING if matches
+	 *               with custom error message passed to ->process().
 	 */
 	abstract public function callback( $key, $val, $line, $group );
 }
