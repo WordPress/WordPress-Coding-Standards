@@ -202,7 +202,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				break;
 			}
 
-			if ( strpos( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ), 'TRUNCATE ' ) === 0 ) {
+			if ( strpos( strtoupper( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ) ), 'TRUNCATE ' ) === 0 ) {
 				// Ignore queries to truncate the database as caching those is irrelevant and they need a direct db query.
 				return;
 			}

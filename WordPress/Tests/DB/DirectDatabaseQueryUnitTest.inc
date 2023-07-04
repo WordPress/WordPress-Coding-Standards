@@ -317,3 +317,13 @@ function stay_silent_for_truncate_query() {
 		)
 	);
 }
+
+function stay_silent_for_truncate_query_lowercase_sql_keywords() {
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare(
+			'truncate table `%1$s`',
+			plugin_get_table_name( 'Name' )
+		)
+	);
+}
