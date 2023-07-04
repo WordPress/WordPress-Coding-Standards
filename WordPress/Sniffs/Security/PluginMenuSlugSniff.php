@@ -51,50 +51,50 @@ final class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 	 *                                         keys and parameter names as the values
 	 */
 	protected $target_functions = array(
+		'add_comments_page'   => array(
+			4 => 'menu_slug',
+		),
+		'add_dashboard_page'  => array(
+			4 => 'menu_slug',
+		),
+		'add_links_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_management_page' => array(
+			4 => 'menu_slug',
+		),
+		'add_media_page'      => array(
+			4 => 'menu_slug',
+		),
 		'add_menu_page'       => array(
 			4 => 'menu_slug',
 		),
 		'add_object_page'     => array(
 			4 => 'menu_slug',
 		),
-		'add_utility_page'    => array(
+		'add_options_page'    => array(
+			4 => 'menu_slug',
+		),
+		'add_pages_page'      => array(
+			4 => 'menu_slug',
+		),
+		'add_plugins_page'    => array(
+			4 => 'menu_slug',
+		),
+		'add_posts_page'      => array(
 			4 => 'menu_slug',
 		),
 		'add_submenu_page'    => array(
 			1 => 'parent_slug',
 			5 => 'menu_slug',
 		),
-		'add_dashboard_page'  => array(
-			4 => 'menu_slug',
-		),
-		'add_posts_page'      => array(
-			4 => 'menu_slug',
-		),
-		'add_media_page'      => array(
-			4 => 'menu_slug',
-		),
-		'add_links_page'      => array(
-			4 => 'menu_slug',
-		),
-		'add_pages_page'      => array(
-			4 => 'menu_slug',
-		),
-		'add_comments_page'   => array(
-			4 => 'menu_slug',
-		),
 		'add_theme_page'      => array(
-			4 => 'menu_slug',
-		),
-		'add_plugins_page'    => array(
 			4 => 'menu_slug',
 		),
 		'add_users_page'      => array(
 			4 => 'menu_slug',
 		),
-		'add_management_page' => array(
-			4 => 'menu_slug',
-		),
-		'add_options_page'    => array(
+		'add_utility_page'    => array(
 			4 => 'menu_slug',
 		),
 	);
