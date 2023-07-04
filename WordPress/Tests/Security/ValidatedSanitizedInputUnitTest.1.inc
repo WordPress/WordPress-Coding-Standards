@@ -94,7 +94,7 @@ switch ( do_something( wp_unslash( $_POST['foo'] ) ) ) {} // Bad.
 
 // Sanitization is required even when the value is being escaped.
 echo esc_html( wp_unslash( $_POST['foo'] ) ); // Bad.
-echo esc_html( sanitize_text_field( wp_unslash( $_POST['foo'] ) ) ); // Ok.
+echo esc_html( Sanitize_Text_Field( wp_unslash( $_POST['foo'] ) ) ); // Ok.
 
 $current_tax_slug = isset( $_GET['a'] ) ? sanitize_key( $_GET['a'] ) : false; // Ok.
 $current_tax_slug = isset( $_GET['a'] ) ? $_GET['a'] : false; // Bad x 2
@@ -103,9 +103,9 @@ $current_tax_slug = isset( $_GET['a'] ) ? sanitize_text_field( wp_unslash( $_GET
 
 echo sanitize_text_field( $_POST['foo545'] ); // Error for no validation, unslashing.
 echo array_map( 'sanitize_text_field', $_GET['test'] ); // Bad, no unslashing.
-echo array_map( 'sanitize_key', $_GET['test'] ); // Ok.
+echo Array_Map( 'sanitize_key', $_GET['test'] ); // Ok.
 
-foo( absint( $_GET['foo'] ) ); // Ok.
+foo( AbsINT( $_GET['foo'] ) ); // Ok.
 $ids = array_map( 'absint', $_GET['test'] ); // Ok.
 
 if ( is_array( $_GET['test'] ) ) {} // Ok.
@@ -113,7 +113,7 @@ if ( is_array( $_GET['test'] ) ) {} // Ok.
 output( "some string \$_POST[some_var]" ); // Ok.
 output( "some string \\$_POST[some_var] $_GET[evil]" ); // Bad x2.
 
-echo esc_html( wp_strip_all_tags( wp_unslash( $_GET['a'] ) ) ); // Ok.
+echo esc_html( wp_strip_all_tags( WP_Unslash( $_GET['a'] ) ) ); // Ok.
 
 // Test validation check vs anonymous functions.
 isset( $_POST['abc'] ); // Validation in global scope, not function scope.

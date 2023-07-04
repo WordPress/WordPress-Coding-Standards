@@ -107,6 +107,6 @@ trait PrintingFunctionsTrait {
 			$this->addedCustomPrintingFunctions = $this->customPrintingFunctions;
 		}
 
-		return isset( $this->allPrintingFunctions[ $functionName ] );
+		return isset( $this->allPrintingFunctions[ strtolower( $functionName ) ] );
 	}
 }

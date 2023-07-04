@@ -220,7 +220,7 @@ trait SanitizingFunctionsTrait {
 	 * @return bool
 	 */
 	public function is_sanitizing_function( $functionName ) {
-		return isset( $this->get_sanitizing_functions()[ $functionName ] );
+		return isset( $this->get_sanitizing_functions()[ strtolower( $functionName ) ] );
 	}
 
 	/**
@@ -233,6 +233,6 @@ trait SanitizingFunctionsTrait {
 	 * @return bool
 	 */
 	public function is_sanitizing_and_unslashing_function( $functionName ) {
-		return isset( $this->get_sanitizing_and_unslashing_functions()[ $functionName ] );
+		return isset( $this->get_sanitizing_and_unslashing_functions()[ strtolower( $functionName ) ] );
 	}
 }

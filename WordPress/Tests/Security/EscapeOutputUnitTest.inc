@@ -15,7 +15,7 @@ while ( have_posts() ) {
 ?>
 
 <h2><?php echo $title; // Bad. ?></h2>
-<h2><?php echo esc_html( $title ); // OK. ?></h2>
+<h2><?php echo esc_HTML( $title ); // OK. ?></h2>
 <h2><?php echo apply_filters( 'the_title', $title ); // Bad, no escaping function. ?></h2>
 
 <?php
@@ -128,7 +128,7 @@ echo $html_fragment; // WPCS: XSS whitelist.
 ?><?php echo $html_fragment; // XSS pass. ?><?php
 
 _deprecated_function( __FUNCTION__, '1.3.0', 'another_func' ); // Ok.
-_deprecated_function( __FUNCTION__, '1.3.0', $another_func ); // Bad.
+_Deprecated_Function( __FUNCTION__, '1.3.0', $another_func ); // Bad.
 _deprecated_function( __FUNCTION__, '1.3.0', esc_html( $another_func ) ); // Ok.
 _deprecated_file( __FILE__, '1.3.0' ); // Ok.
 _deprecated_argument( __METHOD__, '1.3.0', 'The $arg is deprecated.' ); // Ok.
@@ -138,7 +138,7 @@ _doing_it_wrong( __METHOD__, "Invalid value for the 'bob' argument " . esc_html(
 trigger_error( "There was an error: {$message}", E_USER_NOTICE ); // Bad.
 trigger_error( "There was an error: " . esc_html( $message ), E_USER_NOTICE ); // Ok.
 
-echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . esc_url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>'; // Ok.
+echo '<p>' . sprintf( esc_html__( 'Some text -> %sLink text%s', 'textdomain' ), '<a href="' . Esc_Url( add_query_arg( array( 'page' => 'my_page' ), admin_url( 'admin.php' ) ) ) . '">', '</a>' ). '</p>'; // Ok.
 
 echo '<br/><strong>' . sprintf( esc_html__( 'Found %d results', 'textdomain' ), (int) $result_count ) . '</strong><br/><br/>'; // Ok.
 
@@ -171,7 +171,7 @@ echo implode( '<br>', urlencode_deep( $items ) ); // Ok.
 echo implode( '<br>', array_map( 'esc_html', $items ) ); // Ok.
 echo implode( '<br>', array_map( 'foo', $items ) ); // Bad.
 echo join( '<br>', $items ); // Bad.
-echo join( '<br>', array_map( 'esc_html', $items ) ); // Ok.
+echo join( '<br>', Array_Map( 'esc_html', $items ) ); // Ok.
 
 echo '<option name="' . esc_attr( $name ) . '"' .
      ( $name === $selected ? ' selected' : '' ) .
@@ -261,7 +261,7 @@ echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
 echo PHP_VERSION_ID, PHP_VERSION, PHP_EOL, PHP_EXTRA_VERSION; // OK.
 
 trigger_error( 'DEBUG INFO - ' . __METHOD__ . '::internal_domains: domain = ' . $domain ); // Bad.
-trigger_error( $domain ); // Bad.
+Trigger_ERROR( $domain ); // Bad.
 
 vprintf( 'Hello %s', [ $foo ] ); // Bad.
 vprintf( 'Hello %s', [ esc_html( $foo ) ] ); // Ok.
@@ -303,7 +303,7 @@ _deprecated_file(); // Ignore.
 
 // Issue #1246.
 echo antispambot( 'john.doe@mysite.com' ); // OK.
-echo antispambot( esc_html( $email ) ); // OK.
+echo antiSpambot( esc_html( $email ) ); // OK.
 echo antispambot( $email ); // Bad.
 
 /*
