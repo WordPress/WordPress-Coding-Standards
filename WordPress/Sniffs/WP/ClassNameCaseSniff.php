@@ -630,6 +630,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 * @param string $group_name      The name of the group which was matched. Will
 	 *                                always be 'wp_classes'.
 	 * @param string $matched_content The token content (class name) which was matched.
+	 *                                in its original case.
 	 *
 	 * @return void
 	 */

@@ -262,7 +262,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return void
 	 */
@@ -293,7 +294,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return void
 	 */
@@ -318,7 +320,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
@@ -408,7 +411,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 * @since 3.0.0 Check moved from the `process_matched_token()` method to this method.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      The parameters array.
 	 * @param int    $expected_count  The expected number of passed arguments.
 	 *
@@ -434,7 +438,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 * @since 3.0.0 Most of the logic in this method used to be contained in the, now removed, `check_argument_tokens()` method.
 	 *
 	 * @param int         $stackPtr        The position of the current token in the stack.
-	 * @param string      $matched_content The token content (function name) which was matched.
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
 	 *                                     as received from the PassedParemeters class.
@@ -534,7 +539,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0 The logic in this method used to be contained in the, now removed, `check_argument_tokens()` method.
 	 *
-	 * @param string      $matched_content The token content (function name) which was matched.
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
 	 *                                     as received from the PassedParemeters class.
@@ -625,7 +631,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0 The logic in this method used to be contained in the, now removed, `check_text()` method.
 	 *
-	 * @param string      $matched_content The token content (function name) which was matched.
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
 	 *                                     as received from the PassedParemeters class.
@@ -706,7 +713,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0 The logic in this method used to be contained in the, now removed, `check_text()` method.
 	 *
-	 * @param string      $matched_content The token content (function name) which was matched.
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
 	 *                                     as received from the PassedParemeters class.
@@ -740,7 +748,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0 The logic in this method used to be contained in the, now removed, `check_text()` method.
 	 *
-	 * @param string      $matched_content The token content (function name) which was matched.
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
 	 *                                     as received from the PassedParemeters class.
@@ -839,7 +848,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *              - The method visibility has been changed from `protected` to `private`.
 	 *
 	 * @param int    $stackPtr        The position of the gettext call token in the stack.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void

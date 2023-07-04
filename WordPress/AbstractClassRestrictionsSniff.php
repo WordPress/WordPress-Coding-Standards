@@ -192,6 +192,26 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	}
 
 	/**
+	 * Process a matched token.
+	 *
+	 * @since 0.11.0 Split out from the `process()` method.
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in it original case.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 *
+	 * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+	 */
+	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+		parent::process_matched_token( $stackPtr, $group_name, $matched_content );
+	}
+	// phpcs:enable
+
+	/**
 	 * Prepare the class name for use in a regular expression.
 	 *
 	 * The getGroups() method allows for providing class names with a wildcard * to target

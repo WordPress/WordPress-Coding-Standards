@@ -352,14 +352,14 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param array  $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$function_name_lc = strtolower( $matched_content );
-		$function_details = $this->target_functions[ $function_name_lc ];
+		$function_details = $this->target_functions[ $matched_content ];
 
 		$parameter = PassedParameters::getParameterFromStack(
 			$parameters,
