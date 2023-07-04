@@ -94,8 +94,8 @@ final class StrictInArraySniff extends AbstractFunctionParameterSniff {
 		 * this code will need to be adjusted to handle those.
 		 */
 		if ( false === $param_info['always_needed'] ) {
-			$has_search = PassedParameters::getParameterFromStack( $parameters, 2, 'filter_value' );
-			if ( false === $has_search ) {
+			$has_filter_value = PassedParameters::getParameterFromStack( $parameters, 2, 'filter_value' );
+			if ( false === $has_filter_value ) {
 				return;
 			}
 		}
