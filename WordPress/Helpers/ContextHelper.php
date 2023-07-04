@@ -34,11 +34,11 @@ final class ContextHelper {
 	 *
 	 * @since 1.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
-	 *              - The property visibility was changed from `protected` to `public static`.
+	 *              - The property visibility was changed from `protected` to `private static`.
 	 *
 	 * @var array
 	 */
-	public static $safe_casts = array(
+	private static $safe_casts = array(
 		\T_INT_CAST    => true,
 		\T_DOUBLE_CAST => true,
 		\T_BOOL_CAST   => true,
@@ -304,6 +304,17 @@ final class ContextHelper {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Retrieve a list of the tokens which are regarded as "safe casts".
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array<string, bool>
+	 */
+	public static function get_safe_cast_tokens() {
+		return self::$safe_casts;
 	}
 
 	/**
