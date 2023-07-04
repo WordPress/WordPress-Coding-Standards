@@ -96,10 +96,9 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 	 *
 	 * Example: groups => array(
 	 *  'groupname' => array(
-	 *      'type'     => 'error' | 'warning',
-	 *      'message'  => 'Descriptive error message. The error message will be passed the $key and $val of the current array assignment.',
-	 *      'keys'     => array( 'key1', 'another_key' ),
-	 *      'callback' => array( 'class', 'method' ), // Optional.
+	 *      'type'    => 'error' | 'warning',
+	 *      'message' => 'Descriptive error message. The error message will be passed the $key and $val of the current array assignment.',
+	 *      'keys'    => array( 'key1', 'another_key' ),
 	 *  )
 	 * )
 	 *
@@ -220,14 +219,12 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 				continue;
 			}
 
-			$callback = ( isset( $group['callback'] ) && is_callable( $group['callback'] ) ) ? $group['callback'] : array( $this, 'callback' );
-
 			foreach ( $inst as $key => $assignment ) {
 				if ( ! \in_array( $key, $group['keys'], true ) ) {
 					continue;
 				}
 
-				$output = \call_user_func( $callback, $key, $assignment['value'], $assignment['line'], $group );
+				$output = \call_user_func( array( $this, 'callback' ), $key, $assignment['value'], $assignment['line'], $group );
 
 				if ( ! isset( $output ) || false === $output ) {
 					continue;
