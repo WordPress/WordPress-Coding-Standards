@@ -63,9 +63,6 @@ trait MinimumWPVersionTrait {
 	 *               - The property has been renamed from `$minimum_supported_version` to `$minimum_wp_version`.
 	 *               - The CLI option has been renamed from `minimum_supported_wp_version` to `minimum_wp_version`.
 	 *
-	 * @internal When the value of this property is changed, it will also need
-	 *           to be changed in the `WP/AlternativeFunctionsUnitTest.inc` file.
-	 *
 	 * @var string WordPress version.
 	 */
 	public $minimum_wp_version;
