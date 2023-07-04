@@ -96,7 +96,7 @@ trait IsUnitTestTrait {
 
 		// PHPUnit native test cases.
 		'PHPUnit_Framework_TestCase'                 => true,
-		'PHPUnit\Framework\TestCase'                 => true,
+		'PHPUnit\\Framework\\TestCase'               => true,
 		// PHPUnit native TestCase class when imported via use statement.
 		'TestCase'                                   => true,
 	);
@@ -143,9 +143,15 @@ trait IsUnitTestTrait {
 				}
 			}
 
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_test_classes = array_map( 'strtolower', $custom_test_classes );
+			$known_test_classes  = array_change_key_case( $this->known_test_classes, \CASE_LOWER );
+
 			$this->all_test_classes = RulesetPropertyHelper::merge_custom_array(
 				$custom_test_classes,
-				$this->known_test_classes
+				$known_test_classes
 			);
 
 			// Store the original value so the comparison can succeed.
@@ -184,15 +190,19 @@ trait IsUnitTestTrait {
 		// Add any potentially extra custom test classes to the known test classes list.
 		$known_test_classes = $this->get_all_test_classes();
 
+		$namespace = strtolower( Namespaces::determineNamespace( $phpcsFile, $stackPtr ) );
+
 		// Is the class/trait one of the known test classes ?
-		$namespace = Namespaces::determineNamespace( $phpcsFile, $stackPtr );
 		$className = ObjectDeclarations::getName( $phpcsFile, $stackPtr );
-		if ( '' !== $namespace ) {
-			if ( isset( $known_test_classes[ $namespace . '\\' . $className ] ) ) {
+		if ( empty( $className ) === false ) {
+			$className = strtolower( $className );
+			if ( '' !== $namespace ) {
+				if ( isset( $known_test_classes[ $namespace . '\\' . $className ] ) ) {
+					return true;
+				}
+			} elseif ( isset( $known_test_classes[ $className ] ) ) {
 				return true;
 			}
-		} elseif ( isset( $known_test_classes[ $className ] ) ) {
-			return true;
 		}
 
 		// Does the class/trait extend one of the known test classes ?
@@ -200,6 +210,8 @@ trait IsUnitTestTrait {
 		if ( false === $extendedClassName ) {
 			return false;
 		}
+
+		$extendedClassName = strtolower( $extendedClassName );
 
 		if ( '\\' === $extendedClassName[0] ) {
 			if ( isset( $known_test_classes[ substr( $extendedClassName, 1 ) ] ) ) {
