@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\BCFile;
 use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\TextStrings;
@@ -176,7 +177,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 			) {
 				$key      = TextStrings::stripQuotes( $this->tokens[ $keyIdx ]['content'] );
 				$valStart = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $operator + 1 ), null, true );
-				$valEnd   = $this->phpcsFile->findEndOfStatement( $valStart, \T_COLON );
+				$valEnd   = BCFile::findEndOfStatement( $this->phpcsFile, $valStart, \T_COLON );
 				if ( \T_COMMA === $this->tokens[ $valEnd ]['code']
 					|| \T_SEMICOLON === $this->tokens[ $valEnd ]['code']
 				) {
