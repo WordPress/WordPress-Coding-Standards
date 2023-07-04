@@ -43,7 +43,11 @@ final class DeprecationHelper {
 	 * @return bool
 	 */
 	public static function is_function_deprecated( File $phpcsFile, $stackPtr ) {
-		$tokens                  = $phpcsFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
 		$ignore                  = Tokens::$methodPrefixes;
 		$ignore[ \T_WHITESPACE ] = \T_WHITESPACE;
 

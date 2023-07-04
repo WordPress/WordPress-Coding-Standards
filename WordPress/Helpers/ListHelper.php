@@ -53,7 +53,7 @@ final class ListHelper {
 		$tokens = $phpcsFile->getTokens();
 
 		// Is this one of the tokens this function handles ?
-		if ( isset( Collections::listOpenTokensBC()[ $tokens[ $stackPtr ]['code'] ] ) === false ) {
+		if ( isset( $tokens[ $stackPtr ], Collections::listOpenTokensBC()[ $tokens[ $stackPtr ]['code'] ] ) === false ) {
 			return array();
 		}
 

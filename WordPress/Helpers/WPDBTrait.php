@@ -50,8 +50,10 @@ trait WPDBTrait {
 	 * @return bool Whether this is a $wpdb method call.
 	 */
 	protected function is_wpdb_method_call( File $phpcsFile, $stackPtr, $target_methods ) {
-
 		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
 
 		// Check for wpdb.
 		if ( ( \T_VARIABLE === $tokens[ $stackPtr ]['code'] && '$wpdb' !== $tokens[ $stackPtr ]['content'] )
