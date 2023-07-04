@@ -1520,7 +1520,8 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched. Will
 	 *                                always be 'deprecated_functions'.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return void
 	 */
@@ -1528,24 +1529,22 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 		$this->set_minimum_wp_version();
 
-		$function_name = strtolower( $matched_content );
-
 		$message = '%s() has been deprecated since WordPress version %s.';
 		$data    = array(
-			$matched_content,
-			$this->deprecated_functions[ $function_name ]['version'],
+			$this->tokens[ $stackPtr ]['content'],
+			$this->deprecated_functions[ $matched_content ]['version'],
 		);
 
-		if ( ! empty( $this->deprecated_functions[ $function_name ]['alt'] ) ) {
+		if ( ! empty( $this->deprecated_functions[ $matched_content ]['alt'] ) ) {
 			$message .= ' Use %s instead.';
-			$data[]   = $this->deprecated_functions[ $function_name ]['alt'];
+			$data[]   = $this->deprecated_functions[ $matched_content ]['alt'];
 		}
 
 		MessageHelper::addMessage(
 			$this->phpcsFile,
 			$message,
 			$stackPtr,
-			( $this->wp_version_compare( $this->deprecated_functions[ $function_name ]['version'], $this->minimum_wp_version, '<' ) ),
+			( $this->wp_version_compare( $this->deprecated_functions[ $matched_content ]['version'], $this->minimum_wp_version, '<' ) ),
 			MessageHelper::stringToErrorcode( $matched_content . 'Found' ),
 			$data
 		);

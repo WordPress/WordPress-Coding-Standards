@@ -218,7 +218,8 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
@@ -243,7 +244,8 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameter       Array with start and end token positon of the parameter.
 	 * @param array  $parameter_args  Array with alternative and WordPress deprecation version of the parameter.
 	 *
