@@ -1,3 +1,3 @@
 <?php
 
-class WP_Styles {}
+// WP Core file no longer contains a class.

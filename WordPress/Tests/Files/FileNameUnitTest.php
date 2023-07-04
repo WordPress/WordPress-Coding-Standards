@@ -40,6 +40,9 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		'SomeFile.inc'                               => 1,
 		'some-File.inc'                              => 1,
 		'SomeView.inc'                               => 1,
+		'class.with.dot.not.underscore.inc'          => 2,
+		'class@with#other+punctuation.inc'           => 2,
+		'class-wrong-with-different-extension.php3'  => 1,
 
 		// Class file names.
 		'my-class.inc'                               => 1,
@@ -76,23 +79,23 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		'test-sample-phpunit6.inc'                   => 0,
 		'test-sample-phpunit6-case-insensitive.inc'  => 0,
 		'test-sample-wpunit.inc'                     => 0,
-		'test-sample-custom-unit.1.inc'              => 0,
-		'test-sample-custom-unit.2.inc'              => 0,
-		'test-sample-custom-unit.3.inc'              => 0,
-		'test-sample-custom-unit.4.inc'              => 0,
-		'test-sample-custom-unit.5.inc'              => 1, // Namespaced vs non-namespaced.
-		'test-sample-namespaced-declaration.1.inc'   => 0,
-		'test-sample-namespaced-declaration.2.inc'   => 1, // Namespaced vs non-namespaced.
-		'test-sample-namespaced-declaration.3.inc'   => 1, // Wrong namespace.
-		'test-sample-namespaced-declaration.4.inc'   => 1, // Non-namespaced vs namespaced.
-		'test-sample-global-namespace-extends.1.inc' => 0, // Prefixed user input.
-		'test-sample-global-namespace-extends.2.inc' => 1, // Non-namespaced vs namespaced.
+		'test-sample-custom-unit-1.inc'              => 0,
+		'test-sample-custom-unit-2.inc'              => 0,
+		'test-sample-custom-unit-3.inc'              => 0,
+		'test-sample-custom-unit-4.inc'              => 0,
+		'test-sample-custom-unit-5.inc'              => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-declaration-1.inc'   => 0,
+		'test-sample-namespaced-declaration-2.inc'   => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-declaration-3.inc'   => 1, // Wrong namespace.
+		'test-sample-namespaced-declaration-4.inc'   => 1, // Non-namespaced vs namespaced.
+		'test-sample-global-namespace-extends-1.inc' => 0, // Prefixed user input.
+		'test-sample-global-namespace-extends-2.inc' => 1, // Non-namespaced vs namespaced.
 		'test-sample-extends-with-use.inc'           => 0,
-		'test-sample-namespaced-extends.1.inc'       => 0,
-		'test-sample-namespaced-extends.2.inc'       => 1, // Wrong namespace.
-		'test-sample-namespaced-extends.3.inc'       => 1, // Namespaced vs non-namespaced.
-		'test-sample-namespaced-extends.4.inc'       => 1, // Non-namespaced vs namespaced.
-		'test-sample-namespaced-extends.5.inc'       => 0,
+		'test-sample-namespaced-extends-1.inc'       => 0,
+		'test-sample-namespaced-extends-2.inc'       => 1, // Wrong namespace.
+		'test-sample-namespaced-extends-3.inc'       => 1, // Namespaced vs non-namespaced.
+		'test-sample-namespaced-extends-4.inc'       => 1, // Non-namespaced vs namespaced.
+		'test-sample-namespaced-extends-5.inc'       => 0,
 		'Test_Sample.inc'                            => 0,
 
 		/*
@@ -130,6 +133,11 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 
 		$sep        = \DIRECTORY_SEPARATOR;
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', \GLOB_BRACE );
+
+		$php3_test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.php3', \GLOB_BRACE );
+		foreach ( $php3_test_files as $file ) {
+			$test_files[] = $file;
+		}
 
 		if ( ! empty( $test_files ) ) {
 			return $test_files;
