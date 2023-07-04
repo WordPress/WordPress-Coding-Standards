@@ -317,3 +317,18 @@ function stay_silent_for_truncate_query() {
 		)
 	);
 }
+
+function stay_silent_for_truncate_query_lowercase_sql_keywords() {
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare(
+			'truncate table `%1$s`',
+			plugin_get_table_name( 'Name' )
+		)
+	);
+}
+
+function method_names_are_caseinsensitive() {
+	global $wpdb;
+	$autoload = $wpdb->Get_Var( $wpdb->Prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // Warning x 2.
+}

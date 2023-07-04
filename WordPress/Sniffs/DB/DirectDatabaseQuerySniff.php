@@ -185,7 +185,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		$methodPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $is_object_call + 1 ), null, true );
-		$method    = $this->tokens[ $methodPtr ]['content'];
+		$method    = strtolower( $this->tokens[ $methodPtr ]['content'] );
 
 		$this->mergeFunctionLists();
 
@@ -202,7 +202,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				break;
 			}
 
-			if ( strpos( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ), 'TRUNCATE ' ) === 0 ) {
+			if ( strpos( strtoupper( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ) ), 'TRUNCATE ' ) === 0 ) {
 				// Ignore queries to truncate the database as caching those is irrelevant and they need a direct db query.
 				return;
 			}
