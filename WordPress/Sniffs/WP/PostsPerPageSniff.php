@@ -30,8 +30,6 @@ use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 
 	/**
-	 * Posts per page property
-	 *
 	 * Posts per page limit to check against.
 	 *
 	 * @since 0.14.0
