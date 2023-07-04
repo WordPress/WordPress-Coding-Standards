@@ -185,7 +185,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		$methodPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $is_object_call + 1 ), null, true );
-		$method    = $this->tokens[ $methodPtr ]['content'];
+		$method    = strtolower( $this->tokens[ $methodPtr ]['content'] );
 
 		$this->mergeFunctionLists();
 

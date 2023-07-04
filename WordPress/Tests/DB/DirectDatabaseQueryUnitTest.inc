@@ -327,3 +327,8 @@ function stay_silent_for_truncate_query_lowercase_sql_keywords() {
 		)
 	);
 }
+
+function method_names_are_caseinsensitive() {
+	global $wpdb;
+	$autoload = $wpdb->Get_Var( $wpdb->Prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // Warning x 2.
+}
