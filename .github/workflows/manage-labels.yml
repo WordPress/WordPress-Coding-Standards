@@ -21,8 +21,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
-            Status: Awaiting Feedback
-            Status: Review Ready
+            Status: Awaiting feedback
+            Status: Review ready
 
   on-pr-close:
     runs-on: ubuntu-latest
@@ -35,9 +35,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
-            Status: Awaiting Feedback
-            Status: close candidate
-            Status: Review Ready
+            Status: Awaiting feedback
+            Status: Close candidate
+            Status: Review ready
 
   on-issue-close:
     runs-on: ubuntu-latest
@@ -50,8 +50,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
-            Status: Awaiting Feedback
-            Status: close candidate
-            Status: help wanted
-            Status: good first issue
-            Status: PR Exists
+            Status: Awaiting feedback
+            Status: Close candidate
+            Status: Good first issue
+            Status: Help wanted
