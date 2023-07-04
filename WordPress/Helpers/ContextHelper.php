@@ -115,8 +115,8 @@ final class ContextHelper {
 	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
-	 * @internal Note: this may still mistake a namespaced function imported via a `use` statement for
-	 * a global function!
+	 * {@internal Note: this may still mistake a namespaced function imported via a `use` statement for
+	 * a global function!}
 	 *
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
@@ -141,8 +141,8 @@ final class ContextHelper {
 	/**
 	 * Check if a particular token is prefixed with a namespace.
 	 *
-	 * @internal This will give a false positive if the file is not namespaced and the token is prefixed
-	 * with `namespace\`.
+	 * {@internal This will give a false positive if the file is not namespaced and the token is prefixed
+	 * with `namespace\`.}
 	 *
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.

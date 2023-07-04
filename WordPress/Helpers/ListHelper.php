@@ -34,8 +34,8 @@ final class ListHelper {
 	/**
 	 * Get a list of the token pointers to the variables being assigned to in a list statement.
 	 *
-	 * @internal No need to take special measures for nested lists. Nested or not,
-	 * each list part can only contain one variable being written to.
+	 * {@internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.}
 	 *
 	 * @since 2.2.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.

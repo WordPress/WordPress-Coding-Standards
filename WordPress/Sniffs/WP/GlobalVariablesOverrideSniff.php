@@ -163,8 +163,8 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 	/**
 	 * Check that global variables declared via a list construct are prefixed.
 	 *
-	 * @internal No need to take special measures for nested lists. Nested or not,
-	 * each list part can only contain one variable being written to.
+	 * {@internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.}
 	 *
 	 * @since 2.2.0
 	 *
