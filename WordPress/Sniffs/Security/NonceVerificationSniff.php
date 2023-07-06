@@ -75,7 +75,8 @@ class NonceVerificationSniff extends Sniff {
 	 *
 	 * @since 0.5.0
 	 * @since 0.11.0 Changed from public static to protected non-static.
-	 * @since 3.0.0  Moved from the generic `Sniff` class to this class.
+	 * @since 3.0.0  - Moved from the generic `Sniff` class to this class.
+	 *               - Visibility changed from `protected` to `private.
 	 *
 	 * @var array
 	 */
@@ -141,7 +142,8 @@ class NonceVerificationSniff extends Sniff {
 	 * Check if this token has an associated nonce check.
 	 *
 	 * @since 0.5.0
-	 * @since 3.0.0  Moved from the generic `Sniff` class to this class.
+	 * @since 3.0.0 - Moved from the generic `Sniff` class to this class.
+	 *              - Visibility changed from `protected` to `private.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack of tokens.
 	 *

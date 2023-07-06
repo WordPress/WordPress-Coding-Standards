@@ -171,7 +171,8 @@ trait IsUnitTestTrait {
 	 *
 	 * @since 0.12.0 Split off from the `is_token_in_test_method()` method.
 	 * @since 1.0.0  Improved recognition of namespaced class names.
-	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
+	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
+	 *               - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The position of the token to be examined.
