@@ -34,7 +34,8 @@ final class SnakeCaseHelper {
 	 * @since 2.0.0 Moved from the `WordPress.NamingConventions.ValidFunctionName` sniff
 	 *              to this class, renamed from `get_name_suggestion` and made static
 	 *              so it can also be used by classes which don't extend this class.
-	 * @since 3.0.0 Moved from the Sniff class to this class.
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - Renamed from `get_snake_case_name_suggestion()` to `get_suggestion()`.
 	 *
 	 * @param string $name The construct name.
 	 *

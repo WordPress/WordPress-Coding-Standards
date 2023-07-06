@@ -120,7 +120,9 @@ final class ContextHelper {
 	 *
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method was renamed from `is_class_object_call() to `has_object_operator_before()`.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.
@@ -147,6 +149,7 @@ final class ContextHelper {
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.
@@ -189,6 +192,8 @@ final class ContextHelper {
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
+	 *              - The `$global` parameter was renamed to `$global_function`.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile       The file being scanned.
 	 * @param int                         $stackPtr        The index of the token in the stack.
@@ -263,6 +268,7 @@ final class ContextHelper {
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.
@@ -286,6 +292,7 @@ final class ContextHelper {
 	 *              in function calls to array_key_exists() and key_exists() as well.
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.
@@ -331,6 +338,7 @@ final class ContextHelper {
 	 * @since 0.5.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.
@@ -354,6 +362,7 @@ final class ContextHelper {
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.

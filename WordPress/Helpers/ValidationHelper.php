@@ -84,7 +84,8 @@ final class ValidationHelper {
 	 * @since 2.1.0 Stricter check on whether the correct variable and the correct
 	 *              array keys are being validated.
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
-	 *              - Visibility changed from protected to public static.
+	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile         The file being scanned.
 	 * @param int                         $stackPtr          The index of this token in the stack.

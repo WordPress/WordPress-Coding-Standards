@@ -39,7 +39,7 @@ final class VariableHelper {
 	 * @since 2.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - Visibility is now `public` (was `protected`) and the method `static`.
-	 *              - The $phpcsFile parameter was added.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the variable token in the stack.
@@ -101,7 +101,7 @@ final class VariableHelper {
 	 * @since 2.1.0 Now uses get_array_access_keys() under the hood.
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - Visibility is now `public` (was `protected`) and the method `static`.
-	 *              - The $phpcsFile parameter was added.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the variable token in the stack.
@@ -128,7 +128,7 @@ final class VariableHelper {
 	 * @since 2.1.0 Added the $include_coalesce parameter.
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - Visibility is now `public` (was `protected`) and the method `static`.
-	 *              - The $phpcsFile parameter was added.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile        The file being scanned.
 	 * @param int                         $stackPtr         The index of this token in the stack.
@@ -198,7 +198,7 @@ final class VariableHelper {
 	 * @since 0.5.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - Visibility is now `public` (was `protected`) and the method `static`.
-	 *              - The $phpcsFile parameter was added.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The index of the token in the stack.

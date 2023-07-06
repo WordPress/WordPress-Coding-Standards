@@ -38,6 +38,7 @@ final class ConstantsHelper {
 	 * @since 1.0.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method was changed to be `static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The position of the function call token.

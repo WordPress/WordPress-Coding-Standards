@@ -40,6 +40,7 @@ final class ListHelper {
 	 * @since 2.2.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The method visibility was changed from `protected` to `public static`.
+	 *              - The `$phpcsFile` parameter was added.
 	 *              - The `$list_open_close` parameter was dropped.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.

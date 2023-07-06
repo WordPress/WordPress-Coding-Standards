@@ -37,7 +37,7 @@ trait WPDBTrait {
 	 *               vars are automatically updated.
 	 * @since 0.14.0 Moved this method from the `PreparedSQL` sniff to the base WP sniff.
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
-	 *               - The $phpcsFile parameter was added.
+	 *               - The `$phpcsFile` parameter was added.
 	 *
 	 * {@internal This method should be refactored to not exhibit "magic" behaviour
 	 *            for properties in the sniff class(es) using it.}}
