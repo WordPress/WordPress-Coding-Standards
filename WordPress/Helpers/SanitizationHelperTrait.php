@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
@@ -338,14 +339,8 @@ trait SanitizationHelperTrait {
 			return false;
 		}
 
-		// Get the function that it's in.
-		$nested_parenthesis = $tokens[ $stackPtr ]['nested_parenthesis'];
-		$nested_openers     = array_keys( $nested_parenthesis );
-		$function_opener    = array_pop( $nested_openers );
-		$functionPtr        = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $function_opener - 1 ), null, true, null, true );
-
 		// If it is just being unset, the value isn't used at all, so it's safe.
-		if ( \T_UNSET === $tokens[ $functionPtr ]['code'] ) {
+		if ( Context::inUnset( $phpcsFile, $stackPtr ) ) {
 			return true;
 		}
 
