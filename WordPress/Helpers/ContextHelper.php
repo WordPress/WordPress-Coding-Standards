@@ -23,6 +23,8 @@ use PHPCSUtils\Utils\PassedParameters;
  * This also means that it has no promise of backward compatibility. Use at your own risk.
  * ---------------------------------------------------------------------------------------------
  *
+ * @internal
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The methods in this class were previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and have been moved here.
