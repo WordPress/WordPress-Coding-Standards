@@ -27,6 +27,9 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.5.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
+ *
+ * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
+ * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
  */
 class NonceVerificationSniff extends Sniff {
 
