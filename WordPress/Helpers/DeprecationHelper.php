@@ -23,6 +23,8 @@ use PHP_CodeSniffer\Util\Tokens;
  * {@internal The functionality in this class will likely be replaced at some point in
  * the future by functions from PHPCSUtils.}
  *
+ * @internal
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The method in this class was previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and has been moved here.

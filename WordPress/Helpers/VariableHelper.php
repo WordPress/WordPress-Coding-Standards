@@ -25,6 +25,8 @@ use PHPCSUtils\Utils\Parentheses;
  * {@internal The functionality in this class will likely be replaced at some point in
  * the future by functions from PHPCSUtils.}
  *
+ * @internal
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The methods in this class were previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and have been moved here.
