@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 use WordPressCS\WordPress\Helpers\ValidationHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
@@ -32,6 +33,8 @@ use WordPressCS\WordPress\Sniff;
  * @uses \WordPressCS\WordPress\Helpers\SanitizationHelperTrait::$customUnslashingSanitizingFunctions
  */
 class ValidatedSanitizedInputSniff extends Sniff {
+
+	use SanitizationHelperTrait;
 
 	/**
 	 * Check for validation functions for a variable within its own parenthesis only.
@@ -161,7 +164,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// Now look for sanitizing functions.
-		if ( ! $this->is_sanitized( $stackPtr, array( $this, 'add_unslash_error' ) ) ) {
+		if ( ! $this->is_sanitized( $this->phpcsFile, $stackPtr, array( $this, 'add_unslash_error' ) ) ) {
 			$this->phpcsFile->addError(
 				'Detected usage of a non-sanitized input variable: %s',
 				$stackPtr,
