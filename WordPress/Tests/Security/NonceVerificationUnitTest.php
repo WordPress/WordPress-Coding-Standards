@@ -31,53 +31,68 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
+	public function getErrorList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'NonceVerificationUnitTest.1.inc':
+				return array(
+					5   => 1,
+					9   => 1,
+					31  => 1,
+					44  => 1,
+					48  => 1,
+					69  => 1,
+					88  => 1, // Old-style WPCS ignore comments are no longer supported.
+					89  => 1,
+					113 => 1,
+					114 => 1,
+					122 => 1,
+					126 => 1,
+					148 => 1,
+					150 => 1,
+					159 => 1,
+					160 => 1,
+					161 => 1,
+					177 => 1,
+					185 => 1,
+					190 => 1,
+					198 => 1,
+					202 => 1,
+					252 => 1,
+					269 => 1,
+					306 => 1,
+					312 => 1,
+					335 => 1,
+					339 => 1,
+					347 => 1,
+					351 => 1,
+				);
 
-		return array(
-			5   => 1,
-			9   => 1,
-			31  => 1,
-			44  => 1,
-			48  => 1,
-			69  => 1,
-			88  => 1, // Old-style WPCS ignore comments are no longer supported.
-			89  => 1,
-			113 => 1,
-			114 => 1,
-			122 => 1,
-			126 => 1,
-			148 => 1,
-			150 => 1,
-			159 => 1,
-			160 => 1,
-			161 => 1,
-			177 => 1,
-			185 => 1,
-			190 => 1,
-			198 => 1,
-			202 => 1,
-			252 => 1,
-			269 => 1,
-			306 => 1,
-			312 => 1,
-			335 => 1,
-			339 => 1,
-			347 => 1,
-			351 => 1,
-		);
+			default:
+				return array();
+		}
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array(
-			375 => 1,
-			389 => 1,
-		);
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'NonceVerificationUnitTest.1.inc':
+				return array(
+					375 => 1,
+					389 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 }
