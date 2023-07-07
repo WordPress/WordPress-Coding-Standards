@@ -109,10 +109,7 @@ class NonceVerificationSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-
-		$instance = $this->tokens[ $stackPtr ];
-
-		if ( ! isset( $this->superglobals[ $instance['content'] ] ) ) {
+		if ( ! isset( $this->superglobals[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
 			return;
 		}
 
@@ -127,7 +124,7 @@ class NonceVerificationSniff extends Sniff {
 		}
 
 		$error_code = 'Missing';
-		if ( false === $this->superglobals[ $instance['content'] ] ) {
+		if ( false === $this->superglobals[ $this->tokens[ $stackPtr ]['content'] ] ) {
 			$error_code = 'Recommended';
 		}
 
@@ -136,7 +133,7 @@ class NonceVerificationSniff extends Sniff {
 			$this->phpcsFile,
 			'Processing form data without nonce verification.',
 			$stackPtr,
-			$this->superglobals[ $instance['content'] ],
+			$this->superglobals[ $this->tokens[ $stackPtr ]['content'] ],
 			$error_code
 		);
 	}
