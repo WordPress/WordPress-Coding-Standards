@@ -91,7 +91,7 @@ function foo_3() {
 
 // We need to account for when there are multiple vars in a single isset().
 function foo_4() {
-	if ( ! isset( $_POST['foo'], $_POST['bar'], $_POST['_wpnonce'] ) ) { // OK.
+	if ( ! isset( $_POST['foo'], $_FILES['bar'], $_POST['_wpnonce'] ) ) { // OK.
 		return;
 	}
 
@@ -111,7 +111,7 @@ function sanitization_allowed() {
 function foo_5() {
 
 	do_something( (int) $_POST['foo'] ); // Bad.
-	do_something( sanitize_key( $_POST['bar'] ) ); // Bad.
+	do_something( sanitize_key( $_FILES['bar'] ) ); // Bad.
 
 	check_ajax_referer( 'something' );
 }

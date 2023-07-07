@@ -44,7 +44,7 @@ class NonceVerificationSniff extends Sniff {
 	 */
 	protected $superglobals = array(
 		'$_POST'    => true,
-		'$_FILE'    => true,
+		'$_FILES'   => true,
 		'$_GET'     => false,
 		'$_REQUEST' => false,
 	);
