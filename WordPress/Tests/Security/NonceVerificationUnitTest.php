@@ -75,6 +75,12 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 					14 => 1,
 				);
 
+			case 'NonceVerificationUnitTest.7.inc':
+				return array(
+					17 => 1,
+					23 => 1,
+				);
+
 			default:
 				return array();
 		}

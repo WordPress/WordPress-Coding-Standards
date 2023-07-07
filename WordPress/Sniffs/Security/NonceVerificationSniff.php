@@ -91,17 +91,25 @@ class NonceVerificationSniff extends Sniff {
 	private $addedCustomNonceFunctions = array();
 
 	/**
-	 * Information on the last scope that we checked to find a nonce verification.
+	 * Information on the all scopes that were checked to find a nonce verification in a particular file.
+	 *
+	 * The array will be in the following format:
+	 * ```
+	 * array(
+	 *   'file'  => (string) The name of the file.
+	 *   'cache' => (array) array(
+	 *     # => array(             The key is the token pointer to the "start" position.
+	 *       'end'   => (int)      The token pointer to the "end" position.
+	 *       'nonce' => (int|bool) The token pointer where n nonce check
+	 *                             was found, or false if none was found.
+	 *     )
+	 *   )
+	 * )
+	 * ```
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array {
-	 *      @type string   $file        The name of the file.
-	 *      @type int      $start       The index of the token where the scope started.
-	 *      @type int      $end         The index of the token where the scope ended.
-	 *      @type bool|int $nonce_check The index of the token where an nonce check
-	 *                                  was found, or false if none was found.
-	 * }
+	 * @var array<string, mixed>
 	 */
 	private $cached_results;
 
@@ -200,38 +208,49 @@ class NonceVerificationSniff extends Sniff {
 			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $this->tokens[ $start ]['scope_closer'];
 		}
 
+		$search_start = $start;
+
 		// Check if we've looked here before.
 		$filename = $this->phpcsFile->getFilename();
 
 		if ( is_array( $this->cached_results )
 			&& $filename === $this->cached_results['file']
-			&& $start === $this->cached_results['start']
 		) {
+			if ( isset( $this->cached_results['cache'][ $start ] ) ) {
+				if ( false !== $this->cached_results['cache'][ $start ]['nonce'] ) {
+					// If we have already found an nonce check in this scope, we just
+					// need to check whether it comes before this token. It is OK if the
+					// check is after the token though, if this was only a isset() check.
+					return ( true === $allow_nonce_after || $this->cached_results['cache'][ $start ]['nonce'] < $stackPtr );
+				} elseif ( $end <= $this->cached_results['cache'][ $start ]['end'] ) {
+					// If not, we can still go ahead and return false if we've already
+					// checked to the end of the search area.
+					return false;
+				}
 
-			if ( false !== $this->cached_results['nonce_check'] ) {
-				// If we have already found an nonce check in this scope, we just
-				// need to check whether it comes before this token. It is OK if the
-				// check is after the token though, if this was only a isset() check.
-				return ( true === $allow_nonce_after || $this->cached_results['nonce_check'] < $stackPtr );
-			} elseif ( $end <= $this->cached_results['end'] ) {
-				// If not, we can still go ahead and return false if we've already
-				// checked to the end of the search area.
-				return false;
+				// We haven't checked this far yet, but we can still save work by
+				// skipping over the part we've already checked.
+				$search_start = $this->cached_results['cache'][ $start ]['end'];
+			} else {
+				$this->cached_results['cache'][ $start ] = array(
+					'end'   => $end,
+					'nonce' => false,
+				);
 			}
-
-			// We haven't checked this far yet, but we can still save work by
-			// skipping over the part we've already checked.
-			$start = $this->cached_results['end'];
 		} else {
 			$this->cached_results = array(
 				'file'  => $filename,
-				'start' => $start,
-				'end'   => $end,
+				'cache' => array(
+					$start => array(
+						'end'   => $end,
+						'nonce' => false,
+					),
+				),
 			);
 		}
 
 		// Loop through the tokens looking for nonce verification functions.
-		for ( $i = $start; $i < $end; $i++ ) {
+		for ( $i = $search_start; $i < $end; $i++ ) {
 			// Skip over nested closed scope constructs.
 			if ( \T_FUNCTION === $this->tokens[ $i ]['code']
 				|| \T_CLOSURE === $this->tokens[ $i ]['code']
@@ -261,13 +280,13 @@ class NonceVerificationSniff extends Sniff {
 					continue;
 				}
 
-				$this->cached_results['nonce_check'] = $i;
+				$this->cached_results['cache'][ $start ]['nonce'] = $i;
 				return true;
 			}
 		}
 
 		// We're still here, so no luck.
-		$this->cached_results['nonce_check'] = false;
+		$this->cached_results['cache'][ $start ]['nonce'] = false;
 
 		return false;
 	}
