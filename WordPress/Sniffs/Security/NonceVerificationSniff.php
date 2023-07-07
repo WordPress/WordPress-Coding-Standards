@@ -91,6 +91,21 @@ class NonceVerificationSniff extends Sniff {
 	private $addedCustomNonceFunctions = array();
 
 	/**
+	 * Information on the last scope that we checked to find a nonce verification.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array {
+	 *      @type string   $file        The name of the file.
+	 *      @type int      $start       The index of the token where the scope started.
+	 *      @type int      $end         The index of the token where the scope ended.
+	 *      @type bool|int $nonce_check The index of the token where an nonce check
+	 *                                  was found, or false if none was found.
+	 * }
+	 */
+	private $cached_results;
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -151,20 +166,6 @@ class NonceVerificationSniff extends Sniff {
 	 * @return bool
 	 */
 	private function has_nonce_check( $stackPtr ) {
-
-		/**
-		 * A cache of the scope that we last checked for nonce verification in.
-		 *
-		 * @var array {
-		 *      @var string   $file        The name of the file.
-		 *      @var int      $start       The index of the token where the scope started.
-		 *      @var int      $end         The index of the token where the scope ended.
-		 *      @var bool|int $nonce_check The index of the token where an nonce check
-		 *                                 was found, or false if none was found.
-		 * }
-		 */
-		static $last;
-
 		$start = 0;
 		$end   = $stackPtr;
 
@@ -202,17 +203,17 @@ class NonceVerificationSniff extends Sniff {
 		// Check if we've looked here before.
 		$filename = $this->phpcsFile->getFilename();
 
-		if ( is_array( $last )
-			&& $filename === $last['file']
-			&& $start === $last['start']
+		if ( is_array( $this->cached_results )
+			&& $filename === $this->cached_results['file']
+			&& $start === $this->cached_results['start']
 		) {
 
-			if ( false !== $last['nonce_check'] ) {
+			if ( false !== $this->cached_results['nonce_check'] ) {
 				// If we have already found an nonce check in this scope, we just
 				// need to check whether it comes before this token. It is OK if the
 				// check is after the token though, if this was only a isset() check.
-				return ( true === $allow_nonce_after || $last['nonce_check'] < $stackPtr );
-			} elseif ( $end <= $last['end'] ) {
+				return ( true === $allow_nonce_after || $this->cached_results['nonce_check'] < $stackPtr );
+			} elseif ( $end <= $this->cached_results['end'] ) {
 				// If not, we can still go ahead and return false if we've already
 				// checked to the end of the search area.
 				return false;
@@ -220,9 +221,9 @@ class NonceVerificationSniff extends Sniff {
 
 			// We haven't checked this far yet, but we can still save work by
 			// skipping over the part we've already checked.
-			$start = $last['end'];
+			$start = $this->cached_results['end'];
 		} else {
-			$last = array(
+			$this->cached_results = array(
 				'file'  => $filename,
 				'start' => $start,
 				'end'   => $end,
@@ -260,13 +261,13 @@ class NonceVerificationSniff extends Sniff {
 					continue;
 				}
 
-				$last['nonce_check'] = $i;
+				$this->cached_results['nonce_check'] = $i;
 				return true;
 			}
 		}
 
 		// We're still here, so no luck.
-		$last['nonce_check'] = false;
+		$this->cached_results['nonce_check'] = false;
 
 		return false;
 	}
