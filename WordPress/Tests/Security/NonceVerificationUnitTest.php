@@ -49,26 +49,30 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 					89  => 1,
 					113 => 1,
 					114 => 1,
-					122 => 1,
-					126 => 1,
-					148 => 1,
+					138 => 1,
+					140 => 1,
+					149 => 1,
 					150 => 1,
-					159 => 1,
-					160 => 1,
-					161 => 1,
-					177 => 1,
-					185 => 1,
-					190 => 1,
-					198 => 1,
-					202 => 1,
-					252 => 1,
-					269 => 1,
-					306 => 1,
-					312 => 1,
-					335 => 1,
-					339 => 1,
-					347 => 1,
-					351 => 1,
+					151 => 1,
+					167 => 1,
+					175 => 1,
+					180 => 1,
+					188 => 1,
+					192 => 1,
+					242 => 1,
+					259 => 1,
+					296 => 1,
+					302 => 1,
+					325 => 1,
+					329 => 1,
+					337 => 1,
+					341 => 1,
+				);
+
+			case 'NonceVerificationUnitTest.2.inc':
+				return array(
+					10 => 1,
+					14 => 1,
 				);
 
 			default:
@@ -87,8 +91,8 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'NonceVerificationUnitTest.1.inc':
 				return array(
-					375 => 1,
-					389 => 1,
+					365 => 1,
+					379 => 1,
 				);
 
 			default:

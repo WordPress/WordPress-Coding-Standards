@@ -116,16 +116,6 @@ function foo_5() {
 	check_ajax_referer( 'something' );
 }
 
-// Test anonymous function - Bad, needs nonce check.
-check_ajax_referer( 'something' ); // Nonce check is not in function scope.
-$b = function () {
-	if ( ! isset( $_POST['abc'] ) ) { // Bad.
-		return;
-	}
-
-	do_something( $_POST['abc'] ); // Bad.
-};
-
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
