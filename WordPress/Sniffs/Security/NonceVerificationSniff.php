@@ -208,45 +208,26 @@ class NonceVerificationSniff extends Sniff {
 			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $this->tokens[ $start ]['scope_closer'];
 		}
 
-		$search_start = $start;
-
 		// Check if we've looked here before.
 		$filename = $this->phpcsFile->getFilename();
 
-		if ( is_array( $this->cached_results )
-			&& $filename === $this->cached_results['file']
-		) {
-			if ( isset( $this->cached_results['cache'][ $start ] ) ) {
-				if ( false !== $this->cached_results['cache'][ $start ]['nonce'] ) {
-					// If we have already found an nonce check in this scope, we just
-					// need to check whether it comes before this token. It is OK if the
-					// check is after the token though, if this was only a isset() check.
-					return ( true === $allow_nonce_after || $this->cached_results['cache'][ $start ]['nonce'] < $stackPtr );
-				} elseif ( $end <= $this->cached_results['cache'][ $start ]['end'] ) {
-					// If not, we can still go ahead and return false if we've already
-					// checked to the end of the search area.
-					return false;
-				}
+		$current_cache = $this->get_cache( $filename, $start );
+		if ( false !== $current_cache['nonce'] ) {
+			// If we have already found an nonce check in this scope, we just
+			// need to check whether it comes before this token. It is OK if the
+			// check is after the token though, if this was only a isset() check.
+			return ( true === $allow_nonce_after || $current_cache['nonce'] < $stackPtr );
+		} elseif ( $end <= $current_cache['end'] ) {
+			// If not, we can still go ahead and return false if we've already
+			// checked to the end of the search area.
+			return false;
+		}
 
-				// We haven't checked this far yet, but we can still save work by
-				// skipping over the part we've already checked.
-				$search_start = $this->cached_results['cache'][ $start ]['end'];
-			} else {
-				$this->cached_results['cache'][ $start ] = array(
-					'end'   => $end,
-					'nonce' => false,
-				);
-			}
-		} else {
-			$this->cached_results = array(
-				'file'  => $filename,
-				'cache' => array(
-					$start => array(
-						'end'   => $end,
-						'nonce' => false,
-					),
-				),
-			);
+		$search_start = $start;
+		if ( $current_cache['end'] > $start ) {
+			// We haven't checked this far yet, but we can still save work by
+			// skipping over the part we've already checked.
+			$search_start = $this->cached_results['cache'][ $start ]['end'];
 		}
 
 		// Loop through the tokens looking for nonce verification functions.
@@ -280,15 +261,84 @@ class NonceVerificationSniff extends Sniff {
 					continue;
 				}
 
-				$this->cached_results['cache'][ $start ]['nonce'] = $i;
+				$this->set_cache( $filename, $start, $end, $i );
 				return true;
 			}
 		}
 
 		// We're still here, so no luck.
-		$this->cached_results['cache'][ $start ]['nonce'] = false;
+		$this->set_cache( $filename, $start, $end, false );
 
 		return false;
+	}
+
+	/**
+	 * Helper function to retrieve results from the cache.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $filename The name of the current file.
+	 * @param int    $start    The stack pointer searches started from.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function get_cache( $filename, $start ) {
+		if ( is_array( $this->cached_results )
+			&& $filename === $this->cached_results['file']
+			&& isset( $this->cached_results['cache'][ $start ] )
+		) {
+			return $this->cached_results['cache'][ $start ];
+		}
+
+		return array(
+			'end'   => 0,
+			'nonce' => false,
+		);
+	}
+
+	/**
+	 * Helper function to store results to the cache.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string   $filename The name of the current file.
+	 * @param int      $start    The stack pointer searches started from.
+	 * @param int      $end      The stack pointer searched stopped at.
+	 * @param int|bool $nonce    Stack pointer to the nonce verification function call or false if none was found.
+	 *
+	 * @return void
+	 */
+	private function set_cache( $filename, $start, $end, $nonce ) {
+		if ( is_array( $this->cached_results ) === false
+			|| $filename !== $this->cached_results['file']
+		) {
+			$this->cached_results = array(
+				'file'  => $filename,
+				'cache' => array(
+					$start => array(
+						'end'   => $end,
+						'nonce' => $nonce,
+					),
+				),
+			);
+			return;
+		}
+
+		// Okay, so we know the current cache is for the current file. Check if we've seen this start pointer before.
+		if ( isset( $this->cached_results['cache'][ $start ] ) === false ) {
+			$this->cached_results['cache'][ $start ] = array(
+				'end'   => $end,
+				'nonce' => $nonce,
+			);
+			return;
+		}
+
+		// Update existing entry.
+		if ( $end > $this->cached_results['cache'][ $start ]['end'] ) {
+			$this->cached_results['cache'][ $start ]['end'] = $end;
+		}
+
+		$this->cached_results['cache'][ $start ]['nonce'] = $nonce;
 	}
 
 	/**
