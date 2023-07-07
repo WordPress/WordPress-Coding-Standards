@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\MessageHelper;
+use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
@@ -135,6 +136,11 @@ class NonceVerificationSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		if ( ! isset( $this->superglobals[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
+			return;
+		}
+
+		if ( Scopes::isOOProperty( $this->phpcsFile, $stackPtr ) ) {
+			// Property with the same name as a superglobal. Not our target.
 			return;
 		}
 
