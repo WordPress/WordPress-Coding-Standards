@@ -59,21 +59,6 @@ class NonceVerificationSniff extends Sniff {
 	public $customNonceVerificationFunctions = array();
 
 	/**
-	 * Cache of previously added custom functions.
-	 *
-	 * Prevents having to do the same merges over and over again.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 - Changed from public static to protected non-static.
-	 *               - Changed the format from simple bool to array.
-	 *
-	 * @var array
-	 */
-	protected $addedCustomFunctions = array(
-		'nonce' => array(),
-	);
-
-	/**
 	 * List of the functions which verify nonces.
 	 *
 	 * @since 0.5.0
@@ -88,6 +73,22 @@ class NonceVerificationSniff extends Sniff {
 		'check_admin_referer' => true,
 		'check_ajax_referer'  => true,
 	);
+
+	/**
+	 * Cache of previously added custom functions.
+	 *
+	 * Prevents having to do the same merges over and over again.
+	 *
+	 * @since 0.5.0
+	 * @since 0.11.0 - Changed from public static to protected non-static.
+	 *               - Changed the format from simple bool to array.
+	 * @since 3.0.0  - Property rename from `$addedCustomFunctions` to `$addedCustomNonceFunctions`.
+	 *               - Visibility changed from `protected` to `private.
+	 *               - Format changed from a multi-dimensional array to a single-dimensional array.
+	 *
+	 * @var array
+	 */
+	private $addedCustomNonceFunctions = array();
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -278,13 +279,13 @@ class NonceVerificationSniff extends Sniff {
 	 * @return void
 	 */
 	protected function mergeFunctionLists() {
-		if ( $this->customNonceVerificationFunctions !== $this->addedCustomFunctions['nonce'] ) {
+		if ( $this->customNonceVerificationFunctions !== $this->addedCustomNonceFunctions ) {
 			$this->nonceVerificationFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customNonceVerificationFunctions,
 				$this->nonceVerificationFunctions
 			);
 
-			$this->addedCustomFunctions['nonce'] = $this->customNonceVerificationFunctions;
+			$this->addedCustomNonceFunctions = $this->customNonceVerificationFunctions;
 		}
 	}
 }
