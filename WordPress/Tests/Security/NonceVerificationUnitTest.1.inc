@@ -404,3 +404,18 @@ function test_assignment_to_long_list_without_noncecheck() {
 function test_assignment_to_short_list_without_noncecheck() {
 	[ $key, [ $key2 ] ] = $_POST; // Bad.
 }
+
+function dont_throw_error_when_only_used_in_unset() {
+	unset( $_POST['foo'] ); // OK.
+}
+
+function dont_throw_error_when_only_used_in_unset_but_error_for_other_use() {
+	unset( $_POST['foo'] ); // OK.
+	echo $_POST['bar']; // Bad.
+}
+
+function dont_throw_error_when_only_used_in_unset_when_there_is_nonce_check_before_other_use() {
+	unset( $_POST['foo'] ); // OK.
+	wp_verify_nonce( $_POST['prefix_nonce'] );
+	echo $_POST['bar']; // OK.
+}

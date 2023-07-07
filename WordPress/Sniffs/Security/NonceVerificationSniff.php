@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Conditions;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Scopes;
@@ -213,6 +214,11 @@ class NonceVerificationSniff extends Sniff {
 			// This *is* the nonce check, so bow out, but do store to cache.
 			// @todo Change to use arg unpacking once PHP < 5.6 has been dropped.
 			$this->set_cache( $cache_keys['file'], $cache_keys['start'], $cache_keys['end'], $in_nonce_check );
+			return false;
+		}
+
+		if ( Context::inUnset( $this->phpcsFile, $stackPtr ) ) {
+			// Variable is only being unset, no nonce check needed.
 			return false;
 		}
 
