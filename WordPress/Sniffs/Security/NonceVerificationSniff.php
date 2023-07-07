@@ -170,16 +170,14 @@ class NonceVerificationSniff extends Sniff {
 		$start = 0;
 		$end   = $stackPtr;
 
-		$tokens = $this->phpcsFile->getTokens();
-
 		// If we're in a function, only look inside of it.
 		// Once PHPCS 3.5.0 comes out this should be changed to the new Conditions::GetLastCondition() method.
-		if ( isset( $tokens[ $stackPtr ]['conditions'] ) === true ) {
-			$conditions = $tokens[ $stackPtr ]['conditions'];
+		if ( isset( $this->tokens[ $stackPtr ]['conditions'] ) === true ) {
+			$conditions = $this->tokens[ $stackPtr ]['conditions'];
 			$conditions = array_reverse( $conditions, true );
 			foreach ( $conditions as $tokenPtr => $condition ) {
 				if ( \T_FUNCTION === $condition || \T_CLOSURE === $condition ) {
-					$start = $tokens[ $tokenPtr ]['scope_opener'];
+					$start = $this->tokens[ $tokenPtr ]['scope_opener'];
 					break;
 				}
 			}
@@ -200,7 +198,7 @@ class NonceVerificationSniff extends Sniff {
 		// If this superglobal is inside such a check, look for the nonce after it as well,
 		// all the way to the end of the scope.
 		if ( true === $allow_nonce_after ) {
-			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $tokens[ $start ]['scope_closer'];
+			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $this->tokens[ $start ]['scope_closer'];
 		}
 
 		// Check if we've looked here before.
@@ -236,23 +234,23 @@ class NonceVerificationSniff extends Sniff {
 		// Loop through the tokens looking for nonce verification functions.
 		for ( $i = $start; $i < $end; $i++ ) {
 			// Skip over nested closed scope constructs.
-			if ( \T_FUNCTION === $tokens[ $i ]['code']
-				|| \T_CLOSURE === $tokens[ $i ]['code']
-				|| isset( Tokens::$ooScopeTokens[ $tokens[ $i ]['code'] ] )
+			if ( \T_FUNCTION === $this->tokens[ $i ]['code']
+				|| \T_CLOSURE === $this->tokens[ $i ]['code']
+				|| isset( Tokens::$ooScopeTokens[ $this->tokens[ $i ]['code'] ] )
 			) {
-				if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
-					$i = $tokens[ $i ]['scope_closer'];
+				if ( isset( $this->tokens[ $i ]['scope_closer'] ) ) {
+					$i = $this->tokens[ $i ]['scope_closer'];
 				}
 				continue;
 			}
 
 			// If this isn't a function name, skip it.
-			if ( \T_STRING !== $tokens[ $i ]['code'] ) {
+			if ( \T_STRING !== $this->tokens[ $i ]['code'] ) {
 				continue;
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( $this->nonceVerificationFunctions[ $tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 				/*
 				 * Now, make sure it is a call to a global function.
 				 */
