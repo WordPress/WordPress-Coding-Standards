@@ -95,6 +95,16 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 					379 => 1,
 				);
 
+			case 'NonceVerificationUnitTest.4.inc':
+				return array(
+					25 => 1,
+				);
+
+			case 'NonceVerificationUnitTest.6.inc':
+				return array(
+					8 => 1,
+				);
+
 			default:
 				return array();
 		}
