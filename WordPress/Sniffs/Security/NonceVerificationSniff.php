@@ -31,6 +31,7 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.5.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
+ * @since   3.0.0  This sniff has received significant updates to its logic and structure.
  *
  * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
  * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
@@ -224,7 +225,7 @@ class NonceVerificationSniff extends Sniff {
 		}
 
 		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr, false ) ) {
-			// Overwritting the value of a superglobal.
+			// Overwriting the value of a superglobal.
 			return false;
 		}
 
@@ -273,9 +274,9 @@ class NonceVerificationSniff extends Sniff {
 		// Check against the cache.
 		$current_cache = $this->get_cache( $cache_keys['file'], $start );
 		if ( false !== $current_cache['nonce'] ) {
-			// If we have already found an nonce check in this scope, we just
+			// If we have already found a nonce check in this scope, we just
 			// need to check whether it comes before this token. It is OK if the
-			// check is after the token though, if this was only a isset() check.
+			// check is after the token though, if this was only an isset() check.
 			return ( true === $allow_nonce_after || $current_cache['nonce'] < $stackPtr );
 		} elseif ( $end <= $current_cache['end'] ) {
 			// If not, we can still go ahead and return false if we've already

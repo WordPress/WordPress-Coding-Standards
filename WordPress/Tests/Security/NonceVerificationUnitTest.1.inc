@@ -454,7 +454,7 @@ function test_disregard_noncecheck_in_nested_arrow_function() {
 }
 
 function test_match() {
-	$var = match($_POST['key']) { // OK. comparison with nonce check after.
+	$var = match($_POST['key']) { // OK, it's a comparison, with the nonce check after.
 		'value' => wp_verify_nonce( $_POST['nonce'] ), // OK.
 		default => $_POST['key'], // OK, due to check above. Realistically, this is wrong, but that goes for all conditional checks.
 	};
