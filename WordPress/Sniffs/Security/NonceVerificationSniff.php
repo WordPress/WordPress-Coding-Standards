@@ -157,22 +157,23 @@ class NonceVerificationSniff extends Sniff {
 			return;
 		}
 
-		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr ) ) {
+		$needs_nonce = $this->needs_nonce_check( $stackPtr );
+		if ( false === $needs_nonce ) {
 			return;
 		}
 
 		$this->mergeFunctionLists();
 
-		if ( $this->has_nonce_check( $stackPtr ) ) {
+		if ( $this->has_nonce_check( $stackPtr, ( 'after' === $needs_nonce ) ) ) {
 			return;
 		}
 
+		// If we're still here, no nonce-verification function was found.
 		$error_code = 'Missing';
 		if ( false === $this->superglobals[ $this->tokens[ $stackPtr ]['content'] ] ) {
 			$error_code = 'Recommended';
 		}
 
-		// If we're still here, no nonce-verification function was found.
 		MessageHelper::addMessage(
 			$this->phpcsFile,
 			'Processing form data without nonce verification.',
@@ -183,27 +184,22 @@ class NonceVerificationSniff extends Sniff {
 	}
 
 	/**
-	 * Check if this token has an associated nonce check.
+	 * Determine whether or not a nonce check is needed for the current superglobal.
 	 *
-	 * @since 0.5.0
-	 * @since 3.0.0 - Moved from the generic `Sniff` class to this class.
-	 *              - Visibility changed from `protected` to `private.
+	 * @since 3.0.0
 	 *
 	 * @param int $stackPtr The position of the current token in the stack of tokens.
 	 *
-	 * @return bool
+	 * @return string|false String "before" or "after" if a nonce check is needed.
+	 *                      FALSE when no nonce check is needed.
 	 */
-	private function has_nonce_check( $stackPtr ) {
-		$start = 0;
-		$end   = $stackPtr;
-
-		// If we're in a function, only look inside of it.
-		$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
-		if ( false !== $functionPtr ) {
-			$start = $this->tokens[ $functionPtr ]['scope_opener'];
+	protected function needs_nonce_check( $stackPtr ) {
+		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr ) ) {
+			// Overwritting the value of a superglobal.
+			return false;
 		}
 
-		$allow_nonce_after = false;
+		$needs_nonce = 'before';
 		if ( ContextHelper::is_in_isset_or_empty( $this->phpcsFile, $stackPtr )
 			|| ContextHelper::is_in_type_test( $this->phpcsFile, $stackPtr )
 			|| VariableHelper::is_comparison( $this->phpcsFile, $stackPtr )
@@ -211,7 +207,34 @@ class NonceVerificationSniff extends Sniff {
 			|| ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, UnslashingFunctionsHelper::get_functions() ) !== false
 			|| $this->is_only_sanitized( $stackPtr )
 		) {
-			$allow_nonce_after = true;
+			$needs_nonce = 'after';
+		}
+
+		return $needs_nonce;
+	}
+
+	/**
+	 * Check if this token has an associated nonce check.
+	 *
+	 * @since 0.5.0
+	 * @since 3.0.0 - Moved from the generic `Sniff` class to this class.
+	 *              - Visibility changed from `protected` to `private.
+	 *              - New `$allow_nonce_after` parameter.
+	 *
+	 * @param int  $stackPtr          The position of the current token in the stack of tokens.
+	 * @param bool $allow_nonce_after Whether the nonce check _must_ be before the $stackPtr or
+	 *                                is allowed _after_ the $stackPtr.
+	 *
+	 * @return bool
+	 */
+	private function has_nonce_check( $stackPtr, $allow_nonce_after = false ) {
+		$start = 0;
+		$end   = $stackPtr;
+
+		// If we're in a function, only look inside of it.
+		$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+		if ( false !== $functionPtr ) {
+			$start = $this->tokens[ $functionPtr ]['scope_opener'];
 		}
 
 		// We allow for certain actions, such as an isset() check to come before the nonce check.
