@@ -157,14 +157,27 @@ class NonceVerificationSniff extends Sniff {
 			return;
 		}
 
-		$needs_nonce = $this->needs_nonce_check( $stackPtr );
-		if ( false === $needs_nonce ) {
-			return;
+		// Determine the cache keys for this item.
+		$cache_keys = array(
+			'file'  => $this->phpcsFile->getFilename(),
+			'start' => 0,
+			'end'   => $stackPtr,
+		);
+
+		// If we're in a function, only look inside of it.
+		$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
+		if ( false !== $functionPtr ) {
+			$cache_keys['start'] = $this->tokens[ $functionPtr ]['scope_opener'];
 		}
 
 		$this->mergeFunctionLists();
 
-		if ( $this->has_nonce_check( $stackPtr, ( 'after' === $needs_nonce ) ) ) {
+		$needs_nonce = $this->needs_nonce_check( $stackPtr, $cache_keys );
+		if ( false === $needs_nonce ) {
+			return;
+		}
+
+		if ( $this->has_nonce_check( $stackPtr, $cache_keys, ( 'after' === $needs_nonce ) ) ) {
 			return;
 		}
 
@@ -188,12 +201,21 @@ class NonceVerificationSniff extends Sniff {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $stackPtr The position of the current token in the stack of tokens.
+	 * @param int   $stackPtr   The position of the current token in the stack of tokens.
+	 * @param array $cache_keys The keys for the applicable cache (to potentially set).
 	 *
 	 * @return string|false String "before" or "after" if a nonce check is needed.
 	 *                      FALSE when no nonce check is needed.
 	 */
-	protected function needs_nonce_check( $stackPtr ) {
+	protected function needs_nonce_check( $stackPtr, array $cache_keys ) {
+		$in_nonce_check = ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, $this->nonceVerificationFunctions );
+		if ( false !== $in_nonce_check ) {
+			// This *is* the nonce check, so bow out, but do store to cache.
+			// @todo Change to use arg unpacking once PHP < 5.6 has been dropped.
+			$this->set_cache( $cache_keys['file'], $cache_keys['start'], $cache_keys['end'], $in_nonce_check );
+			return false;
+		}
+
 		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr ) ) {
 			// Overwritting the value of a superglobal.
 			return false;
@@ -219,23 +241,19 @@ class NonceVerificationSniff extends Sniff {
 	 * @since 0.5.0
 	 * @since 3.0.0 - Moved from the generic `Sniff` class to this class.
 	 *              - Visibility changed from `protected` to `private.
+	 *              - New `$cache_keys` parameter.
 	 *              - New `$allow_nonce_after` parameter.
 	 *
-	 * @param int  $stackPtr          The position of the current token in the stack of tokens.
-	 * @param bool $allow_nonce_after Whether the nonce check _must_ be before the $stackPtr or
-	 *                                is allowed _after_ the $stackPtr.
+	 * @param int   $stackPtr          The position of the current token in the stack of tokens.
+	 * @param array $cache_keys        The keys for the applicable cache.
+	 * @param bool  $allow_nonce_after Whether the nonce check _must_ be before the $stackPtr or
+	 *                                 is allowed _after_ the $stackPtr.
 	 *
 	 * @return bool
 	 */
-	private function has_nonce_check( $stackPtr, $allow_nonce_after = false ) {
-		$start = 0;
-		$end   = $stackPtr;
-
-		// If we're in a function, only look inside of it.
-		$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
-		if ( false !== $functionPtr ) {
-			$start = $this->tokens[ $functionPtr ]['scope_opener'];
-		}
+	private function has_nonce_check( $stackPtr, array $cache_keys, $allow_nonce_after = false ) {
+		$start = $cache_keys['start'];
+		$end   = $cache_keys['end'];
 
 		// We allow for certain actions, such as an isset() check to come before the nonce check.
 		// If this superglobal is inside such a check, look for the nonce after it as well,
@@ -244,10 +262,8 @@ class NonceVerificationSniff extends Sniff {
 			$end = ( 0 === $start ) ? $this->phpcsFile->numTokens : $this->tokens[ $start ]['scope_closer'];
 		}
 
-		// Check if we've looked here before.
-		$filename = $this->phpcsFile->getFilename();
-
-		$current_cache = $this->get_cache( $filename, $start );
+		// Check against the cache.
+		$current_cache = $this->get_cache( $cache_keys['file'], $start );
 		if ( false !== $current_cache['nonce'] ) {
 			// If we have already found an nonce check in this scope, we just
 			// need to check whether it comes before this token. It is OK if the
@@ -294,13 +310,13 @@ class NonceVerificationSniff extends Sniff {
 					continue;
 				}
 
-				$this->set_cache( $filename, $start, $end, $i );
+				$this->set_cache( $cache_keys['file'], $start, $end, $i );
 				return true;
 			}
 		}
 
 		// We're still here, so no luck.
-		$this->set_cache( $filename, $start, $end, false );
+		$this->set_cache( $cache_keys['file'], $start, $end, false );
 
 		return false;
 	}
