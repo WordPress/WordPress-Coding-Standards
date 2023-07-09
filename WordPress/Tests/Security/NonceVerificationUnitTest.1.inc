@@ -447,3 +447,8 @@ function test_open_arrow_fn_with_noncecheck() {
 function test_open_arrow_fn_without_noncecheck() {
 	$callback = fn() => $_POST['key']++; // Bad.
 }
+
+function test_disregard_noncecheck_in_nested_arrow_function() {
+	$callback = fn() => check_admin_referer( 'foo' );
+	echo $_POST['foo']; // Bad, we don't know if the callback has been called or not.
+}

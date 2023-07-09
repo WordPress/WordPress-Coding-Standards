@@ -293,7 +293,9 @@ class NonceVerificationSniff extends Sniff {
 		// Loop through the tokens looking for nonce verification functions.
 		for ( $i = $search_start; $i < $end; $i++ ) {
 			// Skip over nested closed scope constructs.
-			if ( isset( Collections::closedScopes()[ $this->tokens[ $i ]['code'] ] ) ) {
+			if ( isset( Collections::closedScopes()[ $this->tokens[ $i ]['code'] ] )
+				|| \T_FN === $this->tokens[ $i ]['code']
+			) {
 				if ( isset( $this->tokens[ $i ]['scope_closer'] ) ) {
 					$i = $this->tokens[ $i ]['scope_closer'];
 				}
