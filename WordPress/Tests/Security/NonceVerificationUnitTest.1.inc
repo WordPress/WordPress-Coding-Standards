@@ -452,3 +452,10 @@ function test_disregard_noncecheck_in_nested_arrow_function() {
 	$callback = fn() => check_admin_referer( 'foo' );
 	echo $_POST['foo']; // Bad, we don't know if the callback has been called or not.
 }
+
+function test_match() {
+	$var = match($_POST['key']) { // OK. comparison with nonce check after.
+		'value' => wp_verify_nonce( $_POST['nonce'] ), // OK.
+		default => $_POST['key'], // OK, due to check above. Realistically, this is wrong, but that goes for all conditional checks.
+	};
+}
