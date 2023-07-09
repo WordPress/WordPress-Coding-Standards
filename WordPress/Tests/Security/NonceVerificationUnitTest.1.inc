@@ -438,3 +438,12 @@ function test_null_coalesce_equals_without_noncecheck() {
 	$_POST['foo'][0] ??= 10; // Bad.
 	// Do something.
 }
+
+function test_open_arrow_fn_with_noncecheck() {
+	wp_verify_nonce( $_POST['nonce'] );
+	$callback = fn() => $_POST['key']++; // OK.
+}
+
+function test_open_arrow_fn_without_noncecheck() {
+	$callback = fn() => $_POST['key']++; // Bad.
+}

@@ -166,6 +166,7 @@ class NonceVerificationSniff extends Sniff {
 		);
 
 		// If we're in a function, only look inside of it.
+		// This doesn't take arrow functions into account as those are "open".
 		$functionPtr = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, array( \T_FUNCTION, \T_CLOSURE ) );
 		if ( false !== $functionPtr ) {
 			$cache_keys['start'] = $this->tokens[ $functionPtr ]['scope_opener'];
