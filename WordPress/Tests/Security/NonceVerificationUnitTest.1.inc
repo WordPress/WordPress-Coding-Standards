@@ -419,3 +419,12 @@ function dont_throw_error_when_only_used_in_unset_when_there_is_nonce_check_befo
 	wp_verify_nonce( $_POST['prefix_nonce'] );
 	echo $_POST['bar']; // OK.
 }
+
+function test_null_coalesce() {
+	$var = $_POST['foo'] ?? 10; // OK.
+	wp_verify_nonce( $_POST['nonce'] );
+}
+function test_null_coalesce_without_noncecheck() {
+	$var = $_POST['foo'] ?? 10; // Bad.
+	// Do something.
+}
