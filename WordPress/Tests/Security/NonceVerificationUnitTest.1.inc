@@ -30,7 +30,7 @@ function foo() {
 function process() {
 	do_something( $_POST['foo'] ); // Bad.
 
-	if ( ! isset( $_POST['test'] ) || ! wp_verify_nonce( 'some_action' ) ) {
+	if ( empty( $_POST['test'] ) || ! wp_verify_nonce( 'some_action' ) ) {
 		exit;
 	}
 
@@ -41,7 +41,7 @@ class Some_Class {
 
 	// Bad, needs nonce check.
 	function bar() {
-		if ( ! isset( $_POST['test'] ) ) { // Bad.
+		if ( empty( $_POST['test'] ) ) { // Bad.
 			return;
 		}
 
