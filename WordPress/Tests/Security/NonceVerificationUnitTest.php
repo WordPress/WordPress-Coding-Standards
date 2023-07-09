@@ -67,6 +67,8 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 					329 => 1,
 					337 => 1,
 					341 => 1,
+					402 => 1,
+					405 => 1,
 				);
 
 			case 'NonceVerificationUnitTest.2.inc':

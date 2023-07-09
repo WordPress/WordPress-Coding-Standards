@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Conditions;
+use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\ContextHelper;
@@ -121,10 +122,10 @@ class NonceVerificationSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
+		$targets  = array( \T_VARIABLE => \T_VARIABLE );
+		$targets += Collections::listOpenTokensBC(); // We need to skip over lists.
 
-		return array(
-			\T_VARIABLE,
-		);
+		return $targets;
 	}
 
 	/**
@@ -132,9 +133,21 @@ class NonceVerificationSniff extends Sniff {
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
-	 * @return void
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
+		// Skip over lists as whatever is in those will always be assignments.
+		if ( isset( Collections::listOpenTokensBC()[ $this->tokens[ $stackPtr ]['code'] ] ) ) {
+			$open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
+			$skip_to    = $stackPtr;
+			if ( false !== $open_close ) {
+				$skip_to = $open_close['closer'];
+			}
+
+			return $skip_to;
+		}
+
 		if ( ! isset( $this->superglobals[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
 			return;
 		}

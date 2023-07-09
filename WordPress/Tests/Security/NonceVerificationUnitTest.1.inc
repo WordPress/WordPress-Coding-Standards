@@ -381,3 +381,26 @@ function disallow_for_non_array_comparison_in_condition_with_named_params() {
 		foo();
 	}
 }
+
+function test_long_list_assignment() {
+	list( $_POST['key1'], list( $_POST['key2'] ) ) = $something; // OK.
+}
+function test_short_list_assignment() {
+	[ $_POST['key1'], [ $_POST['key2'] ] ] = $something; // OK.
+}
+
+function test_assignment_to_long_list_with_noncecheck() {
+	wp_verify_nonce( $_POST['nonce'] );
+	list( $key, list( $key2 ) ) = $_POST; // OK.
+}
+function test_assignment_to_short_list_with_noncecheck() {
+	wp_verify_nonce( $_POST['nonce'] );
+	[ $key, [ $key2 ] ] = $_POST; // OK.
+}
+
+function test_assignment_to_long_list_without_noncecheck() {
+	list( $key, list( $key2 ) ) = $_POST; // Bad.
+}
+function test_assignment_to_short_list_without_noncecheck() {
+	[ $key, [ $key2 ] ] = $_POST; // Bad.
+}
