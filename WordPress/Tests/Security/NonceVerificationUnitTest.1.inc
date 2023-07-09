@@ -459,3 +459,30 @@ function test_match() {
 		default => $_POST['key'], // OK, due to check above. Realistically, this is wrong, but that goes for all conditional checks.
 	};
 }
+
+function function_containing_nested_enum_with_nonce_check() {
+	enum MyEnum {
+		public function nested_method() {
+			wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' );
+		}
+	}
+	
+	echo $_POST['foo']; // Bad.
+}
+
+function function_containing_nested_enum_with_nonce_check_outside() {
+	wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' );
+
+	enum MyEnum {
+		public function nested_method() {
+			echo $_POST['foo']; // Bad.
+		}
+	}
+}
+
+enum MyEnum {
+	public function nested_method() {
+		wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' );
+		echo $_POST['foo']; // OK.
+	}
+}
