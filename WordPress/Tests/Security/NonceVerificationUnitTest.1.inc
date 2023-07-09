@@ -428,3 +428,13 @@ function test_null_coalesce_without_noncecheck() {
 	$var = $_POST['foo'] ?? 10; // Bad.
 	// Do something.
 }
+
+function test_null_coalesce_equals() {
+	$_POST['foo'][0] ??= 10; // OK.
+	wp_verify_nonce( $_POST['nonce'] );
+}
+
+function test_null_coalesce_equals_without_noncecheck() {
+	$_POST['foo'][0] ??= 10; // Bad.
+	// Do something.
+}

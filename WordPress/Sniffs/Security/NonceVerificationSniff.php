@@ -222,7 +222,7 @@ class NonceVerificationSniff extends Sniff {
 			return false;
 		}
 
-		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr ) ) {
+		if ( VariableHelper::is_assignment( $this->phpcsFile, $stackPtr, false ) ) {
 			// Overwritting the value of a superglobal.
 			return false;
 		}
@@ -231,6 +231,7 @@ class NonceVerificationSniff extends Sniff {
 		if ( ContextHelper::is_in_isset_or_empty( $this->phpcsFile, $stackPtr )
 			|| ContextHelper::is_in_type_test( $this->phpcsFile, $stackPtr )
 			|| VariableHelper::is_comparison( $this->phpcsFile, $stackPtr )
+			|| VariableHelper::is_assignment( $this->phpcsFile, $stackPtr, true )
 			|| ContextHelper::is_in_array_comparison( $this->phpcsFile, $stackPtr )
 			|| ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, UnslashingFunctionsHelper::get_functions() ) !== false
 			|| $this->is_only_sanitized( $stackPtr )

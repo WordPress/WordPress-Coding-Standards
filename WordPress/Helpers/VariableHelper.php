@@ -201,15 +201,22 @@ final class VariableHelper {
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - Visibility is now `public` (was `protected`) and the method `static`.
 	 *              - The `$phpcsFile` parameter was added.
+	 *              - The `$include_coalesce` parameter was added.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The index of the token in the stack.
-	 *                                               This must point to either a T_VARIABLE or
-	 *                                               T_CLOSE_SQUARE_BRACKET token.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile        The file being scanned.
+	 * @param int                         $stackPtr         The index of the token in the stack.
+	 *                                                      This must point to either a T_VARIABLE or
+	 *                                                      T_CLOSE_SQUARE_BRACKET token.
+	 * @param bool                        $include_coalesce Optional. Whether or not to regard the null
+	 *                                                      coalesce operator - ?? - as a comparison operator.
+	 *                                                      Defaults to true.
+	 *                                                      Null coalesce is a special comparison operator in this
+	 *                                                      sense as it doesn't compare a variable to whatever is
+	 *                                                      on the other side of the comparison operator.
 	 *
 	 * @return bool Whether the token is a variable being assigned a value.
 	 */
-	public static function is_assignment( File $phpcsFile, $stackPtr ) {
+	public static function is_assignment( File $phpcsFile, $stackPtr, $include_coalesce = true ) {
 		$tokens = $phpcsFile->getTokens();
 		if ( isset( $tokens[ $stackPtr ] ) === false ) {
 			return false;
@@ -232,8 +239,13 @@ final class VariableHelper {
 			return false;
 		}
 
+		$assignmentTokens = Tokens::$assignmentTokens;
+		if ( false === $include_coalesce ) {
+			unset( $assignmentTokens[ \T_COALESCE_EQUAL ] );
+		}
+
 		// If the next token is an assignment, that's all we need to know.
-		if ( isset( Tokens::$assignmentTokens[ $tokens[ $next_non_empty ]['code'] ] ) ) {
+		if ( isset( $assignmentTokens[ $tokens[ $next_non_empty ]['code'] ] ) ) {
 			return true;
 		}
 
@@ -241,7 +253,7 @@ final class VariableHelper {
 		if ( \T_OPEN_SQUARE_BRACKET === $tokens[ $next_non_empty ]['code']
 			&& isset( $tokens[ $next_non_empty ]['bracket_closer'] )
 		) {
-			return self::is_assignment( $phpcsFile, $tokens[ $next_non_empty ]['bracket_closer'] );
+			return self::is_assignment( $phpcsFile, $tokens[ $next_non_empty ]['bracket_closer'], $include_coalesce );
 		}
 
 		return false;
