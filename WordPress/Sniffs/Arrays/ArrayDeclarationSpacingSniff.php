@@ -19,12 +19,8 @@ use PHPCSUtils\Utils\PassedParameters;
 /**
  * Enforces WordPress array spacing format.
  *
- * - Check for no space between array keyword and array opener.
- * - Check for no space between the parentheses of an empty array.
- * - Checks for one space after the array opener / before the array closer in single-line arrays.
  * - Checks that associative arrays are multi-line.
  * - Checks that each array item in a multi-line array starts on a new line.
- * - Checks that the array closer in a multi-line array is on a new line.
  *
  * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
@@ -42,6 +38,8 @@ use PHPCSUtils\Utils\PassedParameters;
  * @since   0.14.0 Single item associative arrays are now by default exempt from the
  *                 "must be multi-line" rule. This behaviour can be changed using the
  *                 `allow_single_item_single_line_associative_arrays` property.
+ * @since   3.0.0  Removed various whitespace related checks and fixers in favour of the PHPCSExtra
+ *                 `NormalizedArrays.Arrays.ArrayBraceSpacing` sniff.
  */
 final class ArrayDeclarationSpacingSniff extends Sniff {
 
@@ -97,64 +95,6 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 		$closer = $array_open_close['closer'];
 		unset( $array_open_close );
 
-		/*
-		 * Long arrays only: Check for space between the array keyword and the open parenthesis.
-		 */
-		if ( \T_ARRAY === $this->tokens[ $stackPtr ]['code'] ) {
-
-			if ( ( $stackPtr + 1 ) !== $opener ) {
-				$error      = 'There must be no space between the "array" keyword and the opening parenthesis';
-				$error_code = 'SpaceAfterKeyword';
-
-				$nextNonWhitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $stackPtr + 1 ), ( $opener + 1 ), true );
-				if ( $nextNonWhitespace !== $opener ) {
-					// Don't auto-fix: Something other than whitespace found between keyword and open parenthesis.
-					$this->phpcsFile->addError( $error, $stackPtr, $error_code );
-				} else {
-
-					$fix = $this->phpcsFile->addFixableError( $error, $stackPtr, $error_code );
-
-					if ( true === $fix ) {
-						$this->phpcsFile->fixer->beginChangeset();
-						for ( $i = ( $stackPtr + 1 ); $i < $opener; $i++ ) {
-							$this->phpcsFile->fixer->replaceToken( $i, '' );
-						}
-						$this->phpcsFile->fixer->endChangeset();
-						unset( $i );
-					}
-				}
-				unset( $error, $error_code, $nextNonWhitespace, $fix );
-			}
-		}
-
-		/*
-		 * Check for empty arrays.
-		 */
-		$nextNonWhitespace = $this->phpcsFile->findNext( \T_WHITESPACE, ( $opener + 1 ), ( $closer + 1 ), true );
-		if ( $nextNonWhitespace === $closer ) {
-
-			if ( ( $opener + 1 ) !== $closer ) {
-				$fix = $this->phpcsFile->addFixableError(
-					'Empty array declaration must have no space between the parentheses',
-					$stackPtr,
-					'SpaceInEmptyArray'
-				);
-
-				if ( true === $fix ) {
-					$this->phpcsFile->fixer->beginChangeset();
-					for ( $i = ( $opener + 1 ); $i < $closer; $i++ ) {
-						$this->phpcsFile->fixer->replaceToken( $i, '' );
-					}
-					$this->phpcsFile->fixer->endChangeset();
-					unset( $i );
-				}
-			}
-
-			// This array is empty, so the below checks aren't necessary.
-			return;
-		}
-		unset( $nextNonWhitespace );
-
 		// Pass off to either the single line or multi-line array analysis.
 		if ( $this->tokens[ $opener ]['line'] === $this->tokens[ $closer ]['line'] ) {
 			$this->process_single_line_array( $stackPtr, $opener, $closer );
@@ -164,7 +104,7 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	}
 
 	/**
-	 * Process a single-line array.
+	 * Check that associative arrays are always multi-line.
 	 *
 	 * @since 0.13.0 The actual checks contained in this method used to
 	 *               be in the `process()` method.
@@ -176,9 +116,6 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @return void
 	 */
 	protected function process_single_line_array( $stackPtr, $opener, $closer ) {
-		/*
-		 * Check that associative arrays are always multi-line.
-		 */
 		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
 		if ( ( false === $this->allow_single_item_single_line_associative_arrays
@@ -216,62 +153,6 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 					'AssociativeArrayFound',
 					'error'
 				);
-
-				// No need to check for spacing around opener/closer as this array should be multi-line.
-				return;
-			}
-		}
-
-		/*
-		 * Check that there is a single space after the array opener and before the array closer.
-		 */
-		if ( \T_WHITESPACE !== $this->tokens[ ( $opener + 1 ) ]['code'] ) {
-
-			$fix = $this->phpcsFile->addFixableError(
-				'Missing space after array opener.',
-				$opener,
-				'NoSpaceAfterArrayOpener'
-			);
-
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->addContent( $opener, ' ' );
-			}
-		} elseif ( ' ' !== $this->tokens[ ( $opener + 1 ) ]['content'] ) {
-
-			$fix = $this->phpcsFile->addFixableError(
-				'Expected 1 space after array opener, found %s.',
-				$opener,
-				'SpaceAfterArrayOpener',
-				array( \strlen( $this->tokens[ ( $opener + 1 ) ]['content'] ) )
-			);
-
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( ( $opener + 1 ), ' ' );
-			}
-		}
-
-		if ( \T_WHITESPACE !== $this->tokens[ ( $closer - 1 ) ]['code'] ) {
-
-			$fix = $this->phpcsFile->addFixableError(
-				'Missing space before array closer.',
-				$closer,
-				'NoSpaceBeforeArrayCloser'
-			);
-
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->addContentBefore( $closer, ' ' );
-			}
-		} elseif ( ' ' !== $this->tokens[ ( $closer - 1 ) ]['content'] ) {
-
-			$fix = $this->phpcsFile->addFixableError(
-				'Expected 1 space before array closer, found %s.',
-				$closer,
-				'SpaceBeforeArrayCloser',
-				array( \strlen( $this->tokens[ ( $closer - 1 ) ]['content'] ) )
-			);
-
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->replaceToken( ( $closer - 1 ), ' ' );
 			}
 		}
 	}
@@ -289,34 +170,6 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @return void
 	 */
 	protected function process_multi_line_array( $stackPtr, $opener, $closer ) {
-		/*
-		 * Check that the closing bracket is on a new line.
-		 */
-		$last_content = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $closer - 1 ), $opener, true );
-		if ( false !== $last_content
-			&& $this->tokens[ $last_content ]['line'] === $this->tokens[ $closer ]['line']
-		) {
-			$fix = $this->phpcsFile->addFixableError(
-				'Closing parenthesis of array declaration must be on a new line',
-				$closer,
-				'CloseBraceNewLine'
-			);
-			if ( true === $fix ) {
-				$this->phpcsFile->fixer->beginChangeset();
-
-				if ( $last_content < ( $closer - 1 )
-					&& \T_WHITESPACE === $this->tokens[ ( $closer - 1 ) ]['code']
-				) {
-					// Remove whitespace which would otherwise becoming trailing
-					// (as it gives problems with the fixed file).
-					$this->phpcsFile->fixer->replaceToken( ( $closer - 1 ), '' );
-				}
-
-				$this->phpcsFile->fixer->addNewlineBefore( $closer );
-				$this->phpcsFile->fixer->endChangeset();
-			}
-		}
-
 		/*
 		 * Check that each array item starts on a new line.
 		 */

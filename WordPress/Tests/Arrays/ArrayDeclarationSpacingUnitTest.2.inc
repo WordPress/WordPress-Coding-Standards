@@ -3,13 +3,6 @@
  * Test sniff with short arrays.
  */
 
-$good = [ 'value1', 'value2' ]; // Ok.
-
-$query_vars = ['food']; // Bad, no spaces after opening and before closing parenthesis.
-
-// Test for fixing of extra whitespace.
-$test = [   1, 2     ];
-
 $bad = [ 'key' => 'value' ]; // OK, one item single-line associative arrays are ok.
 
 // Test for fixing nested associative arrays.
@@ -32,23 +25,7 @@ $bad = [ 'key1' => 'value1', /* comment */ 'key2' => 'value2' ]; // Bad.
 $bad = [ 'value1', 'value2', [ 'sub1' => 1, 'sub2' => 2 ], 'value4' ]; // Bad.
 
 /*
- * Tests for empty array with space between parentheses.
- */
-// OK.
-$a = [];
-$value = [ /* comment */ ];
-$x = [
-		// comment
-	 ];
-
-// Bad.
-$value = [ ];
-$value = [   ];
-$x = [
-	 ];
-
-/*
- * Tests for multi-line arrays - closing brace on new line + array items each on new line.
+ * Tests for multi-line arrays - array items each on new line.
  */
 // OK.
 $value = [
@@ -79,12 +56,6 @@ $x = ['name' => 'test',
 
 $foo = [1
 , 2];
-
-$fields = [
-	'value' => 'type'];
-
-$bad = ['key' => 'value']; // Bad, spacing around parenthesis.
-$bad = [     'key' => 'value'     ]; // Bad, spacing around parenthesis.
 
 // phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
 
