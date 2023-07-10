@@ -117,44 +117,46 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	 */
 	protected function process_single_line_array( $stackPtr, $opener, $closer ) {
 		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
-
 		if ( ( false === $this->allow_single_item_single_line_associative_arrays
-				&& ! empty( $array_items ) )
+				&& empty( $array_items ) )
 			|| ( true === $this->allow_single_item_single_line_associative_arrays
-				&& \count( $array_items ) > 1 )
+				&& \count( $array_items ) === 1 )
 		) {
-			/*
-			 * Make sure the double arrow is for *this* array, not for a nested one.
-			 */
-			$array_has_keys = false; // Reset before doing more detailed check.
-			foreach ( $array_items as $item ) {
-				if ( Arrays::getDoubleArrowPtr( $this->phpcsFile, $item['start'], $item['end'] ) !== false ) {
-					$array_has_keys = true;
-					break;
-				}
-			}
+			return;
+		}
 
-			if ( true === $array_has_keys ) {
-				$error = 'When an array uses associative keys, each value should start on %s.';
-				if ( true === $this->allow_single_item_single_line_associative_arrays ) {
-					$error = 'When a multi-item array uses associative keys, each value should start on %s.';
-				}
-
-				/*
-				 * Just add a new line before the array closer.
-				 * The multi-line array fixer will then fix the individual array items in the next fixer loop.
-				 */
-				SpacesFixer::checkAndFix(
-					$this->phpcsFile,
-					$closer,
-					$this->phpcsFile->findPrevious( \T_WHITESPACE, ( $closer - 1 ), null, true ),
-					'newline',
-					$error,
-					'AssociativeArrayFound',
-					'error'
-				);
+		/*
+		 * Make sure the double arrow is for *this* array, not for a nested one.
+		 */
+		$array_has_keys = false;
+		foreach ( $array_items as $item ) {
+			if ( Arrays::getDoubleArrowPtr( $this->phpcsFile, $item['start'], $item['end'] ) !== false ) {
+				$array_has_keys = true;
+				break;
 			}
 		}
+
+		if ( false === $array_has_keys ) {
+			return;
+		}
+		$error = 'When an array uses associative keys, each value should start on %s.';
+		if ( true === $this->allow_single_item_single_line_associative_arrays ) {
+			$error = 'When a multi-item array uses associative keys, each value should start on %s.';
+		}
+
+		/*
+		 * Just add a new line before the array closer.
+		 * The multi-line array fixer will then fix the individual array items in the next fixer loop.
+		 */
+		SpacesFixer::checkAndFix(
+			$this->phpcsFile,
+			$closer,
+			$this->phpcsFile->findPrevious( \T_WHITESPACE, ( $closer - 1 ), null, true ),
+			'newline',
+			$error,
+			'AssociativeArrayFound',
+			'error'
+		);
 	}
 
 	/**
