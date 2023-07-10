@@ -55,8 +55,8 @@ $key3 => 'value3',
 
 // Test for fixing associative arrays with comments between values.
 $bad = array(
-'key1' => 'value1', /* comment */
-'key2' => 'value2'
+'key1' => 'value1',
+/* comment */ 'key2' => 'value2'
 ); // Bad.
 
 // Test for fixing non-associative array with a nested associative array which *will* be fixed.

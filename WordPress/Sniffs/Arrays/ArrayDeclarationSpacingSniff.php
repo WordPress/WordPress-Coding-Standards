@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Fixers\SpacesFixer;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
@@ -197,51 +198,24 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 			}
 
 			if ( true === $array_has_keys ) {
-
-				$phrase = 'an';
+				$error = 'When an array uses associative keys, each value should start on %s.';
 				if ( true === $this->allow_single_item_single_line_associative_arrays ) {
-					$phrase = 'a multi-item';
+					$error = 'When a multi-item array uses associative keys, each value should start on %s.';
 				}
-				$fix = $this->phpcsFile->addFixableError(
-					'When %s array uses associative keys, each value should start on a new line.',
+
+				/*
+				 * Just add a new line before the array closer.
+				 * The multi-line array fixer will then fix the individual array items in the next fixer loop.
+				 */
+				SpacesFixer::checkAndFix(
+					$this->phpcsFile,
 					$closer,
+					$this->phpcsFile->findPrevious( \T_WHITESPACE, ( $closer - 1 ), null, true ),
+					'newline',
+					$error,
 					'AssociativeArrayFound',
-					array( $phrase )
+					'error'
 				);
-
-				if ( true === $fix ) {
-
-					$this->phpcsFile->fixer->beginChangeset();
-
-					foreach ( $array_items as $item ) {
-						/*
-						 * Add a line break before the first non-empty token in the array item.
-						 * Prevents extraneous whitespace at the start of the line which could be
-						 * interpreted as alignment whitespace.
-						 */
-						$first_non_empty = $this->phpcsFile->findNext(
-							Tokens::$emptyTokens,
-							$item['start'],
-							( $item['end'] + 1 ),
-							true
-						);
-						if ( false === $first_non_empty ) {
-							continue;
-						}
-
-						if ( $item['start'] <= ( $first_non_empty - 1 )
-							&& \T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
-						) {
-							// Remove whitespace which would otherwise becoming trailing
-							// (as it gives problems with the fixed file).
-							$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
-						}
-
-						$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
-					}
-
-					$this->phpcsFile->fixer->endChangeset();
-				}
 
 				// No need to check for spacing around opener/closer as this array should be multi-line.
 				return;
