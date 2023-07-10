@@ -382,28 +382,15 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 			}
 
 			if ( $this->tokens[ $end_of_last_item ]['line'] === $this->tokens[ $first_content ]['line'] ) {
-
-				$fix = $this->phpcsFile->addFixableError(
-					'Each item in a multi-line array must be on a new line',
+				SpacesFixer::checkAndFix(
+					$this->phpcsFile,
 					$first_content,
-					'ArrayItemNoNewLine'
+					$end_of_last_item,
+					'newline',
+					'Each item in a multi-line array must be on %s. Found: %s',
+					'ArrayItemNoNewLine',
+					'error'
 				);
-
-				if ( true === $fix ) {
-
-					$this->phpcsFile->fixer->beginChangeset();
-
-					if ( ( $end_of_last_item + 1 ) <= ( $first_content - 1 )
-						&& \T_WHITESPACE === $this->tokens[ ( $first_content - 1 ) ]['code']
-					) {
-						// Remove whitespace which would otherwise becoming trailing
-						// (as it gives problems with the fixed file).
-						$this->phpcsFile->fixer->replaceToken( ( $first_content - 1 ), '' );
-					}
-
-					$this->phpcsFile->fixer->addNewlineBefore( $first_content );
-					$this->phpcsFile->fixer->endChangeset();
-				}
 			}
 
 			$end_of_last_item = $end_of_this_item;
