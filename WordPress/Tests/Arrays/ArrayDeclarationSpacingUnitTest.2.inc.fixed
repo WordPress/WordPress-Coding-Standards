@@ -193,3 +193,6 @@ $bad = [
 [
 	'prop1' => $prop1, 'prop2' => $prop2, // OK.
 ] = $some_var;
+
+// Don't confuse list arrows with array arrows.
+$okay = [ $item1, [ 'key1' => $a, 'key2' => $b ] = $array, $item3 ];

@@ -178,90 +178,73 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 		/*
 		 * Check that associative arrays are always multi-line.
 		 */
-		$array_has_keys = $this->phpcsFile->findNext( \T_DOUBLE_ARROW, $opener, $closer );
-		if ( false !== $array_has_keys ) {
+		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
-			$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
+		if ( ( false === $this->allow_single_item_single_line_associative_arrays
+				&& ! empty( $array_items ) )
+			|| ( true === $this->allow_single_item_single_line_associative_arrays
+				&& \count( $array_items ) > 1 )
+		) {
+			/*
+			 * Make sure the double arrow is for *this* array, not for a nested one.
+			 */
+			$array_has_keys = false; // Reset before doing more detailed check.
+			foreach ( $array_items as $item ) {
+				if ( Arrays::getDoubleArrowPtr( $this->phpcsFile, $item['start'], $item['end'] ) !== false ) {
+					$array_has_keys = true;
+					break;
+				}
+			}
 
-			if ( ( false === $this->allow_single_item_single_line_associative_arrays
-					&& ! empty( $array_items ) )
-				|| ( true === $this->allow_single_item_single_line_associative_arrays
-					&& \count( $array_items ) > 1 )
-			) {
-				/*
-				 * Make sure the double arrow is for *this* array, not for a nested one.
-				 */
-				$array_has_keys = false; // Reset before doing more detailed check.
-				foreach ( $array_items as $item ) {
-					for ( $ptr = $item['start']; $ptr <= $item['end']; $ptr++ ) {
-						if ( \T_DOUBLE_ARROW === $this->tokens[ $ptr ]['code'] ) {
-							$array_has_keys = true;
-							break 2;
+			if ( true === $array_has_keys ) {
+
+				$phrase = 'an';
+				if ( true === $this->allow_single_item_single_line_associative_arrays ) {
+					$phrase = 'a multi-item';
+				}
+				$fix = $this->phpcsFile->addFixableError(
+					'When %s array uses associative keys, each value should start on a new line.',
+					$closer,
+					'AssociativeArrayFound',
+					array( $phrase )
+				);
+
+				if ( true === $fix ) {
+
+					$this->phpcsFile->fixer->beginChangeset();
+
+					foreach ( $array_items as $item ) {
+						/*
+						 * Add a line break before the first non-empty token in the array item.
+						 * Prevents extraneous whitespace at the start of the line which could be
+						 * interpreted as alignment whitespace.
+						 */
+						$first_non_empty = $this->phpcsFile->findNext(
+							Tokens::$emptyTokens,
+							$item['start'],
+							( $item['end'] + 1 ),
+							true
+						);
+						if ( false === $first_non_empty ) {
+							continue;
 						}
 
-						// Skip passed any nested arrays.
-						if ( isset( $this->targets[ $this->tokens[ $ptr ]['code'] ] ) ) {
-							$nested_array_open_close = Arrays::getOpenClose( $this->phpcsFile, $ptr );
-							if ( false === $nested_array_open_close ) {
-								// Nested array open/close could not be determined.
-								continue;
-							}
-
-							$ptr = $nested_array_open_close['closer'];
+						if ( $item['start'] <= ( $first_non_empty - 1 )
+							&& \T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
+						) {
+							// Remove whitespace which would otherwise becoming trailing
+							// (as it gives problems with the fixed file).
+							$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
 						}
+
+						$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
 					}
+
+					$this->phpcsFile->fixer->endChangeset();
 				}
 
-				if ( true === $array_has_keys ) {
-
-					$phrase = 'an';
-					if ( true === $this->allow_single_item_single_line_associative_arrays ) {
-						$phrase = 'a multi-item';
-					}
-					$fix = $this->phpcsFile->addFixableError(
-						'When %s array uses associative keys, each value should start on a new line.',
-						$closer,
-						'AssociativeArrayFound',
-						array( $phrase )
-					);
-
-					if ( true === $fix ) {
-
-						$this->phpcsFile->fixer->beginChangeset();
-
-						foreach ( $array_items as $item ) {
-							/*
-							 * Add a line break before the first non-empty token in the array item.
-							 * Prevents extraneous whitespace at the start of the line which could be
-							 * interpreted as alignment whitespace.
-							 */
-							$first_non_empty = $this->phpcsFile->findNext(
-								Tokens::$emptyTokens,
-								$item['start'],
-								( $item['end'] + 1 ),
-								true
-							);
-							if ( false === $first_non_empty ) {
-								continue;
-							}
-
-							if ( $item['start'] <= ( $first_non_empty - 1 )
-								&& \T_WHITESPACE === $this->tokens[ ( $first_non_empty - 1 ) ]['code']
-							) {
-								// Remove whitespace which would otherwise becoming trailing
-								// (as it gives problems with the fixed file).
-								$this->phpcsFile->fixer->replaceToken( ( $first_non_empty - 1 ), '' );
-							}
-
-							$this->phpcsFile->fixer->addNewlineBefore( $first_non_empty );
-						}
-
-						$this->phpcsFile->fixer->endChangeset();
-					}
-
-					// No need to check for spacing around opener/closer as this array should be multi-line.
-					return;
-				}
+				// No need to check for spacing around opener/closer as this array should be multi-line.
+				return;
 			}
 		}
 

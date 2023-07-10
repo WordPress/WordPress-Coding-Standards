@@ -180,3 +180,6 @@ $bad = array(
 	end */
 	'key4' => 'value4'
 );
+
+// Don't confuse list arrows with array arrows.
+$okay = array( $item1, list( 'key1' => $a, 'key2' => $b ) = $array, $item3 );
