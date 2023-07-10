@@ -171,8 +171,10 @@ final class VariableHelper {
 		$next_token = $phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
 		// This might be an opening square bracket in the case of arrays ($var['a']).
-		while ( false !== $next_token && \T_OPEN_SQUARE_BRACKET === $tokens[ $next_token ]['code'] ) {
-
+		while ( false !== $next_token
+			&& \T_OPEN_SQUARE_BRACKET === $tokens[ $next_token ]['code']
+			&& isset( $tokens[ $next_token ]['bracket_closer'] )
+		) {
 			$next_token = $phpcsFile->findNext(
 				Tokens::$emptyTokens,
 				( $tokens[ $next_token ]['bracket_closer'] + 1 ),
