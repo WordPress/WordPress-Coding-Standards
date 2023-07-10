@@ -31,53 +31,97 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of errors>
 	 */
-	public function getErrorList() {
+	public function getErrorList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'NonceVerificationUnitTest.1.inc':
+				return array(
+					5   => 1,
+					9   => 1,
+					31  => 1,
+					44  => 1,
+					48  => 1,
+					69  => 1,
+					88  => 1, // Old-style WPCS ignore comments are no longer supported.
+					89  => 1,
+					113 => 1,
+					114 => 1,
+					138 => 1,
+					140 => 1,
+					149 => 1,
+					150 => 1,
+					151 => 1,
+					167 => 1,
+					175 => 1,
+					180 => 1,
+					188 => 1,
+					192 => 1,
+					242 => 1,
+					259 => 1,
+					296 => 1,
+					302 => 1,
+					325 => 1,
+					329 => 1,
+					337 => 1,
+					341 => 1,
+					402 => 1,
+					405 => 1,
+					414 => 1,
+					428 => 1,
+					438 => 1,
+					448 => 1,
+					453 => 1,
+					470 => 1,
+					478 => 1,
+				);
 
-		return array(
-			5   => 1,
-			9   => 1,
-			31  => 1,
-			44  => 1,
-			48  => 1,
-			69  => 1,
-			88  => 1, // Old-style WPCS ignore comments are no longer supported.
-			89  => 1,
-			113 => 1,
-			114 => 1,
-			122 => 1,
-			126 => 1,
-			148 => 1,
-			150 => 1,
-			159 => 1,
-			160 => 1,
-			161 => 1,
-			177 => 1,
-			185 => 1,
-			190 => 1,
-			198 => 1,
-			202 => 1,
-			252 => 1,
-			269 => 1,
-			306 => 1,
-			312 => 1,
-			335 => 1,
-			339 => 1,
-			347 => 1,
-			351 => 1,
-		);
+			case 'NonceVerificationUnitTest.2.inc':
+				return array(
+					10 => 1,
+					14 => 1,
+				);
+
+			case 'NonceVerificationUnitTest.7.inc':
+				return array(
+					17 => 1,
+					23 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array <int line number> => <int number of warnings>
 	 */
-	public function getWarningList() {
-		return array(
-			375 => 1,
-			389 => 1,
-		);
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'NonceVerificationUnitTest.1.inc':
+				return array(
+					365 => 1,
+					379 => 1,
+				);
+
+			case 'NonceVerificationUnitTest.4.inc':
+				return array(
+					25 => 1,
+				);
+
+			case 'NonceVerificationUnitTest.6.inc':
+				return array(
+					8 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 }
