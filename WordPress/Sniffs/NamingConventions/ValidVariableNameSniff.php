@@ -66,6 +66,7 @@ final class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @var array
 	 */
 	protected $allowed_mixed_case_member_var_names = array(
+		'cat_ID'            => true,
 		'comment_ID'        => true,
 		'comment_author_IP' => true,
 		'comment_post_ID'   => true,
