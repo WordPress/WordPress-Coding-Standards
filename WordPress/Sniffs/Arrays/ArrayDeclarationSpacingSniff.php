@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Arrays;
 
 use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
 
@@ -53,21 +54,6 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	public $allow_single_item_single_line_associative_arrays = true;
 
 	/**
-	 * Token this sniff targets.
-	 *
-	 * Also used for distinguishing between the array and an array value
-	 * which is also an array.
-	 *
-	 * @since 0.12.0
-	 *
-	 * @var array
-	 */
-	private $targets = array(
-		\T_ARRAY            => \T_ARRAY,
-		\T_OPEN_SHORT_ARRAY => \T_OPEN_SHORT_ARRAY,
-	);
-
-	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 0.12.0
@@ -75,7 +61,7 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return $this->targets;
+		return Collections::arrayOpenTokensBC();
 	}
 
 	/**
@@ -90,7 +76,7 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $stackPtr ]['code']
+		if ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $stackPtr ]['code'] ] )
 			&& Arrays::isShortArray( $this->phpcsFile, $stackPtr ) === false
 		) {
 			// Short list, not short array.
