@@ -221,8 +221,8 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 
 				if ( false === $next ) {
 					// Shouldn't happen, but just in case.
-					$end_of_last_item = $end_of_this_item;
-					continue;
+					$end_of_last_item = $end_of_this_item; // @codeCoverageIgnore
+					continue; // @codeCoverageIgnore
 				}
 
 				if ( $this->tokens[ $next ]['line'] !== $this->tokens[ $first_content ]['line'] ) {
@@ -232,8 +232,8 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 
 			if ( false === $first_content ) {
 				// Shouldn't happen, but just in case.
-				$end_of_last_item = $end_of_this_item;
-				continue;
+				$end_of_last_item = $end_of_this_item; // @codeCoverageIgnore
+				continue; // @codeCoverageIgnore
 			}
 
 			if ( $this->tokens[ $end_of_last_item ]['line'] === $this->tokens[ $first_content ]['line'] ) {

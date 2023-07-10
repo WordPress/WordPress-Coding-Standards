@@ -81,3 +81,7 @@ $bad = array(
 
 // Don't confuse list arrows with array arrows.
 $okay = array( $item1, list( 'key1' => $a, 'key2' => $b ) = $array, $item3 );
+
+// Live coding/parse error.
+// This must be the last test in the file!
+$ignore = array( $item1, 'key' => 'value',
