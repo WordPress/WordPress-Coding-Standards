@@ -256,9 +256,17 @@
 
 	<!-- Generic array layout check. -->
 	<!-- Covers rule: For associative arrays, each item should start on a new line
-		 when the array contains more than one item.
-		 Also covers various single-line array whitespace issues. -->
+		 when the array contains more than one item. -->
 	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
+
+	<!-- Covers various array whitespace issues. -->
+	<rule ref="NormalizedArrays.Arrays.ArrayBraceSpacing">
+		<properties>
+			<property name="spacesWhenEmpty" value="0"/>
+			<property name="spacesSingleLine" value="1"/>
+			<property name="spacesMultiLine" value="newline"/>
+		</properties>
+	</rule>
 
 	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
 	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>

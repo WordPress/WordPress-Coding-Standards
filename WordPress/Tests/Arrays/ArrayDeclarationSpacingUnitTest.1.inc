@@ -3,13 +3,6 @@
  * Test sniff with long arrays.
  */
 
-$good = array( 'value1', 'value2' ); // Ok.
-
-$query_vars = array('food'); // Bad, no spaces after opening and before closing parenthesis.
-
-// Test for fixing of extra whitespace.
-$test = array(   1, 2     );
-
 $bad = array( 'key' => 'value' ); // OK, one item single-line associative arrays are ok.
 
 // Test for fixing nested associative arrays.
@@ -32,40 +25,7 @@ $bad = array( 'key1' => 'value1', /* comment */ 'key2' => 'value2' ); // Bad.
 $bad = array( 'value1', 'value2', array( 'sub1' => 1, 'sub2' => 2 ), 'value4' ); // Bad.
 
 /*
- * Test spacing between array keyword and open parenthesis.
- */
-$a = array(); // OK.
-$b = array  (); // Bad.
-$train = array
-(
-	true,
-	'aaa'
-); // Bad - space between keyword and opener.
-
-$a = array
-// Bad.
-( 'a', 'b' );
-
-$a = array /* Bad. */ ( 'a', 'b' );
-
-/*
- * Tests for empty array with space between parentheses.
- */
-// OK.
-$a = array();
-$value = array( /* comment */ );
-$x = array(
-		// comment
-	 );
-
-// Bad.
-$value = array ( );
-$value = array(   );
-$x = array(
-	 );
-
-/*
- * Tests for multi-line arrays - closing brace on new line + array items each on new line.
+ * Tests for multi-line arrays - array items each on new line.
  */
 // OK.
 $value = array(
@@ -97,12 +57,6 @@ $x = array('name' => 'test',
 $foo = array(1
 , 2);
 
-$fields = array(
-	'value' => 'type');
-
-$bad = array('key' => 'value'); // Bad, spacing around parenthesis.
-$bad = array(     'key' => 'value'     ); // Bad, spacing around parenthesis.
-
 // phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays false
 
 $bad = array( 'key' => 'value' ); // Bad.
@@ -124,3 +78,10 @@ $bad = array(
 	end */
 	'key4' => 'value4'
 );
+
+// Don't confuse list arrows with array arrows.
+$okay = array( $item1, list( 'key1' => $a, 'key2' => $b ) = $array, $item3 );
+
+// Live coding/parse error.
+// This must be the last test in the file!
+$ignore = array( $item1, 'key' => 'value',
