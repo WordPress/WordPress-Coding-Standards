@@ -1,5 +1,5 @@
 {
-	"name": "wp-coding-standards/wpcs",
+	"name": "lewebsimple/wpcs",
 	"type": "phpcodesniffer-standard",
 	"description": "PHP_CodeSniffer rules (sniffs) to enforce WordPress coding conventions",
 	"keywords": [
