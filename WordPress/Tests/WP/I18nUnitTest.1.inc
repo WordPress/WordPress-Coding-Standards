@@ -195,9 +195,9 @@ __( '<foo>Foo</foo>', 'my-slug' ); // Good
 
 // Strings wrapped in `<a href="...">...</a>` aren't flagged, since the link target might require localization.
 __( '<a href="https://wordpress.org">WordPress</a>', 'my-slug' ); // Good
-__( '<a id="anchor">translatable text</a>', 'my-slug' ) // Bad, since no href
-__( '<a>translatable text</a>', 'my-slug' ) // Bad, since no href
-__( '<a href="%s">translatable text</a>', 'my-slug' ) // Good
+__( '<a id="anchor">translatable text</a>', 'my-slug' ); // Bad, since no href
+__( '<a>translatable text</a>', 'my-slug' ); // Bad, since no href
+__( '<a href="%s">translatable text</a>', 'my-slug' ); // Good
 
 // Strings containing malformed XML, to make sure we're able to parse them. No warnings should be thrown.
 __( '<div>text to translate', 'my-slug' );
@@ -313,5 +313,8 @@ esc_html_e( 'foo', '' ); // Bad: text domain mismatch.
 // Issue #1948 - Show an error when the text domain is an empty string and no text domain has been passed.
 // phpcs:set WordPress.WP.I18n text_domain[]
 esc_html_e( 'foo', '' ); // Bad: text-domain can not be empty.
+
+// PHP 8.0+: safeguard handling of newly introduced placeholders.
+__( 'There are %1$h monkeys in the %H', 'my-slug' ); // Bad: multiple arguments should be numbered.
 
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment

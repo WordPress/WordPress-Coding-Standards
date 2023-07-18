@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
@@ -53,8 +54,13 @@ final class EnqueuedResourcesSniff extends Sniff {
 		$end_ptr = $stackPtr;
 		$content = $this->tokens[ $stackPtr ]['content'];
 		if ( \T_INLINE_HTML !== $this->tokens[ $stackPtr ]['code'] ) {
-			$end_ptr = TextStrings::getEndOfCompleteTextString( $this->phpcsFile, $stackPtr );
-			$content = TextStrings::getCompleteTextString( $this->phpcsFile, $stackPtr );
+			try {
+				$end_ptr = TextStrings::getEndOfCompleteTextString( $this->phpcsFile, $stackPtr );
+				$content = TextStrings::getCompleteTextString( $this->phpcsFile, $stackPtr );
+			} catch ( RuntimeException $e ) {
+				// Parse error/live coding.
+				return;
+			}
 		}
 
 		if ( preg_match_all( '# rel=\\\\?[\'"]?stylesheet\\\\?[\'"]?#', $content, $matches, \PREG_OFFSET_CAPTURE ) > 0 ) {

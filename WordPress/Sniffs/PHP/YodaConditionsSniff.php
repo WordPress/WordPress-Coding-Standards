@@ -123,5 +123,4 @@ final class YodaConditionsSniff extends Sniff {
 
 		$this->phpcsFile->addError( 'Use Yoda Condition checks, you must.', $stackPtr, 'NotYoda' );
 	}
-
 }

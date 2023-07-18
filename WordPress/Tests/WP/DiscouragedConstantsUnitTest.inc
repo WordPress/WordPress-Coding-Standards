@@ -100,3 +100,5 @@ enum ContainsConst {
 	const STYLESHEETPATH = 'something';
 	private function STYLESHEETPATH() {}
 }
+
+echo HEADER_TEXTCOLOR::$var; // OK.

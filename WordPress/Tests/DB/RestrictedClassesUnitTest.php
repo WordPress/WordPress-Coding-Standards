@@ -20,6 +20,10 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   3.0.0  Renamed the fixtures to create compatibility with PHPCS 4.x/PHPUnit >=8.
+ *
+ * @covers \WordPressCS\WordPress\AbstractClassRestrictionsSniff
+ * @covers \WordPressCS\WordPress\Helpers\RulesetPropertyHelper
+ * @covers \WordPressCS\WordPress\Sniffs\DB\RestrictedClassesSniff
  */
 final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 
@@ -67,31 +71,38 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'RestrictedClassesUnitTest.1.inc':
 				return array(
-					17 => 1,
-					18 => 1,
-					19 => 1,
-					20 => 1,
-					22 => 1,
-					23 => 1,
-					24 => 1,
-					25 => 1,
-					26 => 1,
-					27 => 1,
-					29 => 1,
-					30 => 1,
-					32 => 1,
-					33 => 1,
-					35 => 1,
-					36 => 1,
-					37 => 1,
-					39 => 1,
-					40 => 1,
-					42 => 1,
-					51 => 1,
-					52 => 1,
-					63 => 1,
-					65 => 1,
-					66 => 1,
+					17  => 1,
+					18  => 1,
+					19  => 1,
+					20  => 1,
+					22  => 1,
+					23  => 1,
+					24  => 1,
+					25  => 1,
+					26  => 1,
+					27  => 1,
+					29  => 1,
+					30  => 1,
+					32  => 1,
+					33  => 1,
+					35  => 1,
+					36  => 1,
+					37  => 1,
+					39  => 1,
+					40  => 1,
+					42  => 1,
+					51  => 1,
+					52  => 1,
+					63  => 1,
+					65  => 1,
+					66  => 1,
+					69  => 1,
+					82  => 1,
+					87  => 1,
+					88  => 1,
+					91  => 1,
+					103 => 1,
+					106 => 1,
 				);
 
 			case 'RestrictedClassesUnitTest.2.inc':
@@ -151,5 +162,4 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

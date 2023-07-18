@@ -173,5 +173,4 @@ final class ArrayKeySpacingRestrictionsSniff extends Sniff {
 			}
 		}
 	}
-
 }

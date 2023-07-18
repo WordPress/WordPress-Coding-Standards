@@ -53,3 +53,6 @@ echo '<script type="text/javascript"
 // Test multi-line text string with multiple issues.
 echo '<link rel="stylesheet" href="https://someurl/somefile1.css"/>
 	<link rel="stylesheet" href="https://someurl/somefile2.css"/>';
+
+// Safeguard the handling of a particular type of parse error (forgotten concat operator).
+echo 'not a text we need to worry' 'about anyway, but we shouldn\'t see an uncaught runtime exception because of it';

@@ -73,12 +73,13 @@ trait IsUnitTestTrait {
 	 *           directory of WP Core.}
 	 *
 	 * @since 0.11.0
-	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
-	 *               Renamed from `$test_class_whitelist` to `$known_test_classes`.
+	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
+	 *               - Renamed from `$test_class_whitelist` to `$known_test_classes`.
+	 *               - Visibility changed from protected to private.
 	 *
 	 * @var string[]
 	 */
-	protected $known_test_classes = array(
+	private $known_test_classes = array(
 		// Base test cases.
 		'WP_UnitTestCase'                            => true,
 		'WP_UnitTestCase_Base'                       => true,
@@ -95,10 +96,70 @@ trait IsUnitTestTrait {
 
 		// PHPUnit native test cases.
 		'PHPUnit_Framework_TestCase'                 => true,
-		'PHPUnit\Framework\TestCase'                 => true,
+		'PHPUnit\\Framework\\TestCase'               => true,
 		// PHPUnit native TestCase class when imported via use statement.
 		'TestCase'                                   => true,
 	);
+
+	/**
+	 * Cache of previously added custom test classes.
+	 *
+	 * Prevents having to do the same merges over and over again.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[]
+	 */
+	private $added_custom_test_classes = array();
+
+	/**
+	 * Combined list of WP/PHPUnit native and custom test classes.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<string, bool>
+	 */
+	private $all_test_classes = array();
+
+	/**
+	 * Retrieve a list of all registered test classes, both WP/PHPUnit native as well as custom.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<string, bool>
+	 */
+	protected function get_all_test_classes() {
+		if ( array() === $this->all_test_classes
+			|| $this->custom_test_classes !== $this->added_custom_test_classes
+		) {
+			/*
+			 * Show some tolerance for user input.
+			 * The custom test class names should be passed as FQN without a prefixing `\`.
+			 */
+			$custom_test_classes = array();
+			if ( ! empty( $this->custom_test_classes ) ) {
+				foreach ( $this->custom_test_classes as $v ) {
+					$custom_test_classes[] = ltrim( $v, '\\' );
+				}
+			}
+
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_test_classes = array_map( 'strtolower', $custom_test_classes );
+			$known_test_classes  = array_change_key_case( $this->known_test_classes, \CASE_LOWER );
+
+			$this->all_test_classes = RulesetPropertyHelper::merge_custom_array(
+				$custom_test_classes,
+				$known_test_classes
+			);
+
+			// Store the original value so the comparison can succeed.
+			$this->added_custom_test_classes = $this->custom_test_classes;
+		}
+
+		return $this->all_test_classes;
+	}
 
 	/**
 	 * Check if a class token is part of a unit test suite.
@@ -110,7 +171,8 @@ trait IsUnitTestTrait {
 	 *
 	 * @since 0.12.0 Split off from the `is_token_in_test_method()` method.
 	 * @since 1.0.0  Improved recognition of namespaced class names.
-	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
+	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
+	 *               - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The position of the token to be examined.
@@ -127,28 +189,21 @@ trait IsUnitTestTrait {
 		}
 
 		// Add any potentially extra custom test classes to the known test classes list.
-		$known_test_classes = RulesetPropertyHelper::merge_custom_array(
-			$this->custom_test_classes,
-			$this->known_test_classes
-		);
+		$known_test_classes = $this->get_all_test_classes();
 
-		/*
-		 * Show some tolerance for user input.
-		 * The custom test class names should be passed as FQN without a prefixing `\`.
-		 */
-		foreach ( $known_test_classes as $k => $v ) {
-			$known_test_classes[ $k ] = ltrim( $v, '\\' );
-		}
+		$namespace = strtolower( Namespaces::determineNamespace( $phpcsFile, $stackPtr ) );
 
 		// Is the class/trait one of the known test classes ?
-		$namespace = Namespaces::determineNamespace( $phpcsFile, $stackPtr );
 		$className = ObjectDeclarations::getName( $phpcsFile, $stackPtr );
-		if ( '' !== $namespace ) {
-			if ( isset( $known_test_classes[ $namespace . '\\' . $className ] ) ) {
+		if ( empty( $className ) === false ) {
+			$className = strtolower( $className );
+			if ( '' !== $namespace ) {
+				if ( isset( $known_test_classes[ $namespace . '\\' . $className ] ) ) {
+					return true;
+				}
+			} elseif ( isset( $known_test_classes[ $className ] ) ) {
 				return true;
 			}
-		} elseif ( isset( $known_test_classes[ $className ] ) ) {
-			return true;
 		}
 
 		// Does the class/trait extend one of the known test classes ?
@@ -156,6 +211,8 @@ trait IsUnitTestTrait {
 		if ( false === $extendedClassName ) {
 			return false;
 		}
+
+		$extendedClassName = strtolower( $extendedClassName );
 
 		if ( '\\' === $extendedClassName[0] ) {
 			if ( isset( $known_test_classes[ substr( $extendedClassName, 1 ) ] ) ) {
@@ -178,5 +235,4 @@ trait IsUnitTestTrait {
 
 		return false;
 	}
-
 }

@@ -654,5 +654,4 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		return (bool) preg_match( '`^(["\'])%[dfFs]\1$`', $array_fill_params[3]['raw'] );
 	}
-
 }

@@ -17,7 +17,9 @@ use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\Scopes;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
+use WordPressCS\WordPress\Helpers\ListHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper;
 use WordPressCS\WordPress\Sniff;
@@ -161,8 +163,8 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 	/**
 	 * Check that global variables declared via a list construct are prefixed.
 	 *
-	 * @internal No need to take special measures for nested lists. Nested or not,
-	 * each list part can only contain one variable being written to.
+	 * {@internal No need to take special measures for nested lists. Nested or not,
+	 * each list part can only contain one variable being written to.}
 	 *
 	 * @since 2.2.0
 	 *
@@ -178,7 +180,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			return;
 		}
 
-		$var_pointers = $this->get_list_variables( $stackPtr, $list_open_close );
+		$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $stackPtr );
 		foreach ( $var_pointers as $ptr ) {
 			$this->process_variable_assignment( $ptr, true );
 		}
@@ -366,7 +368,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 					continue;
 				}
 
-				$var_pointers = $this->get_list_variables( $ptr, $list_open_close );
+				$var_pointers = ListHelper::get_list_variables( $this->phpcsFile, $ptr );
 				foreach ( $var_pointers as $ptr ) {
 					$var_name = $this->tokens[ $ptr ]['content'];
 					if ( '$GLOBALS' === $var_name ) {
@@ -393,7 +395,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			}
 
 			// Don't throw false positives for static class properties.
-			if ( $this->is_class_object_call( $ptr ) === true ) {
+			if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $ptr ) === true ) {
 				continue;
 			}
 
@@ -433,5 +435,4 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			$data
 		);
 	}
-
 }

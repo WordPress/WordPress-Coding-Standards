@@ -9,6 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
+use PHPCSUtils\Utils\Numbers;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 
 /**
@@ -46,8 +48,9 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function getGroups() {
 		return array(
 			'posts_per_page' => array(
-				'type' => 'warning',
-				'keys' => array(
+				'type'    => 'warning',
+				'message' => 'Detected high pagination limit, `%s` is set to `%s`',
+				'keys'    => array(
 					'posts_per_page',
 					'numberposts',
 				),
@@ -62,17 +65,38 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	 * @param  mixed  $val   Assigned value.
 	 * @param  int    $line  Token line.
 	 * @param  array  $group Group definition.
-	 * @return mixed         FALSE if no match, TRUE if matches, STRING if matches
-	 *                       with custom error message passed to ->process().
+	 *
+	 * @return bool FALSE if no match, TRUE if matches.
 	 */
 	public function callback( $key, $val, $line, $group ) {
-		$this->posts_per_page = (int) $this->posts_per_page;
+		$stripped_val = TextStrings::stripQuotes( $val );
 
-		if ( $val > $this->posts_per_page ) {
-			return 'Detected high pagination limit, `%s` is set to `%s`';
+		if ( $val !== $stripped_val ) {
+			// The value was a text string. For text strings, we only accept purely numeric values.
+			if ( preg_match( '`^[0-9]+$`', $stripped_val ) !== 1 ) {
+				// Not a purely numeric value, so any comparison would be a false comparison.
+				return false;
+			}
+
+			// Purely numeric string, treat it as an integer from here on out.
+			$val = $stripped_val;
 		}
 
-		return false;
-	}
+		$first_char = $val[0];
+		if ( '-' === $first_char || '+' === $first_char ) {
+			$val = ltrim( $val, '-+' );
+		} else {
+			$first_char = '';
+		}
 
+		$real_value = Numbers::getDecimalValue( $val );
+		if ( false === $real_value ) {
+			// This wasn't a purely numeric value, so any comparison would be a false comparison.
+			return false;
+		}
+
+		$val = $first_char . $real_value;
+
+		return ( (int) $val > (int) $this->posts_per_page );
+	}
 }

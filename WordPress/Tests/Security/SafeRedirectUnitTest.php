@@ -17,6 +17,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   1.0.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\Security\SafeRedirectSniff
  */
 final class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 
@@ -39,5 +41,4 @@ final class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 			3 => 1,
 		);
 	}
-
 }

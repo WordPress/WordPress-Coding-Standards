@@ -19,6 +19,13 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since   2013-06-11
  * @since   0.13.0     Class name changed: this class is now namespaced.
  * @since   1.0.0      This sniff has been moved from the `XSS` category to the `Security` category.
+ *
+ * @covers \WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::get_safe_cast_tokens
+ * @covers \WordPressCS\WordPress\Helpers\ConstantsHelper::is_use_of_global_constant
+ * @covers \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait
+ * @covers \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait
+ * @covers \WordPressCS\WordPress\Sniffs\Security\EscapeOutputSniff
  */
 final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 
@@ -90,6 +97,10 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 			294 => 1,
 			297 => 1,
 			307 => 1,
+			313 => 1,
+			314 => 1,
+			315 => 1,
+			319 => 1,
 		);
 	}
 
@@ -101,5 +112,4 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList() {
 		return array();
 	}
-
 }

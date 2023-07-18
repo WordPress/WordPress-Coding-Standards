@@ -18,6 +18,9 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @since   2013-06-11
  * @since   0.13.0     Class name changed: this class is now namespaced.
+ *
+ * @covers \WordPressCS\WordPress\Helpers\DeprecationHelper
+ * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidFunctionNameSniff
  */
 final class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 

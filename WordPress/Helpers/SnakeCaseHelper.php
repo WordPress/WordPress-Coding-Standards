@@ -22,6 +22,8 @@ use PHPCSUtils\BackCompat\Helper;
  * {@internal The functionality in this class will likely be replaced at some point in
  * the future by functions from PHPCSUtils.}
  *
+ * @internal
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The method in this class was previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and has been moved here.
@@ -34,7 +36,8 @@ final class SnakeCaseHelper {
 	 * @since 2.0.0 Moved from the `WordPress.NamingConventions.ValidFunctionName` sniff
 	 *              to this class, renamed from `get_name_suggestion` and made static
 	 *              so it can also be used by classes which don't extend this class.
-	 * @since 3.0.0 Moved from the Sniff class to this class.
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - Renamed from `get_snake_case_name_suggestion()` to `get_suggestion()`.
 	 *
 	 * @param string $name The construct name.
 	 *

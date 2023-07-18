@@ -17,6 +17,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @package WPCS\WordPressCodingStandards
  *
  * @since   0.14.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\DB\PreparedSQLPlaceholdersSniff
  */
 final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 
@@ -95,5 +97,4 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			177 => 1,
 		);
 	}
-
 }

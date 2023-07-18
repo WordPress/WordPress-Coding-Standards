@@ -256,9 +256,17 @@
 
 	<!-- Generic array layout check. -->
 	<!-- Covers rule: For associative arrays, each item should start on a new line
-		 when the array contains more than one item.
-		 Also covers various single-line array whitespace issues. -->
+		 when the array contains more than one item. -->
 	<rule ref="WordPress.Arrays.ArrayDeclarationSpacing"/>
+
+	<!-- Covers various array whitespace issues. -->
+	<rule ref="NormalizedArrays.Arrays.ArrayBraceSpacing">
+		<properties>
+			<property name="spacesWhenEmpty" value="0"/>
+			<property name="spacesSingleLine" value="1"/>
+			<property name="spacesMultiLine" value="newline"/>
+		</properties>
+	</rule>
 
 	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
 	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
@@ -410,6 +418,59 @@
 
 	<!-- Covers rule: When combining the spread operator with the reference operator (&), there should be no spaces between them.. -->
 	<!-- Covered by the Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterReference error code. -->
+
+
+	<!--
+	#############################################################################
+	Handbook: Declare Statements, Namespace, and Import Statements - Namespace declarations.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#namespace-declarations
+	#############################################################################
+	-->
+	<!-- Rule: Each part of a namespace name should consist of capitalized words separated by underscores. -->
+
+	<!-- Rule: Namespace declarations should have exactly one blank line before the declaration and at least one blank line after. -->
+
+	<!-- Covers rule: There should be only one namespace declaration per file... -->
+	<rule ref="Universal.Namespaces.OneDeclarationPerFile"/>
+
+	<!-- Covers rule: ... and it should be at the top of the file.
+		 Note: with only one namespace declaration, it not being at the top of the file would be a parse error. -->
+	<!-- When in the file header, covered by PSR12.Files.FileHeader.IncorrectOrder. -->
+
+	<!-- Covers rule: Namespace declarations using curly brace syntax are not allowed. -->
+	<rule ref="Universal.Namespaces.DisallowCurlyBraceSyntax"/>
+
+	<!-- Covers rule: Explicit global namespace declaration (namespace declaration without name) are also not allowed. -->
+	<rule ref="Universal.Namespaces.DisallowDeclarationWithoutName"/>
+
+
+	<!--
+	#############################################################################
+	Handbook: Declare Statements, Namespace, and Import Statements - Using import use statements.
+	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#using-import-use-statements
+	#############################################################################
+	-->
+	<!-- Covers rule: Import use statements should be at the top of the file and follow the (optional) namespace declaration. -->
+	<rule ref="PSR12.Files.FileHeader.IncorrectOrder"/>
+
+	<!-- Covers rule: Import use statements should follow a specific order based on the type of the import:
+		 1. use statements for namespaces, classes, interfaces, traits and enums
+		 2. use statements for functions
+		 3. use statements for constants -->
+	<!-- Not yet covered: use statements which are not part of the file header. -->
+	<rule ref="PSR12.Files.FileHeader.IncorrectGrouping"/>
+
+	<!-- Rule: When using aliases, make sure the aliases follow the WordPress naming convention and are unique. -->
+
+	<!-- Rule: (example based rules, group use formatting, spacing around keywords) -->
+	<!-- Spacing after "use" keyword: covered by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
+
+	<!-- Implied through the examples: Names in an import use statement should not start with a leading backslash. -->
+	<rule ref="Universal.UseStatements.NoLeadingBackslash"/>
+
+	<!-- Implied through the examples: The use, function, const and as keywords should be lowercase.
+		 For the "use" and "as" keywords, this is covered via the Generic.PHP.LowerCaseKeyword sniff. -->
+	<rule ref="Universal.UseStatements.LowercaseFunctionConst"/>
 
 
 	<!--
@@ -705,8 +766,8 @@
 		</properties>
 	</rule>
 
-	<!-- All files should end with a new line. -->
-	<rule ref="Generic.Files.EndFileNewline"/>
+	<!-- All files should end with a new line, but only one. -->
+	<rule ref="PSR2.Files.EndFileNewline"/>
 
 	<!-- No whitespace should come before semicolons. -->
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
@@ -724,6 +785,18 @@
 
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
+
+	<!-- Implied via examples: one space after keywords in class declaration, class declaration on one line,
+		 close brace on line by itself and no blank lines between OO structure body and close brace. -->
+	<rule ref="PSR2.Classes.ClassDeclaration"/>
+	<rule ref="PSR2.Classes.ClassDeclaration.OpenBraceNewLine">
+		<!-- WP expects open brace on same line as class keyword. -->
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.Classes.ClassDeclaration.OpenBraceWrongLine">
+		<!-- WP expects open brace on same line as class keyword. -->
+		<severity>0</severity>
+	</rule>
 
 	<!-- References to self in a class should be lower-case and not have extraneous spaces,
 		 per implicit conventions in the core codebase; the NotUsed code refers to using the

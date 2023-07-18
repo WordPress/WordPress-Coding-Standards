@@ -17,6 +17,8 @@ namespace WordPressCS\WordPress\Helpers;
  * This also means that it has no promise of backward compatibility. Use at your own risk.
  * ---------------------------------------------------------------------------------------------
  *
+ * @internal
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The method in this class was previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and has been moved here.

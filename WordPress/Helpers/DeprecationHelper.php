@@ -23,6 +23,8 @@ use PHP_CodeSniffer\Util\Tokens;
  * {@internal The functionality in this class will likely be replaced at some point in
  * the future by functions from PHPCSUtils.}
  *
+ * @internal
+ *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The method in this class was previously contained in the
  *                `WordPressCS\WordPress\Sniff` class and has been moved here.
@@ -43,7 +45,11 @@ final class DeprecationHelper {
 	 * @return bool
 	 */
 	public static function is_function_deprecated( File $phpcsFile, $stackPtr ) {
-		$tokens                  = $phpcsFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
 		$ignore                  = Tokens::$methodPrefixes;
 		$ignore[ \T_WHITESPACE ] = \T_WHITESPACE;
 

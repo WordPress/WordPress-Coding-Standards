@@ -12,7 +12,12 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
-use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
+use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\ConstantsHelper;
+use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
+use WordPressCS\WordPress\Helpers\FormattingFunctionsHelper;
+use WordPressCS\WordPress\Helpers\PrintingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
 
@@ -31,35 +36,15 @@ use WordPressCS\WordPress\Sniff;
  *                 echo tags `<?=`.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `XSS` category to the `Security` category.
+ *
+ * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customEscapingFunctions
+ * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customAutoEscapedFunctions
+ * @uses    \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait::$customPrintingFunctions
  */
 class EscapeOutputSniff extends Sniff {
 
-	/**
-	 * Custom list of functions which escape values for output.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customEscapingFunctions = array();
-
-	/**
-	 * Custom list of functions whose return values are pre-escaped for output.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customAutoEscapedFunctions = array();
-
-	/**
-	 * Custom list of functions which print output incorporating the passed values.
-	 *
-	 * @since 0.4.0
-	 *
-	 * @var string|string[]
-	 */
-	public $customPrintingFunctions = array();
+	use EscapingFunctionsTrait;
+	use PrintingFunctionsTrait;
 
 	/**
 	 * Printing functions that incorporate unsafe values.
@@ -72,24 +57,6 @@ class EscapeOutputSniff extends Sniff {
 	protected $unsafePrintingFunctions = array(
 		'_e'  => 'esc_html_e() or esc_attr_e()',
 		'_ex' => 'echo esc_html_x() or echo esc_attr_x()',
-	);
-
-	/**
-	 * Cache of previously added custom functions.
-	 *
-	 * Prevents having to do the same merges over and over again.
-	 *
-	 * @since 0.4.0
-	 * @since 0.11.0 - Changed from public static to protected non-static.
-	 *               - Changed the format from simple bool to array.
-	 *
-	 * @var array
-	 */
-	protected $addedCustomFunctions = array(
-		'escape'     => array(),
-		'autoescape' => array(),
-		'sanitize'   => array(),
-		'print'      => array(),
 	);
 
 	/**
@@ -178,8 +145,6 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$this->mergeFunctionLists();
-
 		$function = $this->tokens[ $stackPtr ]['content'];
 
 		// Find the opening parenthesis (if present; T_ECHO might not have it).
@@ -188,7 +153,7 @@ class EscapeOutputSniff extends Sniff {
 		// If function, not T_ECHO nor T_PRINT.
 		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
 			// Skip if it is a function but is not one of the printing functions.
-			if ( ! isset( $this->printingFunctions[ $this->tokens[ $stackPtr ]['content'] ] ) ) {
+			if ( ! $this->is_printing_function( $this->tokens[ $stackPtr ]['content'] ) ) {
 				return;
 			}
 
@@ -338,7 +303,7 @@ class EscapeOutputSniff extends Sniff {
 			// Handle safe PHP native constants.
 			if ( \T_STRING === $this->tokens[ $i ]['code']
 				&& isset( $this->safe_php_constants[ $this->tokens[ $i ]['content'] ] )
-				&& $this->is_use_of_global_constant( $i )
+				&& ConstantsHelper::is_use_of_global_constant( $this->phpcsFile, $i )
 			) {
 				continue;
 			}
@@ -375,7 +340,7 @@ class EscapeOutputSniff extends Sniff {
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
-			if ( isset( $this->safe_casts[ $this->tokens[ $i ]['code'] ] ) ) {
+			if ( isset( ContextHelper::get_safe_cast_tokens()[ $this->tokens[ $i ]['code'] ] ) ) {
 				$in_cast = true;
 				continue;
 			}
@@ -386,18 +351,14 @@ class EscapeOutputSniff extends Sniff {
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
 				$function_opener        = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
-				$is_formatting_function = isset( $this->formattingFunctions[ $functionName ] );
+				$is_formatting_function = FormattingFunctionsHelper::is_formatting_function( $functionName );
 
 				if ( false !== $function_opener ) {
 
-					if ( isset( $this->arrayWalkingFunctions[ $functionName ] ) ) {
+					if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
 
 						// Get the callback parameter.
-						$callback = PassedParameters::getParameter(
-							$this->phpcsFile,
-							$ptr,
-							$this->arrayWalkingFunctions[ $functionName ]
-						);
+						$callback = ArrayWalkingFunctionsHelper::get_callback_parameter( $this->phpcsFile, $ptr );
 
 						if ( ! empty( $callback ) ) {
 							/*
@@ -437,8 +398,8 @@ class EscapeOutputSniff extends Sniff {
 				// If this is a safe function, we don't flag it.
 				if (
 					$is_formatting_function
-					|| isset( $this->autoEscapedFunctions[ $functionName ] )
-					|| isset( $this->escapingFunctions[ $functionName ] )
+					|| $this->is_escaping_function( $functionName )
+					|| $this->is_auto_escaped_function( $functionName )
 				) {
 					continue;
 				}
@@ -469,44 +430,4 @@ class EscapeOutputSniff extends Sniff {
 
 		return $end_of_statement;
 	}
-
-	/**
-	 * Merge custom functions provided via a custom ruleset with the defaults, if we haven't already.
-	 *
-	 * @since 0.11.0 Split out from the `process()` method.
-	 *
-	 * @return void
-	 */
-	protected function mergeFunctionLists() {
-		if ( $this->customEscapingFunctions !== $this->addedCustomFunctions['escape'] ) {
-			$customEscapeFunctions = RulesetPropertyHelper::merge_custom_array( $this->customEscapingFunctions, array(), false );
-
-			$this->escapingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$customEscapeFunctions,
-				$this->escapingFunctions
-			);
-
-			$this->addedCustomFunctions['escape'] = $this->customEscapingFunctions;
-		}
-
-		if ( $this->customAutoEscapedFunctions !== $this->addedCustomFunctions['autoescape'] ) {
-			$this->autoEscapedFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customAutoEscapedFunctions,
-				$this->autoEscapedFunctions
-			);
-
-			$this->addedCustomFunctions['autoescape'] = $this->customAutoEscapedFunctions;
-		}
-
-		if ( $this->customPrintingFunctions !== $this->addedCustomFunctions['print'] ) {
-
-			$this->printingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customPrintingFunctions,
-				$this->printingFunctions
-			);
-
-			$this->addedCustomFunctions['print'] = $this->customPrintingFunctions;
-		}
-	}
-
 }

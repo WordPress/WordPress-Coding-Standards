@@ -52,7 +52,7 @@ class Its_A_Kind_Of_Magic {
 	function __sleep() {} // Ok.
 	function __wakeup() {} // Ok.
 	function __toString() {} // Ok.
-	function __set_state() {} // Ok.
+	static function __set_state($properties) {} // Ok.
 	function __clone() {} // Ok.
 	function __invoke() {} // Ok.
 	function __debugInfo() {} // Ok.
@@ -148,7 +148,7 @@ class Deprecated {
 
 class PHP74Magic {
 	function __serialize() {} // OK.
-	function __unserialize() {} // OK.
+	function __unserialize($data) {} // OK.
 }
 
 class More_Nested {

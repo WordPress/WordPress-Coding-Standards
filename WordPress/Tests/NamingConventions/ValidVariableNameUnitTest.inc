@@ -11,7 +11,7 @@ class MyClass {
 	var $_varName = 'hello'; // Bad.
 
 	public $varNamf  = 'hello'; // Bad.
-	public bool $var_namf = 'hello';
+	public bool $var_namf = true;
 	public $varnamf  = 'hello';
 	public $_varNamf = 'hello'; // Bad.
 
@@ -208,7 +208,7 @@ function has_params( $without_default, $with_default = 'default' ) {} // OK.
 $closure = function ( $without_default, $with_default = 'default' ) {}; // OK.
 $arrow = fn ( $without_default, $with_default = 'default' ) => 10; // OK.
 
-function has_params( $withoutDefault, $withDefault = 'default' ) {} // Bad x 2.
+function has_params_too( $withoutDefault, $withDefault = 'default' ) {} // Bad x 2.
 $closure = function ( $withoutDefault, $withDefault = 'default' ) {}; // Bad x 2.
 $arrow = fn ( $withoutDefault, $withDefault = 'default' ) => 10; // Bad x 2.
 

@@ -214,7 +214,8 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
@@ -345,24 +346,24 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 	}
 
 	/**
-	 * Determine based on the "raw" parameter value, whether a file parameter points to
+	 * Determine based on the "clean" parameter value, whether a file parameter points to
 	 * a local data stream.
 	 *
-	 * @param string $raw_param_value Raw parameter value.
+	 * @param string $clean_param_value Parameter value without comments.
 	 *
 	 * @return bool True if this is a local data stream. False otherwise.
 	 */
-	protected function is_local_data_stream( $raw_param_value ) {
+	protected function is_local_data_stream( $clean_param_value ) {
 
-		$raw_stripped = TextStrings::stripQuotes( $raw_param_value );
-		if ( isset( $this->allowed_local_streams[ $raw_stripped ] )
-			|| isset( $this->allowed_local_stream_constants[ $raw_param_value ] )
+		$stripped = TextStrings::stripQuotes( $clean_param_value );
+		if ( isset( $this->allowed_local_streams[ $stripped ] )
+			|| isset( $this->allowed_local_stream_constants[ $clean_param_value ] )
 		) {
 			return true;
 		}
 
 		foreach ( $this->allowed_local_stream_partials as $partial ) {
-			if ( strpos( $raw_stripped, $partial ) === 0 ) {
+			if ( strpos( $stripped, $partial ) === 0 ) {
 				return true;
 			}
 		}
