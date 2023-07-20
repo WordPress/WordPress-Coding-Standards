@@ -498,10 +498,19 @@
 	<!-- Not yet covered: use statements which are not part of the file header. -->
 	<rule ref="PSR12.Files.FileHeader.IncorrectGrouping"/>
 
-	<!-- Rule: When using aliases, make sure the aliases follow the WordPress naming convention and are unique. -->
+	<!-- Rule: When using aliases, make sure the aliases follow the WordPress naming convention ... -->
+
+	<!-- Covers rule: ... and are unique. -->
+	<rule ref="Universal.UseStatements.NoUselessAliases"/>
 
 	<!-- Rule: (example based rules, group use formatting, spacing around keywords) -->
+
+	<!-- Implied through the examples: There should be exactly one space before/after keywords. -->
 	<!-- Spacing after "use" keyword: covered by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
+	<rule ref="Universal.UseStatements.KeywordSpacing"/>
+	<rule ref="Universal.UseStatements.KeywordSpacing.SpaceAfterUse">
+		<severity>0</severity>
+	</rule>
 
 	<!-- Implied through the examples: Names in an import use statement should not start with a leading backslash. -->
 	<rule ref="Universal.UseStatements.NoLeadingBackslash"/>
@@ -509,6 +518,11 @@
 	<!-- Implied through the examples: The use, function, const and as keywords should be lowercase.
 		 For the "use" and "as" keywords, this is covered via the Generic.PHP.LowerCaseKeyword sniff. -->
 	<rule ref="Universal.UseStatements.LowercaseFunctionConst"/>
+
+	<!-- Implied through the examples: When using group use statements, there should be one statement
+		 for each type - OO constructs (classes/interfaces/traits), functions, constants.
+		 The various types should not be combined in one group use statement. -->
+	<rule ref="Universal.UseStatements.DisallowMixedGroupUse"/>
 
 
 	<!--
