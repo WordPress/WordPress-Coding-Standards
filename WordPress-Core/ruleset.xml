@@ -144,7 +144,45 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
 	#############################################################################
 	-->
-	<!-- Covers rule: Always put spaces after commas, and on both sides of logical,
+	<!-- Covers rule: Always put spaces after commas... -->
+	<!-- No space before a comma and one space or a new line after. -->
+	<rule ref="Universal.WhiteSpace.CommaSpacing"/>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.TooMuchSpaceAfterCommaBeforeTrailingComment">
+		<!-- Alignment of trailing comments is allowed. -->
+		<severity>0</severity>
+	</rule>
+	<!-- Comma spacing in function declarations, including closure use statements, is handled by the
+		 Squiz.Functions.FunctionDeclarationArgumentSpacing sniff. -->
+	<rule ref="Universal.WhiteSpace.CommaSpacing.SpaceBeforeInFunctionDeclaration">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.TooMuchSpaceAfterInFunctionDeclaration">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.NoSpaceAfterInFunctionDeclaration">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.SpaceBeforeInClosureUse">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.TooMuchSpaceAfterInClosureUse">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.NoSpaceAfterInClosureUse">
+		<severity>0</severity>
+	</rule>
+	<!-- Comma spacing in function calls is handled by the Generic.Functions.FunctionCallArgumentSpacing sniff. -->
+	<rule ref="Universal.WhiteSpace.CommaSpacing.SpaceBeforeInFunctionCall">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.TooMuchSpaceAfterInFunctionCall">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.NoSpaceAfterInFunctionCall">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Covers rule: Always put spaces ... on both sides of logical,
 		 arithmetic, comparison, string and assignment operators. -->
 	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
 	<rule ref="Squiz.Strings.ConcatenationSpacing">
@@ -269,7 +307,7 @@
 	</rule>
 
 	<!-- Covers rule: Note the comma after the last array item: this is recommended. -->
-	<rule ref="WordPress.Arrays.CommaAfterArrayItem"/>
+	<rule ref="NormalizedArrays.Arrays.CommaAfterLast"/>
 
 	<!-- Covers rule: For switch control structures, case statements should be indented one tab
 		 from the switch statement and the contents of the case should be indented one tab
@@ -508,6 +546,13 @@
 
 	<!-- Prevent duplicate messages - spacing after use is already covered by `Generic.WhiteSpace.LanguageConstructSpacing`. -->
 	<rule ref="PSR12.Traits.UseDeclaration.SpaceAfterUse">
+		<severity>0</severity>
+	</rule>
+	<!-- Prevent duplicate messages - spacing around a comma is already covered by `Universal.WhiteSpace.CommaSpacing`. -->
+	<rule ref="PSR12.Traits.UseDeclaration.SpaceBeforeComma">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR12.Traits.UseDeclaration.SpaceAfterComma">
 		<severity>0</severity>
 	</rule>
 
