@@ -273,4 +273,10 @@ $wpdb->prepare( '
 	$fields
 ); // IdentifierWithinIN.
 
+// phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version 5.8
+
+$wpdb->prepare( 'WHERE %1$+10.3i = %s', $field, $value ); // UnsupportedIdentifierPlaceholder.
+$wpdb->prepare( "WHERE '%10i' IS NULL", $field ); // UnsupportedIdentifierPlaceholder + QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )', $fields ); // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+
 // phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version

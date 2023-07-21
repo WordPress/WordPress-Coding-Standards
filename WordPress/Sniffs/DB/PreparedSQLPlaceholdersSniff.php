@@ -22,10 +22,12 @@ use WordPressCS\WordPress\Sniff;
  * Check the following issues:
  * - The only placeholders supported are: %d, %f (%F), %s, %i, and their variations.
  * - Literal % signs need to be properly escaped as `%%`.
- * - Simple placeholders (%d, %f, %F, %s) should be left unquoted in the query string.
+ * - Simple placeholders (%d, %f, %F, %s, %i) should be left unquoted in the query string.
  * - Complex placeholders - numbered and formatted variants - will not be quoted
  *   automagically by $wpdb->prepare(), so if used for values, should be quoted in
  *   the query string.
+ *   The only exception to this is complex placeholders for %i. In that case, the
+ *   replacement *will* still be backtick-quoted.
  * - Either an array of replacements should be passed matching the number of
  *   placeholders found or individual parameters for each placeholder should
  *   be passed.
@@ -50,7 +52,6 @@ use WordPressCS\WordPress\Sniff;
 final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 	use MinimumWPVersionTrait;
-
 	use WPDBTrait;
 
 	/**
@@ -407,6 +408,24 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				unset( $match, $matches );
 			}
 
+			if ( $this->wp_version_compare( $this->minimum_wp_version, '6.2', '<' ) ) {
+				if ( preg_match_all( '`' . self::PREPARE_PLACEHOLDER_REGEX . '`x', $content, $matches ) > 0 ) {
+					if ( ! empty( $matches[0] ) ) {
+						foreach ( $matches[0] as $match ) {
+							if ( 'i' === substr( $match, -1 ) ) {
+								$this->phpcsFile->addError(
+									'The %%i modifier is only supported in WP 6.2 or higher. Found: "%s".',
+									$i,
+									'UnsupportedIdentifierPlaceholder',
+									array( $match )
+								);
+							}
+						}
+					}
+				}
+				unset( $match, $matches );
+			}
+
 			/*
 			 * Analyse the query for single/double quoted simple value placeholders
 			 * Identifiers are checked separately.
@@ -429,23 +448,21 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			/*
 			 * Analyse the query for quoted identifier placeholders.
 			 */
-			if ( version_compare( $this->minimum_wp_version, '6.2', '>=' ) ) {
-				$regex = '/(' . $regex_quote . '|`)(?<placeholder>' . self::PREPARE_PLACEHOLDER_REGEX . ')\1/x';
-				if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
-					if ( ! empty( $matches ) ) {
-						foreach ( $matches['placeholder'] as $index => $match ) {
-							if ( 'i' === substr( $match, -1 ) ) {
-								$this->phpcsFile->addError(
-									'Placeholders used for identifiers (%%i) in the query string in $wpdb->prepare() are always quoted automagically. Please remove the surrounding quotes. Found: %s',
-									$i,
-									'QuotedIdentifierPlaceholder',
-									array( $matches[0][ $index ] )
-								);
-							}
+			$regex = '/(' . $regex_quote . '|`)(?<placeholder>' . self::PREPARE_PLACEHOLDER_REGEX . ')\1/x';
+			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
+				if ( ! empty( $matches ) ) {
+					foreach ( $matches['placeholder'] as $index => $match ) {
+						if ( 'i' === substr( $match, -1 ) ) {
+							$this->phpcsFile->addError(
+								'Placeholders used for identifiers (%%i) in the query string in $wpdb->prepare() are always quoted automagically. Please remove the surrounding quotes. Found: %s',
+								$i,
+								'QuotedIdentifierPlaceholder',
+								array( $matches[0][ $index ] )
+							);
 						}
 					}
-					unset( $index, $match, $matches );
 				}
+				unset( $index, $match, $matches );
 			}
 
 			/*
@@ -455,7 +472,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
 					foreach ( $matches[0] as $match ) {
-						if ( preg_match( '`^%[dfFsi]$`', $match ) !== 1 && substr( $match, -1 ) !== 'i' ) { // Identifiers must always be unquoted.
+						if ( substr( $match, -1 ) !== 'i' && preg_match( '`^%[dfFsi]$`', $match ) !== 1 ) { // Identifiers must always be unquoted.
 							$this->phpcsFile->addWarning(
 								'Complex placeholders used for values in the query string in $wpdb->prepare() will NOT be quoted automagically. Found: %s.',
 								$i,
