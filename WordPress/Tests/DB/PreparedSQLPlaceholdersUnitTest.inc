@@ -207,3 +207,76 @@ $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->wp_options WHERE option_name L
 $where .= $wpdb->prepare( " AND `name` LIKE '%%%%" . '%s' . "%%%%' ", $args['name'] ); // Bad x 2.
 
 $wpdb->query($wpdb->prepare("delete from wp_postmeta where post_id = $target_postId AND meta_key like 'google_snippets'")); // Bad, the PreparedSQL sniff will also kick in and throw an error about `$target_postId`.
+
+// phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version 6.2
+
+$wpdb->prepare( 'WHERE %i = %s', $field, $value ); // OK.
+$wpdb->prepare( 'WHERE %i = %s', $value ); // ReplacementsWrongNumber.
+$wpdb->prepare( 'WHERE %i = %x', $field, $value ); // UnsupportedPlaceholder & ReplacementsWrongNumber.
+$wpdb->prepare( 'WHERE %i = %2$s', $field, $value ); // UnquotedComplexPlaceholder.
+$wpdb->prepare( 'WHERE %i = %10s', $field, $value ); // UnquotedComplexPlaceholder.
+$wpdb->prepare( 'WHERE %i = %2$-10s', $field, $value ); // UnquotedComplexPlaceholder.
+
+$wpdb->prepare( 'WHERE %i = "%s"', $field, $value ); // QuotedSimplePlaceholder.
+$wpdb->prepare( 'WHERE "%i" = %s', $field, $value ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( "WHERE \"%i\" = %s", $field, $value ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( "WHERE '%i' = %s", $field, $value ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE \'%i\' = %s', $field, $value ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE `%i` = %s', $field, $value ); // QuotedIdentifierPlaceholder.
+
+$wpdb->prepare( "WHERE '%10i' IS NULL", $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE "%10i" IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE \'%1$i\' IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( "WHERE \"%10i\" IS NULL", $field ); // QuotedIdentifierPlaceholder.
+
+$wpdb->prepare( 'WHERE %1$i IS NULL', $field ); // OK.
+$wpdb->prepare( 'WHERE %10i IS NULL', $field ); // OK.
+$wpdb->prepare( 'WHERE % i IS NULL', $field ); // UnescapedLiteral & UnfinishedPrepare (while this is valid, should avoid).
+$wpdb->prepare( 'WHERE %1$-10i IS NULL', $field ); // OK.
+$wpdb->prepare( 'WHERE %1$-10.3i IS NULL', $field ); // OK.
+$wpdb->prepare( 'WHERE %1$+10.3i IS NULL', $field ); // OK.
+$wpdb->prepare( 'WHERE %1$ 10.3i IS NULL', $field ); // UnsupportedPlaceholder (parsed as "%1$", which is valid, but should avoid).
+$wpdb->prepare( 'WHERE %1$010.3i IS NULL', $field ); // OK.
+$wpdb->prepare( "WHERE %1$'x10.3i IS NULL", $field ); // OK.
+
+$wpdb->prepare( 'WHERE %.2i IS NULL', 'a``b' ); // Currently ignore, but it might cause a problem (most likely a parse error) "WHERE `a`` IS NULL".
+
+$wpdb->prepare( 'WHERE `%1$i` IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE `%10i` IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE `% i` IS NULL', $field ); // UnescapedLiteral & UnfinishedPrepare (if RegEx matched, then it should be QuotedIdentifierPlaceholder).
+$wpdb->prepare( 'WHERE `%1$-10i` IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE `%1$-10.3i` IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE `%1$+10.3i` IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'WHERE `%1$ 10.3i` IS NULL', $field ); // QuotedIdentifierPlaceholder, and UnsupportedPlaceholder (parsed as "%1$", which is valid, but should avoid).
+$wpdb->prepare( 'WHERE `%1$010.3i` IS NULL', $field ); // QuotedIdentifierPlaceholder.
+$wpdb->prepare( "WHERE `%1$'x10.3i` IS NULL", $field ); // QuotedIdentifierPlaceholder.
+
+$wpdb->prepare( 'SELECT ID FROM `%2$i` WHERE `%1$i` = "%3$s"', $field, $wpdb->posts, $value ); // QuotedIdentifierPlaceholder (x2).
+
+$wpdb->prepare( 'SELECT ID FROM %i.%i WHERE %i = "false"', $db, $table, $field ); // OK.
+
+$wpdb->prepare(
+	sprintf(
+		'xxx IN (%s)',
+		implode( ',', array_fill( 0, count($fields), '%i' ) )
+	),
+	$fields
+); // ReplacementsWrongNumber + IdentifierWithinIN.
+
+$wpdb->prepare( '
+	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )',
+	$fields
+); // IdentifierWithinIN.
+
+$wpdb->prepare( '
+	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), "%i" ) ) . ' )',
+	$fields
+); // IdentifierWithinIN.
+
+// phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version 5.8
+
+$wpdb->prepare( 'WHERE %1$+10.3i = %s', $field, $value ); // UnsupportedIdentifierPlaceholder.
+$wpdb->prepare( "WHERE '%10i' IS NULL", $field ); // UnsupportedIdentifierPlaceholder + QuotedIdentifierPlaceholder.
+$wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )', $fields ); // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+
+// phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version

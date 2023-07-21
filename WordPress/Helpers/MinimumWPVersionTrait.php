@@ -31,10 +31,10 @@ trait MinimumWPVersionTrait {
 	/**
 	 * Minimum supported WordPress version.
 	 *
-	 * Currently used by the `WordPress.WP.AlternativeFunctions`,
-	 * `WordPress.WP.Capabilities`, `WordPress.WP.DeprecatedClasses`,
-	 * `WordPress.WP.DeprecatedFunctions`, `WordPress.WP.DeprecatedParameter`
-	 * and the `WordPress.WP.DeprecatedParameterValues` sniff.
+	 * Currently used by the `WordPress.Security.PreparedSQLPlaceholders`,
+	 * `WordPress.WP.AlternativeFunctions`, `WordPress.WP.Capabilities`,
+	 * `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`,
+	 * `WordPress.WP.DeprecatedParameter` and the `WordPress.WP.DeprecatedParameterValues` sniff.
 	 *
 	 * These sniffs will adapt their behaviour based on the minimum supported WP version
 	 * indicated.

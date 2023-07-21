@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\DB;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 use WordPressCS\WordPress\Helpers\WPDBTrait;
 use WordPressCS\WordPress\Sniff;
 
@@ -19,12 +20,14 @@ use WordPressCS\WordPress\Sniff;
  * Check for incorrect use of the $wpdb->prepare method.
  *
  * Check the following issues:
- * - The only placeholders supported are: %d, %f (%F) and %s and their variations.
+ * - The only placeholders supported are: %d, %f (%F), %s, %i, and their variations.
  * - Literal % signs need to be properly escaped as `%%`.
- * - Simple placeholders (%d, %f, %F, %s) should be left unquoted in the query string.
+ * - Simple placeholders (%d, %f, %F, %s, %i) should be left unquoted in the query string.
  * - Complex placeholders - numbered and formatted variants - will not be quoted
  *   automagically by $wpdb->prepare(), so if used for values, should be quoted in
  *   the query string.
+ *   The only exception to this is complex placeholders for %i. In that case, the
+ *   replacement *will* still be backtick-quoted.
  * - Either an array of replacements should be passed matching the number of
  *   placeholders found or individual parameters for each placeholder should
  *   be passed.
@@ -37,13 +40,18 @@ use WordPressCS\WordPress\Sniff;
  * @link https://developer.wordpress.org/reference/classes/wpdb/prepare/
  * @link https://core.trac.wordpress.org/changeset/41496
  * @link https://core.trac.wordpress.org/changeset/41471
+ * @link https://core.trac.wordpress.org/changeset/55151
  *
  * @package WPCS\WordPressCodingStandards
  *
- * @since   0.14.0
+ * @since 0.14.0
+ * @since 3.0.0 Support for the %i placeholder has been added
+ *
+ * @uses  \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 final class PreparedSQLPlaceholdersSniff extends Sniff {
 
+	use MinimumWPVersionTrait;
 	use WPDBTrait;
 
 	/**
@@ -76,7 +84,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				[0-9]+                     # Width specifier.
 				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
 			)
-			[dfFs]                     # Type specifier.
+			[dfFsi]                    # Type specifier.
 		)
 	)';
 
@@ -97,7 +105,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			(?!                        # Negative look ahead.
 				%[^%]                       # Not a correct literal % (%%).
 				|
-				%%[dfFs]                    # Nor a correct literal % (%%), followed by a simple placeholder.
+				%%[dfFsi]                   # Nor a correct literal % (%%), followed by a simple placeholder.
 			)
 			(?:[0-9]+\\\\??\$)?+       # Optional ordering of the placeholders.
 			[+-]?+                     # Optional sign specifier.
@@ -112,7 +120,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				[0-9]++                     # Width specifier.
 				(?:\.(?:[ 0]|\'.)?[0-9]+)?+ # Optional precision specifier with optional padding character.
 			)
-			(?![dfFs])                 # Negative look ahead: not one of the supported placeholders.
+			(?![dfFsi])                # Negative look ahead: not one of the supported placeholders.
 			(?:[^ \'"]*|$)             # but something else instead.
 		)
 	)`x';
@@ -170,6 +178,8 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
+
+		$this->set_minimum_wp_version();
 
 		if ( ! $this->is_wpdb_method_call( $this->phpcsFile, $stackPtr, $this->target_methods ) ) {
 			return;
@@ -398,8 +408,27 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				unset( $match, $matches );
 			}
 
+			if ( $this->wp_version_compare( $this->minimum_wp_version, '6.2', '<' ) ) {
+				if ( preg_match_all( '`' . self::PREPARE_PLACEHOLDER_REGEX . '`x', $content, $matches ) > 0 ) {
+					if ( ! empty( $matches[0] ) ) {
+						foreach ( $matches[0] as $match ) {
+							if ( 'i' === substr( $match, -1 ) ) {
+								$this->phpcsFile->addError(
+									'The %%i modifier is only supported in WP 6.2 or higher. Found: "%s".',
+									$i,
+									'UnsupportedIdentifierPlaceholder',
+									array( $match )
+								);
+							}
+						}
+					}
+				}
+				unset( $match, $matches );
+			}
+
 			/*
-			 * Analyse the query for quoted placeholders.
+			 * Analyse the query for single/double quoted simple value placeholders
+			 * Identifiers are checked separately.
 			 */
 			$regex = '`(' . $regex_quote . ')%[dfFs]\1`';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
@@ -417,13 +446,33 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
+			 * Analyse the query for quoted identifier placeholders.
+			 */
+			$regex = '/(' . $regex_quote . '|`)(?<placeholder>' . self::PREPARE_PLACEHOLDER_REGEX . ')\1/x';
+			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
+				if ( ! empty( $matches ) ) {
+					foreach ( $matches['placeholder'] as $index => $match ) {
+						if ( 'i' === substr( $match, -1 ) ) {
+							$this->phpcsFile->addError(
+								'Placeholders used for identifiers (%%i) in the query string in $wpdb->prepare() are always quoted automagically. Please remove the surrounding quotes. Found: %s',
+								$i,
+								'QuotedIdentifierPlaceholder',
+								array( $matches[0][ $index ] )
+							);
+						}
+					}
+				}
+				unset( $index, $match, $matches );
+			}
+
+			/*
 			 * Analyse the query for unquoted complex placeholders.
 			 */
 			$regex = '`(?<!' . $regex_quote . ')' . self::PREPARE_PLACEHOLDER_REGEX . '(?!' . $regex_quote . ')`x';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
 					foreach ( $matches[0] as $match ) {
-						if ( preg_match( '`%[dfFs]`', $match ) !== 1 ) {
+						if ( substr( $match, -1 ) !== 'i' && preg_match( '`^%[dfFsi]$`', $match ) !== 1 ) { // Identifiers must always be unquoted.
 							$this->phpcsFile->addWarning(
 								'Complex placeholders used for values in the query string in $wpdb->prepare() will NOT be quoted automagically. Found: %s.',
 								$i,
@@ -612,6 +661,12 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 	 *
 	 * This pattern presumes unquoted placeholders!
 	 *
+	 * Identifiers (%i) are not supported, as this function is designed to work
+	 * with `IN()`, which contains a list of values. In the future, it should
+	 * be possible to simplify code using the implode/array_fill pattern to
+	 * use a variable number of identifiers, e.g. `CONCAT(%...i)`,
+	 * https://core.trac.wordpress.org/ticket/54042
+	 *
 	 * @since 0.14.0
 	 *
 	 * @param int $implode_token The stackPtr to the implode function call.
@@ -649,6 +704,17 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		$array_fill_params = PassedParameters::getParameters( $this->phpcsFile, $array_fill );
 
 		if ( empty( $array_fill_params ) || \count( $array_fill_params ) !== 3 ) {
+			return false;
+		}
+
+		if ( "'%i'" === $array_fill_params[3]['raw']
+			|| '"%i"' === $array_fill_params[3]['raw']
+		) {
+			$this->phpcsFile->addError(
+				'The %i placeholder cannot be used within SQL `IN()` clauses.',
+				$implode_token,
+				'IdentifierWithinIN'
+			);
 			return false;
 		}
 
