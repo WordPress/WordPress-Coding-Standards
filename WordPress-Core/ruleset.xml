@@ -113,12 +113,13 @@
 	<!-- Covers rule: Files should be named descriptively using lowercase letters.
 		 Hyphens should separate words. -->
 	<!-- Covers rule: Class file names should be based on the class name with "class-"
-		 prepended and the underscores in the class name replaced with hyphens.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/642 -->
+		 prepended and the underscores in the class name replaced with hyphens. -->
 	<!-- Covers rule: Files containing template tags in wp-includes should have "-template"
-		 appended to the end of the name.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/642 -->
+		 appended to the end of the name. -->
 	<rule ref="WordPress.Files.FileName"/>
+
+	<!-- Rule: For files containing test classes, the file name should reflect the class name exactly, as per PSR4.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1995 -->
 
 
 	<!--
@@ -387,8 +388,8 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#multiline-function-calls
 	#############################################################################
 	-->
-	<!-- Rule: When splitting a function call over multiple lines, each parameter must be on a separate line.
-		 Covered via PEAR.Functions.FunctionCallSignature in Space Usage section. -->
+	<!-- Covers rule: When splitting a function call over multiple lines, each parameter must be on a separate line. -->
+	<!-- Covered via PEAR.Functions.FunctionCallSignature in Space Usage section. -->
 
 	<!-- Rule: Single line inline comments can take up their own line. -->
 	<!-- Rule: Each parameter must take up no more than a single line. Multi-line parameter
@@ -464,9 +465,11 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#namespace-declarations
 	#############################################################################
 	-->
-	<!-- Rule: Each part of a namespace name should consist of capitalized words separated by underscores. -->
+	<!-- Rule: Each part of a namespace name should consist of capitalized words separated by underscores.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2304 -->
 
-	<!-- Rule: Namespace declarations should have exactly one blank line before the declaration and at least one blank line after. -->
+	<!-- Rule: Namespace declarations should have exactly one blank line before the declaration and at least one blank line after.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2305 -->
 
 	<!-- Covers rule: There should be only one namespace declaration per file... -->
 	<rule ref="Universal.Namespaces.OneDeclarationPerFile"/>
@@ -498,12 +501,13 @@
 	<!-- Not yet covered: use statements which are not part of the file header. -->
 	<rule ref="PSR12.Files.FileHeader.IncorrectGrouping"/>
 
-	<!-- Rule: When using aliases, make sure the aliases follow the WordPress naming convention ... -->
+	<!-- Rule: When using aliases, make sure the aliases follow the WordPress naming convention ...
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2306 -->
 
 	<!-- Covers rule: ... and are unique. -->
 	<rule ref="Universal.UseStatements.NoUselessAliases"/>
 
-	<!-- Rule: (example based rules, group use formatting, spacing around keywords) -->
+	<!-- Covers rules: (example based rules, group use formatting, spacing around keywords) -->
 
 	<!-- Implied through the examples: There should be exactly one space before/after keywords. -->
 	<!-- Spacing after "use" keyword: covered by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
@@ -869,7 +873,6 @@
 
 	<!-- Lowercase PHP keywords, like class, function and case. -->
 	<rule ref="Generic.PHP.LowerCaseKeyword"/>
-	<rule ref="Universal.UseStatements.LowercaseFunctionConst"/>
 
 	<!-- Class opening braces should be on the same line as the statement. -->
 	<rule ref="Generic.Classes.OpeningBraceSameLine"/>
