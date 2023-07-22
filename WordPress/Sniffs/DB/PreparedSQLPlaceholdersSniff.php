@@ -253,7 +253,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 							if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
 								$this->phpcsFile->addError(
 									'Dynamic placeholder generation should not have surrounding quotes.',
-									$i,
+									$prev,
 									'QuotedDynamicPlaceholderGeneration'
 								);
 							}

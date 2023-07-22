@@ -39,8 +39,8 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			41  => 1,
 			54  => 1,
 			141 => 1,
-			149 => 1,
-			151 => 1,
+			148 => 1,
+			150 => 1,
 			162 => 1,
 			163 => 1,
 			164 => 1,
@@ -96,12 +96,12 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			279 => 2, // UnsupportedIdentifierPlaceholder + QuotedIdentifierPlaceholder.
 			280 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
 
-			288 => 1,
-			295 => 1,
-			302 => 1,
-			309 => 1,
-			316 => 1,
-			323 => 1,
+			287 => 1,
+			294 => 1,
+			301 => 1,
+			308 => 1,
+			315 => 1,
+			322 => 1,
 
 			347 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
 			353 => 1,
