@@ -512,3 +512,9 @@ $where = $wpdb->prepare(
 	),
 	array_merge( $post_types, $post_statusses )
 ); // OK, well not really, but not something we can reliably analyze.
+
+/*
+ * Safeguard handling of $wpdb->prepare as PHP 8.1+ first class callable.
+ */
+$callback = $wpdb->prepare(...); // OK.
+
