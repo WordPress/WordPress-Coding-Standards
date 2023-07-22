@@ -208,7 +208,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		for ( $i = $query['start']; $i <= $query['end']; $i++ ) {
 			// Skip over groups of tokens if they are part of an inline function call.
-			if ( isset( $skip_from, $skip_to ) && $i >= $skip_from && $i < $skip_to ) {
+			if ( isset( $skip_from, $skip_to ) && $i >= $skip_from && $i <= $skip_to ) {
 				$i = $skip_to;
 				continue;
 			}
@@ -267,7 +267,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
 								) {
 									$skip_from = ( $i + 1 );
-									$skip_to   = ( $this->tokens[ $next ]['parenthesis_closer'] + 1 );
+									$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
 								}
 							}
 						}
