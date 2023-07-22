@@ -681,7 +681,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		if ( preg_match( '`^(["\']), ?\1$`', $implode_params[1]['raw'] ) !== 1 ) {
+		if ( preg_match( '`^(["\']), ?\1$`', $implode_params[1]['clean'] ) !== 1 ) {
 			return false;
 		}
 

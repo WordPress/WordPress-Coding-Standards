@@ -332,3 +332,12 @@ $wpdb->get_col(
 		[ 'taxonomy_name', $limit ]
 	) // Ok.
 );
+
+// Disregard comments in the implode() $separator param.
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',' /*comment*/, array_fill( 0, count($post_types), '%s' ) )
+	),
+	$post_types
+); // OK.
