@@ -263,8 +263,8 @@ $wpdb->prepare(
 	$fields
 ); // ReplacementsWrongNumber + IdentifierWithinIN.
 
-$wpdb->prepare( '
-	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )',
+$wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ),
+	'%i' ) ) . ' )',
 	$fields
 ); // IdentifierWithinIN.
 

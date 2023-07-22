@@ -707,9 +707,11 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		if ( "'%i'" === $array_fill_params[3]['clean']
 			|| '"%i"' === $array_fill_params[3]['clean']
 		) {
+			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $array_fill_params[3]['start'], $array_fill_params[3]['end'], true );
+
 			$this->phpcsFile->addError(
 				'The %i placeholder cannot be used within SQL `IN()` clauses.',
-				$implode_token,
+				$firstNonEmpty,
 				'IdentifierWithinIN'
 			);
 			return false;
