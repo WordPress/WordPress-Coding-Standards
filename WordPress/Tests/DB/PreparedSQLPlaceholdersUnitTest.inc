@@ -377,3 +377,29 @@ $where = $wpdb->prepare(
 	),
 	$post_types
 ); // OK.
+
+// Safeguard that FQN function calls to implode() and array_fill() are handled correctly.
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		\implode( ',', array_fill( 0, count($post_types), '%s' ) )
+	),
+	$post_types
+); // OK.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', \array_fill( 0, count($post_types), '%s' ) )
+	),
+	$post_types
+); // OK.
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', \array_fill( 0, count($post_types), '%s' ) )
+		. ") AND {$wpdb->posts}.post_status IN ("
+		. implode( ',', \array_fill( 0, count($post_statusses), '%s' ) )
+		. ')',
+	array_merge( $post_types, $post_statusses )
+); // OK.

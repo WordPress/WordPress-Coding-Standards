@@ -636,7 +636,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 		foreach ( $sprintf_params as $sprintf_param ) {
 			$implode = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
+				Tokens::$emptyTokens + array( \T_NS_SEPARATOR => \T_NS_SEPARATOR ),
 				$sprintf_param['start'],
 				$sprintf_param['end'],
 				true
@@ -686,7 +686,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		}
 
 		$array_fill = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
+			Tokens::$emptyTokens + array( \T_NS_SEPARATOR => \T_NS_SEPARATOR ),
 			$implode_params[2]['start'],
 			$implode_params[2]['end'],
 			true
