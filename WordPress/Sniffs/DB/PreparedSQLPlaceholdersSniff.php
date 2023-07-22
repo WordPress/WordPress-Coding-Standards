@@ -704,8 +704,8 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		if ( "'%i'" === $array_fill_params[3]['raw']
-			|| '"%i"' === $array_fill_params[3]['raw']
+		if ( "'%i'" === $array_fill_params[3]['clean']
+			|| '"%i"' === $array_fill_params[3]['clean']
 		) {
 			$this->phpcsFile->addError(
 				'The %i placeholder cannot be used within SQL `IN()` clauses.',

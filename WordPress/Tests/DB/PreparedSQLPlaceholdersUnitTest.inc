@@ -341,3 +341,9 @@ $where = $wpdb->prepare(
 	),
 	$post_types
 ); // OK.
+
+// Disregard comments in the array_fill() $value param.
+$wpdb->prepare( '
+	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' /*comment*/ ) ) . ' )',
+	$fields
+); // IdentifierWithinIN.
