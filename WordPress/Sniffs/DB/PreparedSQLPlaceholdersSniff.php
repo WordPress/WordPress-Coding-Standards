@@ -635,10 +635,6 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		unset( $sprintf_params[1] );
 
 		foreach ( $sprintf_params as $sprintf_param ) {
-			if ( strpos( strtolower( $sprintf_param['raw'] ), 'implode' ) === false ) {
-				continue;
-			}
-
 			$implode = $this->phpcsFile->findNext(
 				Tokens::$emptyTokens,
 				$sprintf_param['start'],
@@ -686,10 +682,6 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		}
 
 		if ( preg_match( '`^(["\']), ?\1$`', $implode_params[1]['raw'] ) !== 1 ) {
-			return false;
-		}
-
-		if ( strpos( strtolower( $implode_params[2]['raw'] ), 'array_fill' ) === false ) {
 			return false;
 		}
 
