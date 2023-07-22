@@ -239,39 +239,43 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 
 					} elseif ( 'implode' === strtolower( $this->tokens[ $i ]['content'] ) ) {
 						$prev = $this->phpcsFile->findPrevious(
-							Tokens::$textStringTokens,
+							Tokens::$emptyTokens + array( \T_STRING_CONCAT => \T_STRING_CONCAT ),
 							( $i - 1 ),
-							$query['start']
+							$query['start'],
+							true
 						);
 
-						$prev_content = TextStrings::stripQuotes( $this->tokens[ $prev ]['content'] );
-						$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
+						if ( isset( Tokens::$textStringTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
+							$prev_content = TextStrings::stripQuotes( $this->tokens[ $prev ]['content'] );
+							$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
 
-						// Only examine the implode if preceded by an ` IN (`.
-						if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
+							// Only examine the implode if preceded by an ` IN (`.
+							if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
 
-							if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
-								$this->phpcsFile->addError(
-									'Dynamic placeholder generation should not have surrounding quotes.',
-									$prev,
-									'QuotedDynamicPlaceholderGeneration'
-								);
-							}
+								if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
+									$this->phpcsFile->addError(
+										'Dynamic placeholder generation should not have surrounding quotes.',
+										$prev,
+										'QuotedDynamicPlaceholderGeneration'
+									);
+								}
 
-							if ( $this->analyse_implode( $i ) === true ) {
-								++$valid_in_clauses['uses_in'];
-								++$valid_in_clauses['implode_fill'];
+								if ( $this->analyse_implode( $i ) === true ) {
+									++$valid_in_clauses['uses_in'];
+									++$valid_in_clauses['implode_fill'];
 
-								$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
-								if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
-									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
-								) {
-									$skip_from = ( $i + 1 );
-									$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
+									$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+									if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+										&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
+									) {
+										$skip_from = ( $i + 1 );
+										$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
+									}
 								}
 							}
+							unset( $next, $prev_content, $regex_quote, $match );
 						}
-						unset( $prev, $next, $prev_content, $regex_quote, $match );
+						unset( $prev );
 					}
 				}
 
