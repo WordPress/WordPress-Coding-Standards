@@ -27,11 +27,11 @@ $sql = $wpdb->prepare( 'SELECT * FROM `table`', $something ); // Warning.
  */
 $sql = $wpdb->prepare( '%d %1$e %%% % %A %h', 1 ); // Bad x 5.
 $sql = $wpdb->prepare( '%%%s', 1 ); // OK.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // OK. 2 x warning for unquoted complex placeholders.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %01.2f AND user_login = %10.10X", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb?->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // OK. 2 x warning for unquoted complex placeholders.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb?->users WHERE id = %01.2f AND user_login = %10.10X", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %'.09F AND user_login = %1\$04x", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = \"%1\$c\" AND user_login = '%2\$e'", 1, "admin" ); // Bad x 2 + 1 warning.
-$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users . ' WHERE id = \'%1\$b\' AND user_login = "%2\$o"', 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb?->users . ' WHERE id = \'%1\$b\' AND user_login = "%2\$o"', 1, "admin" ); // Bad x 2 + 1 warning.
 
 /*
  * Test passing quoted simple replacement placeholder and unquoted complex placeholder.
@@ -114,7 +114,7 @@ $results = $wpdb->get_results(
 	$wpdb->prepare( '
 		SELECT ID
 		FROM ' . $wpdb->posts . '
-		WHERE ID NOT IN( SELECT post_id FROM ' . $wpdb->postmeta . ' WHERE meta_key = %s AND meta_value = %s )
+		WHERE ID NOT IN( SELECT post_id FROM ' . $wpdb?->postmeta . ' WHERE meta_key = %s AND meta_value = %s )
 			AND post_status in( "future", "draft", "pending", "private", "publish" )
 			AND post_type in( ' . implode( ',', array_fill( 0, count( $post_types ), '%s' ) ) . ' )
 		LIMIT %d',
