@@ -503,3 +503,12 @@ $where = $wpdb->prepare(
 	array_merge( $post_types, $post_statusses )
 ); // Bad - will throw incorrect nr of replacements error - $value param name in array_fill() does not contain plain text placeholder.
 
+// Sprintf() with named params. This is invalid as variadic functions do not support named params.
+// The sniff will ignore the sprintf() as it cannot be analyzed correctly.
+$where = $wpdb->prepare(
+	sprintf(
+		values: implode( ',', array_fill( 0, count($post_types), '%s' ) ),
+		format: "{$wpdb->posts}.post_type IN ('%s')",
+	),
+	array_merge( $post_types, $post_statusses )
+); // OK, well not really, but not something we can reliably analyze.

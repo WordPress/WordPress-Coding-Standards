@@ -232,6 +232,32 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 						$sprintf_parameters = PassedParameters::getParameters( $this->phpcsFile, $i );
 
 						if ( ! empty( $sprintf_parameters ) ) {
+							/*
+							 * Check for named params. sprintf() does not support this due to its variadic nature,
+							 * and we cannot analyse the code correctly if it is used, so skip the whole sprintf()
+							 * in that case.
+							 */
+							$valid_sprintf = true;
+							foreach ( $sprintf_parameters as $param ) {
+								if ( isset( $param['name'] ) ) {
+									$valid_sprintf = false;
+									break;
+								}
+							}
+
+							if ( false === $valid_sprintf ) {
+								$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+								if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
+								) {
+									$skip_from = ( $i + 1 );
+									$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
+								}
+
+								continue;
+							}
+
+							// We know for sure this sprintf() uses positional parameters, so this will be fine.
 							$skip_from  = ( $sprintf_parameters[1]['end'] + 1 );
 							$last_param = end( $sprintf_parameters );
 							$skip_to    = ( $last_param['end'] + 1 );
@@ -239,7 +265,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 							$valid_in_clauses['implode_fill']     += $this->analyse_sprintf( $sprintf_parameters );
 							$valid_in_clauses['adjustment_count'] += ( \count( $sprintf_parameters ) - 1 );
 						}
-						unset( $sprintf_parameters, $last_param );
+						unset( $sprintf_parameters, $valid_sprintf, $last_param );
 
 					} elseif ( 'implode' === strtolower( $this->tokens[ $i ]['content'] ) ) {
 						$prev = $this->phpcsFile->findPrevious(
@@ -641,7 +667,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 	protected function analyse_sprintf( $sprintf_params ) {
 		$found = 0;
 
-		unset( $sprintf_params[1] );
+		unset( $sprintf_params[1] ); // Remove the positionally passed $format param.
 
 		foreach ( $sprintf_params as $sprintf_param ) {
 			$implode = $this->phpcsFile->findNext(
