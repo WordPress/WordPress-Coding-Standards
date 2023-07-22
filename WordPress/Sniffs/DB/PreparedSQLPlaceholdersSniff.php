@@ -201,6 +201,8 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			'implode_fill'     => 0,
 			'adjustment_count' => 0,
 		);
+		$skip_from                = null;
+		$skip_to                  = null;
 
 		for ( $i = $query['start']; $i <= $query['end']; $i++ ) {
 			// Skip over groups of tokens if they are part of an inline function call.
