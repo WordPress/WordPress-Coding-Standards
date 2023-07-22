@@ -347,3 +347,33 @@ $wpdb->prepare( '
 	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' /*comment*/ ) ) . ' )',
 	$fields
 ); // IdentifierWithinIN.
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', array_fill( 0, count($post_types), '%C' ) )
+		. ')',
+	array_merge( $post_types )
+); // Bad x 2, UnsupportedPlaceholder + UnfinishedPrepare.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( 0, count($post_types), '%C' ) )
+	),
+	$post_types
+); // Bad, ReplacementsWrongNumber due to unrecognized placeholder in array_fill().
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', array_fill( 0, count($post_types), /*comment*/ '%s' ) )
+		. ')',
+	array_merge( $post_types )
+); // OK.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( 0, count($post_types), "%s" /*comment*/ ) )
+	),
+	$post_types
+); // OK.
