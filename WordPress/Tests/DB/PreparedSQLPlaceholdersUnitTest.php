@@ -39,8 +39,8 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			41  => 1,
 			54  => 1,
 			141 => 1,
-			149 => 1,
-			151 => 1,
+			148 => 1,
+			150 => 1,
 			162 => 1,
 			163 => 1,
 			164 => 1,
@@ -95,6 +95,19 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			278 => 1, // UnsupportedIdentifierPlaceholder.
 			279 => 2, // UnsupportedIdentifierPlaceholder + QuotedIdentifierPlaceholder.
 			280 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+
+			287 => 1,
+			294 => 1,
+			301 => 1,
+			308 => 1,
+			315 => 1,
+			322 => 1,
+
+			347 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+			353 => 1,
+
+			// Named parameter support.
+			418 => 1,
 		);
 	}
 
@@ -138,6 +151,18 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			234 => 1, // UnfinishedPrepare.
 			246 => 1, // UnfinishedPrepare.
 			258 => 1, // ReplacementsWrongNumber.
+			300 => 1,
+			354 => 1,
+			358 => 1,
+
+			// Named parameter support.
+			440 => 1,
+			448 => 1,
+			456 => 1,
+			474 => 1,
+			482 => 1,
+			490 => 1,
+			498 => 1,
 		);
 	}
 }

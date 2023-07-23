@@ -2,7 +2,7 @@
 
 $sql = $wpdb->prepare( $sql, $replacements ); // OK - no query available to examine - this will be handled by the PreparedSQL sniff.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, "admin" ); // OK.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, "admin" ) ); // OK.
+$sql = $wpdb?->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, "admin" ) ); // OK.
 $sql = $wpdb->prepare( 'SELECT * FROM `table` WHERE `column` = %s AND `field` = %d', 'foo', 1337 ); // OK.
 $sql = $wpdb->prepare( 'SELECT DATE_FORMAT(`field`, "%%c") FROM `table` WHERE `column` = %s', 'foo' ); // OK.
 
@@ -13,7 +13,7 @@ $sql = $wpdb->prepare( 'SELECT * FROM `table`' ); // Warning.
 $sql = $wpdb->prepare( 'SELECT * FROM `table` WHERE id = ' . $id ); // OK - this will be handled by the PreparedSQL sniff.
 $sql = $wpdb->prepare( "SELECT * FROM `table` WHERE id = $id" ); // OK - this will be handled by the PreparedSQL sniff.
 $sql = $wpdb->prepare( "SELECT * FROM `table` WHERE id = {$id['some%sing']}" ); // OK - this will be handled by the PreparedSQL sniff.
-$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users ); // Warning.
+$sql = $wpdb?->prepare( 'SELECT * FROM ' . $wpdb->users ); // Warning.
 $sql = $wpdb->prepare( "SELECT * FROM `{$wpdb->users}`" );  // Warning.
 $sql = $wpdb->prepare( "SELECT * FROM `{$wpdb->users}` WHERE id = $id" ); // OK - this will be handled by the PreparedSQL sniff.
 
@@ -27,11 +27,11 @@ $sql = $wpdb->prepare( 'SELECT * FROM `table`', $something ); // Warning.
  */
 $sql = $wpdb->prepare( '%d %1$e %%% % %A %h', 1 ); // Bad x 5.
 $sql = $wpdb->prepare( '%%%s', 1 ); // OK.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // OK. 2 x warning for unquoted complex placeholders.
-$sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %01.2f AND user_login = %10.10X", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb?->users WHERE id = %1\$d AND user_login = %2\$s", 1, "admin" ); // OK. 2 x warning for unquoted complex placeholders.
+$sql = $wpdb->prepare( "SELECT * FROM $wpdb?->users WHERE id = %01.2f AND user_login = %10.10X", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %'.09F AND user_login = %1\$04x", 1, "admin" ); // Bad x 1 + 1 warning unquoted complex placeholders + 1 warning nr of replacements.
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = \"%1\$c\" AND user_login = '%2\$e'", 1, "admin" ); // Bad x 2 + 1 warning.
-$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->users . ' WHERE id = \'%1\$b\' AND user_login = "%2\$o"', 1, "admin" ); // Bad x 2 + 1 warning.
+$sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb?->users . ' WHERE id = \'%1\$b\' AND user_login = "%2\$o"', 1, "admin" ); // Bad x 2 + 1 warning.
 
 /*
  * Test passing quoted simple replacement placeholder and unquoted complex placeholder.
@@ -83,10 +83,10 @@ $where = $wpdb->prepare(
 	sprintf(
 		"{$wpdb->posts}.post_type IN (%s)
 		AND {$wpdb->posts}.post_status IN (%s)",
-		implode( ',', array_fill( 0, count($post_types), '%s' ) ),
-		IMPLODE( ',', Array_Fill( 0, count($post_statusses), '%s' ) )
+		implode( ',', array_fill( 0, count($post_types), '%s' ), ),
+		IMPLODE( ',', Array_Fill( 0, count($post_statusses), '%s' ), ),
 	),
-	array_merge( $post_types, $post_statusses )
+	array_merge( $post_types, $post_statusses, ),
 ); // OK.
 
 $where = $wpdb->prepare(
@@ -114,7 +114,7 @@ $results = $wpdb->get_results(
 	$wpdb->prepare( '
 		SELECT ID
 		FROM ' . $wpdb->posts . '
-		WHERE ID NOT IN( SELECT post_id FROM ' . $wpdb->postmeta . ' WHERE meta_key = %s AND meta_value = %s )
+		WHERE ID NOT IN( SELECT post_id FROM ' . $wpdb?->postmeta . ' WHERE meta_key = %s AND meta_value = %s )
 			AND post_status in( "future", "draft", "pending", "private", "publish" )
 			AND post_type in( ' . implode( ',', array_fill( 0, count( $post_types ), '%s' ) ) . ' )
 		LIMIT %d',
@@ -263,8 +263,8 @@ $wpdb->prepare(
 	$fields
 ); // ReplacementsWrongNumber + IdentifierWithinIN.
 
-$wpdb->prepare( '
-	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )',
+$wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ),
+	'%i' ) ) . ' )',
 	$fields
 ); // IdentifierWithinIN.
 
@@ -280,3 +280,241 @@ $wpdb->prepare( "WHERE '%10i' IS NULL", $field ); // UnsupportedIdentifierPlaceh
 $wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' ) ) . ' )', $fields ); // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
 
 // phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version
+
+$wpdb->prepare(); // Ignore.
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode()
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (no params).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_status IN ('"
+		. implode( ',' )
+		. '\') AND {$wpdb->posts}.post_id = %s',
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (missing second param).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_status IN ('"
+		. implode( '|', array_fill( 0, count($post_stati), '%s' ) )
+		. '\') AND {$wpdb->posts}.post_id = %s',
+	$post_id
+); // Bad x2, dynamic placeholder generation quotes with invalid implode call (separator parameter does not contain expected ',' value).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode( ',', $array_fill )
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (array param is not call to array_fill).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode( ',', array_fill() )
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (array param is call to array_fill() without params).
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN (\""
+		. implode( ',', array_fill( 0, count($post_types) ) )
+		. "\") AND {$wpdb->posts}.post_id = %s",
+	$post_id
+); // Bad, dynamic placeholder generation quotes with invalid implode call (array param is call to array_fill(), but missing third param).
+
+// Safeguard that short array as $args is handled correctly.
+$wpdb->get_col(
+	$wpdb->prepare(
+		"SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s LIMIT %d",
+		[ 'taxonomy_name', $limit ]
+	) // Ok.
+);
+
+// Disregard comments in the implode() $separator param.
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',' /*comment*/, array_fill( 0, count($post_types), '%s' ) )
+	),
+	$post_types
+); // OK.
+
+// Disregard comments in the array_fill() $value param.
+$wpdb->prepare( '
+	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' /*comment*/ ) ) . ' )',
+	$fields
+); // IdentifierWithinIN.
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', array_fill( 0, count($post_types), '%C' ) )
+		. ')',
+	array_merge( $post_types )
+); // Bad x 2, UnsupportedPlaceholder + UnfinishedPrepare.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( 0, count($post_types), '%C' ) )
+	),
+	$post_types
+); // Bad, ReplacementsWrongNumber due to unrecognized placeholder in array_fill().
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', array_fill( 0, count($post_types), /*comment*/ '%s' ) )
+		. ')',
+	array_merge( $post_types )
+); // OK.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( 0, count($post_types), "%s" /*comment*/ ) )
+	),
+	$post_types
+); // OK.
+
+// Safeguard that FQN function calls to implode() and array_fill() are handled correctly.
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		\implode( ',', array_fill( 0, count($post_types), '%s' ) )
+	),
+	$post_types
+); // OK.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', \array_fill( 0, count($post_types), '%s' ) )
+	),
+	$post_types
+); // OK.
+
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', \array_fill( 0, count($post_types), '%s' ) )
+		. ") AND {$wpdb->posts}.post_status IN ("
+		. implode( ',', \array_fill( 0, count($post_statusses), '%s' ) )
+		. ')',
+	array_merge( $post_types, $post_statusses )
+); // OK.
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+// WPDB::prepare() with named params. Named args not supported with ...$args, but that's not the concern of this sniff.
+$query = $wpdb->prepare(
+	args  : $replacements,
+	query : 'SELECT ID
+		FROM ' . $wpdb->posts . '
+		WHERE post_type = %s',
+); // OK, named args not supported with ...$args, but that's not the concern of this sniff.
+
+$query = $wpdb->prepare(
+	query : 'SELECT ID
+		FROM ' . $wpdb->posts . '
+		WHERE post_type = %s',
+); // Bad, missing replacements.
+
+$query = $wpdb->prepare(
+	args  : $replacements,
+	queri : 'SELECT ID
+		FROM ' . $wpdb->posts . '
+		WHERE post_type = %s',
+); // Ignore, incorrect name used for named param `query`, so param not recognized.
+
+// Implode() with named params.
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( array: array_fill( 0, count( $post_types ), '%s' ), separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Okay.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( array: $something, separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - `array` param is not an array_fill() function call.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( arrays: array_fill( 0, count( $post_types ), '%s' ), separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - incorrect name used for named param `array`, so param not recognized.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( separator: ',', ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - missing `array` param.
+
+// Array_fill() with named params.
+$where = $wpdb->prepare(
+	"{$wpdb->posts}.post_type IN ("
+		. implode( ',', array_fill( start_index: 0, count: count($post_types), value: '%s' ) ) // Expected order.
+		. ") AND {$wpdb->posts}.post_status IN ("
+		. implode( ',', array_fill( value: '%s', start_index: 0, count: count($post_statusses), ) ) // Unconventional order.
+		. ')',
+	array_merge( $post_types, $post_statusses )
+); // OK.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( start_index: 0, count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - missing $value param in array_fill().
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( start_index: 0, values: '%s', count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - incorrect $values param name in array_fill().
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( value: 's', start_index: 0, count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - $value param name in array_fill() does not contain placeholder.
+
+$where = $wpdb->prepare(
+	sprintf(
+		"{$wpdb->posts}.post_type IN (%s)",
+		implode( ',', array_fill( value: $s, start_index: 0, count: count($post_types) ) ),
+	),
+	array_merge( $post_types, $post_statusses )
+); // Bad - will throw incorrect nr of replacements error - $value param name in array_fill() does not contain plain text placeholder.
+
+// Sprintf() with named params. This is invalid as variadic functions do not support named params.
+// The sniff will ignore the sprintf() as it cannot be analyzed correctly.
+$where = $wpdb->prepare(
+	sprintf(
+		values: implode( ',', array_fill( 0, count($post_types), '%s' ) ),
+		format: "{$wpdb->posts}.post_type IN ('%s')",
+	),
+	array_merge( $post_types, $post_statusses )
+); // OK, well not really, but not something we can reliably analyze.
+
+/*
+ * Safeguard handling of $wpdb->prepare as PHP 8.1+ first class callable.
+ */
+$callback = $wpdb->prepare(...); // OK.
+
