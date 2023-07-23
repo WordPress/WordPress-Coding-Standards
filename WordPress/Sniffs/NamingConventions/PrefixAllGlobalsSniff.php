@@ -145,10 +145,11 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * A list of core constants that are allowed to be defined by plugins and themes.
 	 *
 	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/default-constants.php#L0}
-	 * The constants are listed in the order they are found in the source file
-	 * to make life easier for future updates.
+	 * The constants are listed in alphabetic order.
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
+	 *
+	 * Last update: July 2023 for WP 6.3 at https://github.com/WordPress/wordpress-develop/commit/6281ce432c50345a57768bf53854d9b65b6cdd52
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
@@ -156,43 +157,45 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @var array<string, bool>
 	 */
 	protected $allowed_core_constants = array(
-		'WP_MEMORY_LIMIT'      => true,
-		'WP_MAX_MEMORY_LIMIT'  => true,
+		'ADMIN_COOKIE_PATH'    => true,
+		'AUTH_COOKIE'          => true,
+		'AUTOSAVE_INTERVAL'    => true,
+		'COOKIEHASH'           => true,
+		'COOKIEPATH'           => true,
+		'COOKIE_DOMAIN'        => true,
+		'EMPTY_TRASH_DAYS'     => true,
+		'FORCE_SSL_ADMIN'      => true,
+		'FORCE_SSL_LOGIN'      => true, // Deprecated.
+		'LOGGED_IN_COOKIE'     => true,
+		'MEDIA_TRASH'          => true,
+		'MUPLUGINDIR'          => true, // Deprecated.
+		'PASS_COOKIE'          => true,
+		'PLUGINDIR'            => true, // Deprecated.
+		'PLUGINS_COOKIE_PATH'  => true,
+		'RECOVERY_MODE_COOKIE' => true,
+		'SCRIPT_DEBUG'         => true,
+		'SECURE_AUTH_COOKIE'   => true,
+		'SHORTINIT'            => true,
+		'SITECOOKIEPATH'       => true,
+		'TEST_COOKIE'          => true,
+		'USER_COOKIE'          => true,
+		'WPMU_PLUGIN_DIR'      => true,
+		'WPMU_PLUGIN_URL'      => true,
+		'WP_CACHE'             => true,
 		'WP_CONTENT_DIR'       => true,
+		'WP_CONTENT_URL'       => true,
+		'WP_CRON_LOCK_TIMEOUT' => true,
 		'WP_DEBUG'             => true,
 		'WP_DEBUG_DISPLAY'     => true,
 		'WP_DEBUG_LOG'         => true,
-		'WP_CACHE'             => true,
-		'SCRIPT_DEBUG'         => true,
-		'MEDIA_TRASH'          => true,
-		'SHORTINIT'            => true,
-		'WP_CONTENT_URL'       => true,
+		'WP_DEFAULT_THEME'     => true,
+		'WP_DEVELOPMENT_MODE'  => true,
+		'WP_MAX_MEMORY_LIMIT'  => true,
+		'WP_MEMORY_LIMIT'      => true,
 		'WP_PLUGIN_DIR'        => true,
 		'WP_PLUGIN_URL'        => true,
-		'PLUGINDIR'            => true,
-		'WPMU_PLUGIN_DIR'      => true,
-		'WPMU_PLUGIN_URL'      => true,
-		'MUPLUGINDIR'          => true,
-		'COOKIEHASH'           => true,
-		'USER_COOKIE'          => true,
-		'PASS_COOKIE'          => true,
-		'AUTH_COOKIE'          => true,
-		'SECURE_AUTH_COOKIE'   => true,
-		'LOGGED_IN_COOKIE'     => true,
-		'TEST_COOKIE'          => true,
-		'COOKIEPATH'           => true,
-		'SITECOOKIEPATH'       => true,
-		'ADMIN_COOKIE_PATH'    => true,
-		'PLUGINS_COOKIE_PATH'  => true,
-		'COOKIE_DOMAIN'        => true,
-		'RECOVERY_MODE_COOKIE' => true,
-		'FORCE_SSL_ADMIN'      => true,
-		'FORCE_SSL_LOGIN'      => true,
-		'AUTOSAVE_INTERVAL'    => true,
-		'EMPTY_TRASH_DAYS'     => true,
 		'WP_POST_REVISIONS'    => true,
-		'WP_CRON_LOCK_TIMEOUT' => true,
-		'WP_DEFAULT_THEME'     => true,
+		'WP_START_TIMESTAMP'   => true,
 	);
 
 	/**
