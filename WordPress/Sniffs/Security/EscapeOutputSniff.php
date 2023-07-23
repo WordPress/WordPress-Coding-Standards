@@ -124,6 +124,8 @@ class EscapeOutputSniff extends Sniff {
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
+	 * @since 3.0.0 This method has been split up.
+	 *
 	 * @param int $stackPtr The position of the current token in the stack.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
@@ -217,11 +219,28 @@ class EscapeOutputSniff extends Sniff {
 		// Ignore the function itself.
 		++$stackPtr;
 
+		return $this->check_code_is_escaped( $stackPtr, $end_of_statement, $ternary );
+	}
+
+	/**
+	 * Check whether each relevant part of an arbitrary group of token is output escaped.
+	 *
+	 * @since 3.0.0 Split off from the process_token() method.
+	 *
+	 * @param int       $start   The position to start checking from.
+	 * @param int       $end     The position to stop the check at.
+	 * @param int|false $ternary Stack pointer to the `?` inline then token or
+	 *                           FALSE when no non-parenthesized ternary was found.
+	 *
+	 * @return int Integer stack pointer to skip forward.
+	 */
+	protected function check_code_is_escaped( $start, $end, $ternary = false ) {
+
 		$in_cast = false;
 
 		// Looping through echo'd components.
 		$watch = true;
-		for ( $i = $stackPtr; $i < $end_of_statement; $i++ ) {
+		for ( $i = $start; $i < $end; $i++ ) {
 
 			// Ignore whitespaces and comments.
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
@@ -412,6 +431,6 @@ class EscapeOutputSniff extends Sniff {
 			);
 		}
 
-		return $end_of_statement;
+		return $end;
 	}
 }
