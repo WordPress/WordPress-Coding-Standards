@@ -25,8 +25,6 @@ use WordPressCS\WordPress\Sniff;
  * @since   0.3.0
  * @since   0.12.0 This class now extends the WordPressCS native `Sniff` class.
  * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   3.0.0  Added a check for a complete text string in the case where it
- *                 spans two lines.
  */
 final class EnqueuedResourcesSniff extends Sniff {
 

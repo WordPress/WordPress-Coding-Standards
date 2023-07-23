@@ -382,7 +382,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	);
 
 	/**
-	 * List of all PHPMailer classes include in WP Core.
+	 * List of all PHPMailer classes included in WP Core.
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
@@ -476,7 +476,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	);
 
 	/**
-	 * List of all SimplePier classes included in WP Core.
+	 * List of all SimplePie classes included in WP Core.
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
@@ -578,6 +578,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Used to dynamically fill in some of the above properties and to generate the getGroups() array.
 	 *
+	 * @since 3.0.0
+	 *
 	 * @var array
 	 */
 	private $class_groups = array(
@@ -656,6 +658,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 
 	/**
 	 * Match a lowercase class name to its proper cased name.
+	 *
+	 * @since 3.0.0
 	 *
 	 * @param string $matched_lc Lowercase class name.
 	 *

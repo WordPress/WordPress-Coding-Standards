@@ -23,8 +23,8 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  * - Add appropriate `use` statement(s) to the file/class which intends to use this functionality.
  * - Now the sniff will automatically support the public `custom_test_classes` property which
  *   users can set in their custom ruleset. Do not add the property to the sniff!
- * - The sniff can call the methods in this trait to verify if certain code was found within
- *   a test method or is a test class and will take the custom property into account.
+ * - The sniff can call the `is_test_class()` method in this trait to verify if a class is
+ *   a test class. The `is_test_class()` method will take the custom property into account.
  *
  * @package WPCS\WordPressCodingStandards
  * @since   3.0.0 The properties and method in this trait were previously contained in the

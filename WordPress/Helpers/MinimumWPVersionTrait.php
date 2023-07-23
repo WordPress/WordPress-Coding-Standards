@@ -93,6 +93,8 @@ trait MinimumWPVersionTrait {
 	 * @since 0.14.0
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
 	 *               - Renamed from `get_wp_version_from_cl()` to `set_minimum_wp_version()`.
+	 *
+	 * @return void
 	 */
 	protected function set_minimum_wp_version() {
 		$minimum_wp_version = '';
@@ -140,7 +142,7 @@ trait MinimumWPVersionTrait {
 	 * Ensures that a version number is comparable via the PHP version_compare() function
 	 * by making sure it complies with the minimum "PHP-standardized" version number requirements.
 	 *
-	 * Presumes the input is a numeric version number string. The behaviour with other input is undetermined.
+	 * Presumes the input is a numeric version number string. The behaviour with other input is undefined.
 	 *
 	 * @since 3.0.0
 	 *

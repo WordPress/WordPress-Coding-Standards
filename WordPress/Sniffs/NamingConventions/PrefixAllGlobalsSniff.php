@@ -134,7 +134,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.14.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_hooks` to `$allowed_core_hooks`.
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	protected $allowed_core_hooks = array(
 		'widget_title'   => true,
@@ -144,16 +144,16 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * A list of core constants that are allowed to be defined by plugins and themes.
 	 *
-	 * @since 1.0.0
-	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
-	 *
 	 * Source: {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/default-constants.php#L0}
 	 * The constants are listed in the order they are found in the source file
 	 * to make life easier for future updates.
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
-	 * @var array
+	 * @since 1.0.0
+	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
+	 *
+	 * @var array<string, bool>
 	 */
 	protected $allowed_core_constants = array(
 		'WP_MEMORY_LIMIT'      => true,
@@ -397,7 +397,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * false negatives from user-defined functions when those would be
 	 * autoloaded via a Composer autoload files directives.
 	 *
-	 * @var array
+	 * @var array<string, int>
 	 */
 	private $built_in_functions;
 

@@ -321,6 +321,8 @@ final class ValidationHelper {
 	/**
 	 * Strip quotes of all the values in an array containing only text strings.
 	 *
+	 * @since 3.0.0
+	 *
 	 * @param string[] $text_strings The input array.
 	 *
 	 * @var array

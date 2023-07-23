@@ -229,7 +229,7 @@ final class VariableHelper {
 			\T_CLOSE_SQUARE_BRACKET => true,
 		);
 
-		// Must be a variable, constant or closing square bracket (see below).
+		// Must be a variable or closing square bracket (see below).
 		if ( ! isset( $valid[ $tokens[ $stackPtr ]['code'] ] ) ) {
 			return false;
 		}
