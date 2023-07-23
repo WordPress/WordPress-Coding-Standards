@@ -40,7 +40,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * List of deprecated functions with alternative when available.
 	 *
 	 * To be updated after every major release.
-	 * Last updated for WordPress 4.8.
+	 * Last updated for WordPress 6.3.
 	 *
 	 * Version numbers should be fully qualified.
 	 * Replacement functions should have parentheses.
@@ -51,7 +51,6 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @var array
 	 */
 	private $deprecated_functions = array(
-
 		// WP 0.71.
 		'the_category_head' => array(
 			'alt'     => 'get_the_category_by_ID()',
@@ -1495,6 +1494,110 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_typography_get_css_variable_inline_style' => array(
 			'alt'     => 'wp_style_engine_get_styles()',
 			'version' => '6.1.0',
+		),
+
+		// WP 6.2.0.
+		'_resolve_home_block_template' => array(
+			'alt'     => '',
+			'version' => '6.2.0',
+		),
+		'get_page_by_title' => array(
+			'alt'     => 'WP_Query',
+			'version' => '6.2.0',
+		),
+
+		// WP 6.3.0.
+		'_wp_tinycolor_bound_alpha' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'block_core_navigation_get_classic_menu_fallback' => array(
+			'alt'     => 'WP_Navigation_Fallback::get_classic_menu_fallback',
+			'version' => '6.3.0',
+		),
+		'block_core_navigation_get_classic_menu_fallback_blocks' => array(
+			'alt'     => 'WP_Navigation_Fallback::get_classic_menu_fallback_blocks',
+			'version' => '6.3.0',
+		),
+		'block_core_navigation_get_most_recently_published_navigation' => array(
+			'alt'     => 'WP_Navigation_Fallback::get_most_recently_published_navigation',
+			'version' => '6.3.0',
+		),
+		'block_core_navigation_maybe_use_classic_menu_fallback' => array(
+			'alt'     => 'WP_Navigation_Fallback::create_classic_menu_fallback',
+			'version' => '6.3.0',
+		),
+		'block_core_navigation_parse_blocks_from_menu_items' => array(
+			'alt'     => 'WP_Navigation_Fallback::parse_blocks_from_menu_items',
+			'version' => '6.3.0',
+		),
+		'block_core_navigation_submenu_build_css_colors' => array(
+			'alt'     => 'wp_apply_colors_support()',
+			'version' => '6.3.0',
+		),
+		'wlwmanifest_link' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_get_duotone_filter_id' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_get_duotone_filter_property' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_get_duotone_filter_svg' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_get_global_styles_svg_filters' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_get_loading_attr_default' => array(
+			'alt'     => 'wp_get_loading_optimization_attributes()',
+			'version' => '6.3.0',
+		),
+		'wp_global_styles_render_svg_filters' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_img_tag_add_loading_attr' => array(
+			'alt'     => 'wp_img_tag_add_loading_optimization_attrs()',
+			'version' => '6.3.0',
+		),
+		'wp_queue_comments_for_comment_meta_lazyload' => array(
+			'alt'     => 'wp_lazyload_comment_meta()',
+			'version' => '6.3.0',
+		),
+		'wp_register_duotone_support' => array(
+			'alt'     => 'WP_Duotone::register_duotone_support()',
+			'version' => '6.3.0',
+		),
+		'wp_render_duotone_support' => array(
+			'alt'     => 'WP_Duotone::render_duotone_support()',
+			'version' => '6.3.0',
+		),
+		'wp_tinycolor_bound01' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_tinycolor_hsl_to_rgb' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_tinycolor_hue_to_rgb' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_tinycolor_rgb_to_rgb' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
+		),
+		'wp_tinycolor_string_to_rgb' => array(
+			'alt'     => '',
+			'version' => '6.3.0',
 		),
 	);
 
