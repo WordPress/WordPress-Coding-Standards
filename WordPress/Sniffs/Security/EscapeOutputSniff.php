@@ -133,51 +133,91 @@ class EscapeOutputSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$function = $this->tokens[ $stackPtr ]['content'];
+		// If function, not T_ECHO nor T_PRINT.
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+			return $this->process_tstring_token( $stackPtr );
+		}
 
 		// Find the opening parenthesis (if present; T_ECHO might not have it).
 		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 
-		// If function, not T_ECHO nor T_PRINT.
-		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			// Skip if it is a function but is not one of the printing functions.
-			if ( ! $this->is_printing_function( $this->tokens[ $stackPtr ]['content'] ) ) {
+		$ternary = false;
+
+		$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
+		$last_token       = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
+
+		// Check for the ternary operator. We only need to do this here if this
+		// echo is lacking parenthesis. Otherwise it will be handled below.
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code'] || \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code'] ) {
+
+			$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end_of_statement );
+
+			// If there is a ternary skip over the part before the ?. However, if
+			// the ternary is within parentheses, it will be handled in the loop.
+			if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
+				$stackPtr = $ternary;
+			}
+		}
+
+		// Ignore the function itself.
+		++$stackPtr;
+
+		return $this->check_code_is_escaped( $stackPtr, $end_of_statement, $ternary );
+	}
+
+	/**
+	 * Process a function call token.
+	 *
+	 * @since 3.0.0 Split off from the process_token() method.
+	 *
+	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process_tstring_token( $stackPtr ) {
+		// Find the opening parenthesis.
+		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+
+		$function = $this->tokens[ $stackPtr ]['content'];
+
+		// Skip if it is a function but is not one of the printing functions.
+		if ( ! $this->is_printing_function( $this->tokens[ $stackPtr ]['content'] ) ) {
+			return;
+		}
+
+		if ( isset( $this->tokens[ $open_paren ]['parenthesis_closer'] ) ) {
+			$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
+		}
+
+		// These functions only need to have the first argument escaped.
+		if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
+			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
+			if ( false === $first_param ) {
+				// First parameter doesn't exist. Nothing to do.
 				return;
 			}
 
-			if ( isset( $this->tokens[ $open_paren ]['parenthesis_closer'] ) ) {
-				$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
+			$end_of_statement = ( $first_param['end'] + 1 );
+			unset( $first_param );
+		}
+
+		/*
+		 * If the first param to `_deprecated_file()` follows the typical `basename( __FILE__ )`
+		 * pattern, it doesn't need to be escaped.
+		 */
+		if ( '_deprecated_file' === $function ) {
+			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
+			if ( false === $first_param ) {
+				// First parameter doesn't exist. Nothing to do.
+				return;
 			}
 
-			// These functions only need to have the first argument escaped.
-			if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
-				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
-				if ( false === $first_param ) {
-					// First parameter doesn't exist. Nothing to do.
-					return;
-				}
-
-				$end_of_statement = ( $first_param['end'] + 1 );
-				unset( $first_param );
+			// Quick check. This disregards comments.
+			if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
+				$stackPtr = ( $first_param['end'] + 2 );
 			}
-
-			/*
-			 * If the first param to `_deprecated_file()` follows the typical `basename( __FILE__ )`
-			 * pattern, it doesn't need to be escaped.
-			 */
-			if ( '_deprecated_file' === $function ) {
-				$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
-				if ( false === $first_param ) {
-					// First parameter doesn't exist. Nothing to do.
-					return;
-				}
-
-				// Quick check. This disregards comments.
-				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
-					$stackPtr = ( $first_param['end'] + 2 );
-				}
-				unset( $first_param );
-			}
+			unset( $first_param );
 		}
 
 		if ( isset( $this->unsafePrintingFunctions[ $function ] ) ) {
@@ -194,32 +234,10 @@ class EscapeOutputSniff extends Sniff {
 			}
 		}
 
-		$ternary = false;
-
-		// This is already determined if this is a function and not T_ECHO.
-		if ( ! isset( $end_of_statement ) ) {
-
-			$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
-			$last_token       = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
-
-			// Check for the ternary operator. We only need to do this here if this
-			// echo is lacking parenthesis. Otherwise it will be handled below.
-			if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code'] || \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code'] ) {
-
-				$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end_of_statement );
-
-				// If there is a ternary skip over the part before the ?. However, if
-				// the ternary is within parentheses, it will be handled in the loop.
-				if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
-					$stackPtr = $ternary;
-				}
-			}
-		}
-
 		// Ignore the function itself.
 		++$stackPtr;
 
-		return $this->check_code_is_escaped( $stackPtr, $end_of_statement, $ternary );
+		return $this->check_code_is_escaped( $stackPtr, $end_of_statement );
 	}
 
 	/**
