@@ -173,31 +173,31 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			return parent::process_token( $stackPtr );
 		}
 
-		// Find the opening parenthesis (if present; T_ECHO might not have it).
-		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-
+		// Handle the other tokens we're sniffing for.
+		$start   = ( $stackPtr + 1 );
+		$end     = $start;
 		$ternary = false;
 
-		$end_of_statement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
-		$last_token       = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end_of_statement - 1 ), null, true );
+		// Find a potential opening parenthesis (if present).
+		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		$end        = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
+		$last_token = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
 
 		// Check for the ternary operator. We only need to do this here if this
 		// echo is lacking parenthesis. Otherwise it will be handled below.
-		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code'] || \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code'] ) {
-
-			$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end_of_statement );
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
+			|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code']
+		) {
+			$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end );
 
 			// If there is a ternary skip over the part before the ?. However, if
 			// the ternary is within parentheses, it will be handled in the loop.
 			if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
-				$stackPtr = $ternary;
+				$start = ( $ternary + 1 );
 			}
 		}
 
-		// Ignore the function itself.
-		++$stackPtr;
-
-		return $this->check_code_is_escaped( $stackPtr, $end_of_statement, $ternary );
+		return $this->check_code_is_escaped( $start, $end, $ternary );
 	}
 
 	/**
