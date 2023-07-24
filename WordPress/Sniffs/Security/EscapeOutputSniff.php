@@ -178,6 +178,13 @@ class EscapeOutputSniff extends Sniff {
 	public function process_tstring_token( $stackPtr ) {
 		// Find the opening parenthesis.
 		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $open_paren
+			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
+			|| isset( $this->tokens[ $open_paren ]['parenthesis_closer'] ) === false
+		) {
+			// Live coding, parse error or not a function _call_.
+			return;
+		}
 
 		$function = $this->tokens[ $stackPtr ]['content'];
 
@@ -186,9 +193,7 @@ class EscapeOutputSniff extends Sniff {
 			return;
 		}
 
-		if ( isset( $this->tokens[ $open_paren ]['parenthesis_closer'] ) ) {
-			$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
-		}
+		$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
 
 		// These functions only need to have the first argument escaped.
 		if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
@@ -230,7 +235,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {
-				return isset( $end_of_statement ) ? $end_of_statement : null;
+				return $end_of_statement;
 			}
 		}
 

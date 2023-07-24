@@ -346,3 +346,8 @@ print --10;
 // This includes the PHP 7.0+ null coalesce operator.
 echo $var ?? 'default'; // Bad.
 echo esc_html( $var ?? 'default' ); // OK.
+
+// Make sure the sniff does not get confused over constants/properties using the same name as one of the target functions.
+$a = _ex; // OK, constant, not function call.
+$a = $obj->wp_dropdown_pages; // OK, property access, not function call.
+use function wp_dropdown_pages; // OK, import use statement, not function call.
