@@ -374,3 +374,8 @@ _deprecated_file(
 	basename( __FILE__ ),
 	'1.3.0'
 ); // Ok.
+
+// Exit/die should only be examined when there are parentheses.
+$var = (true || exit ) && empty( $bar ) ? $drink_alone : $drink_together; // OK, exit is not passing status.
+$var = (true or die ) and empty( $bar ) ? $drink_alone : $drink_together; // OK, die is not passing status.
+$var = exit( $var ? $ok : $error ); // Bad x 2.

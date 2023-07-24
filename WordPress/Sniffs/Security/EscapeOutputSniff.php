@@ -160,41 +160,59 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		// Prevent exclusion of any of the function groups.
-		$this->exclude = array();
-
-		// Let the abstract parent class handle the initial function call check.
-		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			// In the tests, custom printing functions may be added/removed on the fly.
-			if ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
-				$this->setup_groups( 'functions' );
-			}
-
-			return parent::process_token( $stackPtr );
-		}
-
-		// Handle the other tokens we're sniffing for.
 		$start   = ( $stackPtr + 1 );
 		$end     = $start;
 		$ternary = false;
 
-		// Find a potential opening parenthesis (if present).
-		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-		$end        = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
-		$last_token = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
+		switch ( $this->tokens[ $stackPtr ]['code'] ) {
+			case \T_STRING:
+				// Prevent exclusion of any of the function groups.
+				$this->exclude = array();
 
-		// Check for the ternary operator. We only need to do this here if this
-		// echo is lacking parenthesis. Otherwise it will be handled below.
-		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
-			|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code']
-		) {
-			$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end );
+				// In the tests, custom printing functions may be added/removed on the fly.
+				if ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
+					$this->setup_groups( 'functions' );
+				}
 
-			// If there is a ternary skip over the part before the ?. However, if
-			// the ternary is within parentheses, it will be handled in the loop.
-			if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
-				$start = ( $ternary + 1 );
-			}
+				// Let the abstract parent class handle the initial function call check.
+				return parent::process_token( $stackPtr );
+
+			case \T_EXIT:
+				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+				if ( false === $next_non_empty
+					|| \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
+					|| isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) === false
+				) {
+					// Live coding/parse error or an exit/die which doesn't pass a status code. Ignore.
+					return;
+				}
+
+				// $end is not examined, so make sure the parentheses are balanced.
+				$start = $next_non_empty;
+				$end   = ( $this->tokens[ $next_non_empty ]['parenthesis_closer'] + 1 );
+				break;
+
+			default:
+				// Find a potential opening parenthesis (if present).
+				$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+				$end        = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
+				$last_token = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
+
+				// Check for the ternary operator. We only need to do this here if this
+				// echo is lacking parenthesis. Otherwise it will be handled below.
+				if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
+					|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code']
+				) {
+					$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end );
+
+					// If there is a ternary skip over the part before the ?. However, if
+					// the ternary is within parentheses, it will be handled in the loop.
+					if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
+						$start = ( $ternary + 1 );
+					}
+				}
+
+				break;
 		}
 
 		return $this->check_code_is_escaped( $start, $end, $ternary );

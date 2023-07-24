@@ -107,6 +107,7 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 					319 => 1,
 					347 => 1,
 					369 => 1,
+					381 => 2,
 				);
 
 			default:
