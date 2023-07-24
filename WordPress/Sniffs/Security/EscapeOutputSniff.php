@@ -224,12 +224,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			return;
 		}
 
-		$function = $this->tokens[ $stackPtr ]['content'];
-
 		$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
 
 		// These functions only need to have the first argument escaped.
-		if ( \in_array( $function, array( 'trigger_error', 'user_error' ), true ) ) {
+		if ( \in_array( $matched_content, array( 'trigger_error', 'user_error' ), true ) ) {
 			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 			if ( false === $first_param ) {
 				// First parameter doesn't exist. Nothing to do.
@@ -244,7 +242,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		 * If the first param to `_deprecated_file()` follows the typical `basename( __FILE__ )`
 		 * pattern, it doesn't need to be escaped.
 		 */
-		if ( '_deprecated_file' === $function ) {
+		if ( '_deprecated_file' === $matched_content ) {
 			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 			if ( false === $first_param ) {
 				// First parameter doesn't exist. Nothing to do.
@@ -258,12 +256,12 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			unset( $first_param );
 		}
 
-		if ( isset( $this->unsafePrintingFunctions[ $function ] ) ) {
+		if ( 'unsafe_printing_functions' === $group_name ) {
 			$error = $this->phpcsFile->addError(
 				"All output should be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
 				'UnsafePrintingFunction',
-				array( $this->unsafePrintingFunctions[ $function ], $function )
+				array( $this->unsafePrintingFunctions[ $matched_content ], $matched_content )
 			);
 
 			// If the error was reported, don't bother checking the function's arguments.
