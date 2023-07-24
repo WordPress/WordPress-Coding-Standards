@@ -40,6 +40,7 @@ wp_install( is_public: '', user_name: '', user_email: '', deprecated: 'should be
 // All will give an ERROR. The functions are ordered alphabetically.
 
 _future_post_hook( 10, $post );
+_load_remote_block_patterns( $value );
 _wp_post_revision_fields( $foo, 'deprecated' );
 add_option( '', '', [] );
 add_option( '', '', 1.23 );
@@ -95,5 +96,4 @@ wp_upload_bits( '', 'deprecated' );
 xfn_check( '', '', 'deprecated' );
 
 // All will give an WARNING as they have been deprecated after WP 5.8.
-_load_remote_block_patterns( $value );
 global_terms( $foo, 'deprecated' );

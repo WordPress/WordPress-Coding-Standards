@@ -354,16 +354,16 @@ wp_unregister_GLOBALS();
 noindex();
 wp_no_robots();
 wp_sensitive_page_meta();
-
-/*
- * Warning.
- */
 /* ============ WP 5.8 ============ */
 _excerpt_render_inner_columns_blocks();
 /* ============ WP 5.9 ============ */
 readonly();
 /* ============ WP 5.9.1 ============ */
 wp_render_duotone_filter_preset();
+
+/*
+ * Warning.
+ */
 /* ============ WP 6.0 ============ */
 image_attachment_fields_to_save();
 wp_add_iframed_editor_assets_html();
