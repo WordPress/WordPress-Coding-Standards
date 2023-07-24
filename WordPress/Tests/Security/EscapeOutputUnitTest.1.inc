@@ -351,3 +351,14 @@ echo esc_html( $var ?? 'default' ); // OK.
 $a = _ex; // OK, constant, not function call.
 $a = $obj->wp_dropdown_pages; // OK, property access, not function call.
 use function wp_dropdown_pages; // OK, import use statement, not function call.
+
+// Make sure the sniff does not get confused over methods/namespaced functions etc vs global function calls.
+$obj->_deprecated_file( $file, '1.3.0' ); // OK.
+$obj?->_deprecated_file( $file, '1.3.0' ); // OK.
+MyClass::_deprecated_file( $file, '1.3.0' ); // OK.
+My\NS\_ex( $some_nasty_var, 'context' ); // OK.
+class IgnoreFunctionDeclarations {
+	function wp_die( $foo ) {} // OK.
+	function &trigger_error( $foo ) {} // OK.
+}
+$obj = new User_Error( $foo ); // OK.

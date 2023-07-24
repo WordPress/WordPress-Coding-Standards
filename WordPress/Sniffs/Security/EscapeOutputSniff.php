@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
@@ -20,7 +21,6 @@ use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\FormattingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\PrintingFunctionsTrait;
 use WordPressCS\WordPress\Helpers\VariableHelper;
-use WordPressCS\WordPress\Sniff;
 
 /**
  * Verifies that all outputted strings are escaped.
@@ -37,12 +37,15 @@ use WordPressCS\WordPress\Sniff;
  *                 echo tags `<?=`.
  * @since   0.13.0 Class name changed: this class is now namespaced.
  * @since   1.0.0  This sniff has been moved from the `XSS` category to the `Security` category.
+ * @since   3.0.0  This class now extends the WordPressCS native
+ *                 `AbstractFunctionRestrictionsSniff` class.
+ *                 The parent `exclude` property is disabled.
  *
  * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customEscapingFunctions
  * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customAutoEscapedFunctions
  * @uses    \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait::$customPrintingFunctions
  */
-class EscapeOutputSniff extends Sniff {
+class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 	use EscapingFunctionsTrait;
 	use PrintingFunctionsTrait;
@@ -112,12 +115,37 @@ class EscapeOutputSniff extends Sniff {
 		$this->safe_components += Tokens::$booleanOperators;
 		$this->safe_components += Collections::incrementDecrementOperators();
 
+		// Set up the tokens the sniff should listen too.
+		$targets   = parent::register();
+		$targets[] = \T_ECHO;
+		$targets[] = \T_PRINT;
+		$targets[] = \T_EXIT;
+		$targets[] = \T_OPEN_TAG_WITH_ECHO;
+
+		return $targets;
+	}
+
+	/**
+	 * Groups of functions this sniff is looking for.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array
+	 */
+	public function getGroups() {
+		// Make sure all array keys are lowercase (could contain user provided function names).
+		$printing_functions = array_change_key_case( $this->get_printing_functions(), \CASE_LOWER );
+
+		// Remove the unsafe printing functions to prevent duplicate notices.
+		$printing_functions = array_diff_key( $printing_functions, $this->unsafePrintingFunctions );
+
 		return array(
-			\T_ECHO,
-			\T_PRINT,
-			\T_EXIT,
-			\T_STRING,
-			\T_OPEN_TAG_WITH_ECHO,
+			'unsafe_printing_functions' => array(
+				'functions' => array_keys( $this->unsafePrintingFunctions ),
+			),
+			'printing_functions' => array(
+				'functions' => array_keys( $printing_functions ),
+			),
 		);
 	}
 
@@ -132,10 +160,17 @@ class EscapeOutputSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
+		// Prevent exclusion of any of the function groups.
+		$this->exclude = array();
 
-		// If function, not T_ECHO nor T_PRINT.
+		// Let the abstract parent class handle the initial function call check.
 		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
-			return $this->process_tstring_token( $stackPtr );
+			// In the tests, custom printing functions may be added/removed on the fly.
+			if ( defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
+				$this->setup_groups( 'functions' );
+			}
+
+			return parent::process_token( $stackPtr );
 		}
 
 		// Find the opening parenthesis (if present; T_ECHO might not have it).
@@ -166,17 +201,20 @@ class EscapeOutputSniff extends Sniff {
 	}
 
 	/**
-	 * Process a function call token.
+	 * Process a matched function call token.
 	 *
 	 * @since 3.0.0 Split off from the process_token() method.
 	 *
-	 * @param int $stackPtr The position of the current token in the stack.
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
-	public function process_tstring_token( $stackPtr ) {
-		// Find the opening parenthesis.
+	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
+		// Make sure we only deal with actual function calls, not function import use statements.
 		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
 		if ( false === $open_paren
 			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
@@ -187,11 +225,6 @@ class EscapeOutputSniff extends Sniff {
 		}
 
 		$function = $this->tokens[ $stackPtr ]['content'];
-
-		// Skip if it is a function but is not one of the printing functions.
-		if ( ! $this->is_printing_function( $this->tokens[ $stackPtr ]['content'] ) ) {
-			return;
-		}
 
 		$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
 
