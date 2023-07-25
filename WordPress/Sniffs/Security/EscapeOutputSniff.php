@@ -313,26 +313,28 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 		// Make sure we only deal with actual function calls, not function import use statements.
-		$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-		if ( false === $open_paren
-			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
-			|| isset( $this->tokens[ $open_paren ]['parenthesis_closer'] ) === false
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $next_non_empty
+			|| \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
+			|| isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) === false
 		) {
 			// Live coding, parse error or not a function _call_.
 			return;
 		}
 
-		$end_of_statement = $this->tokens[ $open_paren ]['parenthesis_closer'];
+		$start = ( $next_non_empty + 1 );
+		$end   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
 
-		// These functions only need to have the first argument escaped.
-		if ( \in_array( $matched_content, array( 'trigger_error', 'user_error' ), true ) ) {
+		// These functions only need to have their first argument escaped.
+		if ( 'trigger_error' === $matched_content || 'user_error' === $matched_content ) {
 			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 			if ( false === $first_param ) {
 				// First parameter doesn't exist. Nothing to do.
 				return;
 			}
 
-			$end_of_statement = ( $first_param['end'] + 1 );
+			$start = $first_param['start'];
+			$end   = ( $first_param['end'] + 1 );
 			unset( $first_param );
 		}
 
@@ -349,7 +351,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// Check for a particular code pattern which can safely be ignored.
 			if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['clean'] ) === 1 ) {
-				$stackPtr = ( $first_param['end'] + 2 );
+				$start = ( $first_param['end'] + 2 );
 			}
 			unset( $first_param );
 		}
@@ -364,14 +366,11 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// If the error was reported, don't bother checking the function's arguments.
 			if ( $error ) {
-				return $end_of_statement;
+				return $end;
 			}
 		}
 
-		// Ignore the function itself.
-		++$stackPtr;
-
-		return $this->check_code_is_escaped( $stackPtr, $end_of_statement );
+		return $this->check_code_is_escaped( $start, $end );
 	}
 
 	/**
