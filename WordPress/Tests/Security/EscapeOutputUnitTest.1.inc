@@ -437,3 +437,5 @@ array_walk(
 		echo ( $webinar->is_too_late_to_register ? : '' );
 	}
 ); // Bad.
+
+echo ESC_HTML . $var . unrelatedFunction( $var ); // Bad x 3.

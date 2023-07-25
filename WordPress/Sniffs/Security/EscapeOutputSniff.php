@@ -496,11 +496,12 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
-				$function_opener        = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, ( $i + 1 ), null, false, null, true );
+				$function_opener        = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
 				$is_formatting_function = FormattingFunctionsHelper::is_formatting_function( $functionName );
 
-				if ( false !== $function_opener ) {
-
+				if ( false !== $function_opener
+					&& \T_OPEN_PARENTHESIS === $this->tokens[ $function_opener ]['code']
+				) {
 					if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
 
 						// Get the callback parameter.
