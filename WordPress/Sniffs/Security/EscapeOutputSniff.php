@@ -581,7 +581,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	}
 
 	/**
-	 * Check whether there is a ternary token in an arbitrary set of tokens.
+	 * Check whether there is a ternary token at the right nesting level in an arbitrary set of tokens.
 	 *
 	 * @since 3.0.0 Split off from the process_token() method.
 	 *
@@ -592,8 +592,24 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	private function find_ternary( $start, $end ) {
 		$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $start, $end );
+		if ( false === $ternary ) {
+			return false;
+		}
 
-		if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
+		$target_nesting_level = 0;
+		if ( empty( $this->tokens[ $start ]['nested_parenthesis'] ) === false ) {
+			$target_nesting_level = \count( $this->tokens[ $start ]['nested_parenthesis'] );
+		}
+
+		if ( empty( $this->tokens[ $ternary ]['nested_parenthesis'] )
+			&& 0 === $target_nesting_level
+		) {
+			return $ternary;
+		}
+
+		if ( empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) === false
+			&& \count( $this->tokens[ $ternary ]['nested_parenthesis'] ) === $target_nesting_level
+		) {
 			return $ternary;
 		}
 

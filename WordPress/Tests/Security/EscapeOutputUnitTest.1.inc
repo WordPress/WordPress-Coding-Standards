@@ -399,3 +399,8 @@ if ( print("hello") && $var ) // Bad x1, `$var`.
 ( 1 === 1 ) ? print ( $foo ? 'ten' : 'twenty' ) . $baz : print $bar; // Bad x 2, $baz and $bar.
 $var = true && print $foo ? $bar : $baz; // Bad x 2, `$bar` and `$baz` should be flagged, not $foo.
 print $foo ? 'ten' : 'twenty'; // OK.
+
+// Ensure print statements with ternaries, without wrapping parentheses, but nested within parentheses are also handled correctly.
+if ( print $foo ? 'ten' : 'twenty' ) {} // OK.
+if ( print $foo ? $bar : $baz ) {} // Bad x 2, `$bar` and `$baz` should be flagged, not $foo.
+$var = ( ( $fop === 1 ) ? ( print $foo ? 'ten' : $twenty ) : print $bar ); // Bad x 2, $twenty & $bar.
