@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\BCFile;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
@@ -192,6 +193,72 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				$end   = ( $this->tokens[ $next_non_empty ]['parenthesis_closer'] + 1 );
 				break;
 
+			case \T_PRINT:
+				$end = BCFile::findEndOfStatement( $this->phpcsFile, $stackPtr );
+				if ( \T_COMMA !== $this->tokens[ $end ]['code']
+					&& \T_SEMICOLON !== $this->tokens[ $end ]['code']
+					&& \T_COLON !== $this->tokens[ $end ]['code']
+					&& \T_DOUBLE_ARROW !== $this->tokens[ $end ]['code']
+					&& isset( $this->tokens[ ( $end + 1 ) ] )
+				) {
+					/*
+					 * FindEndOfStatement includes a comma/(semi-)colon/double arrow if that's the end of
+					 * the statement, but for everything else, it returns the last non-empty token _before_
+					 * the end, which would mean the last non-empty token in the statement would not
+					 * be examined. Let's fix that.
+					 */
+					++$end;
+				}
+
+				// Note: no need to check for close tag as close tag will have the token before the tag as the $end.
+				if ( $end >= ( $this->phpcsFile->numTokens - 1 ) ) {
+					$last_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, $end, null, true );
+					if ( \T_SEMICOLON !== $this->tokens[ $last_non_empty ]['code'] ) {
+						// Live coding/parse error at end of file. Ignore.
+						return;
+					}
+				}
+
+				// Special case for a print statement *within* a ternary, where we need to find the "inline else" as the end token.
+				$prev_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
+				if ( \T_INLINE_THEN === $this->tokens[ $prev_non_empty ]['code'] ) {
+					$target_nesting_level = 0;
+					if ( empty( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) === false ) {
+						$target_nesting_level = \count( $this->tokens[ $stackPtr ]['nested_parenthesis'] );
+					}
+
+					$inline_else = false;
+					for ( $i = ( $stackPtr + 1 ); $i < $end; $i++ ) {
+						if ( \T_INLINE_ELSE !== $this->tokens[ $i ]['code'] ) {
+							continue;
+						}
+
+						if ( empty( $this->tokens[ $i ]['nested_parenthesis'] )
+							&& 0 === $target_nesting_level
+						) {
+							$inline_else = $i;
+							break;
+						}
+
+						if ( empty( $this->tokens[ $i ]['nested_parenthesis'] ) === false
+							&& \count( $this->tokens[ $i ]['nested_parenthesis'] ) === $target_nesting_level
+						) {
+							$inline_else = $i;
+							break;
+						}
+					}
+
+					if ( false === $inline_else ) {
+						// Live coding/parse error. Bow out.
+						return;
+					}
+
+					$end = $inline_else;
+				}
+
+				break;
+
+			// Echo, open tag with echo.
 			default:
 				// Find a potential opening parenthesis (if present).
 				$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );

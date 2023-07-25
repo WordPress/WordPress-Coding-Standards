@@ -379,3 +379,18 @@ _deprecated_file(
 $var = (true || exit ) && empty( $bar ) ? $drink_alone : $drink_together; // OK, exit is not passing status.
 $var = (true or die ) and empty( $bar ) ? $drink_alone : $drink_together; // OK, die is not passing status.
 $var = exit( $var ? $ok : $error ); // Bad x 2.
+
+// Print can be used in expressions, so end of statement can be all sorts.
+if ( print "hello" ) // OK.
+    $var = 'foo'; // OK, not part of the print.
+
+if ( print("hello") && $var ) // Bad x1, `$var`.
+    $var = 'foo'; // OK, not part of the print.
+
+// Bug #2209.
+( 'auto' === $key ) ? print ' disabled ' : print ' enabled '; // OK.
+( $fop === 1 ) ? print $foo : print $bar; // Bad x 2, each print statement should be examined separately.
+( 1 === $foo ) ? print ( $foo ? 'ten' : $twenty ) : print $bar; // Bad x 2, $twenty & $bar.
+
+// Ensure nesting levels are handled correctly.
+( ( $fop === 1 ) ? print ( $var ? 10 : 20 ) : print 100 ); // OK.
