@@ -316,13 +316,13 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 		// These functions only need to have their first argument escaped.
 		if ( 'trigger_error' === $matched_content || 'user_error' === $matched_content ) {
-			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
-			if ( false === $first_param ) {
-				// First parameter doesn't exist. Nothing to do.
+			$message_param = PassedParameters::getParameterFromStack( $params, 1, 'message' );
+			if ( false === $message_param ) {
+				// Message parameter doesn't exist. Nothing to do.
 				return $end;
 			}
 
-			return $this->check_code_is_escaped( $first_param['start'], ( $first_param['end'] + 1 ) );
+			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ) );
 		}
 
 		/*

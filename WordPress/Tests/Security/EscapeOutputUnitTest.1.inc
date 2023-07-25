@@ -456,3 +456,20 @@ wp_die(
 // Safeguard support for PHP 7.4+ numeric literals with underscores and PHP 8.1 octal literals
 // (and throw in some other non-decimal numbers as well).
 echo 1_000_000 + 2_0_0 + 0o12 + 0o20_00, 0XAB953C, 6.674_083e+11, 0b1010;
+
+/*
+ * Safeguard handling of PHP 8.0+ function calls with named parameters for [trigger|user]_error().
+ */
+user_error( error_level: E_USER_NOTICE ); // OK, well not really, required $message parameter missing, but that's not our concern.
+trigger_error(
+	messege: "There was an error: {$message}",
+	error_level: E_USER_NOTICE,
+); // OK, well not really, typo in $message param name, but that's not our concern.
+user_error(
+	error_level: E_USER_WARNING,
+	message: 'There was an error: ' . esc_html( $message ),
+); // OK.
+trigger_error(
+	error_level: E_USER_WARNING,
+	message: "There was an error: {$message}",
+); // Bad.
