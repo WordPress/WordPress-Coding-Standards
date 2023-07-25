@@ -394,3 +394,8 @@ if ( print("hello") && $var ) // Bad x1, `$var`.
 
 // Ensure nesting levels are handled correctly.
 ( ( $fop === 1 ) ? print ( $var ? 10 : 20 ) : print 100 ); // OK.
+
+// Ensure print statements with ternaries and without wrapping parentheses are handled correctly.
+( 1 === 1 ) ? print ( $foo ? 'ten' : 'twenty' ) . $baz : print $bar; // Bad x 2, $baz and $bar.
+$var = true && print $foo ? $bar : $baz; // Bad x 2, `$bar` and `$baz` should be flagged, not $foo.
+print $foo ? 'ten' : 'twenty'; // OK.

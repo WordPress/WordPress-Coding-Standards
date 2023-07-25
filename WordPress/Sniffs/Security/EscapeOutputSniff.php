@@ -266,25 +266,27 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					return;
 				}
 
-				// Find a potential opening parenthesis (if present).
-				$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-				$last_token = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
-
-				// Check for the ternary operator. We only need to do this here if this
-				// echo is lacking parenthesis. Otherwise it will be handled below.
-				if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $open_paren ]['code']
-					|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_token ]['code']
-				) {
-					$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $stackPtr, $end );
-
-					// If there is a ternary skip over the part before the ?. However, if
-					// the ternary is within parentheses, it will be handled in the loop.
-					if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
-						$start = ( $ternary + 1 );
-					}
-				}
-
 				break;
+		}
+
+		if ( \T_EXIT !== $this->tokens[ $stackPtr ]['code'] ) {
+			/*
+			 * Check for a ternary operator.
+			 * We only need to do this here if this echo/print statement is lacking parenthesis.
+			 * Otherwise it will be handled in the `check_code_is_escaped()` method.
+			 */
+			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			$last_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
+
+			if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
+				|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_non_empty ]['code']
+			) {
+				// If there is a ternary skip over the part before the ?.
+				$ternary = $this->find_ternary( $start, $end );
+				if ( false !== $ternary ) {
+					$start = ( $ternary + 1 );
+				}
+			}
 		}
 
 		return $this->check_code_is_escaped( $start, $end, $ternary );
@@ -576,5 +578,25 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		return $end;
+	}
+
+	/**
+	 * Check whether there is a ternary token in an arbitrary set of tokens.
+	 *
+	 * @since 3.0.0 Split off from the process_token() method.
+	 *
+	 * @param int $start The position to start checking from.
+	 * @param int $end   The position to stop the check at.
+	 *
+	 * @return int|false Stack pointer to the ternary or FALSE if no ternary was found.
+	 */
+	private function find_ternary( $start, $end ) {
+		$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $start, $end );
+
+		if ( false !== $ternary && empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) ) {
+			return $ternary;
+		}
+
+		return false;
 	}
 }
