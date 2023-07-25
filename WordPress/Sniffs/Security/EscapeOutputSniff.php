@@ -344,7 +344,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
 			if ( false === $first_param ) {
 				// First parameter doesn't exist. Nothing to do.
-				return;
+				return $end;
 			}
 
 			$start = $first_param['start'];
