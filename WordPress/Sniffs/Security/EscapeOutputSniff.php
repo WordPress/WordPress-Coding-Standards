@@ -330,17 +330,15 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		 * pattern, it doesn't need to be escaped.
 		 */
 		if ( '_deprecated_file' === $matched_content ) {
-			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
-			if ( false === $first_param ) {
-				// First parameter doesn't exist. Nothing to do.
-				return;
-			}
+			$file_param = PassedParameters::getParameterFromStack( $params, 1, 'file' );
 
-			// Check for a particular code pattern which can safely be ignored.
-			if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['clean'] ) === 1 ) {
-				unset( $params[1] );
+			if ( false !== $file_param ) {
+				// Check for a particular code pattern which can safely be ignored.
+				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $file_param['clean'] ) === 1 ) {
+					unset( $params[1], $params['file'] ); // Remove the param, whether passed positionally or named.
+				}
 			}
-			unset( $first_param );
+			unset( $file_param );
 		}
 
 		// Examine each parameter individually.

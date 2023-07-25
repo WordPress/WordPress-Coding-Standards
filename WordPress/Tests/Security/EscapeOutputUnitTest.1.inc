@@ -473,3 +473,15 @@ trigger_error(
 	error_level: E_USER_WARNING,
 	message: "There was an error: {$message}",
 ); // Bad.
+
+/*
+ * Safeguard handling of PHP 8.0+ function calls with named parameters for _deprecated_file().
+ */
+_deprecated_file( version: '1.3.0', file: basename( __FILE__ ) ); // Ok.
+_deprecated_file( version: '1.3.0', files: basename( __FILE__ ) ); // Error, well not really, typo in $file param name, but that's not our concern.
+_deprecated_file( version: '1.3.0', replacement: $name ); // Error. $file param missing, but that's not our concern.
+_deprecated_file(
+	replacement: $name,
+	version: $version,
+	file: $file,
+); // Error x 3.
