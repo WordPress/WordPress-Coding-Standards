@@ -260,9 +260,14 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// Echo, open tag with echo.
 			default:
+				$end = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
+				if ( false === $end ) {
+					// Live coding/parse error. Bow out.
+					return;
+				}
+
 				// Find a potential opening parenthesis (if present).
 				$open_paren = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-				$end        = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), $stackPtr );
 				$last_token = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
 
 				// Check for the ternary operator. We only need to do this here if this
