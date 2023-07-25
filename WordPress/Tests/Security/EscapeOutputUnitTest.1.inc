@@ -452,3 +452,7 @@ wp_die(
 	title: 'label',
 	message: 'error message',
 );
+
+// Safeguard support for PHP 7.4+ numeric literals with underscores and PHP 8.1 octal literals
+// (and throw in some other non-decimal numbers as well).
+echo 1_000_000 + 2_0_0 + 0o12 + 0o20_00, 0XAB953C, 6.674_083e+11, 0b1010;
