@@ -325,6 +325,20 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		$start = ( $next_non_empty + 1 );
 		$end   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
 
+		if ( 'unsafe_printing_functions' === $group_name ) {
+			$error = $this->phpcsFile->addError(
+				"All output should be run through an escaping function (like %s), found '%s'.",
+				$stackPtr,
+				'UnsafePrintingFunction',
+				array( $this->unsafePrintingFunctions[ $matched_content ], $matched_content )
+			);
+
+			// If the error was reported, don't bother checking the function's arguments.
+			if ( $error ) {
+				return $end;
+			}
+		}
+
 		// These functions only need to have their first argument escaped.
 		if ( 'trigger_error' === $matched_content || 'user_error' === $matched_content ) {
 			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
@@ -354,20 +368,6 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				$start = ( $first_param['end'] + 2 );
 			}
 			unset( $first_param );
-		}
-
-		if ( 'unsafe_printing_functions' === $group_name ) {
-			$error = $this->phpcsFile->addError(
-				"All output should be run through an escaping function (like %s), found '%s'.",
-				$stackPtr,
-				'UnsafePrintingFunction',
-				array( $this->unsafePrintingFunctions[ $matched_content ], $matched_content )
-			);
-
-			// If the error was reported, don't bother checking the function's arguments.
-			if ( $error ) {
-				return $end;
-			}
 		}
 
 		return $this->check_code_is_escaped( $start, $end );
