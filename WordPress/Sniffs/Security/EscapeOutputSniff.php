@@ -424,6 +424,18 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
+			// Handle PHP 8.0+ match expressions.
+			if ( \T_MATCH === $this->tokens[ $i ]['code'] ) {
+				$match_valid = $this->walk_match_expression( $i );
+				if ( false === $match_valid ) {
+					// Live coding or parse error. Shouldn't be possible as PHP[CS] will tokenize the keyword as `T_STRING` in that case.
+					break; // @codeCoverageIgnore
+				}
+
+				$i = $match_valid;
+				continue;
+			}
+
 			// Handle arrays for those functions that accept them.
 			if ( \T_ARRAY === $this->tokens[ $i ]['code'] ) {
 				++$i; // Skip the opening parenthesis.
@@ -642,5 +654,87 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Examine a match expression and only check for escaping in the "returned" parts of the match expression.
+	 *
+	 * {@internal PHPCSUtils will likely contain a utility for parsing match expressions in the future.
+	 *            Ref: https://github.com/PHPCSStandards/PHPCSUtils/issues/497}
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $stackPtr Pointer to a T_MATCH token.
+	 *
+	 * @return int|false Stack pointer to skip to or FALSE if the match expression contained a parse error.
+	 */
+	private function walk_match_expression( $stackPtr ) {
+		if ( ! isset( $this->tokens[ $stackPtr ]['scope_opener'], $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
+			// Parse error/live coding. Shouldn't be possible as PHP[CS] will tokenize the keyword as `T_STRING` in that case.
+			return false; // @codeCoverageIgnore
+		}
+
+		$current = $this->tokens[ $stackPtr ]['scope_opener'];
+		$end     = $this->tokens[ $stackPtr ]['scope_closer'];
+		do {
+			$current = $this->phpcsFile->findNext( \T_MATCH_ARROW, ( $current + 1 ), $end );
+			if ( false === $current ) {
+				// We must have reached the last match item (or there is a parse error).
+				break;
+			}
+
+			$item_start = ( $current + 1 );
+			$item_end   = false;
+
+			// Find the first comma at the same level.
+			for ( $i = $item_start; $i <= $end; $i++ ) {
+				// Ignore anything within square brackets.
+				if ( isset( $this->tokens[ $i ]['bracket_opener'], $this->tokens[ $i ]['bracket_closer'] )
+					&& $i === $this->tokens[ $i ]['bracket_opener']
+				) {
+					$i = $this->tokens[ $i ]['bracket_closer'];
+					continue;
+				}
+
+				// Skip past nested arrays, function calls and arbitrary groupings.
+				if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
+					&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
+				) {
+					$i = $this->tokens[ $i ]['parenthesis_closer'];
+					continue;
+				}
+
+				// Skip past closures, anonymous classes and anything else scope related.
+				if ( isset( $this->tokens[ $i ]['scope_condition'], $this->tokens[ $i ]['scope_closer'] )
+					&& $this->tokens[ $i ]['scope_condition'] === $i
+				) {
+					$i = $this->tokens[ $i ]['scope_closer'];
+					continue;
+				}
+
+				if ( \T_COMMA !== $this->tokens[ $i ]['code']
+					&& $i !== $end
+				) {
+					continue;
+				}
+
+				$item_end = $i;
+				break;
+			}
+
+			if ( false === $item_end ) {
+				// Parse error/live coding. Shouldn't be possible.
+				return false; // @codeCoverageIgnore
+			}
+
+			// Now check that the value returned by this match "leaf" is correctly escaped.
+			$this->check_code_is_escaped( $item_start, $item_end );
+
+			// Independently of whether or not the check was succesfull or ran into (parse error) problems,
+			// always skip to the identified end of the item.
+			$current = $item_end;
+		} while ( $current < $end );
+
+		return $end;
 	}
 }

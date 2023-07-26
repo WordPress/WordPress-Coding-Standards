@@ -498,3 +498,37 @@ echo (int) match($var) {
 	$a, $b, $c => $fine,
 	default => $value + $other,
 }; // OK.
+
+echo match($var) { // OK.
+	$nr => 10 + 20, // OK.
+	$a, $b, $c => 'this line should NOT be flagged, vars are conditions, not output', // OK.
+	'my array' => [ 1, 2, 'foo' ], // OK.
+	'some value', $key, 'more' => esc_html($escaped), // OK.
+	'callback' => match($foo) {
+		10 => 10,
+		default => 20,
+	}, // OK.
+	false => ( $cond ? esc_html($valueA) : \esc_attr($valueB) ), // OK.
+	101 => sprintf(
+		'some %s format %d',
+		esc_html( $text ), // OK.
+		(int) $nr, // OK.
+	),
+	default => esc_attr($value + $other), // OK.
+};
+
+echo match($var) { // OK.
+	'some value', 'more' => $this_line_SHOULD_be_flagged['key'], // Bad x 1.
+	'other value' => $cond ? $valueA : $valueB['key'], // Bad x 2.
+	false => ( $cond ? $valueA : $valueB ), // Bad x 2.
+	101 => sprintf(
+		'some %s format %d',
+		$text, // Bad.
+		$nr, // Bad.
+	),
+	default => $value . $other, // Bad x 2.
+};
+
+echo match($var) { // OK.
+	'some value', 'more' => $this_line_SHOULD_be_flagged // Bad x 1. Note: no trailing comma!
+};
