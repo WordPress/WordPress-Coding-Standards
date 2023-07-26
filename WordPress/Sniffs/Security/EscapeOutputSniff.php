@@ -86,20 +86,20 @@ class EscapeOutputSniff extends Sniff {
 	 * @var array
 	 */
 	private $safe_components = array(
-		'T_CONSTANT_ENCAPSED_STRING' => true,
-		'T_LNUMBER'                  => true,
-		'T_MINUS'                    => true,
-		'T_PLUS'                     => true,
-		'T_MULTIPLY'                 => true,
-		'T_DIVIDE'                   => true,
-		'T_MODULUS'                  => true,
-		'T_TRUE'                     => true,
-		'T_FALSE'                    => true,
-		'T_NULL'                     => true,
-		'T_DNUMBER'                  => true,
-		'T_START_NOWDOC'             => true,
-		'T_NOWDOC'                   => true,
-		'T_END_NOWDOC'               => true,
+		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
+		\T_LNUMBER                  => \T_LNUMBER,
+		\T_MINUS                    => \T_MINUS,
+		\T_PLUS                     => \T_PLUS,
+		\T_MULTIPLY                 => \T_MULTIPLY,
+		\T_DIVIDE                   => \T_DIVIDE,
+		\T_MODULUS                  => \T_MODULUS,
+		\T_TRUE                     => \T_TRUE,
+		\T_FALSE                    => \T_FALSE,
+		\T_NULL                     => \T_NULL,
+		\T_DNUMBER                  => \T_DNUMBER,
+		\T_START_NOWDOC             => \T_START_NOWDOC,
+		\T_NOWDOC                   => \T_NOWDOC,
+		\T_END_NOWDOC               => \T_END_NOWDOC,
 	);
 
 	/**
@@ -314,7 +314,7 @@ class EscapeOutputSniff extends Sniff {
 
 			// Allow T_CONSTANT_ENCAPSED_STRING eg: echo 'Some String';
 			// Also T_LNUMBER, e.g.: echo 45; exit -1; and booleans.
-			if ( isset( $this->safe_components[ $this->tokens[ $i ]['type'] ] ) ) {
+			if ( isset( $this->safe_components[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
