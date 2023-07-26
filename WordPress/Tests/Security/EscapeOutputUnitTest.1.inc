@@ -417,3 +417,13 @@ echo ( ! empty( $my_bc_title ) ) ? wp_kses( $my_bc_title, allowed_tags() ) : get
 // Without parentheses wrapping the empty(), this was already okay.
 echo ! empty( $my_bc_title ) ? wp_kses( $my_bc_title, allowed_tags() ) : (10 + 20); // OK.
 echo ( $is_mobile ) ? wp_json_encode( 'true' ) : wp_json_encode( 'false' ); // OK.
+
+// Bug #1219.
+echo ( $webinar->is_too_late_to_register ? '</a>' : '' ); // OK.
+echo $webinar->is_too_late_to_register ? '</a>' : ''; // OK.
+array_walk(
+	$upcoming_webinars,
+	function ( $webinar ) {
+		echo ( $webinar->is_too_late_to_register ? '<a href="' . esc_url( $webinar->url ) . '">' : '' );
+	}
+); // OK.

@@ -417,18 +417,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					$in_cast = false;
 
 				} else {
-
 					// Skip over the condition part of a ternary (i.e., to after the ?).
-					$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $i, $this->tokens[ $i ]['parenthesis_closer'] );
-
+					$ternary = $this->find_ternary( ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
 					if ( false !== $ternary ) {
-
-						$next_paren = $this->phpcsFile->findNext( \T_OPEN_PARENTHESIS, ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
-
-						// We only do it if the ternary isn't within a subset of parentheses.
-						if ( false === $next_paren || ( isset( $this->tokens[ $next_paren ]['parenthesis_closer'] ) && $ternary > $this->tokens[ $next_paren ]['parenthesis_closer'] ) ) {
-							$i = $ternary;
-						}
+						$i = $ternary;
 					}
 				}
 
