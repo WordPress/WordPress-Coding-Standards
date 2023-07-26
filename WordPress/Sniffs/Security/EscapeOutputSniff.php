@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
@@ -267,9 +268,7 @@ class EscapeOutputSniff extends Sniff {
 				continue;
 			}
 
-			if ( \T_OPEN_SHORT_ARRAY === $this->tokens[ $i ]['code']
-				|| \T_CLOSE_SHORT_ARRAY === $this->tokens[ $i ]['code']
-			) {
+			if ( isset( Collections::shortArrayTokens()[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
