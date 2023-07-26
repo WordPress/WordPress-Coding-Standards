@@ -427,3 +427,13 @@ array_walk(
 		echo ( $webinar->is_too_late_to_register ? '<a href="' . esc_url( $webinar->url ) . '">' : '' );
 	}
 ); // OK.
+
+// Bug #1617: code before a ternary should not be ignored if a short ternary is used.
+echo $var ?: ''; // Bad, $var needs escaping.
+echo $var ? /*comment*/ : ''; // Bad, $var needs escaping.
+array_walk(
+	$upcoming_webinars,
+	function ( $webinar ) {
+		echo ( $webinar->is_too_late_to_register ? : '' );
+	}
+); // Bad.

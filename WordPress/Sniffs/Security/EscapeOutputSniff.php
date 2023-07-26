@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\BCFile;
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Operators;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
@@ -286,8 +287,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					&& $this->tokens[ $next_non_empty ]['parenthesis_closer'] !== $last_non_empty
 				)
 			) {
-				// If there is a ternary skip over the part before the ?.
-				$ternary = $this->find_ternary( $start, $end );
+				// If there is a (long) ternary skip over the part before the ?.
+				$ternary = $this->find_long_ternary( $start, $end );
 				if ( false !== $ternary ) {
 					$start = ( $ternary + 1 );
 				}
@@ -417,8 +418,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					$in_cast = false;
 
 				} else {
-					// Skip over the condition part of a ternary (i.e., to after the ?).
-					$ternary = $this->find_ternary( ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
+					// Skip over the condition part of a (long) ternary (i.e., to after the ?).
+					$ternary = $this->find_long_ternary( ( $i + 1 ), $this->tokens[ $i ]['parenthesis_closer'] );
 					if ( false !== $ternary ) {
 						$i = $ternary;
 					}
@@ -585,9 +586,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * @param int $start The position to start checking from.
 	 * @param int $end   The position to stop the check at.
 	 *
-	 * @return int|false Stack pointer to the ternary or FALSE if no ternary was found.
+	 * @return int|false Stack pointer to the ternary or FALSE if no ternary was found or
+	 *                   if this is a short ternary.
 	 */
-	private function find_ternary( $start, $end ) {
+	private function find_long_ternary( $start, $end ) {
 		for ( $i = $start; $i < $end; $i++ ) {
 			// Ignore anything within square brackets.
 			if ( isset( $this->tokens[ $i ]['bracket_opener'], $this->tokens[ $i ]['bracket_closer'] )
@@ -617,7 +619,14 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
-			// Okay, we found a ternary and it should be at the correct nesting level.
+			/*
+			 * Okay, we found a ternary and it should be at the correct nesting level.
+			 * If this is a short ternary, it shouldn't be ignored though.
+			 */
+			if ( Operators::isShortTernary( $this->phpcsFile, $i ) === true ) {
+				return false;
+			}
+
 			return $i;
 		}
 
