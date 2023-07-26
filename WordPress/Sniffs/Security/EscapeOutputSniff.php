@@ -280,6 +280,11 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
 				|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_non_empty ]['code']
+				|| ( \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
+					&& \T_CLOSE_PARENTHESIS === $this->tokens[ $last_non_empty ]['code']
+					&& isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] )
+					&& $this->tokens[ $next_non_empty ]['parenthesis_closer'] !== $last_non_empty
+				)
 			) {
 				// If there is a ternary skip over the part before the ?.
 				$ternary = $this->find_ternary( $start, $end );

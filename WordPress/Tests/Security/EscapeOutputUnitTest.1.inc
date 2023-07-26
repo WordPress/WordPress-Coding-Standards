@@ -410,3 +410,10 @@ echo ( ! empty( $var ) && ( $var > 10 ? $foo : $bar ) ) ? 'go' : 'stop'; // OK.
 echo isset( $var[ $keyA ? $keyA : $keyB ] ) ? 'go' : 'stop'; // OK.
 echo '' !== implode( '', [ $valueA ? $valueA : $valueB, $valueC ? $valueD : $valueE ] ) ? 'go' : 'stop'; // OK.
 echo '' !== ${true ? $foo : $bar} ? 'go' : 'stop'; // OK.
+
+// Bug #677 (and #1507C).
+echo ( ! empty( $my_bc_title ) ) ? wp_kses( $my_bc_title, allowed_tags() ) : (10 + 20); // OK.
+echo ( ! empty( $my_bc_title ) ) ? wp_kses( $my_bc_title, allowed_tags() ) : get_the_title(); // Bad, should flag get_the_title(), not `!`.
+// Without parentheses wrapping the empty(), this was already okay.
+echo ! empty( $my_bc_title ) ? wp_kses( $my_bc_title, allowed_tags() ) : (10 + 20); // OK.
+echo ( $is_mobile ) ? wp_json_encode( 'true' ) : wp_json_encode( 'false' ); // OK.
