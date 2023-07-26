@@ -532,3 +532,10 @@ echo match($var) { // OK.
 echo match($var) { // OK.
 	'some value', 'more' => $this_line_SHOULD_be_flagged // Bad x 1. Note: no trailing comma!
 };
+
+// Bug #1989: allow for Name::class and PHP 8.0+ $obj::class.
+_deprecated_function( __METHOD__, 'x.x.x', ClassName::class ); // OK.
+die( self::CLASS . ' has been abandoned' ); // OK.
+_deprecated_function( __METHOD__, 'x.x.x', parent::Class ); // OK.
+_deprecated_function( __METHOD__, 'x.x.x', static::class ); // OK.
+echo 'Do not use ' . $object::class ); // OK.

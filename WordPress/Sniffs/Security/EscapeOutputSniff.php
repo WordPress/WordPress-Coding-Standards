@@ -492,6 +492,26 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
+			// Check for use of *::class.
+			if ( \T_STRING === $this->tokens[ $i ]['code']
+				|| \T_VARIABLE === $this->tokens[ $i ]['code']
+				|| isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $i ]['code'] ] )
+			) {
+				$double_colon = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				if ( false !== $double_colon
+					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
+				) {
+					$class_keyword = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $double_colon + 1 ), $end, true );
+					if ( false !== $class_keyword
+						&& \T_STRING === $this->tokens[ $class_keyword ]['code']
+						&& 'class' === strtolower( $this->tokens[ $class_keyword ]['content'] )
+					) {
+						$i = $class_keyword;
+						continue;
+					}
+				}
+			}
+
 			$watch = false;
 
 			// Allow int/double/bool casted variables.
