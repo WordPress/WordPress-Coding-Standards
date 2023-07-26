@@ -5,6 +5,12 @@
 
 	<rule ref="WordPress-Core"/>
 
+	<!-- Silence the "no nested dirnames, use $levels" notice, which is included in Core,
+		 as plugin/themes may still support PHP < 7.0. -->
+	<rule ref="Modernize.FunctionCalls.Dirname.Nested">
+		<severity>0</severity>
+	</rule>
+
 	<!-- Generic PHP best practices.
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
