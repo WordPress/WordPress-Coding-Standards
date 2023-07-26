@@ -485,3 +485,16 @@ _deprecated_file(
 	version: $version,
 	file: $file,
 ); // Error x 3.
+
+/*
+ * Safeguard handling of PHP 8.0+ match expression.
+ */
+echo esc_html( match($var) {
+	$a, $b, $c => $fine,
+	default => $value + $other,
+}); // OK.
+
+echo (int) match($var) {
+	$a, $b, $c => $fine,
+	default => $value + $other,
+}; // OK.

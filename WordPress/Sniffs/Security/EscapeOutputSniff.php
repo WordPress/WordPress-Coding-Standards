@@ -484,6 +484,20 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// Allow int/double/bool casted variables.
 			if ( isset( ContextHelper::get_safe_cast_tokens()[ $this->tokens[ $i ]['code'] ] ) ) {
+				/*
+				 * If the next thing is a match expression, skip over it as whatever is
+				 * being returned will be safe casted.
+				 * Do not set `$in_cast` to `true`.
+				 */
+				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				if ( false !== $next_non_empty
+					&& \T_MATCH === $this->tokens[ $next_non_empty ]['code']
+					&& isset( $this->tokens[ $next_non_empty ]['scope_closer'] )
+				) {
+					$i = $this->tokens[ $next_non_empty ]['scope_closer'];
+					continue;
+				}
+
 				$in_cast = true;
 				continue;
 			}
