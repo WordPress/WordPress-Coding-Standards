@@ -404,3 +404,9 @@ print $foo ? 'ten' : 'twenty'; // OK.
 if ( print $foo ? 'ten' : 'twenty' ) {} // OK.
 if ( print $foo ? $bar : $baz ) {} // Bad x 2, `$bar` and `$baz` should be flagged, not $foo.
 $var = ( ( $fop === 1 ) ? ( print $foo ? 'ten' : $twenty ) : print $bar ); // Bad x 2, $twenty & $bar.
+
+// Ternary statements can be chained and nested.
+echo ( ! empty( $var ) && ( $var > 10 ? $foo : $bar ) ) ? 'go' : 'stop'; // OK.
+echo isset( $var[ $keyA ? $keyA : $keyB ] ) ? 'go' : 'stop'; // OK.
+echo '' !== implode( '', [ $valueA ? $valueA : $valueB, $valueC ? $valueD : $valueE ] ) ? 'go' : 'stop'; // OK.
+echo '' !== ${true ? $foo : $bar} ? 'go' : 'stop'; // OK.

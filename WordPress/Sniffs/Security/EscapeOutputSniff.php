@@ -591,26 +591,37 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * @return int|false Stack pointer to the ternary or FALSE if no ternary was found.
 	 */
 	private function find_ternary( $start, $end ) {
-		$ternary = $this->phpcsFile->findNext( \T_INLINE_THEN, $start, $end );
-		if ( false === $ternary ) {
-			return false;
-		}
+		for ( $i = $start; $i < $end; $i++ ) {
+			// Ignore anything within square brackets.
+			if ( isset( $this->tokens[ $i ]['bracket_opener'], $this->tokens[ $i ]['bracket_closer'] )
+				&& $i === $this->tokens[ $i ]['bracket_opener']
+			) {
+				$i = $this->tokens[ $i ]['bracket_closer'];
+				continue;
+			}
 
-		$target_nesting_level = 0;
-		if ( empty( $this->tokens[ $start ]['nested_parenthesis'] ) === false ) {
-			$target_nesting_level = \count( $this->tokens[ $start ]['nested_parenthesis'] );
-		}
+			// Skip past nested arrays, function calls and arbitrary groupings.
+			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
+				&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
+			) {
+				$i = $this->tokens[ $i ]['parenthesis_closer'];
+				continue;
+			}
 
-		if ( empty( $this->tokens[ $ternary ]['nested_parenthesis'] )
-			&& 0 === $target_nesting_level
-		) {
-			return $ternary;
-		}
+			// Skip past closures, anonymous classes and anything else scope related.
+			if ( isset( $this->tokens[ $i ]['scope_condition'], $this->tokens[ $i ]['scope_closer'] )
+				&& $this->tokens[ $i ]['scope_condition'] === $i
+			) {
+				$i = $this->tokens[ $i ]['scope_closer'];
+				continue;
+			}
 
-		if ( empty( $this->tokens[ $ternary ]['nested_parenthesis'] ) === false
-			&& \count( $this->tokens[ $ternary ]['nested_parenthesis'] ) === $target_nesting_level
-		) {
-			return $ternary;
+			if ( \T_INLINE_THEN !== $this->tokens[ $i ]['code'] ) {
+				continue;
+			}
+
+			// Okay, we found a ternary and it should be at the correct nesting level.
+			return $i;
 		}
 
 		return false;
