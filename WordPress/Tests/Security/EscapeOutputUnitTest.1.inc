@@ -439,3 +439,16 @@ array_walk(
 ); // Bad.
 
 echo ESC_HTML . $var . unrelatedFunction( $var ); // Bad x 3.
+
+// Bug #677#issuecomment-470407780: Parameters should be examined individually.
+printf(
+	'<li><a href="#%1$s" class="%2$s"%3$s%4$s>%5$s</a></li>',
+	( '' !== $this->link_title ) ? ' title="' . esc_attr( $this->link_title ) . '"' : '',
+	( '' !== $this->link_aria_label ) ? ' aria-label="' . esc_attr( $this->link_aria_label ) . '"' : '',
+); // OK.
+
+// The fix for #677 will also prevent false positives on parameter labels.
+wp_die(
+	title: 'label',
+	message: 'error message',
+);

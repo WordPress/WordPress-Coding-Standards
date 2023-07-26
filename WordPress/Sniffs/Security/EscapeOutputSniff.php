@@ -162,9 +162,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		$start   = ( $stackPtr + 1 );
-		$end     = $start;
-		$ternary = false;
+		$start = ( $stackPtr + 1 );
+		$end   = $start;
 
 		switch ( $this->tokens[ $stackPtr ]['code'] ) {
 			case \T_STRING:
@@ -270,32 +269,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				break;
 		}
 
-		if ( \T_EXIT !== $this->tokens[ $stackPtr ]['code'] ) {
-			/*
-			 * Check for a ternary operator.
-			 * We only need to do this here if this echo/print statement is lacking parenthesis.
-			 * Otherwise it will be handled in the `check_code_is_escaped()` method.
-			 */
-			$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-			$last_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
-
-			if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
-				|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_non_empty ]['code']
-				|| ( \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
-					&& \T_CLOSE_PARENTHESIS === $this->tokens[ $last_non_empty ]['code']
-					&& isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] )
-					&& $this->tokens[ $next_non_empty ]['parenthesis_closer'] !== $last_non_empty
-				)
-			) {
-				// If there is a (long) ternary skip over the part before the ?.
-				$ternary = $this->find_long_ternary( $start, $end );
-				if ( false !== $ternary ) {
-					$start = ( $ternary + 1 );
-				}
-			}
-		}
-
-		return $this->check_code_is_escaped( $start, $end, $ternary );
+		return $this->check_code_is_escaped( $start, $end );
 	}
 
 	/**
@@ -322,8 +296,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			return;
 		}
 
-		$start = ( $next_non_empty + 1 );
-		$end   = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
+		$end = $this->tokens[ $next_non_empty ]['parenthesis_closer'];
 
 		if ( 'unsafe_printing_functions' === $group_name ) {
 			$error = $this->phpcsFile->addError(
@@ -339,6 +312,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			}
 		}
 
+		$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
+
 		// These functions only need to have their first argument escaped.
 		if ( 'trigger_error' === $matched_content || 'user_error' === $matched_content ) {
 			$first_param = PassedParameters::getParameter( $this->phpcsFile, $stackPtr, 1 );
@@ -347,9 +322,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return $end;
 			}
 
-			$start = $first_param['start'];
-			$end   = ( $first_param['end'] + 1 );
-			unset( $first_param );
+			return $this->check_code_is_escaped( $first_param['start'], ( $first_param['end'] + 1 ) );
 		}
 
 		/*
@@ -365,12 +338,17 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// Check for a particular code pattern which can safely be ignored.
 			if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['clean'] ) === 1 ) {
-				$start = ( $first_param['end'] + 2 );
+				unset( $params[1] );
 			}
 			unset( $first_param );
 		}
 
-		return $this->check_code_is_escaped( $start, $end );
+		// Examine each parameter individually.
+		foreach ( $params as $param ) {
+			$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+		}
+
+		return $end;
 	}
 
 	/**
@@ -378,14 +356,35 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @since 3.0.0 Split off from the process_token() method.
 	 *
-	 * @param int       $start   The position to start checking from.
-	 * @param int       $end     The position to stop the check at.
-	 * @param int|false $ternary Stack pointer to the `?` inline then token or
-	 *                           FALSE when no non-parenthesized ternary was found.
+	 * @param int $start The position to start checking from.
+	 * @param int $end   The position to stop the check at.
 	 *
 	 * @return int Integer stack pointer to skip forward.
 	 */
-	protected function check_code_is_escaped( $start, $end, $ternary = false ) {
+	protected function check_code_is_escaped( $start, $end ) {
+		/*
+		 * Check for a ternary operator.
+		 * We only need to do this here if this statement is lacking parenthesis.
+		 * Otherwise it will be handled in the below loop.
+		 */
+		$ternary        = false;
+		$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $start + 1 ), null, true );
+		$last_non_empty = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $end - 1 ), null, true );
+
+		if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
+			|| \T_CLOSE_PARENTHESIS !== $this->tokens[ $last_non_empty ]['code']
+			|| ( \T_OPEN_PARENTHESIS === $this->tokens[ $next_non_empty ]['code']
+				&& \T_CLOSE_PARENTHESIS === $this->tokens[ $last_non_empty ]['code']
+				&& isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] )
+				&& $this->tokens[ $next_non_empty ]['parenthesis_closer'] !== $last_non_empty
+			)
+		) {
+			// If there is a (long) ternary skip over the part before the ?.
+			$ternary = $this->find_long_ternary( $start, $end );
+			if ( false !== $ternary ) {
+				$start = ( $ternary + 1 );
+			}
+		}
 
 		$in_cast = false;
 
