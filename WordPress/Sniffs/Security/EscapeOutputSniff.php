@@ -249,8 +249,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return;
 			}
 
-			// Quick check. This disregards comments.
-			if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['raw'] ) === 1 ) {
+			// Check for a particular code pattern which can safely be ignored.
+			if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $first_param['clean'] ) === 1 ) {
 				$stackPtr = ( $first_param['end'] + 2 );
 			}
 			unset( $first_param );

@@ -367,3 +367,10 @@ $obj = new User_Error( $foo ); // OK.
 Trigger_ERROR( 'This is fine', $second_param_should_be_ignored ); // OK.
 _Deprecated_File( basename( __FILE__ ), '1.3.0' ); // OK.
 _EX( 'all_params_should_be_ignored_if_function_is_reported_as_unsafe', 'another_param' ); // Bad x 1 for unsafe function.
+
+// Allow for comments in the $file parameter.
+_deprecated_file(
+	/* comment */
+	basename( __FILE__ ),
+	'1.3.0'
+); // Ok.
