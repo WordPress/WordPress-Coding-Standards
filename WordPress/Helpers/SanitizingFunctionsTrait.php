@@ -96,6 +96,7 @@ trait SanitizingFunctionsTrait {
 		'wp_handle_upload'           => true,
 		'wp_kses_allowed_html'       => true,
 		'wp_kses_data'               => true,
+		'wp_kses_one_attr'           => true,
 		'wp_kses_post'               => true,
 		'wp_kses'                    => true,
 		'wp_parse_id_list'           => true,
