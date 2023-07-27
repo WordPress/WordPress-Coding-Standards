@@ -539,3 +539,48 @@ die( self::CLASS . ' has been abandoned' ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', parent::Class ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', static::class ); // OK.
 echo 'Do not use ' . $object::class ); // OK.
+
+/*
+ * Examine the parameters passed for exception creation via throw.
+ */
+throw new MyException(); // OK.
+throw new Exception( esc_html( $message ), (int) $code ); // OK.
+throw new /*comment*/ parent( esc_html( $message ), (int) $code ); // OK.
+throw MyException::get( esc_html( $message ), (int) $code ); // OK.
+throw $obj->getException( esc_html( $message ), (int) $code ); // OK.
+
+throw new Exception( $message, $code ); // Bad x 2.
+throw new self( $message, $code ); // Bad x 2.
+throw
+	 MyException  ::   get   /*comment*/ ( $message, $code ); // Bad x 2.
+throw $obj?->getException( $message, $code ); // Bad x 2.
+throw new $exceptionName( $message, $code ); // Bad x 2.
+
+throw static::get( esc_html( $message ), $code ); // Bad x 1.
+throw \Vendor\Name\MyException::get( $message, (int) $code ); // Bad x 1.
+throw Name\MyException::get( esc_html( $message ), $code ); // Bad x 1.
+throw namespace\MyException::get( $message, (int) $code ); // Bad x 1.
+throw new class('text', 0) extends Exception {}; // OK.
+
+// Since PHP 8.0, throw can be used as an expression.
+$var = ( ( $fop === 1 ) ? throw new Exception( esc_html( $message ), (int) $code ) : $not_part_of_the_throw ); // OK.
+$var = ( ( $fop === 1 ) ? throw /*comment*/ new Exception( $message ) : $not_part_of_the_throw; // Bad x 1.
+
+// The following should be ignored as this is not exception creation, so we don't have access to the parameters.
+throw $stored_exceptions['key'];
+throw $obj->stored_exception;
+
+// We should also ignore any exception which is being caught straight away.
+try {
+	throw new Exception( $message, $code ); // OK, as exception is being caught.
+} catch ( Exception $e ) {
+} finally {
+}
+
+// .. but only if it is not within a closed scope nested within the try.
+try {
+	$callback = function() {
+		throw new Exception( $message, 10 ); // Bad. Unclear if the exception will be caught or not.
+	};
+} catch ( Exception $e ) {
+}

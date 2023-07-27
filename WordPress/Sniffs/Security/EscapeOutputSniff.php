@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\BCFile;
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\Operators;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
@@ -121,6 +122,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		$targets   = parent::register();
 		$targets[] = \T_ECHO;
 		$targets[] = \T_PRINT;
+		$targets[] = \T_THROW;
 		$targets[] = \T_EXIT;
 		$targets[] = \T_OPEN_TAG_WITH_ECHO;
 
@@ -192,6 +194,59 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				$start = $next_non_empty;
 				$end   = ( $this->tokens[ $next_non_empty ]['parenthesis_closer'] + 1 );
 				break;
+
+			case \T_THROW:
+				// Find the open parentheses, while stepping over the exception creation tokens.
+				$ignore  = Tokens::$emptyTokens;
+				$ignore += Collections::namespacedNameTokens();
+				$ignore += Collections::functionCallTokens();
+				$ignore += Collections::objectOperators();
+
+				$next_relevant = $this->phpcsFile->findNext( $ignore, ( $stackPtr + 1 ), null, true );
+				if ( false === $next_relevant ) {
+					return;
+				}
+
+				if ( \T_NEW === $this->tokens[ $next_relevant ]['code'] ) {
+					$next_relevant = $this->phpcsFile->findNext( $ignore, ( $next_relevant + 1 ), null, true );
+					if ( false === $next_relevant ) {
+						return;
+					}
+				}
+
+				if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_relevant ]['code']
+					|| isset( $this->tokens[ $next_relevant ]['parenthesis_closer'] ) === false
+				) {
+					// Live codind/parse error or a pre-created exception. Nothing to do for us.
+					return;
+				}
+
+				$end = $this->tokens[ $next_relevant ]['parenthesis_closer'];
+
+				// Check if the throw is within a `try-catch`.
+				// Doing this here (instead of earlier) to allow skipping to the end of the statement.
+				$search_for           = Collections::closedScopes();
+				$search_for[ \T_TRY ] = \T_TRY;
+
+				$last_condition = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, $search_for );
+				if ( false !== $last_condition && \T_TRY === $this->tokens[ $last_condition ]['code'] ) {
+					// This exception will (probably) be caught, so ignore it.
+					return $end;
+				}
+
+				$call_token = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $next_relevant - 1 ), null, true );
+				$params     = PassedParameters::getParameters( $this->phpcsFile, $call_token );
+				if ( empty( $params ) ) {
+					// No parameters passed, nothing to do.
+					return $end;
+				}
+
+				// Examine each parameter individually.
+				foreach ( $params as $param ) {
+					$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+				}
+
+				return $end;
 
 			case \T_PRINT:
 				$end = BCFile::findEndOfStatement( $this->phpcsFile, $stackPtr );
