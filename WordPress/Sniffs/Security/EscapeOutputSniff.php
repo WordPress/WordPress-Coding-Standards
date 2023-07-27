@@ -475,11 +475,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		$in_cast = false;
+		$watch   = true;
 
 		// Looping through echo'd components.
-		$watch = true;
 		for ( $i = $start; $i < $end; $i++ ) {
-
 			// Ignore whitespaces and comments.
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
@@ -491,14 +490,12 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			}
 
 			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code'] ) {
-
 				if ( ! isset( $this->tokens[ $i ]['parenthesis_closer'] ) ) {
 					// Live coding or parse error.
 					break;
 				}
 
 				if ( $in_cast ) {
-
 					// Skip to the end of a function call if it has been casted to a safe value.
 					$i       = $this->tokens[ $i ]['parenthesis_closer'];
 					$in_cast = false;
@@ -639,7 +636,6 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// Now check that next token is a function call.
 			if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
-
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
 				$function_opener        = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
@@ -649,7 +645,6 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					&& \T_OPEN_PARENTHESIS === $this->tokens[ $function_opener ]['code']
 				) {
 					if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
-
 						// Get the callback parameter.
 						$callback = ArrayWalkingFunctionsHelper::get_callback_parameter( $this->phpcsFile, $ptr );
 
@@ -689,8 +684,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				}
 
 				// If this is a safe function, we don't flag it.
-				if (
-					$is_formatting_function
+				if ( $is_formatting_function
 					|| $this->is_escaping_function( $functionName )
 					|| $this->is_auto_escaped_function( $functionName )
 				) {
