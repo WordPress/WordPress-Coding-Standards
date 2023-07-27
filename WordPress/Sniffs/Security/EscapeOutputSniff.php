@@ -485,8 +485,12 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
-			// Ignore namespace separators.
-			if ( \T_NS_SEPARATOR === $this->tokens[ $i ]['code'] ) {
+			// Skip over irrelevant tokens.
+			if ( isset( Tokens::$magicConstants[ $this->tokens[ $i ]['code'] ] ) // Magic constants for debug functions.
+				|| \T_NS_SEPARATOR === $this->tokens[ $i ]['code']
+				|| \T_DOUBLE_ARROW === $this->tokens[ $i ]['code']
+				|| \T_CLOSE_PARENTHESIS === $this->tokens[ $i ]['code']
+			) {
 				continue;
 			}
 
@@ -553,15 +557,6 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				}
 
 				$i = $array_open_close['closer'];
-				continue;
-			}
-
-			if ( \in_array( $this->tokens[ $i ]['code'], array( \T_DOUBLE_ARROW, \T_CLOSE_PARENTHESIS ), true ) ) {
-				continue;
-			}
-
-			// Handle magic constants for debug functions.
-			if ( isset( Tokens::$magicConstants[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
