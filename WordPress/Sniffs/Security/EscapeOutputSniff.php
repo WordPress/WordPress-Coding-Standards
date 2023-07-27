@@ -693,13 +693,20 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 						}
 					}
 
-					// Skip pointer to after the function.
-					// If this is a formatting function we just skip over the opening
-					// parenthesis. Otherwise we skip all the way to the closing.
+					// If this is a formatting function, we examine the parameters individually.
 					if ( $is_formatting_function ) {
-						$i     = ( $function_opener + 1 );
+						$formatting_params = PassedParameters::getParameters( $this->phpcsFile, $i );
+						if ( ! empty( $formatting_params ) ) {
+							foreach ( $formatting_params as $format_param ) {
+								$this->check_code_is_escaped( $format_param['start'], ( $format_param['end'] + 1 ) );
+							}
+						}
+
 						$watch = true;
-					} elseif ( isset( $this->tokens[ $function_opener ]['parenthesis_closer'] ) ) {
+					}
+
+					// Skip pointer to after the function.
+					if ( isset( $this->tokens[ $function_opener ]['parenthesis_closer'] ) ) {
 						$i = $this->tokens[ $function_opener ]['parenthesis_closer'];
 					} else {
 						// Live coding or parse error.

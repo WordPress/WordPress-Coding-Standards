@@ -641,3 +641,10 @@ Some text without interpolation.
 Some text {$with->interpolation}.
 Some text without interpolation.
 EOD;
+
+// Parameters in formatting functions should be examined individually.
+echo sprintf(
+	'<li><a href="#%1$s" class="%2$s"%3$s%4$s>%5$s</a></li>',
+	( '' !== $this->link_title ) ? ' title="' . esc_attr( $this->link_title ) . '"' : '',
+	( '' !== $this->link_aria_label ) ? ' aria-label="' . $this->link_aria_label . '"' : '',
+); // Bad x 1.
