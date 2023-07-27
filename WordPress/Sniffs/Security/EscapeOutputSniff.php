@@ -58,12 +58,23 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @since 0.4.0
 	 * @since 0.11.0 Changed from public static to protected non-static.
+	 * @since 3.0.0  The format of the array values has changed from plain string to array.
 	 *
 	 * @var array
 	 */
 	protected $unsafePrintingFunctions = array(
-		'_e'  => 'esc_html_e() or esc_attr_e()',
-		'_ex' => 'echo esc_html_x() or echo esc_attr_x()',
+		'_e'  => array(
+			'alternative' => 'esc_html_e() or esc_attr_e()',
+			'params'      => array(
+				1 => 'text',
+			),
+		),
+		'_ex' => array(
+			'alternative' => 'echo esc_html_x() or echo esc_attr_x()',
+			'params'      => array(
+				1 => 'text',
+			),
+		),
 	);
 
 	/**
@@ -368,13 +379,27 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				"All output should be run through an escaping function (like %s), found '%s'.",
 				$stackPtr,
 				'UnsafePrintingFunction',
-				array( $this->unsafePrintingFunctions[ $matched_content ], $matched_content )
+				array( $this->unsafePrintingFunctions[ $matched_content ]['alternative'], $matched_content )
 			);
 
 			// If the error was reported, don't bother checking the function's arguments.
-			if ( $error ) {
+			if ( $error || empty( $this->unsafePrintingFunctions[ $matched_content ]['params'] ) ) {
 				return $end;
 			}
+
+			// If the function was not reported for being unsafe, examine the relevant parameters.
+			$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
+			foreach ( $this->unsafePrintingFunctions[ $matched_content ]['params'] as $position => $name ) {
+				$param = PassedParameters::getParameterFromStack( $params, $position, $name );
+				if ( false === $param ) {
+					// Parameter doesn't exist. Nothing to do.
+					continue;
+				}
+
+				$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+			}
+
+			return $end;
 		}
 
 		$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );

@@ -593,3 +593,15 @@ echo $var == 'foo' ? print 'message' : 'bar'; // OK.
 echo $var == 'foo' ? 'bar' : die( $var ); // Bad x 1, $var, not die().
 echo $var == 'foo' ? throw new Exception( $var ) : 'bar'; // Bad x 1, $var, not throw.
 echo $var == 'foo' ? print $var : 'bar'; // Bad x 1, $var, not print.
+
+/*
+ * When the `UnsafePrintingFunction` error code is ignored, the parameters
+ * for the unsafe functions should still be examined, but only the $text
+ * parameter needs escaping.
+ */
+// phpcs:disable WordPress.Security.EscapeOutput.UnsafePrintingFunction
+_e( $text, $domain ); // Bad x 1, only text param.
+_e( domain: $domain ); // OK, well not really, required $text parameter missing, but that's not our concern.
+_ex( domain: $domain, text: 'plain text', context: $context ); // OK.
+_e( domain: $domain, text: $text, ); // Bad x 1, only text param.
+// phpcs:enable
