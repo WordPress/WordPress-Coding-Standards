@@ -164,6 +164,7 @@ trait EscapingFunctionsTrait {
 		'wp_nav_menu'               => true,
 		'wp_register'               => true,
 		'wp_tag_cloud'              => true,
+		'wp_timezone_choice'        => true,
 		'wp_title'                  => true,
 	);
 
