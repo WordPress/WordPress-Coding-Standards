@@ -12,6 +12,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\BCFile;
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\Operators;
 use PHPCSUtils\Utils\PassedParameters;
@@ -536,13 +537,22 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
-			// Handle arrays for those functions that accept them.
-			if ( \T_ARRAY === $this->tokens[ $i ]['code'] ) {
-				++$i; // Skip the opening parenthesis.
-				continue;
-			}
+			// Examine the items in an array individually for array parameters.
+			if ( isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $i ]['code'] ] ) ) {
+				$array_open_close = Arrays::getOpenClose( $this->phpcsFile, $i );
+				if ( false === $array_open_close ) {
+					// Short list or misidentified short array token.
+					continue;
+				}
 
-			if ( isset( Collections::shortArrayTokens()[ $this->tokens[ $i ]['code'] ] ) ) {
+				$array_items = PassedParameters::getParameters( $this->phpcsFile, $i, 0, true );
+				if ( ! empty( $array_items ) ) {
+					foreach ( $array_items as $array_item ) {
+						$this->check_code_is_escaped( $array_item['start'], ( $array_item['end'] + 1 ) );
+					}
+				}
+
+				$i = $array_open_close['closer'];
 				continue;
 			}
 

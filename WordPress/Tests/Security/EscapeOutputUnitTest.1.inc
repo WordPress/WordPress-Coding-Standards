@@ -605,3 +605,18 @@ _e( domain: $domain ); // OK, well not really, required $text parameter missing,
 _ex( domain: $domain, text: 'plain text', context: $context ); // OK.
 _e( domain: $domain, text: $text, ); // Bad x 1, only text param.
 // phpcs:enable
+
+// Array keys and values should be examined individually.
+wp_die( esc_html( $message ), '', array() ); // OK.
+wp_die(
+	esc_html( $message ), // OK.
+	'',
+	array(
+		'back_link' => true, // OK.
+		'response'  => $response ?? 200, // Bad.
+		'link_url'  => ( '' !== $this->link_url ) ? $this->link_url : '', // Bad.
+		'link_text' => ( '' !== $link_title ) ? esc_attr( $link_title ) : '', // OK.
+		'charset'   => [$set, $rtl] = $array, // Bad x 2 (silly code, but the list shouldn't be treated as an array).
+		'exit'      => $do_exit, // Bad x 1.
+	)
+);
