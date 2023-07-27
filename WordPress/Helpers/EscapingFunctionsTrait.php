@@ -71,6 +71,7 @@ trait EscapingFunctionsTrait {
 		'esc_textarea'               => true,
 		'esc_url_raw'                => true,
 		'esc_url'                    => true,
+		'esc_xml'                    => true,
 		'filter_input'               => true,
 		'filter_var'                 => true,
 		'floatval'                   => true,
