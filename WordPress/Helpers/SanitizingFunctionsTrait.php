@@ -88,6 +88,7 @@ trait SanitizingFunctionsTrait {
 		'sanitize_title_for_query'   => true,
 		'sanitize_title_with_dashes' => true,
 		'sanitize_title'             => true,
+		'sanitize_url'               => true,
 		'sanitize_user_field'        => true,
 		'sanitize_user'              => true,
 		'validate_file'              => true,
