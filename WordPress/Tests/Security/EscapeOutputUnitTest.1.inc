@@ -584,3 +584,12 @@ try {
 	};
 } catch ( Exception $e ) {
 }
+
+// Bug #1861 - don't throw an error for expression examined separately.
+echo $var == 'foo' ? 'bar' : die( 'world' ); // OK.
+echo $var == 'foo' ? throw new Exception( 'message' ) : 'bar'; // OK.
+echo $var == 'foo' ? print 'message' : 'bar'; // OK.
+
+echo $var == 'foo' ? 'bar' : die( $var ); // Bad x 1, $var, not die().
+echo $var == 'foo' ? throw new Exception( $var ) : 'bar'; // Bad x 1, $var, not throw.
+echo $var == 'foo' ? print $var : 'bar'; // Bad x 1, $var, not print.

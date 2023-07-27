@@ -107,6 +107,19 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	);
 
 	/**
+	 * List of keyword tokens this sniff listens for, which can also be used as an inline expression.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<string|int, string|int>
+	 */
+	private $target_keywords = array(
+		\T_EXIT  => \T_EXIT,
+		\T_PRINT => \T_PRINT,
+		\T_THROW => \T_THROW,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -119,11 +132,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		$this->safe_components += Collections::incrementDecrementOperators();
 
 		// Set up the tokens the sniff should listen too.
-		$targets   = parent::register();
+		$targets   = array_merge( parent::register(), $this->target_keywords );
 		$targets[] = \T_ECHO;
-		$targets[] = \T_PRINT;
-		$targets[] = \T_THROW;
-		$targets[] = \T_EXIT;
 		$targets[] = \T_OPEN_TAG_WITH_ECHO;
 
 		return $targets;
@@ -476,6 +486,19 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					}
 				}
 
+				continue;
+			}
+
+			/*
+			 * If a keyword is encountered in an inline expression and the keyword is one
+			 * this sniff listens to, recurse into the sniff, handle the expression
+			 * based on the keyword and skip over the code examined.
+			 */
+			if ( isset( $this->target_keywords[ $this->tokens[ $i ]['code'] ] ) ) {
+				$return_value = $this->process_token( $i );
+				if ( isset( $return_value ) ) {
+					$i = $return_value;
+				}
 				continue;
 			}
 
