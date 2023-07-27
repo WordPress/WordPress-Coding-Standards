@@ -162,6 +162,7 @@ trait EscapingFunctionsTrait {
 		'wp_login_form'             => true,
 		'wp_loginout'               => true,
 		'wp_nav_menu'               => true,
+		'wp_readonly'               => true,
 		'wp_register'               => true,
 		'wp_tag_cloud'              => true,
 		'wp_timezone_choice'        => true,
