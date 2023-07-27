@@ -61,7 +61,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * @since 0.11.0 Changed from public static to protected non-static.
 	 * @since 3.0.0  The format of the array values has changed from plain string to array.
 	 *
-	 * @var array
+	 * @var array<string, array>
 	 */
 	protected $unsafePrintingFunctions = array(
 		'_e'  => array(
@@ -83,7 +83,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var array
+	 * @var array<string, bool>
 	 */
 	private $safe_php_constants = array(
 		'PHP_EOL'             => true, // String.
@@ -103,7 +103,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @since 0.12.0
 	 *
-	 * @var array
+	 * @var array<string|int, string|int>
 	 */
 	private $safe_components = array(
 		\T_LNUMBER                  => \T_LNUMBER,
@@ -134,7 +134,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
-	 * @return array
+	 * @return string|int[]
 	 */
 	public function register() {
 		// Enrich the list of "safe components" tokens.
@@ -560,7 +560,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
-			// Handle safe PHP native constants.
+			// Ignore safe PHP native constants.
 			if ( \T_STRING === $this->tokens[ $i ]['code']
 				&& isset( $this->safe_php_constants[ $this->tokens[ $i ]['content'] ] )
 				&& ConstantsHelper::is_use_of_global_constant( $this->phpcsFile, $i )
