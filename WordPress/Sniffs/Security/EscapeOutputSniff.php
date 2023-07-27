@@ -639,6 +639,25 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
+			// Handle heredocs separately as they only need escaping when interpolation is used.
+			if ( \T_START_HEREDOC === $this->tokens[ $i ]['code'] ) {
+				$current = ( $i + 1 );
+				while ( isset( $this->tokens[ $current ] ) && \T_HEREDOC === $this->tokens[ $current ]['code'] ) {
+					$embeds = TextStrings::getEmbeds( $this->tokens[ $current ]['content'] );
+					if ( ! empty( $embeds ) ) {
+						$this->phpcsFile->addError(
+							'All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found interpolation in unescaped heredoc.',
+							$current,
+							'HeredocOutputNotEscaped'
+						);
+					}
+					++$current;
+				}
+
+				$i = $current;
+				continue;
+			}
+
 			// Now check that next token is a function call.
 			if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 				$ptr                    = $i;

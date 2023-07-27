@@ -620,3 +620,24 @@ wp_die(
 		'exit'      => $do_exit, // Bad x 1.
 	)
 );
+
+// Heredocs should only be flagged when they contain interpolated variables or expressions.
+echo <<<EOD
+Some text without interpolation.
+EOD;
+
+echo <<<"EOD"
+Some text without interpolation.
+EOD;
+
+echo <<<EOD
+Some text $with interpolation.
+Some text $with interpolation.
+Some text $with interpolation.
+EOD;
+
+echo <<<"EOD"
+Some text without interpolation.
+Some text {$with->interpolation}.
+Some text without interpolation.
+EOD;

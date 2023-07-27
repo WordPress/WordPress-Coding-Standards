@@ -153,12 +153,29 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 					617 => 1,
 					619 => 2,
 					620 => 1,
+					634 => 1,
+					635 => 1,
+					636 => 1,
+					641 => 1,
 				);
 
 			case 'EscapeOutputUnitTest.6.inc':
 			case 'EscapeOutputUnitTest.7.inc':
 				return array(
 					4 => 1,
+				);
+
+			case 'EscapeOutputUnitTest.20.inc':
+				// These tests will only yield reliable results when PHPCS is run on PHP 7.3 or higher.
+				if ( \PHP_VERSION_ID < 70300 ) {
+					return array();
+				}
+
+				return array(
+					18 => 1,
+					19 => 1,
+					20 => 1,
+					25 => 1,
 				);
 
 			default:
