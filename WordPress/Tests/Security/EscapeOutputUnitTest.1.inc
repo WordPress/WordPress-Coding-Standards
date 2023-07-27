@@ -317,3 +317,32 @@ echo implode( '<br>', map_deep( callback: 'foo', value: $items, ) ); // Bad, non
 // Note: named params not supported due to the `...$arrays` in array_map()`, but that's not the concern of this sniff.
 echo implode( '<br>', array_map( array: $items, callback: 'esc_html', ) ); // Ok.
 echo implode( '<br>', array_map( array: $items, callback: 'foo', ) ); // Bad.
+
+// Operators should be ignored.
+print 10 ** 20;
+print 10 & 20;
+print 10 | 20;
+print 10 ^ 20;
+print 10 << 20;
+print 10 >> 20;
+print 10 == 20;
+print 10 != 20;
+print 10 === 20;
+print 10 !== 20;
+print 10 < 20;
+print 10 > 20;
+print 10 <= 20;
+print 10 >= 20;
+print 10 <=> 20;
+print ! 'hello';
+print 'hello' && 'world';
+print 'hello' || 'world';
+print 'hello' and 'world';
+print 'hello' or 'world';
+print 'hello' xor 'world';
+print 10++;
+print --10;
+
+// This includes the PHP 7.0+ null coalesce operator.
+echo $var ?? 'default'; // Bad.
+echo esc_html( $var ?? 'default' ); // OK.

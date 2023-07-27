@@ -81,25 +81,23 @@ class EscapeOutputSniff extends Sniff {
 	/**
 	 * List of tokens which can be considered as safe when directly part of the output.
 	 *
+	 * This list is enhanced with additional tokens in the `register()` method.
+	 *
 	 * @since 0.12.0
 	 *
 	 * @var array
 	 */
 	private $safe_components = array(
-		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
 		\T_LNUMBER                  => \T_LNUMBER,
-		\T_MINUS                    => \T_MINUS,
-		\T_PLUS                     => \T_PLUS,
-		\T_MULTIPLY                 => \T_MULTIPLY,
-		\T_DIVIDE                   => \T_DIVIDE,
-		\T_MODULUS                  => \T_MODULUS,
+		\T_DNUMBER                  => \T_DNUMBER,
 		\T_TRUE                     => \T_TRUE,
 		\T_FALSE                    => \T_FALSE,
 		\T_NULL                     => \T_NULL,
-		\T_DNUMBER                  => \T_DNUMBER,
+		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
 		\T_START_NOWDOC             => \T_START_NOWDOC,
 		\T_NOWDOC                   => \T_NOWDOC,
 		\T_END_NOWDOC               => \T_END_NOWDOC,
+		\T_BOOLEAN_NOT              => \T_BOOLEAN_NOT,
 	);
 
 	/**
@@ -108,6 +106,11 @@ class EscapeOutputSniff extends Sniff {
 	 * @return array
 	 */
 	public function register() {
+		// Enrich the list of "safe components" tokens.
+		$this->safe_components += Tokens::$comparisonTokens;
+		$this->safe_components += Tokens::$operators;
+		$this->safe_components += Tokens::$booleanOperators;
+		$this->safe_components += Collections::incrementDecrementOperators();
 
 		return array(
 			\T_ECHO,
