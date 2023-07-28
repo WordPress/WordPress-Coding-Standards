@@ -719,6 +719,18 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					|| $this->is_escaping_function( $functionName )
 					|| $this->is_auto_escaped_function( $functionName )
 				) {
+					// Special case get_search_query() which is unsafe if $escaped = false.
+					if ( 'get_search_query' === strtolower( $functionName ) ) {
+						$escaped_param = PassedParameters::getParameter( $this->phpcsFile, $ptr, 1, 'escaped' );
+						if ( false !== $escaped_param && 'true' !== $escaped_param['clean'] ) {
+							$this->phpcsFile->addError(
+								'Output from get_search_query() is unsafe due to $escaped parameter being set to "false".',
+								$ptr,
+								'UnsafeSearchQuery'
+							);
+						}
+					}
+
 					continue;
 				}
 

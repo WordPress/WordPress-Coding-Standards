@@ -648,3 +648,10 @@ echo sprintf(
 	( '' !== $this->link_title ) ? ' title="' . esc_attr( $this->link_title ) . '"' : '',
 	( '' !== $this->link_aria_label ) ? ' aria-label="' . $this->link_aria_label . '"' : '',
 ); // Bad x 1.
+
+echo '<input type="search" value="' . get_search_query() . '">'; // OK.
+echo '<input type="search" value="' . get_search_query( /*comment*/ true ) . '">'; // OK.
+echo '<input type="search" value="' . get_search_query( false ) . '">'; // Bad.
+echo '<input type="search" value="' . get_search_query( 0 ) . '">'; // Bad.
+echo '<input type="search" value="' . get_search_query( escape: false ) . '">'; // OK, well not really, typo in param name, but that's not our concern.
+echo '<input type="search" value="' . get_search_query( escaped: false ) . '">'; // Bad.
