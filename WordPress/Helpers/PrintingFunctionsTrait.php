@@ -87,15 +87,13 @@ trait PrintingFunctionsTrait {
 	private $allPrintingFunctions = array();
 
 	/**
-	 * Check if a particular function is regarded as a printing function.
+	 * Retrieve a list of all known printing functions.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $functionName The name of the function to check.
-	 *
-	 * @return bool
+	 * @return array<string, bool>
 	 */
-	public function is_printing_function( $functionName ) {
+	public function get_printing_functions() {
 		if ( array() === $this->allPrintingFunctions
 			|| $this->customPrintingFunctions !== $this->addedCustomPrintingFunctions
 		) {
@@ -107,6 +105,19 @@ trait PrintingFunctionsTrait {
 			$this->addedCustomPrintingFunctions = $this->customPrintingFunctions;
 		}
 
-		return isset( $this->allPrintingFunctions[ strtolower( $functionName ) ] );
+		return $this->allPrintingFunctions;
+	}
+
+	/**
+	 * Check if a particular function is regarded as a printing function.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $functionName The name of the function to check.
+	 *
+	 * @return bool
+	 */
+	public function is_printing_function( $functionName ) {
+		return isset( $this->get_printing_functions()[ strtolower( $functionName ) ] );
 	}
 }
