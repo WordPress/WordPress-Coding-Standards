@@ -403,7 +403,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 		$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
-		// These functions only need to have their first argument escaped.
+		/*
+		 * These functions only need to have their first argument - `$message` - escaped.
+		 * Note: user_error() is an alias for trigger_error(), so the param names are the same.
+		 */
 		if ( 'trigger_error' === $matched_content || 'user_error' === $matched_content ) {
 			$message_param = PassedParameters::getParameterFromStack( $params, 1, 'message' );
 			if ( false === $message_param ) {
@@ -415,7 +418,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		/*
-		 * If the first param to `_deprecated_file()` follows the typical `basename( __FILE__ )`
+		 * If the first param to `_deprecated_file()` - `$file` - follows the typical `basename( __FILE__ )`
 		 * pattern, it doesn't need to be escaped.
 		 */
 		if ( '_deprecated_file' === $matched_content ) {
