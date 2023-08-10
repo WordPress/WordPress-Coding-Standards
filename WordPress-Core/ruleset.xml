@@ -199,18 +199,36 @@
 	<!-- Covers rule: Define a function like so: function my_function( $param1 = 'foo', $param2 = 'bar' ) { -->
 	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
 		<properties>
-			<property name="checkClosures" value="true"/>
+			<property name="checkClosures" value="false"/>
 		</properties>
 	</rule>
+	<!-- Prevent duplicate message. This is now checked by the Squiz.Functions.MultiLineFunctionDeclaration sniff. -->
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie.ContentAfterBrace">
+		<severity>0</severity>
+	</rule>
+
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration"/>
+	<!-- WP demands brace on same line, not on the next line. Silence errors related to "brace on same line". -->
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceSpacing">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceIndent">
+		<severity>0</severity>
+	</rule>
+	<!-- Prevent duplicate message. This is already checked by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterUse">
+		<severity>0</severity>
+	</rule>
+
 	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
 		<properties>
 			<property name="equalsSpacing" value="1"/>
 			<property name="requiredSpacesAfterOpen" value="1"/>
 			<property name="requiredSpacesBeforeClose" value="1"/>
 		</properties>
-	</rule>
-	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose">
-		<severity>0</severity>
 	</rule>
 	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterVariadic">
 		<severity>0</severity>

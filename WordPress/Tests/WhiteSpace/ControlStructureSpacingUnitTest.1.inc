@@ -45,91 +45,6 @@ endif;
 if ( false ) :
 else :
 endif;
-// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
-$a = function($arg){}; // Bad.
-$a = function ( $arg ) {
-	// Ok.
-};
-
-$a = function () {
-	// Ok.
-};
-
-function something($arg){} // Bad.
-function foo( $arg ) {
-	// Ok.
-}
-
-function no_params() {
-	// Ok.
-}
-
-function another () {} // Bad, space before open parenthesis prohibited.
-function    and_another() {} // Bad, space before function name prohibited.
-function
-bar() {} // Bad.
-function baz()     {} // Bad.
-function testA()
-{} // Bad.
-
-function &return_by_ref() {} // Ok.
-
-// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 0
-
-$a = function() {}; // Ok.
-$a = function( $arg ) {}; // Ok.
-$a = function($arg){}; // Bad.
-$a = function () {}; // Bad.
-
-$closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Bad.
-
-// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren 1
-
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
-
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use( $var1, $var2 ) {}; // Bad, no space before open parenthesis prohibited.
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use  ( $var1, $var2 ) {}; // Bad, expected exactly one space before opening parenthesis.
-
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ){}; // Bad, space between closing parenthesis and control structure required.
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 )  {}; // Bad, expected exactly one space between closing parenthesis and control structure.
-
-$closureWithArgsAndVars = function ( $arg1, $arg2 )use ( $var1, $var2 ) {}; // Bad, expected exactly one space between closing parenthesis and control structure.
-$closureWithArgsAndVars = function ( $arg1, $arg2 )  use ( $var1, $var2 ) {}; // Bad, expected exactly one space between closing parenthesis and control structure.
-
-// Namespaces.
-use Foo\Admin;
-
-// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing spaces_before_closure_open_paren -1
-
-$a = function( $arg ) {}; // Ok.
-$a = function ( $arg ) {}; // Ok.
-
-$closureWithArgsAndVars = function( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
-$closureWithArgsAndVars = function ( $arg1, $arg2 ) use ( $var1, $var2 ) {}; // Ok.
-
-/*
- * Test for bug where this sniff was triggering a "Blank line found after control structure" error
- * if there is a blank line after the last method in a class.
- *
- * Bug did not trigger when a comment was found after the closing brace of the method.
- *
- * Neither of the below examples should trigger the error.
- */
-class Bar_Foo {
-
-	function foo() {
-	} // Now you won't see the bug.
-
-}
-
-class Foo_Bar {
-
-	// Now you will.
-	function bar() {
-	}
-
-}
 
 // Handle try/catch statements as well.
 try{ // Bad.
@@ -176,9 +91,6 @@ if ( $foo ) {
 // phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
 
 // Check for too many spaces as long as the next non-blank token is on the same line.
-function test( $blah   ) {} // Bad.
-$a = function(   $bar   ) {}; // Bad.
-
 if (    'abc' === $test ) { // Bad.
 	echo 'hi';
 } elseif ( false === $foo    ) { // Bad.
@@ -268,40 +180,3 @@ if ( $foo ) {
 
 
 }
-
-// Issue 1202.
-function hi(): array
-{
-    return [];
-}
-
-// Issue 1420.
-function returntype1(): string {} // Ok.
-function returntype2( $input ): string {} // Ok.
-function returntype3( $input ) : string {} // Ok.
-function returntype4( string $input ): string {} // Ok.
-function returntype5( string $input ) : string {} // Ok.
-function returntype6( string $input, array $inputs ): string {} // Ok.
-function returntype7( string $input, array $inputs ) : string {} // Ok.
-$returntype = function (): string {}; // Ok.
-$returntype = function ( $input ): string {}; // Ok.
-$returntype = function ( $input ) : string {}; // Ok.
-$returntype = function ( string $input ): string {}; // Ok.
-$returntype = function ( string $input ) : string {}; // Ok.
-$returntype = function ( string $input, array $inputs ): string {}; // Ok.
-$returntype = function ( string $input, array $inputs ) : string {}; // Ok.
-
-// Issue 1792.
-$matching_options = array_filter(
-	$imported_options,
-	function ( $option ) use ( $option_id ): bool {
-		return $option['id'] === $option_id;
-	}
-);
-
-$matching_options = array_filter(
-	$imported_options,
-	function ( $option ) use ( $option_id ) : bool {
-		return $option['id'] === $option_id;
-	}
-);
