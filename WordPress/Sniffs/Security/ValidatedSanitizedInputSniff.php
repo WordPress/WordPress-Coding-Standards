@@ -71,7 +71,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		) {
 			// Retrieve all embeds, but use only the initial variable name part.
 			$interpolated_variables = array_map(
-				function( $embed ) {
+				function ( $embed ) {
 					return '$' . preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
 				},
 				TextStrings::getEmbeds( $this->tokens[ $stackPtr ]['content'] )
