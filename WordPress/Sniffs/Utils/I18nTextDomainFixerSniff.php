@@ -25,9 +25,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *
  * Note: Without a user-defined configuration in a custom ruleset, this sniff will be ignored.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.2.0
+ * @since 1.2.0
  */
 final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 

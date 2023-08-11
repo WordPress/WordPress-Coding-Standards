@@ -14,9 +14,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Forbids the use of various native PHP functions and suggests alternatives.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.14.0
+ * @since 0.14.0
  */
 final class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 

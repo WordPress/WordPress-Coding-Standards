@@ -26,9 +26,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * @link https://core.trac.wordpress.org/ticket/40657
  * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1791
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   2.2.0
+ * @since 2.2.0
  */
 final class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 

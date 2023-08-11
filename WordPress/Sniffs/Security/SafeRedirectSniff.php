@@ -14,9 +14,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Encourages use of wp_safe_redirect() to avoid open redirect vulnerabilities.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.0.0
+ * @since 1.0.0
  */
 final class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
 

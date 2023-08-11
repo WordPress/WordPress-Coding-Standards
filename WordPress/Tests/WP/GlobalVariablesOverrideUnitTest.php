@@ -14,12 +14,10 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the GlobalVariables sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.3.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
- *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
+ * @since 0.3.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `Variables` category to the `WP`
+ *               category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
  *
  * @covers \WordPressCS\WordPress\Helpers\ListHelper
  * @covers \WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper

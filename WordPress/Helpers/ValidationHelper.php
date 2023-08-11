@@ -21,9 +21,8 @@ use WordPressCS\WordPress\Helpers\VariableHelper;
 /**
  * Helper function for checking whether a token is validated.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The method in this class was previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and has been moved here.
+ * @since 3.0.0 The method in this class was previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and has been moved here.
  */
 final class ValidationHelper {
 

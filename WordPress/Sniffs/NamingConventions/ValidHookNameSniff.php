@@ -22,13 +22,11 @@ use WordPressCS\WordPress\Helpers\WPHookHelper;
  *
  * Hook names invoked with `do_action_deprecated()` and `apply_filters_deprecated()` are ignored.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
- * @since   0.11.0 Extends the WordPressCS native `AbstractFunctionParameterSniff` class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.10.0
+ * @since 0.11.0 Extends the WordPressCS native `AbstractFunctionParameterSniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
 class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 

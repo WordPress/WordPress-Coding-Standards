@@ -25,8 +25,6 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * @link https://developer.wordpress.org/reference/functions/wp_register_style/
  * @link https://developer.wordpress.org/reference/functions/wp_enqueue_style/
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 1.0.0
  */
 final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSniff {

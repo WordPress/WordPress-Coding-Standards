@@ -15,8 +15,7 @@ use PHPCSUtils\BackCompat\Helper;
 /**
  * Unit test class for the Capabilities sniff.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0
+ * @since 3.0.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\WP\CapabilitiesSniff
  */

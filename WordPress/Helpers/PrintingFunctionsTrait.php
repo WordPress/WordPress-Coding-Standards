@@ -18,10 +18,9 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  * following `public` property which can be changed from within a custom ruleset:
  * - `customPrintingFunctions`.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The properties in this trait were previously contained partially in the
- *                `WordPressCS\WordPress\Sniff` class and partially in the `EscapeOutputSniff`
- *                class and have been moved here.
+ * @since 3.0.0 The properties in this trait were previously contained partially in the
+ *              `WordPressCS\WordPress\Sniff` class and partially in the `EscapeOutputSniff`
+ *              class and have been moved here.
  */
 trait PrintingFunctionsTrait {
 

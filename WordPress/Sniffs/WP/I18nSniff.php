@@ -21,24 +21,22 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 /**
  * Makes sure WP internationalization functions are used properly.
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/internationalization/
- * @link    https://developer.wordpress.org/plugins/internationalization/
+ * @link https://make.wordpress.org/core/handbook/best-practices/internationalization/
+ * @link https://developer.wordpress.org/plugins/internationalization/
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
- * @since   0.11.0 - Now also checks for translators comments.
- *                 - Now has the ability to handle text domain set via the command-line
- *                   as a comma-delimited list.
- *                   `phpcs --runtime-set text_domain my-slug,default`
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This class now extends the WordPressCS native
- *                 `AbstractFunctionRestrictionSniff` class.
- *                 The parent `exclude` property is, however, disabled as it
- *                 would disable the whole sniff.
- * @since   3.0.0  This class now extends the WordPressCS native
- *                 `AbstractFunctionParameterSniff` class.
- *                 The parent `exclude` property is still disabled.
+ * @since 0.10.0
+ * @since 0.11.0 - Now also checks for translators comments.
+ *               - Now has the ability to handle text domain set via the command-line
+ *                 as a comma-delimited list.
+ *                 `phpcs --runtime-set text_domain my-slug,default`
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This class now extends the WordPressCS native
+ *               `AbstractFunctionRestrictionSniff` class.
+ *               The parent `exclude` property is, however, disabled as it
+ *               would disable the whole sniff.
+ * @since 3.0.0  This class now extends the WordPressCS native
+ *               `AbstractFunctionParameterSniff` class.
+ *               The parent `exclude` property is still disabled.
  */
 final class I18nSniff extends AbstractFunctionParameterSniff {
 

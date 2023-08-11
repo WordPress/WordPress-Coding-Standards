@@ -14,8 +14,6 @@ use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
 /**
  * Verify whether references to WP native classes use the proper casing for the class name.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 3.0.0
  */
 final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {

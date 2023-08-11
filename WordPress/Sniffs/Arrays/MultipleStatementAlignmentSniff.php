@@ -22,11 +22,9 @@ use WordPressCS\WordPress\Sniff;
  * - Allows for new line(s) before a double arrow (configurable).
  * - Allows for handling multi-line array items differently if so desired (configurable).
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.14.0
+ * @since 0.14.0
  *
  * {@internal This sniff should eventually be pulled upstream as part of a solution
  * for https://github.com/squizlabs/PHP_CodeSniffer/issues/582 }}

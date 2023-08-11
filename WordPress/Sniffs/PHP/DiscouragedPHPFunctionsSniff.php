@@ -14,11 +14,9 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Discourages the use of various native PHP functions and suggests alternatives.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.14.0 `create_function` was moved to the PHP.RestrictedFunctions sniff.
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.14.0 `create_function` was moved to the PHP.RestrictedFunctions sniff.
  */
 final class DiscouragedPHPFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 

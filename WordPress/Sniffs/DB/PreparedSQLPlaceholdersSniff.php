@@ -44,12 +44,10 @@ use WordPressCS\WordPress\Sniff;
  * @link https://core.trac.wordpress.org/changeset/41471
  * @link https://core.trac.wordpress.org/changeset/55151
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 0.14.0
  * @since 3.0.0 Support for the %i placeholder has been added
  *
- * @uses  \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
+ * @uses \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 final class PreparedSQLPlaceholdersSniff extends Sniff {
 

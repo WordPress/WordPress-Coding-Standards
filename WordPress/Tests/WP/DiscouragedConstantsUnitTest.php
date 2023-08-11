@@ -14,8 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the WP_DiscouragedConstants sniff.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   0.14.0
+ * @since 0.14.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\WP\DiscouragedConstantsSniff
  */

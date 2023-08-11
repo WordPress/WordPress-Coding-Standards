@@ -15,15 +15,13 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 /**
  * Warn about __FILE__ for page registration.
  *
- * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#using-__file__-for-page-registration
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#using-__file__-for-page-registration
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.3.0
- * @since   0.11.0 Refactored to extend the new WordPressCS native
- *                 `AbstractFunctionParameterSniff` class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
+ * @since 0.3.0
+ * @since 0.11.0 Refactored to extend the new WordPressCS native
+ *               `AbstractFunctionParameterSniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  */
 final class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 

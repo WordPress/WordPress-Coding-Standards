@@ -15,9 +15,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Advises about parameters used in function calls.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
+ * @since 0.11.0
  */
 abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictionsSniff {
 

@@ -24,17 +24,15 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Checks that nonce verification accompanies form processing.
  *
- * @link    https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
+ * @link https://developer.wordpress.org/plugins/security/nonces/ Nonces on Plugin Developer Handbook
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.5.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
+ * @since 3.0.0  This sniff has received significant updates to its logic and structure.
  *
- * @since   0.5.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
- * @since   3.0.0  This sniff has received significant updates to its logic and structure.
- *
- * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
- * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
  */
 class NonceVerificationSniff extends Sniff {
 

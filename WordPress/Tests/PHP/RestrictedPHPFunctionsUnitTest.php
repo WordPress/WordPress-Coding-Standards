@@ -14,9 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PHP_DiscouragedPHPFunctions sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.14.0
+ * @since 0.14.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\RestrictedPHPFunctionsSniff
  */

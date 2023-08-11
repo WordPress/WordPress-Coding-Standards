@@ -36,15 +36,13 @@ use WordPressCS\WordPress\Helpers\WPHookHelper;
 /**
  * Verify that everything defined in the global namespace is prefixed with a theme/plugin specific prefix.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.12.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.2.0  Now also checks whether namespaces are prefixed.
+ * @since 2.2.0  - Now also checks variables assigned via the list() construct.
+ *               - Now also ignores global functions which are marked as @deprecated.
  *
- * @since   0.12.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.2.0  Now also checks whether namespaces are prefixed.
- * @since   2.2.0  - Now also checks variables assigned via the list() construct.
- *                 - Now also ignores global functions which are marked as @deprecated.
- *
- * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
+ * @uses \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
 final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 

@@ -19,9 +19,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 /**
  * Restricts usage of some classes.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
+ * @since 0.10.0
  */
 abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictionsSniff {
 

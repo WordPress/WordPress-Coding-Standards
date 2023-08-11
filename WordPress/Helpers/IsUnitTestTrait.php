@@ -26,9 +26,8 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  * - The sniff can call the `is_test_class()` method in this trait to verify if a class is
  *   a test class. The `is_test_class()` method will take the custom property into account.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The properties and method in this trait were previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and have been moved here.
+ * @since 3.0.0 The properties and method in this trait were previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and have been moved here.
  */
 trait IsUnitTestTrait {
 

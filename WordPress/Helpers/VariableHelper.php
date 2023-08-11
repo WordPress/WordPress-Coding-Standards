@@ -27,9 +27,8 @@ use PHPCSUtils\Utils\Parentheses;
  *
  * @internal
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The methods in this class were previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and have been moved here.
+ * @since 3.0.0 The methods in this class were previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and have been moved here.
  */
 final class VariableHelper {
 

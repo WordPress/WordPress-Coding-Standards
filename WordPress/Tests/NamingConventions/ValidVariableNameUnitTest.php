@@ -14,10 +14,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ValidVariableName sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.9.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.9.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
  * @covers \WordPressCS\WordPress\Helpers\SnakeCaseHelper
  * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidVariableNameSniff

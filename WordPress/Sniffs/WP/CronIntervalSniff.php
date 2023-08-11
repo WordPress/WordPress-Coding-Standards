@@ -22,16 +22,14 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag cron schedules less than 15 minutes.
  *
- * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#cron-schedules-less-than-15-minutes-or-expensive-events
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#cron-schedules-less-than-15-minutes-or-expensive-events
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.3.0
- * @since   0.11.0 - Extends the WordPressCS native `Sniff` class.
- *                 - Now deals correctly with WP time constants.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.14.0 The minimum cron interval tested against is now configurable.
- * @since   1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
+ * @since 0.3.0
+ * @since 0.11.0 - Extends the WordPressCS native `Sniff` class.
+ *               - Now deals correctly with WP time constants.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.14.0 The minimum cron interval tested against is now configurable.
+ * @since 1.0.0  This sniff has been moved from the `VIP` category to the `WP` category.
  */
 final class CronIntervalSniff extends Sniff {
 

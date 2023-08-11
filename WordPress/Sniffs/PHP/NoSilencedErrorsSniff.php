@@ -22,9 +22,7 @@ use WordPressCS\WordPress\Sniff;
  * of functions, as no amount of error checking can prevent
  * PHP from throwing errors when those functions are used.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.1.0
+ * @since 1.1.0
  */
 final class NoSilencedErrorsSniff extends Sniff {
 

@@ -18,9 +18,7 @@ use PHPCSUtils\Utils\GetTokensAsString;
  * as calls to the "translate + escape" sister-function due to the presence of
  * more than one parameter.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   2.2.0
+ * @since 2.2.0
  */
 final class EscapedNotTranslatedSniff extends AbstractFunctionParameterSniff {
 

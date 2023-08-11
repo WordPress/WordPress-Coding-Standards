@@ -22,11 +22,9 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *
  * User capabilities should be used, not roles or deprecated capabilities.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 3.0.0
  *
- * @since   3.0.0
- *
- * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
+ * @uses \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 

@@ -19,16 +19,14 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag Database direct queries.
  *
- * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.3.0
- * @since   0.6.0  Removed the add_unique_message() function as it is no longer needed.
- * @since   0.11.0 This class now extends the WordPressCS native `Sniff` class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
- * @since   3.0.0  Support for the very sniff specific WPCS native ignore comment syntax has been removed.
+ * @since 0.3.0
+ * @since 0.6.0  Removed the add_unique_message() function as it is no longer needed.
+ * @since 0.11.0 This class now extends the WordPressCS native `Sniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
+ * @since 3.0.0  Support for the very sniff specific WPCS native ignore comment syntax has been removed.
  */
 final class DirectDatabaseQuerySniff extends Sniff {
 

@@ -21,11 +21,9 @@ use WordPressCS\WordPress\Sniff;
  *
  * Verify the correct spelling of `WordPress` in text strings, comments and OO and namespace names.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.12.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   3.0.0  Now also checks namespace names.
+ * @since 0.12.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 3.0.0  Now also checks namespace names.
  */
 final class CapitalPDangitSniff extends Sniff {
 

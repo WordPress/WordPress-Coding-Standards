@@ -24,9 +24,8 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * @internal
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The method in this class was previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and has been moved here.
+ * @since 3.0.0 The method in this class was previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and has been moved here.
  */
 final class SnakeCaseHelper {
 
