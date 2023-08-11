@@ -59,7 +59,6 @@ final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					143 => 1,
 					146 => 1,
 					181 => 1,
-					198 => 1,
 					212 => 4,
 					230 => 2,
 					231 => 2,
@@ -89,6 +88,11 @@ final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 			case 'GlobalVariablesOverrideUnitTest.3.inc':
 				return array(
 					29 => 1,
+				);
+
+			case 'GlobalVariablesOverrideUnitTest.7.inc':
+				return array(
+					19 => 1,
 				);
 
 			default:

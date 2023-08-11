@@ -183,20 +183,20 @@ function global_vars() {
 	return $closure( $pagenow ); // OK, not an assignment.
 }
 
-// Verify skipping over rest of the function when live coding/parse error in nested scope structure.
-function global_vars() {
-	global $pagenow;
 
-	$closure = function ( $pagenow ) {
-		global $feeds;
 
-		$nested_closure_with_parse_error = function ( $feeds )
 
-		$feeds = 'something'; // Bad, but ignored because of the parse error in the closure.
-	};
 
-	$pagenow = 'something'; // Bad, should be picked up. Tests that skipping on parse error doesn't skip too far.
-}
+
+
+
+
+
+
+
+
+
+
 
 $GLOBALS[] = 'something';
 $GLOBALS[103] = 'something';
@@ -314,4 +314,3 @@ list(
 // Live coding/parse error.
 // This has to be the last test in the file!
 list( $tab, $tabs
-
