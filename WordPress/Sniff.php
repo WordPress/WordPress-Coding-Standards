@@ -23,8 +23,7 @@ use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
  *
  * Provides a bootstrap for the sniffs, to reduce code duplication.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   0.4.0
+ * @since 0.4.0
  */
 abstract class Sniff implements PHPCS_Sniff {
 

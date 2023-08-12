@@ -21,17 +21,15 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Enforces WordPress function name and method name format, based upon Squiz code.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.1.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   2.0.0  The `get_name_suggestion()` method has been moved to the
- *                 WordPress native `Sniff` base class as `get_snake_case_name_suggestion()`.
- * @since   2.2.0  Will now ignore functions and methods which are marked as @deprecated.
- * @since   3.0.0  This sniff has been refactored and no longer extends the upstream
- *                 PEAR.NamingConventions.ValidFunctionName sniff.
+ * @since 0.1.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 2.0.0  The `get_name_suggestion()` method has been moved to the
+ *               WordPress native `Sniff` base class as `get_snake_case_name_suggestion()`.
+ * @since 2.2.0  Will now ignore functions and methods which are marked as @deprecated.
+ * @since 3.0.0  This sniff has been refactored and no longer extends the upstream
+ *               PEAR.NamingConventions.ValidFunctionName sniff.
  */
 final class ValidFunctionNameSniff extends Sniff {
 

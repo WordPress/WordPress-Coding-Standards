@@ -17,14 +17,12 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 /**
  * Discourages the use of various functions and suggests (WordPress) alternatives.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  - Takes the minimum supported WP version into account.
+ *               - Takes exceptions based on passed parameters into account.
  *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  - Takes the minimum supported WP version into account.
- *                 - Takes exceptions based on passed parameters into account.
- *
- * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
+ * @uses \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 

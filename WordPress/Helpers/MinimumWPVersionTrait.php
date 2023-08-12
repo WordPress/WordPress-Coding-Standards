@@ -22,9 +22,8 @@ use PHPCSUtils\BackCompat\Helper;
  * - After that, the `MinimumWPVersionTrait::$minimum_wp_version` property can be freely used
  *   in the sniff.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The property and method in this trait were previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and have been moved here.
+ * @since 3.0.0 The property and method in this trait were previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and have been moved here.
  */
 trait MinimumWPVersionTrait {
 

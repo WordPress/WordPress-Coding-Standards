@@ -19,12 +19,10 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *  helps keep your code forward-compatible and, in cases where results are cached in memory,
  *  it can be many times faster."
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#database-queries
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.10.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
 final class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 

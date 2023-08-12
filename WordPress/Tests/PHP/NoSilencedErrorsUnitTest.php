@@ -14,9 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PHP.NoSilencedErrors sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.1.0
+ * @since 1.1.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\NoSilencedErrorsSniff
  */

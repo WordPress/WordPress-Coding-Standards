@@ -22,13 +22,11 @@ use WordPressCS\WordPress\Sniff;
  *
  * Makes sure that variables aren't directly interpolated into SQL statements.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#formatting-sql-statements
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#formatting-sql-statements
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.8.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `WP` category to the `DB` category.
+ * @since 0.8.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `WP` category to the `DB` category.
  */
 final class PreparedSQLSniff extends Sniff {
 

@@ -18,9 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * 1. Tab-based indentation, long arrays.
  * 2. Space-based indentation, short arrays.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.14.0
+ * @since 0.14.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\Arrays\MultipleStatementAlignmentSniff
  */

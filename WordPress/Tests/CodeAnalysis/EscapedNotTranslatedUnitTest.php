@@ -14,9 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the EscapedNotTranslated sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   2.2.0
+ * @since 2.2.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\CodeAnalysis\EscapedNotTranslatedSniff
  */

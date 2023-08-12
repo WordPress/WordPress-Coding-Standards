@@ -19,10 +19,9 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  * - `customSanitizingFunctions`.
  * - `customUnslashingSanitizingFunctions`
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The properties in this trait were previously contained partially in the
- *                `WordPressCS\WordPress\Sniff` class and partially in the `NonceVerificationSniff`
- *                and the `ValidatedSanitizedInputSniff` classes and have been moved here.
+ * @since 3.0.0 The properties in this trait were previously contained partially in the
+ *              `WordPressCS\WordPress\Sniff` class and partially in the `NonceVerificationSniff`
+ *              and the `ValidatedSanitizedInputSniff` classes and have been moved here.
  */
 trait SanitizingFunctionsTrait {
 

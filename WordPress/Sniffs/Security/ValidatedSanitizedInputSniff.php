@@ -19,18 +19,16 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
- * @link    https://github.com/WordPress/WordPress-Coding-Standards/issues/69
+ * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/69
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.3.0
+ * @since 0.4.0  This class now extends the WordPressCS native `Sniff` class.
+ * @since 0.5.0  Method getArrayIndexKey() has been moved to the WordPressCS native `Sniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  *
- * @since   0.3.0
- * @since   0.4.0  This class now extends the WordPressCS native `Sniff` class.
- * @since   0.5.0  Method getArrayIndexKey() has been moved to the WordPressCS native `Sniff` class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
- *
- * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
- * @uses    \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
  */
 class ValidatedSanitizedInputSniff extends Sniff {
 

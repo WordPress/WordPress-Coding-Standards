@@ -23,8 +23,6 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @link https://developer.wordpress.org/reference/functions/register_post_type/
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 2.2.0
  */
 final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {

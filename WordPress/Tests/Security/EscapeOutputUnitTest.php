@@ -14,11 +14,9 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the EscapeOutput sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   2013-06-11
- * @since   0.13.0     Class name changed: this class is now namespaced.
- * @since   1.0.0      This sniff has been moved from the `XSS` category to the `Security` category.
+ * @since 2013-06-11
+ * @since 0.13.0     Class name changed: this class is now namespaced.
+ * @since 1.0.0      This sniff has been moved from the `XSS` category to the `Security` category.
  *
  * @covers \WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::get_safe_cast_tokens

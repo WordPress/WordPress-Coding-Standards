@@ -18,22 +18,20 @@ use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 /**
  * Ensures filenames do not contain underscores and where applicable are prefixed with `class-`.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.1.0
+ * @since 0.11.0 - This sniff will now also check for all lowercase file names.
+ *               - This sniff will now also verify that files containing a class start with `class-`.
+ *               - This sniff will now also verify that files in `wp-includes` containing
+ *                 template tags end in `-template`. Based on @subpackage file DocBlock tag.
+ *               - This sniff will now allow for underscores in file names for certain theme
+ *                 specific exceptions if the `$is_theme` property is set to `true`.
+ * @since 0.12.0 Now extends the WordPressCS native `Sniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 3.0.0  Test class files are now completely exempt from this rule.
  *
- * @since   0.1.0
- * @since   0.11.0 - This sniff will now also check for all lowercase file names.
- *                 - This sniff will now also verify that files containing a class start with `class-`.
- *                 - This sniff will now also verify that files in `wp-includes` containing
- *                   template tags end in `-template`. Based on @subpackage file DocBlock tag.
- *                 - This sniff will now allow for underscores in file names for certain theme
- *                   specific exceptions if the `$is_theme` property is set to `true`.
- * @since   0.12.0 Now extends the WordPressCS native `Sniff` class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   3.0.0  Test class files are now completely exempt from this rule.
- *
- * @uses    \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
+ * @uses \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes
  */
 final class FileNameSniff extends Sniff {
 

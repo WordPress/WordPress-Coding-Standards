@@ -14,9 +14,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PregQuoteDelimiter sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.0.0
+ * @since 1.0.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\PregQuoteDelimiterSniff
  */

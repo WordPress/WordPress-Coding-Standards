@@ -22,16 +22,14 @@ use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
 /**
  * Checks the naming of variables and member variables.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.9.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   2.0.0  Now offers name suggestions for variables in violation.
+ * @since 0.9.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 2.0.0  Now offers name suggestions for variables in violation.
  *
  * Last synced with base class January 2022 at commit 4b49a952bf0e2c3863d0a113256bae0d7fe63d52.
- * @link    https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
+ * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  */
 final class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 

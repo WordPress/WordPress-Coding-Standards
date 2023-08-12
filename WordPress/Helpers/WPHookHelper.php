@@ -14,9 +14,8 @@ use PHPCSUtils\Utils\PassedParameters;
 /**
  * Helper utilities for recognizing functions related to the WP Hook mechanism.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The property in this class was previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and has been moved here.
+ * @since 3.0.0 The property in this class was previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and has been moved here.
  */
 final class WPHookHelper {
 

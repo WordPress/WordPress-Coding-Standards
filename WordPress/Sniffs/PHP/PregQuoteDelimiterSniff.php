@@ -15,9 +15,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 /**
  * Flag calling preg_quote() without the second ($delimiter) parameter.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.0.0
+ * @since 1.0.0
  */
 final class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 

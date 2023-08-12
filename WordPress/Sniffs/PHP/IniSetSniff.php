@@ -21,8 +21,6 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * - Throws errors for ini directives listed in the disallow-list.
  * - A warning will be thrown in all other cases.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 2.1.0
  */
 final class IniSetSniff extends AbstractFunctionParameterSniff {

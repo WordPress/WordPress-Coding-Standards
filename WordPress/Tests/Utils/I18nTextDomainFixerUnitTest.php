@@ -15,9 +15,7 @@ use PHPCSUtils\BackCompat\Helper;
 /**
  * Unit test class for the I18nTextDomainFixer sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.2.0
+ * @since 1.2.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\Utils\I18nTextDomainFixerSniff
  */

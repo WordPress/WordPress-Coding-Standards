@@ -19,12 +19,10 @@ use PHPCSUtils\Utils\PassedParameters;
 /**
  * Enforces WordPress array indentation for multi-line arrays.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.12.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.12.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
  * {@internal This sniff should eventually be pulled upstream as part of a solution
  * for https://github.com/squizlabs/PHP_CodeSniffer/issues/582 }}

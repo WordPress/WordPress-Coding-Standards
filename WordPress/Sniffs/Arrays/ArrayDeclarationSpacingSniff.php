@@ -22,24 +22,22 @@ use PHPCSUtils\Utils\PassedParameters;
  * - Checks that associative arrays are multi-line.
  * - Checks that each array item in a multi-line array starts on a new line.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0 - The WordPress specific additional checks have now been split off
- *                   from the `WordPress.Arrays.ArrayDeclaration` sniff into this sniff.
- *                 - Added sniffing & fixing for associative arrays.
- * @since   0.12.0 Decoupled this sniff from the upstream sniff completely.
- *                 This sniff now extends the WordPressCS native `Sniff` class instead.
- * @since   0.13.0 Added the last remaining checks from the `WordPress.Arrays.ArrayDeclaration`
- *                 sniff which were not covered elsewhere.
- *                 The `WordPress.Arrays.ArrayDeclaration` sniff has now been deprecated.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   0.14.0 Single item associative arrays are now by default exempt from the
- *                 "must be multi-line" rule. This behaviour can be changed using the
- *                 `allow_single_item_single_line_associative_arrays` property.
- * @since   3.0.0  Removed various whitespace related checks and fixers in favour of the PHPCSExtra
- *                 `NormalizedArrays.Arrays.ArrayBraceSpacing` sniff.
+ * @since 0.11.0 - The WordPress specific additional checks have now been split off
+ *                 from the `WordPress.Arrays.ArrayDeclaration` sniff into this sniff.
+ *               - Added sniffing & fixing for associative arrays.
+ * @since 0.12.0 Decoupled this sniff from the upstream sniff completely.
+ *               This sniff now extends the WordPressCS native `Sniff` class instead.
+ * @since 0.13.0 Added the last remaining checks from the `WordPress.Arrays.ArrayDeclaration`
+ *               sniff which were not covered elsewhere.
+ *               The `WordPress.Arrays.ArrayDeclaration` sniff has now been deprecated.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.14.0 Single item associative arrays are now by default exempt from the
+ *               "must be multi-line" rule. This behaviour can be changed using the
+ *               `allow_single_item_single_line_associative_arrays` property.
+ * @since 3.0.0  Removed various whitespace related checks and fixers in favour of the PHPCSExtra
+ *               `NormalizedArrays.Arrays.ArrayBraceSpacing` sniff.
  */
 final class ArrayDeclarationSpacingSniff extends Sniff {
 

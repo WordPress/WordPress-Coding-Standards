@@ -19,9 +19,7 @@ use WordPressCS\WordPress\Helpers\ConstantsHelper;
 /**
  * Warns against usage of discouraged WP CONSTANTS and recommends alternatives.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.14.0
+ * @since 0.14.0
  */
 final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 

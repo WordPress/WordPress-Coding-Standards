@@ -15,9 +15,8 @@ use PHPCSUtils\Utils\PassedParameters;
 /**
  * Helper functions and function lists for checking whether a function applies a callback to an array.
  *
- * @package WPCS\WordPressCodingStandards
- * @since   3.0.0 The property in this class was previously contained in the
- *                `WordPressCS\WordPress\Sniff` class and has been moved here.
+ * @since 3.0.0 The property in this class was previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and has been moved here.
  */
 final class ArrayWalkingFunctionsHelper {
 

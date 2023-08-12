@@ -29,25 +29,23 @@ use WordPressCS\WordPress\Helpers\VariableHelper;
 /**
  * Verifies that all outputted strings are escaped.
  *
- * @link    https://developer.wordpress.org/apis/security/data-validation/ WordPress Developer Docs on Data Validation.
+ * @link https://developer.wordpress.org/apis/security/data-validation/ WordPress Developer Docs on Data Validation.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 2013-06-11
+ * @since 0.4.0  This class now extends the WordPressCS native `Sniff` class.
+ * @since 0.5.0  The various function list properties which used to be contained in this class
+ *               have been moved to the WordPressCS native `Sniff` parent class.
+ * @since 0.12.0 This sniff will now also check for output escaping when using shorthand
+ *               echo tags `<?=`.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `XSS` category to the `Security` category.
+ * @since 3.0.0  This class now extends the WordPressCS native
+ *               `AbstractFunctionRestrictionsSniff` class.
+ *               The parent `exclude` property is disabled.
  *
- * @since   2013-06-11
- * @since   0.4.0  This class now extends the WordPressCS native `Sniff` class.
- * @since   0.5.0  The various function list properties which used to be contained in this class
- *                 have been moved to the WordPressCS native `Sniff` parent class.
- * @since   0.12.0 This sniff will now also check for output escaping when using shorthand
- *                 echo tags `<?=`.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `XSS` category to the `Security` category.
- * @since   3.0.0  This class now extends the WordPressCS native
- *                 `AbstractFunctionRestrictionsSniff` class.
- *                 The parent `exclude` property is disabled.
- *
- * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customEscapingFunctions
- * @uses    \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customAutoEscapedFunctions
- * @uses    \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait::$customPrintingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customEscapingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::$customAutoEscapedFunctions
+ * @uses \WordPressCS\WordPress\Helpers\PrintingFunctionsTrait::$customPrintingFunctions
  */
 class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 

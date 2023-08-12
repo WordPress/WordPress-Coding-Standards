@@ -19,8 +19,6 @@ use PHP_CodeSniffer\Util\Tokens;
  * Difference with the upstream sniff:
  * - When the `::` operator is used in `::class`, no new line(s) before or after the object operator are allowed.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 3.0.0
  * @link  https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php
  */

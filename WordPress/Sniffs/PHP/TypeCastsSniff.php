@@ -19,13 +19,11 @@ use WordPressCS\WordPress\Sniff;
  *
  * Additionally, the use of the (unset) and (binary) casts is discouraged.
  *
- * @link    https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#space-usage
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.2.0
- * @since   2.0.0 No longer checks that type casts are lowercase or short form.
- *                Relevant PHPCS native sniffs have been included in the rulesets instead.
+ * @since 1.2.0
+ * @since 2.0.0 No longer checks that type casts are lowercase or short form.
+ *              Relevant PHPCS native sniffs have been included in the rulesets instead.
  */
 final class TypeCastsSniff extends Sniff {
 

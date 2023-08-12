@@ -19,11 +19,9 @@ use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
 /**
  * Check for usage of deprecated parameter values in WP functions and provide alternative based on the parameter passed.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 1.0.0
  *
- * @since   1.0.0
- *
- * @uses    \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
+ * @uses \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
 final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSniff {
 

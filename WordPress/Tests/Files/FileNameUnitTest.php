@@ -14,11 +14,9 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the FileName sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   2013-06-11
- * @since   0.11.0     Actually added tests ;-)
- * @since   0.13.0     Class name changed: this class is now namespaced.
+ * @since 2013-06-11
+ * @since 0.11.0     Actually added tests ;-)
+ * @since 0.13.0     Class name changed: this class is now namespaced.
  *
  * @covers \WordPressCS\WordPress\Sniffs\Files\FileNameSniff
  */

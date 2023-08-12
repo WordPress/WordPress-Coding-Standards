@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ObjectOperatorSpacing sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 3.0.0
  *
  * @covers \WordPressCS\WordPress\Sniffs\WhiteSpace\ObjectOperatorSpacingSniff

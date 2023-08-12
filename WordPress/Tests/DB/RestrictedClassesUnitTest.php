@@ -15,11 +15,9 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Unit test class for the DB_RestrictedClasses sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   3.0.0  Renamed the fixtures to create compatibility with PHPCS 4.x/PHPUnit >=8.
+ * @since 0.10.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 3.0.0  Renamed the fixtures to create compatibility with PHPCS 4.x/PHPUnit >=8.
  *
  * @covers \WordPressCS\WordPress\AbstractClassRestrictionsSniff
  * @covers \WordPressCS\WordPress\Helpers\RulesetPropertyHelper
