@@ -52,6 +52,9 @@ final class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 					159 => 1,
 					169 => 1,
 					179 => 1,
+					195 => 1,
+					203 => 2,
+					212 => 1,
 				);
 
 				return $ret;

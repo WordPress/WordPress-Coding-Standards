@@ -53,16 +53,17 @@ final class ControlStructureSpacingSniff extends Sniff {
 	/**
 	 * Tokens for which to ignore extra space on the inside of parenthesis.
 	 *
-	 * For do / else / try, there are no parenthesis, so skip it.
+	 * For do / else / try / finally, there are no parenthesis, so skip it.
 	 *
 	 * @since 0.11.0
 	 *
 	 * @var array
 	 */
 	private $ignore_extra_space_after_open_paren = array(
-		\T_DO   => true,
-		\T_ELSE => true,
-		\T_TRY  => true,
+		\T_DO      => true,
+		\T_ELSE    => true,
+		\T_TRY     => true,
+		\T_FINALLY => true,
 	);
 
 	/**
@@ -82,6 +83,7 @@ final class ControlStructureSpacingSniff extends Sniff {
 			\T_ELSEIF,
 			\T_TRY,
 			\T_CATCH,
+			\T_FINALLY,
 		);
 	}
 
@@ -412,6 +414,21 @@ final class ControlStructureSpacingSniff extends Sniff {
 
 		if ( \T_WHILE === $this->tokens[ $trailingContent ]['code'] && \T_DO === $this->tokens[ $stackPtr ]['code'] ) {
 			// DO with WHILE.
+			return;
+		}
+
+		if ( \T_CATCH === $this->tokens[ $trailingContent ]['code'] && \T_TRY === $this->tokens[ $stackPtr ]['code'] ) {
+			// TRY with CATCH.
+			return;
+		}
+
+		if ( \T_FINALLY === $this->tokens[ $trailingContent ]['code'] && \T_CATCH === $this->tokens[ $stackPtr ]['code'] ) {
+			// CATCH with FINALLY.
+			return;
+		}
+
+		if ( \T_FINALLY === $this->tokens[ $trailingContent ]['code'] && \T_TRY === $this->tokens[ $stackPtr ]['code'] ) {
+			// TRY with FINALLY.
 			return;
 		}
 

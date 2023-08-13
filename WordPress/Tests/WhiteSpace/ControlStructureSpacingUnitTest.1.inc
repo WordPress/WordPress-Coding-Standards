@@ -180,3 +180,35 @@ if ( $foo ) {
 
 
 }
+
+// Handle (try/catch/) finally statements as well.
+try {
+	// Something
+} catch ( Exception $e ) {
+	// Something
+} finally { // OK.
+	// Something
+}
+
+try {
+	// Something
+} finally
+
+{ // Bad.
+	// Something
+}
+
+try {
+	// Something
+} finally{ // Bad.
+	// Something
+}
+
+if ( $condition ) {
+	try {
+		// Something
+	} finally {
+		// Something
+	}
+
+} // Bad: blank line between.
