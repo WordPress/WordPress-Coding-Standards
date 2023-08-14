@@ -171,3 +171,79 @@ if ( $foo ) {
 		// Something
 	} // End try/catch <- Bad: "blank line after".
 }
+
+// Handle (try/catch/) finally statements as well.
+try {
+	// Something
+} catch ( Exception $e ) {
+	// Something
+} finally { // OK.
+	// Something
+}
+
+try {
+	// Something
+} finally { // Bad.
+	// Something
+}
+
+try {
+	// Something
+} finally { // Bad.
+	// Something
+}
+
+if ( $condition ) {
+	try {
+		// Something
+	} finally {
+		// Something
+	}
+} // Bad: blank line between.
+
+// Handle PHP 8.0+ match expressions.
+$expr = match ( $foo ) {
+    1 => 1,
+    2 => 2,
+};
+
+$expr = match ( $foo ) {
+    1 => 1,
+    2 => 2,
+} ;
+
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+$expr = match ( $foo ) {
+    1 => 1,
+    2 => 2,
+};
+
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+if ( $condition ) {
+	$expr = match ( $foo ) {
+	    1 => 1,
+	    2 => 2,
+	};
+} // Bad: blank line between.
+
+// Ignore spacing rules in combination with enums as they tend to have their own rules.
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+if ( $foo ) {
+
+
+	enum MyEnumA {
+		// Code here
+	}
+
+
+}
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+enum MyEnumB {
+	if ( $foo ) {
+		// Code here
+	}
+
+
+} // OK, defer to enum rules.

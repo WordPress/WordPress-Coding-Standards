@@ -9,11 +9,12 @@
 
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use WordPressCS\WordPress\Sniff;
+use PHPCSUtils\Tokens\Collections;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Sniff;
 
 /**
- * Enforces spacing around logical operators and assignments, based upon Squiz code.
+ * Checks that control structures have the correct spacing around brackets, based upon Squiz code.
  *
  * @since 0.1.0
  * @since 2013-06-11 This sniff no longer supports JS.
@@ -22,10 +23,10 @@ use PHP_CodeSniffer\Util\Tokens;
  * @since 0.13.0     Class name changed: this class is now namespaced.
  * @since 3.0.0      Checks related to function declarations have been removed from this sniff.
  *
- * Last synced with base class 2017-01-15 at commit b024ad84656c37ef5733c6998ebc1e60957b2277.
+ * Last synced with base class 2021-11-20 at commit 7f11ffc8222b123c06345afd3261221561c3bb29.
  * Note: This class has diverged quite far from the original. All the same, checking occasionally
  * to see if there are upstream fixes made from which this sniff can benefit, is warranted.
- * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
+ * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
 final class ControlStructureSpacingSniff extends Sniff {
 
@@ -53,16 +54,17 @@ final class ControlStructureSpacingSniff extends Sniff {
 	/**
 	 * Tokens for which to ignore extra space on the inside of parenthesis.
 	 *
-	 * For do / else / try, there are no parenthesis, so skip it.
+	 * For do / else / try / finally, there are no parenthesis, so skip it.
 	 *
 	 * @since 0.11.0
 	 *
 	 * @var array
 	 */
 	private $ignore_extra_space_after_open_paren = array(
-		\T_DO   => true,
-		\T_ELSE => true,
-		\T_TRY  => true,
+		\T_DO      => true,
+		\T_ELSE    => true,
+		\T_TRY     => true,
+		\T_FINALLY => true,
 	);
 
 	/**
@@ -82,6 +84,8 @@ final class ControlStructureSpacingSniff extends Sniff {
 			\T_ELSEIF,
 			\T_TRY,
 			\T_CATCH,
+			\T_FINALLY,
+			\T_MATCH,
 		);
 	}
 
@@ -284,17 +288,18 @@ final class ControlStructureSpacingSniff extends Sniff {
 
 			// We ignore spacing for some structures that tend to have their own rules.
 			$ignore  = array(
-				\T_FUNCTION             => true,
-				\T_CLOSURE              => true,
 				\T_DOC_COMMENT_OPEN_TAG => true,
 				\T_CLOSE_TAG            => true,
 				\T_COMMENT              => true,
 			);
-			$ignore += Tokens::$ooScopeTokens;
+			$ignore += Collections::closedScopes();
 
 			if ( ! isset( $ignore[ $this->tokens[ $firstContent ]['code'] ] )
 				&& $this->tokens[ $firstContent ]['line'] > ( $this->tokens[ $scopeOpener ]['line'] + 1 )
 			) {
+				$gap = ( $this->tokens[ $firstContent ]['line'] - $this->tokens[ $scopeOpener ]['line'] - 1 );
+				$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at start of control structure', $gap );
+
 				$error = 'Blank line found at start of control structure';
 				$fix   = $this->phpcsFile->addFixableError( $error, $scopeOpener, 'BlankLineAfterStart' );
 
@@ -311,6 +316,8 @@ final class ControlStructureSpacingSniff extends Sniff {
 					$this->phpcsFile->fixer->addNewline( $scopeOpener );
 					$this->phpcsFile->fixer->endChangeset();
 				}
+			} else {
+				$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at start of control structure', 0 );
 			}
 
 			if ( $firstContent !== $scopeCloser ) {
@@ -326,6 +333,9 @@ final class ControlStructureSpacingSniff extends Sniff {
 				if ( ! isset( $ignore[ $this->tokens[ $checkToken ]['code'] ] )
 					&& $this->tokens[ $lastContent ]['line'] <= ( $this->tokens[ $scopeCloser ]['line'] - 2 )
 				) {
+					$gap = ( $this->tokens[ $scopeCloser ]['line'] - $this->tokens[ $lastContent ]['line'] - 1 );
+					$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at end of control structure', $gap );
+
 					for ( $i = ( $scopeCloser - 1 ); $i > $lastContent; $i-- ) {
 						if ( $this->tokens[ $i ]['line'] < $this->tokens[ $scopeCloser ]['line']
 							&& \T_OPEN_TAG !== $this->tokens[ $firstContent ]['code']
@@ -359,6 +369,8 @@ final class ControlStructureSpacingSniff extends Sniff {
 							break;
 						}
 					}
+				} else {
+					$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at end of control structure', 0 );
 				}
 			}
 			unset( $ignore );
@@ -366,6 +378,16 @@ final class ControlStructureSpacingSniff extends Sniff {
 
 		if ( ! isset( $scopeCloser ) || true !== $this->blank_line_after_check ) {
 			return;
+		}
+
+		if ( \T_MATCH === $this->tokens[ $stackPtr ]['code'] ) {
+			// Move the scope closer to the semicolon/comma.
+			$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
+			if ( false !== $next
+				&& ( \T_SEMICOLON === $this->tokens[ $next ]['code'] || \T_COMMA === $this->tokens[ $next ]['code'] )
+			) {
+				$scopeCloser = $next;
+			}
 		}
 
 		// {@internal This is just for the blank line check. Only whitespace should be considered,
@@ -405,6 +427,21 @@ final class ControlStructureSpacingSniff extends Sniff {
 			return;
 		}
 
+		if ( \T_CATCH === $this->tokens[ $trailingContent ]['code'] && \T_TRY === $this->tokens[ $stackPtr ]['code'] ) {
+			// TRY with CATCH.
+			return;
+		}
+
+		if ( \T_FINALLY === $this->tokens[ $trailingContent ]['code'] && \T_CATCH === $this->tokens[ $stackPtr ]['code'] ) {
+			// CATCH with FINALLY.
+			return;
+		}
+
+		if ( \T_FINALLY === $this->tokens[ $trailingContent ]['code'] && \T_TRY === $this->tokens[ $stackPtr ]['code'] ) {
+			// TRY with FINALLY.
+			return;
+		}
+
 		if ( \T_CLOSE_TAG === $this->tokens[ $trailingContent ]['code'] ) {
 			// At the end of the script or embedded code.
 			return;
@@ -415,7 +452,7 @@ final class ControlStructureSpacingSniff extends Sniff {
 		) {
 			// Another control structure's closing brace.
 			$owner = $this->tokens[ $trailingContent ]['scope_condition'];
-			if ( \in_array( $this->tokens[ $owner ]['code'], array( \T_FUNCTION, \T_CLOSURE, \T_CLASS, \T_ANON_CLASS, \T_INTERFACE, \T_TRAIT ), true ) ) {
+			if ( isset( Collections::closedScopes()[ $this->tokens[ $owner ]['code'] ] ) === true ) {
 				// The next content is the closing brace of a function, class, interface or trait
 				// so normal function/class rules apply and we can ignore it.
 				return;
