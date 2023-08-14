@@ -242,3 +242,24 @@ if ( $condition ) {
 
 
 } // Bad: blank line between.
+
+// Ignore spacing rules in combination with enums as they tend to have their own rules.
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+if ( $foo ) {
+
+
+	enum MyEnumA {
+		// Code here
+	}
+
+
+}
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+enum MyEnumB {
+	if ( $foo ) {
+		// Code here
+	}
+
+
+} // OK, defer to enum rules.
