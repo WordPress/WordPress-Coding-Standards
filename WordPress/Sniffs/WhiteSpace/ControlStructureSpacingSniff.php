@@ -84,6 +84,7 @@ final class ControlStructureSpacingSniff extends Sniff {
 			\T_TRY,
 			\T_CATCH,
 			\T_FINALLY,
+			\T_MATCH,
 		);
 	}
 
@@ -378,6 +379,16 @@ final class ControlStructureSpacingSniff extends Sniff {
 
 		if ( ! isset( $scopeCloser ) || true !== $this->blank_line_after_check ) {
 			return;
+		}
+
+		if ( \T_MATCH === $this->tokens[ $stackPtr ]['code'] ) {
+			// Move the scope closer to the semicolon/comma.
+			$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $scopeCloser + 1 ), null, true );
+			if ( false !== $next
+				&& ( \T_SEMICOLON === $this->tokens[ $next ]['code'] || \T_COMMA === $this->tokens[ $next ]['code'] )
+			) {
+				$scopeCloser = $next;
+			}
 		}
 
 		// {@internal This is just for the blank line check. Only whitespace should be considered,

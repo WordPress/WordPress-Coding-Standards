@@ -212,3 +212,33 @@ if ( $condition ) {
 	}
 
 } // Bad: blank line between.
+
+// Handle PHP 8.0+ match expressions.
+$expr = match ( $foo ) {
+    1 => 1,
+    2 => 2,
+};
+
+$expr = match($foo){
+    1 => 1,
+    2 => 2,
+} ;
+
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check true
+$expr = match ( $foo ) {
+
+    1 => 1,
+    2 => 2,
+
+};
+
+// phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+if ( $condition ) {
+	$expr = match ( $foo ) {
+	    1 => 1,
+	    2 => 2,
+	};
+
+
+} // Bad: blank line between.
