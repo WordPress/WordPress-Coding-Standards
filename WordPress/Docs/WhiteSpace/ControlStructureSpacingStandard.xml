@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Control Structure Spacing"
+    >
+    <standard>
+    <![CDATA[
+    Put one space on both sides of the opening and closing parentheses of control structures.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: One space on each side of the open and close parentheses.">
+        <![CDATA[
+while<em> ( </em>have_posts()<em> ) </em>{}
+
+// For multi-line conditions,
+// a new line is also accepted.
+if<em> ( </em>true === $condition
+    && $count > 10
+<em>) </em>{}
+        ]]>
+        </code>
+        <code title="Invalid: Incorrect spacing around the open and close parentheses.">
+        <![CDATA[
+// No spaces.
+while<em>(</em>have_posts()<em>)</em>{}
+
+// Too much space.
+while<em>   (   </em>have_posts()<em>   )   </em>{}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    The open brace for the control structure must be on the same line as the close parenthesis or the control structure keyword, with one space between them.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Open brace on the same line as the keyword/close parenthesis.">
+        <![CDATA[
+try<em> {</em>
+    // Do something.
+} catch (
+    ExceptionA | ExceptionB $e
+<em>) {</em>
+}
+        ]]>
+        </code>
+        <code title="Invalid: Open brace on a different line than the keyword/close parenthesis.">
+        <![CDATA[
+try
+<em>{</em>
+    // Do something.
+} catch ( Exception $e )
+<em>(</em>
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: One space between the keyword/close parenthesis and the open brace.">
+        <![CDATA[
+if ( $condition )<em> </em>{
+    // Do something.
+}
+        ]]>
+        </code>
+        <code title="Invalid: Too much space between the keyword/close parenthesis and the open brace.">
+        <![CDATA[
+if ( $condition )<em>     </em>{
+    // Do something.
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    When using alternative control structure syntaxes, there should be one space between the close parenthesis and the colon opening the control structure body.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: One space before the colon.">
+        <![CDATA[
+foreach ( $types as $type )<em> </em>:
+    // Do something.
+endforeach;
+        ]]>
+        </code>
+        <code title="Invalid: No space before the colon.">
+        <![CDATA[
+foreach ( $types as $type )<em></em>:
+    // Do something.
+endforeach;
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    When a control structure is nested in another control structure and the closing braces follow each other, there should be no blank line between the closing braces.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: No blank line between the consecutive close braces.">
+        <![CDATA[
+if ( $a === $b ) {
+    if ( $something ) {
+        // Do something.
+    }
+}
+        ]]>
+        </code>
+        <code title="Invalid: Blank line(s) between the consecutive close braces.">
+        <![CDATA[
+if ( $a === $b ) {
+    if ( $something ) {
+        // Do something.
+    }<em>
+
+
+</em>}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    [Optional, turned off by default]
+    There should be no blank line(s) at the start or end of the control structure body.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: No blank lines at the start or end of the control structure body.">
+        <![CDATA[
+if ( $a === $b ) {
+    echo $a;
+}
+        ]]>
+        </code>
+        <code title="Invalid: Blank line(s) at the start and end of the control structure body.">
+        <![CDATA[
+if ( $a === $b ) {
+<em>
+
+</em>    echo $a;
+<em>
+
+</em>}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
