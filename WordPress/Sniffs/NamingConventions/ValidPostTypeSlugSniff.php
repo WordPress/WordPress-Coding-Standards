@@ -52,7 +52,7 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var array List of function names as keys. Value irrelevant.
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'register_post_type' => true,
@@ -67,7 +67,7 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var array
+	 * @var array<string, true> Key is reserved post type name, value irrelevant.
 	 */
 	protected $reserved_names = array(
 		'action'              => true, // Not a WP post type, but prevents other problems.
@@ -97,7 +97,7 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var string
+	 * @var array<int|string, int|string>
 	 */
 	private $valid_tokens = array();
 
@@ -122,7 +122,7 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 * @since 2.2.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched
 	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.

@@ -324,7 +324,7 @@ final class ValidationHelper {
 	 *
 	 * @param string[] $text_strings The input array.
 	 *
-	 * @var array
+	 * @return string[]
 	 */
 	private static function strip_quotes_from_array_values( array $text_strings ) {
 		return array_map( array( 'PHPCSUtils\Utils\TextStrings', 'stripQuotes' ), $text_strings );

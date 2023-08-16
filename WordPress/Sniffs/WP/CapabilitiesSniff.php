@@ -152,7 +152,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array<string, bool> Role available in WP Core.
+	 * @var array<string, true> Key is role available in WP Core, value irrelevant.
 	 */
 	private $core_roles = array(
 		'super_admin'   => true,
@@ -177,7 +177,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array<string, bool> All capabilities available in core.
+	 * @var array<string, true> All capabilities available in core.
 	 */
 	private $core_capabilities = array(
 		'activate_plugin'             => true,
@@ -349,7 +349,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 * @since 3.0.0
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
-	 * @param array  $group_name      The name of the group which was matched.
+	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched
 	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.

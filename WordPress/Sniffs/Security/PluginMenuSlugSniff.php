@@ -44,9 +44,9 @@ final class PluginMenuSlugSniff extends AbstractFunctionParameterSniff {
 	 *               array containing parameter positions to an array with the parameter
 	 *               position as the index and the parameter name as value.
 	 *
-	 * @var array<string, <int, string|array>> Key is the name of the functions being targetted.
-	 *                                         Value is an array with parameter positions as the
-	 *                                         keys and parameter names as the values
+	 * @var array<string, array<int, string|array>> Key is the name of the functions being targetted.
+	 *                                              Value is an array with parameter positions as the
+	 *                                              keys and parameter names as the values
 	 */
 	protected $target_functions = array(
 		'add_comments_page'   => array(

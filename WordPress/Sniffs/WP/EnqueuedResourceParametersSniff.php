@@ -43,7 +43,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var array <string function_name> => <bool true>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'wp_register_script' => true,
@@ -57,7 +57,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	 *
 	 * This array is enriched with the $emptyTokens array in the register() method.
 	 *
-	 * @var array
+	 * @var array<int|string, int|string>
 	 */
 	private $false_tokens = array(
 		\T_FALSE => \T_FALSE,
@@ -68,7 +68,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	 *
 	 * This array is enriched with the several of the PHPCS token arrays in the register() method.
 	 *
-	 * @var array
+	 * @var array<int|string, int|string>
 	 */
 	private $safe_tokens = array(
 		\T_NULL                     => \T_NULL,

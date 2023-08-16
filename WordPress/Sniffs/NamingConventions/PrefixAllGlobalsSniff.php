@@ -81,7 +81,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.12.0
 	 * @since 3.0.0  Renamed from `$prefix_blacklist` to `$prefix_blocklist`.
 	 *
-	 * @var string[]
+	 * @var array<string, true> Key is prefix, value irrelevant.
 	 */
 	protected $prefix_blocklist = array(
 		'wordpress' => true,
@@ -97,7 +97,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 *
-	 * @var string[]
+	 * @var array<string, string>
 	 */
 	private $validated_prefixes = array();
 
@@ -111,7 +111,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var array
+	 * @var array<string, array<string, mixed>>
 	 */
 	private $validated_namespace_prefixes = array();
 
@@ -132,7 +132,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.14.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_hooks` to `$allowed_core_hooks`.
 	 *
-	 * @var array<string, bool>
+	 * @var array<string, true> Key is hook name, value irrelevant.
 	 */
 	protected $allowed_core_hooks = array(
 		'widget_title'   => true,
@@ -152,7 +152,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
 	 *
-	 * @var array<string, bool>
+	 * @var array<string, true> Key is constant name, value irrelevant.
 	 */
 	protected $allowed_core_constants = array(
 		'ADMIN_COOKIE_PATH'    => true,
@@ -203,7 +203,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0.
 	 *
-	 * @var array<string, bool>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $pluggable_functions = array(
 		'auth_redirect'                                  => true,
@@ -376,7 +376,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0.
 	 *
-	 * @var array<string, bool>
+	 * @var array<string, true> Key is class name, value irrelevant.
 	 */
 	protected $pluggable_classes = array(
 		'TwentyTwenty_Customize'           => true,

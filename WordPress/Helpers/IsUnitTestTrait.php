@@ -76,7 +76,7 @@ trait IsUnitTestTrait {
 	 *               - Renamed from `$test_class_whitelist` to `$known_test_classes`.
 	 *               - Visibility changed from protected to private.
 	 *
-	 * @var string[]
+	 * @var array<string, true> Key is class name, value irrelevant.
 	 */
 	private $known_test_classes = array(
 		// Base test cases.
@@ -125,7 +125,7 @@ trait IsUnitTestTrait {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array<string, bool>
+	 * @return array<string, bool>
 	 */
 	protected function get_all_test_classes() {
 		if ( array() === $this->all_test_classes
