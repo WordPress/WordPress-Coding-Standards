@@ -1,6 +1,6 @@
 ---
 name: Dependency Change
-about: A reminder to take action when a WPCS dependency changes
+about: A reminder to take action when a WordPressCS dependency changes
 
 ---
 
@@ -8,7 +8,7 @@ about: A reminder to take action when a WPCS dependency changes
 
 ## Rationale
 
-<!-- Why should this change be made in WPCS? -->
+<!-- Why should this change be made in WordPressCS? -->
 
 ## References
 
