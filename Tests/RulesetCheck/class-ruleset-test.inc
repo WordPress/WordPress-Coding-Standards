@@ -1,14 +1,14 @@
 <?php
 /**
- * Simple file which should not have any issues when testing against the WPCS rulesets.
+ * Simple file which should not have any issues when testing against the WordPressCS rulesets.
  *
  * Most - if not all - sniffs should be triggered by this file.
  *
  * Used to do a simple CI test on the rulesets.
  *
  * Currently covered - based on the rulesets as of July 24 2018:
- * - Every WPCS native sniff is triggered.
- * - Every WPCS + PHPCS sniff within the Core ruleset is triggered.
+ * - Every WordPressCS native sniff is triggered.
+ * - Every WordPressCS + PHPCS sniff within the Core ruleset is triggered.
  *
  * @package WPCS\WordPressCodingStandards
  */

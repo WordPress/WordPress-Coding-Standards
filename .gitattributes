@@ -1,7 +1,7 @@
 #
 # Exclude these files from release archives.
 # This will also make them unavailable when using Composer with `--prefer-dist`.
-# If you develop for WPCS using Composer, use `--prefer-source`.
+# If you develop for WordPressCS using Composer, use `--prefer-source`.
 # https://blog.madewithlove.be/post/gitattributes/
 #
 /.gitattributes     export-ignore
