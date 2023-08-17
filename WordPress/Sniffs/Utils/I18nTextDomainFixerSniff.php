@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Utils;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
@@ -815,7 +816,7 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 						}
 
 						$replacement = $this->phpcsFile->eolChar
-							. $this->phpcsFile->getTokensAsString( $i, ( $last_header_ptr - $i ), true )
+							. GetTokensAsString::origContent( $this->phpcsFile, $i, ( $last_header_ptr - 1 ) )
 							. $replacement;
 					}
 
