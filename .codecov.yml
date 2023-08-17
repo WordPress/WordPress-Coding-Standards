@@ -1,0 +1,25 @@
+codecov:
+  notify:
+    after_n_builds: 4
+
+coverage:
+  round: nearest
+  # Status will be green when coverage is between 90 and 100%.
+  range: "90...100"
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        paths:
+          - "WordPress"
+    patch:
+      default:
+        threshold: 3%
+        paths:
+          - "WordPress"
+
+ignore:
+  - "WordPress/Tests"
+
+comment: false
