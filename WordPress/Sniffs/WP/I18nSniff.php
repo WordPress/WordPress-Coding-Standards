@@ -89,7 +89,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Text domain.
 	 *
-	 * @var string[]|string
+	 * @var string[]
 	 */
 	public $text_domain;
 

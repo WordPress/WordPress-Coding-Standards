@@ -46,7 +46,7 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var string[]|string
+	 * @var string[]
 	 */
 	public $old_text_domain;
 

@@ -57,7 +57,7 @@ class NonceVerificationSniff extends Sniff {
 	 *
 	 * @since 0.5.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customNonceVerificationFunctions = array();
 
