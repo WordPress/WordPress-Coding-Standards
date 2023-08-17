@@ -192,6 +192,9 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		$endOfStatement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), ( $stackPtr + 1 ) );
+		if ( false === $endOfStatement ) {
+			return;
+		}
 
 		// Check for Database Schema Changes/ table truncation.
 		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
