@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
@@ -160,7 +161,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		}
 
 		// Now look for sanitizing functions.
-		if ( ! $this->is_sanitized( $stackPtr, true ) ) {
+		if ( ! $this->is_sanitized( $stackPtr, array( $this, 'add_unslash_error' ) ) ) {
 			$this->phpcsFile->addError(
 				'Detected usage of a non-sanitized input variable: %s',
 				$stackPtr,
@@ -168,5 +169,29 @@ class ValidatedSanitizedInputSniff extends Sniff {
 				$error_data
 			);
 		}
+	}
+
+	/**
+	 * Add an error for missing use of unslashing.
+	 *
+	 * @since 0.5.0
+	 * @since 3.0.0 - Moved from the `Sniff` class to this class.
+	 *              - The `$phpcsFile` parameter was added.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack
+	 *                                               which is missing unslashing.
+	 *
+	 * @return void
+	 */
+	public function add_unslash_error( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$phpcsFile->addError(
+			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
+			$stackPtr,
+			'MissingUnslash',
+			array( $tokens[ $stackPtr ]['content'] )
+		);
 	}
 }
