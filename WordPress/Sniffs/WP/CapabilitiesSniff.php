@@ -432,7 +432,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->deprecated_capabilities[ $matched_parameter ] ) ) {
-			$this->set_minimum_wp_version( $this->phpcsFile );
+			$this->set_minimum_wp_version();
 			$is_error = $this->wp_version_compare( $this->deprecated_capabilities[ $matched_parameter ], $this->minimum_wp_version, '<' );
 
 			$data = array(
