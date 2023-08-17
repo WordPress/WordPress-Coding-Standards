@@ -71,9 +71,9 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 *
-	 * @var string[]|string
+	 * @var string[]
 	 */
-	public $prefixes = '';
+	public $prefixes = array();
 
 	/**
 	 * Prefix blocklist.

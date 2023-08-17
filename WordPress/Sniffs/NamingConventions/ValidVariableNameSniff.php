@@ -78,7 +78,7 @@ final class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 	 * @since 0.11.0
 	 * @since 3.0.0  Renamed from `$customPropertiesWhitelist` to `$allowed_custom_properties`.
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $allowed_custom_properties = array();
 

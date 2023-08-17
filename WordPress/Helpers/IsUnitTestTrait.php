@@ -61,7 +61,7 @@ trait IsUnitTestTrait {
 	 * @since 3.0.0  Moved from the Sniff class to this dedicated Trait.
 	 *               Renamed from `$custom_test_class_whitelist` to `$custom_test_classes`.
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $custom_test_classes = array();
 

@@ -35,7 +35,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 *
 	 * @since 0.6.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customCacheGetFunctions = array();
 
@@ -44,7 +44,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 *
 	 * @since 0.6.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customCacheSetFunctions = array();
 
@@ -53,7 +53,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 *
 	 * @since 0.6.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customCacheDeleteFunctions = array();
 
