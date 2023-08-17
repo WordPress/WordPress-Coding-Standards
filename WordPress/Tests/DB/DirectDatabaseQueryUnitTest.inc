@@ -332,3 +332,7 @@ function method_names_are_caseinsensitive() {
 	global $wpdb;
 	$autoload = $wpdb->Get_Var( $wpdb->Prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // Warning x 2.
 }
+
+// Live coding/parse error test.
+// This must be the last test in the file.
+$wpdb->get_col( '
