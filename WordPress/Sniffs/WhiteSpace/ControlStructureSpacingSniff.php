@@ -320,7 +320,7 @@ final class ControlStructureSpacingSniff extends Sniff {
 				$this->phpcsFile->recordMetric( $stackPtr, 'Blank lines at start of control structure', 0 );
 			}
 
-			if ( $firstContent !== $scopeCloser ) {
+			if ( isset( $scopeCloser ) && $firstContent !== $scopeCloser ) {
 				$lastContent = $this->phpcsFile->findPrevious( \T_WHITESPACE, ( $scopeCloser - 1 ), null, true );
 
 				$lastNonEmptyContent = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $scopeCloser - 1 ), null, true );

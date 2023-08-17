@@ -19,3 +19,7 @@ if ( $foo ) {
 
 }
 // phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+// Live coding/parse error.
+// This must be the last test in the file!
+if ( $foo ) {
