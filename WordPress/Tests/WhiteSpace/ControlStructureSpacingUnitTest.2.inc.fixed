@@ -13,3 +13,7 @@ if ( $foo ) {
 	} // phpcs:ignore Standard.Category.Sniff -- this comment should be skipped over for the "blank line after" check.
 }
 // phpcs:set WordPress.WhiteSpace.ControlStructureSpacing blank_line_check false
+
+// Live coding/parse error.
+// This must be the last test in the file!
+if ( $foo ) {
