@@ -145,14 +145,24 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * Check if something is being sanitized.
 	 *
 	 * @since 0.5.0
+	 * @since 3.0.0 The second ($require_unslash) parameter has been changed from
+	 *              a boolean toggle to a ?callable $unslash_callback parameter to
+	 *              allow a sniff calling this method to handle their "unslashing"
+	 *              related messaging itself.
 	 *
-	 * @param int  $stackPtr        The index of the token in the stack.
-	 * @param bool $require_unslash Whether to give an error if no unslashing function
-	 *                              is used on the variable before sanitization.
+	 * @param int           $stackPtr         The index of the token in the stack.
+	 * @param callable|null $unslash_callback Optional. When passed, this method will check if an unslashing
+	 *                                        function is used on the variable before sanitization and if not,
+	 *                                        the callback will be called to handle the missing unslashing.
+	 *                                        The callback will receive the $phpcsFile object and the $stackPtr.
+	 *                                        When not passed or `null`, this method will **not** check
+	 *                                        for unslashing issues.
+	 *                                        Defaults to `null` (skip unslashing checks).
 	 *
 	 * @return bool Whether the token being sanitized.
 	 */
-	protected function is_sanitized( $stackPtr, $require_unslash = false ) {
+	protected function is_sanitized( $stackPtr, $unslash_callback = null ) {
+		$require_unslash = is_callable( $unslash_callback );
 
 		// First we check if it is being casted to a safe value.
 		if ( ContextHelper::is_safe_casted( $this->phpcsFile, $stackPtr ) ) {
@@ -162,7 +172,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		// If this isn't within a function call, we know already that it's not safe.
 		if ( ! isset( $this->tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 			if ( $require_unslash ) {
-				$this->add_unslash_error( $stackPtr );
+				call_user_func( $unslash_callback, $this->phpcsFile, $stackPtr );
 			}
 
 			return false;
@@ -189,7 +199,7 @@ abstract class Sniff implements PHPCS_Sniff {
 		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
 		if ( false === $functionPtr ) {
 			if ( true === $require_unslash ) {
-				$this->add_unslash_error( $stackPtr );
+				call_user_func( $unslash_callback, $this->phpcsFile, $stackPtr );
 			}
 
 			return false;
@@ -246,7 +256,7 @@ abstract class Sniff implements PHPCS_Sniff {
 
 		// If slashing is required, give an error.
 		if ( ! $is_unslashed && $require_unslash && ! $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
-			$this->add_unslash_error( $stackPtr );
+			call_user_func( $unslash_callback, $this->phpcsFile, $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
@@ -255,22 +265,5 @@ abstract class Sniff implements PHPCS_Sniff {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Add an error for missing use of unslashing.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param int $stackPtr The index of the token in the stack.
-	 */
-	public function add_unslash_error( $stackPtr ) {
-
-		$this->phpcsFile->addError(
-			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
-			$stackPtr,
-			'MissingUnslash',
-			array( $this->tokens[ $stackPtr ]['content'] )
-		);
 	}
 }
