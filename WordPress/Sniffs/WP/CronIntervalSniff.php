@@ -308,6 +308,8 @@ final class CronIntervalSniff extends Sniff {
 	 * Add warning about unclear cron schedule change.
 	 *
 	 * @param int $stackPtr The position of the current token in the stack.
+	 *
+	 * @return void
 	 */
 	public function confused( $stackPtr ) {
 		$this->phpcsFile->addWarning(

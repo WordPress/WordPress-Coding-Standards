@@ -94,6 +94,8 @@ abstract class Sniff implements PHPCS_Sniff {
 	 * @since 0.4.0
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file currently being processed.
+	 *
+	 * @return void
 	 */
 	protected function init( File $phpcsFile ) {
 		$this->phpcsFile = $phpcsFile;

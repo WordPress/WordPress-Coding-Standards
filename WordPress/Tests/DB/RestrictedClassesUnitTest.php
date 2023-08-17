@@ -33,6 +33,8 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 * where we are passing the parameters to.
 	 *
 	 * @before
+	 *
+	 * @return void
 	 */
 	protected function enhanceGroups() {
 		parent::setUp();
@@ -53,6 +55,8 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 * Reset the $groups property.
 	 *
 	 * @after
+	 *
+	 * @return void
 	 */
 	protected function resetGroups() {
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array();

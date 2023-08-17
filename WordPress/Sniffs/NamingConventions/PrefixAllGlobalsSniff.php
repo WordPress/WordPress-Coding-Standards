@@ -1186,6 +1186,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * - complies with the PHP rules for valid function, class, variable, constant names.
 	 *
 	 * @since 0.12.0
+	 *
+	 * @return void
 	 */
 	private function validate_prefixes() {
 		if ( $this->previous_prefixes === $this->prefixes ) {
