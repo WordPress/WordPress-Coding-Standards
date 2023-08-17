@@ -133,8 +133,10 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 		$test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.inc', \GLOB_BRACE );
 
 		$php3_test_files = glob( dirname( $testFileBase ) . $sep . 'FileNameUnitTests{' . $sep . ',' . $sep . '*' . $sep . '}*.php3', \GLOB_BRACE );
-		foreach ( $php3_test_files as $file ) {
-			$test_files[] = $file;
+		if ( is_array( $php3_test_files ) ) {
+			foreach ( $php3_test_files as $file ) {
+				$test_files[] = $file;
+			}
 		}
 
 		if ( ! empty( $test_files ) ) {
