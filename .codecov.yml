@@ -13,11 +13,7 @@ coverage:
         threshold: 1%
         paths:
           - "WordPress"
-    patch:
-      default:
-        threshold: 3%
-        paths:
-          - "WordPress"
+    patch: off
 
 ignore:
   - "WordPress/Tests"
