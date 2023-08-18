@@ -1,0 +1,26 @@
+parameters:
+    #phpVersion: 50400 # Needs to be 70100 or higher... sigh...
+    level: 5
+    paths:
+        - WordPress
+    bootstrapFiles:
+        - Tests/bootstrap.php
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        # Level 0
+        - '#^Result of method \S+ \(void\) is used\.$#'
+
+        # Level 4
+        - '#^Property \S+::\$\S+ \([^)]+\) in isset\(\) is not nullable\.$#'
+        -
+            count: 1
+            message: '#^Result of && is always true\.$#'
+            path: WordPress/Sniffs/Security/EscapeOutputSniff.php
+        -
+            count: 1
+            message: '#^Strict comparison using === between true and false will always evaluate to false\.$#'
+            path: WordPress/Sniffs/Utils/I18nTextDomainFixerSniff.php
+
+        # Level 5
+        - '#^Parameter \#3 \$value of method \S+File::recordMetric\(\) expects string, \(?(float|int|bool)(\|(float|int|bool))*\)? given\.$#'
