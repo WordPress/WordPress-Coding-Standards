@@ -325,6 +325,11 @@ trait SanitizationHelperTrait {
 			return false;
 		}
 
+		// If the variable is just being unset, the value isn't used at all, so it's safe.
+		if ( Context::inUnset( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
+
 		// First we check if it is being casted to a safe value.
 		if ( ContextHelper::is_safe_casted( $phpcsFile, $stackPtr ) ) {
 			return true;
@@ -337,11 +342,6 @@ trait SanitizationHelperTrait {
 			}
 
 			return false;
-		}
-
-		// If it is just being unset, the value isn't used at all, so it's safe.
-		if ( Context::inUnset( $phpcsFile, $stackPtr ) ) {
-			return true;
 		}
 
 		$valid_functions  = $this->get_sanitizing_functions();
