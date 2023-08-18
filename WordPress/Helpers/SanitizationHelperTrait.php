@@ -364,8 +364,8 @@ trait SanitizationHelperTrait {
 		$functionName = $tokens[ $functionPtr ]['content'];
 
 		// Check if an unslashing function is being used.
+		$is_unslashed = false;
 		if ( UnslashingFunctionsHelper::is_unslashing_function( $functionName ) ) {
-
 			$is_unslashed = true;
 
 			// Check is any of the remaining (sanitizing) functions is used.
@@ -378,14 +378,10 @@ trait SanitizationHelperTrait {
 
 			$functionPtr  = $higherFunctionPtr;
 			$functionName = $tokens[ $functionPtr ]['content'];
-
-		} else {
-			$is_unslashed = false;
 		}
 
 		// Arrays might be sanitized via an array walking function using a callback.
 		if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
-
 			// Get the callback parameter.
 			$callback = ArrayWalkingFunctionsHelper::get_callback_parameter( $phpcsFile, $functionPtr );
 
@@ -408,15 +404,14 @@ trait SanitizationHelperTrait {
 		}
 
 		// If slashing is required, give an error.
-		if ( ! $is_unslashed && $require_unslash && ! $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
+		if ( false === $is_unslashed
+			&& true === $require_unslash
+			&& ! $this->is_sanitizing_and_unslashing_function( $functionName )
+		) {
 			call_user_func( $unslash_callback, $phpcsFile, $stackPtr );
 		}
 
 		// Check if this is a sanitizing function.
-		if ( $this->is_sanitizing_function( $functionName ) || $this->is_sanitizing_and_unslashing_function( $functionName ) ) {
-			return true;
-		}
-
-		return false;
+		return ( $this->is_sanitizing_function( $functionName ) || $this->is_sanitizing_and_unslashing_function( $functionName ) );
 	}
 }
