@@ -315,7 +315,7 @@ trait SanitizationHelperTrait {
 	 *                                                      check for unslashing issues.
 	 *                                                      Defaults to `null` (skip unslashing checks).
 	 *
-	 * @return bool Whether the token being sanitized.
+	 * @return bool Whether the token is being sanitized.
 	 */
 	public function is_sanitized( File $phpcsFile, $stackPtr, $unslash_callback = null ) {
 		$tokens          = $phpcsFile->getTokens();
@@ -368,7 +368,7 @@ trait SanitizationHelperTrait {
 		if ( UnslashingFunctionsHelper::is_unslashing_function( $functionName ) ) {
 			$is_unslashed = true;
 
-			// Check is any of the remaining (sanitizing) functions is used.
+			// Check whether this function call is wrapped within a sanitizing function.
 			$higherFunctionPtr = ContextHelper::is_in_function_call( $phpcsFile, $functionPtr, $sanitizing_functions );
 
 			// If there is no other valid function being used, this value is unsanitized.
