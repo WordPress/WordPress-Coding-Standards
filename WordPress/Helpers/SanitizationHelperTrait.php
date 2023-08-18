@@ -344,11 +344,12 @@ trait SanitizationHelperTrait {
 			return false;
 		}
 
-		$valid_functions  = $this->get_sanitizing_functions();
-		$valid_functions += $this->get_sanitizing_and_unslashing_functions();
-		$valid_functions += UnslashingFunctionsHelper::get_functions();
-		$valid_functions += ArrayWalkingFunctionsHelper::get_functions();
+		$sanitizing_functions  = $this->get_sanitizing_functions();
+		$sanitizing_functions += $this->get_sanitizing_and_unslashing_functions();
+		$sanitizing_functions += ArrayWalkingFunctionsHelper::get_functions();
+		$valid_functions       = $sanitizing_functions + UnslashingFunctionsHelper::get_functions();
 
+		// Get the function that it's in.
 		$functionPtr = ContextHelper::is_in_function_call( $phpcsFile, $stackPtr, $valid_functions );
 
 		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
@@ -367,11 +368,8 @@ trait SanitizationHelperTrait {
 
 			$is_unslashed = true;
 
-			// Remove the unslashing functions.
-			$valid_functions = array_diff_key( $valid_functions, UnslashingFunctionsHelper::get_functions() );
-
 			// Check is any of the remaining (sanitizing) functions is used.
-			$higherFunctionPtr = ContextHelper::is_in_function_call( $phpcsFile, $functionPtr, $valid_functions );
+			$higherFunctionPtr = ContextHelper::is_in_function_call( $phpcsFile, $functionPtr, $sanitizing_functions );
 
 			// If there is no other valid function being used, this value is unsanitized.
 			if ( false === $higherFunctionPtr ) {
