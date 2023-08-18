@@ -320,6 +320,10 @@ trait SanitizationHelperTrait {
 		$tokens          = $phpcsFile->getTokens();
 		$require_unslash = is_callable( $unslash_callback );
 
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
 		// First we check if it is being casted to a safe value.
 		if ( ContextHelper::is_safe_casted( $phpcsFile, $stackPtr ) ) {
 			return true;
