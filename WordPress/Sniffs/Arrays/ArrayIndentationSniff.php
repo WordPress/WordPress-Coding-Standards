@@ -9,12 +9,12 @@
 
 namespace WordPressCS\WordPress\Sniffs\Arrays;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\PassedParameters;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces WordPress array indentation for multi-line arrays.

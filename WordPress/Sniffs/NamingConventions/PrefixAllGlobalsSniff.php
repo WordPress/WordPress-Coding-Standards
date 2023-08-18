@@ -17,8 +17,8 @@ use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\FunctionDeclarations;
 use PHPCSUtils\Utils\Lists;
 use PHPCSUtils\Utils\MessageHelper;
-use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Namespaces;
+use PHPCSUtils\Utils\ObjectDeclarations;
 use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\Scopes;
@@ -960,7 +960,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 				}
 
-				unset( $has_global, $end_of_statement, $ptr, $imported );
+				unset( $has_global, $end_of_statement, $ptr );
 			}
 		}
 

@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use PHPCSUtils\Tokens\Collections;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use WordPressCS\WordPress\Sniff;
 
 /**

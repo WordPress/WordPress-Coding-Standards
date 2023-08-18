@@ -9,9 +9,9 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Tokens\Collections;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Enforces Yoda conditional statements.

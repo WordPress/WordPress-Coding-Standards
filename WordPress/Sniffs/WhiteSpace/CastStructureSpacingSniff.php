@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\WhiteSpace;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Ensure cast statements are preceded by whitespace.
