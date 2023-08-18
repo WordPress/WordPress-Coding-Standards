@@ -100,6 +100,7 @@ final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 					387 => 1,
 					397 => 1,
 					405 => 1,
+					413 => 1,
 				);
 
 			case 'ValidatedSanitizedInputUnitTest.2.inc':

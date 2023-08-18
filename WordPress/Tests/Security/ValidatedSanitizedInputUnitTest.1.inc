@@ -404,3 +404,11 @@ function test_ignore_array_key_exists_as_first_class_callable() {
 	$callback = array_key_exists(...);
 	$id = (int) $_POST['foo']; // Bad.
 }
+
+/*
+ * Unsetting a superglobal key is not the same as validating it.
+ */
+function test_unset_is_not_validation() {
+	unset( $_REQUEST['key'] );
+	$id = (int) $_REQUEST['key']; // Bad, missing validation.
+}

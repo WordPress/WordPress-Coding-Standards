@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
@@ -88,6 +89,11 @@ class ValidatedSanitizedInputSniff extends Sniff {
 
 		// Check if this is a superglobal.
 		if ( ! \in_array( $this->tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
+			return;
+		}
+
+		// If the variable is being unset, we don't care about it.
+		if ( Context::inUnset( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 

@@ -36,7 +36,6 @@ final class ValidationHelper {
 	private static $targets = array(
 		\T_ISSET          => 'construct',
 		\T_EMPTY          => 'construct',
-		\T_UNSET          => 'construct',
 		\T_STRING         => 'function_call',
 		\T_COALESCE       => 'coalesce',
 		\T_COALESCE_EQUAL => 'coalesce',
