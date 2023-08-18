@@ -232,17 +232,17 @@ function test_allow_array_key_exists_alias() {
 	}
 }
 function test_correct_multi_level_array_validation() {
-	if ( isset( $_POST['toplevel']['sublevel'] ) ) {
-		$id = (int) $_POST['toplevel']; // OK, if a subkey exists, the top level key *must* also exist.
-		$id = (int) $_POST['toplevel']['sublevel']; // OK.
-		$id = (int) $_POST['toplevel']['sublevel']['subsub']; // Bad x1 - validate, this sub has not been validated.
+	if ( isset( $_COOKIE['toplevel']['sublevel'] ) ) {
+		$id = (int) $_COOKIE['toplevel']; // OK, if a subkey exists, the top level key *must* also exist.
+		$id = (int) $_COOKIE['toplevel']['sublevel']; // OK.
+		$id = (int) $_COOKIE['toplevel']['sublevel']['subsub']; // Bad x1 - validate, this sub has not been validated.
 	}
 
-	if ( array_key_exists( 'bar', $_POST['foo'] ) ) {
-		$id = (int) $_POST['bar']; // Bad x 1 - validate.
-		$id = (int) $_POST['foo']; // OK.
-		$id = (int) $_POST['foo']['bar']; // OK.
-		$id = (int) $_POST['foo']['bar']['baz']; // Bad x 1 - validate.
+	if ( array_key_exists( 'bar', $_COOKIE['foo'] ) ) {
+		$id = (int) $_COOKIE['bar']; // Bad x 1 - validate.
+		$id = (int) $_COOKIE['foo']; // OK.
+		$id = (int) $_COOKIE['foo']['bar']; // OK.
+		$id = (int) $_COOKIE['foo']['bar']['baz']; // Bad x 1 - validate.
 	}
 }
 
@@ -380,11 +380,11 @@ function test_allow_array_key_exists_with_named_params_multilevel_access_wrong_p
 }
 
 function test_allow_array_key_exists_with_named_params_multilevel_access_test() {
-	if ( array_key_exists( array: $_POST['foo'], key: 'bar' ) ) {
-		$id = (int) $_POST['bar']; // Bad x 1 - validate.
-		$id = (int) $_POST['foo']; // OK.
-		$id = (int) $_POST['foo']['bar']; // OK.
-		$id = (int) $_POST['foo']['bar']['baz']; // Bad x 1 - validate.
+	if ( array_key_exists( array: $_SERVER['foo'], key: 'bar' ) ) {
+		$id = (int) $_SERVER['bar']; // Bad x 1 - validate.
+		$id = (int) $_SERVER['foo']; // OK.
+		$id = (int) $_SERVER['foo']['bar']; // OK.
+		$id = (int) $_SERVER['foo']['bar']['baz']; // Bad x 1 - validate.
 	}
 }
 
