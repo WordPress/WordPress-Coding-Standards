@@ -90,7 +90,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 		) {
 			// Retrieve all embeds, but use only the initial variable name part.
 			$interpolated_variables = array_map(
-				function ( $embed ) {
+				static function ( $embed ) {
 					return preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
 				},
 				TextStrings::getEmbeds( $this->tokens[ $stackPtr ]['content'] )
@@ -99,7 +99,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			// Filter the embeds down to superglobals only.
 			$interpolated_superglobals = array_filter(
 				$interpolated_variables,
-				function ( $var_name ) {
+				static function ( $var_name ) {
 					return ( 'GLOBALS' !== $var_name && Variables::isSuperglobalName( $var_name ) );
 				}
 			);
