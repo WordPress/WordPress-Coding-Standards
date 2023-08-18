@@ -17,3 +17,5 @@ And preferably also code samples of code which shouldn't be flagged.
 
 ## Additional context (optional)
 <!-- Add any other context or screenshots about the feature request here. -->
+
+- [ ] I intend to create a pull request to implement this feature.

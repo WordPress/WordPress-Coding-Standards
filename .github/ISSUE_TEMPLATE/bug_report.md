@@ -47,10 +47,14 @@ The error code for the sniff that is (or should be) being triggered (you
 can see the sniff error codes by running `phpcs` with the `-s` flag).
 e.g. `WordPress.PHP.NoSilencedErrors.Discouraged`
 
+Note: only report issues for error codes starting with `WordPress` to this repo!
+If the error code starts with `Universal`, `NormalizedArrays` or `Modernize` report the issue to PHPCSExtra.
+If the error code starts with `Generic`, `PEAR`, `PSR1`, `PSR2`, `PSR12`, `Squiz` or `Zend` report the issue to PHP_CodeSniffer itself.
+
 You can leave this section empty if you are reporting a false negative.
 -->
 
-## Custom ruleset
+## Custom Ruleset
 <!--
 If the issue cannot be reproduced when using `--standard=WordPress` on the command line,
 please post the relevant part of your custom ruleset here.
@@ -67,21 +71,22 @@ please post the relevant part of your custom ruleset here.
 <!--
 To find out the versions used:
 * PHP: run `php -v`.
-* PHPCS: run `[vendor/bin/]phpcs --version`
-* WPCS: run `composer [global] info` for a Composer install.
+* Packages: run `composer info` or run `composer [global] info` to see the installed versions.
 -->
 
-| Question               | Answer
-| ------------------------| -------
-| PHP version             | x.y.z
-| PHP_CodeSniffer version | x.y.z
-| WPCS version            | x.y.z
-| WPCS install type       | e.g. Composer global, Composer project local, git clone, other (please expand)
-| IDE (if relevant)       | Name and version e.g. PhpStorm 2018.2.2
+| Question                 | Answer
+| ------------------------ | -------
+| PHP version              | x.y.z
+| PHP_CodeSniffer version  | x.y.z
+| WordPressCS version      | x.y.z
+| PHPCSUtils version       | x.y.z
+| PHPCSExtra version       | x.y.z
+| WordPressCS install type | e.g. Composer global, Composer project local, other (please expand)
+| IDE (if relevant)        | Name and version e.g. PhpStorm 2018.2.2
 
 
 ## Additional Context (optional)
 <!-- Add any other context about the problem here. -->
 
-## Tested Against `develop` branch?
-- [ ] I have verified the issue still exists in the `develop` branch of WPCS.
+## Tested Against `develop` Branch?
+- [ ] I have verified the issue still exists in the `develop` branch of WordPressCS.
