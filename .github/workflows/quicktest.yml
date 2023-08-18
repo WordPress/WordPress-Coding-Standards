@@ -90,7 +90,7 @@ jobs:
         run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
 
       - name: Send coverage report to Codecov
-        if: ${{ success() && github.ref_name == 'develop' }}
+        if: ${{ success() && github.ref_name == 'develop' && matrix.php != 'latest' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./build/logs/clover.xml
