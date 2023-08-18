@@ -9,7 +9,14 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
+use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
 
 /**
  * Helper functions and function lists for checking whether a sanitizing function is being used.
@@ -19,11 +26,20 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  * - `customSanitizingFunctions`.
  * - `customUnslashingSanitizingFunctions`
  *
+ * ---------------------------------------------------------------------------------------------
+ * This trait is only intended for internal use by WordPressCS and is not part of the public API.
+ * This also means that it has no promise of backward compatibility. Use at your own risk.
+ * ---------------------------------------------------------------------------------------------
+ *
+ * @internal
+ *
  * @since 3.0.0 The properties in this trait were previously contained partially in the
  *              `WordPressCS\WordPress\Sniff` class and partially in the `NonceVerificationSniff`
  *              and the `ValidatedSanitizedInputSniff` classes and have been moved here.
+ *              The pre-existing methods in this trait were previously contained in the
+ *              `WordPressCS\WordPress\Sniff` class and have been moved here.
  */
-trait SanitizingFunctionsTrait {
+trait SanitizationHelperTrait {
 
 	/**
 	 * Custom list of functions that sanitize the values passed to them.
@@ -235,5 +251,167 @@ trait SanitizingFunctionsTrait {
 	 */
 	public function is_sanitizing_and_unslashing_function( $functionName ) {
 		return isset( $this->get_sanitizing_and_unslashing_functions()[ strtolower( $functionName ) ] );
+	}
+
+	/**
+	 * Check if something is only being sanitized.
+	 *
+	 * @since 0.5.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public`.
+	 *              - The `$phpcsFile` parameter was added.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool Whether the token is only within a sanitization.
+	 */
+	public function is_only_sanitized( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// If it isn't being sanitized at all.
+		if ( ! $this->is_sanitized( $phpcsFile, $stackPtr ) ) {
+			return false;
+		}
+
+		// If the token isn't in parentheses, we know the value must have only been casted, because
+		// is_sanitized() would have returned `false` otherwise.
+		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			return true;
+		}
+
+		// At this point we're expecting the value to have not been casted. If it
+		// was, it wasn't *only* casted, because it's also in a function.
+		if ( ContextHelper::is_safe_casted( $phpcsFile, $stackPtr ) ) {
+			return false;
+		}
+
+		// The only parentheses should belong to the sanitizing function. If there's
+		// more than one set, this isn't *only* sanitization.
+		return ( \count( $tokens[ $stackPtr ]['nested_parenthesis'] ) === 1 );
+	}
+
+	/**
+	 * Check if something is being sanitized.
+	 *
+	 * @since 0.5.0
+	 * @since 3.0.0 - Moved from the Sniff class to this class.
+	 *              - The method visibility was changed from `protected` to `public`.
+	 *              - The `$phpcsFile` parameter was added.
+	 *              - The $require_unslash parameter has been changed from
+	 *                a boolean toggle to a ?callable $unslash_callback parameter to
+	 *                allow a sniff calling this method to handle their "unslashing"
+	 *                related messaging itself.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile        The file being scanned.
+	 * @param int                         $stackPtr         The index of the token in the stack.
+	 * @param callable|null               $unslash_callback Optional. When passed, this method will check if
+	 *                                                      an unslashing function is used on the variable before
+	 *                                                      sanitization and if not, the callback will be called
+	 *                                                      to handle the missing unslashing.
+	 *                                                      The callback will receive the $phpcsFile object and
+	 *                                                      the $stackPtr.
+	 *                                                      When not passed or `null`, this method will **not**
+	 *                                                      check for unslashing issues.
+	 *                                                      Defaults to `null` (skip unslashing checks).
+	 *
+	 * @return bool Whether the token is being sanitized.
+	 */
+	public function is_sanitized( File $phpcsFile, $stackPtr, $unslash_callback = null ) {
+		$tokens          = $phpcsFile->getTokens();
+		$require_unslash = is_callable( $unslash_callback );
+
+		if ( isset( $tokens[ $stackPtr ] ) === false ) {
+			return false;
+		}
+
+		// If the variable is just being unset, the value isn't used at all, so it's safe.
+		if ( Context::inUnset( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
+
+		// First we check if it is being casted to a safe value.
+		if ( ContextHelper::is_safe_casted( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
+
+		// If this isn't within a function call, we know already that it's not safe.
+		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
+			if ( $require_unslash ) {
+				call_user_func( $unslash_callback, $phpcsFile, $stackPtr );
+			}
+
+			return false;
+		}
+
+		$sanitizing_functions  = $this->get_sanitizing_functions();
+		$sanitizing_functions += $this->get_sanitizing_and_unslashing_functions();
+		$sanitizing_functions += ArrayWalkingFunctionsHelper::get_functions();
+		$valid_functions       = $sanitizing_functions + UnslashingFunctionsHelper::get_functions();
+
+		// Get the function that it's in.
+		$functionPtr = ContextHelper::is_in_function_call( $phpcsFile, $stackPtr, $valid_functions );
+
+		// If this isn't a call to one of the valid functions, it sure isn't a sanitizing function.
+		if ( false === $functionPtr ) {
+			if ( true === $require_unslash ) {
+				call_user_func( $unslash_callback, $phpcsFile, $stackPtr );
+			}
+
+			return false;
+		}
+
+		$functionName = $tokens[ $functionPtr ]['content'];
+
+		// Check if an unslashing function is being used.
+		$is_unslashed = false;
+		if ( UnslashingFunctionsHelper::is_unslashing_function( $functionName ) ) {
+			$is_unslashed = true;
+
+			// Check whether this function call is wrapped within a sanitizing function.
+			$higherFunctionPtr = ContextHelper::is_in_function_call( $phpcsFile, $functionPtr, $sanitizing_functions );
+
+			// If there is no other valid function being used, this value is unsanitized.
+			if ( false === $higherFunctionPtr ) {
+				return false;
+			}
+
+			$functionPtr  = $higherFunctionPtr;
+			$functionName = $tokens[ $functionPtr ]['content'];
+		}
+
+		// Arrays might be sanitized via an array walking function using a callback.
+		if ( ArrayWalkingFunctionsHelper::is_array_walking_function( $functionName ) ) {
+			// Get the callback parameter.
+			$callback = ArrayWalkingFunctionsHelper::get_callback_parameter( $phpcsFile, $functionPtr );
+
+			if ( ! empty( $callback ) ) {
+				/*
+				 * If this is a function callback (not a method callback array) and we're able
+				 * to resolve the function name, do so.
+				 */
+				$first_non_empty = $phpcsFile->findNext(
+					Tokens::$emptyTokens,
+					$callback['start'],
+					( $callback['end'] + 1 ),
+					true
+				);
+
+				if ( false !== $first_non_empty && \T_CONSTANT_ENCAPSED_STRING === $tokens[ $first_non_empty ]['code'] ) {
+					$functionName = TextStrings::stripQuotes( $tokens[ $first_non_empty ]['content'] );
+				}
+			}
+		}
+
+		// If slashing is required, give an error.
+		if ( false === $is_unslashed
+			&& true === $require_unslash
+			&& ! $this->is_sanitizing_and_unslashing_function( $functionName )
+		) {
+			call_user_func( $unslash_callback, $phpcsFile, $stackPtr );
+		}
+
+		// Check if this is a sanitizing function.
+		return ( $this->is_sanitizing_function( $functionName ) || $this->is_sanitizing_and_unslashing_function( $functionName ) );
 	}
 }

@@ -17,6 +17,7 @@ use PHPCSUtils\Utils\MessageHelper;
 use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\VariableHelper;
 use WordPressCS\WordPress\Sniff;
@@ -31,10 +32,12 @@ use WordPressCS\WordPress\Sniff;
  * @since 1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
  * @since 3.0.0  This sniff has received significant updates to its logic and structure.
  *
- * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
- * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizationHelperTrait::$customSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizationHelperTrait::$customUnslashingSanitizingFunctions
  */
 class NonceVerificationSniff extends Sniff {
+
+	use SanitizationHelperTrait;
 
 	/**
 	 * Superglobals to notify about when not accompanied by an nonce check.
@@ -234,7 +237,7 @@ class NonceVerificationSniff extends Sniff {
 			|| VariableHelper::is_assignment( $this->phpcsFile, $stackPtr, true )
 			|| ContextHelper::is_in_array_comparison( $this->phpcsFile, $stackPtr )
 			|| ContextHelper::is_in_function_call( $this->phpcsFile, $stackPtr, UnslashingFunctionsHelper::get_functions() ) !== false
-			|| $this->is_only_sanitized( $stackPtr )
+			|| $this->is_only_sanitized( $this->phpcsFile, $stackPtr )
 		) {
 			$needs_nonce = 'after';
 		}
