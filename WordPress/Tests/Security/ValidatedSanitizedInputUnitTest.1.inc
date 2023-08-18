@@ -480,3 +480,12 @@ function test_null_coalesce_equals_validation_extra_safeguard() {
 	$_POST['key'] ??= 'default'; // OK, assignment.
 	$key            = $_POST['key']; // Bad, missing unslash + sanitization, validation okay.
 }
+
+function test_in_match_condition_is_regarded_as_comparison() {
+	if ( isset( $_REQUEST['key'] ) ) {
+		$test = match( $_REQUEST['key'] ) {
+			'valueA' => 'A',
+			default  => 'B',
+		};
+	}
+}
