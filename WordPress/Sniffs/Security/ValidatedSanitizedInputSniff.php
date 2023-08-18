@@ -230,11 +230,15 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
+		// We know there will be array keys as that's checked in the process_token() method.
+		$array_keys = VariableHelper::get_array_access_keys( $phpcsFile, $stackPtr );
+		$error_data = array( $var_name . '[' . implode( '][', $array_keys ) . ']' );
+
 		$phpcsFile->addError(
-			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
+			'%s not unslashed before sanitization. Use wp_unslash() or similar',
 			$stackPtr,
 			'MissingUnslash',
-			array( $var_name )
+			$error_data
 		);
 	}
 }
