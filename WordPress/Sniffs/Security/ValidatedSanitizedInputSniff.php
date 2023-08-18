@@ -46,6 +46,23 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	public $check_validation_in_scope_only = false;
 
 	/**
+	 * Superglobals for which the values will be slashed by WP.
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/wp_magic_quotes/
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<string, true>
+	 */
+	private $slashed_superglobals = array(
+		'$_COOKIE'  => true,
+		'$_GET'     => true,
+		'$_POST'    => true,
+		'$_REQUEST' => true,
+		'$_SERVER'  => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -66,8 +83,6 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * @return void
 	 */
 	public function process_token( $stackPtr ) {
-
-		$superglobals = $this->input_superglobals;
 
 		// Handling string interpolation.
 		if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code']
@@ -96,8 +111,12 @@ class ValidatedSanitizedInputSniff extends Sniff {
 			return;
 		}
 
-		// Check if this is a superglobal.
-		if ( ! \in_array( $this->tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
+		/* Handle variables */
+
+		// Check if this is a superglobal we want to examine.
+		if ( '$GLOBALS' === $this->tokens[ $stackPtr ]['content']
+			|| Variables::isSuperglobalName( $this->tokens[ $stackPtr ]['content'] ) === false
+		) {
 			return;
 		}
 
@@ -203,13 +222,19 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * @return void
 	 */
 	public function add_unslash_error( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+		$tokens   = $phpcsFile->getTokens();
+		$var_name = $tokens[ $stackPtr ]['content'];
+
+		if ( isset( $this->slashed_superglobals[ $var_name ] ) === false ) {
+			// WP doesn't slash these, so they don't need unslashing.
+			return;
+		}
 
 		$phpcsFile->addError(
 			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
 			$stackPtr,
 			'MissingUnslash',
-			array( $tokens[ $stackPtr ]['content'] )
+			array( $var_name )
 		);
 	}
 }

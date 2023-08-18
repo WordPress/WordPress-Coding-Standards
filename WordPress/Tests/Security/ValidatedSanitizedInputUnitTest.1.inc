@@ -450,3 +450,28 @@ function test_examine_additional_superglobals_in_textstrings() {
 	$text = "Use {$_ENV['key']} for something"; // Bad.
 	$text = "Use {$GLOBALS['key']} for something"; // OK.
 }
+
+function test_examine_additional_superglobals_as_vars() {
+	$key = sanitize_text_field( $_SESSION['key'] ); // Bad - missing validation.
+	$key = sanitize_text_field( $_ENV['key'] ); // Bad - missing validation.
+	$key = sanitize_text_field( $_FILES['key'] ); // Bad - missing validation.
+
+	if ( isset( $_SESSION['key'], $_ENV['key'], $_FILES['key'] ) === false ) {
+		return;
+	}
+
+	// OK.
+	$key = sanitize_text_field( wp_unslash( $_SESSION['key'] ) );
+	$key = sanitize_text_field( wp_unslash( $_ENV['key'] ) );
+	$key = sanitize_text_field( wp_unslash( $_FILES['key'] ) );
+
+	// OK - unslashing not needed for $_SESSION, $_ENV and $_FILES.
+	$key = sanitize_text_field( $_SESSION['key'] );
+	$key = sanitize_text_field( $_ENV['key'] );
+	$key = sanitize_text_field( $_FILES['key'] );
+
+	// Bad - missing sanitization.
+	do_something( $_SESSION['key'] );
+	do_something( $_ENV['key'] );
+	do_something( $_FILES['key'] );
+}

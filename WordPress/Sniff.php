@@ -22,23 +22,6 @@ use PHP_CodeSniffer\Sniffs\Sniff as PHPCS_Sniff;
 abstract class Sniff implements PHPCS_Sniff {
 
 	/**
-	 * A list of superglobals that incorporate user input.
-	 *
-	 * @since 0.5.0
-	 * @since 0.11.0 Changed from static to non-static.
-	 *
-	 * @var string[]
-	 */
-	protected $input_superglobals = array(
-		'$_COOKIE',
-		'$_GET',
-		'$_FILES',
-		'$_POST',
-		'$_REQUEST',
-		'$_SERVER',
-	);
-
-	/**
 	 * The current file being sniffed.
 	 *
 	 * @since 0.4.0
