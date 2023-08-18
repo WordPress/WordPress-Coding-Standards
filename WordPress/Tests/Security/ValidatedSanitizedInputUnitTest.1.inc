@@ -64,7 +64,7 @@ unset( $_GET['test'] ); // Ok.
 
 output( "some string {$_POST['some_var']}" ); // Bad.
 
-echo (int) $_GET['test']; // Ok.
+echo isset( $_GET['test'] ) ? (int) $_GET['test'] : 0; // Ok.
 some_func( $some_arg, (int) $_GET['test'] ); // Ok.
 
 function zebra() {
@@ -105,7 +105,7 @@ echo sanitize_text_field( $_POST['foo545'] ); // Error for no validation, unslas
 echo array_map( 'sanitize_text_field', $_GET['test'] ); // Bad, no unslashing.
 echo Array_Map( 'sanitize_key', $_GET['test'] ); // Ok.
 
-foo( AbsINT( $_GET['foo'] ) ); // Ok.
+isset( $_GET['foo'] ) && foo( AbsINT( $_GET['foo'] ) ); // Ok.
 $ids = array_map( 'absint', $_GET['test'] ); // Ok.
 
 if ( is_array( $_GET['test'] ) ) {} // Ok.
@@ -411,4 +411,35 @@ function test_ignore_array_key_exists_as_first_class_callable() {
 function test_unset_is_not_validation() {
 	unset( $_REQUEST['key'] );
 	$id = (int) $_REQUEST['key']; // Bad, missing validation.
+}
+
+/*
+ * Only count a variable as validated if the validation happened in the same scope.
+ */
+function test_nested_closed_scopes() {
+	$closure = function() {
+		return isset( $_POST['bar'] );
+	};
+
+	$anon = new class() {
+		public function __construct() {
+			if ( isset( $_POST['bar'] ) ) {
+				// Do something.
+			}
+		}
+	};
+
+	$arrow = fn() => isset( $_POST['bar'] );
+
+	$id = (int) $_POST['bar']; // Bad x 1 - validate.
+}
+
+function test_arrow_open_scope() {
+	if ( ! isset( $_SERVER['key'] ) ) {
+		return;
+	}
+
+	$arrow = fn() => (int) $_SERVER['key']; // OK, validation outside the scope of the arrow function counts.
+
+	$arrow = fn() => isset( $_SERVER['abc'] ) ? (int) $_SERVER['abc'] : 0; // OK.
 }
