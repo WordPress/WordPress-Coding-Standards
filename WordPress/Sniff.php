@@ -15,7 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper;
 use WordPressCS\WordPress\Helpers\ContextHelper;
-use WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait;
+use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
 
 /**
@@ -27,7 +27,7 @@ use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
  */
 abstract class Sniff implements PHPCS_Sniff {
 
-	use SanitizingFunctionsTrait;
+	use SanitizationHelperTrait;
 
 	/**
 	 * A list of superglobals that incorporate user input.

@@ -31,8 +31,8 @@ use WordPressCS\WordPress\Sniff;
  * @since 1.0.0  This sniff has been moved from the `CSRF` category to the `Security` category.
  * @since 3.0.0  This sniff has received significant updates to its logic and structure.
  *
- * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customSanitizingFunctions
- * @uses \WordPressCS\WordPress\Helpers\SanitizingFunctionsTrait::$customUnslashingSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizationHelperTrait::$customSanitizingFunctions
+ * @uses \WordPressCS\WordPress\Helpers\SanitizationHelperTrait::$customUnslashingSanitizingFunctions
  */
 class NonceVerificationSniff extends Sniff {
 

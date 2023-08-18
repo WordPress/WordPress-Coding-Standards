@@ -23,7 +23,7 @@ use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
  *              `WordPressCS\WordPress\Sniff` class and partially in the `NonceVerificationSniff`
  *              and the `ValidatedSanitizedInputSniff` classes and have been moved here.
  */
-trait SanitizingFunctionsTrait {
+trait SanitizationHelperTrait {
 
 	/**
 	 * Custom list of functions that sanitize the values passed to them.
