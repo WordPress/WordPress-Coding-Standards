@@ -66,7 +66,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var array
+	 * @var array<string, true> Key is variable name, value irrelevant.
 	 */
 	protected $override_allowed = array(
 		'content_width'     => true,

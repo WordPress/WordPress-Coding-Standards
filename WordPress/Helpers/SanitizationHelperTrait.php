@@ -75,7 +75,7 @@ trait SanitizationHelperTrait {
 	 * @since 3.0.0  - Moved from the Sniff class to this trait.
 	 *               - Visibility changed from protected to private.
 	 *
-	 * @var array<string, bool>
+	 * @var array<string, true>
 	 */
 	private $sanitizingFunctions = array(
 		'_wp_handle_upload'          => true,
@@ -188,7 +188,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array<string, bool>
+	 * @return array<string, bool>
 	 */
 	public function get_sanitizing_functions() {
 		if ( array() === $this->allSanitizingFunctions
@@ -210,7 +210,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array<string, bool>
+	 * @return array<string, bool>
 	 */
 	public function get_sanitizing_and_unslashing_functions() {
 		if ( array() === $this->allUnslashingSanitizingFunctions

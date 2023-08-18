@@ -37,7 +37,7 @@ final class ContextHelper {
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The property visibility was changed from `protected` to `private static`.
 	 *
-	 * @var array
+	 * @var array<int|string, true> Key is token constant, value irrelevant.
 	 */
 	private static $safe_casts = array(
 		\T_INT_CAST    => true,
@@ -58,7 +58,7 @@ final class ContextHelper {
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The property visibility was changed from `protected` to `private static`.
 	 *
-	 * @var array
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	private static $typeTestFunctions = array(
 		'is_array'     => true,
@@ -85,7 +85,7 @@ final class ContextHelper {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	private static $key_exists_functions = array(
 		'array_key_exists' => true,
@@ -102,7 +102,7 @@ final class ContextHelper {
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
 	 *              - The property visibility was changed from `protected` to `private static`.
 	 *
-	 * @var array <string function name> => <true|array>
+	 * @var array<string, bool|array>
 	 */
 	private static $arrayCompareFunctions = array(
 		'in_array'     => true,
@@ -327,7 +327,7 @@ final class ContextHelper {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return array<string, bool>
+	 * @return array<int|string, true>
 	 */
 	public static function get_safe_cast_tokens() {
 		return self::$safe_casts;

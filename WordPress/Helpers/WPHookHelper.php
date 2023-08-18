@@ -30,8 +30,8 @@ final class WPHookHelper {
 	 *               - The format of the value has changed from a non-relevant boolean to
 	 *                 an array with the parameter position and name(s) for the hook name parameter.
 	 *
-	 * @var array<string, <string, int|string|array>> Function name as key, array with target
-	 *                                                parameter position and name(s) as value.
+	 * @var array<string, array<string, int|string|string[]>> Function name as key, array with target
+	 *                                                        parameter position and name(s) as value.
 	 */
 	private static $hookInvokeFunctions = array(
 		'do_action' => array(

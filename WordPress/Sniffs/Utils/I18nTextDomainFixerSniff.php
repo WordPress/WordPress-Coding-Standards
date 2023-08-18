@@ -262,8 +262,8 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var array Array key is the header name, the value indicated whether it is a
-	 *            required (true) or optional (false) header.
+	 * @var array<string, bool> Array key is the header name, the value indicated whether it is a
+	 *                          required (true) or optional (false) header.
 	 */
 	private $theme_headers = array(
 		'Theme Name'        => true,
@@ -289,8 +289,8 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var array Array key is the header name, the value indicated whether it is a
-	 *            required (true) or optional (false) header.
+	 * @var array<string, bool> Array key is the header name, the value indicated whether it is a
+	 *                          required (true) or optional (false) header.
 	 */
 	private $plugin_headers = array(
 		'Plugin Name'       => true,
@@ -345,7 +345,7 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $tab_width = null;
 

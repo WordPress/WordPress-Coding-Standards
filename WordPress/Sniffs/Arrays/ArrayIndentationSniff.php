@@ -521,6 +521,8 @@ final class ArrayIndentationSniff extends Sniff {
 	 * @param int    $expected   Expected nr of spaces (tabs translated to space value).
 	 * @param int    $found      Found nr of spaces (tabs translated to space value).
 	 * @param string $new_indent Whitespace indent replacement content.
+	 *
+	 * @return void
 	 */
 	protected function add_array_alignment_error( $ptr, $error, $error_code, $expected, $found, $new_indent ) {
 
@@ -535,6 +537,8 @@ final class ArrayIndentationSniff extends Sniff {
 	 *
 	 * @param int    $ptr        Stack pointer to the first content on the line.
 	 * @param string $new_indent Whitespace indent replacement content.
+	 *
+	 * @return void
 	 */
 	protected function fix_alignment_error( $ptr, $new_indent ) {
 		if ( 1 === $this->tokens[ $ptr ]['column'] ) {

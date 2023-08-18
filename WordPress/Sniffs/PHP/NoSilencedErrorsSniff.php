@@ -60,7 +60,7 @@ final class NoSilencedErrorsSniff extends Sniff {
 	 * @since 1.1.0
 	 * @since 3.0.0 Renamed from `$custom_whitelist` to `$customAllowedFunctionsList`.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	public $customAllowedFunctionsList = array();
 
@@ -81,7 +81,7 @@ final class NoSilencedErrorsSniff extends Sniff {
 	 * @since 1.1.0
 	 * @since 3.0.0 Renamed from `$function_whitelist` to `$allowedFunctionsList`.
 	 *
-	 * @var array <string function name> => <bool true>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $allowedFunctionsList = array(
 		// Directory extension.
@@ -154,7 +154,7 @@ final class NoSilencedErrorsSniff extends Sniff {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @var array
+	 * @var array<int|string, int|string>
 	 */
 	private $empty_tokens = array();
 

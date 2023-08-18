@@ -51,8 +51,8 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 * @since 3.0.0  The format of the value has changed from an integer parameter
 	 *               position to an array with the parameter position and name.
 	 *
-	 * @var array<string, <string, in|string>> Function name as key, array with target
-	 *                                         parameter and name as value.
+	 * @var array<string, array<string, int|string>> Function name as key, array with target
+	 *                                               parameter and name as value.
 	 */
 	protected $target_functions = array(
 		'define' => array(

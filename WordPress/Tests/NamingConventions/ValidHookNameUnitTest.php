@@ -26,7 +26,8 @@ final class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of errors>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = 'ValidHookNameUnitTest.1.inc' ) {
 
@@ -87,7 +88,8 @@ final class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 	 * Returns the lines where warnings should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of warnings>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList( $testFile = 'ValidHookNameUnitTest.1.inc' ) {
 

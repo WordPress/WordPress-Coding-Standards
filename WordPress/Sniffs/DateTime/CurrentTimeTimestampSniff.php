@@ -44,7 +44,7 @@ final class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var array <string function_name> => <bool always needed ?>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'current_time' => true,

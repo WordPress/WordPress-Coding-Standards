@@ -543,6 +543,8 @@ final class MultipleStatementAlignmentSniff extends Sniff {
 	 * This message may be thrown more than once if the property is being changed inline in a file.
 	 *
 	 * @since 0.14.0
+	 *
+	 * @return void
 	 */
 	protected function validate_align_multiline_items() {
 		$alignMultilineItems = $this->alignMultilineItems;

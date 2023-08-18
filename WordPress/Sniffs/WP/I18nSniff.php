@@ -99,7 +99,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 * @since 0.10.0
 	 * @since 0.11.0 Changed visibility from public to protected.
 	 *
-	 * @var array <string function name> => <string function type>
+	 * @var array<string, string> Key is function name, value is the function type.
 	 */
 	protected $i18n_functions = array(
 		'translate'                      => 'simple',
@@ -146,7 +146,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array Array of the parameter positions and names.
+	 * @var array<string, array> Array of the parameter positions and names.
 	 */
 	private $parameter_specs = array(
 		'simple' => array(

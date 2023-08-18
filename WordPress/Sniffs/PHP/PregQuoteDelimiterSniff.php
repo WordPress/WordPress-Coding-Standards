@@ -35,7 +35,7 @@ final class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var array <string function_name> => <bool>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'preg_quote' => true,
