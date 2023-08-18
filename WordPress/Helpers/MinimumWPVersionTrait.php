@@ -95,7 +95,7 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @return void
 	 */
-	protected function set_minimum_wp_version() {
+	final protected function set_minimum_wp_version() {
 		$minimum_wp_version = '';
 
 		// Use a ruleset provided value if available.
@@ -128,7 +128,7 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @return bool
 	 */
-	protected function wp_version_compare( $version1, $version2, $operator ) {
+	final protected function wp_version_compare( $version1, $version2, $operator ) {
 		$version1 = $this->normalize_version_number( $version1 );
 		$version2 = $this->normalize_version_number( $version2 );
 

@@ -80,6 +80,9 @@
 		<exclude-pattern>/WordPress/Sniffs/Security/(EscapeOutput|NonceVerification|ValidatedSanitizedInput)Sniff\.php$</exclude-pattern>
 	</rule>
 
+	<!-- Enforce that methods in traits are always final. -->
+	<rule ref="Universal.FunctionDeclarations.RequireFinalMethodsInTraits"/>
+
 
 	<!--
 	#############################################################################

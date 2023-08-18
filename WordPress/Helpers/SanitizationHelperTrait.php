@@ -190,7 +190,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @return array<string, bool>
 	 */
-	public function get_sanitizing_functions() {
+	final public function get_sanitizing_functions() {
 		if ( array() === $this->allSanitizingFunctions
 			|| $this->customSanitizingFunctions !== $this->addedCustomSanitizingFunctions['sanitize']
 		) {
@@ -212,7 +212,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @return array<string, bool>
 	 */
-	public function get_sanitizing_and_unslashing_functions() {
+	final public function get_sanitizing_and_unslashing_functions() {
 		if ( array() === $this->allUnslashingSanitizingFunctions
 			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomSanitizingFunctions['unslashsanitize']
 		) {
@@ -236,7 +236,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_sanitizing_function( $functionName ) {
+	final public function is_sanitizing_function( $functionName ) {
 		return isset( $this->get_sanitizing_functions()[ strtolower( $functionName ) ] );
 	}
 
@@ -249,7 +249,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @return bool
 	 */
-	public function is_sanitizing_and_unslashing_function( $functionName ) {
+	final public function is_sanitizing_and_unslashing_function( $functionName ) {
 		return isset( $this->get_sanitizing_and_unslashing_functions()[ strtolower( $functionName ) ] );
 	}
 
@@ -266,7 +266,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @return bool Whether the token is only within a sanitization.
 	 */
-	public function is_only_sanitized( File $phpcsFile, $stackPtr ) {
+	final public function is_only_sanitized( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
 		// If it isn't being sanitized at all.
@@ -317,7 +317,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * @return bool Whether the token is being sanitized.
 	 */
-	public function is_sanitized( File $phpcsFile, $stackPtr, $unslash_callback = null ) {
+	final public function is_sanitized( File $phpcsFile, $stackPtr, $unslash_callback = null ) {
 		$tokens          = $phpcsFile->getTokens();
 		$require_unslash = is_callable( $unslash_callback );
 
