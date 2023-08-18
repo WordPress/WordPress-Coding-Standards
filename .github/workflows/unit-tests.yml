@@ -3,7 +3,7 @@ name: Unit Tests
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
   # Allow manually triggering the workflow.
   workflow_dispatch:
