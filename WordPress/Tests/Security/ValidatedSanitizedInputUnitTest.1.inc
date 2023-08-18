@@ -489,3 +489,14 @@ function test_in_match_condition_is_regarded_as_comparison() {
 		};
 	}
 }
+
+function test_in_match_condition_is_regarded_as_comparison() {
+	if ( isset( $_REQUEST['keyA'], $_REQUEST['keyB'], $_REQUEST['keyC'] ) ) {
+		$test = match( $toggle ) {
+			true    => sanitize_text_field( wp_unslash( $_REQUEST['keyA'] ) ), // OK.
+			false   => sanitize_text_field( $_REQUEST['keyB'] ), // Bad - missing unslash.
+			10      => wp_unslash( $_REQUEST['keyC'] ), // Bad - missing sanitization.
+			default => $_REQUEST['keyD'], // Bad - missing sanitization, unslash, validation.
+		};
+	}
+}
