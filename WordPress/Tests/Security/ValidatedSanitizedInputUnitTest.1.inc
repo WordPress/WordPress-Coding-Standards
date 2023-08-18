@@ -475,3 +475,8 @@ function test_examine_additional_superglobals_as_vars() {
 	do_something( $_ENV['key'] );
 	do_something( $_FILES['key'] );
 }
+
+function test_null_coalesce_equals_validation_extra_safeguard() {
+	$_POST['key'] ??= 'default'; // OK, assignment.
+	$key            = $_POST['key']; // Bad, missing unslash + sanitization, validation okay.
+}
