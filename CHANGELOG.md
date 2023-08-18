@@ -33,7 +33,7 @@ _No documentation available about unreleased changes as of yet._
 - The `sanitize_hex_color()` and the `sanitize_hex_color_no_hash()` functions to the `escapingFunctions` list used by the `WordPress.Security.EscapeOutput` sniff.
 
 ### Changed
-- The recommended version of the suggested DealerDirect PHPCS Composer plugin is now `^0.6`.
+- The recommended version of the suggested [Composer PHPCS plugin] is now `^0.6`.
 
 ### Fixed
 - `WordPress.PHP.NoSilencedErrors`: depending on the custom properties set, the metrics would be different.
@@ -152,7 +152,7 @@ The move does not affect the package name for Packagist. This remains the same: 
 - The error message for the `WordPress.Security.ValidatedSanitizedInput.MissingUnslash` has been reworded.
 - The `Sniff::is_comparison()` method now has a new `$include_coalesce` parameter to allow for toggling whether the null coalesce operator should be seen as a comparison operator. Defaults to `true`.
 - All sniffs are now also being tested against PHP 7.4 (unstable) for consistent sniff results.
-- The recommended version of the suggested DealerDirect PHPCS Composer plugin is now `^0.5.0`.
+- The recommended version of the suggested [Composer PHPCS plugin] is now `^0.5.0`.
 - Various minor code tweaks and clean up.
 
 ### Removed
@@ -274,7 +274,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 - Dev: The command to run the unit tests has changed. Please see the updated instructions in the [CONTRIBUTING.md](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/.github/CONTRIBUTING.md) file.
     The `bin/pre-commit` example git hook has been updated to match. Additionally a `run-tests` script has been added to the `composer.json` file for your convenience.
 	To facilitate this, PHPUnit has been added to `require-dev`, even though it is strictly speaking a dependency of PHPCS, not of WPCS.
-- Dev: The DealerDirect PHPCS Composer plugin has been added to `require-dev`.
+- Dev: The [Composer PHPCS plugin] has been added to `require-dev`.
 - Various code tweaks and clean up.
 - User facing documentation, including the wiki, as well as inline documentation has been updated for all the changes contained in WordPressCS 2.0 and other recommended best practices for `PHP_CodeSniffer` 3.3.1+.
 
@@ -1178,6 +1178,8 @@ See the comparison for full list.
 ## 2013-06-11
 
 Initial tagged release.
+
+[Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/master...HEAD
 [2.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.1...2.3.0
