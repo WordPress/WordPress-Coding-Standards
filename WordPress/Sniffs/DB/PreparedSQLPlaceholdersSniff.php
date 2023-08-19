@@ -327,7 +327,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				if ( $stripped_content !== $content ) {
 					$vars_without_wpdb = array_filter(
 						TextStrings::getEmbeds( $content ),
-						function ( $symbol ) {
+						static function ( $symbol ) {
 							return preg_match( '`^\{?\$\{?wpdb\??->`', $symbol ) !== 1;
 						}
 					);
