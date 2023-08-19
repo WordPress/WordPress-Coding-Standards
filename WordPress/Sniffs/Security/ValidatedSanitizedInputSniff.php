@@ -11,7 +11,9 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\TextStrings;
+use PHPCSUtils\Utils\Variables;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 use WordPressCS\WordPress\Helpers\ValidationHelper;
@@ -44,6 +46,23 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	public $check_validation_in_scope_only = false;
 
 	/**
+	 * Superglobals for which the values will be slashed by WP.
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/wp_magic_quotes/
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var array<string, true>
+	 */
+	private $slashed_superglobals = array(
+		'$_COOKIE'  => true,
+		'$_GET'     => true,
+		'$_POST'    => true,
+		'$_REQUEST' => true,
+		'$_SERVER'  => true,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -65,29 +84,44 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$superglobals = $this->input_superglobals;
-
 		// Handling string interpolation.
 		if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $stackPtr ]['code']
 			|| \T_HEREDOC === $this->tokens[ $stackPtr ]['code']
 		) {
 			// Retrieve all embeds, but use only the initial variable name part.
 			$interpolated_variables = array_map(
-				function ( $embed ) {
-					return '$' . preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
+				static function ( $embed ) {
+					return preg_replace( '`^(\{?\$\{?\(?)([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)(.*)$`', '$2', $embed );
 				},
 				TextStrings::getEmbeds( $this->tokens[ $stackPtr ]['content'] )
 			);
 
-			foreach ( array_intersect( $interpolated_variables, $superglobals ) as $bad_variable ) {
+			// Filter the embeds down to superglobals only.
+			$interpolated_superglobals = array_filter(
+				$interpolated_variables,
+				static function ( $var_name ) {
+					return ( 'GLOBALS' !== $var_name && Variables::isSuperglobalName( $var_name ) );
+				}
+			);
+
+			foreach ( $interpolated_superglobals as $bad_variable ) {
 				$this->phpcsFile->addError( 'Detected usage of a non-sanitized, non-validated input variable %s: %s', $stackPtr, 'InputNotValidatedNotSanitized', array( $bad_variable, $this->tokens[ $stackPtr ]['content'] ) );
 			}
 
 			return;
 		}
 
-		// Check if this is a superglobal.
-		if ( ! \in_array( $this->tokens[ $stackPtr ]['content'], $superglobals, true ) ) {
+		/* Handle variables */
+
+		// Check if this is a superglobal we want to examine.
+		if ( '$GLOBALS' === $this->tokens[ $stackPtr ]['content']
+			|| Variables::isSuperglobalName( $this->tokens[ $stackPtr ]['content'] ) === false
+		) {
+			return;
+		}
+
+		// If the variable is being unset, we don't care about it.
+		if ( Context::inUnset( $this->phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
@@ -188,13 +222,23 @@ class ValidatedSanitizedInputSniff extends Sniff {
 	 * @return void
 	 */
 	public function add_unslash_error( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+		$tokens   = $phpcsFile->getTokens();
+		$var_name = $tokens[ $stackPtr ]['content'];
+
+		if ( isset( $this->slashed_superglobals[ $var_name ] ) === false ) {
+			// WP doesn't slash these, so they don't need unslashing.
+			return;
+		}
+
+		// We know there will be array keys as that's checked in the process_token() method.
+		$array_keys = VariableHelper::get_array_access_keys( $phpcsFile, $stackPtr );
+		$error_data = array( $var_name . '[' . implode( '][', $array_keys ) . ']' );
 
 		$phpcsFile->addError(
-			'%s data not unslashed before sanitization. Use wp_unslash() or similar',
+			'%s not unslashed before sanitization. Use wp_unslash() or similar',
 			$stackPtr,
 			'MissingUnslash',
-			array( $tokens[ $stackPtr ]['content'] )
+			$error_data
 		);
 	}
 }

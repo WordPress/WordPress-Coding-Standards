@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Conditions;
 use PHPCSUtils\Utils\Context;
 use PHPCSUtils\Utils\PassedParameters;
@@ -36,7 +37,6 @@ final class ValidationHelper {
 	private static $targets = array(
 		\T_ISSET          => 'construct',
 		\T_EMPTY          => 'construct',
-		\T_UNSET          => 'construct',
 		\T_STRING         => 'function_call',
 		\T_COALESCE       => 'coalesce',
 		\T_COALESCE_EQUAL => 'coalesce',
@@ -155,6 +155,23 @@ final class ValidationHelper {
 
 		// phpcs:ignore Generic.CodeAnalysis.JumbledIncrementer.Found -- On purpose, see below.
 		for ( $i = ( $scope_start + 1 ); $i < $scope_end; $i++ ) {
+
+			if ( isset( Collections::closedScopes()[ $tokens[ $i ]['code'] ] )
+				&& isset( $tokens[ $i ]['scope_closer'] )
+			) {
+				// Jump over nested closed scopes as validation done within those does not apply.
+				$i = $tokens[ $i ]['scope_closer'];
+				continue;
+			}
+
+			if ( \T_FN === $tokens[ $i ]['code']
+				&& isset( $tokens[ $i ]['scope_closer'] )
+				&& $tokens[ $i ]['scope_closer'] < $scope_end
+			) {
+				// Jump over nested arrow functions as long as the current variable isn't *in* the arrow function.
+				$i = $tokens[ $i ]['scope_closer'];
+				continue;
+			}
 
 			if ( isset( self::$targets[ $tokens[ $i ]['code'] ] ) === false ) {
 				continue;
