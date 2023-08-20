@@ -52,7 +52,9 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                  normal file processing.
 	 */
 	public function process( File $phpcsFile, $stackPtr ) {
-		$this->init( $phpcsFile );
+		$this->phpcsFile = $phpcsFile;
+		$this->tokens    = $phpcsFile->getTokens();
+
 		return $this->process_token( $stackPtr );
 	}
 
@@ -67,21 +69,4 @@ abstract class Sniff implements PHPCS_Sniff {
 	 *                  normal file processing.
 	 */
 	abstract public function process_token( $stackPtr );
-
-	/**
-	 * Initialize the class for the current process.
-	 *
-	 * This method must be called by child classes before using many of the methods
-	 * below.
-	 *
-	 * @since 0.4.0
-	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file currently being processed.
-	 *
-	 * @return void
-	 */
-	protected function init( File $phpcsFile ) {
-		$this->phpcsFile = $phpcsFile;
-		$this->tokens    = $phpcsFile->getTokens();
-	}
 }
