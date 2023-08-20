@@ -51,7 +51,7 @@ final class RulesetPropertyHelper {
 	 *                      Defaults to true.
 	 * @return array
 	 */
-	public static function merge_custom_array( $custom, $base = array(), $flip = true ) {
+	public static function merge_custom_array( $custom, array $base = array(), $flip = true ) {
 		if ( true === $flip ) {
 			$base = array_filter( $base );
 		}
