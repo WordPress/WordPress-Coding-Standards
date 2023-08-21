@@ -738,6 +738,14 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 				$content = $functionName;
 
+				// Check if it's static method call.
+				$double_colon = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				if ( false !== $double_colon
+					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
+				) {
+					// Set the pointer to the end of the method.
+					$i = $this->phpcsFile->findNext( \T_CLOSE_PARENTHESIS, $i, $end );
+				}
 			} else {
 				$content = $this->tokens[ $i ]['content'];
 				$ptr     = $i;
