@@ -16,8 +16,8 @@ function bar() {
 	return $listofthings;
 }
 
-function dummy() {
-}
+
+
 
 function baz() {
 	global $wpdb;
