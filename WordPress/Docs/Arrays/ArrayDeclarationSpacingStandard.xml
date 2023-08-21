@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Array Declaration Spacing"
+    >
+    <standard>
+    <![CDATA[
+      Associative arrays should be multi-line, unless there is a single item in an array.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Single item in an array">
+        <![CDATA[
+$data = array( 'post_id' => 22 );
+        ]]>
+        </code>
+        <code title="Invalid: Multiple array items on a single line">
+        <![CDATA[
+$data = array( 'post_id' => 22, <em>'post_title' => 'Example title',</em> <em>'attributes' => array( 'test', 'test2' )</em> );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+      In multi-line arrays, array items should start on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Every array item on new line">
+        <![CDATA[
+$data = array(
+    'post_id'    => 22,
+    'post_title' => 'Example title',
+    'attributes' => array(
+        'test',
+        'test2'
+    )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Mixed items on a single line, and on new lines">
+        <![CDATA[
+$data = array(
+    'post_id'    => 22,
+    'post_title' => 'Example title', <em>'attributes' => array( 'test', 'test2' )</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
