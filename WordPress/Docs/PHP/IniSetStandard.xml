@@ -1,4 +1,8 @@
-<documentation title="Detect use of `ini_set()`">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Detect Use Of `ini_set()"
+    >
     <standard>
     <![CDATA[
       Using ini_set() and similar functions for altering PHP settings at runtime is discouraged. Changing runtime configuration might break other plugins and themes, and even WordPress itself.

@@ -14,16 +14,16 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PregQuoteDelimiter sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 1.0.0
  *
- * @since   1.0.0
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\PregQuoteDelimiterSniff
  */
-class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
+final class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array();
@@ -32,13 +32,14 @@ class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
-			6 => 1,
-			7 => 1,
+			6  => 1,
+			7  => 1,
+			13 => 1,
+			14 => 1,
 		);
 	}
-
 }

@@ -1,3 +1,3 @@
 <?php
 
-class WP_Dependencies {}
+// WP Core file no longer contains a class.

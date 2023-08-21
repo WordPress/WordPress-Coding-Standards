@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Prefix All Globals"
+    >
+    <standard>
+    <![CDATA[
+    All globals terms must be prefixed with a theme/plugin specific term. Global terms include Namespace names, Class/Interface/Trait/Enum names (when not namespaced), Functions (when not namespaced or in an OO structure), Constants/Variable names declared in the global namespace, and Hook names.
+
+    A prefix must be distinct and unique to the plugin/theme, in order to prevent potential conflicts with other plugins/themes and with WordPress itself.
+
+    The prefix used for a plugin/theme may be chosen by the developers and should be defined in a custom PHPCS ruleset to allow for this sniff to verify that the prefix is consistently used.
+    Prefixes will be treated in a case-insensitive manner.
+    https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#naming-conventions-prefix-everything-in-the-global-namespace
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using the prefix ECPT_">
+        <![CDATA[
+define( <em>'ECPT_VERSION'</em>, '1.0' );
+
+<em>$ecpt_admin</em> = new ECPT_Admin_Page();
+
+class <em>ECPT_Admin_Page</em> {}
+
+apply_filter(
+    <em>'ecpt_modify_content'</em>,
+    $ecpt_content
+);
+        ]]>
+        </code>
+        <code title="Invalid: non-prefixed code">
+        <![CDATA[
+define( <em>'PLUGIN_VERSION'</em>, '1.0' );
+
+<em>$admin</em> = new Admin_Page();
+
+class <em>Admin_Page</em> {}
+
+apply_filter(
+    <em>'modify_content'</em>,
+    $content
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Using the prefix ECPT_ in namespaced code">
+        <![CDATA[
+namespace <em>ECPT_Plugin\Admin</em>;
+
+// Constants declared using `const` will
+// be namespaced and therefore prefixed.
+const VERSION = 1.0;
+
+// A class declared in a (prefixed) namespace
+// is automatically prefixed.
+class Admin_Page {}
+
+// Variables in a namespaced file are not
+// namespaced, so still need prefixing.
+<em>$ecpt_admin</em> = new Admin_Page();
+
+// Hook names are not subject to namespacing.
+apply_filter(
+    <em>'ecpt_modify_content'</em>,
+    $ecpt_content
+);
+        ]]>
+        </code>
+        <code title="Invalid: using a non-prefixed namespace">
+        <![CDATA[
+namespace <em>Admin</em>;
+
+// As the namespace is not prefixed, this
+// is still bad.
+const VERSION = 1.0;
+
+// As the namespace is not prefixed, this
+// is still bad.
+class Admin_Page {}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Using prefixes reserved for WordPress is not permitted, even if WordPress is not currently using the prefix (yet).
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using the prefix mycoolplugin_">
+        <![CDATA[
+function <em>mycoolplugin_save_post()</em> {}
+        ]]>
+        </code>
+        <code title="Invalid: Using a WordPress reserved prefix wp_">
+        <![CDATA[
+function <em>wp_save_post()</em> {}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Prefixes must have a minimum length of three character to be considered valid, as many plugins and themes share the same initials.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using the distinct prefix MyPlugin">
+        <![CDATA[
+interface <em>MyPluginIsCool</em> {}
+        ]]>
+        </code>
+        <code title="Invalid: Using a two-letter prefix My">
+        <![CDATA[
+interface <em>My</em> {}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

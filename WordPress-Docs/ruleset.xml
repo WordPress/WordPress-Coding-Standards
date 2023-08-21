@@ -5,7 +5,7 @@
 
 	<!--
 		Handbook: PHP Documentation Standards
-		Ref: https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/php/
+		Ref: https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/
 	-->
 
 	<rule ref="Squiz.Commenting">

@@ -14,12 +14,10 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Discourages the use of various WordPress functions and suggests alternatives.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class DiscouragedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class DiscouragedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -53,5 +51,4 @@ class DiscouragedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

@@ -9,8 +9,10 @@
 
 namespace WordPressCS\WordPress\Sniffs\DateTime;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Don't use current_time() to get a (timezone corrected) "timestamp".
@@ -24,11 +26,9 @@ use PHP_CodeSniffer\Util\Tokens;
  * @link https://core.trac.wordpress.org/ticket/40657
  * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1791
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   2.2.0
+ * @since 2.2.0
  */
-class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
+final class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
@@ -44,7 +44,7 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var array <string function_name> => <bool always needed ?>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'current_time' => true,
@@ -57,7 +57,8 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
@@ -73,14 +74,21 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		/*
 		 * Check whether the first parameter is a timestamp format.
 		 */
-		for ( $i = $parameters[1]['start']; $i <= $parameters[1]['end']; $i++ ) {
+		$type_param = PassedParameters::getParameterFromStack( $parameters, 1, 'type' );
+		if ( false === $type_param ) {
+			// Type parameter not found. Bow out.
+			return;
+		}
+
+		$content_type = '';
+		for ( $i = $type_param['start']; $i <= $type_param['end']; $i++ ) {
 			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
 				continue;
 			}
 
 			if ( isset( Tokens::$textStringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-				$content_first = trim( $this->strip_quotes( $this->tokens[ $i ]['content'] ) );
-				if ( 'U' !== $content_first && 'timestamp' !== $content_first ) {
+				$content_type = trim( TextStrings::stripQuotes( $this->tokens[ $i ]['content'] ) );
+				if ( 'U' !== $content_type && 'timestamp' !== $content_type ) {
 					// Most likely valid use of current_time().
 					return;
 				}
@@ -104,24 +112,12 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		/*
 		 * Check whether the second parameter, $gmt, is a set to `true` or `1`.
 		 */
-		if ( isset( $parameters[2] ) ) {
-			$content_second = '';
-			if ( 'true' === $parameters[2]['raw'] || '1' === $parameters[2]['raw'] ) {
-				$content_second = $parameters[2]['raw'];
-				$gmt_true       = true;
-			} else {
-				// Do a more extensive parameter check.
-				for ( $i = $parameters[2]['start']; $i <= $parameters[2]['end']; $i++ ) {
-					if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-						continue;
-					}
-
-					$content_second .= $this->tokens[ $i ]['content'];
-				}
-
-				if ( 'true' === $content_second || '1' === $content_second ) {
-					$gmt_true = true;
-				}
+		$gmt_param = PassedParameters::getParameterFromStack( $parameters, 2, 'gmt' );
+		if ( is_array( $gmt_param ) ) {
+			$content_gmt = '';
+			if ( 'true' === $gmt_param['clean'] || '1' === $gmt_param['clean'] ) {
+				$content_gmt = $gmt_param['clean'];
+				$gmt_true    = true;
 			}
 		}
 
@@ -145,16 +141,15 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 		$error       = 'Don\'t use current_time() for retrieving a Unix (UTC) timestamp. Use time() instead. Found: %s';
 		$error_code  = 'RequestedUTC';
 
-		$code_snippet = "current_time( '" . $content_first . "'";
-		if ( isset( $content_second ) ) {
-			$code_snippet .= ', ' . $content_second;
+		$code_snippet = "current_time( '" . $content_type . "'";
+		if ( isset( $content_gmt ) ) {
+			$code_snippet .= ', ' . $content_gmt;
 		}
 		$code_snippet .= ' )';
 
 		if ( false !== $has_comment ) {
 			// If there are comments, we don't auto-fix as it would remove those comments.
 			$this->phpcsFile->addError( $error, $stackPtr, $error_code, array( $code_snippet ) );
-
 			return;
 		}
 
@@ -170,5 +165,4 @@ class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 			$this->phpcsFile->fixer->endChangeset();
 		}
 	}
-
 }

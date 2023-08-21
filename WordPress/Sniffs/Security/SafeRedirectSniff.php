@@ -14,11 +14,9 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Encourages use of wp_safe_redirect() to avoid open redirect vulnerabilities.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.0.0
+ * @since 1.0.0
  */
-class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
+final class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -37,12 +35,11 @@ class SafeRedirectSniff extends AbstractFunctionRestrictionsSniff {
 		return array(
 			'wp_redirect' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Using wp_safe_redirect(), along with the allowed_redirect_hosts filter if needed, can help avoid any chances of malicious redirects within code. It is also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
+				'message'   => '%s() found. Using wp_safe_redirect(), along with the "allowed_redirect_hosts" filter if needed, can help avoid any chances of malicious redirects within code. It is also important to remember to call exit() after a redirect so that no other unwanted code is executed.',
 				'functions' => array(
 					'wp_redirect',
 				),
 			),
 		);
 	}
-
 }

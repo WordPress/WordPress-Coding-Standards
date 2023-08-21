@@ -580,3 +580,9 @@ $deprecated_functions = [
 ] = $some_var;
 
 // phpcs:set WordPress.Arrays.MultipleStatementAlignment alignMultilineItems always
+
+$array = [];
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+$array = [

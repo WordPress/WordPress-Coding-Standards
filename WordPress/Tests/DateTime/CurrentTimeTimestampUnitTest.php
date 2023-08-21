@@ -14,29 +14,30 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the CurrentTimeTimestamp sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 2.2.0
  *
- * @since   2.2.0
+ * @covers \WordPressCS\WordPress\Sniffs\DateTime\CurrentTimeTimestampSniff
  */
-class CurrentTimeTimestampUnitTest extends AbstractSniffUnitTest {
+final class CurrentTimeTimestampUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
 			9  => 1,
 			11 => 1,
 			17 => 1,
+			31 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
@@ -44,7 +45,7 @@ class CurrentTimeTimestampUnitTest extends AbstractSniffUnitTest {
 			23 => 1,
 			24 => 1,
 			25 => 1,
+			32 => 1,
 		);
 	}
-
 }

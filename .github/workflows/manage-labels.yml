@@ -1,0 +1,56 @@
+name: Remove outdated labels
+
+on:
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
+  pull_request_target:
+    types:
+      - closed
+  issues:
+    types:
+      - closed
+
+jobs:
+  on-pr-merge:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'WordPress' && github.event.pull_request.merged == true
+
+    name: Clean up labels on PR merge
+
+    steps:
+      - uses: mondeja/remove-labels-gh-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            Status: Awaiting feedback
+            Status: Review ready
+
+  on-pr-close:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'WordPress' && github.event_name == 'pull_request_target' && github.event.pull_request.merged == false
+
+    name: Clean up labels on PR close
+
+    steps:
+      - uses: mondeja/remove-labels-gh-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            Status: Awaiting feedback
+            Status: Close candidate
+            Status: Review ready
+
+  on-issue-close:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'WordPress' && github.event.issue.state == 'closed'
+
+    name: Clean up labels on issue close
+
+    steps:
+      - uses: mondeja/remove-labels-gh-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            Status: Awaiting feedback
+            Status: Close candidate
+            Status: Good first issue
+            Status: Help wanted

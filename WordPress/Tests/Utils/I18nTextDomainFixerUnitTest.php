@@ -10,15 +10,16 @@
 namespace WordPressCS\WordPress\Tests\Utils;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the I18nTextDomainFixer sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 1.2.0
  *
- * @since   1.2.0
+ * @covers \WordPressCS\WordPress\Sniffs\Utils\I18nTextDomainFixerSniff
  */
-class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
+final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * The tab width to use during testing.
@@ -48,19 +49,23 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of errors>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = '' ) {
+
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
 
 		switch ( $testFile ) {
 			case 'I18nTextDomainFixerUnitTest.css':
 				return array(
-					29  => 1,
-					92  => 1,
-					107 => 1,
-					120 => 1,
-					133 => 1,
-					149 => 1,
+					29  => ( true === $is_phpcs_4 ? 0 : 1 ),
+					92  => ( true === $is_phpcs_4 ? 0 : 1 ),
+					107 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					120 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					133 => ( true === $is_phpcs_4 ? 0 : 1 ),
+					149 => ( true === $is_phpcs_4 ? 0 : 1 ),
 				);
 
 			case 'I18nTextDomainFixerUnitTest.3.inc':
@@ -136,6 +141,13 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 					202 => 1,
 					203 => 1,
 					204 => 1,
+					208 => 1,
+					215 => 1,
+					224 => 1,
+					225 => 1,
+					241 => 1,
+					242 => 1,
+					245 => 1,
 				);
 
 			default:
@@ -147,7 +159,8 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 	 * Returns the lines where warnings should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of warnings>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList( $testFile = '' ) {
 		switch ( $testFile ) {
@@ -184,5 +197,4 @@ class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

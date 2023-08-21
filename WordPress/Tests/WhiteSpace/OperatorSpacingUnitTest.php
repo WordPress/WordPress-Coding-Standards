@@ -14,19 +14,19 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the OperatorSpacing sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 2013-06-11
+ * @since 0.12.0     Now only tests the WPCS specific addition of T_BOOLEAN_NOT.
+ *                   The rest of the sniff is unit tested upstream.
+ * @since 0.13.0     Class name changed: this class is now namespaced.
  *
- * @since   2013-06-11
- * @since   0.12.0     Now only tests the WPCS specific addition of T_BOOLEAN_NOT.
- *                     The rest of the sniff is unit tested upstream.
- * @since   0.13.0     Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Sniffs\WhiteSpace\OperatorSpacingSniff
  */
-class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
+final class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -42,17 +42,15 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest {
 			49 => 2,
 			50 => 2,
 			51 => 2,
-			69 => 2,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

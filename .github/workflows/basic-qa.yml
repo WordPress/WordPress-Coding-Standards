@@ -1,0 +1,190 @@
+name: Basic QA checks
+
+on:
+  push:
+  pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+# Cancels all previous workflow runs for the same branch that have not yet completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Check code style of sniffs, rulesets and XML documentation.
+  # Check that all sniffs are feature complete.
+  sniffs:
+    name: Run code sniffs
+    runs-on: ubuntu-latest
+
+    env:
+      XMLLINT_INDENT: '	'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 'latest'
+          coverage: none
+          tools: cs2pr
+
+      # @link https://getcomposer.org/doc/03-cli.md#validate
+      - name: Validate the composer.json file
+        run: composer validate --no-check-all --strict
+
+      # Using PHPCS `master` as an early detection system for bugs upstream.
+      - name: Set PHPCS version
+        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts --no-interaction
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v2
+        with:
+          # Bust the cache at least once a month - output format: YYYY-MM.
+          custom-cache-suffix: $(date -u "+%Y-%m")
+
+      - name: Install xmllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y libxml2-utils
+
+      # Show XML violations inline in the file diff.
+      # @link https://github.com/marketplace/actions/xmllint-problem-matcher
+      - uses: korelstar/xmllint-problem-matcher@v1
+
+      - name: Check the code style of the PHP files
+        id: phpcs
+        run: vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Show PHPCS results in PR
+        if: ${{ always() && steps.phpcs.outcome == 'failure' }}
+        run: cs2pr ./phpcs-report.xml
+
+      # Validate the Ruleset XML files.
+      # @link http://xmlsoft.org/xmllint.html
+      - name: Validate the WordPress rulesets
+        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+
+      - name: Validate the sample ruleset
+        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+
+      # Validate the Documentation XML files.
+      - name: Validate documentation against schema
+        run: xmllint --noout --schema vendor/phpcsstandards/phpcsdevtools/DocsXsd/phpcsdocs.xsd ./WordPress/Docs/*/*Standard.xml
+
+      - name: Check the code-style consistency of the xml files
+        run: |
+          diff -B --tabsize=4 ./WordPress/ruleset.xml <(xmllint --format "./WordPress/ruleset.xml")
+          diff -B --tabsize=4 ./WordPress-Core/ruleset.xml <(xmllint --format "./WordPress-Core/ruleset.xml")
+          diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml")
+          diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml")
+          diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample")
+
+      # Check that the sniffs available are feature complete.
+      # For now, just check that all sniffs have unit tests.
+      # At a later stage the documentation check can be activated.
+      - name: Check sniff feature completeness
+        run: composer check-complete
+
+  # Makes sure the rulesets don't throw unexpected errors or warnings.
+  # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
+  # It also needs to be run against all PHPCS versions WPCS is tested against.
+  ruleset-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ 'latest' ]
+        phpcs_version: [ 'lowest', 'dev-master' ]
+
+    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          # Allow for PHP deprecation notices.
+          ini-values: error_reporting = E_ALL & ~E_DEPRECATED
+          coverage: none
+
+      - name: "Set PHPCS version (master)"
+        if: ${{ matrix.phpcs_version != 'lowest' }}
+        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v2
+        with:
+          composer-options: --no-dev
+          # Bust the cache at least once a month - output format: YYYY-MM.
+          custom-cache-suffix: $(date -u "+%Y-%m")
+
+      - name: "Set PHPCS version (lowest)"
+        if: ${{ matrix.phpcs_version == 'lowest' }}
+        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
+
+      - name: Test the WordPress-Core ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
+
+      - name: Test the WordPress-Docs ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
+
+      - name: Test the WordPress-Extra ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
+
+      - name: Test the WordPress ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
+
+      # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
+      # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
+      # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
+      #
+      # Note: the ValidVariableNameUnitTest.inc file is temporarily ignored until upstream PHPCS PR 3833 has been merged.
+      - name: Test for fixer conflicts (fixes expected)
+        if: ${{ matrix.phpcs_version == 'dev-master' }}
+        id: phpcbf
+        continue-on-error: true
+        run: |
+          set +e
+          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/NamingConventions/ValidVariableNameUnitTest.inc,/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
+          exitcode="$?"
+          echo "EXITCODE=$exitcode" >> $GITHUB_OUTPUT
+          exit "$exitcode"
+
+      - name: Fail the build on fixer conflicts and other errors
+        if: ${{ steps.phpcbf.outputs.EXITCODE != 0 && steps.phpcbf.outputs.EXITCODE != 1 }}
+        run: exit ${{ steps.phpcbf.outputs.EXITCODE }}
+
+  phpstan:
+    name: "PHPStan"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: phpstan
+
+      # Install dependencies and handle caching in one go.
+      # Dependencies need to be installed to make sure the PHPCS and PHPUnit classes are recognized.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v2"
+        with:
+          # Bust the cache at least once a month - output format: YYYY-MM.
+          custom-cache-suffix: $(date -u "+%Y-%m")
+
+      - name: Run PHPStan
+        run: phpstan analyse

@@ -52,7 +52,7 @@ class Its_A_Kind_Of_Magic {
 	function __sleep() {} // Ok.
 	function __wakeup() {} // Ok.
 	function __toString() {} // Ok.
-	function __set_state() {} // Ok.
+	static function __set_state($properties) {} // Ok.
 	function __clone() {} // Ok.
 	function __invoke() {} // Ok.
 	function __debugInfo() {} // Ok.
@@ -145,3 +145,84 @@ class Deprecated {
 	 */
 	public static function __deprecatedMethod() {}
 }
+
+class PHP74Magic {
+	function __serialize() {} // OK.
+	function __unserialize($data) {} // OK.
+}
+
+class More_Nested {
+	public function method_name() {
+		function __autoload() {} // OK - magic function in global namespace.
+		function __CamelCase() {} // Bad x 2 for *function*, not method.
+	}
+}
+
+function ___triple_underscore() {} // OK.
+
+class Triple {
+	function ___triple_underscore() {} // OK.
+}
+
+class DeprecatedWithAttribute {
+	/**
+	 * Function description.
+	 *
+	 * @since 1.2.3
+	 * @deprecated 2.3.4
+	 *
+	 * @return void
+	 */
+	#[SomeAttribute]
+	#[AnotherAttribute]
+	public static function __deprecatedMethod() {}
+}
+
+// Safeguard that the suggested replacement name does not suggest undue changes to underscores in the name.
+class UnderScoreHandling {
+	public function ___Leading_Underscores() {} // Bad, replacement suggestion should be: ___leading_underscores.
+	public function Multiple_______Underscores() {} // Bad, replacement suggestion should be: multiple_______underscores.
+	public function Trailing_Underscores___() {}// Bad, replacement suggestion should be: trailing_underscores___.
+}
+
+// Safeguard that functions with a name only consisting of underscores are always ignored.
+function __() {}
+
+class OnlyUnderscores {
+	public function _____() {}
+}
+
+// Class vs function name PHP case-sensitivity quirks.
+class FooBÃÈ {
+	function FooBÃÈ() {} // OK, same case.
+	function fOOBÃÈ() {} // OK, same case for the non-ascii chars.
+	function FooBãè() {} // Bad - not PHP 4-type constructor, non ascii chars not in same case - POC: https://3v4l.org/YOc2R.
+}
+
+// Safeguard that methods in enums are correctly handled by the sniff.
+enum Suit {
+	case Hearts;
+	case Diamonds;
+
+	public function color(): string {} // OK.
+	public function __changeColor(): string {} // Bad
+
+	public function &getShape(): string // Bad.
+	{
+		return "Rectangle";
+	}
+
+	// These are the only three magic methods allowed in enums.
+	public function __call( $a, $b ) {} // Ok.
+	public static function __callStatic( $a, $b ) {} // Ok.
+	public function __invoke() {} // Ok.
+}
+
+// Related to #1891 - ensure the sniff does not throw an error if the suggested alternative would be the same as the original name.
+function lähtöaika() {} // OK.
+function lÄhtÖaika() {} // Bad, but only handled by the sniff if Mbstring is available.
+function lÄhtOaika() {} // Bad, handled via transliteration of non-ASCII chars if Mbstring is not available.
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+function

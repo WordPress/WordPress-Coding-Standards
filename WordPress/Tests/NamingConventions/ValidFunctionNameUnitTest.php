@@ -14,17 +14,18 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ValidFunctionName sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 2013-06-11
+ * @since 0.13.0     Class name changed: this class is now namespaced.
  *
- * @since   2013-06-11
- * @since   0.13.0     Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Helpers\DeprecationHelper
+ * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidFunctionNameSniff
  */
-class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
+final class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -46,16 +47,24 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 			106 => 2,
 			116 => 1,
 			117 => 1,
+			157 => 2,
+			183 => 1,
+			184 => 1,
+			185 => 1,
+			199 => 1,
+			208 => 2,
+			210 => 1,
+			223 => function_exists( 'mb_strtolower' ) ? 1 : 0,
+			224 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

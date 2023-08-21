@@ -1,4 +1,8 @@
-<documentation title="Validate post type slugs">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Valid Post Type Slug"
+    >
     <standard>
     <![CDATA[
     The post type slug used in register_post_type() must be between 1 and 20 characters.

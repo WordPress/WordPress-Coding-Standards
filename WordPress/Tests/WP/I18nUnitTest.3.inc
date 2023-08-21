@@ -19,3 +19,9 @@ __( 'string', "something-$domain" ); // Bad, shouldn't use variable for domain.
 
 __( 'string', 'something-else' ); // Bad, text domain mismatch.
 __( 'string', "something-else" ); // Bad, text domain mismatch.
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+__( domain: 'something', text: 'string', ); // OK.
+__( domain: 'something-else', text: 'string', ); // Bad, text domain mismatch.

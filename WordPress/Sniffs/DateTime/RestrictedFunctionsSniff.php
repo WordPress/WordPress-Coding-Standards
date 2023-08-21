@@ -14,11 +14,9 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Forbids the use of various native DateTime related PHP/WP functions and suggests alternatives.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 2.2.0
  */
-class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -58,5 +56,4 @@ class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

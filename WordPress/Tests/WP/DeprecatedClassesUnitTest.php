@@ -14,23 +14,25 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the WP_DeprecatedClasses sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.12.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.12.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Sniffs\WP\DeprecatedClassesSniff
  */
-class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
+final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
-		$errors = array_fill( 9, 10, 1 );
+		$start_line = 9;
+		$end_line   = 25;
+		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
-		unset( $errors[16] );
+		unset( $errors[16], $errors[18], $errors[21] );
 
 		return $errors;
 	}
@@ -38,10 +40,9 @@ class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
-		return array_fill( 24, 1, 1 );
+		return array();
 	}
-
 }

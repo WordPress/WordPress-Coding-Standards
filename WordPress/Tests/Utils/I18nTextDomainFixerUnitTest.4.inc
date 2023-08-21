@@ -67,7 +67,7 @@ _x( $text, $context, $variableTextdomain );
 _ex( $text, $context, CONSTANT_TEXTDOMAIN );
 
 /*
- * Text domains *not* in the whitelisted "old" domain list should be ignored.
+ * Text domains *not* in the "old" domain list should be ignored.
  */
 load_plugin_textdomain( 'tgmpa', false, '/languages/' );
 _e( $text, 'default' );
@@ -202,6 +202,49 @@ _nc( $single, $plural ); // Warning.
 __ngettext( $singular, $plural, $number ); // Error.
 __ngettext_noop( $singular, $plural, 'other-text-domain' ); // Error.
 translate_with_context( $text, 'third-text-domain' ); // Error.
+
+// New WP function.
+load_script_textdomain( $handle, 'something-else', '/path/to/languages/' ); // OK.
+load_script_textdomain( $handle, 'third-text-domain', '/path/to/languages/' ); // Error.
+
+// Test ignoring multi-token text domains.
+__( $text, 'my' 'domain' ); // Parse error, but not our concern.
+
+// Test with space based code indentation
+function foo() {
+    unload_textdomain(
+        /* Missing domain. */
+    );
+}
+
+/*
+ * Safeguard support for PHP 8.0+ named parameters.
+ */
+// Missing domain parameter.
+_n( plural: $plural, single: $single ); // Error.
+esc_attr_x(
+	context : $context,
+	text    : $text,
+);
+
+// Has correct domain parameter.
+load_textdomain( mofile: '/path/to/file.mo', domain: 'something-else', );
+_e( $text, domain: 'something-else' );
+_nx_noop(
+	domain: 'something-else',
+	context: $context,
+	singular: $singular,
+	plural: $plural,
+);
+
+// Has incorrect domain parameter.
+load_muplugin_textdomain( mu_plugin_rel_path: '/languages/', domain: 'other-text-domain', );
+__( $text, domain: 'text-domain' );
+esc_html_x(
+	$text,
+	domain: 'text-domain',
+	context: $context,
+);
 
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

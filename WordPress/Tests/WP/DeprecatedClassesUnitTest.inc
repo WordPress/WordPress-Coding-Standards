@@ -13,12 +13,13 @@ echo \WP_User_Search::prepare_query();
 class My_User_Search extends WP_User_Search {}
 class Our_User_Search implements WP_User_Search {}
 $a = (new WP_User_Search())->query();
+/* ============ WP 3.7 ============ */
+$anon = new class extends WP_HTTP_Fsockopen {};
 /* ============ WP 4.9 ============ */
-class Prefix_Menu_section extends Customize_New_Menu_Section {}
+class Prefix_Menu_section extends WP_Customize_New_Menu_Section {}
 WP_Customize_New_Menu_Control::foo();
-
-/*
- * Warning.
- */
 /* ============ WP 5.3 ============ */
 $json = new Services_JSON;
+$json = new Services_JSON_Error;
+class Prefix_Menu_section extends WP_Privacy_Data_Export_Requests_Table {}
+WP_Privacy_Data_Removal_Requests_Table::foo();

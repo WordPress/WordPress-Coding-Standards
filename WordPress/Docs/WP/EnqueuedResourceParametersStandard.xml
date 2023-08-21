@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Enqueued Resource Parameters"
+    >
+    <standard>
+    <![CDATA[
+    The resource version must be set, to prevent the browser from using an outdated, cached version after the resource has been updated.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Resource has a version number.">
+        <![CDATA[
+wp_register_style(
+    'someStyle-css',
+    $path_to_local_file,
+    array(),
+    <em>'1.0.0'</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Resource has no version number set.">
+        <![CDATA[
+wp_register_style(
+    'someStyle-css',
+    $path_to_local_file,
+    array()
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    The resource version must not be `false`. When this value is set to `false`, the WordPress Core version number will be used, which is incorrect for themes and plugins.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Resource has a version number.">
+        <![CDATA[
+wp_enqueue_script(
+    'someScript-js',
+    $path_to_local_file,
+    array( 'jquery' ),
+    <em>'1.0.0'</em>,
+    true
+);
+        ]]>
+        </code>
+        <code title="Invalid: Resource has version set to false.">
+        <![CDATA[
+wp_enqueue_script(
+    'someScript-js',
+    $path_to_local_file,
+    array( 'jquery' ),
+    <em>false</em>,
+    true
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    You must explicitly set a JavaScript resource to load in either the header or the footer of your page. It is recommended to load these resources in the footer by setting the `$in_footer` parameter to `true`.
+
+    Loading scripts in the header blocks parsing of the page and has a negative impact on load times. However, loading in the footer may break compatibility when other scripts rely on the resource to be available at any time.
+    In that case, you can pass `false` to make it explicit that the script should be loaded in the header of the page.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: The resource is specified to load in the footer.">
+        <![CDATA[
+wp_register_script(
+    'someScript-js',
+    $path_to_local_file,
+    array( 'jquery' ),
+    '1.0.0',
+    <em>true</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: The location to load this resource is not explicitly set.">
+        <![CDATA[
+wp_register_script(
+    'someScript-js',
+    $path_to_local_file,
+    array( 'jquery' ),
+    '1.0.0'
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

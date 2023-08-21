@@ -14,19 +14,19 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ControlStructureSpacing sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 2013-06-11
+ * @since 0.13.0     Class name changed: this class is now namespaced.
  *
- * @since   2013-06-11
- * @since   0.13.0     Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Sniffs\WhiteSpace\ControlStructureSpacingSniff
  */
-class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
+final class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = '' ) {
 
@@ -39,47 +39,27 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 					37  => 1,
 					41  => 1,
 					42  => 1,
-					49  => 5,
-					58  => 3,
-					67  => 1,
-					68  => 1,
-					69  => 1,
-					71  => 1,
-					72  => 1,
-					81  => 3,
-					82  => 1,
-					85  => 1,
-					91  => 2,
-					92  => 1,
+					50  => 2,
+					52  => 5,
+					59  => 1,
+					67  => 2,
 					94  => 1,
-					95  => 1,
-					97  => 1,
-					98  => 1,
-					135 => 2,
-					137 => 5,
-					144 => 1,
-					152 => 2,
+					96  => 1,
+					102 => 1,
+					104 => 1,
+					108 => 2,
+					112 => 2,
+					159 => 1,
+					169 => 1,
 					179 => 1,
-					180 => 1,
-					182 => 1,
-					184 => 1,
-					190 => 1,
-					192 => 1,
-					196 => 2,
-					200 => 2,
-					247 => 1,
-					257 => 1,
-					267 => 1,
+					195 => 1,
+					203 => 2,
+					212 => 1,
+					222 => 5,
+					228 => 1,
+					232 => 1,
+					241 => 1,
 				);
-
-				/*
-				Uncomment when "$blank_line_check" parameter will be "true" by default.
-
-				$ret[29] += 1;
-				$ret[33]  = 1;
-				$ret[36]  = 1;
-				$ret[38]  = 1;
-				 */
 
 				return $ret;
 
@@ -98,10 +78,9 @@ class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

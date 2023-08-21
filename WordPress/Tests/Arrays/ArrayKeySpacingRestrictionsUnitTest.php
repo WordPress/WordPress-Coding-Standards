@@ -14,17 +14,17 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ArrayKeySpacingRestrictions sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.3.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.3.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Sniffs\Arrays\ArrayKeySpacingRestrictionsSniff
  */
-class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest {
+final class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -40,23 +40,34 @@ class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest {
 			23 => 1,
 			26 => 1,
 			29 => 1,
-			31 => 1,
+			33 => 2,
 			34 => 1,
-			38 => 2,
-			39 => 1,
-			40 => 1,
-			45 => 2,
-			46 => 2,
+			35 => 1,
+			40 => 2,
+			41 => 2,
+			45 => 1,
+			46 => 1,
+			51 => 1,
+			58 => 1,
+			59 => 1,
+			60 => 1,
+			66 => 1,
+			67 => 1,
+			74 => 1,
+			75 => 1,
+			76 => 1,
+			82 => 1,
+			83 => 1,
+			87 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

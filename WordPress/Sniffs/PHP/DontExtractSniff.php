@@ -14,16 +14,14 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Restricts the usage of extract().
  *
- * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#dont-extract
+ * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#dont-extract
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.10.0 Previously this check was contained within the
- *                 `WordPress.VIP.RestrictedFunctions` sniff.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `Functions` category to the `PHP` category.
+ * @since 0.10.0 Previously this check was contained within the
+ *               `WordPress.VIP.RestrictedFunctions` sniff.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `Functions` category to the `PHP` category.
  */
-class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
+final class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -51,5 +49,4 @@ class DontExtractSniff extends AbstractFunctionRestrictionsSniff {
 
 		);
 	}
-
 }

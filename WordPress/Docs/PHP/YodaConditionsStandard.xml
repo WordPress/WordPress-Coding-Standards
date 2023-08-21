@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Yoda Conditions"
+    >
+    <standard>
+    <![CDATA[
+    When doing logical comparisons involving variables, the variable must be placed on the right side. All constants, literals, and function calls must be placed on the left side. If neither side is a variable, the order is unimportant.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: The variable is placed on the right">
+        <![CDATA[
+if ( <em>true === $the_force</em> ) {
+    $victorious = you_will( $be );
+}
+        ]]>
+        </code>
+        <code title="Invalid: The variable has been placed on the left">
+        <![CDATA[
+if ( <em>$the_force === false</em> ) {
+    $victorious = you_will_not( $be );
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

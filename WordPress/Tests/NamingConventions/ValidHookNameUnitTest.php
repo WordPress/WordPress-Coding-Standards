@@ -14,61 +14,67 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ValidHookName sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.10.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.10.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Helpers\WPHookHelper
+ * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidHookNameSniff
  */
-class ValidHookNameUnitTest extends AbstractSniffUnitTest {
+final class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of errors>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = 'ValidHookNameUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
 			case 'ValidHookNameUnitTest.1.inc':
 				return array(
-					14 => 1,
-					15 => 1,
-					16 => 1,
-					17 => 1,
-					28 => 1,
-					29 => 1,
-					30 => 1,
-					33 => 1,
-					53 => 1,
-					54 => 1,
-					55 => 1,
-					56 => 1,
-					57 => 1,
-					58 => 1,
-					59 => 1,
-					60 => 1,
-					61 => 1,
-					62 => 1,
-					63 => 1,
-					64 => 1,
-					65 => 1,
-					66 => 1,
-					68 => 1,
-					69 => 1,
-					70 => 1,
-					71 => 1,
-					72 => 1,
-					73 => 1,
-					74 => 1,
-					75 => 1,
-					76 => 1,
-					77 => 1,
-					78 => 1,
-					79 => 1,
-					80 => 1,
-					81 => 1,
-					89 => 1,
+					14  => 1,
+					15  => 1,
+					16  => 1,
+					17  => 1,
+					28  => 1,
+					29  => 1,
+					30  => 1,
+					33  => 1,
+					53  => 1,
+					54  => 1,
+					55  => 1,
+					56  => 1,
+					57  => 1,
+					58  => 1,
+					59  => 1,
+					60  => 1,
+					61  => 1,
+					62  => 1,
+					63  => 1,
+					64  => 1,
+					65  => 1,
+					66  => 1,
+					68  => 1,
+					69  => 1,
+					70  => 1,
+					71  => 1,
+					72  => 1,
+					73  => 1,
+					74  => 1,
+					75  => 1,
+					76  => 1,
+					77  => 1,
+					78  => 1,
+					79  => 1,
+					80  => 1,
+					81  => 1,
+					89  => 1,
+					107 => 1,
+					114 => 1,
+					115 => 1,
+					123 => 1,
 				);
 
 			case 'ValidHookNameUnitTest.2.inc':
@@ -82,21 +88,25 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 	 * Returns the lines where warnings should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of warnings>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList( $testFile = 'ValidHookNameUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
 			case 'ValidHookNameUnitTest.1.inc':
 				return array(
-					8  => 1,
-					9  => 1,
-					10 => 1,
-					11 => 1,
-					68 => 1,
-					72 => 1,
-					77 => 1,
-					95 => 1,
+					8   => 1,
+					9   => 1,
+					10  => 1,
+					11  => 1,
+					68  => 1,
+					72  => 1,
+					77  => 1,
+					95  => 1,
+					107 => 1,
+					115 => 1,
+					123 => 1,
 				);
 
 			case 'ValidHookNameUnitTest.2.inc':
@@ -112,5 +122,4 @@ class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

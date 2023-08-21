@@ -14,18 +14,19 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the DirectDatabaseQuery sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.3.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
  *
- * @since   0.3.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
+ * @covers \WordPressCS\WordPress\Helpers\RulesetPropertyHelper
+ * @covers \WordPressCS\WordPress\Sniffs\DB\DirectDatabaseQuerySniff
  */
-class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
+final class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array();
@@ -34,28 +35,62 @@ class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
-			6   => 2,
-			8   => 1,
-			17  => 1,
-			32  => 1,
-			34  => 1,
-			38  => 1,
-			50  => 2,
-			78  => 1,
-			79  => 1,
+			5   => 2,
+			12  => 1,
+			26  => 2,
+			27  => 2,
+			28  => 1,
+			29  => 1,
+			38  => 2,
+			44  => 2,
+			60  => 1,
+			61  => 1,
+			62  => 1,
+			63  => 1,
+			65  => 2,
+			66  => 2,
+			67  => 2,
 			80  => 1,
-			112 => 1,
-			170 => 1,
-			178 => 1,
+			81  => 1,
+			82  => 1,
+			83  => 1,
+			84  => 1,
+			85  => 1,
+			86  => 1,
+			97  => 1,
+			114 => 1,
+			123 => 1,
+			130 => 1,
+			141 => 1,
+			150 => 2,
+			157 => 2,
+			168 => 2,
+			175 => 1,
+			180 => 1,
+			185 => 1,
 			190 => 1,
-			250 => 2,
-			257 => 1,
-			274 => 1,
+			195 => 1,
+			200 => 1,
+			205 => 1,
+			210 => 1,
+			215 => 1,
+			220 => 1,
+			228 => 2,
+			235 => 2,
+			251 => 1,
+			252 => 1,
+			265 => 1,
+			269 => 1,
+			281 => 1,
+			287 => 2,
+			288 => 1,
+			300 => 1,
+			306 => 2,
+			333 => 2,
 		);
 	}
-
 }

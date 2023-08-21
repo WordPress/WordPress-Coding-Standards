@@ -9,20 +9,22 @@
 
 namespace WordPressCS\WordPress;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Utils\Context;
+use PHPCSUtils\Utils\MessageHelper;
+use WordPressCS\WordPress\Helpers\ContextHelper;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Restricts usage of some functions.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.3.0
- * @since   0.10.0 Class became a proper abstract class. This was already the behaviour.
- *                 Moved the file and renamed the class from
- *                 `\WordPressCS\WordPress\Sniffs\Functions\FunctionRestrictionsSniff` to
- *                 `\WordPressCS\WordPress\AbstractFunctionRestrictionsSniff`.
- * @since   0.11.0 Extends the WordPressCS native `Sniff` class.
+ * @since 0.3.0
+ * @since 0.10.0 Class became a proper abstract class. This was already the behaviour.
+ *               Moved the file and renamed the class from
+ *               `\WordPressCS\WordPress\Sniffs\Functions\FunctionRestrictionsSniff` to
+ *               `\WordPressCS\WordPress\AbstractFunctionRestrictionsSniff`.
+ * @since 0.11.0 Extends the WordPressCS native `Sniff` class.
  */
 abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
@@ -97,14 +99,14 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *         'message'   => 'Use anonymous functions instead please!',
 	 *         'functions' => array( 'file_get_contents', 'create_function', 'mysql_*' ),
 	 *         // Only useful when using wildcards:
-	 *         'whitelist' => array( 'mysql_to_rfc3339' => true, ),
+	 *         'allow' => array( 'mysql_to_rfc3339' => true, ),
 	 *     )
 	 * )
 	 *
 	 * You can use * wildcards to target a group of functions.
 	 * When you use * wildcards, you may inadvertently restrict too many
-	 * functions. In that case you can add the `whitelist` key to
-	 * whitelist individual functions to prevent false positives.
+	 * functions. In that case you can add the `allow` key to
+	 * safe list individual functions to prevent false positives.
 	 *
 	 * @return array
 	 */
@@ -151,13 +153,23 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 		foreach ( $this->groups as $groupName => $group ) {
 			if ( empty( $group[ $key ] ) ) {
 				unset( $this->groups[ $groupName ] );
-			} else {
-				$items       = array_map( array( $this, 'prepare_name_for_regex' ), $group[ $key ] );
-				$all_items[] = $items;
-				$items       = implode( '|', $items );
-
-				$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
+				continue;
 			}
+
+			// Lowercase the items and potential allows as the comparisons should be done case-insensitively.
+			// Note: this disregards non-ascii names, but as we don't have any of those, that is okay for now.
+			$items                              = array_map( 'strtolower', $group[ $key ] );
+			$this->groups[ $groupName ][ $key ] = $items;
+
+			if ( ! empty( $group['allow'] ) ) {
+				$this->groups[ $groupName ]['allow'] = array_change_key_case( $group['allow'], \CASE_LOWER );
+			}
+
+			$items       = array_map( array( $this, 'prepare_name_for_regex' ), $items );
+			$all_items[] = $items;
+			$items       = implode( '|', $items );
+
+			$this->groups[ $groupName ]['regex'] = sprintf( $this->regex_pattern, $items );
 		}
 
 		if ( empty( $this->groups ) ) {
@@ -182,7 +194,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		$this->excluded_groups = $this->merge_custom_array( $this->exclude );
+		$this->excluded_groups = RulesetPropertyHelper::merge_custom_array( $this->exclude );
 		if ( array_diff_key( $this->groups, $this->excluded_groups ) === array() ) {
 			// All groups have been excluded.
 			// Don't remove the listener as the exclude property can be changed inline.
@@ -211,32 +223,35 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @return bool
 	 */
 	public function is_targetted_token( $stackPtr ) {
-
-		if ( \T_STRING !== $this->tokens[ $stackPtr ]['code'] ) {
-			return false;
-		}
-
 		// Exclude function definitions, class methods, and namespaced calls.
-		if ( $this->is_class_object_call( $stackPtr ) === true ) {
+		if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
 		}
 
-		if ( $this->is_token_namespaced( $stackPtr ) === true ) {
+		if ( ContextHelper::is_token_namespaced( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
 		}
 
-		$prev = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-		if ( false !== $prev ) {
-			// Skip sniffing on function, class definitions or for function aliases in use statements.
-			$skipped = array(
-				\T_FUNCTION        => \T_FUNCTION,
-				\T_CLASS           => \T_CLASS,
-				\T_AS              => \T_AS, // Use declaration alias.
-			);
+		if ( Context::inAttribute( $this->phpcsFile, $stackPtr ) ) {
+			// Class instantiation or constant in attribute, not function call.
+			return false;
+		}
 
-			if ( isset( $skipped[ $this->tokens[ $prev ]['code'] ] ) ) {
-				return false;
-			}
+		$search                   = Tokens::$emptyTokens;
+		$search[ \T_BITWISE_AND ] = \T_BITWISE_AND;
+
+		$prev = $this->phpcsFile->findPrevious( $search, ( $stackPtr - 1 ), null, true );
+
+		// Skip sniffing on function, OO definitions or for function aliases in use statements.
+		$invalid_tokens  = Tokens::$ooScopeTokens;
+		$invalid_tokens += array(
+			\T_FUNCTION => \T_FUNCTION,
+			\T_NEW      => \T_NEW,
+			\T_AS       => \T_AS, // Use declaration alias.
+		);
+
+		if ( isset( $invalid_tokens[ $this->tokens[ $prev ]['code'] ] ) ) {
+			return false;
 		}
 
 		// Check if this could even be a function call.
@@ -280,7 +295,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 				continue;
 			}
 
-			if ( isset( $group['whitelist'][ $token_content ] ) ) {
+			if ( isset( $group['allow'][ $token_content ] ) ) {
 				continue;
 			}
 
@@ -303,18 +318,20 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
 	 */
 	public function process_matched_token( $stackPtr, $group_name, $matched_content ) {
 
-		$this->addMessage(
+		MessageHelper::addMessage(
+			$this->phpcsFile,
 			$this->groups[ $group_name ]['message'],
 			$stackPtr,
 			( 'error' === $this->groups[ $group_name ]['type'] ),
-			$this->string_to_errorcode( $group_name . '_' . $matched_content ),
+			MessageHelper::stringToErrorcode( $group_name . '_' . $matched_content ),
 			array( $matched_content )
 		);
 	}
@@ -328,15 +345,14 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param string $function Function name.
+	 * @param string $function_name Function name.
 	 * @return string Regex escaped function name.
 	 */
-	protected function prepare_name_for_regex( $function ) {
-		$function = str_replace( array( '.*', '*' ), '@@', $function ); // Replace wildcards with placeholder.
-		$function = preg_quote( $function, '`' );
-		$function = str_replace( '@@', '.*', $function ); // Replace placeholder with regex wildcard.
+	protected function prepare_name_for_regex( $function_name ) {
+		$function_name = str_replace( array( '.*', '*' ), '@@', $function_name ); // Replace wildcards with placeholder.
+		$function_name = preg_quote( $function_name, '`' );
+		$function_name = str_replace( '@@', '.*', $function_name ); // Replace placeholder with regex wildcard.
 
-		return $function;
+		return $function_name;
 	}
-
 }

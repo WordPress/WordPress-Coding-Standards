@@ -1,3 +1,3 @@
 <?php
 
-class WP_Scripts {}
+// WP Core file no longer contains a class.

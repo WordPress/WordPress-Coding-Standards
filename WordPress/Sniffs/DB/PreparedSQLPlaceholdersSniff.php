@@ -9,19 +9,27 @@
 
 namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Arrays;
+use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\MinimumWPVersionTrait;
+use WordPressCS\WordPress\Helpers\WPDBTrait;
+use WordPressCS\WordPress\Sniff;
 
 /**
- * Check for incorrect use of the $wpdb->prepare method.
+ * Checks for incorrect use of the $wpdb->prepare method.
  *
- * Check the following issues:
- * - The only placeholders supported are: %d, %f (%F) and %s and their variations.
+ * Checks the following issues:
+ * - The only placeholders supported are: %d, %f (%F), %s, %i, and their variations.
  * - Literal % signs need to be properly escaped as `%%`.
- * - Simple placeholders (%d, %f, %F, %s) should be left unquoted in the query string.
+ * - Simple placeholders (%d, %f, %F, %s, %i) should be left unquoted in the query string.
  * - Complex placeholders - numbered and formatted variants - will not be quoted
  *   automagically by $wpdb->prepare(), so if used for values, should be quoted in
  *   the query string.
+ *   The only exception to this is complex placeholders for %i. In that case, the
+ *   replacement *will* still be backtick-quoted.
  * - Either an array of replacements should be passed matching the number of
  *   placeholders found or individual parameters for each placeholder should
  *   be passed.
@@ -31,22 +39,23 @@ use PHP_CodeSniffer\Util\Tokens;
  * created using code along the lines of:
  * `sprintf( 'query .... IN (%s) ...', implode( ',', array_fill( 0, count( $something ), '%s' ) ) )`.
  *
- * A "PreparedSQLPlaceholders replacement count" whitelist comment is supported
- * specifically to silence the `ReplacementsWrongNumber` and `UnfinishedPrepare`
- * error codes. The other error codes are not affected by it.
- *
  * @link https://developer.wordpress.org/reference/classes/wpdb/prepare/
  * @link https://core.trac.wordpress.org/changeset/41496
  * @link https://core.trac.wordpress.org/changeset/41471
+ * @link https://core.trac.wordpress.org/changeset/55151
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.14.0
+ * @since 3.0.0 Support for the %i placeholder has been added
  *
- * @since   0.14.0
+ * @uses \WordPressCS\WordPress\Helpers\MinimumWPVersionTrait::$minimum_wp_version
  */
-class PreparedSQLPlaceholdersSniff extends Sniff {
+final class PreparedSQLPlaceholdersSniff extends Sniff {
+
+	use MinimumWPVersionTrait;
+	use WPDBTrait;
 
 	/**
-	 * These regexes copied from http://php.net/manual/en/function.sprintf.php#93552
+	 * These regexes were originally copied from https://www.php.net/function.sprintf#93552
 	 * and adjusted for limitations in `$wpdb->prepare()`.
 	 *
 	 * Near duplicate of the one used in the WP.I18n sniff, but with fewer types allowed.
@@ -75,7 +84,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				[0-9]+                     # Width specifier.
 				(?:\.(?:[ 0]|\'.)?[0-9]+)? # Optional precision specifier with optional padding character.
 			)
-			[dfFs]                     # Type specifier.
+			[dfFsi]                    # Type specifier.
 		)
 	)';
 
@@ -96,7 +105,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			(?!                        # Negative look ahead.
 				%[^%]                       # Not a correct literal % (%%).
 				|
-				%%[dfFs]                    # Nor a correct literal % (%%), followed by a simple placeholder.
+				%%[dfFsi]                   # Nor a correct literal % (%%), followed by a simple placeholder.
 			)
 			(?:[0-9]+\\\\??\$)?+       # Optional ordering of the placeholders.
 			[+-]?+                     # Optional sign specifier.
@@ -111,7 +120,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				[0-9]++                     # Width specifier.
 				(?:\.(?:[ 0]|\'.)?[0-9]+)?+ # Optional precision specifier with optional padding character.
 			)
-			(?![dfFs])                 # Negative look ahead: not one of the supported placeholders.
+			(?![dfFsi])                # Negative look ahead: not one of the supported placeholders.
 			(?:[^ \'"]*|$)             # but something else instead.
 		)
 	)`x';
@@ -170,16 +179,22 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 
-		if ( ! $this->is_wpdb_method_call( $stackPtr, $this->target_methods ) ) {
+		$this->set_minimum_wp_version();
+
+		if ( ! $this->is_wpdb_method_call( $this->phpcsFile, $stackPtr, $this->target_methods ) ) {
 			return;
 		}
 
-		$parameters = $this->get_function_call_parameters( $this->methodPtr );
+		$parameters = PassedParameters::getParameters( $this->phpcsFile, $this->methodPtr );
 		if ( empty( $parameters ) ) {
 			return;
 		}
 
-		$query                    = $parameters[1];
+		$query = PassedParameters::getParameterFromStack( $parameters, 1, 'query' );
+		if ( false === $query ) {
+			return;
+		}
+
 		$text_string_tokens_found = false;
 		$variable_found           = false;
 		$sql_wildcard_found       = false;
@@ -190,10 +205,12 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			'implode_fill'     => 0,
 			'adjustment_count' => 0,
 		);
+		$skip_from                = null;
+		$skip_to                  = null;
 
 		for ( $i = $query['start']; $i <= $query['end']; $i++ ) {
 			// Skip over groups of tokens if they are part of an inline function call.
-			if ( isset( $skip_from, $skip_to ) && $i >= $skip_from && $i < $skip_to ) {
+			if ( isset( $skip_from, $skip_to ) && $i >= $skip_from && $i <= $skip_to ) {
 				$i = $skip_to;
 				continue;
 			}
@@ -210,9 +227,35 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
 					if ( 'sprintf' === strtolower( $this->tokens[ $i ]['content'] ) ) {
-						$sprintf_parameters = $this->get_function_call_parameters( $i );
+						$sprintf_parameters = PassedParameters::getParameters( $this->phpcsFile, $i );
 
 						if ( ! empty( $sprintf_parameters ) ) {
+							/*
+							 * Check for named params. sprintf() does not support this due to its variadic nature,
+							 * and we cannot analyse the code correctly if it is used, so skip the whole sprintf()
+							 * in that case.
+							 */
+							$valid_sprintf = true;
+							foreach ( $sprintf_parameters as $param ) {
+								if ( isset( $param['name'] ) ) {
+									$valid_sprintf = false;
+									break;
+								}
+							}
+
+							if ( false === $valid_sprintf ) {
+								$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+								if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
+								) {
+									$skip_from = ( $i + 1 );
+									$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
+								}
+
+								continue;
+							}
+
+							// We know for sure this sprintf() uses positional parameters, so this will be fine.
 							$skip_from  = ( $sprintf_parameters[1]['end'] + 1 );
 							$last_param = end( $sprintf_parameters );
 							$skip_to    = ( $last_param['end'] + 1 );
@@ -220,43 +263,47 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 							$valid_in_clauses['implode_fill']     += $this->analyse_sprintf( $sprintf_parameters );
 							$valid_in_clauses['adjustment_count'] += ( \count( $sprintf_parameters ) - 1 );
 						}
-						unset( $sprintf_parameters, $last_param );
+						unset( $sprintf_parameters, $valid_sprintf, $last_param );
 
 					} elseif ( 'implode' === strtolower( $this->tokens[ $i ]['content'] ) ) {
 						$prev = $this->phpcsFile->findPrevious(
-							Tokens::$textStringTokens,
+							Tokens::$emptyTokens + array( \T_STRING_CONCAT => \T_STRING_CONCAT ),
 							( $i - 1 ),
-							$query['start']
+							$query['start'],
+							true
 						);
 
-						$prev_content = $this->strip_quotes( $this->tokens[ $prev ]['content'] );
-						$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
+						if ( isset( Tokens::$textStringTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
+							$prev_content = TextStrings::stripQuotes( $this->tokens[ $prev ]['content'] );
+							$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
 
-						// Only examine the implode if preceded by an ` IN (`.
-						if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
+							// Only examine the implode if preceded by an ` IN (`.
+							if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
 
-							if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
-								$this->phpcsFile->addError(
-									'Dynamic placeholder generation should not have surrounding quotes.',
-									$i,
-									'QuotedDynamicPlaceholderGeneration'
-								);
-							}
+								if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
+									$this->phpcsFile->addError(
+										'Dynamic placeholder generation should not have surrounding quotes.',
+										$prev,
+										'QuotedDynamicPlaceholderGeneration'
+									);
+								}
 
-							if ( $this->analyse_implode( $i ) === true ) {
-								++$valid_in_clauses['uses_in'];
-								++$valid_in_clauses['implode_fill'];
+								if ( $this->analyse_implode( $i ) === true ) {
+									++$valid_in_clauses['uses_in'];
+									++$valid_in_clauses['implode_fill'];
 
-								$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
-								if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
-									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
-								) {
-									$skip_from = ( $i + 1 );
-									$skip_to   = ( $this->tokens[ $next ]['parenthesis_closer'] + 1 );
+									$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+									if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+										&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
+									) {
+										$skip_from = ( $i + 1 );
+										$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
+									}
 								}
 							}
+							unset( $next, $prev_content, $regex_quote, $match );
 						}
-						unset( $prev, $next, $prev_content, $regex_quote, $match );
+						unset( $prev );
 					}
 				}
 
@@ -268,7 +315,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 
 			$regex_quote = $this->regex_quote;
 			if ( isset( Tokens::$stringTokens[ $this->tokens[ $i ]['code'] ] ) ) {
-				$content     = $this->strip_quotes( $content );
+				$content     = TextStrings::stripQuotes( $content );
 				$regex_quote = $this->get_regex_quote_snippet( $content, $this->tokens[ $i ]['content'] );
 			}
 
@@ -276,17 +323,22 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				|| \T_HEREDOC === $this->tokens[ $i ]['code']
 			) {
 				// Only interested in actual query text, so strip out variables.
-				$stripped_content = $this->strip_interpolated_variables( $content );
+				$stripped_content = TextStrings::stripEmbeds( $content );
 				if ( $stripped_content !== $content ) {
-					$interpolated_vars = $this->get_interpolated_variables( $content );
-					$vars_without_wpdb = array_diff( $interpolated_vars, array( 'wpdb' ) );
-					$content           = $stripped_content;
+					$vars_without_wpdb = array_filter(
+						TextStrings::getEmbeds( $content ),
+						static function ( $symbol ) {
+							return preg_match( '`^\{?\$\{?wpdb\??->`', $symbol ) !== 1;
+						}
+					);
+
+					$content = $stripped_content;
 
 					if ( ! empty( $vars_without_wpdb ) ) {
 						$variable_found = true;
 					}
 				}
-				unset( $stripped_content, $interpolated_vars, $vars_without_wpdb );
+				unset( $stripped_content, $vars_without_wpdb );
 			}
 
 			$placeholders = preg_match_all( '`' . self::PREPARE_PLACEHOLDER_REGEX . '`x', $content, $matches );
@@ -392,8 +444,27 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 				unset( $match, $matches );
 			}
 
+			if ( $this->wp_version_compare( $this->minimum_wp_version, '6.2', '<' ) ) {
+				if ( preg_match_all( '`' . self::PREPARE_PLACEHOLDER_REGEX . '`x', $content, $matches ) > 0 ) {
+					if ( ! empty( $matches[0] ) ) {
+						foreach ( $matches[0] as $match ) {
+							if ( 'i' === substr( $match, -1 ) ) {
+								$this->phpcsFile->addError(
+									'The %%i modifier is only supported in WP 6.2 or higher. Found: "%s".',
+									$i,
+									'UnsupportedIdentifierPlaceholder',
+									array( $match )
+								);
+							}
+						}
+					}
+				}
+				unset( $match, $matches );
+			}
+
 			/*
-			 * Analyse the query for quoted placeholders.
+			 * Analyse the query for single/double quoted simple value placeholders
+			 * Identifiers are checked separately.
 			 */
 			$regex = '`(' . $regex_quote . ')%[dfFs]\1`';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
@@ -411,13 +482,33 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
+			 * Analyse the query for quoted identifier placeholders.
+			 */
+			$regex = '/(' . $regex_quote . '|`)(?<placeholder>' . self::PREPARE_PLACEHOLDER_REGEX . ')\1/x';
+			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
+				if ( ! empty( $matches ) ) {
+					foreach ( $matches['placeholder'] as $index => $match ) {
+						if ( 'i' === substr( $match, -1 ) ) {
+							$this->phpcsFile->addError(
+								'Placeholders used for identifiers (%%i) in the query string in $wpdb->prepare() are always quoted automagically. Please remove the surrounding quotes. Found: %s',
+								$i,
+								'QuotedIdentifierPlaceholder',
+								array( $matches[0][ $index ] )
+							);
+						}
+					}
+				}
+				unset( $index, $match, $matches );
+			}
+
+			/*
 			 * Analyse the query for unquoted complex placeholders.
 			 */
 			$regex = '`(?<!' . $regex_quote . ')' . self::PREPARE_PLACEHOLDER_REGEX . '(?!' . $regex_quote . ')`x';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
 					foreach ( $matches[0] as $match ) {
-						if ( preg_match( '`%[dfFs]`', $match ) !== 1 ) {
+						if ( substr( $match, -1 ) !== 'i' && preg_match( '`^%[dfFsi]$`', $match ) !== 1 ) { // Identifiers must always be unquoted.
 							$this->phpcsFile->addWarning(
 								'Complex placeholders used for values in the query string in $wpdb->prepare() will NOT be quoted automagically. Found: %s.',
 								$i,
@@ -445,11 +536,6 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
-		$count_diff_whitelisted = $this->has_whitelist_comment(
-			'PreparedSQLPlaceholders replacement count',
-			$stackPtr
-		);
-
 		if ( 0 === $total_placeholders ) {
 			if ( 1 === $total_parameters ) {
 				if ( false === $variable_found && false === $sql_wildcard_found ) {
@@ -465,7 +551,7 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 						'UnnecessaryPrepare'
 					);
 				}
-			} elseif ( false === $count_diff_whitelisted && 0 === $valid_in_clauses['uses_in'] ) {
+			} elseif ( 0 === $valid_in_clauses['uses_in'] ) {
 				$this->phpcsFile->addWarning(
 					'Replacement variables found, but no valid placeholders found in the query.',
 					$i,
@@ -486,27 +572,25 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return;
 		}
 
-		if ( true === $count_diff_whitelisted ) {
-			return;
-		}
-
 		$replacements = $parameters;
-		array_shift( $replacements ); // Remove the query.
+		unset( $replacements['query'], $replacements[1] ); // Remove the query param, whether passed positionally or named.
 
-		// The parameters may have been passed as an array in parameter 2.
-		if ( isset( $parameters[2] ) && 2 === $total_parameters ) {
+		// The parameters may have been passed as an array in the variadic $args parameter.
+		$args_param = PassedParameters::getParameterFromStack( $parameters, 2, 'args' );
+		if ( false !== $args_param && 2 === $total_parameters ) {
 			$next = $this->phpcsFile->findNext(
 				Tokens::$emptyTokens,
-				$parameters[2]['start'],
-				( $parameters[2]['end'] + 1 ),
+				$args_param['start'],
+				( $args_param['end'] + 1 ),
 				true
 			);
 
 			if ( false !== $next
 				&& ( \T_ARRAY === $this->tokens[ $next ]['code']
-					|| \T_OPEN_SHORT_ARRAY === $this->tokens[ $next ]['code'] )
+					|| ( isset( Collections::shortArrayListOpenTokensBC()[ $this->tokens[ $next ]['code'] ] )
+						&& Arrays::isShortArray( $this->phpcsFile, $next ) === true ) )
 			) {
-				$replacements = $this->get_function_call_parameters( $next );
+				$replacements = PassedParameters::getParameters( $this->phpcsFile, $next );
 			}
 		}
 
@@ -581,15 +665,11 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	protected function analyse_sprintf( $sprintf_params ) {
 		$found = 0;
 
-		unset( $sprintf_params[1] );
+		unset( $sprintf_params[1] ); // Remove the positionally passed $format param.
 
 		foreach ( $sprintf_params as $sprintf_param ) {
-			if ( strpos( strtolower( $sprintf_param['raw'] ), 'implode' ) === false ) {
-				continue;
-			}
-
 			$implode = $this->phpcsFile->findNext(
-				Tokens::$emptyTokens,
+				Tokens::$emptyTokens + array( \T_NS_SEPARATOR => \T_NS_SEPARATOR ),
 				$sprintf_param['start'],
 				$sprintf_param['end'],
 				true
@@ -615,6 +695,12 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 *
 	 * This pattern presumes unquoted placeholders!
 	 *
+	 * Identifiers (%i) are not supported, as this function is designed to work
+	 * with `IN()`, which contains a list of values. In the future, it should
+	 * be possible to simplify code using the implode/array_fill pattern to
+	 * use a variable number of identifiers, e.g. `CONCAT(%...i)`,
+	 * https://core.trac.wordpress.org/ticket/54042
+	 *
 	 * @since 0.14.0
 	 *
 	 * @param int $implode_token The stackPtr to the implode function call.
@@ -622,24 +708,27 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 	 * @return bool True if the pattern is found, false otherwise.
 	 */
 	protected function analyse_implode( $implode_token ) {
-		$implode_params = $this->get_function_call_parameters( $implode_token );
-
+		$implode_params = PassedParameters::getParameters( $this->phpcsFile, $implode_token );
 		if ( empty( $implode_params ) || \count( $implode_params ) !== 2 ) {
 			return false;
 		}
 
-		if ( preg_match( '`^(["\']), ?\1$`', $implode_params[1]['raw'] ) !== 1 ) {
+		$implode_separator_param = PassedParameters::getParameterFromStack( $implode_params, 1, 'separator' );
+		if ( false === $implode_separator_param
+			|| preg_match( '`^(["\']), ?\1$`', $implode_separator_param['clean'] ) !== 1
+		) {
 			return false;
 		}
 
-		if ( strpos( strtolower( $implode_params[2]['raw'] ), 'array_fill' ) === false ) {
+		$implode_array_param = PassedParameters::getParameterFromStack( $implode_params, 2, 'array' );
+		if ( false === $implode_array_param ) {
 			return false;
 		}
 
 		$array_fill = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			$implode_params[2]['start'],
-			$implode_params[2]['end'],
+			Tokens::$emptyTokens + array( \T_NS_SEPARATOR => \T_NS_SEPARATOR ),
+			$implode_array_param['start'],
+			$implode_array_param['end'],
 			true
 		);
 
@@ -649,13 +738,24 @@ class PreparedSQLPlaceholdersSniff extends Sniff {
 			return false;
 		}
 
-		$array_fill_params = $this->get_function_call_parameters( $array_fill );
-
-		if ( empty( $array_fill_params ) || \count( $array_fill_params ) !== 3 ) {
+		$array_fill_value_param = PassedParameters::getParameter( $this->phpcsFile, $array_fill, 3, 'value' );
+		if ( false === $array_fill_value_param ) {
 			return false;
 		}
 
-		return (bool) preg_match( '`^(["\'])%[dfFs]\1$`', $array_fill_params[3]['raw'] );
-	}
+		if ( "'%i'" === $array_fill_value_param['clean']
+			|| '"%i"' === $array_fill_value_param['clean']
+		) {
+			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $array_fill_value_param['start'], $array_fill_value_param['end'], true );
 
+			$this->phpcsFile->addError(
+				'The %i placeholder cannot be used within SQL `IN()` clauses.',
+				$firstNonEmpty,
+				'IdentifierWithinIN'
+			);
+			return false;
+		}
+
+		return (bool) preg_match( '`^(["\'])%[dfFs]\1$`', $array_fill_value_param['clean'] );
+	}
 }

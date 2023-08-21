@@ -14,16 +14,16 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PreparedSQLPlaceholders sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.14.0
  *
- * @since   0.14.0
+ * @covers \WordPressCS\WordPress\Sniffs\DB\PreparedSQLPlaceholdersSniff
  */
-class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
+final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -37,8 +37,8 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			41  => 1,
 			54  => 1,
 			141 => 1,
-			149 => 1,
-			151 => 1,
+			148 => 1,
+			150 => 1,
 			162 => 1,
 			163 => 1,
 			164 => 1,
@@ -58,13 +58,61 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			205 => 1,
 			207 => 2,
 			209 => 1,
+
+			215 => 1, // UnsupportedPlaceholder.
+
+			220 => 1, // QuotedSimplePlaceholder.
+			221 => 1, // QuotedSimplePlaceholder.
+			222 => 1, // QuotedSimplePlaceholder.
+			223 => 1, // QuotedSimplePlaceholder.
+			224 => 1, // QuotedSimplePlaceholder.
+			225 => 1, // QuotedSimplePlaceholder.
+
+			227 => 1, // QuotedIdentifierPlaceholder.
+			228 => 1, // QuotedIdentifierPlaceholder.
+			229 => 1, // QuotedIdentifierPlaceholder.
+			230 => 1, // QuotedIdentifierPlaceholder.
+
+			234 => 1, // UnescapedLiteral.
+			238 => 1, // UnsupportedPlaceholder.
+
+			244 => 1, // QuotedIdentifierPlaceholder.
+			245 => 1, // QuotedIdentifierPlaceholder.
+			246 => 1, // UnescapedLiteral.
+			247 => 1, // QuotedIdentifierPlaceholder.
+			248 => 1, // QuotedIdentifierPlaceholder.
+			249 => 1, // QuotedIdentifierPlaceholder.
+			250 => 2, // QuotedIdentifierPlaceholder.
+			251 => 1, // QuotedIdentifierPlaceholder.
+			252 => 1, // QuotedIdentifierPlaceholder.
+
+			254 => 2, // QuotedIdentifierPlaceholder x2.
+			261 => 1, // IdentifierWithinIN.
+			267 => 1, // IdentifierWithinIN.
+			272 => 1, // IdentifierWithinIN.
+			278 => 1, // UnsupportedIdentifierPlaceholder.
+			279 => 2, // UnsupportedIdentifierPlaceholder + QuotedIdentifierPlaceholder.
+			280 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+
+			287 => 1,
+			294 => 1,
+			301 => 1,
+			308 => 1,
+			315 => 1,
+			322 => 1,
+
+			347 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+			353 => 1,
+
+			// Named parameter support.
+			418 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
@@ -85,15 +133,34 @@ class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			57  => 1,
 			58  => 1,
 			61  => 1,
-			62  => 1, // Whitelist comment deprecation warning.
+			62  => 1, // Old-style WPCS ignore comments are no longer supported.
 			66  => 1,
-			68  => 1, // Whitelist comment deprecation warning.
+			68  => 1, // Old-style WPCS ignore comments are no longer supported.
 			126 => 1,
 			139 => 1,
 			160 => 2,
 			161 => 2,
 			177 => 1,
+			214 => 1,
+			215 => 1,
+			216 => 1,
+			217 => 1,
+			218 => 1,
+			234 => 1, // UnfinishedPrepare.
+			246 => 1, // UnfinishedPrepare.
+			258 => 1, // ReplacementsWrongNumber.
+			300 => 1,
+			354 => 1,
+			358 => 1,
+
+			// Named parameter support.
+			440 => 1,
+			448 => 1,
+			456 => 1,
+			474 => 1,
+			482 => 1,
+			490 => 1,
+			498 => 1,
 		);
 	}
-
 }

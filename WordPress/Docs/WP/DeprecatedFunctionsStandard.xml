@@ -1,4 +1,8 @@
-<documentation title="Deprecated Functions">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Deprecated Functions"
+    >
     <standard>
     <![CDATA[
     Please refrain from using deprecated WordPress functions. 

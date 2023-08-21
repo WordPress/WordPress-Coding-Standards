@@ -5,6 +5,12 @@
 
 	<rule ref="WordPress-Core"/>
 
+	<!-- Silence the "no nested dirnames, use $levels" notice, which is included in Core,
+		 as plugin/themes may still support PHP < 7.0. -->
+	<rule ref="Modernize.FunctionCalls.Dirname.Nested">
+		<severity>0</severity>
+	</rule>
+
 	<!-- Generic PHP best practices.
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
@@ -35,39 +41,28 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
-	<!-- And yet more best practices.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1143 -->
-	<rule ref="PEAR.Files.IncludingFile.BracketsNotRequired">
-		<type>warning</type>
-	</rule>
-	<rule ref="PEAR.Files.IncludingFile.UseRequire">
-		<type>warning</type>
-	</rule>
-	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
-		<type>warning</type>
-	</rule>
-
-	<!-- Check correct spacing of language constructs. This also ensures that the
-	     above rule for not using brackets with require is fixed correctly.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1153 -->
-	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
-
-	<!-- Hook callbacks may not use all params -->
-	<!-- https://github.com/WordPress/WordPress-Coding-Standards/pull/382#discussion_r29981655 -->
-	<!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
-
-	<!-- Encourage having only one class/interface/trait per file. -->
-	<rule ref="Generic.Files.OneObjectStructurePerFile">
-		<type>warning</type>
-		<message>Best practice suggestion: Declare only one class/interface/trait in a file.</message>
+	<!-- Check that functions use all parameters passed.
+		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/xxx -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+		<!-- Allow for callback functions which may not need all parameters passed. -->
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed"/>
+		<!-- Allow for functions in extended classes/implemented interfaces. -->
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed"/>
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed"/>
 	</rule>
 
-	<!-- Verify modifier keywords for declared methods and properties in classes.
+	<!-- Do not allow leading underscores in property or method names. Visibility should be used instead.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1101 -->
-	<rule ref="Squiz.Scope.MethodScope"/>
-	<rule ref="PSR2.Classes.PropertyDeclaration"/>
-	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
-	<rule ref="PSR2.Methods.MethodDeclaration"/>
+	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<severity>5</severity>
+	</rule>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<severity>5</severity>
+	</rule>
 
 	<!-- Warn against using fully-qualified class names instead of the self keyword. -->
 	<rule ref="Squiz.Classes.SelfMemberReference.NotUsed">
@@ -95,6 +90,9 @@
 	<rule ref="WordPress.WP.DiscouragedConstants"/>
 	<rule ref="WordPress.WP.DiscouragedFunctions"/>
 
+	<!-- Verify that capabilities are being used correctly. -->
+	<rule ref="WordPress.WP.Capabilities"/>
+
 	<!-- Scripts & style should be enqueued.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/35 -->
 	<rule ref="WordPress.WP.EnqueuedResources"/>
@@ -111,9 +109,6 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1146 -->
 	<rule ref="WordPress.WP.EnqueuedResourceParameters"/>
 
-	<!-- Discourage use of the backtick operator (execution of shell commands).
-		 https://github.com/WordPress/WordPress-Coding-Standards/pull/646 -->
-	<rule ref="Generic.PHP.BacktickOperator"/>
 
 	<!-- Check for PHP Parse errors.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/522 -->
@@ -133,17 +128,6 @@
 	<!-- Validates post type slugs for valid characters, length and reserved keywords. -->
 	<rule ref="WordPress.NamingConventions.ValidPostTypeSlug"/>
 
-	<!-- Check that object instantiations always have braces & are not assigned by reference.
-		 https://github.com/WordPress/WordPress-Coding-Standards/issues/919
-		 Note: there is a similar upstream sniff `PSR12.Classes.ClassInstantiation`, however
-		 that sniff:
-		 - does not cover JS files;
-		 - does not demand parentheses for PHP anonymous classes;
-		 - does not check the whitespace between the class name and the parentheses;
-		 - does not check for PHP new by reference.
-		 For those reasons, the WPCS version should remain. -->
-	<rule ref="WordPress.Classes.ClassInstantiation"/>
-
 	<!-- https://github.com/WordPress/WordPress-Coding-Standards/issues/1157 -->
 	<rule ref="WordPress.Security.PluginMenuSlug"/>
 	<rule ref="WordPress.WP.CronInterval"/>
@@ -153,11 +137,11 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1371 -->
 	<rule ref="WordPress.PHP.PregQuoteDelimiter"/>
 
-	<!-- The Core ruleset respects the whitelist. For `Extra` the sniff is stricter.
+	<!-- The Core ruleset respects the PHP allowed functions list. For `Extra` the sniff is stricter.
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1450 -->
 	<rule ref="WordPress.PHP.NoSilencedErrors">
 		<properties>
-			<property name="use_default_whitelist" value="false"/>
+			<property name="usePHPFunctionsList" value="false"/>
 		</properties>
 	</rule>
 
@@ -169,11 +153,32 @@
 		</properties>
 	</rule>
 
-
 	<!-- Prevent some typical mistakes people make accidentally.
-	     https://github.com/WordPress/WordPress-Coding-Standards/pull/1777 -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1777 -->
 	<rule ref="WordPress.CodeAnalysis.EscapedNotTranslated"/>
 
+	<!-- Detects duplicate array keys in array declarations. -->
+	<rule ref="Universal.Arrays.DuplicateArrayKey"/>
+
+	<!-- Disallows return type declarations on constructor/destructor methods,
+		 and constructor/destructor methods returning a value. -->
+	<rule ref="Universal.CodeAnalysis.ConstructorDestructorReturn"/>
+
+	<!-- Detects foreach control structures using the same variable for both key and value. -->
+	<rule ref="Universal.CodeAnalysis.ForeachUniqueAssignment"/>
+
+	<!-- Detects using static instead of self in object-oriented constructs which are final. -->
+	<rule ref="Universal.CodeAnalysis.StaticInFinalClass"/>
+
+	<!-- Disallow if statements, if they are the only statement in an else block. -->
+	<rule ref="Universal.ControlStructures.DisallowLonelyIf"/>
+
+	<!-- Enforce for a file to either declare (global/namespaced) functions
+		 or declare object-oriented structures, but not both. -->
+	<rule ref="Universal.Files.SeparateFunctionsFromOO"/>
+
+	<!-- Detect useless "echo sprintf(...)". -->
+	<rule ref="Universal.CodeAnalysis.NoEchoSprintf"/>
 
 	<!--
 	#############################################################################

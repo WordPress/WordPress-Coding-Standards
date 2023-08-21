@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted Date and Time Functions"
+    >
+    <standard>
+    <![CDATA[
+    The restricted functions date_default_timezone_set() and date() should not be used.
+    ]]>
+    </standard>
+    <standard>
+    <![CDATA[
+    Using the PHP native date_default_timezone_set() function isn't allowed, because WordPress Core needs the default time zone to be set to UTC for timezone calculations using the WP Core API to work correctly.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using DateTime object.">
+        <![CDATA[
+$date = new <em>DateTime()</em>;
+$date->setTimezone(
+    new DateTimeZone( 'Europe/Amsterdam' )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using date_default_timezone_set().">
+        <![CDATA[
+<em>date_default_timezone_set</em>( 'Europe/Amsterdam' );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Using the PHP native date() function isn't allowed, as it is affected by runtime timezone changes which can cause the date/time to be incorrectly displayed. Use gmdate() instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using gmdate().">
+        <![CDATA[
+$last_updated = <em>gmdate</em>(
+    'Y-m-d\TH:i:s',
+    strtotime( $plugin['last_updated'] )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using date().">
+        <![CDATA[
+$last_updated = <em>date</em>(
+    'Y-m-d\TH:i:s',
+    strtotime( $plugin['last_updated'] )
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

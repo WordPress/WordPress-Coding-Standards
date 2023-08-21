@@ -9,30 +9,33 @@
 
 namespace WordPressCS\WordPress\Sniffs\DB;
 
-use WordPressCS\WordPress\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Conditions;
+use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
+use WordPressCS\WordPress\Sniff;
 
 /**
  * Flag Database direct queries.
  *
- * @link    https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
+ * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.3.0
- * @since   0.6.0  Removed the add_unique_message() function as it is no longer needed.
- * @since   0.11.0 This class now extends the WordPressCS native `Sniff` class.
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
+ * @since 0.3.0
+ * @since 0.6.0  Removed the add_unique_message() function as it is no longer needed.
+ * @since 0.11.0 This class now extends the WordPressCS native `Sniff` class.
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `VIP` category to the `DB` category.
+ * @since 3.0.0  Support for the very sniff specific WPCS native ignore comment syntax has been removed.
  */
-class DirectDatabaseQuerySniff extends Sniff {
+final class DirectDatabaseQuerySniff extends Sniff {
 
 	/**
 	 * List of custom cache get functions.
 	 *
 	 * @since 0.6.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customCacheGetFunctions = array();
 
@@ -41,7 +44,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 	 *
 	 * @since 0.6.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customCacheSetFunctions = array();
 
@@ -50,7 +53,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 	 *
 	 * @since 0.6.0
 	 *
-	 * @var string|string[]
+	 * @var string[]
 	 */
 	public $customCacheDeleteFunctions = array();
 
@@ -67,6 +70,57 @@ class DirectDatabaseQuerySniff extends Sniff {
 		'cacheget'    => array(),
 		'cacheset'    => array(),
 		'cachedelete' => array(),
+	);
+
+	/**
+	 * A list of functions that get data from the cache.
+	 *
+	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
+	 * @since 3.0.0  Moved from the generic `Sniff` class to this class.
+	 *
+	 * @var array
+	 */
+	protected $cacheGetFunctions = array(
+		'wp_cache_get' => true,
+	);
+
+	/**
+	 * A list of functions that set data in the cache.
+	 *
+	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
+	 * @since 3.0.0  Moved from the generic `Sniff` class to this class.
+	 *
+	 * @var array
+	 */
+	protected $cacheSetFunctions = array(
+		'wp_cache_set' => true,
+		'wp_cache_add' => true,
+	);
+
+	/**
+	 * A list of functions that delete data from the cache.
+	 *
+	 * @since 0.6.0
+	 * @since 0.11.0 Changed from public static to protected non-static.
+	 * @since 3.0.0  Moved from the generic `Sniff` class to this class.
+	 *
+	 * @var array
+	 */
+	protected $cacheDeleteFunctions = array(
+		'wp_cache_delete'         => true,
+		'clean_attachment_cache'  => true,
+		'clean_blog_cache'        => true,
+		'clean_bookmark_cache'    => true,
+		'clean_category_cache'    => true,
+		'clean_comment_cache'     => true,
+		'clean_network_cache'     => true,
+		'clean_object_term_cache' => true,
+		'clean_page_cache'        => true,
+		'clean_post_cache'        => true,
+		'clean_term_cache'        => true,
+		'clean_user_cache'        => true,
 	);
 
 	/**
@@ -119,13 +173,17 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$is_object_call = $this->phpcsFile->findNext( \T_OBJECT_OPERATOR, ( $stackPtr + 1 ), null, false, null, true );
-		if ( false === $is_object_call ) {
-			return; // This is not a call to the wpdb object.
+		$is_object_call = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+		if ( false === $is_object_call
+			|| ( \T_OBJECT_OPERATOR !== $this->tokens[ $is_object_call ]['code']
+				&& \T_NULLSAFE_OBJECT_OPERATOR !== $this->tokens[ $is_object_call ]['code'] )
+		) {
+			// This is not a call to the wpdb object.
+			return;
 		}
 
-		$methodPtr = $this->phpcsFile->findNext( array( \T_WHITESPACE ), ( $is_object_call + 1 ), null, true, null, true );
-		$method    = $this->tokens[ $methodPtr ]['content'];
+		$methodPtr = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $is_object_call + 1 ), null, true );
+		$method    = strtolower( $this->tokens[ $methodPtr ]['content'] );
 
 		$this->mergeFunctionLists();
 
@@ -133,29 +191,21 @@ class DirectDatabaseQuerySniff extends Sniff {
 			return;
 		}
 
-		$endOfStatement   = $this->phpcsFile->findNext( \T_SEMICOLON, ( $stackPtr + 1 ), null, false, null, true );
-		$endOfLineComment = '';
-		for ( $i = ( $endOfStatement + 1 ); $i < $this->phpcsFile->numTokens; $i++ ) {
-
-			if ( $this->tokens[ $i ]['line'] !== $this->tokens[ $endOfStatement ]['line'] ) {
-				break;
-			}
-
-			if ( \T_COMMENT === $this->tokens[ $i ]['code'] ) {
-				$endOfLineComment .= $this->tokens[ $i ]['content'];
-			}
+		$endOfStatement = $this->phpcsFile->findNext( array( \T_SEMICOLON, \T_CLOSE_TAG ), ( $stackPtr + 1 ) );
+		if ( false === $endOfStatement ) {
+			return;
 		}
 
-		$whitelisted_db_call = false;
-		if ( preg_match( '/db call\W*(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
-			$whitelisted_db_call = true;
-		}
-
-		// Check for Database Schema Changes.
+		// Check for Database Schema Changes/ table truncation.
 		for ( $_pos = ( $stackPtr + 1 ); $_pos < $endOfStatement; $_pos++ ) {
-			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement, false, null, true );
+			$_pos = $this->phpcsFile->findNext( Tokens::$textStringTokens, $_pos, $endOfStatement );
 			if ( false === $_pos ) {
 				break;
+			}
+
+			if ( strpos( strtoupper( TextStrings::stripQuotes( $this->tokens[ $_pos ]['content'] ) ), 'TRUNCATE ' ) === 0 ) {
+				// Ignore queries to truncate the database as caching those is irrelevant and they need a direct db query.
+				return;
 			}
 
 			if ( preg_match( '#\b(?:ALTER|CREATE|DROP)\b#i', $this->tokens[ $_pos ]['content'] ) > 0 ) {
@@ -163,58 +213,45 @@ class DirectDatabaseQuerySniff extends Sniff {
 			}
 		}
 
-		// Flag instance if not whitelisted.
-		if ( ! $whitelisted_db_call ) {
-			$this->phpcsFile->addWarning( 'Usage of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
-		}
+		$this->phpcsFile->addWarning( 'Use of a direct database call is discouraged.', $stackPtr, 'DirectQuery' );
 
 		if ( ! isset( $this->methods['cachable'][ $method ] ) ) {
 			return $endOfStatement;
 		}
 
-		$whitelisted_cache = false;
-		$cached            = false;
-		$wp_cache_get      = false;
-		if ( preg_match( '/cache\s+(?:ok|pass|clear|whitelist)/i', $endOfLineComment ) ) {
-			$whitelisted_cache = true;
-		}
-		if ( ! $whitelisted_cache && ! empty( $this->tokens[ $stackPtr ]['conditions'] ) ) {
-			$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_FUNCTION );
+		$cached       = false;
+		$wp_cache_get = false;
 
-			if ( false === $scope_function ) {
-				$scope_function = $this->phpcsFile->getCondition( $stackPtr, \T_CLOSURE );
-			}
+		$scope_function = Conditions::getLastCondition( $this->phpcsFile, $stackPtr, Collections::functionDeclarationTokens() );
+		if ( false !== $scope_function ) {
+			$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
+			$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
 
-			if ( false !== $scope_function ) {
-				$scopeStart = $this->tokens[ $scope_function ]['scope_opener'];
-				$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
+			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
+				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
-				for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
-					if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-						if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
+							$cached = true;
+							break;
+						}
+					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-							if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
-								$cached = true;
-								break;
-							}
-						} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+						$wp_cache_get = true;
 
-							$wp_cache_get = true;
+					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
 
-						} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
-
-							if ( $wp_cache_get ) {
-								$cached = true;
-								break;
-							}
+						if ( $wp_cache_get ) {
+							$cached = true;
+							break;
 						}
 					}
 				}
 			}
 		}
 
-		if ( ! $cached && ! $whitelisted_cache ) {
+		if ( ! $cached ) {
 			$message = 'Direct database call without caching detected. Consider using wp_cache_get() / wp_cache_set() or wp_cache_delete().';
 			$this->phpcsFile->addWarning( $message, $stackPtr, 'NoCaching' );
 		}
@@ -235,7 +272,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget'] ) {
-			$this->cacheGetFunctions = $this->merge_custom_array(
+			$this->cacheGetFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheGetFunctions,
 				$this->cacheGetFunctions
 			);
@@ -244,7 +281,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset'] ) {
-			$this->cacheSetFunctions = $this->merge_custom_array(
+			$this->cacheSetFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheSetFunctions,
 				$this->cacheSetFunctions
 			);
@@ -253,7 +290,7 @@ class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] ) {
-			$this->cacheDeleteFunctions = $this->merge_custom_array(
+			$this->cacheDeleteFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);
@@ -261,5 +298,4 @@ class DirectDatabaseQuerySniff extends Sniff {
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}
 	}
-
 }

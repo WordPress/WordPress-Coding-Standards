@@ -10,43 +10,42 @@
 namespace WordPressCS\WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use WordPressCS\WordPress\PHPCSHelper;
 
 /**
  * Unit test class for the TypeCasts sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 1.2.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\TypeCastsSniff
  */
-class TypeCastsUnitTest extends AbstractSniffUnitTest {
+final class TypeCastsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
 			10 => 1,
 			11 => 1,
+			13 => 1,
 			26 => 1,
 			27 => 1,
+			28 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
-			14 => 1,
 			15 => 1,
-			16 => ( version_compare( PHPCSHelper::get_version(), '3.4.0', '<' ) === true ? 0 : 1 ),
+			16 => 1,
 			17 => 1,
-			28 => 1,
 			29 => 1,
 		);
 	}

@@ -14,16 +14,16 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PHP.NoSilencedErrors sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 1.1.0
  *
- * @since   1.1.0
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\NoSilencedErrorsSniff
  */
-class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
+final class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array();
@@ -32,7 +32,7 @@ class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
@@ -60,7 +60,7 @@ class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
 			68 => 1,
 			71 => 1,
 			78 => 1,
+			85 => 1,
 		);
 	}
-
 }

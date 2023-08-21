@@ -14,16 +14,16 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the IniSet sniff.
  *
- * @package WPCS\WordPressCodingStandards
- *
  * @since 2.1.0
+ *
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\IniSetSniff
  */
-class IniSetUnitTest extends AbstractSniffUnitTest {
+final class IniSetUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -47,13 +47,15 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 			33 => 1,
 			34 => 1,
 			42 => 1,
+			51 => 1,
+			55 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
@@ -64,5 +66,4 @@ class IniSetUnitTest extends AbstractSniffUnitTest {
 			43 => 1,
 		);
 	}
-
 }

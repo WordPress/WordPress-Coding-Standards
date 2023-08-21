@@ -14,25 +14,27 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PrefixAllGlobals sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.12.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.12.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Helpers\IsUnitTestTrait
+ * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\PrefixAllGlobalsSniff
  */
-class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
+final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of errors>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = 'PrefixAllGlobalsUnitTest.1.inc' ) {
 
 		switch ( $testFile ) {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
-					1   => 8, // 2 x error for blacklisted prefix passed. 4 x error for short prefixes. 2 x no prefix.
+					1   => 8, // 2 x error for blocked prefix passed. 4 x error for short prefixes. 2 x no prefix.
 					10  => 1,
 					18  => 1,
 					21  => 1,
@@ -51,6 +53,9 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					39  => 1,
 					40  => 1,
 					90  => 1,
+					212 => 1, // Old-style WPCS ignore comments are no longer supported.
+					215 => 1, // Old-style WPCS ignore comments are no longer supported.
+					216 => 1, // Old-style WPCS ignore comments are no longer supported.
 					// Backfills.
 					225 => ( function_exists( '\mb_strpos' ) ) ? 0 : 1,
 					230 => ( function_exists( '\array_column' ) ) ? 0 : 1,
@@ -79,11 +84,23 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					464 => 2,
 					465 => 1,
 					468 => 1,
+					550 => 1,
+					551 => 1,
+					557 => 1,
+					569 => 1,
+					579 => 1,
+					584 => 1,
+					585 => 1,
+					605 => 1,
+					606 => 1,
+					616 => 1,
+					617 => 1,
+					633 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.4.inc':
 				return array(
-					1  => 1, // 1 x error for blacklisted prefix passed.
+					1  => 1, // 1 x error for blocked prefix passed.
 					18 => 1,
 				);
 
@@ -100,7 +117,8 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 	 * Returns the lines where warnings should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
-	 * @return array <int line number> => <int number of warnings>
+	 *
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList( $testFile = 'PrefixAllGlobalsUnitTest.1.inc' ) {
 
@@ -108,11 +126,6 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
 					1   => 3, // 3 x warning for potentially incorrect prefix passed.
-					201 => 1, // Whitelist comment deprecation warning.
-					208 => 1, // Whitelist comment deprecation warning.
-					212 => 1, // Whitelist comment deprecation warning.
-					215 => 1, // Whitelist comment deprecation warning.
-					216 => 1, // Whitelist comment deprecation warning.
 					249 => 1,
 					250 => 1,
 					253 => 1,
@@ -153,5 +166,4 @@ class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 				return array();
 		}
 	}
-
 }

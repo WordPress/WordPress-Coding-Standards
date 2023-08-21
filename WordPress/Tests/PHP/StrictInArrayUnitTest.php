@@ -14,17 +14,18 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the StrictInArray sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.9.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.9.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\AbstractFunctionParameterSniff
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\StrictInArraySniff
  */
-class StrictInArrayUnitTest extends AbstractSniffUnitTest {
+final class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array();
@@ -33,7 +34,7 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array(
@@ -48,7 +49,9 @@ class StrictInArrayUnitTest extends AbstractSniffUnitTest {
 			35 => 1,
 			36 => 1,
 			37 => 1,
+			44 => 1,
+			48 => 1,
+			49 => 1,
 		);
 	}
-
 }

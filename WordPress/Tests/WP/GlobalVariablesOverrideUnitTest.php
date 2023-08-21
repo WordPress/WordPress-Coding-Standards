@@ -14,21 +14,23 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the GlobalVariables sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.3.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
+ * @since 1.0.0  This sniff has been moved from the `Variables` category to the `WP`
+ *               category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
  *
- * @since   0.3.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
- * @since   1.0.0  This sniff has been moved from the `Variables` category to the `WP`
- *                 category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
+ * @covers \WordPressCS\WordPress\Helpers\ListHelper
+ * @covers \WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper
+ * @covers \WordPressCS\WordPress\Sniffs\WP\GlobalVariablesOverrideSniff
  */
-class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
+final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = '' ) {
 		switch ( $testFile ) {
@@ -37,6 +39,7 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					3   => 1,
 					6   => 1,
 					8   => 1,
+					11  => 1, // Old-style WPCS ignore comments are no longer supported.
 					16  => 1,
 					17  => 1,
 					18  => 1,
@@ -54,13 +57,16 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					143 => 1,
 					146 => 1,
 					181 => 1,
-					198 => 1,
 					212 => 4,
 					230 => 2,
 					231 => 2,
 					234 => 2,
 					239 => 3,
 					242 => 1,
+					252 => 1,
+					268 => 1,
+					292 => 1,
+					294 => 1,
 				);
 
 			case 'GlobalVariablesOverrideUnitTest.2.inc':
@@ -82,6 +88,11 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 					29 => 1,
 				);
 
+			case 'GlobalVariablesOverrideUnitTest.7.inc':
+				return array(
+					19 => 1,
+				);
+
 			default:
 				return array();
 		}
@@ -90,20 +101,9 @@ class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
-	public function getWarningList( $testFile = '' ) {
-		switch ( $testFile ) {
-			case 'GlobalVariablesOverrideUnitTest.1.inc':
-				return array(
-					11 => 1, // Whitelist comment deprecation warning.
-				);
-
-			default:
-				return array();
-		}
+	public function getWarningList() {
+		return array();
 	}
-
 }

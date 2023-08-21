@@ -14,12 +14,10 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 /**
  * Restrict the use of various development functions.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  */
-class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 
 	/**
 	 * Groups of functions to restrict.
@@ -62,5 +60,4 @@ class DevelopmentFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			),
 		);
 	}
-
 }

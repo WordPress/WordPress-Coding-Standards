@@ -9,8 +9,13 @@
 
 namespace WordPressCS\WordPress\Sniffs\Utils;
 
-use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\GetTokensAsString;
+use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\TextStrings;
+use WordPressCS\WordPress\AbstractFunctionParameterSniff;
+use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 
 /**
  * Comprehensive I18n text domain fixer tool.
@@ -21,11 +26,9 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * Note: Without a user-defined configuration in a custom ruleset, this sniff will be ignored.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.2.0
+ * @since 1.2.0
  */
-class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
+final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * A list of tokenizers this sniff supports.
@@ -44,7 +47,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var string[]|string
+	 * @var string[]
 	 */
 	public $old_text_domain;
 
@@ -70,50 +73,159 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 * The WP Internationalization related functions to target for the replacements.
 	 *
 	 * @since 1.2.0
+	 * @since 3.0.0 The format of the value has changed from a numerically indexed
+	 *              array containing parameter positions to an array with the parameter
+	 *              position as the index and the parameter name as value.
 	 *
-	 * @var array <string function name> => <int parameter position>
+	 * @var array<string, array<string, int|string>> Function name as key, array with target
+	 *                                               parameter and name as value.
 	 */
 	protected $target_functions = array(
-		'load_textdomain'                        => 1,
-		'load_plugin_textdomain'                 => 1,
-		'load_muplugin_textdomain'               => 1,
-		'load_theme_textdomain'                  => 1,
-		'load_child_theme_textdomain'            => 1,
-		'unload_textdomain'                      => 1,
+		'load_textdomain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'load_plugin_textdomain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'load_muplugin_textdomain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'load_theme_textdomain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'load_child_theme_textdomain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'load_script_textdomain' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'unload_textdomain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
 
-		'__'                                     => 2,
-		'_e'                                     => 2,
-		'_x'                                     => 3,
-		'_ex'                                    => 3,
-		'_n'                                     => 4,
-		'_nx'                                    => 5,
-		'_n_noop'                                => 3,
-		'_nx_noop'                               => 4,
-		'translate_nooped_plural'                => 3,
-		'_c'                                     => 2, // Deprecated.
-		'_nc'                                    => 4, // Deprecated.
-		'__ngettext'                             => 4, // Deprecated.
-		'__ngettext_noop'                        => 3, // Deprecated.
-		'translate_with_context'                 => 2, // Deprecated.
+		'__' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'_e' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'_x' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
+		'_ex' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
+		'_n' => array(
+			'position' => 4,
+			'name'     => 'domain',
+		),
+		'_nx' => array(
+			'position' => 5,
+			'name'     => 'domain',
+		),
+		'_n_noop' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
+		'_nx_noop' => array(
+			'position' => 4,
+			'name'     => 'domain',
+		),
+		'translate_nooped_plural' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
 
-		'esc_html__'                             => 2,
-		'esc_html_e'                             => 2,
-		'esc_html_x'                             => 3,
-		'esc_attr__'                             => 2,
-		'esc_attr_e'                             => 2,
-		'esc_attr_x'                             => 3,
+		'esc_html__' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'esc_html_e' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'esc_html_x' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
+		'esc_attr__' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'esc_attr_e' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'esc_attr_x' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
 
-		'is_textdomain_loaded'                   => 1,
-		'get_translations_for_domain'            => 1,
+		'is_textdomain_loaded' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'get_translations_for_domain' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+
+		// Deprecated functions.
+		'_c' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'_nc' => array(
+			'position' => 4,
+			'name'     => 'domain',
+		),
+		'__ngettext' => array(
+			'position' => 4,
+			'name'     => 'domain',
+		),
+		'__ngettext_noop' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
+		'translate_with_context' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
 
 		// Shouldn't be used by plugins/themes.
-		'translate'                              => 2,
-		'translate_with_gettext_context'         => 3,
+		'translate' => array(
+			'position' => 2,
+			'name'     => 'domain',
+		),
+		'translate_with_gettext_context' => array(
+			'position' => 3,
+			'name'     => 'domain',
+		),
 
 		// WP private functions. Shouldn't be used by plugins/themes.
-		'_load_textdomain_just_in_time'          => 1,
-		'_get_path_to_translation_from_lang_dir' => 1,
-		'_get_path_to_translation'               => 1,
+		'_load_textdomain_just_in_time' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'_get_path_to_translation_from_lang_dir' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
+		'_get_path_to_translation' => array(
+			'position' => 1,
+			'name'     => 'domain',
+		),
 	);
 
 	/**
@@ -150,45 +262,51 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var array Array key is the header name, the value indicated whether it is a
-	 *            required (true) or optional (false) header.
+	 * @var array<string, bool> Array key is the header name, the value indicated whether it is a
+	 *                          required (true) or optional (false) header.
 	 */
 	private $theme_headers = array(
-		'Theme Name'  => true,
-		'Theme URI'   => false,
-		'Author'      => true,
-		'Author URI'  => false,
-		'Description' => true,
-		'Version'     => true,
-		'License'     => true,
-		'License URI' => true,
-		'Tags'        => false,
-		'Text Domain' => true,
-		'Domain Path' => false,
+		'Theme Name'        => true,
+		'Theme URI'         => false,
+		'Author'            => true,
+		'Author URI'        => false,
+		'Description'       => true,
+		'Version'           => true,
+		'Requires at least' => true,
+		'Tested up to'      => true,
+		'Requires PHP'      => true,
+		'License'           => true,
+		'License URI'       => true,
+		'Text Domain'       => true,
+		'Tags'              => false,
+		'Domain Path'       => false,
 	);
 
 	/**
 	 * Possible headers for a plugin.
 	 *
-	 * @link https://developer.wordpress.org/plugins/the-basics/header-requirements/
+	 * @link https://developer.wordpress.org/plugins/plugin-basics/header-requirements/
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var array Array key is the header name, the value indicated whether it is a
-	 *            required (true) or optional (false) header.
+	 * @var array<string, bool> Array key is the header name, the value indicated whether it is a
+	 *                          required (true) or optional (false) header.
 	 */
 	private $plugin_headers = array(
-		'Plugin Name' => true,
-		'Plugin URI'  => false,
-		'Description' => false,
-		'Version'     => false,
-		'Author'      => false,
-		'Author URI'  => false,
-		'License'     => false,
-		'License URI' => false,
-		'Text Domain' => false,
-		'Domain Path' => false,
-		'Network'     => false,
+		'Plugin Name'       => true,
+		'Plugin URI'        => false,
+		'Description'       => false,
+		'Version'           => false,
+		'Requires at least' => false,
+		'Requires PHP'      => false,
+		'Author'            => false,
+		'Author URI'        => false,
+		'License'           => false,
+		'License URI'       => false,
+		'Text Domain'       => false,
+		'Domain Path'       => false,
+		'Network'           => false,
+		'Update URI'        => false,
 	);
 
 	/**
@@ -227,7 +345,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $tab_width = null;
 
@@ -280,7 +398,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->old_text_domain ) ) {
-			$this->old_text_domain = $this->merge_custom_array( $this->old_text_domain, array(), false );
+			$this->old_text_domain = RulesetPropertyHelper::merge_custom_array( $this->old_text_domain, array(), false );
 
 			if ( ! is_array( $this->old_text_domain )
 				|| array() === $this->old_text_domain
@@ -325,14 +443,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( isset( $this->tab_width ) === false ) {
-			if ( isset( $this->phpcsFile->config->tabWidth ) === false
-				|| 0 === $this->phpcsFile->config->tabWidth
-			) {
-				// We have no idea how wide tabs are, so assume 4 spaces for fixing.
-				$this->tab_width = 4;
-			} else {
-				$this->tab_width = $this->phpcsFile->config->tabWidth;
-			}
+			$this->tab_width = Helper::getTabWidth( $this->phpcsFile );
 		}
 
 		if ( \T_DOC_COMMENT_OPEN_TAG === $this->tokens[ $stackPtr ]['code']
@@ -341,7 +452,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 			// Examine for plugin/theme file header.
 			return $this->process_comments( $stackPtr );
 
-		} elseif ( 'CSS' !== $this->phpcsFile->tokenizerType ) {
+		} elseif ( isset( $this->phpcsFile->tokenizerType ) === false || 'CSS' !== $this->phpcsFile->tokenizerType ) {
 			// Examine a T_STRING token in a PHP file as a function call.
 			return parent::process_token( $stackPtr );
 		}
@@ -355,24 +466,34 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		$target_param = $this->target_functions[ $matched_content ];
+		$target_param_specs = $this->target_functions[ $matched_content ];
+		$found_param        = PassedParameters::getParameterFromStack( $parameters, $target_param_specs['position'], $target_param_specs['name'] );
 
-		if ( isset( $parameters[ $target_param ] ) === false && 1 !== $target_param ) {
+		if ( false === $found_param && 1 !== $target_param_specs['position'] ) {
 			$error_msg  = 'Missing $domain arg';
 			$error_code = 'MissingArgDomain';
 
-			if ( isset( $parameters[ ( $target_param - 1 ) ] ) ) {
+			$has_named_params = false;
+			foreach ( $parameters as $param ) {
+				if ( isset( $param['name'] ) ) {
+					$has_named_params = true;
+					break;
+				}
+			}
+
+			if ( false === $has_named_params && isset( $parameters[ ( $target_param_specs['position'] - 1 ) ] ) ) {
 				$fix = $this->phpcsFile->addFixableError( $error_msg, $stackPtr, $error_code );
 
 				if ( true === $fix ) {
-					$start_previous = $parameters[ ( $target_param - 1 ) ]['start'];
-					$end_previous   = $parameters[ ( $target_param - 1 ) ]['end'];
+					$start_previous = $parameters[ ( $target_param_specs['position'] - 1 ) ]['start'];
+					$end_previous   = $parameters[ ( $target_param_specs['position'] - 1 ) ]['end'];
 					if ( \T_WHITESPACE === $this->tokens[ $start_previous ]['code']
 						&& $this->tokens[ $start_previous ]['content'] === $this->phpcsFile->eolChar
 					) {
@@ -401,6 +522,16 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 						$this->phpcsFile->fixer->addContent( $end_previous, $replacement );
 					}
 				}
+			} elseif ( true === $has_named_params ) {
+				/*
+				 * Function call using named arguments. For now, we will not auto-fix this.
+				 *
+				 * {@internal If we don't bother with indentation and such, this can be made
+				 * auto-fixable by getting the 'end' of the last seen parameter and adding the
+				 * domain parameter, with the 'domain: ' parameter label, after the last
+				 * seen parameter.}
+				 */
+				$this->phpcsFile->addError( $error_msg, $stackPtr, $error_code );
 			} else {
 				$error_msg .= ' and preceding argument(s)';
 				$error_code = 'MissingArgs';
@@ -413,8 +544,8 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// Target parameter found. Let's examine it.
-		$domain_param_start = $parameters[ $target_param ]['start'];
-		$domain_param_end   = $parameters[ $target_param ]['end'];
+		$domain_param_start = $found_param['start'];
+		$domain_param_end   = $found_param['end'];
 		$domain_token       = null;
 
 		for ( $i = $domain_param_start; $i <= $domain_param_end; $i++ ) {
@@ -436,7 +567,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		}
 
 		// If we're still here, this means only one T_CONSTANT_ENCAPSED_STRING was found.
-		$old_domain = $this->strip_quotes( $this->tokens[ $domain_token ]['content'] );
+		$old_domain = TextStrings::stripQuotes( $this->tokens[ $domain_token ]['content'] );
 
 		if ( ! \in_array( $old_domain, $this->old_text_domain, true ) ) {
 			// Not a text domain targetted for replacement, ignore.
@@ -463,15 +594,15 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 *
 	 * @return void
 	 */
 	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {
-
 		$target_param = $this->target_functions[ $matched_content ];
 
-		if ( 1 !== $target_param ) {
+		if ( 1 !== $target_param['position'] ) {
 			// Only process the no param case as fixable if the text domain is expected to be the first parameter.
 			$this->phpcsFile->addWarning( 'Missing $domain arg and preceding argument(s)', $stackPtr, 'MissingArgs' );
 			return;
@@ -545,13 +676,13 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		$type    = 'plugin';
 		$skip_to = $stackPtr;
 
-		$file = $this->strip_quotes( $this->phpcsFile->getFileName() );
+		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
 		if ( 'STDIN' === $file ) {
 			return;
 		}
 
 		$file_name = basename( $file );
-		if ( 'CSS' === $this->phpcsFile->tokenizerType ) {
+		if ( isset( $this->phpcsFile->tokenizerType ) && 'CSS' === $this->phpcsFile->tokenizerType ) {
 			if ( 'style.css' !== $file_name && ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
 				// CSS files only need to be examined for the file header.
 				return ( $this->phpcsFile->numTokens + 1 );
@@ -685,7 +816,7 @@ class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 						}
 
 						$replacement = $this->phpcsFile->eolChar
-							. $this->phpcsFile->getTokensAsString( $i, ( $last_header_ptr - $i ), true )
+							. GetTokensAsString::origContent( $this->phpcsFile, $i, ( $last_header_ptr - 1 ) )
 							. $replacement;
 					}
 

@@ -157,14 +157,14 @@ namespace Acronym {
 
 
 /*
- * OK - exceptions whitelisted by default.
+ * OK - exceptions ignored by default.
  */
 $_POST['something'] = 'value';
 
 do_action_deprecated( 'set_current_user' ); // Deprecated hook, ignored.
 
 // WP global variables, override warning is handled by another sniff.
-function acronym_do_something() {
+function acronym_do_another_thing() {
 	global $post;
 	$post = 'value';
 	$GLOBALS['post'] = 'value';
@@ -181,7 +181,7 @@ class Example extends WP_UnitTestCase {
 	function do_something() {}
 }
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist[] My_TestClass
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_classes[] My_TestClass
 class Test_Class_D extends My_TestClass {
 
 	const SOME_CONSTANT = 'value';
@@ -190,25 +190,25 @@ class Test_Class_D extends My_TestClass {
 
 	function do_something() {}
 }
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_class_whitelist[]
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_classes[]
 
 
-/*
- * OK - whitelisted via whitelist comment.
- */
 if ( ! function_exists( 'intdiv' ) ) {
 	// Fill in for a PHP function which is not available in low PHP versions.
-	function intdiv() { // WPCS: prefix ok.
+	function intdiv() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 		// Some code.
     }
 }
 
 if ( ! defined( 'PHP_VERSION_ID' ) ) {
     $acronym_version = explode('.', PHP_VERSION);
-    define('PHP_VERSION_ID', (int) (($acronym_version[0] * 10000) + ($acronym_version[1] * 100) + $acronym_version[2])); // WPCS: prefix ok.
+    define('PHP_VERSION_ID', (int) (($acronym_version[0] * 10000) + ($acronym_version[1] * 100) + $acronym_version[2]));
     unset($acronym_version);
 }
 
+/*
+ * Bad - ignored via old-style ignore comment.
+ */
 $something = 'abc'; // WPCS: prefix ok.
 
 // Executing a WP core action or filter is sometimes ok.
@@ -319,7 +319,7 @@ namespace TGMPA\Testing {
 	define( 'MY\\' . __NAMESPACE__, __FILE__ ); // OK, even though strangely setup, the constant is in a namespace.
 }
 
-// OK: whitelisted core hooks.
+// OK: ignored core hooks.
 apply_filters( 'widget_title', $title );
 do_action( 'add_meta_boxes' );
 
@@ -376,7 +376,7 @@ function acronymFunction() {
 
 // Issue #1311 - allow for overrulable WP Core constants.
 define( 'FORCE_SSL_ADMIN', true );
-const SCRIPT_DEBUG = $develop_src;
+const SCRIPT_DEBUG = true;
 
 // Allow for hook name prefixes with less conventional separators.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] test-this,myplugin\
@@ -399,7 +399,7 @@ class Some_Test_Class extends NonTestClass { // Bad.
 }
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wordpress,somethingelse
-// The above line adds an issue to line 1 about a blacklisted prefix.
+// The above line adds an issue to line 1 about a blocked prefix.
 function wordpress_do_something() {} // Bad.
 function somethingelse_do_something() {} // OK.
 
@@ -482,6 +482,20 @@ function acronym_lists_in_function_scope() {
  */
 function deprecated_function() {}
 
+/**
+ * Function description.
+ *
+ * @since 1.2.3
+ * @deprecated 2.3.4
+ *
+ * @return void
+ */
+#[MyAttribute([
+	'something',
+	'something else',
+])]
+function deprecated_function_with_attribute() {}
+
 /*
  * Bad: Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/1733.
  *
@@ -497,12 +511,166 @@ function aa_do_something(){}
 
 // The following line mimicks an empty prefix value.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
-function aa_do_something(){}
+function aaa_do_something(){}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊
 function 😊_do_something(){}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
 function 😊😊_do_something(){}
+
+// Reset to the standard test prefixes.
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
+
+if ( ! interface_exists( 'Serializable' ) ) {
+	interface Serializable {} // Introduced in PHP 5.1.0.
+}
+
+// Not wrapped in a `defined()` as the `const` keyword can only be used in the top-level scope.
+// Just presume the file containing this code is included conditionally ;-)
+const E_DEPRECATED = 8192; // Introduced in PHP 5.3.0.
+
+apply_filters( /* name missing */, $var ); // Ignore as undetermined.
+
+/*
+ * Safeguard correct handling (ignoring) of PHP 7.4+ arrow functions.
+ */
+// Parameters in a arrow function declaration do not need to be prefixed.
+$acronym_fn = fn($foo = 10, $bar = 20) => $foo;
+
+// Variable variables local to the arrow function do not need to be prefixed.
+$acronym_fn = fn($acronym_name, $acronym_value) => $$acronym_name = $acronym_value;
+
+// Function local variables in a arrow function declaration do not need to be prefixed.
+$acronym_fn = fn($acronym_name, $acronym_value) => $new = $acronym_value;
+
+// The `$GLOBAL['my_key']` assignment and the function declaration within the closure should still be flagged.
+$acronym_fn = fn($a, $b) =>
+	$no_prefix = function($a, $b) { // The `$no_prefix` variable should be ignored.
+		$GLOBALS['my_key'] = 10; // Bad.
+		function named() {} // Bad.
+		return $a + $b;
+	};
+
+// Safeguard that assignments using the PHP 7.4+ null coalesce equals operator are handled correctly.
+function acronym_null_coalesce_equals() {
+	$GLOBALS['my_key'] ??= 10; // Bad.
+}
+
+// Safeguard that property assignments using the PHP 8.0+ nullsafe object operator do not trigger false positives.
+$acronym_object?->property = 10;
+
+/*
+ * Safeguard support for function calls using PHP 8.0+ named parameters.
+ */
+define( value: 0 ); // OK. Well, not really as missing a required param, but that's not the concern of this sniff.
+define(
+	value        : 'not_prefixed',
+	constant_name: 'NOT_PREFIXED', // Bad.
+);
+define(
+	case_insensitive: true,
+	constant_name: 'ACRONYM_PREFIXED', // OK.
+	value: 0,
+);
+
+do_action_ref_array( hook: 'My-Hook', args: $args ); // OK. Well, not really, but using the wrong parameter name, so not our concern.
+do_action_ref_array( args: $args, hook_name: 'acronym_hook', ); // OK.
+do_action_ref_array( args: $args, hook_name: 'My-Hook', ); // Bad.
+do_action( hook_name: "acronym_plugin_action_{$acronym_filter_var}" ); // OK.
+
+apply_filters_ref_array( args: $args ); // OK. Well, not really, but missing required parameter, so not our concern.
+apply_filters_ref_array( args: $var, hook_name: 'acronym_filter', ); // OK.
+apply_filters_ref_array( args: $var, hook_name: 'theme_filter', ); // Bad.
+apply_filters_ref_array( hook_name: 'theme_filter_' . $acronym_filter_var ); // Bad.
+
+// Safeguard that comments in the parameters are ignored.
+apply_filters( /* test */ 'widget_title', $title );
+do_action( /* test */ 'add_meta_boxes' );
+
+define( /* test */ 'FORCE_SSL_ADMIN', true );
+
+// Safeguard that assignments to properties using PHP 8.0+ constructor property promotion don't lead to false positives.
+class Acronym_ConstructorPropertyPromotion {
+	public function __construct(
+		public int $timestart = 0,
+		protected int|bool $timeend = false,
+		$post = null
+	) {} // Ok.
+}
+
+/*
+ * Safeguard that PHP 8.1+ enums are treated correctly.
+ */
+enum Example {} // Bad.
+enum Another_Example: int {} // Bad.
+
+enum Acronym: string implements SomeInterface {} // OK.
+enum AcronymExample { // OK.
+	// Constants and methods declared within an enum do not need to be prefixed. (Properties are not allowed)
+	const SOME_CONSTANT = 'value'; // OK.
+	public function do_something( $param = 'default' ) {} // OK x2.
+
+	// Global constants and hook names still do need to be prefixed when defined within an enum.
+	protected function hello() {
+		define( 'FOO', 'value' ); // Bad.
+		apply_filters( 'foo', $args ); // Bad.
+	}
+}
+
+// Safeguard that the sniff ignores PHP 8.2+ constants in traits correctly.
+trait Acronym_Has_Constant {
+	final const NON_PREFIXED = true; // OK.
+}
+
+// Safeguard improved finding of end of global statement.
+function acronym_close_tag_can_end_global_statement() {
+	global $something, $acronym_else ?>
+
+	<?php
+	echo $breakOutOfTheStatement;
+	$acronym_else = 'value'; // OK.
+	$something = 'value'; // Bad.
+	$breakOutOfTheStatement = 'value'; // OK.
+}
+
+// Safeguard improved checking if global statement is in the current scope.
+function acronym_only_check_global_statement_in_current_scope() {
+	$closure = function() {
+		global $something;
+		return $something;
+	};
+
+	$something = 'value'; // OK, global statement is in different scope.
+}
+
+/*
+ * Safeguard that function name comparisons for PHP native function polyfills are done case-insensitively.
+ */
+if ( function_exists( 'stripos' ) ) {
+	function striPos() {}
+}
+
+/*
+ * Safeguard that pluggable functions and classes can be declared without a prefix.
+ */
+function wp_hash_password( $password ) {
+	// Do something.
+	return $hash;
+}
+
+function WP_Mail() {}
+
+class WP_User_Search {}
+
+class WP_Atom_Server {
+	public function __call( $name, $arguments ) {
+		// Do something.
+	}
+
+	public static function __callStatic( $name, $arguments ) {
+		// Do something.
+	}
+}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

@@ -14,16 +14,16 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the PHP_DiscouragedPHPFunctions sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.14.0
  *
- * @since   0.14.0
+ * @covers \WordPressCS\WordPress\Sniffs\PHP\RestrictedPHPFunctionsSniff
  */
-class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
+final class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -34,10 +34,9 @@ class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Class Name Case"
+    >
+    <standard>
+    <![CDATA[
+    It is strongly recommended to refer to WP native classes by their properly cased name.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: reference to a WordPress native class name using the correct case.">
+        <![CDATA[
+$obj = new WP_Query;
+        ]]>
+        </code>
+        <code title="Invalid: reference to a WordPress native class name not using the correct case.">
+        <![CDATA[
+$obj = new wp_query;
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

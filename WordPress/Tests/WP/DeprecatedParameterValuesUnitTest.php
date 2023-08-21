@@ -14,16 +14,16 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the DeprecatedParameterValues sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 1.0.0
  *
- * @since   1.0.0
+ * @covers \WordPressCS\WordPress\Sniffs\WP\DeprecatedParameterValuesSniff
  */
-class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
+final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
 		return array(
@@ -41,16 +41,26 @@ class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 			16 => 1,
 			17 => 1,
 			18 => 1,
+			35 => 1,
+			40 => 1,
+			43 => 1,
+			44 => 1,
+			45 => 1,
+			46 => 1,
+			47 => 1,
+			48 => 1,
+			49 => 1,
+			50 => 1,
+			51 => 1,
 		);
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

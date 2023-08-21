@@ -14,19 +14,19 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the ArrayDeclarationSpacing sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Sniffs\Arrays\ArrayDeclarationSpacingSniff
  */
-class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
+final class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
 	 * @param string $testFile The name of the file being tested.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = '' ) {
 
@@ -34,66 +34,46 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 			// Long arrays.
 			case 'ArrayDeclarationSpacingUnitTest.1.inc':
 				return array(
-					8   => 2,
-					11  => 2,
-					16  => 4,
-					20  => 2,
-					22  => 1,
-					26  => 1,
-					29  => 1,
-					32  => 1,
-					38  => 1,
-					39  => 1,
-					45  => 1,
-					49  => 1,
-					62  => 2,
-					63  => 1,
-					64  => 1,
-					84  => 1,
-					85  => 1,
-					88  => 1,
-					89  => 2,
-					92  => 3,
-					94  => 1,
-					97  => 1,
-					98  => 2,
-					101 => 1,
-					103 => 2,
-					104 => 2,
-					108 => 1,
-					109 => 1,
-					121 => 1,
+					9  => 4,
+					13 => 2,
+					15 => 1,
+					19 => 1,
+					22 => 1,
+					25 => 1,
+					44 => 1,
+					45 => 1,
+					48 => 1,
+					49 => 1,
+					52 => 2,
+					54 => 1,
+					57 => 1,
+					58 => 1,
+					62 => 1,
+					63 => 1,
+					75 => 1,
 				);
 
 			// Short arrays.
 			case 'ArrayDeclarationSpacingUnitTest.2.inc':
 				return array(
-					8   => 2,
-					11  => 2,
-					16  => 4,
-					20  => 2,
-					22  => 1,
-					26  => 1,
-					29  => 1,
-					32  => 1,
-					45  => 1,
-					46  => 1,
-					47  => 1,
-					67  => 1,
-					68  => 1,
-					71  => 1,
-					72  => 2,
-					75  => 3,
-					77  => 1,
-					80  => 1,
-					81  => 2,
-					84  => 1,
-					86  => 2,
-					87  => 2,
-					91  => 1,
-					92  => 1,
-					104 => 1,
-					126 => 1,
+					9  => 4,
+					13 => 2,
+					15 => 1,
+					19 => 1,
+					22 => 1,
+					25 => 1,
+					44 => 1,
+					45 => 1,
+					48 => 1,
+					49 => 1,
+					52 => 2,
+					54 => 1,
+					57 => 1,
+					58 => 1,
+					62 => 1,
+					63 => 1,
+					75 => 1,
+					97 => 1,
 				);
 
 			default:
@@ -104,10 +84,9 @@ class ArrayDeclarationSpacingUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
 		return array();
 	}
-
 }

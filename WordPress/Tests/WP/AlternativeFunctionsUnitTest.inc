@@ -1,13 +1,11 @@
 <?php
 
-
-
 curl_init(); // Warning.
 curl_close( $ch ); // Warning.
 CURL_getinfo(); // Warning.
 curlyhair(); // Ok.
 
-parse_url( 'http://example.com/' ); // Warning.
+parse_url( 'https://example.com/' ); // Warning.
 
 $json = json_encode( $thing ); // Warning, use wp_json_encode instead.
 
@@ -28,17 +26,7 @@ srand(); // Warning.
 mt_srand(); // Warning.
 wp_rand(); // OK.
 
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
-parse_url( 'http://example.com/' ); // OK.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
-
 strip_tags( $something, '<iframe>' ); // OK.
-
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.0
-parse_url($url, PHP_URL_QUERY); // OK.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.7
-parse_url($url, PHP_URL_SCHEME); // Warning.
-// phpcs:set WordPress.WP.AlternativeFunctions minimum_supported_version 4.6
 
 file_get_contents( $local_file, true ); // OK.
 file_get_contents( $url, false ); // Warning.
@@ -78,3 +66,84 @@ function curl_version_ssl() {} // OK.
 use function curl_version; // OK.
 use function something as curl_version; // OK.
 use function curl_init as curl_version; // Bad.
+
+unlink(); // Warning.
+rename(); // Warning.
+chgrp(); // Warning.
+chmod(); // Warning.
+chown(); // Warning.
+is_writable(); // Warning.
+is_writeable(); // Warning.
+mkdir(); // Warning.
+rmdir(); // Warning.
+touch(); // Warning.
+fputs(); // Warning.
+
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
+parse_url( 'http://example.com/' ); // OK, alternative was not yet available.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.4
+parse_url( 'http://example.com/' ); // Warning, not using $component param, so can switch over.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version
+
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.0
+parse_url($url, PHP_URL_QUERY); // OK, alternative was not yet available.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.5
+parse_url($url, PHP_URL_QUERY); // OK, $component param not yet available.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
+parse_url($url, PHP_URL_SCHEME); // Warning, using $component param, but also using WP 4.7+, so can switch over.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version
+
+/*
+ * Tests for support for PHP 8.0+ named parameters.
+ */
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to strip_tags().
+strip_tags( allowed_tags: '<iframe>' ); // OK. Well not really, missing required param, but that's not the concern of this sniff.
+strip_tags( allowed_tags: '<iframe>', string: $something ); // OK.
+strip_tags( string: $something ); // Warning.
+
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to parse_url().
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.4
+parse_url(component : PHP_URL_QUERY); // OK. Well, not really, missing required parameter, but that's not the concern of this sniff.
+parse_url(component : PHP_URL_QUERY, url : $url); // OK.
+parse_url(url : $url); // Warning.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version 4.7
+parse_url(component: PHP_URL_SCHEME, url: $url, ); // Warning.
+// phpcs:set WordPress.WP.AlternativeFunctions minimum_wp_version
+
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to file_get_contents().
+file_get_contents( use_include_path: true, filename: $local_file, ); // OK.
+file_get_contents( use_include_path: false, filename: $url, ); // Warning.
+
+file_get_contents( use_include_path: false ); // OK, well not really, missing required param, but that's not the concern of this sniff.
+
+file_get_contents( use_include_path: false, filename: 'http://remoteurl.com/file/?w=1' ); // Warning.
+file_get_contents( use_include_path: false, filename: 'https://wordpress.org' ); // Warning.
+file_get_contents( use_include_path: false, filename: ABSPATH . 'wp-admin/css/some-file.css'); // OK.
+file_get_contents( use_include_path: false, filename: 'php://input' ); // OK.
+file_get_contents(use_include_path: false, filename: MYABSPATH . 'plugin-file.json'); // Warning.
+
+// Safeguard support for PHP 8.0+ named parameters for the custom logic related to fopen(), readfile() and file_put_contents().
+fopen (mode: 'w'); // Warning. Missing required param, but that's not the concern of this sniff.
+$output_stream = fopen( mode: 'w', filename: 'php://output', ); // OK.
+$output_stream = fopen( mode: 'w', context: $stream, filename: STDOUT ); // OK.
+$bytes = readfile( use_include_path: false, context: $stream, filename: 'php://fd/3' ); // OK.
+file_put_contents( data: $data, flags : LOCK_EX, filename: STDERR ); // OK.
+$output_stream = fopen( mode: 'r', filename: $url, ); // Warning.
+
+// Safeguard that comments in the parameters are ignored for the custom logic related to file_get_contents().
+file_get_contents(
+	$local_file,
+	true // Using local include path.
+); // OK.
+file_get_contents(
+	// Not using an https: URL for reasons.
+	ABSPATH . 'wp-admin/css/some-file.css'
+); // OK.
+file_get_contents(
+	// Not using ABSPATH for reasons.
+	$url
+); // Warning.
+file_get_contents(
+	// Not using plugin_dir_path() for reasons.
+	$url
+); // Warning.

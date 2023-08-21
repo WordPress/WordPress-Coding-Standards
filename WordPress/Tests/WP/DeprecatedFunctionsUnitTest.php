@@ -14,21 +14,22 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 /**
  * Unit test class for the WP_DeprecatedFunctions sniff.
  *
- * @package WPCS\WordPressCodingStandards
+ * @since 0.11.0
+ * @since 0.13.0 Class name changed: this class is now namespaced.
  *
- * @since   0.11.0
- * @since   0.13.0 Class name changed: this class is now namespaced.
+ * @covers \WordPressCS\WordPress\Sniffs\WP\DeprecatedFunctionsSniff
  */
-class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
+final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
 	 *
-	 * @return array <int line number> => <int number of errors>
+	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList() {
-
-		$errors = array_fill( 8, 329, 1 );
+		$start_line = 8;
+		$end_line   = 362;
+		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
 		unset(
@@ -43,6 +44,7 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$errors[73],
 			$errors[76],
 			$errors[80],
+			$errors[102], // Undeprecated function.
 			$errors[118],
 			$errors[125],
 			$errors[162],
@@ -63,8 +65,21 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 			$errors[319],
 			$errors[323],
 			$errors[330],
-			$errors[332]
+			$errors[332],
+			$errors[337],
+			$errors[340],
+			$errors[344],
+			$errors[346],
+			$errors[353],
+			$errors[357],
+			$errors[359],
+			$errors[361]
 		);
+
+		// Temporarily until PHPCS supports PHP 8.2.
+		if ( \PHP_VERSION_ID >= 80200 ) {
+			unset( $errors[360] ); // Function call to readonly.
+		}
 
 		return $errors;
 	}
@@ -72,19 +87,22 @@ class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @return array <int line number> => <int number of warnings>
+	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
-
-		$warnings = array_fill( 342, 8, 1 );
+		$start_line = 368;
+		$end_line   = 413;
+		$warnings   = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
 		unset(
-			$warnings[344],
-			$warnings[348]
+			$warnings[373],
+			$warnings[375],
+			$warnings[377],
+			$warnings[387],
+			$warnings[390]
 		);
 
 		return $warnings;
 	}
-
 }

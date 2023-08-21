@@ -9,16 +9,15 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
+use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
  * Flag calling preg_quote() without the second ($delimiter) parameter.
  *
- * @package WPCS\WordPressCodingStandards
- *
- * @since   1.0.0
+ * @since 1.0.0
  */
-class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
+final class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.
@@ -32,11 +31,11 @@ class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * List of functions this sniff should examine.
 	 *
-	 * @link http://php.net/preg_quote
+	 * @link https://www.php.net/preg_quote
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var array <string function_name> => <bool>
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'preg_quote' => true,
@@ -49,21 +48,23 @@ class PregQuoteDelimiterSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
-	 * @param string $matched_content The token content (function name) which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
 	 * @param array  $parameters      Array with information about the parameters.
 	 *
 	 * @return void
 	 */
 	public function process_parameters( $stackPtr, $group_name, $matched_content, $parameters ) {
-		if ( \count( $parameters ) > 1 ) {
+
+		$delimiter = PassedParameters::getParameterFromStack( $parameters, 2, 'delimiter' );
+		if ( false !== $delimiter ) {
 			return;
 		}
 
 		$this->phpcsFile->addWarning(
-			'Passing the $delimiter as the second parameter to preg_quote() is strongly recommended.',
+			'Passing the $delimiter parameter to preg_quote() is strongly recommended.',
 			$stackPtr,
 			'Missing'
 		);
 	}
-
 }

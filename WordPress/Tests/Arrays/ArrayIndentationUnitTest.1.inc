@@ -388,7 +388,7 @@ else {
 	'notes3'         => array(
 		'<p>Please note: On some PHP versions <code>filter_var( $x, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE )</code> where <code>$x = false</code> will incorrectly return <code>null</code>.<br />
 		Also: with the same parameters filter_var() will return <code>false</code> instead of <code>null</code> for most objects.</p>',
-		'<p>The code snippet is simplified for brevity. Please refer to the source of this file on <a href="http://github.com/jrfnl/PHP-cheat-sheet-extended" target="_blank">GitHub</a> for full details on how to use filter_var_array().</p>',
+		'<p>The code snippet is simplified for brevity. Please refer to the source of this file on <a href="https://github.com/jrfnl/PHP-cheat-sheet-extended" target="_blank">GitHub</a> for full details on how to use filter_var_array().</p>',
 	),
 );
 
@@ -436,3 +436,13 @@ $my_array = [
 'prop1' => $prop1,
 			'prop2' => $prop2,
 ] = $some_var;
+
+// Fixer conflict prevention.
+$bad = array(
+	'key1' => 'value1', /* comment
+	end */ 'key2' => 'value2',
+);
+
+// Live coding/parse error.
+// This has to be the last test in the file.
+$array = array(
