@@ -39,12 +39,16 @@
 * [Fixing errors or ignoring them](#fixing-errors-or-ignoring-them)
     + [Tools shipped with WordPressCS](#tools-shipped-with-wordpresscs)
 * [Contributing](#contributing)
+* [Funding](#funding)
 * [License](#license)
 
+---
 
 ## Introduction
 
 This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
+
+This project needs funding. If you want to donate read [here](#funding) about how you can help.
 
 ## Minimum Requirements
 
@@ -62,7 +66,7 @@ For the best results, it is recommended to also ensure the following additional 
 
 ## Installation
 
-As of WordPressCS 3.0.0, installation via Composer using the below instructions is the only supported type of installation.
+As of [WordPressCS 3.0.0](https://make.wordpress.org/core/2023/08/21/wordpresscs-3-0-0-is-now-available/), installation via Composer using the below instructions is the only supported type of installation.
 
 [Composer](https://getcomposer.org/) will automatically install the project dependencies and register the rulesets from WordPressCS and other external standards with PHP_CodeSniffer using the [Composer PHPCS plugin](https://github.com/PHPCSStandards/composer-installer).
 
@@ -247,6 +251,10 @@ At this moment, WordPressCS offer the following tools:
 ## Contributing
 
 See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit testing](.github/CONTRIBUTING.md#unit-testing) the standard.
+
+## Funding
+
+If you want to sponsor the work on WordPressCS, you can do so by donating to the [WP PHP Open Collective](https://opencollective.com//thewpcc/contribute/wp-php-63406).
 
 ## License
 
