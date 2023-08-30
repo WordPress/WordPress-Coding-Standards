@@ -739,13 +739,25 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				$content = $functionName;
 
 				// Check if it's static method call.
-				$double_colon = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
-				if ( false !== $double_colon
+				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				if ( false !== $next_non_empty
 					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
 				) {
 					// Set the pointer to the end of the method.
 					$i = $this->phpcsFile->findNext( \T_CLOSE_PARENTHESIS, $i, $end );
 				}
+
+				// Check if the class is fully qualified (namespaced), then check for the double colon (static method).
+				if ( false !== $next_non_empty
+					&& \T_NS_SEPARATOR === $this->tokens[ $double_colon ]['code']
+				) {
+
+				}
+
+				// Checking for fully qualified name - go and find all the T_STRING and T_NS_SEPARATOR until the T_DOUBLE_COLON token.
+
+
+
 			} else {
 				$content = $this->tokens[ $i ]['content'];
 				$ptr     = $i;
