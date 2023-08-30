@@ -22,3 +22,10 @@ _deprecated_function( __METHOD__, 'x.x.x', parent::Class ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', static::class ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', ClassName::escapingMethod() ); // Bad.
 echo 'Do not use ' . $object::class ); // OK.
+
+echo MyClass\ClassName::render( // Bad.
+	'testing',
+	ClassName::props('test-other', $attributes, [
+		'someName' => $attributeName
+	])
+);
