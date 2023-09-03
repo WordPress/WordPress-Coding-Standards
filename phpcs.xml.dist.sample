@@ -146,7 +146,7 @@
 	<rule ref="WordPress.WP.GlobalVariablesOverride">
 		<exclude-pattern>/path/to/Tests/*Test\.php</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.Files.Filename">
+	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>/path/to/Tests/*Test\.php</exclude-pattern>
 	</rule>
 
