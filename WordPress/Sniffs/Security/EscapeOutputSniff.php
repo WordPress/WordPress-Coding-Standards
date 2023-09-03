@@ -263,7 +263,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 				// Examine each parameter individually.
 				foreach ( $params as $param ) {
-					$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+					$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ), 'ExceptionNotEscaped' );
 				}
 
 				return $end;
@@ -344,7 +344,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				break;
 		}
 
-		return $this->check_code_is_escaped( $start, $end );
+		return $this->check_code_is_escaped( $start, $end, 'OutputNotEscaped' );
 	}
 
 	/**
@@ -395,7 +395,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					continue;
 				}
 
-				$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+				$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ), 'OutputNotEscaped' );
 			}
 
 			return $end;
@@ -414,7 +414,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return $end;
 			}
 
-			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ) );
+			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ), 'ErrorNotEscaped' );
 		}
 
 		/*
@@ -435,7 +435,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 		// Examine each parameter individually.
 		foreach ( $params as $param ) {
-			$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+			$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ), 'OutputNotEscaped' );
 		}
 
 		return $end;
@@ -446,12 +446,13 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @since 3.0.0 Split off from the process_token() method.
 	 *
-	 * @param int $start The position to start checking from.
-	 * @param int $end   The position to stop the check at.
+	 * @param int    $start The position to start checking from.
+	 * @param int    $end   The position to stop the check at.
+	 * @param string $code  Code to use for the PHPCS error.
 	 *
 	 * @return int Integer stack pointer to skip forward.
 	 */
-	protected function check_code_is_escaped( $start, $end ) {
+	protected function check_code_is_escaped( $start, $end, $code ) {
 		/*
 		 * Check for a ternary operator.
 		 * We only need to do this here if this statement is lacking parenthesis.
@@ -532,7 +533,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			// Handle PHP 8.0+ match expressions.
 			if ( \T_MATCH === $this->tokens[ $i ]['code'] ) {
-				$match_valid = $this->walk_match_expression( $i );
+				$match_valid = $this->walk_match_expression( $i, $code );
 				if ( false === $match_valid ) {
 					// Live coding or parse error. Shouldn't be possible as PHP[CS] will tokenize the keyword as `T_STRING` in that case.
 					break; // @codeCoverageIgnore
@@ -553,7 +554,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				$array_items = PassedParameters::getParameters( $this->phpcsFile, $i, 0, true );
 				if ( ! empty( $array_items ) ) {
 					foreach ( $array_items as $array_item ) {
-						$this->check_code_is_escaped( $array_item['start'], ( $array_item['end'] + 1 ) );
+						$this->check_code_is_escaped( $array_item['start'], ( $array_item['end'] + 1 ), $code );
 					}
 				}
 
@@ -699,7 +700,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 						$formatting_params = PassedParameters::getParameters( $this->phpcsFile, $i );
 						if ( ! empty( $formatting_params ) ) {
 							foreach ( $formatting_params as $format_param ) {
-								$this->check_code_is_escaped( $format_param['start'], ( $format_param['end'] + 1 ) );
+								$this->check_code_is_escaped( $format_param['start'], ( $format_param['end'] + 1 ), $code );
 							}
 						}
 
@@ -754,7 +755,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			$this->phpcsFile->addError(
 				"All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '%s'.",
 				$ptr,
-				'OutputNotEscaped',
+				$code,
 				array( $content )
 			);
 		}
@@ -825,11 +826,12 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $stackPtr Pointer to a T_MATCH token.
+	 * @param int    $stackPtr Pointer to a T_MATCH token.
+	 * @param string $code     Code to use for the PHPCS error.
 	 *
 	 * @return int|false Stack pointer to skip to or FALSE if the match expression contained a parse error.
 	 */
-	private function walk_match_expression( $stackPtr ) {
+	private function walk_match_expression( $stackPtr, $code ) {
 		if ( ! isset( $this->tokens[ $stackPtr ]['scope_opener'], $this->tokens[ $stackPtr ]['scope_closer'] ) ) {
 			// Parse error/live coding. Shouldn't be possible as PHP[CS] will tokenize the keyword as `T_STRING` in that case.
 			return false; // @codeCoverageIgnore
@@ -889,7 +891,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			}
 
 			// Now check that the value returned by this match "leaf" is correctly escaped.
-			$this->check_code_is_escaped( $item_start, $item_end );
+			$this->check_code_is_escaped( $item_start, $item_end, $code );
 
 			// Independently of whether or not the check was succesfull or ran into (parse error) problems,
 			// always skip to the identified end of the item.
