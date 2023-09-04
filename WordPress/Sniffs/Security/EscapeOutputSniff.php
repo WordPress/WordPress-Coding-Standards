@@ -414,7 +414,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return $end;
 			}
 
-			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ), 'ErrorNotEscaped' );
+			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ), 'OutputNotEscaped' );
 		}
 
 		/*
