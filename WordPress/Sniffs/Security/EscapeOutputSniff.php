@@ -344,7 +344,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				break;
 		}
 
-		return $this->check_code_is_escaped( $start, $end, 'OutputNotEscaped' );
+		return $this->check_code_is_escaped( $start, $end );
 	}
 
 	/**
@@ -395,7 +395,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					continue;
 				}
 
-				$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ), 'OutputNotEscaped' );
+				$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
 			}
 
 			return $end;
@@ -414,7 +414,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return $end;
 			}
 
-			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ), 'OutputNotEscaped' );
+			return $this->check_code_is_escaped( $message_param['start'], ( $message_param['end'] + 1 ) );
 		}
 
 		/*
@@ -435,7 +435,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 		// Examine each parameter individually.
 		foreach ( $params as $param ) {
-			$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ), 'OutputNotEscaped' );
+			$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
 		}
 
 		return $end;
@@ -452,7 +452,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 *
 	 * @return int Integer stack pointer to skip forward.
 	 */
-	protected function check_code_is_escaped( $start, $end, $code ) {
+	protected function check_code_is_escaped( $start, $end, $code = 'OutputNotEscaped' ) {
 		/*
 		 * Check for a ternary operator.
 		 * We only need to do this here if this statement is lacking parenthesis.
