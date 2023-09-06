@@ -740,23 +740,57 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 				// Check if it's static method call.
 				if ( $this->is_static_method_call( $i ) ) {
-					$end_name_ptr = $this->get_fully_qualified_name_ptr( $i );
-
-					$class_name = '';
+					$fully_qualified_name = '';
+					$double_colon         = $this->phpcsFile->findNext( \T_DOUBLE_COLON, $i, $end );
+					$keyword              = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $double_colon + 1 ), $end, true );
 
 					// Add a namespace separator to the class name, if it exists.
 					if ( \T_NS_SEPARATOR === $this->tokens[ $i - 1 ]['code'] ) {
-						$class_name = '\\';
+						$fully_qualified_name = '\\';
 					}
 
-					for ( $name_start = $i; $name_start <= $end_name_ptr; $name_start++ ) {
-						$class_name .= $this->tokens[ $name_start ]['content'];
-					}
-					unset( $name_start );
+					/*
+					 * Check what is the type of the $keyword token:
+					 *  T_STRING followed by a parenthesis opener - static method
+					 *  T_STRING without a parenthesis - enum/class constant
+					 *  T_VARIABLE - static public property
+					 * Based on this, we will construct the content to pass to, and set the $i and the $ptr variables.
+					 */
+					if ( \T_STRING === $this->tokens[ $keyword ]['code'] ) {
+						$static_method_end = $this->phpcsFile->findNext( \T_CLOSE_PARENTHESIS, $i, $end );
 
-					// Skip the content of the static method.
-					$i       = $this->phpcsFile->findNext( \T_CLOSE_PARENTHESIS, $i, $end );
-					$content = ! empty( $class_name ) ? trim( $class_name ) : $content;
+						// Enum/class constant.
+						if ( false === $static_method_end ) {
+							$constant_ptr = $this->phpcsFile->findNext( \T_STRING, $double_colon, $end );
+
+							for ( $name_start = $i; $name_start <= $constant_ptr; $name_start++ ) {
+								$fully_qualified_name .= $this->tokens[ $name_start ]['content'];
+							}
+							unset( $name_start );
+
+							$i   = $constant_ptr;
+							$ptr = $i;
+						} else { // Static method.
+							for ( $name_start = $i; $name_start <= $keyword; $name_start++ ) {
+								$fully_qualified_name .= $this->tokens[ $name_start ]['content'];
+							}
+							unset( $name_start );
+
+							$i   = $static_method_end;
+							$ptr = $keyword;
+						}
+					} elseif ( \T_VARIABLE === $this->tokens[ $keyword ]['code'] ) {
+						for ( $name_start = $i; $name_start <= $keyword; $name_start++ ) {
+							$fully_qualified_name .= $this->tokens[ $name_start ]['content'];
+						}
+						unset( $name_start );
+
+						$i   = $keyword;
+						$ptr = $i;
+					}
+
+					// Content should be a class and a method/constant.
+					$content = ! empty( $fully_qualified_name ) ? trim( $fully_qualified_name ) : $content;
 				}
 			} else {
 				$content = $this->tokens[ $i ]['content'];
