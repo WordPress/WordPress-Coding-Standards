@@ -739,25 +739,25 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				$content = $functionName;
 
 				// Check if it's static method call.
-				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
-				if ( false !== $next_non_empty
-					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
-				) {
-					// Set the pointer to the end of the method.
-					$i = $this->phpcsFile->findNext( \T_CLOSE_PARENTHESIS, $i, $end );
+				if ( $this->is_static_method_call( $i ) ) {
+					$end_name_ptr = $this->get_fully_qualified_name_ptr( $i );
+
+					$class_name = '';
+
+					// Add a namespace separator to the class name, if it exists.
+					if ( \T_NS_SEPARATOR === $this->tokens[ $i - 1 ]['code'] ) {
+						$class_name = '\\';
+					}
+
+					for ( $name_start = $i; $name_start <= $end_name_ptr; $name_start++ ) {
+						$class_name .= $this->tokens[ $name_start ]['content'];
+					}
+					unset( $name_start );
+
+					// Skip the content of the static method.
+					$i       = $this->phpcsFile->findNext( \T_CLOSE_PARENTHESIS, $i, $end );
+					$content = ! empty( $class_name ) ? trim( $class_name ) : $content;
 				}
-
-				// Check if the class is fully qualified (namespaced), then check for the double colon (static method).
-				if ( false !== $next_non_empty
-					&& \T_NS_SEPARATOR === $this->tokens[ $double_colon ]['code']
-				) {
-
-				}
-
-				// Checking for fully qualified name - go and find all the T_STRING and T_NS_SEPARATOR until the T_DOUBLE_COLON token.
-
-
-
 			} else {
 				$content = $this->tokens[ $i ]['content'];
 				$ptr     = $i;
@@ -919,5 +919,67 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		} while ( $current < $end );
 
 		return $end;
+	}
+
+	/**
+	 * Check if the current \T_STRING token is a part of the static method call.
+	 *
+	 * @param int $stackPtr Current \T_STRING token pointer.
+	 *
+	 * @return bool True if it is, false if it isn't.
+	 */
+	private function is_static_method_call( $stackPtr ) {
+		/*
+		 * Find the previous empty token, then inspect the token next to it (non-empty one).
+		 * If the non-empty one is the $stackPtr, check for the double colon from it.
+		 * If the non-empty one is a \T_NS_SEPARATOR, try see if it's a part of the FQCN, then if it is,
+		 * check if there is a double colon after the FQCN or not.
+		 */
+		if ( \T_NS_SEPARATOR === $this->tokens[ $stackPtr - 1 ]['code'] ) { // FQCN.
+			$name_ptr = $this->get_fully_qualified_name_ptr( $stackPtr - 1 );
+
+			return $this->does_double_colon_exists( $name_ptr );
+		} else { // Imported or non-namespaced.
+			$name_ptr = $this->get_fully_qualified_name_ptr( $stackPtr );
+
+			return $this->does_double_colon_exists( $name_ptr );
+		}
+	}
+
+	/**
+	 * Get the end pointer of the fully qualified class name (FQCN).
+	 *
+	 * Check if the next token is a \T_STRING, then if the one after one is \T_NS_SEPARATOR.
+	 * If it's not, that's the end of the name, if it is, call the method again
+	 * until you find the end of it and return this value.
+	 *
+	 * @param int $stackPtr Current token pointer.
+	 *
+	 * @return int Stack pointer to the end of the FQCN.
+	 */
+	private function get_fully_qualified_name_ptr( $stackPtr ) {
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+			if ( \T_NS_SEPARATOR === $this->tokens[ $stackPtr + 1 ]['code'] ) {
+				$namePtr = $this->get_fully_qualified_name_ptr( $stackPtr + 1 );
+			} else {
+				$namePtr = $stackPtr;
+			}
+		} elseif ( \T_NS_SEPARATOR === $this->tokens[ $stackPtr ]['code'] ) {
+			$namePtr = $this->get_fully_qualified_name_ptr( $stackPtr + 1 );
+		} else {
+			$namePtr = $stackPtr;
+		}
+
+		return $namePtr;
+	}
+
+	/**
+	 * Check if the current token pointer is a double colon.
+	 *
+	 * @param int $stackPtr Current token pointer.
+	 * @return bool True if it is, false if not.
+	 */
+	private function does_double_colon_exists( $stackPtr ) {
+		return false !== $stackPtr && \T_DOUBLE_COLON === $this->tokens[ $stackPtr + 1 ]['code'];
 	}
 }
