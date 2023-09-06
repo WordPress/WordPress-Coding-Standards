@@ -4,14 +4,14 @@ echo ClassName::someMethodName( $attributes, $test ); // Bad.
 
 echo ClassName::someMethodName( $attributes, $test ), $someOtherUnescapedContent; // Bad x2.
 
-echo ClassName::someMethodName( $attributes, $test ), esc_html($someOtherUnescapedContent); // Bad, but only for the static method that is not escaped.
+echo ClassName::someMethodName( $attributes, $test ), esc_html( $someOtherUnescapedContent ); // Bad, but only for the static method that is not escaped.
 
 echo $someOtherUnescapedContent, ClassName::someMethodName( $attributes, $test ), // Bad x2
-esc_html($someOtherUnescapedContent);
+esc_html( $someOtherUnescapedContent );
 
 echo $someOtherUnescapedContent, // Bad
 ClassName::someMethodName( $attributes, $test ), // Bad
-esc_html($someOtherUnescapedContent);
+esc_html( $someOtherUnescapedContent );
 
 echo $someOtherUnescapedContent, ClassName::someMethodName( $attributes, $test ), $check_me; // Bad x3.
 
@@ -39,3 +39,8 @@ echo \Namespaced\ClassName::statMethod(); // Bad.
 echo Example\Namespaced\ClassName::statMethod(); // Bad.
 
 echo \QualifiedExample\Namespaced\ClassName::statMethod(); // Bad.
+
+echo Some\Enum\Color::ENUM_CONSTANT; // Bad.
+echo Some\ClassName::   CLASS_CONSTANT; // Bad.
+
+echo ClassName::$publicStaticProperty; // Bad
