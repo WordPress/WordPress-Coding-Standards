@@ -25,7 +25,17 @@ echo 'Do not use ' . $object::class ); // OK.
 
 echo MyClass\ClassName::render( // Bad.
 	'testing',
-	ClassName::props('test-other', $attributes, [
+	ClassName::props('test-other', $attributes, [ // Should be skipped over, since the wrapping static method is not escaped.
 		'someName' => $attributeName
 	])
 );
+
+echo Example::statMethod(); // Bad.
+
+echo \FullyQualifiedWithoutImport::statMethod(); // Bad.
+
+echo \Namespaced\ClassName::statMethod(); // Bad.
+
+echo Example\Namespaced\ClassName::statMethod(); // Bad.
+
+echo \QualifiedExample\Namespaced\ClassName::statMethod(); // Bad.
