@@ -17,6 +17,10 @@
 
 </div>
 
+# Upgrade Notice
+
+> If you are upgrading from an older WordPressCS version to version 3.0.0, please read the [Upgrade guide for ruleset maintainers and end-users](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Upgrade-Guide-to-WordPressCS-3.0.0-for-ruleset-maintainers) first!
+
 
 # WordPress Coding Standards for PHP_CodeSniffer
 
@@ -66,7 +70,6 @@ As of WordPressCS 3.0.0, installation via Composer using the below instructions 
 
 [Composer](https://getcomposer.org/) will automatically install the project dependencies and register the rulesets from WordPressCS and other external standards with PHP_CodeSniffer using the [Composer PHPCS plugin](https://github.com/PHPCSStandards/composer-installer).
 
-> If you are upgrading from an older WordPressCS version to version 3.0.0, please read the [Upgrade guide for ruleset maintainers and end-users](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Upgrade-Guide-to-WordPressCS-3.0.0-for-ruleset-maintainers) first!
 
 ### Composer Project-based Installation
 
