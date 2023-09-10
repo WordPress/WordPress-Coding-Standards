@@ -48,7 +48,7 @@
 
 This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
 
-This project needs funding. If you want to donate read [here](#funding) about how you can help.
+This project needs funding. [Find out how you can help](#funding).
 
 ## Minimum Requirements
 
