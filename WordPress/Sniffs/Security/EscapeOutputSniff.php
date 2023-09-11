@@ -445,6 +445,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * Check whether each relevant part of an arbitrary group of token is output escaped.
 	 *
 	 * @since 3.0.0 Split off from the process_token() method.
+	 * @since 3.1.0 Add the check for static methods.
 	 *
 	 * @param int    $start The position to start checking from.
 	 * @param int    $end   The position to stop the check at.
@@ -958,6 +959,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Check if the current \T_STRING token is a part of the static method call.
 	 *
+	 * @since 3.1.0 Add the method to check for a static method call.
+	 *
 	 * @param int $stackPtr Current \T_STRING token pointer.
 	 *
 	 * @return bool True if it is, false if it isn't.
@@ -987,6 +990,8 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * If it's not, that's the end of the name, if it is, call the method again
 	 * until you find the end of it and return this value.
 	 *
+	 * @since 3.1.0 Add the method that will get the pointer of the FQCN.
+	 *
 	 * @param int $stackPtr Current token pointer.
 	 *
 	 * @return int Stack pointer to the end of the FQCN.
@@ -1010,7 +1015,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * Check if the current token pointer is a double colon.
 	 *
+	 * @since 3.1.0 Add the method that checks is the token is a double colon one.
+	 *
 	 * @param int $stackPtr Current token pointer.
+	 * 
 	 * @return bool True if it is, false if not.
 	 */
 	private function does_double_colon_exists( $stackPtr ) {
