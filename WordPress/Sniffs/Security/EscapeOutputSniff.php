@@ -1018,7 +1018,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * @since 3.1.0 Add the method that checks is the token is a double colon one.
 	 *
 	 * @param int $stackPtr Current token pointer.
-	 * 
+	 *
 	 * @return bool True if it is, false if not.
 	 */
 	private function does_double_colon_exists( $stackPtr ) {
