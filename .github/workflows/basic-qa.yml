@@ -141,6 +141,12 @@ jobs:
       - name: Test the WordPress ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
 
+      - name: Rename the example ruleset to one which can be used for a ruleset
+        run:  cp phpcs.xml.dist.sample sample.xml
+
+      - name: Test the example ruleset
+        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/example-ruleset-test.inc --standard=./sample.xml
+
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
       # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
