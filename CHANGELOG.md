@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
-## [3.0.1] - 2023-09-13
+## [3.0.1] - 2023-09-14
 
 ### Added
 
