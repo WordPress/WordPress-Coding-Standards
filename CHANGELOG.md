@@ -8,6 +8,23 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [3.0.1] - 2023-09-13
+
+### Added
+
+- In WordPressCS 3.0.0, the functionality of the `WordPress.Security.EscapeOutput` sniff was updated to report unescaped message parameters passed to exceptions created in `throw` statements. This specific violation now has a separate error code: `ExceptionNotEscaped`. This will allow users to ignore or exclude that specific error code. Props [@anomiex].
+    The error code(s) for other escaping issues flagged by the sniff remain unchanged.
+
+### Changed
+
+- Updated the CI workflow to test the example ruleset for issues.
+- Funding files and updates in the Readme about funding the project.
+
+### Fixed
+
+- Fixed a sniff name in the `phpcs.xml.dist.sample` file (case-sensitive sniff name). Props [@dawidurbanski].
+
+
 ## [3.0.0] - 2023-08-21
 
 ### Important information about this release:
@@ -1556,6 +1573,7 @@ Initial tagged release.
 [Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/main...HEAD
+[3.0.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.3.0...3.0.0
 [2.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.1...2.3.0
 [2.2.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.0...2.2.1
@@ -1585,8 +1603,10 @@ Initial tagged release.
 [0.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-10-06...0.3.0
 [2013-10-06]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
 
+[@anomiex]:       https://github.com/anomiex
 [@ckanitz]:       https://github.com/ckanitz
 [@craigfrancis]:  https://github.com/craigfrancis
+[@dawidurbanski]: https://github.com/dawidurbanski
 [@desrosj]:       https://github.com/desrosj
 [@grappler]:      https://github.com/grappler
 [@Ipstenu]:       https://github.com/Ipstenu
