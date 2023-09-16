@@ -218,20 +218,21 @@ trait EscapingFunctionsTrait {
 		if ( array() === $this->allEscapingFunctions
 			|| $this->customEscapingFunctions !== $this->addedCustomEscapingFunctions['escape']
 		) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_escaping_functions = array_map( 'strtolower', $this->customEscapingFunctions );
+			$escaping_functions        = array_change_key_case( $this->escapingFunctions, \CASE_LOWER );
+
 			$this->allEscapingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customEscapingFunctions,
-				$this->escapingFunctions
+				$custom_escaping_functions,
+				$escaping_functions
 			);
 
 			$this->addedCustomEscapingFunctions['escape'] = $this->customEscapingFunctions;
 		}
 
-		// Check if the $functionName is a static method or not.
-		if ( strpos( $functionName, '::' ) === false ) {
-			$functionName = strtolower( $functionName );
-		}
-
-		return isset( $this->allEscapingFunctions[ $functionName ] );
+		return isset( $this->allEscapingFunctions[ strtolower( $functionName ) ] );
 	}
 
 	/**
@@ -247,9 +248,15 @@ trait EscapingFunctionsTrait {
 		if ( array() === $this->allAutoEscapedFunctions
 			|| $this->customAutoEscapedFunctions !== $this->addedCustomEscapingFunctions['autoescape']
 		) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_auto_escaped_functions = array_map( 'strtolower', $this->customAutoEscapedFunctions );
+			$auto_escaped_functions        = array_change_key_case( $this->autoEscapedFunctions, \CASE_LOWER );
+
 			$this->allAutoEscapedFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customAutoEscapedFunctions,
-				$this->autoEscapedFunctions
+				$custom_auto_escaped_functions,
+				$auto_escaped_functions
 			);
 
 			$this->addedCustomEscapingFunctions['autoescape'] = $this->customAutoEscapedFunctions;
