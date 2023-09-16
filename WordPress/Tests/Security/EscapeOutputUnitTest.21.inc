@@ -48,6 +48,8 @@ echo ClassName::$publicStaticProperty; // Bad
 // phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[] \QualifiedExample\Namespaced\ClassName::statMethod
 
 echo \QualifiedExample\Namespaced\ClassName::statMethod(); // Ok.
+echo \QualifiedExample\Namespaced\ClassName::statmethod(); // Ok.
+echo \QualifiedExample\namespaced\className::statmethoD(); // Ok.
 
 // phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[]
 
