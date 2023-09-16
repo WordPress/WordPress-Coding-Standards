@@ -226,7 +226,12 @@ trait EscapingFunctionsTrait {
 			$this->addedCustomEscapingFunctions['escape'] = $this->customEscapingFunctions;
 		}
 
-		return isset( $this->allEscapingFunctions[ strtolower( $functionName ) ] );
+		// Check if the $functionName is a static method or not.
+		if ( strpos( $functionName, '::' ) === false ) {
+			$functionName = strtolower( $functionName );
+		}
+
+		return isset( $this->allEscapingFunctions[ $functionName ] );
 	}
 
 	/**
