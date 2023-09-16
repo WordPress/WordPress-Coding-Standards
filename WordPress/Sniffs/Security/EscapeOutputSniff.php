@@ -792,6 +792,10 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 					// Content should be a class and a method/constant.
 					$content = ! empty( $fully_qualified_name ) ? trim( $fully_qualified_name ) : $content;
+
+					if ( $this->is_escaping_function( $content ) ) {
+						continue;
+					}
 				}
 			} else {
 				$content = $this->tokens[ $i ]['content'];
