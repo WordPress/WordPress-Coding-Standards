@@ -44,3 +44,11 @@ echo Some\Enum\Color::ENUM_CONSTANT; // Bad.
 echo Some\ClassName::   CLASS_CONSTANT; // Bad.
 
 echo ClassName::$publicStaticProperty; // Bad
+
+// phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[] \QualifiedExample\Namespaced\ClassName::statMethod
+
+echo \QualifiedExample\Namespaced\ClassName::statMethod(); // Ok.
+
+// phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[]
+
+echo \QualifiedExample\Namespaced\ClassName::statMethod(); // Bad.
