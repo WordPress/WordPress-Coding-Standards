@@ -310,7 +310,7 @@ class NonceVerificationSniff extends Sniff {
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( $this->nonceVerificationFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
 				/*
 				 * Now, make sure it is a call to a global function.
 				 */
@@ -411,9 +411,15 @@ class NonceVerificationSniff extends Sniff {
 	 */
 	protected function mergeFunctionLists() {
 		if ( $this->customNonceVerificationFunctions !== $this->addedCustomNonceFunctions ) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_nonce_verification_functions = array_map( 'strtolower', $this->customNonceVerificationFunctions );
+			$nonce_verification_functions        = array_change_key_case( $this->nonceVerificationFunctions, \CASE_LOWER );
+
 			$this->nonceVerificationFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customNonceVerificationFunctions,
-				$this->nonceVerificationFunctions
+				$custom_nonce_verification_functions,
+				$nonce_verification_functions
 			);
 
 			$this->addedCustomNonceFunctions = $this->customNonceVerificationFunctions;
