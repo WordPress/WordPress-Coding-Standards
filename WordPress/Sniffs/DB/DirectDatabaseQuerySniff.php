@@ -230,17 +230,17 @@ final class DirectDatabaseQuerySniff extends Sniff {
 			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 
-					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					if ( isset( $this->cacheDeleteFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
 
 						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 							$cached = true;
 							break;
 						}
-					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheGetFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
 
 						$wp_cache_get = true;
 
-					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheSetFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
 
 						if ( $wp_cache_get ) {
 							$cached = true;
@@ -272,27 +272,45 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget'] ) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_cache_get_functions = array_map( 'strtolower', $this->customCacheGetFunctions );
+			$cache_get_functions        = array_change_key_case( $this->cacheGetFunctions, \CASE_LOWER );
+
 			$this->cacheGetFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customCacheGetFunctions,
-				$this->cacheGetFunctions
+				$custom_cache_get_functions,
+				$cache_get_functions
 			);
 
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
 		if ( $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset'] ) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_cache_set_functions = array_map( 'strtolower', $this->customCacheSetFunctions );
+			$cache_set_functions        = array_change_key_case( $this->cacheSetFunctions, \CASE_LOWER );
+
 			$this->cacheSetFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customCacheSetFunctions,
-				$this->cacheSetFunctions
+				$custom_cache_set_functions,
+				$cache_set_functions
 			);
 
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
 		if ( $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] ) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_cache_delete_functions = array_map( 'strtolower', $this->customCacheDeleteFunctions );
+			$cache_delete_functions        = array_change_key_case( $this->cacheDeleteFunctions, \CASE_LOWER );
+
 			$this->cacheDeleteFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customCacheDeleteFunctions,
-				$this->cacheDeleteFunctions
+				$custom_cache_delete_functions,
+				$cache_delete_functions
 			);
 
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
