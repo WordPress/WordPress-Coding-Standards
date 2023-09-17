@@ -96,9 +96,15 @@ trait PrintingFunctionsTrait {
 		if ( array() === $this->allPrintingFunctions
 			|| $this->customPrintingFunctions !== $this->addedCustomPrintingFunctions
 		) {
+			/*
+			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
+			 */
+			$custom_printing_functions = array_map( 'strtolower', $this->customPrintingFunctions );
+			$printing_functions        = array_change_key_case( $this->printingFunctions, \CASE_LOWER );
+
 			$this->allPrintingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$this->customPrintingFunctions,
-				$this->printingFunctions
+				$custom_printing_functions,
+				$printing_functions
 			);
 
 			$this->addedCustomPrintingFunctions = $this->customPrintingFunctions;
