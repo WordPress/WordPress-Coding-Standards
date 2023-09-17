@@ -466,7 +466,7 @@ function function_containing_nested_enum_with_nonce_check() {
 			wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' );
 		}
 	}
-	
+
 	echo $_POST['foo']; // Bad.
 }
 
@@ -486,3 +486,10 @@ enum MyEnum {
 		echo $_POST['foo']; // OK.
 	}
 }
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] my_nonce_check
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[] do_something
+function foo_6() {
+	my_noncE_cheCk( do_soMeThinG( $_POST['tweet'] ) ); // OK.
+}
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[]
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]

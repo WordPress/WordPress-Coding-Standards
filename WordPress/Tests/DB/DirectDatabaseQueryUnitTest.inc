@@ -333,6 +333,66 @@ function method_names_are_caseinsensitive() {
 	$autoload = $wpdb->Get_Var( $wpdb->Prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // Warning x 2.
 }
 
+/*
+ * Test using custom properties, setting & unsetting (resetting).
+ */
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[] my_cacheget
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheset,my_other_cacheset
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] my_cachedel
+function cache_customA() {
+	global $wpdb;
+	$quux = MY_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
+		my_cacheSet( 'key', 'group' );
+	}
+}
+
+function cache_customB() {
+	global $wpdb;
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
+		my_other_CacheSet( 'key', 'group' );
+	}
+}
+
+function cache_customC() {
+	global $wpdb;
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	my_cacheDEL( 'key', 'group' );
+}
+
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheset
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[]
+
+function cache_customD() {
+	global $wpdb;
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
+		my_cacHeset( 'key', 'group' );
+	}
+}
+
+function cache_customE() {
+	global $wpdb;
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning x 2.
+		my_other_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_customF() {
+	global $wpdb;
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning x 2.
+	my_cachedel( 'key', 'group' );
+}
+
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[]
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[]
+
 // Live coding/parse error test.
 // This must be the last test in the file.
 $wpdb->get_col( '
