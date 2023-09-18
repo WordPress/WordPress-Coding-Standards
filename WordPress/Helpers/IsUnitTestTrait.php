@@ -142,15 +142,11 @@ trait IsUnitTestTrait {
 				}
 			}
 
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_test_classes = array_map( 'strtolower', $custom_test_classes );
-			$known_test_classes  = array_change_key_case( $this->known_test_classes, \CASE_LOWER );
-
 			$this->all_test_classes = RulesetPropertyHelper::merge_custom_array(
 				$custom_test_classes,
-				$known_test_classes
+				$this->known_test_classes,
+				true,
+				true
 			);
 
 			// Store the original value so the comparison can succeed.

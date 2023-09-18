@@ -273,45 +273,33 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		}
 
 		if ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget'] ) {
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_cache_get_functions = array_map( 'strtolower', $this->customCacheGetFunctions );
-			$cache_get_functions        = array_change_key_case( $this->cacheGetFunctions, \CASE_LOWER );
-
 			$this->cacheGetFunctions = RulesetPropertyHelper::merge_custom_array(
-				$custom_cache_get_functions,
-				$cache_get_functions
+				$this->customCacheGetFunctions,
+				$this->cacheGetFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
 		if ( $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset'] ) {
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_cache_set_functions = array_map( 'strtolower', $this->customCacheSetFunctions );
-			$cache_set_functions        = array_change_key_case( $this->cacheSetFunctions, \CASE_LOWER );
-
 			$this->cacheSetFunctions = RulesetPropertyHelper::merge_custom_array(
-				$custom_cache_set_functions,
-				$cache_set_functions
+				$this->customCacheSetFunctions,
+				$this->cacheSetFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
 		if ( $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] ) {
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_cache_delete_functions = array_map( 'strtolower', $this->customCacheDeleteFunctions );
-			$cache_delete_functions        = array_change_key_case( $this->cacheDeleteFunctions, \CASE_LOWER );
-
 			$this->cacheDeleteFunctions = RulesetPropertyHelper::merge_custom_array(
-				$custom_cache_delete_functions,
-				$cache_delete_functions
+				$this->customCacheDeleteFunctions,
+				$this->cacheDeleteFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;

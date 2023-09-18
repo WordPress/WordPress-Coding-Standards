@@ -411,15 +411,11 @@ class NonceVerificationSniff extends Sniff {
 	 */
 	protected function mergeFunctionLists() {
 		if ( $this->customNonceVerificationFunctions !== $this->addedCustomNonceFunctions ) {
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_nonce_verification_functions = array_map( 'strtolower', $this->customNonceVerificationFunctions );
-			$nonce_verification_functions        = array_change_key_case( $this->nonceVerificationFunctions, \CASE_LOWER );
-
 			$this->nonceVerificationFunctions = RulesetPropertyHelper::merge_custom_array(
-				$custom_nonce_verification_functions,
-				$nonce_verification_functions
+				$this->customNonceVerificationFunctions,
+				$this->nonceVerificationFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomNonceFunctions = $this->customNonceVerificationFunctions;

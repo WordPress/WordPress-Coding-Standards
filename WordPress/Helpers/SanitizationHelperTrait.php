@@ -194,15 +194,11 @@ trait SanitizationHelperTrait {
 		if ( array() === $this->allSanitizingFunctions
 			|| $this->customSanitizingFunctions !== $this->addedCustomSanitizingFunctions['sanitize']
 		) {
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_sanitizing_functions = array_map( 'strtolower', $this->customSanitizingFunctions );
-			$sanitizing_functions        = array_change_key_case( $this->sanitizingFunctions, \CASE_LOWER );
-
 			$this->allSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$custom_sanitizing_functions,
-				$sanitizing_functions
+				$this->customSanitizingFunctions,
+				$this->sanitizingFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomSanitizingFunctions['sanitize'] = $this->customSanitizingFunctions;
@@ -222,15 +218,11 @@ trait SanitizationHelperTrait {
 		if ( array() === $this->allUnslashingSanitizingFunctions
 			|| $this->customUnslashingSanitizingFunctions !== $this->addedCustomSanitizingFunctions['unslashsanitize']
 		) {
-			/*
-			 * Lowercase all names, both custom as well as "known", as PHP treats namespaced names case-insensitively.
-			 */
-			$custom_unslashing_sanitizing_functions = array_map( 'strtolower', $this->customUnslashingSanitizingFunctions );
-			$unslashing_sanitizing_functions        = array_change_key_case( $this->unslashingSanitizingFunctions, \CASE_LOWER );
-
 			$this->allUnslashingSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
-				$custom_unslashing_sanitizing_functions,
-				$unslashing_sanitizing_functions
+				$this->customUnslashingSanitizingFunctions,
+				$this->unslashingSanitizingFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomSanitizingFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
