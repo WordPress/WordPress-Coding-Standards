@@ -55,9 +55,9 @@ final class RulesetPropertyHelper {
 	 */
 	public static function merge_custom_array( $custom, array $base = array(), $flip = true, $lowercaseKeyValues = false ) {
 		if ( $lowercaseKeyValues ) {
-			$base = array_map( 'strtolower', $base );
+			$base   = array_map( 'strtolower', $base );
 			$custom = array_map( 'strtolower', $custom );
-			$base = array_change_key_case( $base );
+			$base   = array_change_key_case( $base );
 			$custom = array_change_key_case( $custom );
 		}
 
