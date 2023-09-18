@@ -54,6 +54,13 @@ final class RulesetPropertyHelper {
 	 * @return array
 	 */
 	public static function merge_custom_array( $custom, array $base = array(), $flip = true, $lowercaseKeyValues = false ) {
+		if ( $lowercaseKeyValues ) {
+			$base = array_map( 'strtolower', $base );
+			$custom = array_map( 'strtolower', $custom );
+			$base = array_change_key_case( $base );
+			$custom = array_change_key_case( $custom );
+		}
+
 		if ( true === $flip ) {
 			$base = array_filter( $base );
 		}
@@ -68,13 +75,6 @@ final class RulesetPropertyHelper {
 
 		if ( empty( $base ) ) {
 			return $custom;
-		}
-
-		if ( $lowercaseKeyValues ) {
-			$base = array_map( 'strtolower', $base );
-			$custom = array_map( 'strtolower', $custom );
-			$base = array_change_key_case( $base );
-			$custom = array_change_key_case( $custom );
 		}
 
 		return array_merge( $base, $custom );
