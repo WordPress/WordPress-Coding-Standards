@@ -67,6 +67,10 @@ final class PostsPerPageSniff extends AbstractArrayAssignmentRestrictionsSniff {
 	public function callback( $key, $val, $line, $group ) {
 		$stripped_val = TextStrings::stripQuotes( $val );
 
+		if ( '' === $stripped_val ) {
+			return false;
+		}
+
 		if ( $val !== $stripped_val ) {
 			// The value was a text string. For text strings, we only accept purely numeric values.
 			if ( preg_match( '`^[0-9]+$`', $stripped_val ) !== 1 ) {

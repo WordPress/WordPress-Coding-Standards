@@ -124,3 +124,17 @@ $args = array(
 	'posts_per_page' => 75.0, // OK (75).
 	'posts_per_page' => 150.000, // Bad (150).
 );
+
+$query = 'posts_per_page=' . (int) $_POST['limit']; // OK.
+
+$args = array(
+	'posts_per_page' => '', // OK.
+);
+
+_query_posts( 'nopaging=true&posts_per_page=' ); // OK.
+
+$query_args['posts_per_page'] = ''; // OK.
+
+$query_args[
+	'posts_per_page'
+] = ''; // OK.
