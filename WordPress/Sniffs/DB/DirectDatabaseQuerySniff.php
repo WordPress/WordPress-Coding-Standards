@@ -229,18 +229,19 @@ final class DirectDatabaseQuerySniff extends Sniff {
 
 			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					$content = strtolower( $this->tokens[ $i ]['content'] );
 
-					if ( isset( $this->cacheDeleteFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
+					if ( isset( $this->cacheDeleteFunctions[ $content ] ) ) {
 
 						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 							$cached = true;
 							break;
 						}
-					} elseif ( isset( $this->cacheGetFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
+					} elseif ( isset( $this->cacheGetFunctions[ $content ] ) ) {
 
 						$wp_cache_get = true;
 
-					} elseif ( isset( $this->cacheSetFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
+					} elseif ( isset( $this->cacheSetFunctions[ $content ] ) ) {
 
 						if ( $wp_cache_get ) {
 							$cached = true;
