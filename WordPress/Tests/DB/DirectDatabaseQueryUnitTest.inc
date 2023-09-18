@@ -336,9 +336,9 @@ function method_names_are_caseinsensitive() {
 /*
  * Test using custom properties, setting & unsetting (resetting).
  */
-// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[] my_cacheget
-// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheset,my_other_cacheset
-// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] my_cachedel
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[] my_cacHeget
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cachEset,my_other_cacheSET
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] MY_cachedeL
 function cache_customA() {
 	global $wpdb;
 	$quux = MY_cacheget( 'quux' );
@@ -363,7 +363,7 @@ function cache_customC() {
 	my_cacheDEL( 'key', 'group' );
 }
 
-// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheset
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheSet
 // phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[]
 
 function cache_customD() {

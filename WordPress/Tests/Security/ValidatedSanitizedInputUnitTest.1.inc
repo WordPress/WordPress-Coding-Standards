@@ -511,14 +511,14 @@ function test_this() {
 
 	$abc = sanitize_color( wp_unslash( $_POST['abc_field'] ) ); // Bad x1 - sanitize.
 
-	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_twitter_handle
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_TWITTER_handle
 
 	$abc = sanitize_cOlor( wp_unslash( $_POST['abc_field'] ) ); // OK.
 	$abc = sanitize_facebook_ID( wp_unslash( $_POST['abc_field'] ) ); // Bad x1 - sanitize.
 	$abc = sanitize_twitteR_handle( $_POST['abc_field'] ); // Bad x1 - unslash.
 
-	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_facebook_id
-	// phpcs:set WordPress.Security.ValidatedSanitizedInput customUnslashingSanitizingFunctions[] sanitize_twitter_handle
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_facebook_ID
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customUnslashingSanitizingFunctions[] sanITize_twitter_handle
 
 	$abc = sanitizE_coLor( wp_unslash( $_POST['abc_field'] ) ); // OK.
 	$abc = sanitize_facebook_ID( wp_unslash( $_POST['abc_field'] ) ); // OK.

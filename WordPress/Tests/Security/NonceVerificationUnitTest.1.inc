@@ -486,8 +486,8 @@ enum MyEnum {
 		echo $_POST['foo']; // OK.
 	}
 }
-// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] my_nonce_check
-// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[] do_something
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] MY_nonce_check
+// phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[] do_sometHING
 function foo_6() {
 	my_noncE_cheCk( do_soMeThinG( $_POST['tweet'] ) ); // OK.
 }
