@@ -44,6 +44,9 @@ final class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
 			15 => 1,
 			16 => 1,
 			19 => 2,
+			25 => 2,
+			26 => 2,
+			27 => 2,
 		);
 	}
 }
