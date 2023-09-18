@@ -43,15 +43,17 @@ final class RulesetPropertyHelper {
 	 * @since 2.0.0  No longer supports custom array properties which were incorrectly
 	 *               passed as a string.
 	 * @since 3.0.0  Moved from the Sniff class to this class.
+	 * @since 3.1.0  Added a new parameter to lowercase array keys and values.
 	 *
-	 * @param array $custom Custom list as provided via a ruleset.
-	 * @param array $base   Optional. Base list. Defaults to an empty array.
-	 *                      Expects `value => true` format when `$flip` is true.
-	 * @param bool  $flip   Optional. Whether or not to flip the custom list.
-	 *                      Defaults to true.
+	 * @param array $custom             Custom list as provided via a ruleset.
+	 * @param array $base               Optional. Base list. Defaults to an empty array.
+	 *                                  Expects `value => true` format when `$flip` is true.
+	 * @param bool  $flip               Optional. Whether or not to flip the custom list.
+	 * @param bool  $lowercaseKeyValues Optional. Whether to lowercase keys and values in the resulting array.
+	 *                                  Defaults to false.
 	 * @return array
 	 */
-	public static function merge_custom_array( $custom, array $base = array(), $flip = true ) {
+	public static function merge_custom_array( $custom, array $base = array(), $flip = true, $lowercaseKeyValues = false ) {
 		if ( true === $flip ) {
 			$base = array_filter( $base );
 		}
@@ -66,6 +68,13 @@ final class RulesetPropertyHelper {
 
 		if ( empty( $base ) ) {
 			return $custom;
+		}
+
+		if ( $lowercaseKeyValues ) {
+			$base = array_map( 'strtolower', $base );
+			$custom = array_map( 'strtolower', $custom );
+			$base = array_change_key_case( $base );
+			$custom = array_change_key_case( $custom );
 		}
 
 		return array_merge( $base, $custom );
