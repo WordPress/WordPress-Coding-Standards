@@ -61,8 +61,8 @@ The WordPress Coding Standards package requires:
 * [Composer](https://getcomposer.org/)
 
 For the best results, it is recommended to also ensure the following additional PHP extensions are enabled:
-    - [iconv](https://www.php.net/book.iconv)
-    - [Multibyte String](https://www.php.net/book.mbstring)
+- [iconv](https://www.php.net/book.iconv)
+- [Multibyte String](https://www.php.net/book.mbstring)
 
 ## Installation
 
