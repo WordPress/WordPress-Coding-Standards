@@ -73,7 +73,7 @@ $files1 = @ & scandir($dir); // Bad.
 /*
  * The custom allowed functions list will be respected even when `usePHPFunctionsList` is set to false.
  */
-// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[] fgetcsv,hex2bin
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[] fgetCsv,hEx2bin
 while ( ( $csvdata = @fgetcsv( $handle, 2000, $separator ) ) !== false ) {}
 echo @some_userland_function( $param ); // Bad.
 $decoded = @hex2bin( $data );

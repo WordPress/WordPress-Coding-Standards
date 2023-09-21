@@ -657,7 +657,7 @@ echo '<input type="search" value="' . get_search_query( escape: false ) . '">'; 
 echo '<input type="search" value="' . get_search_query( escaped: false ) . '">'; // Bad.
 
 // phpcs:set WordPress.Security.EscapeOutput customPrintingFunctions[] TO_SCREEN,my_print
-to_scReen( $var1, esc_attr( $var2 ) ); // Bad x 1.
-my_prinT( $var1, $var2 ); // Bad x 2.
+to_screen( $var1, esc_attr( $var2 ) ); // Bad x 1.
+my_print( $var1, $var2 ); // Bad x 2.
 
 // phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[]

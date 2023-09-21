@@ -489,7 +489,7 @@ enum MyEnum {
 // phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] MY_nonce_check
 // phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[] do_sometHING
 function foo_6() {
-	my_noncE_cheCk( do_soMeThinG( $_POST['tweet'] ) ); // OK.
+	my_nonce_check( do_something( $_POST['tweet'] ) ); // OK.
 }
 // phpcs:set WordPress.Security.NonceVerification customUnslashingSanitizingFunctions[]
 // phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]

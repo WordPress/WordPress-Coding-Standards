@@ -341,10 +341,10 @@ function method_names_are_caseinsensitive() {
 // phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] MY_cachedeL
 function cache_customA() {
 	global $wpdb;
-	$quux = MY_cacheget( 'quux' );
+	$quux = my_cacheget( 'quux' );
 	if ( false !== $quux ) {
 		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
-		my_cacheSet( 'key', 'group' );
+		my_cacheset( 'key', 'group' );
 	}
 }
 
@@ -353,14 +353,14 @@ function cache_customB() {
 	$quux = my_cacheget( 'quux' );
 	if ( false !== $quux ) {
 		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
-		my_other_CacheSet( 'key', 'group' );
+		my_other_cacheset( 'key', 'group' );
 	}
 }
 
 function cache_customC() {
 	global $wpdb;
 	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
-	my_cacheDEL( 'key', 'group' );
+	my_cachedel( 'key', 'group' );
 }
 
 // phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_cacheSet
@@ -371,7 +371,7 @@ function cache_customD() {
 	$quux = my_cacheget( 'quux' );
 	if ( false !== $quux ) {
 		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
-		my_cacHeset( 'key', 'group' );
+		my_cacheset( 'key', 'group' );
 	}
 }
 
