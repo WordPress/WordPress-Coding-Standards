@@ -43,22 +43,23 @@ final class RulesetPropertyHelper {
 	 * @since 2.0.0  No longer supports custom array properties which were incorrectly
 	 *               passed as a string.
 	 * @since 3.0.0  Moved from the Sniff class to this class.
-	 * @since 3.1.0  Added a new parameter to lowercase array keys and values.
+	 * @since 3.0.2  Added a new parameter to lowercase array keys and values.
 	 *
-	 * @param array $custom             Custom list as provided via a ruleset.
-	 * @param array $base               Optional. Base list. Defaults to an empty array.
-	 *                                  Expects `value => true` format when `$flip` is true.
-	 * @param bool  $flip               Optional. Whether or not to flip the custom list.
-	 * @param bool  $lowercaseKeyValues Optional. Whether to lowercase keys and values in the resulting array.
-	 *                                  Defaults to false.
+	 * @param array $custom        Custom list as provided via a ruleset.
+	 * @param array $base          Optional. Base list. Defaults to an empty array.
+	 *                             Expects `value => true` format when `$flip` is true.
+	 * @param bool  $flip          Optional. Whether or not to flip the custom list.
+	 * @param bool  $lowercasekeys Optional. Whether to lowercase keys and values in the resulting array.
+	 *                             Defaults to false.
 	 * @return array
 	 */
-	public static function merge_custom_array( $custom, array $base = array(), $flip = true, $lowercaseKeyValues = false ) {
-		if ( $lowercaseKeyValues ) {
-			$base   = array_map( 'strtolower', $base );
-			$custom = array_map( 'strtolower', $custom );
-			$base   = array_change_key_case( $base );
-			$custom = array_change_key_case( $custom );
+	public static function merge_custom_array( $custom, array $base = array(), $flip = true, $lowercasekeys = false ) {
+		if ( empty( $base ) && empty( $custom ) ) {
+			return array();
+		}
+
+		if ( $lowercasekeys ) {
+			$base = array_change_key_case( $base );
 		}
 
 		if ( true === $flip ) {
@@ -71,6 +72,10 @@ final class RulesetPropertyHelper {
 
 		if ( true === $flip ) {
 			$custom = array_fill_keys( $custom, false );
+		}
+
+		if ( $lowercasekeys ) {
+			$custom = array_change_key_case( $custom );
 		}
 
 		if ( empty( $base ) ) {
