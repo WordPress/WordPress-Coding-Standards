@@ -184,7 +184,8 @@ final class NoSilencedErrorsSniff extends Sniff {
 	 */
 	public function process_token( $stackPtr ) {
 		// Handle the user-defined custom function list.
-		$this->customAllowedFunctionsList = RulesetPropertyHelper::merge_custom_array( $this->customAllowedFunctionsList, array(), false, true );
+		$this->customAllowedFunctionsList = RulesetPropertyHelper::merge_custom_array( $this->customAllowedFunctionsList, array(), false );
+		$this->customAllowedFunctionsList = array_map( 'strtolower', $this->customAllowedFunctionsList );
 
 		/*
 		 * Check if the error silencing is done for one of the allowed functions.
