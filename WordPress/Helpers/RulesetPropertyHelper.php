@@ -49,7 +49,7 @@ final class RulesetPropertyHelper {
 	 * @param array $base          Optional. Base list. Defaults to an empty array.
 	 *                             Expects `value => true` format when `$flip` is true.
 	 * @param bool  $flip          Optional. Whether or not to flip the custom list.
-	 * @param bool  $lowercasekeys Optional. Whether to lowercase keys and values in the resulting array.
+	 * @param bool  $lowercasekeys Optional. Whether to lowercase keys in the resulting array.
 	 *                             Defaults to false.
 	 * @return array
 	 */
