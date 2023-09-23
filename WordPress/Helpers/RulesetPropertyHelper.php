@@ -43,7 +43,7 @@ final class RulesetPropertyHelper {
 	 * @since 2.0.0  No longer supports custom array properties which were incorrectly
 	 *               passed as a string.
 	 * @since 3.0.0  Moved from the Sniff class to this class.
-	 * @since 3.0.2  Added a new parameter to lowercase array keys and values.
+	 * @since 3.0.2  Added a new parameter to lowercase array keys for the resulting array.
 	 *
 	 * @param array $custom        Custom list as provided via a ruleset.
 	 * @param array $base          Optional. Base list. Defaults to an empty array.
