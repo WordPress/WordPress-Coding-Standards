@@ -21,7 +21,7 @@
 		"ext-libxml": "*",
 		"ext-tokenizer": "*",
 		"ext-xmlreader": "*",
-		"squizlabs/php_codesniffer": "^3.7.2",
+		"phpcsstandards/php_codesniffer": "^3.7.2",
 		"phpcsstandards/phpcsutils": "^1.0.8",
 		"phpcsstandards/phpcsextra": "^1.2.0"
 	},
@@ -46,16 +46,16 @@
 			"@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --show-deprecated --exclude vendor --exclude .git"
 		],
 		"check-cs": [
-			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+			"@php ./vendor/phpcsstandards/php_codesniffer/bin/phpcs"
 		],
 		"fix-cs": [
-			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
+			"@php ./vendor/phpcsstandards/php_codesniffer/bin/phpcbf"
 		],
 		"run-tests": [
-			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php --no-coverage"
+			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/phpcsstandards/php_codesniffer/tests/AllTests.php --no-coverage"
 		],
 		"coverage": [
-			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/phpcsstandards/php_codesniffer/tests/AllTests.php"
 		],
 		"check-complete": [
 			"@php ./vendor/phpcsstandards/phpcsdevtools/bin/phpcs-check-feature-completeness -q ./WordPress"

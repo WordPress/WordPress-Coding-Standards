@@ -52,7 +52,7 @@ jobs:
 
       - name: "Set PHPCS version (master)"
         if: ${{ matrix.phpcs_version != 'lowest' }}
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
+        run: composer require phpcsstandards/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies (PHP < 8.0 )
         if: ${{ matrix.php < 8.0 && matrix.php != 'latest' }}
@@ -70,7 +70,7 @@ jobs:
 
       - name: "Set PHPCS version (lowest)"
         if: ${{ matrix.phpcs_version == 'lowest' }}
-        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
+        run: composer update phpcsstandards/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.phpcs_version == 'dev-master' }}

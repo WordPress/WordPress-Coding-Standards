@@ -14,7 +14,7 @@ Bug reports containing a minimal code sample which can be used to reproduce the 
 Since WordPressCS employs many sniffs that are part of PHP_CodeSniffer itself or PHPCSExtra, sometimes an issue will be caused by a bug in PHPCS or PHPCSExtra and not in WordPressCS itself.
 If the error message in question doesn't come from a sniff whose name starts with `WordPress`, the issue is probably a bug in PHPCS or PHPCSExtra.
 
-* Bugs for sniffs starting with `Generic`, `PEAR`, `PSR1`, `PSR2`, `PSR12`, `Squiz` or `Zend` should be [reported to PHPCS](https://github.com/squizlabs/PHP_CodeSniffer/issues).
+* Bugs for sniffs starting with `Generic`, `PEAR`, `PSR1`, `PSR2`, `PSR12`, `Squiz` or `Zend` should be [reported to PHPCS](https://github.com/PHPCSStandards/PHP_CodeSniffer/issues).
 * Bugs for sniffs starting with `Modernize`, `NormalizedArrays` or `Universal` should be [reported to PHPCSExtra](https://github.com/PHPCSStandards/PHPCSExtra/issues).
 
 # Contributing patches and new features

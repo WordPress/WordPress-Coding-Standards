@@ -39,7 +39,7 @@ jobs:
 
       # Using PHPCS `master` as an early detection system for bugs upstream.
       - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts --no-interaction
+        run: composer require phpcsstandards/php_codesniffer:"dev-master" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
@@ -68,10 +68,10 @@ jobs:
       # Validate the Ruleset XML files.
       # @link http://xmlsoft.org/xmllint.html
       - name: Validate the WordPress rulesets
-        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+        run: xmllint --noout --schema vendor/phpcsstandards/php_codesniffer/phpcs.xsd ./*/ruleset.xml
 
       - name: Validate the sample ruleset
-        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+        run: xmllint --noout --schema vendor/phpcsstandards/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
 
       # Validate the Documentation XML files.
       - name: Validate documentation against schema
@@ -117,7 +117,7 @@ jobs:
 
       - name: "Set PHPCS version (master)"
         if: ${{ matrix.phpcs_version != 'lowest' }}
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
+        run: composer require phpcsstandards/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
@@ -128,7 +128,7 @@ jobs:
 
       - name: "Set PHPCS version (lowest)"
         if: ${{ matrix.phpcs_version == 'lowest' }}
-        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
+        run: composer update phpcsstandards/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
 
       - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
