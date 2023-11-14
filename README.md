@@ -254,7 +254,7 @@ See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit t
 
 ## Funding
 
-If you want to sponsor the work on WordPressCS, you can do so by donating to the [WP PHP Open Collective](https://opencollective.com//thewpcc/contribute/wp-php-63406).
+If you want to sponsor the work on WordPressCS, you can do so by donating to the [PHP_CodeSniffer Open Collective](https://opencollective.com/php_codesniffer).
 
 ## License
 
