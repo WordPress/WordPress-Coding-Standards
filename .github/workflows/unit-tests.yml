@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '8.0', '8.1', '8.2', '8.3' ]
+        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '8.0', '8.1', '8.2', '8.3', '8.4' ]
         phpcs_version: [ 'lowest', 'dev-master' ]
         extensions: [ '' ]
         coverage: [false]
@@ -57,7 +57,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
 
-    continue-on-error: ${{ matrix.php == '8.3' }}
+    continue-on-error: ${{ matrix.php == '8.4' }}
 
     steps:
       - name: Checkout repository
