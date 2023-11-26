@@ -180,6 +180,15 @@
 	<!-- Detect useless "echo sprintf(...)". -->
 	<rule ref="Universal.CodeAnalysis.NoEchoSprintf"/>
 
+	<!-- Discourage the use of long closures. -->
+	<rule ref="Universal.FunctionDeclarations.NoLongClosures">
+		<properties>
+			<!-- Disable the error. -->
+			<property name="maxLines" value="9999"/>
+		</properties>
+	</rule>
+
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.
