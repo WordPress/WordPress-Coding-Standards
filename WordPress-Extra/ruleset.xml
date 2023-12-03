@@ -180,6 +180,9 @@
 	<!-- Detect useless "echo sprintf(...)". -->
 	<rule ref="Universal.CodeAnalysis.NoEchoSprintf"/>
 
+	<!-- Detect use of double negative `!!`. -->
+	<rule ref="Universal.CodeAnalysis.NoDoubleNegative"/>
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.
