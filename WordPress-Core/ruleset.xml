@@ -869,6 +869,9 @@
 	<!-- Important to prevent issues with content being sent before headers. -->
 	<rule ref="Generic.Files.ByteOrderMark"/>
 
+	<!-- Always have a lowertag PHP open tag. -->
+	<rule ref="Universal.PHP.LowercasePHPTag"/>
+
 	<!-- All line endings should be \n. -->
 	<rule ref="Generic.Files.LineEndings">
 		<properties>
