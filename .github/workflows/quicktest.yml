@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.4', '7.4', 'latest' ]
+        php: [ '5.4', 'latest' ]
         phpcs_version: [ 'lowest', 'dev-master' ]
 
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
@@ -54,18 +54,10 @@ jobs:
         if: ${{ matrix.phpcs_version != 'lowest' }}
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
-      - name: Install Composer dependencies (PHP < 8.0 )
-        if: ${{ matrix.php < 8.0 && matrix.php != 'latest' }}
+      - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
-          custom-cache-suffix: $(date -u "+%Y-%m")
-
-      - name: Install Composer dependencies (PHP >= 8.0)
-        if: ${{ matrix.php >= 8.0 || matrix.php == 'latest' }}
-        uses: ramsey/composer-install@v2
-        with:
-          composer-options: --ignore-platform-req=php+
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: "Set PHPCS version (lowest)"
@@ -76,21 +68,16 @@ jobs:
         if: ${{ matrix.phpcs_version == 'dev-master' }}
         run: composer lint -- --checkstyle
 
-      - name: Run the unit tests without code coverage - PHP 5.4 - 8.0
-        if: ${{ matrix.php == '5.4' && github.ref_name != 'develop' }}
+      - name: Run the unit tests without code coverage
+        if: ${{ github.ref_name != 'develop' }}
         run: composer run-tests
 
-      # Until PHPCS supports PHPUnit 9, we cannot run code coverage on PHP 8.0+, so run it on PHP 5.4 and 7.4.
-      - name: Run the unit tests with code coverage - PHP 5.4 - 8.0
-        if: ${{ matrix.php != 'latest' && github.ref_name == 'develop' }}
+      - name: Run the unit tests with code coverage
+        if: ${{ github.ref_name == 'develop' }}
         run: composer coverage
 
-      - name: Run the unit tests without code coverage - PHP >= 8.1
-        if: ${{ matrix.php == 'latest' }}
-        run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
-
       - name: Send coverage report to Codecov
-        if: ${{ success() && github.ref_name == 'develop' && matrix.php != 'latest' }}
+        if: ${{ success() && github.ref_name == 'develop' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./build/logs/clover.xml
