@@ -64,7 +64,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] Submit for ["Month in WordPress"][month-in-wp].
 - [ ] Submit for the ["Monthy Dev Roundup"][dev-roundup].
 
-[phpcs-releases]:      https://github.com/squizlabs/PHP_CodeSniffer/releases
+[phpcs-releases]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/releases
 [phpcsutils-releases]: https://github.com/PHPCSStandards/PHPCSUtils/releases
 [phpcsextra-releases]: https://github.com/PHPCSStandards/PHPCSExtra/releases
 [month-in-wp]:         https://make.wordpress.org/community/month-in-wordpress-submissions/

@@ -46,7 +46,7 @@
 
 ## Introduction
 
-This project is a collection of [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
+This project is a collection of [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer) rules (sniffs) to validate code developed for WordPress. It ensures code quality and adherence to coding conventions, especially the official [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/).
 
 This project needs funding. [Find out how you can help](#funding).
 
@@ -133,7 +133,7 @@ If you need to further customize the selection of sniffs for your project - you 
 
 When you name this file either `.phpcs.xml`, `phpcs.xml`, `.phpcs.xml.dist` or `phpcs.xml.dist`, PHP_CodeSniffer will automatically locate it as long as it is placed in the directory from which you run the CodeSniffer or in a directory above it. If you follow these naming conventions you don't have to supply a `--standard` CLI argument.
 
-For more info, read about [using a default configuration file](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also the provided WordPressCS [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and the [fully annotated example ruleset](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
+For more info, read about [using a default configuration file](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also the provided WordPressCS [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and the [fully annotated example ruleset](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
 
 ### Customizing sniff behaviour
 
@@ -143,7 +143,7 @@ You can find a complete list of all the properties you can change for the WordPr
 
 WordPressCS also uses sniffs from PHPCSExtra and from PHP_CodeSniffer itself.
 The [README for PHPCSExtra](https://github.com/PHPCSStandards/PHPCSExtra) contains information on the properties which can be set for the sniff from PHPCSExtra.
-Information on custom properties which can be set for sniffs from PHP_CodeSniffer can be found in the [PHP_CodeSniffer wiki](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Customisable-Sniff-Properties).
+Information on custom properties which can be set for sniffs from PHP_CodeSniffer can be found in the [PHP_CodeSniffer wiki](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Customisable-Sniff-Properties).
 
 
 ### Recommended additional rulesets

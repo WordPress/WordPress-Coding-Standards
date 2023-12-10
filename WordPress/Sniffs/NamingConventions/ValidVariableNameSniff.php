@@ -29,7 +29,7 @@ use WordPressCS\WordPress\Helpers\SnakeCaseHelper;
  * @since 2.0.0  Now offers name suggestions for variables in violation.
  *
  * Last synced with base class January 2022 at commit 4b49a952bf0e2c3863d0a113256bae0d7fe63d52.
- * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
+ * @link https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php
  */
 final class ValidVariableNameSniff extends PHPCS_AbstractVariableSniff {
 

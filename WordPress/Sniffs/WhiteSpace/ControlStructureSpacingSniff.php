@@ -26,7 +26,7 @@ use WordPressCS\WordPress\Sniff;
  * Last synced with base class 2021-11-20 at commit 7f11ffc8222b123c06345afd3261221561c3bb29.
  * Note: This class has diverged quite far from the original. All the same, checking occasionally
  * to see if there are upstream fixes made from which this sniff can benefit, is warranted.
- * @link https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
+ * @link https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php
  */
 final class ControlStructureSpacingSniff extends Sniff {
 

@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Util\Tokens;
  * - When the `::` operator is used in `::class`, no new line(s) before or after the object operator are allowed.
  *
  * @since 3.0.0
- * @link  https://github.com/squizlabs/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php
+ * @link  https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php
  */
 final class ObjectOperatorSpacingSniff extends Squiz_ObjectOperatorSpacingSniff {
 
