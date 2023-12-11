@@ -84,6 +84,7 @@ trait EscapingFunctionsTrait {
 		'sanitize_hex_color_no_hash' => true,
 		'sanitize_html_class'        => true,
 		'sanitize_key'               => true,
+		'sanitize_locale_name'       => true,
 		'sanitize_user_field'        => true,
 		'tag_escape'                 => true,
 		'urlencode_deep'             => true,
