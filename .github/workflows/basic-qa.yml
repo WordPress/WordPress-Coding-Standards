@@ -12,6 +12,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PHPCS_DEV: 'dev-master'
+  UTILS_DEV: 'dev-develop'
+  EXTRA_DEV: 'dev-develop'
+
 jobs:
   # Check code style of sniffs, rulesets and XML documentation.
   # Check that all sniffs are feature complete.
@@ -37,9 +42,13 @@ jobs:
       - name: Validate the composer.json file
         run: composer validate --no-check-all --strict
 
-      # Using PHPCS `master` as an early detection system for bugs upstream.
-      - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts --no-interaction
+      # Using dev versions of the dependencies as an early detection system for bugs upstream.
+      - name: "Composer: set PHPCS dependencies (dev)"
+        run: >
+          composer require --no-update --no-scripts --no-interaction
+          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
+          phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
@@ -93,15 +102,15 @@ jobs:
 
   # Makes sure the rulesets don't throw unexpected errors or warnings.
   # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
-  # It also needs to be run against all PHPCS versions WPCS is tested against.
+  # It also needs to be run against all dependency versions WPCS is tested against.
   ruleset-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ 'latest' ]
-        phpcs_version: [ 'lowest', 'dev-master' ]
+        dependencies: [ 'lowest', 'stable', 'dev' ]
 
-    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
+    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}"
 
     steps:
       - name: Checkout repository
@@ -115,9 +124,13 @@ jobs:
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
           coverage: none
 
-      - name: "Set PHPCS version (master)"
-        if: ${{ matrix.phpcs_version != 'lowest' }}
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
+      - name: "Composer: set PHPCS dependencies for tests (dev)"
+        if: ${{ matrix.dependencies == 'dev' }}
+        run: >
+          composer require --no-update --no-scripts --no-interaction
+          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
+          phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
@@ -126,8 +139,13 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      - name: "Set PHPCS version (lowest)"
-        run: composer update squizlabs/php_codesniffer --prefer-lowest --no-scripts --no-interaction
+      - name: "Composer: downgrade PHPCS dependencies for tests (lowest)"
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: >
+          composer update --prefer-lowest --no-scripts --no-interaction
+          squizlabs/php_codesniffer
+          phpcsstandards/phpcsutils
+          phpcsstandards/phpcsextra
 
       - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
@@ -150,8 +168,9 @@ jobs:
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
       # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
+      # This check is only run against "dev" as conflicts can not be fixed for already released versions.
       - name: Test for fixer conflicts (fixes expected)
-        if: ${{ matrix.phpcs_version == 'dev-master' }}
+        if: ${{ matrix.dependencies == 'dev' }}
         id: phpcbf
         continue-on-error: true
         run: |
