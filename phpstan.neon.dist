@@ -17,6 +17,16 @@ parameters:
             message: "#^Cannot unset offset 'query' on non-empty-array<int, array<string, int\\|string>>.$#"
             path: WordPress/Sniffs/DB/PreparedSQLPlaceholdersSniff.php
 
+        # Level 3
+        # Consistency preferred - these are methods which return whatever a parent/child method returns.
+        # They shouldn't need to keep track of whether the child method returns int or void.
+        - '#^Method [^ ]+Sniff::process_token\(\) should return int\|void but returns null\.$#'
+        -
+            # False positive. Will be fixed via next version of PHPCSUtils.
+            count: 1
+            message: '#^Method [^ ]+Sniff::process\(\) should return int\|void but returns null\.$#'
+            path: WordPress/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php
+
         # Level 4
         - '#^Property \S+::\$\S+ \([^)]+\) in isset\(\) is not nullable\.$#'
         -
