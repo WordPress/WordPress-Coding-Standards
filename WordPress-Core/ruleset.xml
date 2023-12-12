@@ -218,10 +218,6 @@
 	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceIndent">
 		<severity>0</severity>
 	</rule>
-	<!-- Prevent duplicate message. This is already checked by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
-	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterUse">
-		<severity>0</severity>
-	</rule>
 
 	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
 		<properties>
