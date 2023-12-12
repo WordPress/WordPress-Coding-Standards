@@ -42,7 +42,7 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 * PHP_CodeSniffer 3.8.0 or higher
 * PHPCSUtils 1.0.9 or higher
 * PHPCSExtra 1.2.1 or higher
-* PHPUnit 4.x, 5.x, 6.x or 7.x
+* PHPUnit 4.x - 9.x
 
 The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test framework for unit testing the sniffs.
 
@@ -85,9 +85,9 @@ phpunit --filter WordPress /path/to/PHP_CodeSniffer/tests/AllTests.php
 
 Expected output:
 ```
-PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
+PHPUnit 9.6.15 by Sebastian Bergmann and contributors.
 
-Runtime:       PHP 7.4.33
+Runtime:       PHP 8.3.0
 Configuration: /WordPressCS/phpunit.xml.dist
 
 .........................................................         57 / 57 (100%)

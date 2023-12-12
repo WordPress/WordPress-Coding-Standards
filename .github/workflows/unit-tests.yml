@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '8.0', '8.1', '8.2', '8.3', '8.4' ]
+        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.4' ]
         phpcs_version: [ 'lowest', 'dev-master' ]
         extensions: [ '' ]
         coverage: [false]
@@ -33,7 +33,6 @@ jobs:
             coverage: true # Make sure coverage is recorded for this too.
 
           # Run code coverage builds against high/low PHP and high/low PHPCS.
-          # Note: Until PHPCS supports PHPUnit 9, we cannot run code coverage on PHP 8.0+.
           - php: '5.4'
             phpcs_version: 'dev-master'
             extensions: ''
@@ -42,11 +41,11 @@ jobs:
             phpcs_version: 'lowest'
             extensions: ''
             coverage: true
-          - php: '7.4'
+          - php: '8.3'
             phpcs_version: 'dev-master'
             extensions: ''
             coverage: true
-          - php: '7.4'
+          - php: '8.3'
             phpcs_version: 'lowest'
             extensions: ''
             coverage: true
@@ -86,18 +85,10 @@ jobs:
         if: ${{ matrix.phpcs_version != 'lowest' }}
         run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
-      - name: Install Composer dependencies (PHP < 8.0 )
-        if: ${{ matrix.php < 8.0 }}
+      - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
-          custom-cache-suffix: $(date -u "+%Y-%m")
-
-      - name: Install Composer dependencies (PHP >= 8.0)
-        if: ${{ matrix.php >= 8.0 }}
-        uses: ramsey/composer-install@v2
-        with:
-          composer-options: --ignore-platform-req=php+
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: "Set PHPCS version (lowest)"
@@ -108,18 +99,13 @@ jobs:
         if: ${{ matrix.phpcs_version == 'dev-master' }}
         run: composer lint -- --checkstyle | cs2pr
 
-      - name: Run the unit tests without code coverage - PHP 5.4 - 8.0
-        if: ${{ matrix.php < '8.1' && matrix.coverage == false }}
+      - name: Run the unit tests without code coverage
+        if: ${{ matrix.coverage == false }}
         run: composer run-tests
 
-      - name: Run the unit tests with code coverage - PHP 5.4 - 8.0
-        if: ${{ matrix.php < '8.1' && matrix.coverage == true  }}
+      - name: Run the unit tests with code coverage
+        if: ${{ matrix.coverage == true  }}
         run: composer coverage
-
-      # Until PHPCS supports PHPUnit 9, we cannot run code coverage on PHP 8.0+.
-      - name: Run the unit tests without code coverage - PHP >= 8.1
-        if: ${{ matrix.php >= '8.1' && matrix.coverage == false  }}
-        run: composer run-tests -- --no-configuration --bootstrap=./Tests/bootstrap.php --dont-report-useless-tests
 
       - name: Send coverage report to Codecov
         if: ${{ success() && matrix.coverage == true }}

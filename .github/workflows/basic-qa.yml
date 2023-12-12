@@ -127,8 +127,7 @@ jobs:
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: "Set PHPCS version (lowest)"
-        if: ${{ matrix.phpcs_version == 'lowest' }}
-        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
+        run: composer update squizlabs/php_codesniffer --prefer-lowest --no-scripts --no-interaction
 
       - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
@@ -178,7 +177,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: 'latest'
           coverage: none
           tools: phpstan
 
