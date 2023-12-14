@@ -24,35 +24,22 @@ jobs:
     strategy:
       matrix:
         php: [ '5.4', 'latest' ]
-        phpcs_version: [ 'lowest', 'dev-master' ]
+        dependencies: [ 'lowest', 'stable' ]
 
-    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}
+    name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # On stable PHPCS versions, allow for PHP deprecation notices.
-      # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
-      - name: Setup ini config
-        id: set_ini
-        run: |
-          if [ "${{ matrix.phpcs_version }}" != "dev-master" ]; then
-            echo 'PHP_INI=error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On' >> $GITHUB_OUTPUT
-          else
-            echo 'PHP_INI=error_reporting=-1, display_errors=On' >> $GITHUB_OUTPUT
-          fi
-
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
+          # With stable PHPCS dependencies, allow for PHP deprecation notices.
+          # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
+          ini-values: error_reporting=-1, display_errors=On
           coverage:  ${{ github.ref_name == 'develop' && 'xdebug' || 'none' }}
-
-      - name: "Set PHPCS version (master)"
-        if: ${{ matrix.phpcs_version != 'lowest' }}
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
@@ -60,12 +47,16 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      - name: "Set PHPCS version (lowest)"
-        if: ${{ matrix.phpcs_version == 'lowest' }}
-        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
+      - name: "Composer: downgrade PHPCS dependencies for tests (lowest)"
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: >
+          composer update --prefer-lowest --no-scripts --no-interaction
+          squizlabs/php_codesniffer
+          phpcsstandards/phpcsutils
+          phpcsstandards/phpcsextra
 
       - name: Lint PHP files against parse errors
-        if: ${{ matrix.phpcs_version == 'dev-master' }}
+        if: ${{ matrix.dependencies == 'stable' }}
         run: composer lint -- --checkstyle
 
       - name: Run the unit tests without code coverage
