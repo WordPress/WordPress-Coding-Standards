@@ -138,7 +138,7 @@ Also note the class name convention. The method `getErrorList()` MUST return an 
 If you run the following from the root directory of your WordPressCS clone:
 
 ```sh
-$ "vendor/bin/phpcs" --standard=Wordpress -s ./Tests/PHP/POSIXFunctionsUnitTest.inc --sniffs=WordPress.PHP.POSIXFunctions
+$ "vendor/bin/phpcs" --standard=Wordpress -s ./WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc --sniffs=WordPress.PHP.POSIXFunctions
 ...
 --------------------------------------------------------------------------------
 FOUND 7 ERRORS AFFECTING 7 LINES
