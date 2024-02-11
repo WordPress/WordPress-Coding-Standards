@@ -119,7 +119,7 @@ jobs:
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: "Composer: downgrade PHPCS dependencies for tests (lowest)"
-        if: ${{ ! startsWith( matrix.php, '8' ) && matrix.dependencies == 'lowest' }}
+        if: ${{ matrix.dependencies == 'lowest' }}
         run: >
           composer update --prefer-lowest --no-scripts --no-interaction
           squizlabs/php_codesniffer
