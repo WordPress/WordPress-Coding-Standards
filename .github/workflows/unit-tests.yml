@@ -32,7 +32,7 @@ jobs:
         coverage: [false]
 
         include:
-          - php: '7.4'
+          - php: '7.2'
             dependencies: 'stable'
             extensions: ':mbstring' # = Disable Mbstring.
             coverage: true # Make sure coverage is recorded for this too.
