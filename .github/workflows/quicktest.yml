@@ -57,7 +57,7 @@ jobs:
 
       - name: Lint PHP files against parse errors
         if: ${{ matrix.dependencies == 'stable' }}
-        run: composer lint -- --checkstyle
+        run: composer lint
 
       - name: Run the unit tests without code coverage
         if: ${{ github.ref_name != 'develop' }}
