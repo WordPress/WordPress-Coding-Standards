@@ -39,7 +39,7 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 3.8.0 or higher
+* PHP_CodeSniffer 3.9.0 or higher
 * PHPCSUtils 1.0.9 or higher
 * PHPCSExtra 1.2.1 or higher
 * PHPUnit 4.x - 9.x
