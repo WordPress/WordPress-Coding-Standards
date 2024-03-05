@@ -41,6 +41,10 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
+	<!-- Do not allow ambiguous conditions.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2429 -->
+	<rule ref="Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence"/>
+
 	<!-- Check that functions use all parameters passed.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1510 -->
 	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">

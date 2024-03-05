@@ -64,7 +64,7 @@ class Ruleset_Test {
 			if ( preg_match( '`' . preg_quote( $param_a, '`' ) . '`i', $param_b ) === 1 ) {
 				echo esc_html( "doublequoted $string" );
 			} elseif ( $this->a ) {
-				$ab = $a % $b + $c / $d && $param_a || $param_b >> $bitshift;
+				$ab = $a % $b + $c / $d && ( $param_a || $param_b >> $bitshift );
 			}
 		};
 
