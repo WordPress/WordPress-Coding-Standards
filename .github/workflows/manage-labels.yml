@@ -17,7 +17,7 @@ jobs:
     name: Clean up labels on PR merge
 
     steps:
-      - uses: mondeja/remove-labels-gh-action@v1
+      - uses: mondeja/remove-labels-gh-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
@@ -31,7 +31,7 @@ jobs:
     name: Clean up labels on PR close
 
     steps:
-      - uses: mondeja/remove-labels-gh-action@v1
+      - uses: mondeja/remove-labels-gh-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
@@ -46,7 +46,7 @@ jobs:
     name: Clean up labels on issue close
 
     steps:
-      - uses: mondeja/remove-labels-gh-action@v1
+      - uses: mondeja/remove-labels-gh-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
