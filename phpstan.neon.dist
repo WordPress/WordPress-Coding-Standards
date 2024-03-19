@@ -11,12 +11,6 @@ parameters:
         # Level 0
         - '#^Result of method \S+ \(void\) is used\.$#'
 
-        -
-            # False positive. Will be fixed via next version of PHPCSUtils.
-            count: 1
-            message: "#^Cannot unset offset 'query' on non-empty-array<int, array<string, int\\|string>>.$#"
-            path: WordPress/Sniffs/DB/PreparedSQLPlaceholdersSniff.php
-
         # Level 4
         - '#^Property \S+::\$\S+ \([^)]+\) in isset\(\) is not nullable\.$#'
         -
@@ -27,12 +21,6 @@ parameters:
             count: 1
             message: '#^Strict comparison using === between true and false will always evaluate to false\.$#'
             path: WordPress/Sniffs/Utils/I18nTextDomainFixerSniff.php
-
-        -
-            # False positive. Will be fixed via next version of PHPCSUtils.
-            count: 1
-            message: "#^Cannot unset offset 'file' on array<int, array<string, int\\|string>>.$#"
-            path: WordPress/Sniffs/Security/EscapeOutputSniff.php
 
         # Level 5
         - '#^Parameter \#3 \$value of method \S+File::recordMetric\(\) expects string, \(?(float|int|bool)(\|(float|int|bool))*\)? given\.$#'
