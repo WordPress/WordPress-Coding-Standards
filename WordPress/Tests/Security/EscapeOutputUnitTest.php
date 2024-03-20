@@ -180,6 +180,28 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 					25 => 1,
 				);
 
+			case 'EscapeOutputUnitTest.21.inc':
+				return array(
+					3  => 1,
+					5  => 2,
+					7  => 1,
+					9  => 2,
+					12 => 1,
+					13 => 1,
+					16 => 3,
+					23 => 1,
+					26 => 1,
+					33 => 1,
+					35 => 1,
+					37 => 1,
+					39 => 1,
+					41 => 1,
+					43 => 1,
+					44 => 1,
+					46 => 1,
+					56 => 1,
+				);
+
 			default:
 				return array();
 		}
