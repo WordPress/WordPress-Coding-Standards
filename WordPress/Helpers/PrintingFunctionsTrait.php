@@ -98,7 +98,9 @@ trait PrintingFunctionsTrait {
 		) {
 			$this->allPrintingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customPrintingFunctions,
-				$this->printingFunctions
+				$this->printingFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomPrintingFunctions = $this->customPrintingFunctions;

@@ -310,7 +310,7 @@ class NonceVerificationSniff extends Sniff {
 			}
 
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( $this->nonceVerificationFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ strtolower( $this->tokens[ $i ]['content'] ) ] ) ) {
 				/*
 				 * Now, make sure it is a call to a global function.
 				 */
@@ -413,7 +413,9 @@ class NonceVerificationSniff extends Sniff {
 		if ( $this->customNonceVerificationFunctions !== $this->addedCustomNonceFunctions ) {
 			$this->nonceVerificationFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customNonceVerificationFunctions,
-				$this->nonceVerificationFunctions
+				$this->nonceVerificationFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomNonceFunctions = $this->customNonceVerificationFunctions;

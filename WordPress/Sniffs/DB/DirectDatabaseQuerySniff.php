@@ -229,18 +229,19 @@ final class DirectDatabaseQuerySniff extends Sniff {
 
 			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					$content = strtolower( $this->tokens[ $i ]['content'] );
 
-					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					if ( isset( $this->cacheDeleteFunctions[ $content ] ) ) {
 
 						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 							$cached = true;
 							break;
 						}
-					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheGetFunctions[ $content ] ) ) {
 
 						$wp_cache_get = true;
 
-					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheSetFunctions[ $content ] ) ) {
 
 						if ( $wp_cache_get ) {
 							$cached = true;
@@ -274,7 +275,9 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		if ( $this->customCacheGetFunctions !== $this->addedCustomFunctions['cacheget'] ) {
 			$this->cacheGetFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheGetFunctions,
-				$this->cacheGetFunctions
+				$this->cacheGetFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
@@ -283,7 +286,9 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		if ( $this->customCacheSetFunctions !== $this->addedCustomFunctions['cacheset'] ) {
 			$this->cacheSetFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheSetFunctions,
-				$this->cacheSetFunctions
+				$this->cacheSetFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
@@ -292,7 +297,9 @@ final class DirectDatabaseQuerySniff extends Sniff {
 		if ( $this->customCacheDeleteFunctions !== $this->addedCustomFunctions['cachedelete'] ) {
 			$this->cacheDeleteFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customCacheDeleteFunctions,
-				$this->cacheDeleteFunctions
+				$this->cacheDeleteFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;

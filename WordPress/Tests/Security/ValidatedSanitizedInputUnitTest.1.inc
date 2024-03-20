@@ -500,3 +500,32 @@ function test_in_match_condition_is_regarded_as_comparison() {
 		};
 	}
 }
+
+/*
+ * Test using custom properties, setting & unsetting (resetting).
+ */
+function test_this() {
+	if ( ! isset( $_POST['abc_field'] ) ) {
+		return;
+	}
+
+	$abc = sanitize_color( wp_unslash( $_POST['abc_field'] ) ); // Bad x1 - sanitize.
+
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_TWITTER_handle
+
+	$abc = sanitize_color( wp_unslash( $_POST['abc_field'] ) ); // OK.
+	$abc = sanitize_facebook_id( wp_unslash( $_POST['abc_field'] ) ); // Bad x1 - sanitize.
+	$abc = sanitize_twitter_handle( $_POST['abc_field'] ); // Bad x1 - unslash.
+
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[] sanitize_color,sanitize_facebook_ID
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customUnslashingSanitizingFunctions[] sanITize_twitter_handle
+
+	$abc = sanitize_color( wp_unslash( $_POST['abc_field'] ) ); // OK.
+	$abc = sanitize_facebook_id( wp_unslash( $_POST['abc_field'] ) ); // OK.
+	$abc = sanitize_twitter_handle( $_POST['abc_field'] ); // OK.
+
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customSanitizingFunctions[]
+	// phpcs:set WordPress.Security.ValidatedSanitizedInput customUnslashingSanitizingFunctions[]
+
+	$abc = sanitize_twitter_handle( $_POST['abc_field'] ); // Bad x2, sanitize + unslash.
+}

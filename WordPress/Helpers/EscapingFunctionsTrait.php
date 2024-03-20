@@ -221,7 +221,9 @@ trait EscapingFunctionsTrait {
 		) {
 			$this->allEscapingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customEscapingFunctions,
-				$this->escapingFunctions
+				$this->escapingFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomEscapingFunctions['escape'] = $this->customEscapingFunctions;
@@ -245,7 +247,9 @@ trait EscapingFunctionsTrait {
 		) {
 			$this->allAutoEscapedFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customAutoEscapedFunctions,
-				$this->autoEscapedFunctions
+				$this->autoEscapedFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomEscapingFunctions['autoescape'] = $this->customAutoEscapedFunctions;

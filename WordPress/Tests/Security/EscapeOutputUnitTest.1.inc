@@ -655,3 +655,9 @@ echo '<input type="search" value="' . get_search_query( false ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( 0 ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( escape: false ) . '">'; // OK, well not really, typo in param name, but that's not our concern.
 echo '<input type="search" value="' . get_search_query( escaped: false ) . '">'; // Bad.
+
+// phpcs:set WordPress.Security.EscapeOutput customPrintingFunctions[] TO_SCREEN,my_print
+to_screen( $var1, esc_attr( $var2 ) ); // Bad x 1.
+my_print( $var1, $var2 ); // Bad x 2.
+
+// phpcs:set WordPress.Security.EscapeOutput customEscapingFunctions[]

@@ -197,7 +197,9 @@ trait SanitizationHelperTrait {
 		) {
 			$this->allSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customSanitizingFunctions,
-				$this->sanitizingFunctions
+				$this->sanitizingFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomSanitizingFunctions['sanitize'] = $this->customSanitizingFunctions;
@@ -219,7 +221,9 @@ trait SanitizationHelperTrait {
 		) {
 			$this->allUnslashingSanitizingFunctions = RulesetPropertyHelper::merge_custom_array(
 				$this->customUnslashingSanitizingFunctions,
-				$this->unslashingSanitizingFunctions
+				$this->unslashingSanitizingFunctions,
+				true,
+				true
 			);
 
 			$this->addedCustomSanitizingFunctions['unslashsanitize'] = $this->customUnslashingSanitizingFunctions;
