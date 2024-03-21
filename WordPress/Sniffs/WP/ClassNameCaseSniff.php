@@ -25,7 +25,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -121,6 +121,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Application_Passwords_List_Table',
 		'WP_Automatic_Updater',
 		'WP_Block',
+		'WP_Block_Bindings_Registry',
+		'WP_Block_Bindings_Source',
 		'WP_Block_Editor_Context',
 		'WP_Block_List',
 		'WP_Block_Parser',
@@ -192,10 +194,21 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Filesystem_FTPext',
 		'WP_Filesystem_SSH2',
 		'WP_Filesystem_ftpsockets',
+		'WP_Font_Collection',
+		'WP_Font_Face',
+		'WP_Font_Face_Resolver',
+		'WP_Font_Library',
+		'WP_Font_Utils',
+		'WP_HTML_Active_Formatting_Elements',
 		'WP_HTML_Attribute_Token',
+		'WP_HTML_Open_Elements',
+		'WP_HTML_Processor',
+		'WP_HTML_Processor_State',
 		'WP_HTML_Span',
 		'WP_HTML_Tag_Processor',
 		'WP_HTML_Text_Replacement',
+		'WP_HTML_Token',
+		'WP_HTML_Unsupported_Exception',
 		'WP_HTTP_Fsockopen',
 		'WP_HTTP_IXR_Client',
 		'WP_HTTP_Proxy',
@@ -212,6 +225,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Image_Editor_GD',
 		'WP_Image_Editor_Imagick',
 		'WP_Importer',
+		'WP_Interactivity_API',
+		'WP_Interactivity_API_Directives_Processor',
 		'WP_Internal_Pointers',
 		'WP_Links_List_Table',
 		'WP_List_Table',
@@ -226,11 +241,13 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Meta_Query',
 		'WP_Metadata_Lazyloader',
 		'WP_Nav_Menu_Widget',
+		'WP_Navigation_Block_Renderer',
 		'WP_Navigation_Fallback',
 		'WP_Network',
 		'WP_Network_Query',
 		'WP_Object_Cache',
 		'WP_Paused_Extensions_Storage',
+		'WP_Plugin_Dependencies',
 		'WP_Plugin_Install_List_Table',
 		'WP_Plugins_List_Table',
 		'WP_Post',
@@ -257,6 +274,9 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_REST_Comments_Controller',
 		'WP_REST_Controller',
 		'WP_REST_Edit_Site_Export_Controller',
+		'WP_REST_Font_Collections_Controller',
+		'WP_REST_Font_Faces_Controller',
+		'WP_REST_Font_Families_Controller',
 		'WP_REST_Global_Styles_Controller',
 		'WP_REST_Global_Styles_Revisions_Controller',
 		'WP_REST_Menu_Items_Controller',
@@ -282,6 +302,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_REST_Sidebars_Controller',
 		'WP_REST_Site_Health_Controller',
 		'WP_REST_Taxonomies_Controller',
+		'WP_REST_Template_Autosaves_Controller',
+		'WP_REST_Template_Revisions_Controller',
 		'WP_REST_Templates_Controller',
 		'WP_REST_Term_Meta_Fields',
 		'WP_REST_Term_Search_Handler',
@@ -301,6 +323,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Role',
 		'WP_Roles',
 		'WP_Screen',
+		'WP_Script_Modules',
 		'WP_Scripts',
 		'WP_Session_Tokens',
 		'WP_Sidebar_Block_Editor_Control',
@@ -341,6 +364,11 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Theme_JSON_Resolver',
 		'WP_Theme_JSON_Schema',
 		'WP_Themes_List_Table',
+		'WP_Translation_Controller',
+		'WP_Translation_File',
+		'WP_Translation_File_MO',
+		'WP_Translation_File_PHP',
+		'WP_Translations',
 		'WP_Upgrader',
 		'WP_Upgrader_Skin',
 		'WP_User',
@@ -384,7 +412,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -412,11 +440,33 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	);
 
 	/**
-	 * List of all GetID3 classes include in WP Core.
+	 * List of all AVIF classes included in WP Core.
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 *
+	 * @since 3.1.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $avif_classes = array(
+		'Avifinfo\\Box',
+		'Avifinfo\\Chan_Prop',
+		'Avifinfo\\Dim_Prop',
+		'Avifinfo\\Features',
+		'Avifinfo\\Parser',
+		'Avifinfo\\Prop',
+		'Avifinfo\\Tile',
+	);
+
+	/**
+	 * List of all GetID3 classes included in WP Core.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -452,7 +502,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -470,7 +520,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -614,7 +664,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.3-RC1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -685,6 +735,17 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	private $wp_themes_classes_lc = array();
 
 	/**
+	 * List of all AVIF classes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $avif_classes property.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $avif_classes_lc = array();
+
+	/**
 	 * List of all GetID3 classes in lowercase.
 	 *
 	 * This array is automatically generated in the class constructor based on the $phpmailer_classes property.
@@ -740,6 +801,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	private $class_groups = array(
 		'wp_classes',
 		'wp_themes_classes',
+		'avif_classes',
 		'getid3_classes',
 		'phpmailer_classes',
 		'requests_classes',
