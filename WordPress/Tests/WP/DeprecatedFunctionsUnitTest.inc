@@ -411,3 +411,18 @@ wp_tinycolor_hsl_to_rgb();
 wp_tinycolor_hue_to_rgb();
 wp_tinycolor_rgb_to_rgb();
 wp_tinycolor_string_to_rgb();
+/* ============ WP 6.4 ============ */
+_admin_bar_bump_cb();
+_inject_theme_attribute_in_block_template_content();
+_remove_theme_attribute_in_block_template_content();
+_wp_theme_json_webfonts_handler();
+print_embed_styles();
+print_emoji_styles();
+the_block_template_skip_link();
+wp_admin_bar_header();
+wp_img_tag_add_decoding_attr();
+wp_update_https_detection_errors();
+/* ============ WP 6.5 ============ */
+block_core_file_ensure_interactivity_dependency();
+block_core_image_ensure_interactivity_dependency();
+block_core_query_ensure_interactivity_dependency();

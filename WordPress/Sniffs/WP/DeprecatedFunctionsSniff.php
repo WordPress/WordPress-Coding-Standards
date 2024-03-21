@@ -37,14 +37,13 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	/**
 	 * List of deprecated functions with alternative when available.
 	 *
-	 * To be updated after every major release.
-	 * Last updated for WordPress 6.3.
-	 *
 	 * Version numbers should be fully qualified.
 	 * Replacement functions should have parentheses.
 	 *
 	 * To retrieve a function list for comparison, the following tool is available:
 	 * https://github.com/JDGrimes/wp-deprecated-code-scanner
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @var array
 	 */
@@ -1596,6 +1595,62 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_tinycolor_string_to_rgb' => array(
 			'alt'     => '',
 			'version' => '6.3.0',
+		),
+
+		// WP 6.4.0.
+		'_admin_bar_bump_cb' => array(
+			'alt'     => 'wp_enqueue_admin_bar_bump_styles()',
+			'version' => '6.4.0',
+		),
+		'_inject_theme_attribute_in_block_template_content' => array(
+			'alt'     => 'traverse_and_serialize_blocks( parse_blocks( $template_content ), \'_inject_theme_attribute_in_template_part_block\' )',
+			'version' => '6.4.0',
+		),
+		'_remove_theme_attribute_in_block_template_content' => array(
+			'alt'     => 'traverse_and_serialize_blocks( parse_blocks( $template_content ), \'_remove_theme_attribute_from_template_part_block\' )',
+			'version' => '6.4.0',
+		),
+		'_wp_theme_json_webfonts_handler' => array(
+			'alt'     => 'wp_print_font_faces()',
+			'version' => '6.4.0',
+		),
+		'print_embed_styles' => array(
+			'alt'     => 'wp_enqueue_embed_styles()',
+			'version' => '6.4.0',
+		),
+		'print_emoji_styles' => array(
+			'alt'     => 'wp_enqueue_emoji_styles()',
+			'version' => '6.4.0',
+		),
+		'the_block_template_skip_link' => array(
+			'alt'     => 'wp_enqueue_block_template_skip_link()',
+			'version' => '6.4.0',
+		),
+		'wp_admin_bar_header' => array(
+			'alt'     => 'wp_enqueue_admin_bar_header_styles()',
+			'version' => '6.4.0',
+		),
+		'wp_img_tag_add_decoding_attr' => array(
+			'alt'     => 'wp_img_tag_add_loading_optimization_attrs()',
+			'version' => '6.4.0',
+		),
+		'wp_update_https_detection_errors' => array(
+			'alt'     => 'wp_get_https_detection_errors()',
+			'version' => '6.4.0',
+		),
+
+		// WP 6.5.0.
+		'block_core_file_ensure_interactivity_dependency' => array(
+			'alt'     => 'wp_register_script_module()',
+			'version' => '6.5.0',
+		),
+		'block_core_image_ensure_interactivity_dependency' => array(
+			'alt'     => 'wp_register_script_module()',
+			'version' => '6.5.0',
+		),
+		'block_core_query_ensure_interactivity_dependency' => array(
+			'alt'     => 'wp_register_script_module()',
+			'version' => '6.5.0',
 		),
 	);
 
