@@ -79,7 +79,7 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @var string WordPress version.
 	 */
-	private $default_minimum_wp_version = '6.0';
+	private $default_minimum_wp_version = '6.2';
 
 	/**
 	 * Overrule the minimum supported WordPress version with a command-line/config value.

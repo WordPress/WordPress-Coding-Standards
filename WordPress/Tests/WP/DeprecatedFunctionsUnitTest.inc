@@ -360,10 +360,6 @@ _excerpt_render_inner_columns_blocks();
 readonly();
 /* ============ WP 5.9.1 ============ */
 wp_render_duotone_filter_preset();
-
-/*
- * Warning.
- */
 /* ============ WP 6.0 ============ */
 image_attachment_fields_to_save();
 wp_add_iframed_editor_assets_html();
@@ -384,6 +380,10 @@ install_global_terms();
 sync_category_tag_slugs();
 wp_get_attachment_thumb_file();
 wp_typography_get_css_variable_inline_style();
+
+/*
+ * Warning.
+ */
 /* ============ WP 6.2 ============ */
 _resolve_home_block_template();
 get_page_by_title();
