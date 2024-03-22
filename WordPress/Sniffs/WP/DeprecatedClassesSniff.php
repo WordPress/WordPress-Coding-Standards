@@ -41,7 +41,7 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Version numbers should be fully qualified.
 	 *
-	 * Last update: July 2023 for WP 6.3 at https://github.com/WordPress/wordpress-develop/commit/6281ce432c50345a57768bf53854d9b65b6cdd52
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @var array
 	 */
@@ -83,6 +83,16 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 		'Services_JSON_Error' => array(
 			'alt'     => 'The PHP native JSON extension',
 			'version' => '5.3.0',
+		),
+
+		// WP 6.4.0.
+		'WP_Http_Curl' => array(
+			'alt'     => 'WP_Http',
+			'version' => '6.4.0',
+		),
+		'WP_Http_Streams' => array(
+			'alt'     => 'WP_Http',
+			'version' => '6.4.0',
 		),
 	);
 

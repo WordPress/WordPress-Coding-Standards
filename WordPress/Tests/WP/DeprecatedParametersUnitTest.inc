@@ -94,6 +94,6 @@ wp_notify_postauthor( '', 'null' ); // Null as a string not null.
 wp_title_rss( 'deprecated' );
 wp_upload_bits( '', 'deprecated' );
 xfn_check( '', '', 'deprecated' );
+global_terms( $foo, 'deprecated' );
 
 // All will give an WARNING as they have been deprecated after WP 5.8.
-global_terms( $foo, 'deprecated' );

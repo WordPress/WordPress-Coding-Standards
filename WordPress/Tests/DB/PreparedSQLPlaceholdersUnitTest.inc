@@ -343,10 +343,10 @@ $where = $wpdb->prepare(
 ); // OK.
 
 // Disregard comments in the array_fill() $value param.
-$wpdb->prepare( '
-	xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' /*comment*/ ) ) . ' )',
-	$fields
-); // IdentifierWithinIN.
+// Also test handling of %i when minimum supported WP version is not high enough yet.
+// phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version 6.0
+$wpdb->prepare( 'xxx IN ( ' . implode( ',', array_fill( 0, count( $post_types ), '%i' /*comment*/ ) ) . ' )', $fields ); // IdentifierWithinIN.
+// phpcs:set WordPress.DB.PreparedSQLPlaceholders minimum_wp_version
 
 $where = $wpdb->prepare(
 	"{$wpdb->posts}.post_type IN ("

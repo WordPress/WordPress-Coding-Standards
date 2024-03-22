@@ -101,7 +101,7 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			315 => 1,
 			322 => 1,
 
-			347 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
+			348 => 2, // UnsupportedIdentifierPlaceholder + IdentifierWithinIN.
 			353 => 1,
 
 			// Named parameter support.
