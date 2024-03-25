@@ -37,7 +37,7 @@ final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
 	 * @return void
 	 */
 	protected function enhanceGroups() {
-		parent::setUp();
+		parent::setUpPrerequisites();
 
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
 			'test' => array(

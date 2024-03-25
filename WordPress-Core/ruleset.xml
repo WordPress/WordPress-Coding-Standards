@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Core" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Core" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
 
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
@@ -216,10 +216,6 @@
 		<severity>0</severity>
 	</rule>
 	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceIndent">
-		<severity>0</severity>
-	</rule>
-	<!-- Prevent duplicate message. This is already checked by the Generic.WhiteSpace.LanguageConstructSpacing sniff. -->
-	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterUse">
 		<severity>0</severity>
 	</rule>
 
@@ -868,6 +864,9 @@
 	-->
 	<!-- Important to prevent issues with content being sent before headers. -->
 	<rule ref="Generic.Files.ByteOrderMark"/>
+
+	<!-- Always have a lowertag PHP open tag. -->
+	<rule ref="Universal.PHP.LowercasePHPTag"/>
 
 	<!-- All line endings should be \n. -->
 	<rule ref="Generic.Files.LineEndings">

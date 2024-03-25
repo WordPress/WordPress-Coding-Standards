@@ -12,6 +12,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PHPCS_DEV: 'dev-master'
+  UTILS_DEV: 'dev-develop'
+  EXTRA_DEV: 'dev-develop'
+
 jobs:
   # Check code style of sniffs, rulesets and XML documentation.
   # Check that all sniffs are feature complete.
@@ -24,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -37,12 +42,16 @@ jobs:
       - name: Validate the composer.json file
         run: composer validate --no-check-all --strict
 
-      # Using PHPCS `master` as an early detection system for bugs upstream.
-      - name: Set PHPCS version
-        run: composer require squizlabs/php_codesniffer:"dev-master" --no-update --no-scripts --no-interaction
+      # Using dev versions of the dependencies as an early detection system for bugs upstream.
+      - name: "Composer: set PHPCS dependencies (dev)"
+        run: >
+          composer require --no-update --no-scripts --no-interaction
+          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
+          phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -54,7 +63,8 @@ jobs:
 
       # Show XML violations inline in the file diff.
       # @link https://github.com/marketplace/actions/xmllint-problem-matcher
-      - uses: korelstar/xmllint-problem-matcher@v1
+      - name: Enable showing XML issues inline
+        uses: korelstar/xmllint-problem-matcher@v1
 
       - name: Check the code style of the PHP files
         id: phpcs
@@ -92,19 +102,19 @@ jobs:
 
   # Makes sure the rulesets don't throw unexpected errors or warnings.
   # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
-  # It also needs to be run against all PHPCS versions WPCS is tested against.
+  # It also needs to be run against all dependency versions WPCS is tested against.
   ruleset-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ 'latest' ]
-        phpcs_version: [ 'lowest', 'dev-master' ]
+        dependencies: [ 'lowest', 'stable', 'dev' ]
 
-    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.phpcs_version }}"
+    name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}"
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -114,20 +124,28 @@ jobs:
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
           coverage: none
 
-      - name: "Set PHPCS version (master)"
-        if: ${{ matrix.phpcs_version != 'lowest' }}
-        run: composer require squizlabs/php_codesniffer:"${{ matrix.phpcs_version }}" --no-update --no-scripts --no-interaction
+      - name: "Composer: set PHPCS dependencies for tests (dev)"
+        if: ${{ matrix.dependencies == 'dev' }}
+        run: >
+          composer require --no-update --no-scripts --no-interaction
+          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
+          phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           composer-options: --no-dev
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      - name: "Set PHPCS version (lowest)"
-        if: ${{ matrix.phpcs_version == 'lowest' }}
-        run: composer update squizlabs/php_codesniffer --prefer-lowest --ignore-platform-req=php+ --no-scripts --no-interaction
+      - name: "Composer: downgrade PHPCS dependencies for tests (lowest)"
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: >
+          composer update --prefer-lowest --no-scripts --no-interaction
+          squizlabs/php_codesniffer
+          phpcsstandards/phpcsutils
+          phpcsstandards/phpcsextra
 
       - name: Test the WordPress-Core ruleset
         run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
@@ -150,15 +168,14 @@ jobs:
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
       # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
-      #
-      # Note: the ValidVariableNameUnitTest.inc file is temporarily ignored until upstream PHPCS PR 3833 has been merged.
+      # This check is only run against "dev" as conflicts can not be fixed for already released versions.
       - name: Test for fixer conflicts (fixes expected)
-        if: ${{ matrix.phpcs_version == 'dev-master' }}
+        if: ${{ matrix.dependencies == 'dev' }}
         id: phpcbf
         continue-on-error: true
         run: |
           set +e
-          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/NamingConventions/ValidVariableNameUnitTest.inc,/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
+          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
           exitcode="$?"
           echo "EXITCODE=$exitcode" >> $GITHUB_OUTPUT
           exit "$exitcode"
@@ -174,20 +191,20 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: 'latest'
           coverage: none
           tools: phpstan
 
       # Install dependencies and handle caching in one go.
       # Dependencies need to be installed to make sure the PHPCS and PHPUnit classes are recognized.
-      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")

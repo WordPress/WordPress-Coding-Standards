@@ -141,7 +141,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		$this->safe_components += Tokens::$booleanOperators;
 		$this->safe_components += Collections::incrementDecrementOperators();
 
-		// Set up the tokens the sniff should listen too.
+		// Set up the tokens the sniff should listen to.
 		$targets   = array_merge( parent::register(), $this->target_keywords );
 		$targets[] = \T_ECHO;
 		$targets[] = \T_OPEN_TAG_WITH_ECHO;
@@ -157,7 +157,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 * @return array
 	 */
 	public function getGroups() {
-		// Make sure all array keys are lowercase (could contain user provided function names).
+		// Make sure all array keys are lowercase (could contain user-provided function names).
 		$printing_functions = array_change_key_case( $this->get_printing_functions(), \CASE_LOWER );
 
 		// Remove the unsafe printing functions to prevent duplicate notices.
@@ -237,7 +237,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_relevant ]['code']
 					|| isset( $this->tokens[ $next_relevant ]['parenthesis_closer'] ) === false
 				) {
-					// Live codind/parse error or a pre-created exception. Nothing to do for us.
+					// Live coding/parse error or a pre-created exception. Nothing to do for us.
 					return;
 				}
 
@@ -470,7 +470,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				&& $this->tokens[ $next_non_empty ]['parenthesis_closer'] !== $last_non_empty
 			)
 		) {
-			// If there is a (long) ternary skip over the part before the ?.
+			// If there is a (long) ternary, skip over the part before the ?.
 			$ternary = $this->find_long_ternary( $start, $end );
 			if ( false !== $ternary ) {
 				$start = ( $ternary + 1 );
@@ -503,7 +503,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				}
 
 				if ( $in_cast ) {
-					// Skip to the end of a function call if it has been casted to a safe value.
+					// Skip to the end of a function call if it has been cast to a safe value.
 					$i       = $this->tokens[ $i ]['parenthesis_closer'];
 					$in_cast = false;
 
@@ -625,7 +625,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			if ( isset( ContextHelper::get_safe_cast_tokens()[ $this->tokens[ $i ]['code'] ] ) ) {
 				/*
 				 * If the next thing is a match expression, skip over it as whatever is
-				 * being returned will be safe casted.
+				 * being returned will be safely cast.
 				 * Do not set `$in_cast` to `true`.
 				 */
 				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
@@ -660,7 +660,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
-			// Now check that next token is a function call.
+			// Now check that the next token is a function call.
 			if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
 				$ptr                    = $i;
 				$functionName           = $this->tokens[ $i ]['content'];
@@ -893,7 +893,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			// Now check that the value returned by this match "leaf" is correctly escaped.
 			$this->check_code_is_escaped( $item_start, $item_end, $code );
 
-			// Independently of whether or not the check was succesfull or ran into (parse error) problems,
+			// Independently of whether or not the check was successful or ran into (parse error) problems,
 			// always skip to the identified end of the item.
 			$current = $item_end;
 		} while ( $current < $end );

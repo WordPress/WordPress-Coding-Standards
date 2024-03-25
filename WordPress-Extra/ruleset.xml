@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Extra" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Extra" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
 
 	<description>Best practices beyond core WordPress Coding Standards</description>
 
@@ -41,8 +41,12 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/809 -->
 	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
 
+	<!-- Do not allow ambiguous conditions.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2429 -->
+	<rule ref="Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence"/>
+
 	<!-- Check that functions use all parameters passed.
-		 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/xxx -->
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1510 -->
 	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
 		<!-- Allow for callback functions which may not need all parameters passed. -->
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed"/>
@@ -179,6 +183,9 @@
 
 	<!-- Detect useless "echo sprintf(...)". -->
 	<rule ref="Universal.CodeAnalysis.NoEchoSprintf"/>
+
+	<!-- Detect use of double negative `!!`. -->
+	<rule ref="Universal.CodeAnalysis.NoDoubleNegative"/>
 
 	<!--
 	#############################################################################

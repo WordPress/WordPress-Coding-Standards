@@ -8,7 +8,37 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
-## [3.0.1] - 2023-09-13
+## [3.1.0] - 2024-03-25
+
+### Added
+- WordPress-Core ruleset: now includes the `Universal.PHP.LowercasePHPTag` sniff.
+- WordPress-Extra ruleset: now includes the `Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence` and the `Universal.CodeAnalysis.NoDoubleNegative` sniffs.
+- The `sanitize_locale_name()` function to the list of known "escaping" functions. Props [@Chouby]
+- The `sanitize_locale_name()` function to the list of known "sanitize & unslash" functions. Props [@Chouby]
+
+### Changed
+
+- The minimum required `PHP_CodeSniffer` version to 3.9.0 (was 3.7.2).
+- The minimum required `PHPCSUtils` version to 1.0.10 (was 1.0.8).
+- The minimum required `PHPCSExtra` version to 1.2.1 (was 1.1.0).
+    Please ensure you run `composer update wp-coding-standards/wpcs --with-dependencies` to benefit from these updates.
+- Core ruleset: the spacing after the `use` keyword for closure `use` statements will now consistently be checked. Props [@westonruter] for reporting.
+- The default value for `minimum_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#various-sniffs-set-the-minimum-supported-wp-version), has been updated to `6.2`.
+- `WordPress.NamingConventions.PrefixAllGlobals` has been updated to recognize pluggable functions introduced in WP 6.4 and 6.5.
+- `WordPress.NamingConventions.ValidPostTypeSlug` has been updated to recognize reserved post types introduced in WP 6.4 and 6.5.
+- `WordPress.WP.ClassNameCase` has been updated to recognize classes introduced in WP 6.4 and 6.5.
+- `WordPress.WP.DeprecatedClasses` now detects classes deprecated in WordPress up to WP 6.5.
+- `WordPress.WP.DeprecatedFunctions` now detects functions deprecated in WordPress up to WP 6.5.
+- The `IsUnitTestTrait` will now recognize classes which extend the new WP Core `WP_Font_Face_UnitTestCase` class as test classes.
+- The test suite can now run on PHPUnit 4.x - 9.x (was 4.x - 7.x), which should make contributing more straight forward.
+- Various housekeeping, includes a contribution from [@rodrigoprimo].
+
+### Fixed
+
+- `WordPress.WP.PostsPerPage` could potentially result in an `Internal.Exception` when encountering a query string which doesn't include the value for `posts_per_page` in the query string. Props [@anomiex] for reporting.
+
+
+## [3.0.1] - 2023-09-14
 
 ### Added
 
@@ -97,7 +127,7 @@ In all cases, please read the complete changelog carefully before you upgrade.
 - The `sanitize_url()` and `wp_kses_one_attr()` functions to the list of known "sanitizing" functions.
 - Metrics for blank lines at the start/end of a control structure body to the `WordPress.WhiteSpace.ControlStructureSpacing` sniff. These can be displayed using `--report=info` when the `blank_line_check` property has been set to `true`.
 - End-user documentation to the following new and pre-existing sniffs: `WordPress.DateTime.RestrictedFunctions`, `WordPress.NamingConventions.PrefixAllGlobals` (props [@Ipstenu]), `WordPress.PHP.StrictInArray` (props [@marconmartins]), `WordPress.PHP.YodaConditions` (props [@Ipstenu]), `WordPress.WhiteSpace.ControlStructureSpacing` (props [@ckanitz]), `WordPress.WhiteSpace.ObjectOperatorSpacing`, `WordPress.WhiteSpace.OperatorSpacing` (props [@ckanitz]), `WordPress.WP.CapitalPDangit` (props [@NielsdeBlaauw]), `WordPress.WP.Capabilities`, `WordPress.WP.ClassNameCase`, `WordPress.WP.EnqueueResourceParameters` (props [@NielsdeBlaauw]).
-    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage).
+    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Usage).
     Note: all sniffs which have been added from PHPCSExtra (Universal, Modernize, NormalizedArrays sniffs) are also fully documented.
 
 #### Added (internal/dev-only)
@@ -454,7 +484,7 @@ The move does not affect the package name for Packagist. This remains the same: 
 - `Sniff::get_list_variables()` utility method which will retrieve an array with the token pointers to the variables which are being assigned to in a `list()` construct. Includes support for short lists.
 - `Sniff::is_function_deprecated()` static utility method to determine whether a declared function has been marked as deprecated in the function DocBlock.
 - End-user documentation to the following existing sniffs: `WordPress.Arrays.ArrayIndentation`, `WordPress.Arrays.ArrayKeySpacingRestrictions`, `WordPress.Arrays.MultipleStatementAlignment`, `WordPress.Classes.ClassInstantiation`, `WordPress.NamingConventions.ValidHookName`, `WordPress.PHP.IniSet`, `WordPress.Security.SafeRedirect`, `WordPress.WhiteSpace.CastStructureSpacing`, `WordPress.WhiteSpace.DisallowInlineTabs`, `WordPress.WhiteSpace.PrecisionAlignment`, `WordPress.WP.CronInterval`, `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`, `WordPress.WP.DeprecatedParameters`, `WordPress.WP.DeprecatedParameterValues`, `WordPress.WP.EnqueuedResources`, `WordPress.WP.PostsPerPage`.
-    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage).
+    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Usage).
 
 ### Changed
 - The default value for `minimum_supported_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#minimum-wp-version-to-check-for-usage-of-deprecated-functions-classes-and-function-parameters), has been updated to `5.0`.
@@ -661,7 +691,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 - `WordPress.NamingConventions.ValidVariableName`: Added unit tests confirming support for multi-variable/property declarations.
 - The `get_name_suggestion()` method has been moved from the `WordPress.NamingConventions.ValidFunctionName` sniff to the base `Sniff` class, renamed to `get_snake_case_name_suggestion()` and made static.
 - The rulesets are now validated against the `PHP_CodeSniffer` XSD schema.
-- Updated the [custom ruleset example](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/phpcs.xml.dist.sample) to use the recommended ruleset syntax for `PHP_CodeSniffer` 3.3.1+, including using the new [array property format](https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/3.3.0) which is now supported.
+- Updated the [custom ruleset example](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/phpcs.xml.dist.sample) to use the recommended ruleset syntax for `PHP_CodeSniffer` 3.3.1+, including using the new [array property format](https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/3.3.0) which is now supported.
 - Dev: The command to run the unit tests has changed. Please see the updated instructions in the [CONTRIBUTING.md](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/.github/CONTRIBUTING.md) file.
     The `bin/pre-commit` example git hook has been updated to match. Additionally a `run-tests` script has been added to the `composer.json` file for your convenience.
 	To facilitate this, PHPUnit has been added to `require-dev`, even though it is strictly speaking a dependency of PHPCS, not of WPCS.
@@ -672,7 +702,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 ### Deprecated
 - The use of the [WordPressCS native whitelist comments](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors), which were introduced in WPCS 0.4.0, have been deprecated and support will be removed in WPCS 3.0.0.
     The WordPressCS native whitelist comments will continue to work for now, but a deprecation warning will be thrown when they are encountered.
-    You are encouraged to upgrade our whitelist comment to use the [PHPCS native selective ignore annotations](https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/3.2.0) as introduced in `PHP_CodeSniffer` 3.2.0, as soon as possible.
+    You are encouraged to upgrade our whitelist comment to use the [PHPCS native selective ignore annotations](https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/3.2.0) as introduced in `PHP_CodeSniffer` 3.2.0, as soon as possible.
 
 ### Removed
 - Support for PHP 5.3. PHP 5.4 is the minimum requirement for `PHP_CodeSniffer` 3.x.
@@ -684,7 +714,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 - Support for array properties set in a custom ruleset without the `type="array"` attribute.
     Support for this was deprecated in WPCS 1.0.0.
     If in doubt about how properties should be set in your custom ruleset, please refer to the [Customizable sniff properties](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) wiki page which contains XML code examples for setting each and every WPCS native sniff property.
-    As the minimum `PHP_CodeSniffer` version is now 3.3.1, you can now also use the [new format for setting array properties](https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/3.3.0), so this would be a great moment to review and update your custom ruleset.
+    As the minimum `PHP_CodeSniffer` version is now 3.3.1, you can now also use the [new format for setting array properties](https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/3.3.0), so this would be a great moment to review and update your custom ruleset.
     Note: the ability to set select properties from the command-line as comma-delimited strings is _not_ affected by this change.
 - The following sniffs have been removed outright without deprecation.
     If you are referencing these sniffs in a ruleset XML file or in inline annotations, please update these to reference the replacement sniffs instead.
@@ -985,10 +1015,10 @@ If you are a maintainer of an external standard based on WPCS and any of your cu
 
 ### Fixed
 - Compatibility with PHP 7.3. A change in PHP 7.3 was causing the `WordPress.DB.RestrictedClasses`, `WordPress.DB.RestrictedFunctions` and the `WordPress.WP.AlternativeFunctions` sniffs to fail to correctly detect issues.
-- Compatibility with the latest releases from [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
+- Compatibility with the latest releases from [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer).
     PHPCS 3.2.0 introduced new annotations which can be used inline to selectively disable/ignore certain sniffs.
     **Note**: The initial implementation of the new annotations was buggy. If you intend to start using these new style annotations, you are strongly advised to use PHPCS 3.3.0 or higher.
-    For more information about these annotations, please refer to the [PHPCS Wiki](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file).
+    For more information about these annotations, please refer to the [PHPCS Wiki](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file).
     - The [WPCS native whitelist comments](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors) can now be combined with the new style PHPCS whitelist annotations in the `-- for reasons` part of the annotation.
     - `WordPress.Arrays.ArrayDeclarationSpacing`: the fixer will now handle the new style annotations correctly.
     - `WordPress.Arrays.CommaAfterArrayItem`: prevent a fixer loop when new style annotations are encountered.
@@ -1221,7 +1251,7 @@ If you exclude some sniffs or error codes, you may have to update your custom ru
 
 Additionally, to make it easier for you to customize your ruleset, two new wiki pages have been published with information on the properties you can adjust from your ruleset:
 * [WPCS customizable sniff properties](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties)
-* [PHPCS customizable sniff properties](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Customisable-Sniff-Properties)
+* [PHPCS customizable sniff properties](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Customisable-Sniff-Properties)
 
 For more detailed information about the changed sniff names and error codes, please refer to PR [#633](https://github.com/WordPress/WordPress-Coding-Standards/pull/633) and PR [#814](https://github.com/WordPress/WordPress-Coding-Standards/pull/814).
 
@@ -1571,8 +1601,10 @@ See the comparison for full list.
 Initial tagged release.
 
 [Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer
+[PHP_CodeSniffer]:       https://github.com/PHPCSStandards/PHP_CodeSniffer
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/main...HEAD
+[3.1.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.3.0...3.0.0
 [2.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.1...2.3.0
@@ -1604,6 +1636,7 @@ Initial tagged release.
 [2013-10-06]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
 
 [@anomiex]:       https://github.com/anomiex
+[@Chouby]:        https://github.com/Chouby
 [@ckanitz]:       https://github.com/ckanitz
 [@craigfrancis]:  https://github.com/craigfrancis
 [@dawidurbanski]: https://github.com/dawidurbanski
@@ -1615,5 +1648,7 @@ Initial tagged release.
 [@Luc45]:         https://github.com/Luc45
 [@marconmartins]: https://github.com/marconmartins
 [@NielsdeBlaauw]: https://github.com/NielsdeBlaauw
+[@rodrigoprimo]:  https://github.com/rodrigoprimo
 [@slaFFik]:       https://github.com/slaFFik
 [@sandeshjangam]: https://github.com/sandeshjangam
+[@westonruter]:   https://github.com/westonruter

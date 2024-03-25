@@ -75,3 +75,7 @@ function fooBar( TypeA&namespace\TypeB $param ) : \TypeC&Partially\Qualified {}
 class Foo {
 	public readonly int|string $prop;
 }
+
+// Safeguard that declare statements are ignored.
+// Ref: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/289
+declare(ticks=1);

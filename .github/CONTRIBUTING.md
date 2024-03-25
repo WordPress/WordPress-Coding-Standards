@@ -14,7 +14,7 @@ Bug reports containing a minimal code sample which can be used to reproduce the 
 Since WordPressCS employs many sniffs that are part of PHP_CodeSniffer itself or PHPCSExtra, sometimes an issue will be caused by a bug in PHPCS or PHPCSExtra and not in WordPressCS itself.
 If the error message in question doesn't come from a sniff whose name starts with `WordPress`, the issue is probably a bug in PHPCS or PHPCSExtra.
 
-* Bugs for sniffs starting with `Generic`, `PEAR`, `PSR1`, `PSR2`, `PSR12`, `Squiz` or `Zend` should be [reported to PHPCS](https://github.com/squizlabs/PHP_CodeSniffer/issues).
+* Bugs for sniffs starting with `Generic`, `PEAR`, `PSR1`, `PSR2`, `PSR12`, `Squiz` or `Zend` should be [reported to PHPCS](https://github.com/PHPCSStandards/PHP_CodeSniffer/issues).
 * Bugs for sniffs starting with `Modernize`, `NormalizedArrays` or `Universal` should be [reported to PHPCSExtra](https://github.com/PHPCSStandards/PHPCSExtra/issues).
 
 # Contributing patches and new features
@@ -39,10 +39,10 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 3.7.2 or higher
-* PHPCSUtils 1.0.8 or higher
-* PHPCSExtra 1.1.0 or higher
-* PHPUnit 4.x, 5.x, 6.x or 7.x
+* PHP_CodeSniffer 3.9.0 or higher
+* PHPCSUtils 1.0.10 or higher
+* PHPCSExtra 1.2.1 or higher
+* PHPUnit 4.x - 9.x
 
 The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test framework for unit testing the sniffs.
 
@@ -85,9 +85,9 @@ phpunit --filter WordPress /path/to/PHP_CodeSniffer/tests/AllTests.php
 
 Expected output:
 ```
-PHPUnit 7.5.20 by Sebastian Bergmann and contributors.
+PHPUnit 9.6.15 by Sebastian Bergmann and contributors.
 
-Runtime:       PHP 7.4.33
+Runtime:       PHP 8.3.0
 Configuration: /WordPressCS/phpunit.xml.dist
 
 .........................................................         57 / 57 (100%)
@@ -138,7 +138,7 @@ Also note the class name convention. The method `getErrorList()` MUST return an 
 If you run the following from the root directory of your WordPressCS clone:
 
 ```sh
-$ "vendor/bin/phpcs" --standard=Wordpress -s ./Tests/PHP/POSIXFunctionsUnitTest.inc --sniffs=WordPress.PHP.POSIXFunctions
+$ "vendor/bin/phpcs" --standard=Wordpress -s ./WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc --sniffs=WordPress.PHP.POSIXFunctions
 ...
 --------------------------------------------------------------------------------
 FOUND 7 ERRORS AFFECTING 7 LINES

@@ -87,6 +87,7 @@ trait IsUnitTestTrait {
 		// Domain specific base test cases.
 		'WP_Ajax_UnitTestCase'                       => true,
 		'WP_Canonical_UnitTestCase'                  => true,
+		'WP_Font_Face_UnitTestCase'                  => true,
 		'WP_Test_REST_Controller_Testcase'           => true,
 		'WP_Test_REST_Post_Type_Controller_Testcase' => true,
 		'WP_Test_REST_TestCase'                      => true,

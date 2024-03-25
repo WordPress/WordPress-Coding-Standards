@@ -147,7 +147,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
-	 * Last update: July 2023 for WP 6.3 at https://github.com/WordPress/wordpress-develop/commit/6281ce432c50345a57768bf53854d9b65b6cdd52
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
@@ -201,6 +201,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated functions should still be included in this list as plugins may support older WP versions.
 	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 *
 	 * @since 3.0.0.
 	 *
 	 * @var array<string, true> Key is function name, value irrelevant.
@@ -236,6 +238,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentyeleven_comment'                           => true,
 		'twentyeleven_content_nav'                       => true,
 		'twentyeleven_continue_reading_link'             => true,
+		'twentyeleven_header_image'                      => true,
 		'twentyeleven_header_style'                      => true,
 		'twentyeleven_posted_on'                         => true,
 		'twentyeleven_setup'                             => true,
@@ -255,6 +258,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentyfourteen_admin_header_style'              => true,
 		'twentyfourteen_excerpt_more'                    => true,
 		'twentyfourteen_font_url'                        => true,
+		'twentyfourteen_header_image'                    => true,
 		'twentyfourteen_header_style'                    => true,
 		'twentyfourteen_list_authors'                    => true,
 		'twentyfourteen_paging_nav'                      => true,
@@ -296,6 +300,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentyten_admin_header_style'                   => true,
 		'twentyten_comment'                              => true,
 		'twentyten_continue_reading_link'                => true,
+		'twentyten_header_image'                         => true,
 		'twentyten_posted_in'                            => true,
 		'twentyten_posted_on'                            => true,
 		'twentyten_setup'                                => true,
@@ -317,6 +322,9 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentytwenty_get_customizer_css'                => true,
 		'twentytwenty_get_theme_svg'                     => true,
 		'twentytwenty_the_theme_svg'                     => true,
+		'twentytwentyfour_block_styles'                  => true,
+		'twentytwentyfour_block_stylesheets'             => true,
+		'twentytwentyfour_pattern_categories'            => true,
 		'twentytwentytwo_styles'                         => true,
 		'twentytwentytwo_support'                        => true,
 		'wp_authenticate'                                => true,
@@ -373,6 +381,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * and {@link https://core.trac.wordpress.org/browser/trunk/src/wp-includes/pluggable-deprecated.php}
 	 *
 	 * Note: deprecated classes should still be included in this list as plugins may support older WP versions.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
 	 *
 	 * @since 3.0.0.
 	 *
