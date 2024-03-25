@@ -8,6 +8,36 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [3.1.0] - 2024-03-25
+
+### Added
+- WordPress-Core ruleset: now includes the `Universal.PHP.LowercasePHPTag` sniff.
+- WordPress-Extra ruleset: now includes the `Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence` and the `Universal.CodeAnalysis.NoDoubleNegative` sniffs.
+- The `sanitize_locale_name()` function to the list of known "escaping" functions. Props [@Chouby]
+- The `sanitize_locale_name()` function to the list of known "sanitize & unslash" functions. Props [@Chouby]
+
+### Changed
+
+- The minimum required `PHP_CodeSniffer` version to 3.9.0 (was 3.7.2).
+- The minimum required `PHPCSUtils` version to 1.0.10 (was 1.0.8).
+- The minimum required `PHPCSExtra` version to 1.2.1 (was 1.1.0).
+    Please ensure you run `composer update wp-coding-standards/wpcs --with-dependencies` to benefit from these updates.
+- Core ruleset: the spacing after the `use` keyword for closure `use` statements will now consistently be checked. Props [@westonruter] for reporting.
+- The default value for `minimum_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#various-sniffs-set-the-minimum-supported-wp-version), has been updated to `6.2`.
+- `WordPress.NamingConventions.PrefixAllGlobals` has been updated to recognize pluggable functions introduced in WP 6.4 and 6.5.
+- `WordPress.NamingConventions.ValidPostTypeSlug` has been updated to recognize reserved post types introduced in WP 6.4 and 6.5.
+- `WordPress.WP.ClassNameCase` has been updated to recognize classes introduced in WP 6.4 and 6.5.
+- `WordPress.WP.DeprecatedClasses` now detects classes deprecated in WordPress up to WP 6.5.
+- `WordPress.WP.DeprecatedFunctions` now detects functions deprecated in WordPress up to WP 6.5.
+- The `IsUnitTestTrait` will now recognize classes which extend the new WP Core `WP_Font_Face_UnitTestCase` class as test classes.
+- The test suite can now run on PHPUnit 4.x - 9.x (was 4.x - 7.x), which should make contributing more straight forward.
+- Various housekeeping, includes a contribution from [@rodrigoprimo].
+
+### Fixed
+
+- `WordPress.WP.PostsPerPage` could potentially result in an `Internal.Exception` when encountering a query string which doesn't include the value for `posts_per_page` in the query string. Props [@anomiex] for reporting.
+
+
 ## [3.0.1] - 2023-09-14
 
 ### Added
@@ -1571,8 +1601,10 @@ See the comparison for full list.
 Initial tagged release.
 
 [Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer
+[PHP_CodeSniffer]:       https://github.com/PHPCSStandards/PHP_CodeSniffer
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/main...HEAD
+[3.1.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.3.0...3.0.0
 [2.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.2.1...2.3.0
@@ -1604,6 +1636,7 @@ Initial tagged release.
 [2013-10-06]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
 
 [@anomiex]:       https://github.com/anomiex
+[@Chouby]:        https://github.com/Chouby
 [@ckanitz]:       https://github.com/ckanitz
 [@craigfrancis]:  https://github.com/craigfrancis
 [@dawidurbanski]: https://github.com/dawidurbanski
@@ -1615,5 +1648,7 @@ Initial tagged release.
 [@Luc45]:         https://github.com/Luc45
 [@marconmartins]: https://github.com/marconmartins
 [@NielsdeBlaauw]: https://github.com/NielsdeBlaauw
+[@rodrigoprimo]:  https://github.com/rodrigoprimo
 [@slaFFik]:       https://github.com/slaFFik
 [@sandeshjangam]: https://github.com/sandeshjangam
+[@westonruter]:   https://github.com/westonruter
