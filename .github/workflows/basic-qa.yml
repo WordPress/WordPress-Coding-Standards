@@ -56,10 +56,15 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
+      # Updating the lists can fail intermittently, typically after Microsoft has released a new package.
+      # This should not be blocking for this job, so ignore any errors from this step.
+      # Ref: https://github.com/dotnet/core/issues/4167
+      - name: Update the available packages list
+        continue-on-error: true
+        run: sudo apt-get update
+
       - name: Install xmllint
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y libxml2-utils
+        run: sudo apt-get install --no-install-recommends -y libxml2-utils
 
       # Show XML violations inline in the file diff.
       # @link https://github.com/marketplace/actions/xmllint-problem-matcher
