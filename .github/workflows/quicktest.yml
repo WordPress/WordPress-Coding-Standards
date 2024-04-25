@@ -41,6 +41,10 @@ jobs:
           ini-values: error_reporting=-1, display_errors=On
           coverage:  ${{ github.ref_name == 'develop' && 'xdebug' || 'none' }}
 
+      - name: Enable creation of `composer.lock` file
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: composer config --unset lock
+
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
         with:

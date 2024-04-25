@@ -112,6 +112,10 @@ jobs:
           phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
           phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
+      - name: Enable creation of `composer.lock` file
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: composer config --unset lock
+
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
         with:
