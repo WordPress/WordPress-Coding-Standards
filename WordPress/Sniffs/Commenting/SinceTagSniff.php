@@ -22,7 +22,6 @@ use PHPCSUtils\Utils\Variables;
 /**
  * This sniff verifies the presence of valid `@since` tags in the docblocks of various PHP structures
  * and WordPress hooks. Supported structures include classes, interfaces, traits, enums, functions, methods and properties.
- * Files located within the __experimental block of the block-library are excluded from checks.
  */
 class SinceTagSniff implements Sniff {
 
@@ -564,41 +563,5 @@ class SinceTagSniff implements Sniff {
 		}
 
 		return $version_tags;
-	}
-
-	/**
-	 * Checks if the current block is experimental.
-	 *
-	 * @param File $phpcs_file The file being scanned.
-	 * @return bool Returns true if the current block is experimental.
-	 */
-	protected static function is_experimental_block( File $phpcs_file ) {
-		$block_json_filepath = dirname( $phpcs_file->getFilename() ) . DIRECTORY_SEPARATOR . 'block.json';
-
-		if ( isset( static::$cache[ $block_json_filepath ] ) ) {
-			return static::$cache[ $block_json_filepath ];
-		}
-
-		if ( ! is_file( $block_json_filepath ) || ! is_readable( $block_json_filepath ) ) {
-			static::$cache[ $block_json_filepath ] = false;
-			return static::$cache[ $block_json_filepath ];
-		}
-
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- this Composer package doesn't depend on WordPress.
-		$block_metadata = file_get_contents( $block_json_filepath );
-		if ( false === $block_metadata ) {
-			static::$cache[ $block_json_filepath ] = false;
-			return static::$cache[ $block_json_filepath ];
-		}
-
-		$block_metadata = json_decode( $block_metadata, true );
-		if ( ! is_array( $block_metadata ) ) {
-			static::$cache[ $block_json_filepath ] = false;
-			return static::$cache[ $block_json_filepath ];
-		}
-
-		$experimental_flag                     = '__experimental';
-		static::$cache[ $block_json_filepath ] = array_key_exists( $experimental_flag, $block_metadata ) && ( false !== $block_metadata[ $experimental_flag ] );
-		return static::$cache[ $block_json_filepath ];
 	}
 }
