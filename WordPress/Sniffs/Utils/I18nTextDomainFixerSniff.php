@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Utils;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Utils\FilePath;
 use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
@@ -675,7 +676,7 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		$headers = $this->plugin_headers;
 		$type    = 'plugin';
 
-		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
+		$file = FilePath::getName( $this->phpcsFile );
 		if ( 'STDIN' === $file ) {
 			return;
 		}
