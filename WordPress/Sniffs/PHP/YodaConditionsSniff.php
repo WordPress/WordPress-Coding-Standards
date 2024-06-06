@@ -43,10 +43,9 @@ final class YodaConditionsSniff extends Sniff {
 
 		$starters                        = Tokens::$booleanOperators;
 		$starters                       += Tokens::$assignmentTokens;
+		$starters                       += Collections::ternaryOperators();
 		$starters[ \T_CASE ]             = \T_CASE;
 		$starters[ \T_RETURN ]           = \T_RETURN;
-		$starters[ \T_INLINE_THEN ]      = \T_INLINE_THEN;
-		$starters[ \T_INLINE_ELSE ]      = \T_INLINE_ELSE;
 		$starters[ \T_SEMICOLON ]        = \T_SEMICOLON;
 		$starters[ \T_OPEN_PARENTHESIS ] = \T_OPEN_PARENTHESIS;
 
