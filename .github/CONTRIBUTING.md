@@ -39,9 +39,9 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 3.9.0 or higher
-* PHPCSUtils 1.0.10 or higher
-* PHPCSExtra 1.2.1 or higher
+* PHP_CodeSniffer 3.13.0 or higher
+* PHPCSUtils 1.1.0 or higher
+* PHPCSExtra 1.4.0 or higher
 * PHPUnit 4.x - 9.x
 
 The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test framework for unit testing the sniffs.
