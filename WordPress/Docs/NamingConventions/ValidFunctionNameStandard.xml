@@ -1,117 +1,117 @@
 <?xml version="1.0"?>
 <documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
-               title="Valid Function Name"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Valid Function Name"
 >
     <standard>
-        <![CDATA[
+    <![CDATA[
     Use lowercase letters in function names. Separate words using underscores. Do not use double underscores as a prefix.
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: lowercase function name.">
-            <![CDATA[
+        <![CDATA[
 prefix_function_name();
         ]]>
         </code>
         <code title="Invalid: mixed case function name.">
-            <![CDATA[
+        <![CDATA[
 Prefix_Function_NAME();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: words separated by underscores.">
-            <![CDATA[
+        <![CDATA[
 prefix_function_name();
         ]]>
         </code>
         <code title="Invalid: using camel case to separate words.">
-            <![CDATA[
+        <![CDATA[
 prefixFunctionName();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: function name with single underscore prefix.">
-            <![CDATA[
+        <![CDATA[
 _prefix_function_name();
         ]]>
         </code>
         <code title="Invalid: function name with double underscore prefix.">
-            <![CDATA[
+        <![CDATA[
 __prefix_function_name();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: lower case method name.">
-            <![CDATA[
+        <![CDATA[
 $object->prefix_method_name();
         ]]>
         </code>
         <code title="Invalid: mixed case method name.">
-            <![CDATA[
+        <![CDATA[
 $object->Prefix_Method_NAME();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: words separated by underscores.">
-            <![CDATA[
+        <![CDATA[
 $object->prefix_method_name();
         ]]>
         </code>
         <code title="Invalid: using camel case to separate words.">
-            <![CDATA[
+        <![CDATA[
 $object->prefixMethodName();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: method name with single underscore prefix.">
-            <![CDATA[
+        <![CDATA[
 $object->_prefix_method_name();
         ]]>
         </code>
         <code title="Invalid: method name with double underscore prefix.">
-            <![CDATA[
+        <![CDATA[
 $object->__prefix_method_name();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: lower case static method name.">
-            <![CDATA[
+        <![CDATA[
 My_Class::prefix_static_method_name();
         ]]>
         </code>
         <code title="Invalid: mixed case static method name.">
-            <![CDATA[
+        <![CDATA[
 My_Class::Prefix_Static_Method_NAME();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: words separated by underscores.">
-            <![CDATA[
+        <![CDATA[
 My_Class::prefix_static_method_name();
         ]]>
         </code>
         <code title="Invalid: using camel case to separate words.">
-            <![CDATA[
+        <![CDATA[
 My_Class::prefixStaticMethodName();
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
         <code title="Valid: static method name with single underscore prefix.">
-            <![CDATA[
+        <![CDATA[
 My_Class::_prefix_static_method_name();
         ]]>
         </code>
         <code title="Invalid: static method name with double underscore prefix.">
-            <![CDATA[
+        <![CDATA[
 My_Class::__prefix_static_method_name();
         ]]>
         </code>
