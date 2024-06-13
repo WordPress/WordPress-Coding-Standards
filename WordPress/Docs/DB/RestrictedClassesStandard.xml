@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted Database Classes and Methods"
+    >
+    <standard>
+    <![CDATA[
+      Avoid touching the database directly with PHP library classes and methods. Use the $wpdb object and associated functions instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Invalid: Using the object-orientated mysqli interface">
+        <![CDATA[
+$mysqli = new mysqli(
+    "example.com", 
+    $db_user, 
+    $db_pass, 
+    $db_name 
+);
+
+$result = <em>$mysqli->query</em>(
+    $mysqli,
+    "SELECT * FROM wp_posts LIMIT 5" 
+);
+        ]]>
+        </code>
+        <code title="Valid: Use WordPress functions">
+        <![CDATA[
+$result = <em>get_posts()</em>;
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Invalid: Using the object-orientated PDO and PDOStatement interfaces to insert a post">
+        <![CDATA[
+$pdo   = new PDO( 
+    $dsn, 
+    $db_user, 
+    $db_pass 
+);
+
+$stmnt = $pdo->prepare(
+    "INSERT INTO wp_posts (post_title)
+    VALUES (?)" 
+);
+
+$stmnt->execute( ['Title'] );
+        ]]>
+        </code>
+        <code title="Valid: Use WordPress functions">
+        <![CDATA[
+<em>wp_insert_post</em>( 
+    array( 'post_title' => 'Title' )
+);
+
+// or...
+
+global $wpdb;
+<em>$wpdb->insert</em>( 
+    "{$wpdb->prefix}_posts",
+    array( 'post_title' => 'Title' ),
+    array( '%s' ) 
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
