@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Don't exctract"
+    >
+    <standard>
+    <![CDATA[
+    Restricts the usage of `extract()` php function. It makes code harder to debug and harder to understand and may cause conflicts on variables names.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Similarly named functions or methods are fine">
+        <![CDATA[
+$var_array = array(
+    "title"    => "My title",
+    "content"  => "My content",
+    "ID"       => 123
+);
+my_extract( $var_array, EXTR_OVERWRITE );
+        ]]>
+        </code>
+        <code title="Invalid: ">
+        <![CDATA[
+$var_array = array(
+    "title"    => "My title",
+    "content"  => "My content",
+    "ID"       => 123
+);
+extract( $var_array, EXTR_OVERWRITE );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
