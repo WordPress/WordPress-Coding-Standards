@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Prepared SQL"
+    >
+    <standard>
+    <![CDATA[
+    When making direct database queries using $wpdb, you should use $wpdb->prepare(), and use placeholders for all variables used in the query. You should not use variable interpolation or concatenation.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Placeholders with $wpdb->prepare() used for all variables in query.">
+        <![CDATA[
+$val = $_GET['foo'];
+$wpdb->prepare(
+    "SELECT * from table WHERE field = %s",
+    $val
+);
+        ]]>
+        </code>
+        <code title="Invalid: Interpolated variables used in $wpdb->prepare().">
+        <![CDATA[
+$val = $_GET['foo'];
+$wpdb->prepare(
+    "SELECT * from table WHERE field = {$val}"
+);
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Placeholders with $wpdb->prepare() used for all variables in query.">
+        <![CDATA[
+$val = $_GET['foo'];
+$wpdb->prepare(
+    "SELECT * from table WHERE field = %s",
+    $val
+);
+        ]]>
+        </code>
+        <code title="Invalid: Concatenation of variables used in $wpdb->prepare().">
+        <![CDATA[
+$val = $_GET['foo'];
+$wpdb->prepare(
+    "SELECT * from table WHERE field = " . $val
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
