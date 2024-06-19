@@ -19,7 +19,7 @@ $var_array = array(
 my_extract( $var_array, EXTR_OVERWRITE );
         ]]>
         </code>
-        <code title="Invalid: ">
+        <code title="Invalid: use `extract()` function">
         <![CDATA[
 $var_array = array(
     "title"    => "My title",
