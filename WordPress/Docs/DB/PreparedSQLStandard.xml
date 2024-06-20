@@ -13,7 +13,7 @@
         <![CDATA[
 $val = $_GET['foo'];
 $wpdb->prepare(
-    "SELECT * from table WHERE field = %s",
+    "SELECT * from table WHERE field = <em>%s</em>",
     $val
 );
         ]]>
@@ -22,7 +22,7 @@ $wpdb->prepare(
         <![CDATA[
 $val = $_GET['foo'];
 $wpdb->prepare(
-    "SELECT * from table WHERE field = {$val}"
+    "SELECT * from table WHERE field = <em>{$val}</em>"
 );
         ]]>
         </code>
@@ -33,7 +33,7 @@ $wpdb->prepare(
         <![CDATA[
 $val = $_GET['foo'];
 $wpdb->prepare(
-    "SELECT * from table WHERE field = %s",
+    "SELECT * from table WHERE field = <em>%s</em>",
     $val
 );
         ]]>
@@ -42,7 +42,7 @@ $wpdb->prepare(
         <![CDATA[
 $val = $_GET['foo'];
 $wpdb->prepare(
-    "SELECT * from table WHERE field = " . $val
+    "SELECT * from table WHERE field = <em>" . $val</em>
 );
         ]]>
         </code>
