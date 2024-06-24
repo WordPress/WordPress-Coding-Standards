@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Get Meta Single"
+    >
+    <standard>
+    <![CDATA[
+When calling the get_(comment|post|site|term|user)_meta(), get_metadata(), get_metadata_default(),
+and get_metadata_raw() functions, if the $meta_key/$key parameter is passed, the $single parameter
+should be passed as well to make it explicit what is the expected return type.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: get meta functions used with or without both $meta_key/$key and $single parameters.">
+        <![CDATA[
+$admin_color = get_user_meta(
+    $user_id,
+    <em>'admin_color',
+    true</em>
+);
+$post_meta = get_metadata( 'post', $post_id<em></em> );
+        ]]>
+        </code>
+        <code title="Invalid: get meta function used with $meta_key/$key parameter and without $single parameter.">
+        <![CDATA[
+$admin_color = get_user_meta(
+    $user_id,
+    <em>'admin_color'</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
