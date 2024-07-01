@@ -11,18 +11,18 @@
     <code_comparison>
         <code title="Valid: Placeholders with $wpdb->prepare() used for all variables in query.">
         <![CDATA[
-$val = $_GET['foo'];
 $wpdb->prepare(
-    "SELECT * from table WHERE field = <em>%s</em>",
-    $val
+    'SELECT * from table
+        WHERE field = <em>%s</em>',
+    <em>$_GET['foo']</em>
 );
         ]]>
         </code>
-        <code title="Invalid: Interpolated variables used in $wpdb->prepare().">
+        <code title="Invalid: Interpolated variables used in $wpdb->query().">
         <![CDATA[
-$val = $_GET['foo'];
-$wpdb->prepare(
-    "SELECT * from table WHERE field = <em>{$val}</em>"
+$wpdb->query(
+    "SELECT * from table
+    WHERE field = <em>{$_GET['foo']}</em>"
 );
         ]]>
         </code>
@@ -31,18 +31,18 @@ $wpdb->prepare(
     <code_comparison>
         <code title="Valid: Placeholders with $wpdb->prepare() used for all variables in query.">
         <![CDATA[
-$val = $_GET['foo'];
 $wpdb->prepare(
-    "SELECT * from table WHERE field = <em>%s</em>",
-    $val
+    'SELECT * from table
+        WHERE field = <em>%s</em>',
+    <em>$value</em>
 );
         ]]>
         </code>
-        <code title="Invalid: Concatenation of variables used in $wpdb->prepare().">
+        <code title="Invalid: Concatenation of variables used in $wpdb->*().">
         <![CDATA[
-$val = $_GET['foo'];
-$wpdb->prepare(
-    "SELECT * from table WHERE field = <em>" . $val</em>
+$wpdb->get_results(
+    "SELECT * from table
+    WHERE field = <em>" . $value</em>
 );
         ]]>
         </code>
