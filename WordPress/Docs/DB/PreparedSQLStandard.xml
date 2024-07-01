@@ -5,7 +5,8 @@
     >
     <standard>
     <![CDATA[
-    When making direct database queries using $wpdb, you should use $wpdb->prepare(), and use placeholders for all variables used in the query. You should not use variable interpolation or concatenation.
+    When querying the database, you should use $wpdb->prepare() to escape and quote the contents of variables. This prevents SQL injection.
+    Use placeholders for all variables used in the query. You should not use variable interpolation or concatenation.
     ]]>
     </standard>
     <code_comparison>
