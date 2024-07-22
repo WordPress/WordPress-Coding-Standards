@@ -9,7 +9,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: short post type slug.">
+        <code title="Valid: Short post type slug.">
         <![CDATA[
 register_post_type( 
     <em>'my_short_slug'</em>, 
@@ -17,7 +17,7 @@ register_post_type(
 );
         ]]>
         </code>
-        <code title="Invalid: too long post type slug.">
+        <code title="Invalid: Too long post type slug.">
         <![CDATA[
 register_post_type( 
     <em>'my_own_post_type_too_long'</em>, 
@@ -32,7 +32,7 @@ register_post_type(
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: no special characters in post type slug.">
+        <code title="Valid: No special characters in post type slug.">
         <![CDATA[
 register_post_type( 
     <em>'my_post_type_slug'</em>, 
@@ -40,7 +40,7 @@ register_post_type(
 );
         ]]>
         </code>
-        <code title="Invalid: invalid characters in post type slug.">
+        <code title="Invalid: Invalid characters in post type slug.">
         <![CDATA[
 register_post_type( 
     <em>'my/post/type/slug'</em>, 
@@ -55,7 +55,7 @@ register_post_type(
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: static post type slug.">
+        <code title="Valid: Static post type slug.">
         <![CDATA[
 register_post_type( 
     <em>'my_post_active'</em>, 
@@ -63,7 +63,7 @@ register_post_type(
 );
         ]]>
         </code>
-        <code title="Invalid: dynamic post type slug.">
+        <code title="Invalid: Dynamic post type slug.">
         <![CDATA[
 register_post_type( 
     <em>"my_post_{$status}"</em>, 
@@ -78,7 +78,7 @@ register_post_type(
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: prefixed post slug.">
+        <code title="Valid: Prefixed post slug.">
         <![CDATA[
 register_post_type( 
     <em>'prefixed_author'</em>, 
@@ -86,7 +86,7 @@ register_post_type(
 );
         ]]>
         </code>
-        <code title="Invalid: using a reserved keyword as slug.">
+        <code title="Invalid: Using a reserved keyword as slug.">
         <![CDATA[
 register_post_type( 
     <em>'author'</em>, 
@@ -101,7 +101,7 @@ register_post_type(
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: custom prefix post slug.">
+        <code title="Valid: Custom prefix post slug.">
         <![CDATA[
 register_post_type( 
     <em>'prefixed_author'</em>, 
@@ -109,7 +109,7 @@ register_post_type(
 );
         ]]>
         </code>
-        <code title="Invalid: using a reserved prefix.">
+        <code title="Invalid: Using a reserved prefix.">
         <![CDATA[
 register_post_type( 
     <em>'wp_author'</em>, 

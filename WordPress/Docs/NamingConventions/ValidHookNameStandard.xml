@@ -9,24 +9,24 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: lowercase hook name.">
+        <code title="Valid: Lowercase hook name.">
         <![CDATA[
 do_action( <em>'prefix_hook_name'</em>, $var );
         ]]>
         </code>
-        <code title="Invalid: mixed case hook name.">
+        <code title="Invalid: Mixed case hook name.">
         <![CDATA[
 do_action( <em>'Prefix_Hook_NAME'</em>, $var );
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
-        <code title="Valid: words separated by underscores.">
+        <code title="Valid: Words separated by underscores.">
         <![CDATA[
 apply_filters( <em>'prefix_hook_name'</em>, $var );
         ]]>
         </code>
-        <code title="Invalid: using non-underscore characters to separate words.">
+        <code title="Invalid: Using non-underscore characters to separate words.">
         <![CDATA[
 apply_filters( <em>'prefix\hook-name'</em>, $var );
         ]]>

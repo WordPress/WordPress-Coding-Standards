@@ -9,12 +9,12 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: passing a valid function parameter value.">
+        <code title="Valid: Passing a valid function parameter value.">
         <![CDATA[
 bloginfo( <em>'url'</em> );
         ]]>
         </code>
-        <code title="Invalid: passing a deprecated function parameter value.">
+        <code title="Invalid: Passing a deprecated function parameter value.">
         <![CDATA[
 bloginfo ( <em>'home'</em> ); // Deprecated WP 2.2.0.
         ]]>

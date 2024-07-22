@@ -29,7 +29,7 @@ apply_filter(
 );
         ]]>
         </code>
-        <code title="Invalid: non-prefixed code.">
+        <code title="Invalid: Non-prefixed code.">
         <![CDATA[
 define( <em>'PLUGIN_VERSION'</em>, '1.0' );
 
@@ -68,7 +68,7 @@ apply_filter(
 );
         ]]>
         </code>
-        <code title="Invalid: using a non-prefixed namespace.">
+        <code title="Invalid: Using a non-prefixed namespace.">
         <![CDATA[
 namespace <em>Admin</em>;
 
