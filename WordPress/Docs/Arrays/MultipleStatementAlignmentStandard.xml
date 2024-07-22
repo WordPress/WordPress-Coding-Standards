@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-        When declaring arrays, there should be one space on either side of a double arrow operator used to assign a value to a key.
+    When declaring arrays, there should be one space on either side of a double arrow operator used to assign a value to a key.
     ]]>
     </standard>
     <code_comparison>
@@ -24,7 +24,7 @@ $bar = array( 'year'<em>=>   </em>$current_year );
     </code_comparison>
     <standard>
     <![CDATA[
-        In the case of a block of related assignments, it is recommended to align the arrows to promote readability.
+    In the case of a block of related assignments, it is recommended to align the arrows to promote readability.
     ]]>
     </standard>
     <code_comparison>

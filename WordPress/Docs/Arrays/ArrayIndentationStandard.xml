@@ -5,18 +5,18 @@
     >
     <standard>
     <![CDATA[
-      The array closing bracket indentation should line up with the start of the content on the line containing the array opener.
+    The array closing bracket indentation should line up with the start of the content on the line containing the array opener.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Closing bracket lined up correctly">
+        <code title="Valid: Closing bracket lined up correctly.">
         <![CDATA[
 $args = array(
     'post_id' => 22,
 <em>);</em>
         ]]>
         </code>
-        <code title="Invalid: Closing bracket lined up incorrectly">
+        <code title="Invalid: Closing bracket lined up incorrectly.">
         <![CDATA[
 $args = array(
     'post_id' => 22,
@@ -26,11 +26,11 @@ $args = array(
     </code_comparison>
     <standard>
     <![CDATA[
-      In multi-line arrays, array items should be indented by a 4-space tab for each level of nested array, so that the array visually matches its structure.
+    In multi-line arrays, array items should be indented by a 4-space tab for each level of nested array, so that the array visually matches its structure.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Correctly indented array">
+        <code title="Valid: Correctly indented array.">
         <![CDATA[
 $args = array(
     'post_id'       => 22,
@@ -88,7 +88,7 @@ $args = array(
         </code>
     </code_comparison>
     <code_comparison>
-        <code title="Valid: Opener and comma after closer are indented correctly">
+        <code title="Valid: Opener and comma after closer are indented correctly.">
         <![CDATA[
 $text = array(
     <<<EOD

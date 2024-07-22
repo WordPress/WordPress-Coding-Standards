@@ -5,11 +5,11 @@
     >
     <standard>
     <![CDATA[
-      When referring to array items, only include a space around the index if it is a variable or the key is concatenated.
+    When referring to array items, only include a space around the index if it is a variable or the key is concatenated.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Correct spacing around the index keys">
+        <code title="Valid: Correct spacing around the index keys.">
         <![CDATA[
 $post       = $posts<em>[ </em>$post_id<em> ]</em>;
 $post_title = $post<em>[ </em>'concatenated' . $title<em> ]</em>;
@@ -18,7 +18,7 @@ $post       = $posts<em>[</em>123<em>]</em>;
 $post_title = $post<em>[</em>'post_title'<em>]</em>;
         ]]>
         </code>
-        <code title="Invalid: Incorrect spacing around the index keys">
+        <code title="Invalid: Incorrect spacing around the index keys.">
         <![CDATA[
 $post       = $posts<em>[</em>$post_id<em>]</em>;
 $post_title = $post<em>[</em>'concatenated' . $title<em> ]</em>;

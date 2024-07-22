@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-Capabilities passed should be valid capabilities (custom capabilities can be added in the ruleset).
+    Capabilities passed should be valid capabilities (custom capabilities can be added in the ruleset).
     ]]>
     </standard>
     <code_comparison>
@@ -22,7 +22,7 @@ map_meta_cap( <em>'manage_site'</em>, $user->ID );
     </code_comparison>
     <standard>
     <![CDATA[
-Always use user capabilities instead of roles.
+    Always use user capabilities instead of roles.
     ]]>
     </standard>
     <code_comparison>
@@ -51,7 +51,7 @@ add_options_page(
     </code_comparison>
     <standard>
     <![CDATA[
-Don't use deprecated capabilities.
+    Don't use deprecated capabilities.
     ]]>
     </standard>
     <code_comparison>
