@@ -1,4 +1,8 @@
-<documentation title="Object Operator Spacing">
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Object Operator Spacing"
+>
     <standard>
     <![CDATA[
     The object operators (->, ?->, ::) should not have any spaces around them, though new lines are allowed except for use with the `::class` constant.

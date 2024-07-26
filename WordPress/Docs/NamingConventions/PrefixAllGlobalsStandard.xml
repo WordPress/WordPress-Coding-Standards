@@ -15,7 +15,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using the prefix ECPT_">
+        <code title="Valid: Using the prefix ECPT_.">
         <![CDATA[
 define( <em>'ECPT_VERSION'</em>, '1.0' );
 
@@ -29,7 +29,7 @@ apply_filter(
 );
         ]]>
         </code>
-        <code title="Invalid: non-prefixed code">
+        <code title="Invalid: non-prefixed code.">
         <![CDATA[
 define( <em>'PLUGIN_VERSION'</em>, '1.0' );
 
@@ -45,7 +45,7 @@ apply_filter(
         </code>
     </code_comparison>
     <code_comparison>
-        <code title="Valid: Using the prefix ECPT_ in namespaced code">
+        <code title="Valid: Using the prefix ECPT_ in namespaced code.">
         <![CDATA[
 namespace <em>ECPT_Plugin\Admin</em>;
 
@@ -68,7 +68,7 @@ apply_filter(
 );
         ]]>
         </code>
-        <code title="Invalid: using a non-prefixed namespace">
+        <code title="Invalid: using a non-prefixed namespace.">
         <![CDATA[
 namespace <em>Admin</em>;
 
@@ -88,12 +88,12 @@ class Admin_Page {}
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using the prefix mycoolplugin_">
+        <code title="Valid: Using the prefix mycoolplugin_.">
         <![CDATA[
 function <em>mycoolplugin_save_post()</em> {}
         ]]>
         </code>
-        <code title="Invalid: Using a WordPress reserved prefix wp_">
+        <code title="Invalid: Using a WordPress reserved prefix wp_.">
         <![CDATA[
 function <em>wp_save_post()</em> {}
         ]]>
@@ -105,12 +105,12 @@ function <em>wp_save_post()</em> {}
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using the distinct prefix MyPlugin">
+        <code title="Valid: Using the distinct prefix MyPlugin.">
         <![CDATA[
 interface <em>MyPluginIsCool</em> {}
         ]]>
         </code>
-        <code title="Invalid: Using a two-letter prefix My">
+        <code title="Invalid: Using a two-letter prefix My.">
         <![CDATA[
 interface <em>My</em> {}
         ]]>

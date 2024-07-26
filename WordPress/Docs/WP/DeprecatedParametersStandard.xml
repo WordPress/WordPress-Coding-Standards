@@ -6,7 +6,7 @@
     <standard>
     <![CDATA[
     Please refrain from passing deprecated WordPress function parameters.
-	In case, you need to pass an optional parameter positioned <em>after</em> the deprecated parameter, only ever pass the default value.
+    In case, you need to pass an optional parameter positioned <em>after</em> the deprecated parameter, only ever pass the default value.
     ]]>
     </standard>
     <code_comparison>
