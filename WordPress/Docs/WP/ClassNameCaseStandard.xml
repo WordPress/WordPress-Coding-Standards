@@ -9,12 +9,12 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: reference to a WordPress native class name using the correct case.">
+        <code title="Valid: Reference to a WordPress native class name using the correct case.">
         <![CDATA[
 $obj = new WP_Query;
         ]]>
         </code>
-        <code title="Invalid: reference to a WordPress native class name not using the correct case.">
+        <code title="Invalid: Reference to a WordPress native class name not using the correct case.">
         <![CDATA[
 $obj = new wp_query;
         ]]>

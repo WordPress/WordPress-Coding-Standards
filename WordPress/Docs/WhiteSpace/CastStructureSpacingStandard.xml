@@ -10,7 +10,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: space before typecast.">
+        <code title="Valid: Space before typecast.">
         <![CDATA[
 $a =<em> </em>(int) '420';
 
@@ -18,7 +18,7 @@ $a =<em> </em>(int) '420';
 $a = function_call( <em>...(array)</em> $mixed );
         ]]>
         </code>
-        <code title="Invalid: no space before typecast.">
+        <code title="Invalid: No space before typecast.">
         <![CDATA[
 $a <em>=(</em>int) '420';
         ]]>

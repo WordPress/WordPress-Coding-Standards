@@ -9,12 +9,12 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: use of a current (non-deprecated) function.">
+        <code title="Valid: Use of a current (non-deprecated) function.">
         <![CDATA[
 $sites = <em>get_sites</em>();
         ]]>
         </code>
-        <code title="Invalid: use of a deprecated function.">
+        <code title="Invalid: Use of a deprecated function.">
         <![CDATA[
 $sites = <em>wp_get_sites</em>(); // Deprecated WP 4.6.
         ]]>

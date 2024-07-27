@@ -9,7 +9,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: correct spacing between the key and value.">
+        <code title="Valid: Correct spacing between the key and value.">
         <![CDATA[
 $foo = array( 'cat'<em> => </em>22 );
 $bar = array( 'year'<em> => </em>$current_year );

@@ -11,13 +11,13 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: calling in_array() with the $strict parameter set to `true`.">
+        <code title="Valid: Calling in_array() with the $strict parameter set to `true`.">
         <![CDATA[
 $array = array( '1', 1, true );
 if ( in_array( $value, $array, <em>true</em> ) ) {}
         ]]>
         </code>
-        <code title="Invalid: calling in_array() without passing the $strict parameter.">
+        <code title="Invalid: Calling in_array() without passing the $strict parameter.">
         <![CDATA[
 $array = array( '1', 1, true );
 if ( in_array( $value, $array<em> </em>) ) {}
@@ -26,12 +26,12 @@ if ( in_array( $value, $array<em> </em>) ) {}
     </code_comparison>
 
     <code_comparison>
-        <code title="Valid: calling array_search() with the $strict parameter set to `true`.">
+        <code title="Valid: Calling array_search() with the $strict parameter set to `true`.">
         <![CDATA[
 $key = array_search( 1, $array, <em>true</em> );
         ]]>
         </code>
-        <code title="Invalid: calling array_search() without passing the $strict parameter.">
+        <code title="Invalid: Calling array_search() without passing the $strict parameter.">
         <![CDATA[
 $key = array_search( 1, $array<em> </em>);
         ]]>
@@ -39,12 +39,12 @@ $key = array_search( 1, $array<em> </em>);
     </code_comparison>
 
     <code_comparison>
-        <code title="Valid: calling array_keys() with a $search_value and the $strict parameter set to `true`.">
+        <code title="Valid: Calling array_keys() with a $search_value and the $strict parameter set to `true`.">
         <![CDATA[
 $keys = array_keys( $array, $key, <em>true</em> );
         ]]>
         </code>
-        <code title="Invalid: calling array_keys() with a $search_value without passing the $strict parameter.">
+        <code title="Invalid: Calling array_keys() with a $search_value without passing the $strict parameter.">
         <![CDATA[
 $keys = array_keys( $array, $key<em> </em>);
         ]]>
