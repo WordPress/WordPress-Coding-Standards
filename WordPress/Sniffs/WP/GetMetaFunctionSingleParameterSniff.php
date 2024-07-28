@@ -36,6 +36,10 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 	/**
 	 * List of functions this sniff should examine.
 	 *
+	 * Once support for PHP 5.4 is dropped, it is possible to create two private properties
+	 * representing the two different signatures of get meta functions to remove the duplication
+	 * of the name and position of the parameters.
+	 *
 	 * @link https://developer.wordpress.org/reference/functions/get_comment_meta/
 	 * @link https://developer.wordpress.org/reference/functions/get_metadata/
 	 * @link https://developer.wordpress.org/reference/functions/get_metadata_default/
@@ -47,8 +51,10 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var array<string, array> Key is function name, value is an array containing information
-	 *                           about the name and position of the relevant parameters.
+	 * @var array<string, array<string, array<string, int|string>>> Key is function name, value is
+	 *                                                              an array containing information
+	 *                                                              about the name and position of
+	 *                                                              the relevant parameters.
 	 */
 	protected $target_functions = array(
 		'get_comment_meta'     => array(
@@ -160,13 +166,14 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 			return;
 		}
 
-		$tokens = $this->phpcsFile->getTokens();
+		$tokens       = $this->phpcsFile->getTokens();
+		$message_data = array( $condition['parameter'], $tokens[ $stackPtr ]['content'], $recommended['parameter'] );
 
 		$this->phpcsFile->addWarning(
-			'When passing the $%s parameter to %s(), the $%s parameter must also be passed to make it explicit whether an array or a string is expected.',
+			'When passing the $%s parameter to %s(), it is recommended to pass the $%s parameter as well to make it explicit whether an array or a string is expected.',
 			$stackPtr,
 			'ReturnTypeNotExplicit',
-			array( $condition['parameter'], $tokens[ $stackPtr ]['content'], $recommended['parameter'] )
+			$message_data
 		);
 	}
 }
