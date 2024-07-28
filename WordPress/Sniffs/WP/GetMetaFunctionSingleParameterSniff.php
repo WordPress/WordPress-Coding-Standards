@@ -22,7 +22,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * @since 3.2.0
  */
-final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
+final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The group name for this group of functions.

@@ -190,7 +190,7 @@
 	<!-- Flags calls to get_*_meta() and get_metadata*() functions
 	     that include the $key/$meta_key parameter but omit the $single parameter.
 	     https://github.com/WordPress/WordPress-Coding-Standards/issues/2459 -->
-	<rule ref="WordPress.WP.GetMetaSingle"/>
+	<rule ref="WordPress.WP.GetMetaFunctionSingleParameter"/>
 
 	<!--
 	#############################################################################
