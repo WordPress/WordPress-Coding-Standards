@@ -490,13 +490,13 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$this->prefixes = RulesetPropertyHelper::merge_custom_array( $this->prefixes, array(), false );
 		if ( empty( $this->prefixes ) ) {
 			// No prefixes passed, nothing to do.
-			return;
+			// return;
 		}
 
 		$this->validate_prefixes();
 		if ( empty( $this->validated_prefixes ) ) {
 			// No _valid_ prefixes passed, nothing to do.
-			return;
+			// return;
 		}
 
 		// Ignore test classes.
@@ -577,6 +577,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					}
 				}
 			}
+
+      var_dump( $namespace_name );
 
 			// Still here ? In that case, we have a non-prefixed namespace name.
 			$recorded = $this->phpcsFile->addError(
@@ -731,6 +733,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			if ( empty( $item_name ) || $this->is_prefixed( $stackPtr, $item_name ) === true ) {
 				return;
 			}
+
+      var_dump( $item_name );
 
 			$recorded = $this->phpcsFile->addError(
 				self::ERROR_MSG,
