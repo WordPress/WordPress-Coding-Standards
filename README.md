@@ -157,13 +157,13 @@ The [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP)
 
 Install either as a separate ruleset and run it separately against your code or add it to your custom ruleset, like so:
 ```xml
-<config name="testVersion" value="7.0-"/>
+<config name="testVersion" value="7.2-"/>
 <rule ref="PHPCompatibilityWP">
     <include-pattern>*\.php$</include-pattern>
 </rule>
 ```
 
-Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `7.0-` to support the same PHP versions as WordPress Core supports.
+Whichever way you run it, do make sure you set the `testVersion` to run the sniffs against. The `testVersion` determines for which PHP versions you will receive compatibility information. The recommended setting for this at this moment is  `7.2-` to support the same PHP versions as WordPress Core supports.
 
 For more information about setting the `testVersion`, see:
 * [PHPCompatibility: Sniffing your code for compatibility with specific PHP version(s)](https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions)
