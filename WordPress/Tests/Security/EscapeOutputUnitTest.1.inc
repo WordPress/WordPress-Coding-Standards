@@ -462,7 +462,7 @@ echo 1_000_000 + 2_0_0 + 0o12 + 0o20_00, 0XAB953C, 6.674_083e+11, 0b1010;
  */
 user_error( error_level: E_USER_NOTICE ); // OK, well not really, required $message parameter missing, but that's not our concern.
 trigger_error(
-	message: "There was an error: {$message}",
+	messege: "There was an error: {$message}",
 	error_level: E_USER_NOTICE,
 ); // OK, well not really, typo in $message param name, but that's not our concern.
 user_error(
