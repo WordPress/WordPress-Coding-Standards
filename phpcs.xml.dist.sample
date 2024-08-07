@@ -140,7 +140,7 @@
 	so excluding test files from the `WordPress.Files.Filename` sniff can be a
 	legitimate exclusion.
 
-	For more information on ruleset configuration optiones, check out the PHPCS wiki:
+	For more information on ruleset configuration options, check out the PHPCS wiki:
 	https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-Ruleset
 	-->
 	<rule ref="WordPress.WP.GlobalVariablesOverride">

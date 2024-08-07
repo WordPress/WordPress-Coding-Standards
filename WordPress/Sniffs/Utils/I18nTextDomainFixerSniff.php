@@ -536,7 +536,7 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 				$error_msg .= ' and preceding argument(s)';
 				$error_code = 'MissingArgs';
 
-				// Expected preceeding param also missing, just throw the warning.
+				// Expected preceding param also missing, just throw the warning.
 				$this->phpcsFile->addWarning( $error_msg, $stackPtr, $error_code );
 			}
 
@@ -570,7 +570,7 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		$old_domain = TextStrings::stripQuotes( $this->tokens[ $domain_token ]['content'] );
 
 		if ( ! \in_array( $old_domain, $this->old_text_domain, true ) ) {
-			// Not a text domain targetted for replacement, ignore.
+			// Not a text domain targeted for replacement, ignore.
 			return;
 		}
 

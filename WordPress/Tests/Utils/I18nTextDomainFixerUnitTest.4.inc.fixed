@@ -171,7 +171,7 @@ _get_path_to_translation_from_lang_dir( 'something-else' );
 _get_path_to_translation( 'something-else' );
 
 /*
- * Missing text domain and preceeding args, only throw warning.
+ * Missing text domain and preceding args, only throw warning.
  */
 __();
 _e(   /* comment */  );

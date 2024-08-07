@@ -33,7 +33,7 @@ use WordPressCS\WordPress\Sniff;
  * @since 0.13.0 Class name changed: this class is now namespaced.
  * @since 1.0.0  This sniff has been moved from the `Variables` category to the `WP`
  *               category and renamed from `GlobalVariables` to `GlobalVariablesOverride`.
- * @since 1.1.0  The sniff now also detects variables being overriden in the global namespace.
+ * @since 1.1.0  The sniff now also detects variables being overridden in the global namespace.
  * @since 2.2.0  The sniff now also detects variable assignments via the list() construct.
  *
  * @uses \WordPressCS\WordPress\Helpers\IsUnitTestTrait::$custom_test_classes

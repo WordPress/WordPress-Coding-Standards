@@ -509,7 +509,7 @@ function a_do_something(){}
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] aa
 function aa_do_something(){}
 
-// The following line mimicks an empty prefix value.
+// The following line mimics an empty prefix value.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
 function aaa_do_something(){}
 

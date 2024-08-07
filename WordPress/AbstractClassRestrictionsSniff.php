@@ -159,7 +159,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	}
 
 	/**
-	 * Verify if the current token is one of the targetted classes.
+	 * Verify if the current token is one of the targeted classes.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *

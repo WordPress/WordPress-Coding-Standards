@@ -57,7 +57,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var array<string, array> The key is the name of a function we're targetting,
+	 * @var array<string, array> The key is the name of a function we're targeting,
 	 *                           the value is an array containing the 1-based parameter position
 	 *                           of the "capability" parameter within the function, as well as
 	 *                           the name of the parameter as declared in the function.

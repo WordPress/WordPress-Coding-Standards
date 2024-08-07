@@ -449,7 +449,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return bool Whether or not the argument is a string literal.
 	 */
@@ -550,7 +550,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -642,7 +642,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -724,7 +724,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return bool Whether or not the text string has translatable content.
 	 */
@@ -759,7 +759,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -813,9 +813,9 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int   $stackPtr          The position of the function call token in the stack.
 	 * @param array $param_info_single Parameter info array for the `$single` parameter,
-	 *                                 as received from the PassedParemeters class.
+	 *                                 as received from the PassedParameters class.
 	 * @param array $param_info_plural Parameter info array for the `$plural` parameter,
-	 *                                 as received from the PassedParemeters class.
+	 *                                 as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
