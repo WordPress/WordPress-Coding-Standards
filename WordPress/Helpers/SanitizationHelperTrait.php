@@ -126,7 +126,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * This list is complementary to the `$sanitizingFunctions` list.
 	 * Sanitizing functions should be added to this list if they also
-	 * implicitely unslash data and to the `$sanitizingFunctions` list
+	 * implicitly unslash data and to the `$sanitizingFunctions` list
 	 * if they don't.
 	 *
 	 * @since 0.5.0

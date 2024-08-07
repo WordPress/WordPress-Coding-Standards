@@ -39,7 +39,7 @@ echo 'Some Raw String';  // Good.
 echo '' . $bad; // Bad, should not validate.
 echo "this is $bad"; // Bad.
 echo esc_html( $good . $better ) . $foo; // Bad, should escape all concatenated elements.
-echo esc_html( $food . 'include'  ); // Good, eveything inside the escaping/sanitizing function should pass.
+echo esc_html( $food . 'include'  ); // Good, everything inside the escaping/sanitizing function should pass.
 echo esc_html( strtoupper( $ok ) ) . $foo; // Bad, again.
 echo esc_html( strtoupper( $ok ) ) . ' ' . esc_html( strtolower( $ok ) ); // Ok.
 
@@ -462,7 +462,7 @@ echo 1_000_000 + 2_0_0 + 0o12 + 0o20_00, 0XAB953C, 6.674_083e+11, 0b1010;
  */
 user_error( error_level: E_USER_NOTICE ); // OK, well not really, required $message parameter missing, but that's not our concern.
 trigger_error(
-	messege: "There was an error: {$message}",
+	message: "There was an error: {$message}",
 	error_level: E_USER_NOTICE,
 ); // OK, well not really, typo in $message param name, but that's not our concern.
 user_error(

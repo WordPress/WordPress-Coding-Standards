@@ -244,7 +244,7 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 *
 	 * @param string $matched_content The token content (function name) which was matched
 	 *                                in lowercase.
-	 * @param array  $parameter       Array with start and end token positon of the parameter.
+	 * @param array  $parameter       Array with start and end token position of the parameter.
 	 * @param array  $parameter_args  Array with alternative and WordPress deprecation version of the parameter.
 	 *
 	 * @return void

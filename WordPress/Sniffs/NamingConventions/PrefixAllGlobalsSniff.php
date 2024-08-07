@@ -861,7 +861,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	protected function process_variable_assignment( $stackPtr, $in_list = false ) {
 		/*
 		 * We're only concerned with variables which are being defined.
-		 * `is_assigment()` will not recognize property assignments, which is good in this case.
+		 * `is_assignment()` will not recognize property assignments, which is good in this case.
 		 * However it will also not recognize $b in `foreach( $a as $b )` as an assignment, so
 		 * we need a separate check for that.
 		 */
@@ -1138,7 +1138,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
-	 * @since 1.0.0  Does not require a word seperator anymore after a prefix.
+	 * @since 1.0.0  Does not require a word separator anymore after a prefix.
 	 *               This allows for improved code style independent checking,
 	 *               i.e. allows for camelCase naming and the likes.
 	 * @since 1.0.1  - Added $stackPtr parameter.

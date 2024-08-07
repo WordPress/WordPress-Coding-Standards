@@ -35,7 +35,7 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 		parent::setUp();
 
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
-			'test-empty-funtions-array' => array(
+			'test-empty-functions-array' => array(
 				'type'      => 'error',
 				'message'   => 'Detected usage of %s.',
 				'functions' => array(),

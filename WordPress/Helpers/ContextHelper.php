@@ -31,7 +31,7 @@ use PHPCSUtils\Utils\PassedParameters;
 final class ContextHelper {
 
 	/**
-	 * Tokens which when they preceed code indicate the value is safely casted.
+	 * Tokens which when they precede code indicate the value is safely casted.
 	 *
 	 * @since 1.1.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
