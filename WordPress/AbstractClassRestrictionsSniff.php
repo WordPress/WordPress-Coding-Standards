@@ -102,7 +102,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 			return;
 		}
 
-		if ( true === $this->is_targeted_token( $stackPtr ) ) {
+		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 			return $this->check_for_matches( $stackPtr );
 		}
 	}
@@ -116,7 +116,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	 *
 	 * @return bool
 	 */
-	public function is_targeted_token( $stackPtr ) {
+	public function is_targetted_token( $stackPtr ) {
 
 		$token     = $this->tokens[ $stackPtr ];
 		$classname = '';

@@ -208,7 +208,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			return;
 		}
 
-		if ( true === $this->is_targeted_token( $stackPtr ) ) {
+		if ( true === $this->is_targetted_token( $stackPtr ) ) {
 			return $this->check_for_matches( $stackPtr );
 		}
 	}
@@ -222,7 +222,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *
 	 * @return bool
 	 */
-	public function is_targeted_token( $stackPtr ) {
+	public function is_targetted_token( $stackPtr ) {
 		// Exclude function definitions, class methods, and namespaced calls.
 		if ( ContextHelper::has_object_operator_before( $this->phpcsFile, $stackPtr ) === true ) {
 			return false;
