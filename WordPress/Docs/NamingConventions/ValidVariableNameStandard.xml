@@ -24,7 +24,7 @@
         <code title="Valid: words separated by underscores.">
         <![CDATA[
 class My_Class {
-    public $variable_name = 'value';
+    public <em>$property_name</em> = 'value';
 }
         ]]>
         </code>
