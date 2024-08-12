@@ -28,7 +28,7 @@ class My_Class {
 }
         ]]>
         </code>
-        <code title="Invalid: using camel case to separate words.">
+        <code title="Invalid: Using camel case to separate words.">
         <![CDATA[
 class My_Class {
     public <em>$propertyName</em> = 'value';
