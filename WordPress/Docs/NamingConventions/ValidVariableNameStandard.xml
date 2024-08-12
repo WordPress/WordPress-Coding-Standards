@@ -14,7 +14,7 @@
 <em>$prefix_variable_name</em> = 'value';
         ]]>
         </code>
-        <code title="Invalid: mixed case function name.">
+        <code title="Invalid: Mixed case function name.">
         <![CDATA[
 <em>$Prefix_Variable_NAME</em> = 'value';
         ]]>
