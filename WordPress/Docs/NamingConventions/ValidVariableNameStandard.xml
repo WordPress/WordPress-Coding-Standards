@@ -9,7 +9,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: lowercase variable name.">
+        <code title="Valid: Lowercase variable name.">
         <![CDATA[
 <em>$prefix_variable_name</em> = 'value';
         ]]>
