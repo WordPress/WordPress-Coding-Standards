@@ -31,7 +31,7 @@ class My_Class {
         <code title="Invalid: using camel case to separate words.">
         <![CDATA[
 class My_Class {
-    public $variableName = 'value';
+    public <em>$propertyName</em> = 'value';
 }
         ]]>
         </code>
