@@ -36,4 +36,16 @@ class My_Class {
         ]]>
         </code>
     </code_comparison>
+    <code_comparison>
+        <code title="Valid: Echo a correctly named variable.">
+        <![CDATA[
+echo <em>$variable_name</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Echo an incorrectly named variable.">
+        <![CDATA[
+echo <em>$VariableName</em>;
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
