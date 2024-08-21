@@ -7,12 +7,11 @@
     <![CDATA[
     When calling the `get_(comment|post|site|term|user)_meta()`, `get_metadata()`,
     `get_metadata_default()`, and `get_metadata_raw()` functions, if the `$[meta_]key` parameter is
-    passed, the `$single` parameter should be passed as well to make it explicit what is the
-    expected return type.
+    passed, the `$single` parameter should be passed as well to make it explicit whether the functions should return a single value (the first value) or an array of values stored for the meta key.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Get meta functions called either without the `$[meta_]key` parameter or with both the `$[meta_]key` and the `$single` parameters.">
+        <code title="Valid: Get meta functions called either without the `$[meta_]key` parameter; or with both the `$[meta_]key` and the `$single` parameters.">
         <![CDATA[
 $admin_color = get_user_meta(
     $user_id,
@@ -22,7 +21,7 @@ $admin_color = get_user_meta(
 $post_meta = get_metadata( 'post', $post_id<em></em> );
         ]]>
         </code>
-        <code title="Invalid: Get meta function called with the `$[meta_]key` parameter and without `$single` parameter.">
+        <code title="Invalid: Get meta function called with the `$[meta_]key` parameter, but without the `$single` parameter.">
         <![CDATA[
 $admin_color = get_user_meta(
     $user_id,

@@ -36,9 +36,9 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 	/**
 	 * List of functions this sniff should examine.
 	 *
-	 * Once support for PHP 5.4 is dropped, it is possible to create two private properties
+	 * {@internal Once support for PHP < 5.6 is dropped, it is possible to create two class constants
 	 * representing the two different signatures of get meta functions to remove the duplication
-	 * of the name and position of the parameters.
+	 * of the name and position of the parameters.}
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/get_comment_meta/
 	 * @link https://developer.wordpress.org/reference/functions/get_metadata/
@@ -172,7 +172,7 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 		$this->phpcsFile->addWarning(
 			'When passing the $%s parameter to %s(), it is recommended to pass the $%s parameter as well to make it explicit whether an array or a string is expected.',
 			$stackPtr,
-			'ReturnTypeNotExplicit',
+			'Missing',
 			$message_data
 		);
 	}
