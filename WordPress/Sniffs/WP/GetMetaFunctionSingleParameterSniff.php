@@ -13,6 +13,8 @@ use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
+ * Warns when calls to get meta functions use the $[meta_]key param without the $single param.
+ *
  * Flags calls to get_(comment|post|site|term|user)_meta(), get_metadata(), get_metadata_default()
  * and get_metadata_raw() functions that include the $key/$meta_key parameter, but omit the $single
  * parameter. Omitting $single in this situation can result in unexpected return types and lead to
@@ -59,82 +61,82 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 	protected $target_functions = array(
 		'get_comment_meta'     => array(
 			'condition'   => array(
-				'parameter' => 'key',
-				'position'  => 2,
+				'param_name' => 'key',
+				'position'   => 2,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 3,
+				'param_name' => 'single',
+				'position'   => 3,
 			),
 		),
 		'get_metadata'         => array(
 			'condition'   => array(
-				'parameter' => 'meta_key',
-				'position'  => 3,
+				'param_name' => 'meta_key',
+				'position'   => 3,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 4,
+				'param_name' => 'single',
+				'position'   => 4,
 			),
 		),
 		'get_metadata_default' => array(
 			'condition'   => array(
-				'parameter' => 'meta_key',
-				'position'  => 3,
+				'param_name' => 'meta_key',
+				'position'   => 3,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 4,
+				'param_name' => 'single',
+				'position'   => 4,
 			),
 		),
 		'get_metadata_raw'     => array(
 			'condition'   => array(
-				'parameter' => 'meta_key',
-				'position'  => 3,
+				'param_name' => 'meta_key',
+				'position'   => 3,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 4,
+				'param_name' => 'single',
+				'position'   => 4,
 			),
 		),
 		'get_post_meta'        => array(
 			'condition'   => array(
-				'parameter' => 'key',
-				'position'  => 2,
+				'param_name' => 'key',
+				'position'   => 2,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 3,
+				'param_name' => 'single',
+				'position'   => 3,
 			),
 		),
 		'get_site_meta'        => array(
 			'condition'   => array(
-				'parameter' => 'key',
-				'position'  => 2,
+				'param_name' => 'key',
+				'position'   => 2,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 3,
+				'param_name' => 'single',
+				'position'   => 3,
 			),
 		),
 		'get_term_meta'        => array(
 			'condition'   => array(
-				'parameter' => 'key',
-				'position'  => 2,
+				'param_name' => 'key',
+				'position'   => 2,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 3,
+				'param_name' => 'single',
+				'position'   => 3,
 			),
 		),
 		'get_user_meta'        => array(
 			'condition'   => array(
-				'parameter' => 'key',
-				'position'  => 2,
+				'param_name' => 'key',
+				'position'   => 2,
 			),
 			'recommended' => array(
-				'parameter' => 'single',
-				'position'  => 3,
+				'param_name' => 'single',
+				'position'   => 3,
 			),
 		),
 	);
@@ -156,21 +158,25 @@ final class GetMetaFunctionSingleParameterSniff extends AbstractFunctionParamete
 		$condition   = $this->target_functions[ $matched_content ]['condition'];
 		$recommended = $this->target_functions[ $matched_content ]['recommended'];
 
-		$meta_key = PassedParameters::getParameterFromStack( $parameters, $condition['position'], $condition['parameter'] );
+		$meta_key = PassedParameters::getParameterFromStack( $parameters, $condition['position'], $condition['param_name'] );
 		if ( false === $meta_key ) {
 			return;
 		}
 
-		$single = PassedParameters::getParameterFromStack( $parameters, $recommended['position'], $recommended['parameter'] );
+		$single = PassedParameters::getParameterFromStack( $parameters, $recommended['position'], $recommended['param_name'] );
 		if ( is_array( $single ) ) {
 			return;
 		}
 
 		$tokens       = $this->phpcsFile->getTokens();
-		$message_data = array( $condition['parameter'], $tokens[ $stackPtr ]['content'], $recommended['parameter'] );
+		$message_data = array(
+			$condition['param_name'],
+			$tokens[ $stackPtr ]['content'],
+			$recommended['param_name'],
+		);
 
 		$this->phpcsFile->addWarning(
-			'When passing the $%s parameter to %s(), it is recommended to pass the $%s parameter as well to make it explicit whether an array or a string is expected.',
+			'When passing the $%s parameter to %s(), it is recommended to also pass the $%s parameter to explicitly indicate whether a single value or multiple values are expected to be returned.',
 			$stackPtr,
 			'Missing',
 			$message_data
