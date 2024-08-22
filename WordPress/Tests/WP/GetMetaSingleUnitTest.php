@@ -12,13 +12,13 @@ namespace WordPressCS\WordPress\Tests\WP;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
- * Unit test class for the GetMetaFunctionSingleParameter sniff.
+ * Unit test class for the GetMetaSingle sniff.
  *
  * @since 3.2.0
  *
- * @covers \WordPressCS\WordPress\Sniffs\WP\GetMetaFunctionSingleParameterSniff
+ * @covers \WordPressCS\WordPress\Sniffs\WP\GetMetaSingleSniff
  */
-final class GetMetaFunctionSingleParameterUnitTest extends AbstractSniffUnitTest {
+final class GetMetaSingleUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
