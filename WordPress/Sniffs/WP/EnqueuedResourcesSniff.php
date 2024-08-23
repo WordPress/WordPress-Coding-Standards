@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Exceptions\ValueError;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
@@ -54,7 +54,7 @@ final class EnqueuedResourcesSniff extends Sniff {
 			try {
 				$end_ptr = TextStrings::getEndOfCompleteTextString( $this->phpcsFile, $stackPtr );
 				$content = TextStrings::getCompleteTextString( $this->phpcsFile, $stackPtr );
-			} catch ( RuntimeException $e ) {
+			} catch ( ValueError $e ) {
 				// Parse error/live coding.
 				return;
 			}

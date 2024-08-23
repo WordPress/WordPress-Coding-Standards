@@ -9,8 +9,8 @@
 
 namespace WordPressCS\WordPress\Helpers;
 
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\File;
+use PHPCSUtils\Exceptions\UnexpectedTokenType;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Lists;
 
@@ -67,7 +67,7 @@ final class ListHelper {
 
 		try {
 			$assignments = Lists::getAssignments( $phpcsFile, $stackPtr );
-		} catch ( RuntimeException $e ) {
+		} catch ( UnexpectedTokenType $e ) {
 			// Parse error/live coding.
 			return array();
 		}
