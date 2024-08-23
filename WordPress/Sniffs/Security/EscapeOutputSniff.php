@@ -200,19 +200,19 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return parent::process_token( $stackPtr );
 
 			case \T_EXIT:
-				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-				if ( false === $next_non_empty
-					|| \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
-					|| isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) === false
-				) {
-					// Live coding/parse error or an exit/die which doesn't pass a status code. Ignore.
+				$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
+				if ( empty( $params ) ) {
+					// Live coding/parse error or an exit/die which doesn't pass a status. Ignore.
 					return;
 				}
 
-				// $end is not examined, so make sure the parentheses are balanced.
-				$start = $next_non_empty;
-				$end   = ( $this->tokens[ $next_non_empty ]['parenthesis_closer'] + 1 );
-				break;
+				// There should only be one parameter ($status), but just to be on the safe side.
+				foreach ( $params as $param ) {
+					$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+				}
+
+				// Skip to the end of the last found parameter.
+				return ( $param['end'] + 1 );
 
 			case \T_THROW:
 				// Find the open parentheses, while stepping over the exception creation tokens.
