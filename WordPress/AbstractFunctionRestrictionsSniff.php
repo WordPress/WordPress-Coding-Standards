@@ -214,7 +214,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	}
 
 	/**
-	 * Verify is the current token is a function call.
+	 * Verify if the current token is a function call.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *
