@@ -27,6 +27,13 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 
 	/**
+	 * The phrase to use for the metric recorded by this sniff.
+	 *
+	 * @var string
+	 */
+	const METRIC_NAME = 'get_*meta() function called with $single parameter';
+
+	/**
 	 * The group name for this group of functions.
 	 *
 	 * @since 3.2.0
@@ -165,8 +172,11 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 
 		$single = PassedParameters::getParameterFromStack( $parameters, $recommended['position'], $recommended['param_name'] );
 		if ( is_array( $single ) ) {
+			$this->phpcsFile->recordMetric( $stackPtr, self::METRIC_NAME, 'yes' );
 			return;
 		}
+
+		$this->phpcsFile->recordMetric( $stackPtr, self::METRIC_NAME, 'no' );
 
 		$tokens       = $this->phpcsFile->getTokens();
 		$message_data = array(
