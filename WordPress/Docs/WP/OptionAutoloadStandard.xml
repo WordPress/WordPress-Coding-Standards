@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Option Autoload"
+    >
+    <standard>
+    <![CDATA[
+    When using `add_option()`, `update_option()`, `wp_set_options_autoload()`,
+    `wp_set_option_autoload()`, or `wp_set_option_autoload_values()`, it is recommended to
+    explicitly set the autoload value to ensure predictable behavior. This value determines whether
+    the option is automatically loaded on every page load, which can impact site performance.
+
+    Check https://felix-arntz.me/blog/autoloading-wordpress-options-efficiently-and-responsibly/ for
+    more information on when to set autoload to `true` or `false`.
+    ]]>
+    </standard>
+    <standard>
+    <![CDATA[
+    Even though the autoload parameter is optional for `add_option()` and `update_option()`, it is
+    recommended to always explicitly set it.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Explicitly setting the autoload parameter.">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    '',
+    <em>true</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Autoload parameter missing.">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    ''
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Using 'yes' or 'no' is not recommended. Those values are deprecated. Instead, use
+    `true`|`false`|`null` if using `add_option()` or `update_option()` or `true`|`false` if using
+    `wp_set_option_autoload_values()`, `wp_set_option_autoload()`, or `wp_set_options_autoload()`.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using boolean values.">
+        <![CDATA[
+update_option(
+    'my_option',
+    'value',
+    <em>true</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using deprecated values.">
+        <![CDATA[
+update_option(
+    'my_option',
+    'value',
+    <em>'yes'</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    It is not recommended to use internal-only values ('auto', 'auto-on', 'auto-off', 'on', 'off')
+    in plugin or theme code. Instead, use `true`|`false`|`null` if using `add_option()` or
+    `update_option()` or `true`|`false` if using `wp_set_option_autoload_values()`,
+    `wp_set_option_autoload()`, or `wp_set_options_autoload()`.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using boolean values.">
+        <![CDATA[
+wp_set_option_autoload_values(
+    array(
+        'my_option_1' => <em>true</em>,
+        'my_option_2' => <em>false</em>
+    )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using internal-only values.">
+        <![CDATA[
+wp_set_option_autoload_values(
+    array(
+        'my_option_1' => <em>'auto-on'</em>,
+        'my_option_2' => <em>'auto-off'</em>
+    )
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Only `true` and `false` are valid values for the autoload parameter, with one exception: `null`
+    is also valid for `add_option()` and `update_option()`.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using `true`, `false`, or `null`.">
+        <![CDATA[
+wp_set_options_autoload(
+    array( 'my_option_1', 'my_option_2' ),
+    <em>false</em>
+);
+
+wp_set_option_autoload(
+    'my_option',
+    <em>false</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using invalid values.">
+        <![CDATA[
+wp_set_options_autoload(
+    array( 'my_option_1', 'my_option_2' ),
+    <em>1</em>
+);
+
+wp_set_option_autoload(
+    'my_option',
+    <em>null</em> // `null` is invalid for this function.
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

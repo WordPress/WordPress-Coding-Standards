@@ -193,6 +193,13 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2459 -->
 	<rule ref="WordPress.WP.GetMetaSingle"/>
 
+	<!-- Flags calls to add_option(), update_option(), wp_set_options_autoload(),
+		 wp_set_option_autoload(), wp_set_option_autoload_values() functions when the
+		 `$autoload` parameter is missing or contain an invalid, internal-only or
+		 deprecated value.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2473 -->
+	<rule ref="WordPress.WP.OptionAutoload"/>
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.
