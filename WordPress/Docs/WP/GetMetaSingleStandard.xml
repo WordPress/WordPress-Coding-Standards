@@ -7,9 +7,13 @@
     <![CDATA[
     When calling the `get_(comment|post|site|term|user)_meta()`, `get_metadata()`,
     `get_metadata_default()`, and `get_metadata_raw()` functions, if the `$[meta_]key` parameter is
-    passed, the `$single` parameter should be passed as well to make it explicit whether the functions should return a single value (the first value) or an array of values stored for the meta key.
+    passed, the `$single` parameter should be passed as well to make it explicit whether the
+    functions should return a single value (the first value) or an array of values stored for the
+    meta key.
 
-    Note that these functions may still return `false` for an invalid ID. They may also return an empty string if `$single` is `true` or an empty array if `$single` is `false` for a valid but non-existing ID. This can be confusing as these might be valid values for a meta value.
+    Note that these functions may still return `false` for an invalid ID. They may also return an
+    empty string if `$single` is `true` or an empty array if `$single` is `false` for a valid but
+    non-existing ID. This can be confusing as these might be valid values for a meta value.
     ]]>
     </standard>
     <code_comparison>
