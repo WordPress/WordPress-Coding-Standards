@@ -159,7 +159,7 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 		$recommended = $this->target_functions[ $matched_content ]['recommended'];
 
 		$meta_key = PassedParameters::getParameterFromStack( $parameters, $condition['position'], $condition['param_name'] );
-		if ( false === $meta_key ) {
+		if ( ! is_array( $meta_key ) ) {
 			return;
 		}
 
