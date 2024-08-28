@@ -187,6 +187,11 @@
 	<!-- Detect use of double negative `!!`. -->
 	<rule ref="Universal.CodeAnalysis.NoDoubleNegative"/>
 
+	<!-- Flags calls to get_*_meta() and get_metadata*() functions
+		 that include the $[meta_]key parameter but omit the $single parameter.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2459 -->
+	<rule ref="WordPress.WP.GetMetaSingle"/>
+
 	<!--
 	#############################################################################
 	Code style sniffs for more recent PHP features and syntaxes.
