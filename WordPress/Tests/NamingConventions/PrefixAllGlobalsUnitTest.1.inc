@@ -6,8 +6,8 @@
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wp
 function wp_do_something() {}
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ^%&
-function ^%&_do_something() {}
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ^%&%
+function ^%&%_do_something() {}
 
 // Now let's set the real prefixes we want to test for.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
