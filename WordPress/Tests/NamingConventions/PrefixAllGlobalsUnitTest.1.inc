@@ -674,3 +674,6 @@ class WP_Atom_Server {
 }
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
+
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ^%&
+function ^%&_do_something() {}

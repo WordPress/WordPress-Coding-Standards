@@ -34,7 +34,7 @@ final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'PrefixAllGlobalsUnitTest.1.inc':
 				return array(
-					1   => 8, // 2 x error for blocked prefix passed. 4 x error for short prefixes. 2 x no prefix.
+					1   => 9, // 2 x error for blocked prefix passed. 5 x error for short prefixes. 2 x no prefix.
 					10  => 1,
 					18  => 1,
 					21  => 1,
@@ -96,6 +96,7 @@ final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					616 => 1,
 					617 => 1,
 					633 => 1,
+					679 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.4.inc':
