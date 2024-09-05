@@ -511,13 +511,13 @@ function aa_do_something(){}
 
 // The following line mimics an empty prefix value.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
-function aaa_do_something(){}
+function aaaa_do_something(){}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊
 function 😊_do_something(){}
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
-function 😊😊_do_something(){}
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊😊
+function 😊😊😊_do_something(){}
 
 // Reset to the standard test prefixes.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
@@ -672,8 +672,5 @@ class WP_Atom_Server {
 		// Do something.
 	}
 }
-
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] tod
-function tod_something() {}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
