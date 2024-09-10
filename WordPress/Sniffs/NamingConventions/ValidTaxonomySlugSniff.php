@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractValidSlugSniff;
-use WordPressCS\WordPress\Helpers\WPReservedKeywordHelper;
+use WordPressCS\WordPress\Helpers\WPReservedNamesHelper;
 
 /**
  * Validates taxonomy names.
@@ -79,6 +79,6 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	 * @return array<string, true>
 	 */
 	protected function get_reserved_names() {
-		return WPReservedKeywordHelper::get_terms();
+		return WPReservedNamesHelper::get_terms();
 	}
 }

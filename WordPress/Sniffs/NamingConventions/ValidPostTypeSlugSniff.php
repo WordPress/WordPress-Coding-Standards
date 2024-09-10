@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use WordPressCS\WordPress\AbstractValidSlugSniff;
-use WordPressCS\WordPress\Helpers\WPReservedKeywordHelper;
+use WordPressCS\WordPress\Helpers\WPReservedNamesHelper;
 
 /**
  * Validates post type names.
@@ -81,6 +81,6 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	 * @return array<string, true>
 	 */
 	protected function get_reserved_names() {
-		return WPReservedKeywordHelper::get_post_types();
+		return WPReservedNamesHelper::get_post_types();
 	}
 }
