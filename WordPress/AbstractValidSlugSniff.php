@@ -4,7 +4,7 @@
  *
  * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards
- * @license https://opensource.org/licenses/MIT MITnamespace WordPressCS\WordPress;
+ * @license https://opensource.org/licenses/MIT MIT
  */
 
 namespace WordPressCS\WordPress;
