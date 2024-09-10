@@ -12,7 +12,7 @@ namespace WordPressCS\WordPress\Helpers;
 /**
  * Helper utilities for recognizing WP reserved keywords.
  */
-final class WPReservedKeywordHelper {
+final class WPReservedNamesHelper {
 	/**
 	 * Array of reserved post type names which can not be used by themes and plugins.
 	 *
