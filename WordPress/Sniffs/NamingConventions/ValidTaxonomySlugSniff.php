@@ -13,16 +13,14 @@ use WordPressCS\WordPress\AbstractValidSlugSniff;
 use WordPressCS\WordPress\Helpers\WPReservedKeywordHelper;
 
 /**
- * Validates post type names.
+ * Validates taxonomy names.
  *
- * Checks post type slugs for the presence of invalid characters, excessive
+ * Checks taxonomy slugs for the presence of invalid characters, excessive
  * length, and reserved keywords.
  *
- * @link https://developer.wordpress.org/reference/functions/register_post_type/
- *
- * @since 2.2.0
+ * @link https://developer.wordpress.org/reference/functions/register_taxonomy/
  */
-final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
+final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 
 	/**
 	 * Retrieve function and parameter(s) pairs this sniff is looking for.
@@ -31,7 +29,7 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	 */
 	protected function get_target_functions() {
 		return array(
-			'register_post_type' => array( 'post_type' ),
+			'register_taxonomy' => array( 'taxonomy' ),
 		);
 	}
 
@@ -41,7 +39,7 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	 * @return string The slug type.
 	 */
 	protected function get_slug_type() {
-		return 'post type';
+		return 'taxonomy';
 	}
 
 	/**
@@ -50,14 +48,14 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	 * @return string The plural slug type.
 	 */
 	protected function get_slug_type_plural() {
-		return 'post types';
+		return 'taxonomies';
 	}
 
 	/**
 	 * Retrieve regex to validate the characters that can be used as the
-	 * post type slug.
+	 * taxonomy slug.
 	 *
-	 * @link https://developer.wordpress.org/reference/functions/register_post_type/
+	 * @link https://developer.wordpress.org/reference/functions/register_taxonomy/
 	 *
 	 * @var string
 	 */
@@ -66,21 +64,21 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	}
 
 	/**
-	 * Retrieve max length of a post type name.
+	 * Retrieve max length of a taxonomy name.
 	 *
 	 * @var int
 	 */
 	protected function get_max_length() {
-		return 20;
+		return 32;
 	}
 
 	/**
-	 * Retrieve the reserved post type names which can not be used
+	 * Retrieve the reserved taxonomy names which can not be used
 	 * by themes and plugins.
 	 *
 	 * @return array<string, true>
 	 */
 	protected function get_reserved_names() {
-		return WPReservedKeywordHelper::get_post_types();
+		return WPReservedKeywordHelper::get_terms();
 	}
 }

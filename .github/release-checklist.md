@@ -28,7 +28,8 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] `$pluggable_functions` in `WordPress.NamingConventions.PrefixAllGlobals` - PR #xxx
     - [ ] `$pluggable_classes` in `WordPress.NamingConventions.PrefixAllGlobals` - PR #xxx
     - [ ] `$target_functions` in `WordPress.Security.PluginMenuSlug` - PR #xxx
-    - [ ] `$reserved_names` in `WordPress.NamingConventions.ValidPostTypeSlug` - PR #xxx
+    - [ ] `$post_types` in `WPReservedKeywordHelper` - PR #xxx
+    - [ ] `$terms` in `WPReservedKeywordHelper` - PR #xxx
     - [ ] `$wp_time_constants` in `WordPress.WP.CronInterval` - PR #xxx
     - [ ] `$known_test_classes` in `IsUnitTestTrait` - PR #xxx
     - [ ] ...etc...
