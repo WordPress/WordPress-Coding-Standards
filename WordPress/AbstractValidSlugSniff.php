@@ -28,35 +28,35 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var string
 	 */
-	protected $slug_type;
+	private $slug_type;
 
 	/**
 	 * Plural of the slug type. E.g. 'post types' for a post type slug.
 	 *
 	 * @var string
 	 */
-	protected $slug_type_plural;
+	private $slug_type_plural;
 
 	/**
 	 * Max length of a slug is limited by the SQL field.
 	 *
 	 * @var int
 	 */
-	protected $max_length;
+	private $max_length;
 
 	/**
 	 * Regex to validate the characters that can be used as the slug.
 	 *
 	 * @var string
 	 */
-	protected $valid_characters;
+	private $valid_characters;
 
 	/**
 	 * Array of reserved names for a specific slug type.
 	 *
 	 * @var array<string, true> Key is reserved name, value irrelevant.
 	 */
-	protected $reserved_names;
+	private $reserved_names;
 
 	/**
 	 * All valid tokens for the slug parameter.
