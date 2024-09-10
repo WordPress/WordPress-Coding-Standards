@@ -52,7 +52,7 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	protected $valid_characters;
 
 	/**
-	 * Array of reserved names which can not be used by themes and plugins.
+	 * Array of reserved names for a specific slug type.
 	 *
 	 * @var array<string, true> Key is reserved name, value irrelevant.
 	 */
