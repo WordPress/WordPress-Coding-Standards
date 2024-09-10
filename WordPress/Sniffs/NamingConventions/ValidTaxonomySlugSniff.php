@@ -16,7 +16,7 @@ use WordPressCS\WordPress\Helpers\WPReservedKeywordHelper;
  * Validates taxonomy names.
  *
  * Checks taxonomy slugs for the presence of invalid characters, excessive
- * length, and reserved keywords.
+ * length, and reserved names.
  *
  * @link https://developer.wordpress.org/reference/functions/register_taxonomy/
  */
