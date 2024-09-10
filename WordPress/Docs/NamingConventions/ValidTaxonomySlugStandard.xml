@@ -86,7 +86,7 @@ register_taxonomy(
 );
         ]]>
         </code>
-        <code title="Invalid: Using a reserved keyword as slug.">
+        <code title="Invalid: Using a reserved name as a slug.">
         <![CDATA[
 register_taxonomy(
     <em>'post_tag'</em>,
