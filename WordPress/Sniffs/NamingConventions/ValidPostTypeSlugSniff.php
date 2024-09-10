@@ -16,7 +16,7 @@ use WordPressCS\WordPress\Helpers\WPReservedKeywordHelper;
  * Validates post type names.
  *
  * Checks post type slugs for the presence of invalid characters, excessive
- * length, and reserved keywords.
+ * length, and reserved names.
  *
  * @link https://developer.wordpress.org/reference/functions/register_post_type/
  *
