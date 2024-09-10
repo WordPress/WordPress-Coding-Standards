@@ -59,7 +59,7 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/register_post_type/
 	 *
-	 * @var string
+	 * @return string
 	 */
 	protected function get_valid_characters() {
 		return '/^[a-z0-9_-]+$/';
@@ -68,7 +68,7 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve max length of a post type name.
 	 *
-	 * @var int
+	 * @return int
 	 */
 	protected function get_max_length() {
 		return 20;

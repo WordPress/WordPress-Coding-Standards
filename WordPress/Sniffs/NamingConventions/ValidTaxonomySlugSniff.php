@@ -57,7 +57,7 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/register_taxonomy/
 	 *
-	 * @var string
+	 * @return string
 	 */
 	protected function get_valid_characters() {
 		return '/^[a-z0-9_-]+$/';
@@ -66,7 +66,7 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve max length of a taxonomy name.
 	 *
-	 * @var int
+	 * @return int
 	 */
 	protected function get_max_length() {
 		return 32;
