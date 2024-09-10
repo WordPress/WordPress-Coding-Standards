@@ -74,7 +74,7 @@ register_taxonomy(
     </code_comparison>
     <standard>
     <![CDATA[
-    The taxonomy slug used in register_taxonomy() can not use reserved keywords, such as the ones used by WordPress itself.
+    The taxonomy slug used in register_taxonomy() can not use reserved names, such as the ones used by WordPress itself.
     ]]>
     </standard>
     <code_comparison>
