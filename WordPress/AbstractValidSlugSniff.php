@@ -19,7 +19,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * Validates names passed to a function call.
  *
  * Checks slugs for the presence of invalid characters, excessive length,
- * and reserved keywords.
+ * and reserved names.
  */
 abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 

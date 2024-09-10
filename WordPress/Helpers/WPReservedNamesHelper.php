@@ -10,7 +10,7 @@
 namespace WordPressCS\WordPress\Helpers;
 
 /**
- * Helper utilities for recognizing WP reserved keywords.
+ * Helper utilities for recognizing WP reserved names.
  */
 final class WPReservedNamesHelper {
 	/**
@@ -143,26 +143,24 @@ final class WPReservedNamesHelper {
 	);
 
 	/**
-	 * Verify if a given keyword is a reserved post type name.
+	 * Verify if a given name is a reserved post type name.
 	 *
-	 * @param string $name The keyword to be checked.
+	 * @param string $name The name to be checked.
 	 *
 	 * @return bool
 	 */
 	public static function is_reserved_post_type( $name ) {
-
 		return isset( self::$post_types[ $name ] );
 	}
 
 	/**
-	 * Verify if a given keyword is a reserved taxonomy name.
+	 * Verify if a given name is a reserved taxonomy name.
 	 *
-	 * @param string $name The keyword to be checked.
+	 * @param string $name The name to be checked.
 	 *
 	 * @return bool
 	 */
 	public static function is_reserved_term( $name ) {
-
 		return isset( self::$terms[ $name ] )
 			|| isset( self::$post_types[ $name ] );
 	}

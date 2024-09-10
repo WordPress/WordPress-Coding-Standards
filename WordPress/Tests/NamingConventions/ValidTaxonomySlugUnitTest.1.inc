@@ -49,7 +49,7 @@ EOD
 register_taxonomy( "my-own-taxonomy-toooooooooo-long-{$i}" ); // 1x Error, Too long. 1x Warning, post type may or may not get too long with dynamic contents in the id.
 register_taxonomy( 'my/own/taxonomy/tooooooooooo/long', array() ); // Bad. Invalid chars: "/" and too long.
 
-register_taxonomy( 'wp_block', array() ); // Bad. Must only error on reserved keyword, not invalid prefix.
+register_taxonomy( 'wp_block', array() ); // Bad. Must only error on reserved name, not invalid prefix.
 
 // Test handling of more complex embedded variables and expressions.
 register_taxonomy("testing123-${(foo)}-test");

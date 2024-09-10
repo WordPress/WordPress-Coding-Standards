@@ -129,7 +129,7 @@
 	<!-- Verify that everything in the global namespace is prefixed. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals"/>
 
-	<!-- Validates post type slugs for valid characters, length and reserved keywords. -->
+	<!-- Validates post type slugs for valid characters, length and reserved names. -->
 	<rule ref="WordPress.NamingConventions.ValidPostTypeSlug"/>
 
 	<!-- Validates taxonomy slugs for valid characters, length and reserved names. -->
