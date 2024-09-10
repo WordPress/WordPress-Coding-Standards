@@ -50,7 +50,7 @@ final class WPReservedNamesHelper {
 	 *
 	 * Source: {@link https://developer.wordpress.org/reference/functions/register_taxonomy/#reserved-terms}
 	 *
-	 * {@internal To be updated after every major release.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.6.1.}
 	 *
 	 * @var array<string, true> Key is reserved taxonomy name, value irrelevant.
 	 */
