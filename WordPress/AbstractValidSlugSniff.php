@@ -143,7 +143,7 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the parameter of a matched function.
 	 *
-	 * Errors on invalid names when reserved keywords are used,
+	 * Errors on invalid names when reserved names are used,
 	 * the name is too long, or contains invalid characters.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
