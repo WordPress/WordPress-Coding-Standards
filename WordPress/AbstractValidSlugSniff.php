@@ -249,8 +249,8 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 				array(
 					$matched_content,
 					$this->slug_type,
-					ucfirst( $this->slug_type ),
 					$slug,
+					ucfirst( $this->slug_type ),
 				)
 			);
 		}
