@@ -27,6 +27,8 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve function and parameter(s) pairs this sniff is looking for.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return array<string, string|array<string>> Function parameter(s) pairs.
 	 */
 	protected function get_target_functions() {
@@ -38,6 +40,8 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve the slug type.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return string The slug type.
 	 */
 	protected function get_slug_type() {
@@ -46,6 +50,8 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 
 	/**
 	 * Retrieve the plural slug type.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return string The plural slug type.
 	 */
@@ -56,6 +62,8 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve regex to validate the characters that can be used as the
 	 * post type slug.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/register_post_type/
 	 *
@@ -68,6 +76,8 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve max length of a post type name.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return int
 	 */
 	protected function get_max_length() {
@@ -77,6 +87,8 @@ final class ValidPostTypeSlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve the reserved post type names which can not be used
 	 * by themes and plugins.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return array<string, true>
 	 */

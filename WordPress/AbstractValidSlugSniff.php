@@ -20,11 +20,15 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  *
  * Checks slugs for the presence of invalid characters, excessive length,
  * and reserved names.
+ *
+ * @since 3.2.0
  */
 abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * Slug type. E.g. 'post type' for a post type slug.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @var string
 	 */
@@ -33,12 +37,16 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Plural of the slug type. E.g. 'post types' for a post type slug.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @var string
 	 */
 	private $slug_type_plural;
 
 	/**
 	 * Max length of a slug is limited by the SQL field.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @var int
 	 */
@@ -47,12 +55,16 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Regex to validate the characters that can be used as the slug.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @var string
 	 */
 	private $valid_characters;
 
 	/**
 	 * Array of reserved names for a specific slug type.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @var array<string, true> Key is reserved name, value irrelevant.
 	 */
@@ -62,6 +74,8 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	 * All valid tokens for the slug parameter.
 	 *
 	 * Set in `register()`.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @var array<int|string, int|string>
 	 */
@@ -88,12 +102,16 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	 * An array of names is supported to allow for functions for which the
 	 * parameter names have undergone name changes over time.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return array<string, string|array<string>> Function parameter(s) pairs.
 	 */
 	abstract protected function get_target_functions();
 
 	/**
 	 * Retrieve the slug type.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return string The slug type.
 	 */
@@ -102,6 +120,8 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Retrieve the plural slug type.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return string The plural slug type.
 	 */
 	abstract protected function get_slug_type_plural();
@@ -109,6 +129,8 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Retrieve the regex to validate the characters that can be used as
 	 * the slug.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return string Regular expression.
 	 */
@@ -119,6 +141,8 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * The length is limited by the SQL field.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return int The maximum length of a slug.
 	 */
 	abstract protected function get_max_length();
@@ -126,12 +150,17 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Retrieve the reserved names which can not be used by themes and plugins.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return array<string, true> Key is reserved name, value irrelevant.
 	 */
 	abstract protected function get_reserved_names();
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
+	 *
+	 * @since 2.2.0
+	 * @since 3.2.0 Moved from the ValidPostTypeSlug Sniff class to this class.
 	 *
 	 * @return array
 	 */
@@ -145,6 +174,10 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Errors on invalid names when reserved names are used,
 	 * the name is too long, or contains invalid characters.
+	 *
+	 * @since 2.2.0
+	 * @since 3.2.0 Moved from the ValidPostTypeSlug Sniff class to this class and
+	 *              modfied for variable target functions and slug restrictions.
 	 *
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.

@@ -11,6 +11,8 @@ namespace WordPressCS\WordPress\Helpers;
 
 /**
  * Helper utilities for recognizing WP reserved names.
+ *
+ * @since 3.2.0
  */
 final class WPReservedNamesHelper {
 	/**
@@ -19,6 +21,12 @@ final class WPReservedNamesHelper {
 	 * Source: {@link https://developer.wordpress.org/reference/functions/register_post_type/#reserved-post-types}
 	 *
 	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 *
+	 * @since 2.2.0
+	 * @since 3.2.0 - Moved from the Sniff class to this class.
+	 *              - The property visibility has changed from `protected` to `private static`.
+	 *                Use the `get_post_types()` method for access or use the
+	 *                `is_reserved_post_type()` method to check if a name is on the list.
 	 *
 	 * @var array<string, true> Key is reserved post type name, value irrelevant.
 	 */
@@ -51,6 +59,8 @@ final class WPReservedNamesHelper {
 	 * Source: {@link https://developer.wordpress.org/reference/functions/register_taxonomy/#reserved-terms}
 	 *
 	 * {@internal To be updated after every major release. Last updated for WordPress 6.6.1.}
+	 *
+	 * @since 3.2.0
 	 *
 	 * @var array<string, true> Key is reserved taxonomy name, value irrelevant.
 	 */
@@ -145,6 +155,8 @@ final class WPReservedNamesHelper {
 	/**
 	 * Verify if a given name is a reserved post type name.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @param string $name The name to be checked.
 	 *
 	 * @return bool
@@ -155,6 +167,8 @@ final class WPReservedNamesHelper {
 
 	/**
 	 * Verify if a given name is a reserved taxonomy name.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @param string $name The name to be checked.
 	 *
@@ -168,6 +182,8 @@ final class WPReservedNamesHelper {
 	/**
 	 * Retrieve an array with the reserved post type names.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return array<string, true> Array with the post type names as keys. The value is irrelevant.
 	 */
 	public static function get_post_types() {
@@ -176,6 +192,8 @@ final class WPReservedNamesHelper {
 
 	/**
 	 * Retrieve an array with the reserved taxonomy names.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return array<string, true> Array with the taxonomy names as keys. The value is irrelevant.
 	 */

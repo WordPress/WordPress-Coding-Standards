@@ -18,12 +18,16 @@ use WordPressCS\WordPress\Helpers\WPReservedNamesHelper;
  * Checks taxonomy slugs for the presence of invalid characters, excessive
  * length, and reserved names.
  *
+ * @since 3.2.0
+ *
  * @link https://developer.wordpress.org/reference/functions/register_taxonomy/
  */
 final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 
 	/**
 	 * Retrieve function and parameter(s) pairs this sniff is looking for.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return array<string, string|array<string>> Function parameter(s) pairs.
 	 */
@@ -36,6 +40,8 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve the slug type.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return string The slug type.
 	 */
 	protected function get_slug_type() {
@@ -44,6 +50,8 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 
 	/**
 	 * Retrieve the plural slug type.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return string The plural slug type.
 	 */
@@ -54,6 +62,8 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve regex to validate the characters that can be used as the
 	 * taxonomy slug.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/register_taxonomy/
 	 *
@@ -66,6 +76,8 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve max length of a taxonomy name.
 	 *
+	 * @since 3.2.0
+	 *
 	 * @return int
 	 */
 	protected function get_max_length() {
@@ -75,6 +87,8 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve the reserved taxonomy names which can not be used
 	 * by themes and plugins.
+	 *
+	 * @since 3.2.0
 	 *
 	 * @return array<string, true>
 	 */
