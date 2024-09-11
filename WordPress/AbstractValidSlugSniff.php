@@ -125,8 +125,6 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Retrieve the max length of a slug.
 	 *
-	 * The length is limited by the SQL field.
-	 *
 	 * @since 3.2.0
 	 *
 	 * @return int The maximum length of a slug.

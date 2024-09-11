@@ -76,6 +76,8 @@ final class ValidTaxonomySlugSniff extends AbstractValidSlugSniff {
 	/**
 	 * Retrieve max length of a taxonomy name.
 	 *
+	 * The length is limited by the SQL field.
+	 *
 	 * @since 3.2.0
 	 *
 	 * @return int
