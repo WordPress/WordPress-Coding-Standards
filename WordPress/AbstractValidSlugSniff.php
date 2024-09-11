@@ -82,20 +82,6 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	private $valid_tokens = array();
 
 	/**
-	 * Constructor.
-	 *
-	 * @since 3.0.0
-	 */
-	public function __construct() {
-		$this->target_functions = $this->get_target_functions();
-		$this->slug_type        = $this->get_slug_type();
-		$this->slug_type_plural = $this->get_slug_type_plural();
-		$this->valid_characters = $this->get_valid_characters();
-		$this->max_length       = $this->get_max_length();
-		$this->reserved_names   = $this->get_reserved_names();
-	}
-
-	/**
 	 * Retrieve function and parameter(s) pairs this sniff is looking for.
 	 *
 	 * The parameter or an array of parameters keyed by target function.
@@ -160,12 +146,19 @@ abstract class AbstractValidSlugSniff extends AbstractFunctionParameterSniff {
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @since 2.2.0
-	 * @since 3.2.0 Moved from the ValidPostTypeSlug Sniff class to this class.
+	 * @since 3.2.0 - Moved from the ValidPostTypeSlug Sniff class to this class.
+	 *              - Added setting up properties for target functions and slug details.
 	 *
 	 * @return array
 	 */
 	public function register() {
-		$this->valid_tokens = Tokens::$textStringTokens + Tokens::$heredocTokens + Tokens::$emptyTokens;
+		$this->valid_tokens     = Tokens::$textStringTokens + Tokens::$heredocTokens + Tokens::$emptyTokens;
+		$this->target_functions = $this->get_target_functions();
+		$this->slug_type        = $this->get_slug_type();
+		$this->slug_type_plural = $this->get_slug_type_plural();
+		$this->valid_characters = $this->get_valid_characters();
+		$this->max_length       = $this->get_max_length();
+		$this->reserved_names   = $this->get_reserved_names();
 		return parent::register();
 	}
 
