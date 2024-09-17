@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+               title="Preg Quote Delimiter"
+>
+    <standard>
+        <![CDATA[
+    Passing the $delimiter parameter to preg_quote() is strongly recommended to ensure the delimiter required by the PCRE functions are escaped.
+    ]]>
+    </standard>
+</documentation>
