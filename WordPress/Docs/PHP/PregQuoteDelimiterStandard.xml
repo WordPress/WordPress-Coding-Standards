@@ -8,4 +8,17 @@
     Passing the $delimiter parameter to preg_quote() is strongly recommended to ensure the delimiter required by the PCRE functions are escaped.
     ]]>
     </standard>
+
+    <code_comparison>
+        <code title="Valid: The delimiter is included.">
+            <![CDATA[
+preg_quote( $str, '/' );
+        ]]>
+        </code>
+        <code title="Invalid: The delimiter is not included.">
+            <![CDATA[
+preg_quote( $str );
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
