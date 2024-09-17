@@ -1,0 +1,19 @@
+<documentation title="Assignment In Ternary Condition">
+<standard>
+    <![CDATA[
+        Checks that variable assignment does not occur in conditional statement of ternary. Condition must be in parentheses to be checked; Ternaries lacking parentheses around condition are skipped. If incorrect will throw: "Variable assignment found within a condition. Did you mean to do a comparison?"
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Variable assigned with comparison in parentheses.">
+        <![CDATA[
+echo $mode = ( <em>$a == 'a'</em> ) ? 'b' : 'c';
+        ]]>
+        </code>
+        <code title="Invalid: Parentheses used but variable assignment instead of comparison.">
+        <![CDATA[
+echo $mode = ( <em>$a = 'a'</em> ) ? 'b' : 'c';
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
