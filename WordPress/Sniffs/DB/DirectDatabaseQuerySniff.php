@@ -19,7 +19,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag Database direct queries.
  *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
+ * @link https://docs.wpvip.com/php_codesniffer/warnings/#h-direct-database-queries
  *
  * @since 0.3.0
  * @since 0.6.0  Removed the add_unique_message() function as it is no longer needed.

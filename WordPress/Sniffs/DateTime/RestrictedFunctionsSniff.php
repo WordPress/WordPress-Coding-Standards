@@ -29,7 +29,7 @@ final class RestrictedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			/*
 			 * Disallow the changing the timezone.
 			 *
-			 * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#manipulating-the-timezone-server-side
+			 * @link https://docs.wpvip.com/php_codesniffer/errors/#h-manipulating-the-timezone-server-side
 			 */
 			'timezone_change' => array(
 				'type'      => 'error',

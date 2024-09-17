@@ -22,7 +22,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag cron schedules less than 15 minutes.
  *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#cron-schedules-less-than-15-minutes-or-expensive-events
+ * @link https://docs.wpvip.com/php_codesniffer/warnings/#h-cron-schedules-less-than-15-minutes-or-expensive-events
  *
  * @since 0.3.0
  * @since 0.11.0 - Extends the WordPressCS native `Sniff` class.
