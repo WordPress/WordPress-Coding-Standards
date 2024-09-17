@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Passing the $delimiter parameter to preg_quote() is strongly recommended to ensure the delimiter required by the PCRE functions are escaped.
+    Passing the $delimiter parameter to preg_quote() is strongly recommended. If it is not passed, the default delimiters `/` are presumed, which is often wrong.
     ]]>
     </standard>
     <code_comparison>
