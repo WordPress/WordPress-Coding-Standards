@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Discouraged PHP Functions"
+    >
+    <standard>
+    <![CDATA[
+Use JSON instead of serialized data, which has known vulnerability problems with object injection.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using JSON for serialized data.">
+            <![CDATA[
+$serialized = json_encode( $array );
+$serialized = wp_json_encode( $array );
+$unserialized = json_decode( $array );
+        ]]>
+        </code>
+        <code title="Invalid: Using serialized data strings.">
+            <![CDATA[
+$serialized = serialize( $array );
+$unserialized = unserialize( $array );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+        <![CDATA[
+URLs should now be encoded using rawurlencode(). Only legacy applications should use urlencode().
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Encoding a url using rawurlencode().">
+            <![CDATA[
+rawurlencode( get_site_url() );
+        ]]>
+        </code>
+        <code title="Invalid: Encoding a url using urlencode().">
+            <![CDATA[
+urlencode( get_site_url() );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+Avoid using functions which change configuration values at runtime.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Not changing configuration at runtime.">
+            <![CDATA[
+// Configuration not changed at runtime.
+        ]]>
+        </code>
+        <code title="Invalid: Changing configuration at runtime">
+            <![CDATA[
+error_reporting( 0 );
+ini_restore( $option );
+apache_setenv( $variable, $value );
+putenv( $assignment );
+set_include_path( $include_path );
+restore_include_path();
+magic_quotes_runtime( $new_setting );
+set_magic_quotes_runtime( $new_setting );
+dl( $extension_filename );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+Do not use PHP system calls. They are often disabled by server admins.
+    ]]>
+    </standard>
+<code_comparison>
+<code title="Valid: Not using PHP system calls.">
+    <![CDATA[
+// Avoiding using PHP system calls.
+        ]]>
+</code>
+<code title="Invalid: Using PHP system calls.">
+    <![CDATA[
+exec( $command );
+passthru( $command );
+proc_open( 'php', $desc, $pipes, $cwd, $env );
+shell_exec( $command );
+system( $command );
+popen( $command, $mode );
+        ]]>
+</code>
+</code_comparison>
+    <standard>
+    <![CDATA[
+Functions often used for obfuscating code are strongly discouraged. Make sure the function is used for benign reasons.
+     ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using functions for benign reasons.">
+        <![CDATA[
+base64_encode($username);
+base64_decode( $expected_md5 );
+        ]]>
+        </code>
+        <code title="Invalid: Using functions to obfuscate code.">
+        <![CDATA[
+eval( base64_decode( $code_str ) );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
