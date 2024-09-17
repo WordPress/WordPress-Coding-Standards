@@ -18,7 +18,7 @@
         </code>
         <code title="Invalid: Calling the PHP native `var_dump()` function.">
         <![CDATA[
-var_dump( $bar );
+<em>var_dump( $bar );</em>
         ]]>
         </code>
     </code_comparison>
@@ -37,7 +37,7 @@ var_dump( $bar );
         </code>
         <code title="Invalid: Calling the PHP native `phpinfo()` function.">
         <![CDATA[
-phpinfo();
+<em>phpinfo();</em>
         ]]>
         </code>
     </code_comparison>
