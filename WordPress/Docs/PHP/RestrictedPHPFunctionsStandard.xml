@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted PHP Functions"
+    >
+    <standard>
+    <![CDATA[
+    The restricted function create_function() should not be used.
+
+    create_function() is deprecated as of PHP 7.2 and removed in PHP 8.0. Please use declared named or anonymous functions instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using anonymous function (closure).">
+        <![CDATA[
+add_action( 'init', function() {
+    return foo( 'bar' );
+} );
+        ]]>
+        </code>
+        <code title="Invalid: Using create_function().">
+        <![CDATA[
+add_action( 'init', <em>create_function( '',
+    'return foo( "bar" );'
+)</em> );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
