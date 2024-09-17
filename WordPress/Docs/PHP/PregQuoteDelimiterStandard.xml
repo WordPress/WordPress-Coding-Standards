@@ -11,12 +11,12 @@
     <code_comparison>
         <code title="Valid: The delimiter is included.">
         <![CDATA[
-preg_quote( $str, '/' );
+preg_quote( $dir, '#' )
         ]]>
         </code>
         <code title="Invalid: The delimiter is not included.">
         <![CDATA[
-preg_quote( $str );
+preg_quote( $dir );
         ]]>
         </code>
     </code_comparison>
