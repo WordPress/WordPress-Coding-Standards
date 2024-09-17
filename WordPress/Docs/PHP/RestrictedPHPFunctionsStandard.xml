@@ -20,9 +20,9 @@ add_action( 'init', function() {
         </code>
         <code title="Invalid: Using create_function().">
         <![CDATA[
-add_action( 'init', create_function( '',
+add_action( 'init', <em>create_function( '',
     'return foo( "bar" );'
-) );
+)</em> );
         ]]>
         </code>
     </code_comparison>
