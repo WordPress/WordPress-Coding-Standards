@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="WordPress Alternative Functions"
+    >
+    <standard>
+    <![CDATA[
+    Use WordPress functions instead of native PHP functions to maintain compatibility and benefit from WordPress's additional security and performance improvements.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using wp_safe_redirect().">
+        <![CDATA[
+        wp_safe_redirect( $url );
+        ]]>
+        </code>
+        <code title="Invalid: Using PHP's header() function for redirection.">
+        <![CDATA[
+        header( "Location: $url" );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    WordPress provides the wp_remote_* functions for making HTTP requests. Avoid using file_get_contents() or cURL directly.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using wp_remote_get() for HTTP requests.">
+        <![CDATA[
+        $response = wp_remote_get( $url );
+        ]]>
+        </code>
+        <code title="Invalid: Using file_get_contents() for HTTP requests.">
+        <![CDATA[
+        $response = file_get_contents( $url );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Use WordPress's translation functions to ensure text is translatable and localized.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using _e() or __() for translatable text.">
+        <![CDATA[
+        _e( 'Hello, World!', 'text-domain' );
+        $greeting = __( 'Hello, World!', 'text-domain' );
+        ]]>
+        </code>
+        <code title="Invalid: Echoing plain text strings.">
+        <![CDATA[
+        echo 'Hello, World!';
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Always use WordPress functions for escaping output to prevent XSS vulnerabilities.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using esc_html() to escape HTML output.">
+        <![CDATA[
+        echo esc_html( $user_input );
+        ]]>
+        </code>
+        <code title="Invalid: Outputting user input without escaping.">
+        <![CDATA[
+        echo $user_input;
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Use WordPress's wp_nonce_* functions for security and form validation.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using wp_nonce_field() and wp_verify_nonce().">
+        <![CDATA[
+        wp_nonce_field( 'save_post', 'my_nonce' );
+        if ( wp_verify_nonce( $_POST['my_nonce'], 'save_post' ) ) {
+        // Process form submission.
+        }
+        ]]>
+        </code>
+        <code title="Invalid: Not using nonces for form validation.">
+        <![CDATA[
+        // No nonce used for form validation.
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
