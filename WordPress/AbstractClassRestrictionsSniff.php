@@ -128,8 +128,10 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_CLOSE_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
 			}
 
-			$classname = GetTokensAsString::noEmpties( $this->phpcsFile, ( $stackPtr + 2 ), $nameEnd );
-			$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
+			if ( isset( $this->tokens[ $stackPtr + 2 ] ) && false !== $nameEnd ) {
+				$classname = GetTokensAsString::noEmpties( $this->phpcsFile, ( $stackPtr + 2 ), $nameEnd );
+				$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
+			}
 		}
 
 		if ( \T_DOUBLE_COLON === $token['code'] ) {
