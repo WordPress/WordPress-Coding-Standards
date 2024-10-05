@@ -32,6 +32,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] `$wp_time_constants` in `WordPress.WP.CronInterval` - PR #xxx
     - [ ] `$known_test_classes` in `IsUnitTestTrait` - PR #xxx
     - [ ] ...etc...
+- [ ] Verify there there has been no vandalism on the wiki (and if so, remove/fix it).
 
 ### Release prep
 
