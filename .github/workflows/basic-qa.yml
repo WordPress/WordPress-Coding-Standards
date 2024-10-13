@@ -186,7 +186,7 @@ jobs:
           set +e
           $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
           exitcode="$?"
-          echo "EXITCODE=$exitcode" >> $GITHUB_OUTPUT
+          echo "EXITCODE=$exitcode" >> "$GITHUB_OUTPUT"
           exit "$exitcode"
 
       - name: Fail the build on fixer conflicts and other errors
