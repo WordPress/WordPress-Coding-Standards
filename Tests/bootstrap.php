@@ -12,7 +12,7 @@
  * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
- */
+ */ 
 
 if ( ! defined( 'PHP_CODESNIFFER_IN_TESTS' ) ) {
 	define( 'PHP_CODESNIFFER_IN_TESTS', true );
