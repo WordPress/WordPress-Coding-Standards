@@ -821,7 +821,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	private function check_string_has_no_leading_trailing_spaces( $matched_content, $param_name, $param_info ) {
 		// Strip surrounding quotes.
 		$content_without_quotes = TextStrings::stripQuotes( $param_info['clean'] );
-		$first_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
+		$first_non_empty        = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
 
 		if ( ltrim( $content_without_quotes ) !== $content_without_quotes ) {
 			$this->phpcsFile->addError(
