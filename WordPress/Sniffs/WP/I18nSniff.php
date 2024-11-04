@@ -380,6 +380,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				$has_content = $this->check_string_has_translatable_content( $matched_content, $param_name, $param_info );
 				if ( true === $has_content ) {
 					$this->check_string_has_no_html_wrapper( $matched_content, $param_name, $param_info );
+					$this->check_string_has_no_leading_trailing_spaces( $matched_content, $param_name, $param_info );
 				}
 			}
 		}
@@ -801,6 +802,49 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				'NoHtmlWrappedStrings',
 				array( $param_info['clean'] )
 			);
+		}
+	}
+
+	/**
+	 * Check if a translatable string has leading or trailing spaces.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
+	 * @param string      $param_name      The name of the parameter being examined.
+	 * @param array|false $param_info      Parameter info array for an individual parameter,
+	 *                                     as received from the PassedParameters class.
+	 *
+	 * @return void
+	 */
+	private function check_string_has_no_leading_trailing_spaces( $matched_content, $param_name, $param_info ) {
+		// Strip surrounding quotes.
+		$content_without_quotes = TextStrings::stripQuotes( $param_info['clean'] );
+		$first_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
+
+		if ( ltrim( $content_without_quotes ) !== $content_without_quotes ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading spaces. Found: %s',
+				$first_non_empty,
+				'NoLeadingTrailingSpaces',
+				array( $param_info['clean'] )
+			);
+		}
+		if ( rtrim( $content_without_quotes ) !== $content_without_quotes ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing spaces. Found: %s',
+				$first_non_empty,
+				'NoLeadingTrailingSpaces',
+				array( $param_info['clean'] )
+			);
+		}
+
+		if ('cadena' == $param_info['raw']) {
+			fwrite(STDERR, "\n" . '$matched_content: ' . print_r($matched_content, TRUE));
+			fwrite(STDERR, "\n" . '$param_name: ' . print_r($param_name, TRUE));
+			fwrite(STDERR, "\n" . '$param_info: ' . print_r($param_info, TRUE));
+			exit(1);
 		}
 	}
 
