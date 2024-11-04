@@ -839,13 +839,6 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				array( $param_info['clean'] )
 			);
 		}
-
-		if ('cadena' == $param_info['raw']) {
-			fwrite(STDERR, "\n" . '$matched_content: ' . print_r($matched_content, TRUE));
-			fwrite(STDERR, "\n" . '$param_name: ' . print_r($param_name, TRUE));
-			fwrite(STDERR, "\n" . '$param_info: ' . print_r($param_info, TRUE));
-			exit(1);
-		}
 	}
 
 	/**
