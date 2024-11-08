@@ -207,7 +207,7 @@ jobs:
         with:
           php-version: 'latest'
           coverage: none
-          tools: phpstan
+          tools: phpstan:1.x
 
       # Install dependencies and handle caching in one go.
       # Dependencies need to be installed to make sure the PHPCS and PHPUnit classes are recognized.
