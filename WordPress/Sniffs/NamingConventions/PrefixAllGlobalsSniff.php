@@ -1289,7 +1289,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	private function record_potential_prefix_metric( $stackPtr, $construct_name ) {
 		if ( preg_match( '`^([A-Z]*[a-z0-9]*+)`', ltrim( $construct_name, '\$_' ), $matches ) > 0
-			&& isset( $matches[1] ) && '' !== $matches[1]
+			&& '' !== $matches[1]
 		) {
 			$this->phpcsFile->recordMetric( $stackPtr, 'Prefix all globals: potential prefixes - start of non-prefixed construct', strtolower( $matches[1] ) );
 		}
