@@ -9,8 +9,11 @@
 
 namespace WordPressCS\WordPress\Tests\Utils;
 
+use PHP_CodeSniffer\Files\DummyFile;
+use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\TestUtils\ConfigDouble;
 
 /**
  * Unit test class for the I18nTextDomainFixer sniff.
@@ -199,5 +202,33 @@ final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 			default:
 				return array();
 		}
+	}
+
+	/**
+	 * Test the sniff bails early when handling a plugin header passed via STDIN.
+	 *
+	 * @return void
+	 */
+	public function testStdIn() {
+		$config = new ConfigDouble();
+		Helper::setConfigData( 'installed_paths', dirname( dirname( __DIR__ ) ), true, $config );
+		$config->standards = array( 'WordPress' );
+		$config->sniffs    = array( 'WordPress.Utils.I18nTextDomainFixer' );
+
+		$ruleset = new Ruleset( $config );
+
+		$content = '<?php // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain test-std-in
+/**
+ * Plugin Name: Missing text domain, docblock format.
+ * Plugin URI: https://www.bigvoodoo.com/
+ * Description: Sniff triggers a missing text domain error for a normal file, but not for STDIN.
+ */';
+
+		$file = new DummyFile( $content, $ruleset, $config );
+		$file->process();
+
+		$this->assertSame( 0, $file->getErrorCount() );
+		$this->assertSame( 0, $file->getWarningCount() );
+		$this->assertCount( 0, $file->getErrors() );
 	}
 }
