@@ -674,7 +674,6 @@ final class I18nTextDomainFixerSniff extends AbstractFunctionParameterSniff {
 		$regex   = $this->plugin_header_regex;
 		$headers = $this->plugin_headers;
 		$type    = 'plugin';
-		$skip_to = $stackPtr;
 
 		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
 		if ( 'STDIN' === $file ) {
