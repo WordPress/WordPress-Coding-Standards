@@ -873,7 +873,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $param_info['clean'], $placeholders ) === 1 ) {
+			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $param_info['clean'] ) === 1 ) {
 				$needs_translators_comment = true;
 				break;
 			}
@@ -969,7 +969,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 * @return bool
 	 */
 	private function is_translators_comment( $content ) {
-		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`i', $content, $matches ) === 1 ) {
+		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`i', $content ) === 1 ) {
 			return true;
 		}
 		return false;
