@@ -12,11 +12,15 @@
         <code title="Valid: Lowercase variable name.">
         <![CDATA[
 <em>$prefix_variable_name</em> = 'value';
+
+echo <em>$prefix_variable_name</em>;
         ]]>
         </code>
         <code title="Invalid: Mixed case function name.">
         <![CDATA[
 <em>$Prefix_Variable_NAME</em> = 'value';
+
+echo <em>$Prefix_Variable_NAME</em>;
         ]]>
         </code>
     </code_comparison>
@@ -33,18 +37,6 @@ class My_Class {
 class My_Class {
     public <em>$propertyName</em> = 'value';
 }
-        ]]>
-        </code>
-    </code_comparison>
-    <code_comparison>
-        <code title="Valid: Echo a correctly named variable.">
-        <![CDATA[
-echo <em>$variable_name</em>;
-        ]]>
-        </code>
-        <code title="Invalid: Echo an incorrectly named variable.">
-        <![CDATA[
-echo <em>$VariableName</em>;
         ]]>
         </code>
     </code_comparison>
