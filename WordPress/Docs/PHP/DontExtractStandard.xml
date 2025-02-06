@@ -22,10 +22,11 @@ $post_data = array(
         <code title="Invalid: Using `extract()` function">
         <![CDATA[
 $var_array = array(
-    "title"    => "My title",
-    "content"  => "My content",
-    "ID"       => 123
+    'title'    => 'My title',
+    'content'  => 'My content',
+    'ID'       => 123
 );
+
 <em>extract( $var_array );</em>
 echo $title;
         ]]>
