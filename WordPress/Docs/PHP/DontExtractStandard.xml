@@ -9,10 +9,11 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: access array elements directly">
+        <code title="Valid: Accessing array elements directly">
         <![CDATA[
 $post_data = array(
     'title'   => 'My title',
+
     'content' => 'My content',
     'ID'      => 123
 );
