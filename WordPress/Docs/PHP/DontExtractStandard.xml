@@ -19,7 +19,7 @@ $post_data = array(
 <em>echo $post_data['title'];</em>
         ]]>
         </code>
-        <code title="Invalid: Using the `extract()` function.">
+        <code title="Invalid: Using `extract()` function">
         <![CDATA[
 $var_array = array(
     "title"    => "My title",
