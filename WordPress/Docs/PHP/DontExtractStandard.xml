@@ -9,7 +9,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Accessing array elements directly">
+        <code title="Valid: Accessing array elements directly.">
         <![CDATA[
 $post_data = array(
     'title'   => 'My title',
@@ -19,7 +19,7 @@ $post_data = array(
 <em>echo $post_data['title'];</em>
         ]]>
         </code>
-        <code title="Invalid: Using `extract()` function">
+        <code title="Invalid: Using the `extract()` function.">
         <![CDATA[
 $var_array = array(
     'title'    => 'My title',
