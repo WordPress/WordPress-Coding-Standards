@@ -17,6 +17,7 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * @since 1.2.0
  *
+ * @covers \WordPressCS\WordPress\AbstractFunctionParameterSniff::is_targetted_token
  * @covers \WordPressCS\WordPress\Sniffs\Utils\I18nTextDomainFixerSniff
  */
 final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
@@ -148,6 +149,8 @@ final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 					241 => 1,
 					242 => 1,
 					245 => 1,
+					277 => 1,
+					278 => 1,
 				);
 
 			default:
@@ -191,6 +194,11 @@ final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 					195 => 1,
 					196 => 1,
 					201 => 1,
+				);
+
+			case 'I18nTextDomainFixerUnitTest.7.inc':
+				return array(
+					16 => 1,
 				);
 
 			default:
