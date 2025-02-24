@@ -99,11 +99,16 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 			return false;
 		}
 
+		if ( isset( $this->tokens[ $next ]['parenthesis_closer'] ) === false ) {
+			// Syntax error or live coding: missing closing parenthesis.
+			return false;
+		}
+
 		// First class callable.
 		$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next + 1 ), null, true );
-		if ( false !== $firstNonEmpty && \T_ELLIPSIS === $this->tokens[ $firstNonEmpty ]['code'] ) {
+		if ( \T_ELLIPSIS === $this->tokens[ $firstNonEmpty ]['code'] ) {
 			$secondNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $firstNonEmpty + 1 ), null, true );
-			if ( false === $secondNonEmpty || \T_CLOSE_PARENTHESIS === $this->tokens[ $secondNonEmpty ]['code'] ) {
+			if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $secondNonEmpty ]['code'] ) {
 				return false;
 			}
 		}

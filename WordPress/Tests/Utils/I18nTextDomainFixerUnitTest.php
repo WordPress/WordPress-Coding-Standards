@@ -196,11 +196,6 @@ final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 					201 => 1,
 				);
 
-			case 'I18nTextDomainFixerUnitTest.7.inc':
-				return array(
-					16 => 1,
-				);
-
 			default:
 				return array();
 		}
