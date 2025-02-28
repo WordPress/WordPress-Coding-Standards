@@ -45,8 +45,8 @@ $ok = wp_set_option_autoload_values(
 );
 
 /*
- * These should all be ignored by the sniff as the autoload value is undetermined or not easy to
- * determine.
+ * These should all be ignored by the sniff as the autoload value can't be reliably
+ * determined.
  */
 $ignored = add_option( 'my_option', 'my_value', '', $some_variable );
 $ignored = add_option( 'my_option', 'my_value', '', $obj->yes );
@@ -71,8 +71,8 @@ $ignored = wp_set_option_autoload_values(
 );
 
 /*
- * These are ignored because it is not easy to determine the option names and the autoload values or
- * the `$options` parameter is empty.
+ * These are ignored because the option names and the autoload values can't be reliably determined
+ * or the `$options` parameter is empty.
  */
 $ignored = wp_set_option_autoload_values( $options );
 $ignored = wp_set_option_autoload_values( options: $options );
@@ -82,7 +82,7 @@ $ignored = wp_set_option_autoload_values(options: array());
 $ignored = wp_set_option_autoload_values(options: []);
 
 /*
- * Invalid function calls that are ignored by the sniff as a mandatory parameter is missing
+ * Invalid function calls that are ignored by the sniff as a mandatory parameter is missing.
  */
 $ignored = wp_set_option_autoload_values();
 $ignored = wp_set_options_autoload();
