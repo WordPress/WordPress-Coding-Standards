@@ -82,6 +82,24 @@ jobs:
           pattern: "./WordPress/Docs/*/*Standard.xml"
           xsd-file: "vendor/phpcsstandards/phpcsdevtools/DocsXsd/phpcsdocs.xsd"
 
+      - name: Validate Project PHPCS ruleset against schema
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: ".phpcs.xml.dist"
+          xsd-file: "vendor/squizlabs/php_codesniffer/phpcs.xsd"
+
+      - name: "Validate PHPUnit config for use with PHPUnit 8"
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "phpunit.xml.dist"
+          xsd-file: "vendor/phpunit/phpunit/schema/8.5.xsd"
+
+      - name: "Validate PHPUnit config for use with PHPUnit 9"
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "phpunit.xml.dist"
+          xsd-file: "vendor/phpunit/phpunit/schema/9.2.xsd"
+
       # Check that the sniffs available are feature complete.
       # For now, just check that all sniffs have unit tests.
       # At a later stage the documentation check can be activated.
