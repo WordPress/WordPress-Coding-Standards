@@ -176,7 +176,7 @@ $autofix_warning = add_option(
     // phpcs:ignore Standard.Category.Sniff -- For test reasons.
     'off'
 );
-$autofix_warning = add_option( 'my_option', 'my_value', '','off');
+$autofix_warning = add_option( 'my_option', 'my_value', '', 'off' );
 $autofix_warning = add_option( value: 'my_value', deprecated: '', autoload: 'yes', option: 'my_option' );
 $autofix_warning = update_option( 'my_option', 'new_value', 'yes' );
 $autofix_warning = update_option( 'my_option', 'new_value', 'no' );
