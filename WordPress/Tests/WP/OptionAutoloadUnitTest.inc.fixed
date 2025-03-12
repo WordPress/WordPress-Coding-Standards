@@ -15,16 +15,16 @@ use function add_option;
  */
 $ok = \add_option( 'my_option', 'my_value', '', true );
 $ok = add_option( 'my_option', array('some', 'big', 'array'), '', false );
-$ok = add_option( 'my_option', new stdClass(), '', null );
+$ok = ADD_OPTION( 'my_option', new stdClass(), '', null );
 $ok = add_option( 'my_option', autoload: FALSE, value: 'my_value' );
 $ok = add_option( 'my_option', autoload: false );
 $ok = add_option( autoload: false, deprecated: '', value: 'my_value', option: 'my_option' );
 $ok = \update_option( 'my_option', 'new_value', \true );
 $ok = update_option( 'my_option', 'new_value', \false );
-$ok = update_option( 'my_option', 'new_value', \NULL );
+$ok = Update_Option( 'my_option', 'new_value', \NULL );
 $ok = update_option( 'my_option', autoload: TrUe, value: 'new_value' );
 $ok = update_option( autoload: false, value: 'my_value', option: 'my_option' );
-$ok = update_option( $option_name, get_option( $option_name ), false );
+$ok = update_OPTION( $option_name, get_option( $option_name ), false );
 $ok = wp_set_options_autoload( array( 'option1', 'option2' ), \false );
 $ok = wp_set_options_autoload( array( 'option1', 'option2' ), \true );
 $ok = wp_set_options_autoload( autoload: false, options: array( 'option1', 'option2' ) );
@@ -49,13 +49,13 @@ $ok = wp_set_option_autoload_values(
  * determined.
  */
 $ignored = add_option( 'my_option', 'my_value', '', $some_variable );
-$ignored = add_option( 'my_option', 'my_value', '', $obj->yes );
+$ignored = ADD_OPTION( 'my_option', 'my_value', '', $obj->yes );
 $ignored = add_option( 'my_option', 'my_value', '', $some_variable ? 'yes' : 'no' );
-$ignored = add_option( 'my_option', 'my_value', '', 'ye' . 's' );
+$ignored = Add_Option( 'my_option', 'my_value', '', 'ye' . 's' );
 $ignored = add_option( 'my_option', 'my_value', '', (function () { return 'yes'; })() );
 $ignored = add_option( 'my_option', 'new_value', '', yes);
 $ignored = wp_set_options_autoload( array( 'option1', 'option2' ), $some_variable );
-$ignored = wp_set_option_autoload( 'option1', $some_variable );
+$ignored = wp_set_OPTION_autoload( 'option1', $some_variable );
 $ignored = wp_set_option_autoload_values(
     array(
         'option1' => $some_variable,
@@ -146,7 +146,7 @@ $warning = wp_set_option_autoload_values(
 
 // Incorrect function calls, should be flagged by the sniff.
 $incorrect_but_warning = add_option();
-$incorrect_but_warning = update_option();
+$incorrect_but_warning = update_OPTION();
 $incorrect_but_warning = update_option( 'my_option' );
 $incorrect_but_warning = update_option( autoloader: false, value: 'my_value', option: 'my_option' ); // Typo in the autoload parameter.
 $incorrect_but_warning = add_option( autoload: true, 'my_option' );
