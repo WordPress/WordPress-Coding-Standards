@@ -347,7 +347,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( $param_second_token
-			&& ! isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $param_first_token ]['code'] ] )
+			&& false === isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $param_first_token ]['code'] ] )
 		) {
 			// Bail early if the parameter has two or more non-empty tokens and the second token is
 			// not an array opener as this means an undetermined param value or a value that is not
