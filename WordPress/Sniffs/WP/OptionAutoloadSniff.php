@@ -37,54 +37,70 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	const METRIC_NAME = 'Value of the `$autoload` parameter in the option functions';
 
 	/**
-	 * List of valid values for the `$autoload` parameter in the add_option() and update_option()
-	 * functions.
+	 * Valid values for the `$autoload` parameter in the add_option() and update_option() functions.
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var string[]
+	 * @var array<string, string>
 	 */
-	private $valid_values_add_and_update = array( 'true', 'false', 'null' );
+	private $valid_values_add_and_update = array(
+		'true'  => 'true',
+		'false' => 'false',
+		'null'  => 'null',
+	);
 
 	/**
-	 * List of valid values for the `$autoload` parameter in the wp_set_options_autoload(),
+	 * Valid values for the `$autoload` parameter in the wp_set_options_autoload(),
 	 * wp_set_option_autoload(), and wp_set_option_autoload_values() functions.
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var string[]
+	 * @var array<string, string>
 	 */
-	private $valid_values_other_functions = array( 'true', 'false' );
+	private $valid_values_other_functions = array(
+		'true'  => 'true',
+		'false' => 'false',
+	);
 
 	/**
-	 * List of deprecated values for the `$autoload` parameter.
+	 * Deprecated values for the `$autoload` parameter.
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var string[]
+	 * @var array<string, true>
 	 */
-	private $deprecated_values = array( 'yes', 'no' );
+	private $deprecated_values = array(
+		'yes' => true,
+		'no'  => true,
+	);
 
 	/**
 	 * Internal-use only values for `$autoload` that cannot be fixed automatically by the sniff.
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var string[]
+	 * @var array<string, true>
 	 */
-	private $internal_values_non_fixable = array( 'auto', 'auto-on', 'auto-off' );
+	private $internal_values_non_fixable = array(
+		'auto'     => true,
+		'auto-on'  => true,
+		'auto-off' => true,
+	);
 
 	/**
 	 * Internal-use only values for `$autoload` that can be fixed automatically by the sniff.
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var string[]
+	 * @var array<string, true>
 	 */
-	private $internal_values_fixable = array( 'on', 'off' );
+	private $internal_values_fixable = array(
+		'on'  => true,
+		'off' => true,
+	);
 
 	/**
-	 * List of replacements for fixable values.
+	 * Replacements for fixable values.
 	 *
 	 * @since 3.2.0
 	 *
@@ -98,13 +114,16 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * List of functions for which the `$autoload` parameter is optional.
+	 * Functions for which the `$autoload` parameter is optional.
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var string[]
+	 * @var array<string, true>
 	 */
-	private $autoload_is_optional = array( 'add_option', 'update_option' );
+	private $autoload_is_optional = array(
+		'add_option'    => true,
+		'update_option' => true,
+	);
 
 	/**
 	 * The group name for this group of functions.
@@ -277,7 +296,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		$this->phpcsFile->recordMetric( $stackPtr, self::METRIC_NAME, 'param missing' );
 
 		// Only display a warning for the functions in which the `$autoload` parameter is optional.
-		if ( in_array( $function_name, $this->autoload_is_optional, true ) ) {
+		if ( isset( $this->autoload_is_optional[ $function_name ] ) ) {
 			$this->phpcsFile->addWarning(
 				'It is recommended to always pass the `$autoload` parameter when using %s() function.',
 				$stackPtr,
@@ -315,24 +334,25 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 
 		$normalized_value = strtolower( $autoload_info['clean'] );
 
-		if ( \T_NS_SEPARATOR === $this->tokens[ $param_first_token ]['code']
-			&& $param_second_token
-			&& in_array( strtolower( $this->tokens[ $param_second_token ]['content'] ), $this->valid_values_add_and_update, true )
-		) {
-			// Ensure the sniff handles correctly `true`, `false` and `null` when they are
-			// namespaced (preceded by a backslash).
-			$param_first_token  = $param_second_token;
-			$param_second_token = false;
-			$normalized_value   = substr( $normalized_value, 1 );
+		if ( \T_NS_SEPARATOR === $this->tokens[ $param_first_token ]['code'] && $param_second_token ) {
+			$token_content_lowercase = strtolower( $this->tokens[ $param_second_token ]['content'] );
+
+			if ( isset( $this->valid_values_add_and_update[ $token_content_lowercase ] ) ) {
+				// Ensure the sniff handles correctly `true`, `false` and `null` when they are
+				// namespaced (preceded by a backslash).
+				$param_first_token  = $param_second_token;
+				$param_second_token = false;
+				$normalized_value   = substr( $normalized_value, 1 );
+			}
 		}
 
-		if ( in_array( $function_name, $this->autoload_is_optional, true ) ) {
+		if ( isset( $this->autoload_is_optional[ $function_name ] ) ) {
 			$valid_values = $this->valid_values_add_and_update;
 		} else {
 			$valid_values = $this->valid_values_other_functions;
 		}
 
-		if ( in_array( $normalized_value, $valid_values, true ) ) {
+		if ( isset( $valid_values[ $normalized_value ] ) ) {
 			$this->phpcsFile->recordMetric( $param_first_token, self::METRIC_NAME, $normalized_value );
 			return;
 		}
@@ -360,7 +380,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 
 		$known_discouraged_values = array_merge( $this->deprecated_values, $this->internal_values_non_fixable, $this->internal_values_fixable );
 
-		if ( in_array( $autoload_value, $known_discouraged_values, true ) ) {
+		if ( isset( $known_discouraged_values[ $autoload_value ] ) ) {
 			$metric_value = $autoload_value;
 		} else {
 			$metric_value = 'other value';
@@ -368,15 +388,15 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 
 		$this->phpcsFile->recordMetric( $param_first_token, self::METRIC_NAME, $metric_value );
 
-		if ( in_array( $autoload_value, $this->deprecated_values, true ) ) {
+		if ( isset( $this->deprecated_values[ $autoload_value ] ) ) {
 			$message    = 'The use of `%s` as the value of the `$autoload` parameter is deprecated. Use `%s` instead.';
 			$error_code = 'Deprecated';
 			$data       = array( $autoload_info['clean'], $this->fixable_values[ $autoload_value ] );
-		} elseif ( in_array( $autoload_value, $this->internal_values_fixable, true ) ) {
+		} elseif ( isset( $this->internal_values_fixable[ $autoload_value ] ) ) {
 			$message    = 'The use of `%s` as the value of the `$autoload` parameter is discouraged. Use `%s` instead.';
 			$error_code = 'InternalUseOnly';
 			$data       = array( $autoload_info['clean'], $this->fixable_values[ $autoload_value ] );
-		} elseif ( in_array( $autoload_value, $this->internal_values_non_fixable, true ) ) {
+		} elseif ( isset( $this->internal_values_non_fixable [ $autoload_value ] ) ) {
 			$message    = 'The use of `%s` as the value of the `$autoload` parameter is discouraged.';
 			$error_code = 'InternalUseOnly';
 			$data       = array( $autoload_info['clean'] );
@@ -394,7 +414,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 			$data                = array( $autoload_info['clean'], $valid_values_string );
 		}
 
-		if ( in_array( $autoload_value, array_keys( $this->fixable_values ), true ) ) {
+		if ( isset( $this->fixable_values[ $autoload_value ] ) ) {
 			$fix = $this->phpcsFile->addFixableWarning(
 				$message,
 				$param_first_token,
