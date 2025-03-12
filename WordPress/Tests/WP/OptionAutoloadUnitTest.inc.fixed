@@ -19,8 +19,13 @@ $ok = ADD_OPTION( 'my_option', new stdClass(), '', null );
 $ok = add_option( 'my_option', autoload: FALSE, value: 'my_value' );
 $ok = add_option( 'my_option', autoload: false );
 $ok = add_option( autoload: false, deprecated: '', value: 'my_value', option: 'my_option' );
-$ok = \update_option( 'my_option', 'new_value', \true );
-$ok = update_option( 'my_option', 'new_value', \false );
+$ok = \update_option(    'my_option'    ,    'new_value'    ,    \true    );
+$ok = update_option(
+    'my_option',
+    'new_value',
+    // phpcs:ignore Standard.Category.Sniff -- For test reasons.
+    /* comment */ \false /* comment */
+);
 $ok = Update_Option( 'my_option', 'new_value', \NULL );
 $ok = update_option( 'my_option', autoload: TrUe, value: 'new_value' );
 $ok = update_option( autoload: false, value: 'my_value', option: 'my_option' );
@@ -53,7 +58,12 @@ $ignored = ADD_OPTION( 'my_option', 'my_value', '', $obj->yes );
 $ignored = add_option( 'my_option', 'my_value', '', $some_variable ? 'yes' : 'no' );
 $ignored = Add_Option( 'my_option', 'my_value', '', 'ye' . 's' );
 $ignored = add_option( 'my_option', 'my_value', '', (function () { return 'yes'; })() );
-$ignored = add_option( 'my_option', 'new_value', '', yes);
+$ignored = add_option(
+    'my_option',
+    'new_value',
+    '',
+    /* comment */ yes /* comment */
+);
 $ignored = wp_set_options_autoload( array( 'option1', 'option2' ), $some_variable );
 $ignored = wp_set_OPTION_autoload( 'option1', $some_variable );
 $ignored = wp_set_option_autoload_values(
@@ -85,7 +95,7 @@ $ignored = wp_set_option_autoload_values(options: []);
  * Invalid function calls that are ignored by the sniff as a mandatory parameter is missing.
  */
 $ignored = wp_set_option_autoload_values();
-$ignored = wp_set_options_autoload();
+$ignored = wp_set_options_autoload( /* some comment */ );
 $ignored = wp_set_options_autoload( array( 'option1', 'option2' ) );
 $ignored = wp_set_option_autoload();
 $ignored = wp_set_option_autoload( 'option1' );
@@ -108,7 +118,7 @@ $warning = add_option( 'my_option', 'my_value', '', 'invalid_value' );
 $warning = add_option( 'my_option', 'my_value', '', 'true' );
 $warning = add_option( 'my_option', 'my_value', '', "false" );
 $warning = add_option( 'my_option', 'my_value', '', array('some', 'array') );
-$warning = add_option( 'my_option', 'my_value', '', ['some', 'array'] );
+$warning = /* comment */ add_option /* comment */ ( 'my_option', 'my_value', '', ['some', 'array'] );
 $warning = add_option( option: 'my_option' );
 $warning = add_option( value: 'my_value', option: 'my_option' );
 $warning = add_option( value: 'my_value', deprecated: '', option: 'my_option' );
@@ -117,7 +127,11 @@ $warning = add_option( 'my_option', 'my_value', '', 'YES' ); // the uppercase ve
 $warning = update_option( 'my_option', 'new_value' );
 $warning = update_option( 'my_option', 'new_value', 'auto' );
 $warning = update_option( 'my_option', 'new_value', 'auto-on' );
-$warning = update_option( 'my_option', 'new_value', 'auto-off' );
+$warning = update_option(
+    /* option name */ 'my_option',
+    'new_value' /* option value */,
+    /* autoload value */ 'auto-off' // phpcs:ignore Standard.Category.Sniff -- For test reasons.
+);
 $warning = update_option( 'my_option', 'new_value', 'invalid_value' );
 $warning = update_option( value: 'new_value', option: 'my_option' );
 $warning = update_option( value: 'new_value', autoload: 'auto', option: 'my_option' );
@@ -128,6 +142,7 @@ $warning = wp_set_option_autoload( 'option1', 'invalid_value' );
 $warning = wp_set_option_autoload( 'option1', \NuLL );
 $warning = wp_set_option_autoload_values( ['option1' => null] );
 $warning = wp_set_option_autoload_values(
+    // phpcs:ignore Standard.Category.Sniff -- For test reasons.
     [
         'option1' => '',
         'option2' => 'true',
@@ -137,7 +152,7 @@ $warning = wp_set_option_autoload_values(
         'option6' => 'YES',
         'option7' => 'invalid_value',
         'option8' => 'auto',
-        'option9' => 'auto-on',
+        'option9' /* some comment */ => /* some comment */ 'auto-on',
         'option10' => 'auto-off',
         'option11',
         /* some comment */ 'option12' /* some comment */,
