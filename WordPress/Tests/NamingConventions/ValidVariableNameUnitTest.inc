@@ -189,7 +189,7 @@ class MultiVarDeclarations {
 
 echo "This is $post_ID with $ThisShouldBeFlagged"; // Bad.
 
-// Safeguard that illegal property declarations are ignored.
+// Properties in interfaces are allowed since PHP 8.4.
 interface PropertiesNotAllowed {
 	public $notAllowed;
 }
