@@ -339,5 +339,10 @@ esc_html_x( ' string ', 'context', 'my-slug' ); // Bad: leading and trailing spa
 esc_attr__( ' string', 'my-slug' ); // Bad: leading space.
 esc_attr_e( 'string ', 'my-slug' ); // Bad: trailing space.
 esc_attr_x( ' string ', 'context', 'my-slug' ); // Bad: leading and trailing spaces.
+__( '	string', 'my-slug' ); // Bad: leading tab.
+__( 'string	', 'my-slug' ); // Bad: trailing tab.
+__( '	string	', 'my-slug' ); // Bad: leading and trailing tabs.
+__( '		string', 'my-slug' ); // Bad: two leading tabs.
+__( 'string		', 'my-slug' ); // Bad: two trailing tabs.
 
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
