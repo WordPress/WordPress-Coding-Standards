@@ -825,7 +825,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 
 		if ( ltrim( $content_without_quotes ) !== $content_without_quotes ) {
 			$this->phpcsFile->addError(
-				'Translatable string should not have leading spaces. Found: %s',
+				'Translatable string should not have leading spaces, tabs, or new lines. Found: %s',
 				$first_non_empty,
 				'NoLeadingTrailingSpaces',
 				array( $param_info['clean'] )
@@ -833,7 +833,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 		}
 		if ( rtrim( $content_without_quotes ) !== $content_without_quotes ) {
 			$this->phpcsFile->addError(
-				'Translatable string should not have trailing spaces. Found: %s',
+				'Translatable string should not have trailing spaces, tabs, or new lines. Found: %s',
 				$first_non_empty,
 				'NoLeadingTrailingSpaces',
 				array( $param_info['clean'] )
