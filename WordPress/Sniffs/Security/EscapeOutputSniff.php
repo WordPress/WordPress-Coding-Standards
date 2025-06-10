@@ -185,7 +185,6 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	 */
 	public function process_token( $stackPtr ) {
 		$start = ( $stackPtr + 1 );
-		$end   = $start;
 
 		switch ( $this->tokens[ $stackPtr ]['code'] ) {
 			case \T_STRING:

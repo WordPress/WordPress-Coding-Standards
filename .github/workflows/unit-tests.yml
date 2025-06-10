@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.4' ]
+        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.5' ]
         dependencies: [ 'lowest', 'stable' ]
         extensions: [ '' ]
         coverage: [false]
@@ -46,11 +46,11 @@ jobs:
             dependencies: 'lowest'
             extensions: ''
             coverage: true
-          - php: '8.3'
+          - php: '8.4'
             dependencies: 'stable'
             extensions: ''
             coverage: true
-          - php: '8.3'
+          - php: '8.4'
             dependencies: 'lowest'
             extensions: ''
             coverage: true
@@ -68,7 +68,7 @@ jobs:
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '8.3'
+          - php: '8.4'
             dependencies: 'dev'
             extensions: ''
             coverage: false
@@ -79,7 +79,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
 
-    continue-on-error: ${{ matrix.php == '8.4' }}
+    continue-on-error: ${{ matrix.php == '8.5' }}
 
     steps:
       - name: Checkout repository
@@ -91,9 +91,9 @@ jobs:
         id: set_ini
         run: |
           if [ "${{ matrix.dependencies }}" != "dev" ]; then
-            echo 'PHP_INI=error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On' >> $GITHUB_OUTPUT
+            echo 'PHP_INI=error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On' >> "$GITHUB_OUTPUT"
           else
-            echo 'PHP_INI=error_reporting=-1, display_errors=On' >> $GITHUB_OUTPUT
+            echo 'PHP_INI=error_reporting=-1, display_errors=On' >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up PHP
@@ -144,7 +144,7 @@ jobs:
 
       - name: Send coverage report to Codecov
         if: ${{ success() && matrix.coverage == true }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true

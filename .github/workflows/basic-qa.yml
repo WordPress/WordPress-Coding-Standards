@@ -24,9 +24,6 @@ jobs:
     name: Run code sniffs
     runs-on: ubuntu-latest
 
-    env:
-      XMLLINT_INDENT: '	'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,21 +53,6 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      # Updating the lists can fail intermittently, typically after Microsoft has released a new package.
-      # This should not be blocking for this job, so ignore any errors from this step.
-      # Ref: https://github.com/dotnet/core/issues/4167
-      - name: Update the available packages list
-        continue-on-error: true
-        run: sudo apt-get update
-
-      - name: Install xmllint
-        run: sudo apt-get install --no-install-recommends -y libxml2-utils
-
-      # Show XML violations inline in the file diff.
-      # @link https://github.com/marketplace/actions/xmllint-problem-matcher
-      - name: Enable showing XML issues inline
-        uses: korelstar/xmllint-problem-matcher@v1
-
       - name: Check the code style of the PHP files
         id: phpcs
         run: vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml
@@ -82,14 +64,72 @@ jobs:
       # Validate the Ruleset XML files.
       # @link http://xmlsoft.org/xmllint.html
       - name: Validate the WordPress rulesets
-        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./*/ruleset.xml
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "./*/ruleset.xml"
+          xsd-file: "vendor/squizlabs/php_codesniffer/phpcs.xsd"
 
       - name: Validate the sample ruleset
-        run: xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd ./phpcs.xml.dist.sample
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "phpcs.xml.dist.sample"
+          xsd-file: "vendor/squizlabs/php_codesniffer/phpcs.xsd"
 
       # Validate the Documentation XML files.
       - name: Validate documentation against schema
-        run: xmllint --noout --schema vendor/phpcsstandards/phpcsdevtools/DocsXsd/phpcsdocs.xsd ./WordPress/Docs/*/*Standard.xml
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "./WordPress/Docs/*/*Standard.xml"
+          xsd-file: "vendor/phpcsstandards/phpcsdevtools/DocsXsd/phpcsdocs.xsd"
+
+      - name: Validate Project PHPCS ruleset against schema
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: ".phpcs.xml.dist"
+          xsd-file: "vendor/squizlabs/php_codesniffer/phpcs.xsd"
+
+      - name: "Validate PHPUnit config for use with PHPUnit 8"
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "phpunit.xml.dist"
+          xsd-file: "vendor/phpunit/phpunit/schema/8.5.xsd"
+
+      - name: "Validate PHPUnit config for use with PHPUnit 9"
+        uses: phpcsstandards/xmllint-validate@v1
+        with:
+          pattern: "phpunit.xml.dist"
+          xsd-file: "vendor/phpunit/phpunit/schema/9.2.xsd"
+
+      # Check that the sniffs available are feature complete.
+      # For now, just check that all sniffs have unit tests.
+      # At a later stage the documentation check can be activated.
+      - name: Check sniff feature completeness
+        run: composer check-complete
+
+  xml-cs:
+    name: 'XML Code style'
+    runs-on: ubuntu-latest
+
+    env:
+      XMLLINT_INDENT: '	'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Updating the lists can fail intermittently, typically after Microsoft has released a new package.
+      # This should not be blocking for this job, so ignore any errors from this step.
+      # Ref: https://github.com/dotnet/core/issues/4167
+      - name: Update the available packages list
+        continue-on-error: true
+        run: sudo apt-get update
+
+      - name: Install xmllint
+        run: sudo apt-get install --no-install-recommends -y libxml2-utils
+
+      # Show XML violations inline in the file diff.
+      - name: Enable showing XML issues inline
+        uses: korelstar/xmllint-problem-matcher@v1
 
       - name: Check the code-style consistency of the xml files
         run: |
@@ -98,12 +138,6 @@ jobs:
           diff -B --tabsize=4 ./WordPress-Docs/ruleset.xml <(xmllint --format "./WordPress-Docs/ruleset.xml")
           diff -B --tabsize=4 ./WordPress-Extra/ruleset.xml <(xmllint --format "./WordPress-Extra/ruleset.xml")
           diff -B --tabsize=4 ./phpcs.xml.dist.sample <(xmllint --format "./phpcs.xml.dist.sample")
-
-      # Check that the sniffs available are feature complete.
-      # For now, just check that all sniffs have unit tests.
-      # At a later stage the documentation check can be activated.
-      - name: Check sniff feature completeness
-        run: composer check-complete
 
   # Makes sure the rulesets don't throw unexpected errors or warnings.
   # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
@@ -186,7 +220,7 @@ jobs:
           set +e
           $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
           exitcode="$?"
-          echo "EXITCODE=$exitcode" >> $GITHUB_OUTPUT
+          echo "EXITCODE=$exitcode" >> "$GITHUB_OUTPUT"
           exit "$exitcode"
 
       - name: Fail the build on fixer conflicts and other errors
@@ -207,7 +241,7 @@ jobs:
         with:
           php-version: 'latest'
           coverage: none
-          tools: phpstan
+          tools: phpstan:1.x
 
       # Install dependencies and handle caching in one go.
       # Dependencies need to be installed to make sure the PHPCS and PHPUnit classes are recognized.
