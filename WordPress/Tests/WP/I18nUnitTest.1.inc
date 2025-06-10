@@ -344,5 +344,18 @@ __( 'string	', 'my-slug' ); // Bad: trailing tab.
 __( '	string	', 'my-slug' ); // Bad: leading and trailing tabs.
 __( '		string', 'my-slug' ); // Bad: two leading tabs.
 __( 'string		', 'my-slug' ); // Bad: two trailing tabs.
+__( '
+string', 'my-slug' ); // Bad: leading new line.
+__( 'string
+', 'my-slug' ); // Bad: trailing new line.
+__( '
+string
+', 'my-slug' ); // Bad: leading and trailing new line.
+__( '
+
+string', 'my-slug' ); // Bad: two leading new lines.
+__( 'string
+
+', 'my-slug' ); // Bad: two trailing new lines.
 
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
