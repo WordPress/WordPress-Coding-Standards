@@ -137,15 +137,16 @@ trait SanitizationHelperTrait {
 	 * @var array<string, bool>
 	 */
 	private $unslashingSanitizingFunctions = array(
-		'absint'               => true,
-		'boolval'              => true,
-		'count'                => true,
-		'doubleval'            => true,
-		'floatval'             => true,
-		'intval'               => true,
-		'sanitize_key'         => true,
-		'sanitize_locale_name' => true,
-		'sizeof'               => true,
+		'absint'                => true,
+		'boolval'               => true,
+		'count'                 => true,
+		'doubleval'             => true,
+		'floatval'              => true,
+		'intval'                => true,
+		'rest_sanitize_boolean' => true,
+		'sanitize_key'          => true,
+		'sanitize_locale_name'  => true,
+		'sizeof'                => true,
 	);
 
 	/**
