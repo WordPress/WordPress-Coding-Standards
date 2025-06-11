@@ -357,5 +357,10 @@ string', 'my-slug' ); // Bad: two leading new lines.
 __( 'string
 
 ', 'my-slug' ); // Bad: two trailing new lines.
+__( "String with leading vertical tab", 'my-slug' ); // Bad, has leading vertical tab.
+__( "String with trailing vertical tab", 'my-slug' ); // Bad, has trailing vertical tab.
+__( "String with leading and trailing vertical tabs", 'my-slug' ); // Bad, has both leading and trailing vertical tabs.
+__( "String with 2 leading vertical tabs", 'my-slug' ); // Bad, has 2 leading vertical tabs.
+__( "String with 2 trailing vertical tabs", 'my-slug' ); // Bad, has 2 trailing vertical tabs.
 
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
