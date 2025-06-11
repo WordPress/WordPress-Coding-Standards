@@ -830,6 +830,8 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 		$pattern_trailing_tabs   = '/\t+$/u';
 		$pattern_leading_newlines = '/^[\r\n]+/u';
 		$pattern_trailing_newlines = '/[\r\n]+$/u';
+		$pattern_leading_vtabs   = '/^\x0B+/u';
+		$pattern_trailing_vtabs  = '/\x0B+$/u';
 
 		// Check for leading spaces.
 		if ( preg_match( $pattern_leading_spaces, $content_without_quotes ) ) {
@@ -887,6 +889,26 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				'Translatable string should not have trailing new lines. Found: %s',
 				$first_non_empty,
 				'TrailingNewLines',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for leading vertical tabs.
+		if ( preg_match( $pattern_leading_vtabs, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading vertical tabs. Found: %s',
+				$first_non_empty,
+				'LeadingVTabs',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for trailing vertical tabs.
+		if ( preg_match( $pattern_trailing_vtabs, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing vertical tabs. Found: %s',
+				$first_non_empty,
+				'TrailingVTabs',
 				array( $param_info['clean'] )
 			);
 		}
