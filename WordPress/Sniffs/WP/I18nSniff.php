@@ -824,14 +824,14 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 		$first_non_empty        = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
 
 		// Define regex patterns.
-		$pattern_leading_spaces  = '/^[ ]+/u';
-		$pattern_trailing_spaces = '/[ ]+$/u';
-		$pattern_leading_tabs    = '/^\t+/u';
-		$pattern_trailing_tabs   = '/\t+$/u';
-		$pattern_leading_newlines = '/^[\r\n]+/u';
-		$pattern_trailing_newlines = '/[\r\n]+$/u';
+		$pattern_leading_spaces  = '/^[\x20]+/u';
+		$pattern_trailing_spaces = '/[\x20]+$/u';
+		$pattern_leading_tabs    = '/^\x09+/u';
+		$pattern_trailing_tabs   = '/\x09+$/u';
 		$pattern_leading_vtabs   = '/^\x0B+/u';
 		$pattern_trailing_vtabs  = '/\x0B+$/u';
+		$pattern_leading_newlines = '/^\x0A+/u';
+		$pattern_trailing_newlines = '/\x0A+$/u';
 
 		// Check for leading spaces.
 		if ( preg_match( $pattern_leading_spaces, $content_without_quotes ) ) {
@@ -873,26 +873,6 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 			);
 		}
 		
-		// Check for leading new lines.
-		if ( preg_match( $pattern_leading_newlines, $content_without_quotes ) ) {
-			$this->phpcsFile->addError(
-				'Translatable string should not have leading new lines. Found: %s',
-				$first_non_empty,
-				'LeadingNewLines',
-				array( $param_info['clean'] )
-			);
-		}
-		
-		// Check for trailing new lines.
-		if ( preg_match( $pattern_trailing_newlines, $content_without_quotes ) ) {
-			$this->phpcsFile->addError(
-				'Translatable string should not have trailing new lines. Found: %s',
-				$first_non_empty,
-				'TrailingNewLines',
-				array( $param_info['clean'] )
-			);
-		}
-		
 		// Check for leading vertical tabs.
 		if ( preg_match( $pattern_leading_vtabs, $content_without_quotes ) ) {
 			$this->phpcsFile->addError(
@@ -909,6 +889,26 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				'Translatable string should not have trailing vertical tabs. Found: %s',
 				$first_non_empty,
 				'TrailingVTabs',
+				array( $param_info['clean'] )
+			);
+		}
+
+		// Check for leading new lines.
+		if ( preg_match( $pattern_leading_newlines, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading new lines. Found: %s',
+				$first_non_empty,
+				'LeadingNewLines',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for trailing new lines.
+		if ( preg_match( $pattern_trailing_newlines, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing new lines. Found: %s',
+				$first_non_empty,
+				'TrailingNewLines',
 				array( $param_info['clean'] )
 			);
 		}
