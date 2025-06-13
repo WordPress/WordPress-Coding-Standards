@@ -24,14 +24,14 @@ function <em>Prefix_Function_NAME()</em> {}
         <code title="Valid: Words separated by underscores.">
         <![CDATA[
 class My_Class {
-    public static <em>method_name()</em> {}
+    public static function <em>method_name()</em> {}
 }
         ]]>
         </code>
         <code title="Invalid: Using camel case to separate words.">
         <![CDATA[
 class My_Class {
-    public static <em>methodName()</em> {}
+    public static function <em>methodName()</em> {}
 }
         ]]>
         </code>
