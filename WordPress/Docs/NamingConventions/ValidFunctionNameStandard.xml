@@ -36,4 +36,16 @@ class My_Class {
         ]]>
         </code>
     </code_comparison>
+    <code_comparison>
+        <code title="Valid: Single underscore prefix is allowed.">
+        <![CDATA[
+function <em>_prefix_function_name()</em> {}
+        ]]>
+        </code>
+        <code title="Invalid: Double underscore prefix is not allowed.">
+        <![CDATA[
+function <em>__prefix_function_name()</em> {}
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
