@@ -75,7 +75,7 @@ jobs:
 
           # Add extra build to test against PHPCS 4.
           #- php: '7.4'
-          #  dependencies: '4.0.x-dev as 3.9.99'
+          #  dependencies: '4.0.x-dev as 3.99.99'
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
 
