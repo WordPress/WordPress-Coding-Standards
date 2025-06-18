@@ -29,6 +29,8 @@
 			<property name="allowMultiline" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="Generic.Strings.UnnecessaryHeredoc"/>
+	<rule ref="Generic.WhiteSpace.HereNowdocIdentifierSpacing"/>
 
 	<!-- More generic PHP best practices.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/607 -->
