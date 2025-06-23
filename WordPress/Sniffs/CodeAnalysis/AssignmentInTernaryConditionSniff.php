@@ -23,7 +23,7 @@ use WordPressCS\WordPress\Sniff;
  *
  * @since 0.14.0
  * @since 3.0.0  - The generic "assignment in condition" logic has been removed from the sniff
- *                 in favour of the upstream `Generic.CodeAnalysis.AssignmentInCondition` sniff.
+ *                 in favor of the upstream `Generic.CodeAnalysis.AssignmentInCondition` sniff.
  *               - The sniff has been renamed from `AssignmentInCondition` to `AssignmentInTernaryCondition`.
  *
  * @link https://github.com/squizlabs/PHP_CodeSniffer/pull/1594 Upstream sniff.

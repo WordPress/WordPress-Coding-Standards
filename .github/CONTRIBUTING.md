@@ -31,7 +31,7 @@ Alternatively, if you have push access to this repo, create a feature branch pre
 ## Public properties
 
 When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
-Only make a property `public` if that is the intended behaviour.
+Only make a property `public` if that is the intended behavior.
 
 When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 

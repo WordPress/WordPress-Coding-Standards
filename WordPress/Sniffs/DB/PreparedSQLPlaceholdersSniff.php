@@ -232,7 +232,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 						if ( ! empty( $sprintf_parameters ) ) {
 							/*
 							 * Check for named params. sprintf() does not support this due to its variadic nature,
-							 * and we cannot analyse the code correctly if it is used, so skip the whole sprintf()
+							 * and we cannot analyze the code correctly if it is used, so skip the whole sprintf()
 							 * in that case.
 							 */
 							$valid_sprintf = true;
@@ -347,7 +347,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
-			 * Analyse the query for incorrect LIKE queries.
+			 * Analyze the query for incorrect LIKE queries.
 			 *
 			 * - `LIKE %s` is the only correct one.
 			 * - `LIKE '%s'` or `LIKE "%s"` will not be reported here, but in the quote check.
@@ -419,7 +419,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
-			 * Analyse the query for unsupported placeholders.
+			 * Analyze the query for unsupported placeholders.
 			 */
 			if ( preg_match_all( self::UNSUPPORTED_PLACEHOLDER_REGEX, $content, $matches ) > 0 ) {
 				if ( ! empty( $matches[0] ) ) {
@@ -463,7 +463,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
-			 * Analyse the query for single/double quoted simple value placeholders
+			 * Analyze the query for single/double quoted simple value placeholders
 			 * Identifiers are checked separately.
 			 */
 			$regex = '`(' . $regex_quote . ')%[dfFs]\1`';
@@ -482,7 +482,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
-			 * Analyse the query for quoted identifier placeholders.
+			 * Analyze the query for quoted identifier placeholders.
 			 */
 			$regex = '/(' . $regex_quote . '|`)(?<placeholder>' . self::PREPARE_PLACEHOLDER_REGEX . ')\1/x';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
@@ -502,7 +502,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			}
 
 			/*
-			 * Analyse the query for unquoted complex placeholders.
+			 * Analyze the query for unquoted complex placeholders.
 			 */
 			$regex = '`(?<!' . $regex_quote . ')' . self::PREPARE_PLACEHOLDER_REGEX . '(?!' . $regex_quote . ')`x';
 			if ( preg_match_all( $regex, $content, $matches ) > 0 ) {
@@ -650,7 +650,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 	}
 
 	/**
-	 * Analyse a sprintf() query wrapper to see if it contains a specific code pattern
+	 * Analyze a sprintf() query wrapper to see if it contains a specific code pattern
 	 * to deal correctly with `IN` queries.
 	 *
 	 * The pattern we are searching for is:
@@ -687,7 +687,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 	}
 
 	/**
-	 * Analyse an implode() function call to see if it contains a specific code pattern
+	 * Analyze an implode() function call to see if it contains a specific code pattern
 	 * to dynamically create placeholders.
 	 *
 	 * The pattern we are searching for is:

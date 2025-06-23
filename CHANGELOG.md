@@ -768,7 +768,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 - The `vip_powered_wpcom` function from the `Sniff::$autoEscapedFunctions` list which is used by the `WordPress.Security.EscapeOutput` sniff.
 - The `AbstractVariableRestrictionsSniff` class, which was deprecated since WordPressCS 1.0.0.
 - The `Sniff::has_html_open_tag()` utility method, which was deprecated since WordPressCS 1.0.0.
-- The internal `$php_reserved_vars` property from the `WordPress.NamingConventions.ValidVariableName` sniff in favour of using a PHPCS native property which is now available.
+- The internal `$php_reserved_vars` property from the `WordPress.NamingConventions.ValidVariableName` sniff in favor of using a PHPCS native property which is now available.
 - The class aliases and WPCS native autoloader used for PHPCS cross-version support.
 - The unit test framework workarounds for PHPCS cross-version unit testing.
 - Support for the `@codingStandardsChangeSetting` annotation, which is generally only used in unit tests.
@@ -865,8 +865,8 @@ Note: This will be the last release supporting PHP_CodeSniffer 2.x.
 
 ### Changed
 - The `PEAR.Functions.FunctionCallSignature` sniff, which is part of the `WordPress-Core` ruleset, used to allow multiple function call parameters per line in multi-line function calls. This will no longer be allowed.
-    As of this release, if a function call is multi-line, each parameter should start on a new line and an `error` will be thrown if the code being analysed does not comply with that rule.
-    The sniff behaviour for single-line function calls is not affected by this change.
+    As of this release, if a function call is multi-line, each parameter should start on a new line and an `error` will be thrown if the code being analyzed does not comply with that rule.
+    The sniff behavior for single-line function calls is not affected by this change.
 - Moved the `WordPress.CodeAnalysis.EmptyStatement` sniff from the `WordPress-Extra` to the `WordPress-Core` ruleset.
 - Moved the `Squiz.PHP.CommentedOutCode` sniff from the `WordPress-Docs` to the `WordPress-Extra` ruleset and lowered the threshold for determining whether or not a comment is commented out code from 45% to 40%.
 - The `WordPress.NamingConventions.PrefixAllGlobals` sniff now has improved support for recognizing whether or not (non-prefixed) globals are declared in the context of unit tests.
@@ -881,7 +881,7 @@ Note: This will be the last release supporting PHP_CodeSniffer 2.x.
 ### Fixed
 - The `WordPress.Security.ValidatedSanitizedInput` sniff will now recognize array keys in superglobals independently of the string quote-style used for the array key.
 - The `WordPress.WhiteSpace.PrecisionAlignment` sniff will no longer throw false positives for DocBlocks for JavaScript functions within inline HTML.
-- `WordPress.WP.DeprecatedClasses`: The error codes for this sniff were unstable as they were based on the code being analysed instead of on fixed values.
+- `WordPress.WP.DeprecatedClasses`: The error codes for this sniff were unstable as they were based on the code being analyzed instead of on fixed values.
 - Various bugfixes for the `WordPress.WP.GlobalVariablesOverride` sniff:
     - Previously, the sniff only checked variables in the global namespace when a `global` statement would be encountered. As of now, all variable assignments in the global namespace will be checked.
     - Nested functions/closures/classes which don't import the global variable will now be skipped over when encountered within another function, preventing false positives.
@@ -1089,8 +1089,8 @@ If you are a maintainer of an external standard based on WPCS and any of your cu
 
 ### Added
 - `WordPress.Arrays.MultipleStatementAlignment` sniff to the `WordPress-Core` ruleset which will align the array assignment operator for multi-item, multi-line associative arrays.
-    This new sniff offers four custom properties to customize its behaviour: [`ignoreNewlines`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-allow-for-new-lines), [`exact`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-allow-non-exact-alignment), [`maxColumn`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-maximum-column) and [`alignMultilineItems`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-dealing-with-multi-line-items).
-- `WordPress.DB.PreparedSQLPlaceholders` sniff to the `WordPress-Core` ruleset which will analyse the placeholders passed to `$wpdb->prepare()` for their validity, check whether queries using `IN ()` and `LIKE` statements are created correctly and will check whether a correct number of replacements are passed.
+    This new sniff offers four custom properties to customize its behavior: [`ignoreNewlines`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-allow-for-new-lines), [`exact`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-allow-non-exact-alignment), [`maxColumn`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-maximum-column) and [`alignMultilineItems`](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#array-alignment-dealing-with-multi-line-items).
+- `WordPress.DB.PreparedSQLPlaceholders` sniff to the `WordPress-Core` ruleset which will analyze the placeholders passed to `$wpdb->prepare()` for their validity, check whether queries using `IN ()` and `LIKE` statements are created correctly and will check whether a correct number of replacements are passed.
     This sniff should help detect queries which are impacted by the security fixes to `$wpdb->prepare()` which shipped with WP 4.8.2 and 4.8.3.
     The sniff also adds a new ["PreparedSQLPlaceholders replacement count" whitelist comment](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Whitelisting-code-which-flags-errors#preparedsql-placeholders-vs-replacements) for pertinent replacement count vs placeholder mismatches. Please consider carefully whether something could be a bug when you are tempted to use the whitelist comment and if so, [report it](https://github.com/WordPress/WordPress-Coding-Standards/issues/new).
 - `WordPress.PHP.DiscourageGoto` sniff to the `WordPress-Core` ruleset.
@@ -1110,7 +1110,7 @@ If you are a maintainer of an external standard based on WPCS and any of your cu
 - When passing an array property via a custom ruleset to PHP_CodeSniffer, spaces around the key/value are taken as intentional and parsed as part of the array key/value. In practice, this leads to confusion and WPCS does not expect any values which could be preceded/followed by a space, so for the WordPress Coding Standard native array properties, like `customAutoEscapedFunction`, `text_domain`, `prefixes`, WPCS will now trim whitespace from the keys/values received before use.
 - The WPCS native whitelist comments used to only work when they were put on the _end of the line_ of the code they applied to. As of now, they will also be recognized when they are be put at the _end of the statement_ they apply to.
 - The `WordPress.Arrays.ArrayDeclarationSpacing` sniff used to enforce all associative arrays to be multi-line. The handbook has been updated to only require this for multi-item associative arrays and the sniff has been updated accordingly.
-    [The original behaviour can still be enforced](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#arrays-forcing-single-item-associative-arrays-to-be-multi-line) by setting the new `allow_single_item_single_line_associative_arrays` property to `false` in a custom ruleset.
+    [The original behavior can still be enforced](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#arrays-forcing-single-item-associative-arrays-to-be-multi-line) by setting the new `allow_single_item_single_line_associative_arrays` property to `false` in a custom ruleset.
 - The `WordPress.NamingConventions.PrefixAllGlobals` sniff will now allow for a limited list of WP core hooks which are intended to be called by plugins and themes.
 - The `WordPress.PHP.DiscouragedFunctions` sniff used to include `create_function`. This check has been moved to the new `WordPress.PHP.RestrictedFunctions` sniff.
 - The `WordPress.PHP.StrictInArray` sniff now has a separate error code `FoundNonStrictFalse` for when the `$strict` parameter has been set to `false`. This allows for excluding the warnings for that particular situation, which will normally be intentional, via a custom ruleset.
@@ -1329,7 +1329,7 @@ You are also encouraged to check the file history of any WPCS classes you extend
 ### Removed
 - Warnings thrown by individual sniffs about parse errors they encounter. This is left up to the `Generic.PHP.Syntax` sniff which is included in the `WordPress-Extra` ruleset.
 - The `post_class()` function from the `autoEscapedFunctions` list used by the `WordPress.XSS.EscapeOutput` sniff.
-- The `Generic.Files.LowercasedFilename` sniff from the `WordPress-Core` ruleset in favour of the improved `WordPress.Files.FileName` sniff to prevent duplicate messages being thrown.
+- The `Generic.Files.LowercasedFilename` sniff from the `WordPress-Core` ruleset in favor of the improved `WordPress.Files.FileName` sniff to prevent duplicate messages being thrown.
 - Some temporary work-arounds for changes which were pulled and merged into PHPCS upstream.
 
 ### Fixed

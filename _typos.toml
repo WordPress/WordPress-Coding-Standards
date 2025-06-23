@@ -22,3 +22,5 @@ extend-ignore-identifiers-re = [
 ]
 
 [default.extend-words]
+# Don't correct a limited list of specific words.
+Automattic = "Automattic"
