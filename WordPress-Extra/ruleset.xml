@@ -15,7 +15,6 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/382 -->
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
-	<rule ref="Generic.Functions.CallTimePassByReference"/>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
 	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
 	<rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
