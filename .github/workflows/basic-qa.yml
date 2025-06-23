@@ -254,3 +254,15 @@ jobs:
 
       - name: Run PHPStan
         run: phpstan analyse
+
+  typos-check:
+    name: "Find typos"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Search for misspellings"
+        uses: "crate-ci/typos@v1"
