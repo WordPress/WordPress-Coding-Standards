@@ -173,7 +173,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * List is sorted alphabetically.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.1.0.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -229,6 +229,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 		'edit_app_password'           => true,
 		'edit_categories'             => true,
 		'edit_block'                  => true, // Only seen in tests.
+		'edit_block_binding'          => true,
 		'edit_blocks'                 => true, // Alias for 'edit_posts', but supported.
 		'edit_comment'                => true, // Alias, but supported.
 		'edit_comment_meta'           => true,
