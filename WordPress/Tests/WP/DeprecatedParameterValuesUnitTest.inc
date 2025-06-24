@@ -50,5 +50,10 @@ update_option('blacklist_keys', $value);
 update_option('comment_whitelist', $value);
 update_option(autoload: true, value: $value, option: 'blacklist_keys');
 
+// Passing boolean $settings is deprecated since WP 6.6.0.
+wp_get_typography_font_size_value( $preset, array() ); // OK.
+wp_get_typography_font_size_value( $preset, true ); // Error.
+wp_get_typography_font_size_value( $preset, false ); // Error.
+
 // Live coding/parse error.
 get_bloginfo( show: /*to do*/, );
