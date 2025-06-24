@@ -90,14 +90,17 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		$start_line = 388;
-		$end_line   = 428;
+		$end_line   = 443;
 		$warnings   = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
 		unset(
 			$warnings[390],
 			$warnings[414],
-			$warnings[425]
+			$warnings[425],
+			$warnings[429],
+			$warnings[432],
+			$warnings[442]
 		);
 
 		return $warnings;
