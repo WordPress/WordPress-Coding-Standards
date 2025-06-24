@@ -23,10 +23,10 @@ $json = new Services_JSON;
 $json = new Services_JSON_Error;
 class Prefix_Menu_section extends WP_Privacy_Data_Export_Requests_Table {}
 WP_Privacy_Data_Removal_Requests_Table::foo();
+/* ============ WP 6.4 ============ */
+WP_Http_Curl::do_something();
+$streams = new WP_Http_Streams();
 
 /*
  * Warning
  */
-/* ============ WP 6.4 ============ */
-WP_Http_Curl::do_something();
-$streams = new WP_Http_Streams();
