@@ -69,7 +69,7 @@ final class NoSilencedErrorsSniff extends Sniff {
 	 *
 	 * Errors caused by calls to any of these native PHP functions
 	 * are allowed to be silenced as file system permissions and such
-	 * can cause E_WARNINGs to be thrown which cannot be prevented via
+	 * can cause `E_WARNING`s to be thrown which cannot be prevented via
 	 * error checking.
 	 *
 	 * Note: only calls to global functions - in contrast to class methods -

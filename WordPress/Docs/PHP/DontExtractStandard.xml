@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Forbids the usage of the PHP native `extract()` function. Using `extract()` makes code harder to debug, harder to understand and may cause unexpected behaviour when variables names conflict.
+    Forbids the usage of the PHP native `extract()` function. Using `extract()` makes code harder to debug, harder to understand and may cause unexpected behavior when variables names conflict.
     ]]>
     </standard>
     <code_comparison>

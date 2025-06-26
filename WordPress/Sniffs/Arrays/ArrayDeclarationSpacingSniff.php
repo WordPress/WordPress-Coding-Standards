@@ -34,9 +34,9 @@ use WordPressCS\WordPress\Sniff;
  *               The `WordPress.Arrays.ArrayDeclaration` sniff has now been deprecated.
  * @since 0.13.0 Class name changed: this class is now namespaced.
  * @since 0.14.0 Single item associative arrays are now by default exempt from the
- *               "must be multi-line" rule. This behaviour can be changed using the
+ *               "must be multi-line" rule. This behavior can be changed using the
  *               `allow_single_item_single_line_associative_arrays` property.
- * @since 3.0.0  Removed various whitespace related checks and fixers in favour of the PHPCSExtra
+ * @since 3.0.0  Removed various whitespace related checks and fixers in favor of the PHPCSExtra
  *               `NormalizedArrays.Arrays.ArrayBraceSpacing` sniff.
  */
 final class ArrayDeclarationSpacingSniff extends Sniff {
