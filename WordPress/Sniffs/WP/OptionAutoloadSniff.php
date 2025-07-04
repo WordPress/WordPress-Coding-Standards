@@ -201,7 +201,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		}
 
 		if ( 'wp_set_option_autoload_values' === $function_name ) {
-			$this->handle_wp_set_option_autoload_values( $target_param, $stackPtr );
+			$this->handle_wp_set_option_autoload_values( $target_param );
 			return;
 		}
 
@@ -232,11 +232,10 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 * @since 3.2.0
 	 *
 	 * @param array $options_param Options parameter information.
-	 * @param int   $stackPtr      The position of the current token in the stack.
 	 *
 	 * @return void
 	 */
-	private function handle_wp_set_option_autoload_values( array $options_param, $stackPtr ) {
+	private function handle_wp_set_option_autoload_values( array $options_param ) {
 		$array_token = $this->phpcsFile->findNext(
 			Tokens::$emptyTokens,
 			$options_param['start'],
