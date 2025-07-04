@@ -17,8 +17,8 @@ use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
- * Warns when calls to add_option(), update_option(), wp_set_options_autoload(),
- * wp_set_option_autoload(), wp_set_option_autoload_values() are missing the `$autoload` param or
+ * Warns when calls to `add_option()`, `update_option()`, `wp_set_options_autoload()`,
+ * `wp_set_option_autoload()`, `wp_set_option_autoload_values()` are missing the `$autoload` param or
  * contain an invalid, internal or deprecated value.
  *
  * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/2473
@@ -38,7 +38,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	const METRIC_NAME = 'Value of the `$autoload` parameter in the option functions';
 
 	/**
-	 * Valid values for the `$autoload` parameter in the add_option() and update_option() functions.
+	 * Valid values for the `$autoload` parameter in the `add_option()` and `update_option()` functions.
 	 *
 	 * @since 3.2.0
 	 *
@@ -51,8 +51,8 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Valid values for the `$autoload` parameter in the wp_set_options_autoload(),
-	 * wp_set_option_autoload(), and wp_set_option_autoload_values() functions.
+	 * Valid values for the `$autoload` parameter in the `wp_set_options_autoload()`,
+	 * `wp_set_option_autoload()`, and `wp_set_option_autoload_values()` functions.
 	 *
 	 * @since 3.2.0
 	 *
