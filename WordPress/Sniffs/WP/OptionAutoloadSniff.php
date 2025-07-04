@@ -68,7 +68,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var array<string, true>
+	 * @var array<string, true> The key is the name of the deprecated value. The array value is irrelevant.
 	 */
 	private $deprecated_values = array(
 		'yes' => true,
@@ -80,7 +80,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var array<string, true>
+	 * @var array<string, true> The key is the non-fixable value. The array value is irrelevant.
 	 */
 	private $internal_values_non_fixable = array(
 		'auto'     => true,
@@ -93,7 +93,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var array<string, true>
+	 * @var array<string, true> The key is the fixable value. The array value is irrelevant.
 	 */
 	private $internal_values_fixable = array(
 		'on'  => true,
@@ -119,7 +119,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @var array<string, true>
+	 * @var array<string, true> The key is the function name. The value is irrelevant.
 	 */
 	private $autoload_is_optional = array(
 		'add_option'    => true,
