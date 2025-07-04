@@ -293,10 +293,10 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 * @return void
 	 */
 	private function maybe_display_missing_autoload_warning( $stackPtr, $function_name ) {
-		$this->phpcsFile->recordMetric( $stackPtr, self::METRIC_NAME, 'param missing' );
-
 		// Only display a warning for the functions in which the `$autoload` parameter is optional.
 		if ( isset( $this->autoload_is_optional[ $function_name ] ) ) {
+			$this->phpcsFile->recordMetric( $stackPtr, self::METRIC_NAME, 'param missing' );
+
 			$this->phpcsFile->addWarning(
 				'It is recommended to always pass the `$autoload` parameter when using %s() function.',
 				$stackPtr,
