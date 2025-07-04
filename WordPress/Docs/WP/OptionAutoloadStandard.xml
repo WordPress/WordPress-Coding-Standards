@@ -20,9 +20,8 @@
     - For `wp_set_option_autoload_values()`, `wp_set_option_autoload()`, and
     `wp_set_options_autoload()`: `true` or `false`.
 
-    Using 'yes' or 'no' is deprecated since WordPress 6.6.0. Using 'auto', 'auto-on', 'auto-off',
-    'on', or 'off' in plugin/theme code is strongly discouraged as those values are meant for
-    internal-use only.
+    Using 'yes' or 'no' is deprecated since WordPress 6.6.0. Plugin/theme code should also not use
+    values for the parameter which are for WP core internal use only.
 
     Any other values, including `null` for functions other than `add_option()` and `update_option()`,
     are invalid.
@@ -31,10 +30,8 @@
     <code_comparison>
         <code title="Valid: Using a boolean value or `null`">
         <![CDATA[
-add_option(
-    'my_option',
-    'value',
-    '',
+wp_set_options_autoload(
+    array('option1', 'option2'),
     <em>true</em>
 );
 
