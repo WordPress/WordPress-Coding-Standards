@@ -22,6 +22,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * contain an invalid, internal or deprecated value.
  *
  * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/2473
+ * @link https://felix-arntz.me/blog/autoloading-wordpress-options-efficiently-and-responsibly/ For more information on how to use the autoload flag.
  *
  * @since 3.2.0
  */
