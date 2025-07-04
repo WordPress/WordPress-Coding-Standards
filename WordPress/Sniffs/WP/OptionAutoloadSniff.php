@@ -58,7 +58,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, string>
 	 */
-	private $valid_values_other_functions = array(
+	private $valid_values_wp_set_option_functions = array(
 		'true'  => 'true',
 		'false' => 'false',
 	);
@@ -349,7 +349,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		if ( isset( $this->autoload_is_optional[ $function_name ] ) ) {
 			$valid_values = $this->valid_values_add_and_update;
 		} else {
-			$valid_values = $this->valid_values_other_functions;
+			$valid_values = $this->valid_values_wp_set_option_functions;
 		}
 
 		if ( isset( $valid_values[ $normalized_value ] ) ) {
