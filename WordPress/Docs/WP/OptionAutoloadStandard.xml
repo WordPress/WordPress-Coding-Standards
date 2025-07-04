@@ -7,8 +7,9 @@
     <![CDATA[
     When using `add_option()`, `update_option()`, `wp_set_options_autoload()`,
     `wp_set_option_autoload()`, or `wp_set_option_autoload_values()`, it is recommended to
-    explicitly set the autoload parameter to ensure predictable behavior. This parameter determines
-    whether the option is automatically loaded on every page load, which can impact site performance.
+    explicitly set the autoload parameter to ensure predictable behavior.
+    The autoload flag determines whether the option is automatically loaded on every page load,
+    which can impact site performance.
     ]]>
     </standard>
     <standard>
@@ -23,7 +24,7 @@
     'on', or 'off' in plugin/theme code is strongly discouraged as those values are meant for
     internal-use only.
 
-    Any other values, including `null` for functions other than `add_option()` and `update_option()`
+    Any other values, including `null` for functions other than `add_option()` and `update_option()`,
     are invalid.
     ]]>
     </standard>
@@ -75,7 +76,7 @@ wp_set_options_autoload(
     <standard>
     <![CDATA[
     Even though the autoload parameter is optional for `add_option()` and `update_option()`, it is
-    recommended to always explicitly set it.
+    strongly recommended to always explicitly set it.
     ]]>
     </standard>
     <code_comparison>

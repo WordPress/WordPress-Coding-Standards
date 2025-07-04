@@ -240,7 +240,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		$array_token = $this->phpcsFile->findNext(
 			Tokens::$emptyTokens,
 			$options_param['start'],
-			$options_param['end'],
+			( $options_param['end'] + 1 ),
 			true
 		);
 
@@ -311,8 +311,8 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @param array  $autoload_info Information about the autoload value (start and end tokens and
-	 *                              the clean value).
+	 * @param array  $autoload_info Information about the autoload value (start and end tokens,
+	 *                              the clean value and potentially the "raw" value - which isn't used).
 	 * @param string $function_name The token content (function name) which was matched
 	 *                              in lowercase.
 	 *
@@ -369,7 +369,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		if ( $param_second_token
 			&& false === isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $param_first_token ]['code'] ] )
 		) {
-			// Bail early if the parameter has two or more non-empty tokens and the second token is
+			// Bail early if the parameter has two or more non-empty tokens and the first token is
 			// not an array opener as this means an undetermined param value or a value that is not
 			// easy to determine.
 			$this->phpcsFile->recordMetric( $param_first_token, self::METRIC_NAME, 'undetermined value' );
@@ -401,13 +401,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 			$error_code = 'InternalUseOnly';
 			$data       = array( $autoload_info['clean'] );
 		} else {
-			$valid_values        = array_map(
-				function ( $value ) {
-					return '`' . $value . '`';
-				},
-				$valid_values
-			);
-			$valid_values_string = implode( ', ', $valid_values );
+			$valid_values_string = '`' . implode( '`, `', $valid_values ) . '`';
 			$valid_values_string = substr_replace( $valid_values_string, ' or', strrpos( $valid_values_string, ',' ), 1 );
 			$message             = 'The use of `%s` as the value of the `$autoload` parameter is invalid. Use %s instead.';
 			$error_code          = 'InvalidValue';
@@ -422,7 +416,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 				$data
 			);
 
-			if ( $fix ) {
+			if ( true === $fix ) {
 				$this->phpcsFile->fixer->replaceToken( $param_first_token, $this->fixable_values[ $autoload_value ] );
 			}
 
