@@ -179,11 +179,11 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @param int    $stackPtr      The position of the current token in the stack.
-	 * @param string $group_name    The name of the group which was matched.
-	 * @param string $function_name The token content (function name) which was matched
-	 *                              in lowercase.
-	 * @param array  $parameters    Array with information about the parameters.
+	 * @param int                                   $stackPtr      The position of the current token in the stack.
+	 * @param string                                $group_name    The name of the group which was matched.
+	 * @param string                                $function_name The token content (function name) which was matched
+	 *                                                             in lowercase.
+	 * @param array<int, array<string, int|string>> $parameters    Array with information about the parameters.
 	 *
 	 * @return void
 	 */
@@ -232,7 +232,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @param array $options_param Options parameter information.
+	 * @param array<string, int|string> $options_param Options parameter information.
 	 *
 	 * @return void
 	 */
@@ -311,10 +311,10 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @param array  $autoload_info Information about the autoload value (start and end tokens,
-	 *                              the clean value and potentially the "raw" value - which isn't used).
-	 * @param string $function_name The token content (function name) which was matched
-	 *                              in lowercase.
+	 * @param array<string, int|string> $autoload_info Information about the autoload value (start and end tokens, the
+	 *                                                 clean value and potentially the "raw" value - which isn't used).
+	 * @param string                    $function_name The token content (function name) which was matched
+	 *                                                 in lowercase.
 	 *
 	 * @return void
 	 */
