@@ -243,7 +243,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 			true
 		);
 
-		if ( false === isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $array_token ]['code'] ] ) ) {
+		if ( false === $array_token || false === isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $array_token ]['code'] ] ) ) {
 			// Bail if the first non-empty token in the parameter is not an array opener as this
 			// means it is not possible to determine the option names and autoload values passed to
 			// wp_set_option_autoload_values().
