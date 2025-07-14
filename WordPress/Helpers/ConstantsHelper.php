@@ -16,7 +16,7 @@ use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 
 /**
- * Helper utilities for identifying constants in PHP code.
+ * Helper utilities for identifying the use of global constants in PHP code.
  *
  * ---------------------------------------------------------------------------------------------
  * This class is only intended for internal use by WordPressCS and is not part of the public API.
