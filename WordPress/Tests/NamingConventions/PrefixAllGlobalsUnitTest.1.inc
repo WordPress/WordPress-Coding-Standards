@@ -276,7 +276,7 @@ apply_filters( $_REQUEST['else'] ); // Warning.
 
 class Acronym_Dynamic_Hooks {
 	const FILTER = 'acronym';
-	const FILTER_WITH_UNDERSCORE = 'acronym_';
+	const ?string FILTER_WITH_UNDERSCORE = 'acronym_';
 
 	protected $filter = 'acronym';
 	protected $filter_with_underscore = 'acronym_';
