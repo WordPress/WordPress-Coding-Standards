@@ -394,11 +394,11 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 			$data       = array( $autoload_info['clean'], $this->fixable_values[ $autoload_value ] );
 		} elseif ( isset( $this->internal_values_fixable[ $autoload_value ] ) ) {
 			$message    = 'The use of `%s` as the value of the `$autoload` parameter is discouraged. Use `%s` instead.';
-			$error_code = 'InternalUseOnly';
+			$error_code = 'InternalUseOnlyOnOff';
 			$data       = array( $autoload_info['clean'], $this->fixable_values[ $autoload_value ] );
 		} elseif ( isset( $this->internal_values_non_fixable [ $autoload_value ] ) ) {
 			$message    = 'The use of `%s` as the value of the `$autoload` parameter is discouraged.';
-			$error_code = 'InternalUseOnly';
+			$error_code = 'InternalUseOnlyAuto';
 			$data       = array( $autoload_info['clean'] );
 		} else {
 			$valid_values_string = '`' . implode( '`, `', $valid_values ) . '`';
