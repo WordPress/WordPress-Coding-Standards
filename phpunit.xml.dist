@@ -25,6 +25,7 @@
 			<file>./WordPress/AbstractClassRestrictionsSniff.php</file>
 			<file>./WordPress/AbstractFunctionParameterSniff.php</file>
 			<file>./WordPress/AbstractFunctionRestrictionsSniff.php</file>
+			<file>./WordPress/AbstractValidSlugSniff.php</file>
 			<directory>./WordPress/Sniffs/</directory>
 			<directory>./WordPress/Helpers/</directory>
 		</whitelist>

@@ -49,7 +49,7 @@ EOD
 register_post_type( "my-own-post-type-too-long-{$i}" ); // 1x Error, Too long. 1x Warning, post type may or may not get too long with dynamic contents in the id.
 register_post_type( 'my/own/post/type/too/long', array() ); // Bad. Invalid chars: "/" and too long.
 
-register_post_type( 'wp_block', array() ); // Bad. Must only error on reserved keyword, not invalid prefix.
+register_post_type( 'wp_block', array() ); // Bad. Must only error on reserved name, not invalid prefix.
 
 // Test handling of more complex embedded variables and expressions.
 register_post_type("testing123-${(foo)}-test");
