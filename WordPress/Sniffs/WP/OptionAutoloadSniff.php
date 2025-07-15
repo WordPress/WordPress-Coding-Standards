@@ -334,7 +334,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 
 		$normalized_value = strtolower( $autoload_info['clean'] );
 
-		if ( \T_NS_SEPARATOR === $this->tokens[ $param_first_token ]['code'] && $param_second_token ) {
+		if ( \T_NS_SEPARATOR === $this->tokens[ $param_first_token ]['code'] && is_int( $param_second_token ) ) {
 			$token_content_lowercase = strtolower( $this->tokens[ $param_second_token ]['content'] );
 
 			if ( isset( $this->valid_values_add_and_update[ $token_content_lowercase ] ) ) {

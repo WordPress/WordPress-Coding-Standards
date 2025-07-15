@@ -117,6 +117,11 @@ final class OptionAutoloadUnitTest extends AbstractSniffUnitTest {
 					227 => 1,
 				);
 
+			case 'OptionAutoloadUnitTest.3.inc':
+				return array(
+					8 => 1,
+				);
+
 			default:
 				return array();
 		}
