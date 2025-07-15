@@ -360,8 +360,17 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 		if ( in_array( $this->tokens[ $param_first_token ]['code'], array( \T_VARIABLE, \T_STRING ), true )
 			&& 'null' !== strtolower( $this->tokens[ $param_first_token ]['content'] )
 		) {
-			// Bail early if the first non-empty token in the parameter is T_VARIABLE or T_STRING as
-			// this means it is not possible to determine the value.
+			/*
+			 * Bail early if the first non-empty token in the parameter is T_VARIABLE or T_STRING as
+			 * this means it is not possible to determine the value.
+			 *
+			 * Exception for `null`: when FQN `\null` is used, PHPCS tokenizes it as T_STRING. Since
+			 * `null` is a known invalid value for the `$autoload` parameter in some functions (not
+			 * an undetermined value), we shouldn't bail in this case.
+			 *
+			 * Similar special treatment for FQN `\true` and `\false` is not needed as these values
+			 * are always valid and already handled in the condition above.
+			 */
 			$this->phpcsFile->recordMetric( $param_first_token, self::METRIC_NAME, 'undetermined value' );
 			return;
 		}
