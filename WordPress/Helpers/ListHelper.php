@@ -15,7 +15,7 @@ use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Lists;
 
 /**
- * Helper utilities for checking the context in which a token is used.
+ * Helper utilities for working with lists.
  *
  * ---------------------------------------------------------------------------------------------
  * This class is only intended for internal use by WordPressCS and is not part of the public API.
