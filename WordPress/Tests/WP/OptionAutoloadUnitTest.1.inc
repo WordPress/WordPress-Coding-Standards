@@ -84,6 +84,7 @@ $ignored = wp_set_option_autoload_values(
  * These are ignored because the option names and the autoload values can't be reliably determined
  * or the `$options` parameter is empty.
  */
+$ignored = wp_set_option_autoload_values($options);
 $ignored = wp_set_option_autoload_values( $options );
 $ignored = wp_set_option_autoload_values( options: $options );
 $ignored = wp_set_option_autoload_values(array());
