@@ -378,7 +378,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 
 		$autoload_value = TextStrings::stripQuotes( $autoload_info['clean'] );
 
-		$known_discouraged_values = array_merge( $this->deprecated_values, $this->internal_values_non_fixable, $this->internal_values_fixable );
+		$known_discouraged_values = $this->deprecated_values + $this->internal_values_non_fixable + $this->internal_values_fixable;
 
 		if ( isset( $known_discouraged_values[ $autoload_value ] ) ) {
 			$metric_value = $autoload_value;
