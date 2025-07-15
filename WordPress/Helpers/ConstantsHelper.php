@@ -42,7 +42,7 @@ final class ConstantsHelper {
 	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The position of the function call token.
+	 * @param int                         $stackPtr  The position of the T_STRING token.
 	 *
 	 * @return bool
 	 */
