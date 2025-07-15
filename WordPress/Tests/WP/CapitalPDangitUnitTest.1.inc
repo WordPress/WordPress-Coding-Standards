@@ -102,7 +102,7 @@ if ( $counts['wordpress'] ) { // OK.
  *
  * @link OK: http://justintadlock.com/archives/2011/07/01/captions-in-wordpress
  */
- 
+
 if ( file_exists( ABSPATH . 'wp-content/plugins/wordpress-importer/wordpress-importer.php' ) ) { // OK.
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
@@ -129,8 +129,8 @@ $default_editor_settings = [
 				'label' 		=> __( 'Arouse Documentation', 'arouse' ),
 				'content' 		=> __( '<a class="button" href="https://themezhut.com/arouse-wordpress-theme-documentation/" target="_blank">Read the documentation.</a>', 'arouse' ), // OK.
 			)
-		) 
-	);	
+		)
+	);
 
 ?>
 

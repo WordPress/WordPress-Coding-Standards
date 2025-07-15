@@ -6,7 +6,7 @@ namespace My;
 
 class DBlayer {
 	const VERSION = '1.0';
-	
+
 	public static $property = true;
 
 	public static function connect() {
