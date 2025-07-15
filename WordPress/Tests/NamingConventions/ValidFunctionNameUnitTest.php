@@ -60,6 +60,8 @@ final class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 					210 => 1,
 					223 => function_exists( 'mb_strtolower' ) ? 1 : 0,
 					224 => 1,
+					230 => 1,
+					231 => 1,
 				);
 
 			default:

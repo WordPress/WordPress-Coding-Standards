@@ -222,3 +222,12 @@ enum Suit {
 function lähtöaika() {} // OK.
 function lÄhtÖaika() {} // Bad, but only handled by the sniff if Mbstring is available.
 function lÄhtOaika() {} // Bad, handled via transliteration of non-ASCII chars if Mbstring is not available.
+
+/*
+ * Safeguard that PHP 8.3+ readonly anonymous classes are handled correctly.
+ */
+$anon_class = new readonly class() {
+    public function camelCase() {} // Bad.
+    protected function __something() {} // Bad.
+    private function snake_case() {} // Ok.
+};
