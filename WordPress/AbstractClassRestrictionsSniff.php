@@ -123,6 +123,15 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 		if ( \in_array( $token['code'], array( \T_NEW, \T_EXTENDS, \T_IMPLEMENTS ), true ) ) {
 			if ( \T_NEW === $token['code'] ) {
+				$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+
+				if ( false === $nextNonEmpty
+					|| \in_array( $this->tokens[ $nextNonEmpty ]['code'], array( \T_READONLY, \T_ANON_CLASS, \T_ATTRIBUTE ), true )
+				) {
+					// Live coding or anonymous class (bow out for anonymous classes as they don't have a name).
+					return false;
+				}
+
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_TAG ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_CLOSE_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
