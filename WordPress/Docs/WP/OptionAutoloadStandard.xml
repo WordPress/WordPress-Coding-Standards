@@ -14,6 +14,33 @@
     </standard>
     <standard>
     <![CDATA[
+    Even though the autoload parameter is optional for `add_option()` and `update_option()`, it is
+    strongly recommended to always explicitly set it.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Explicitly setting the autoload parameter.">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    '',
+    <em>true</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Autoload parameter missing.">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    ''
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
     The following values should be used when setting the autoload parameter depending on the function:
 
     - For `add_option()` and `update_option()`: `true`, `false`, or `null`.
@@ -66,33 +93,6 @@ wp_set_option_autoload_values(
 wp_set_options_autoload(
     array('option1', 'option2'),
     <em>1</em>
-);
-        ]]>
-        </code>
-    </code_comparison>
-    <standard>
-    <![CDATA[
-    Even though the autoload parameter is optional for `add_option()` and `update_option()`, it is
-    strongly recommended to always explicitly set it.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: Explicitly setting the autoload parameter.">
-        <![CDATA[
-add_option(
-    'my_option',
-    'value',
-    '',
-    <em>true</em>
-);
-        ]]>
-        </code>
-        <code title="Invalid: Autoload parameter missing.">
-        <![CDATA[
-add_option(
-    'my_option',
-    'value',
-    ''
 );
         ]]>
         </code>
