@@ -30,10 +30,7 @@ final class IniSetSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @var array Multidimensional array with parameter details.
-	 *     $target_functions = array(
-	 *         (string) Function name.
-	 *     );
+	 * @var array<string, true> Key is function name, value irrelevant.
 	 */
 	protected $target_functions = array(
 		'ini_set'   => true,
@@ -47,7 +44,7 @@ final class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * @since 2.1.0
 	 * @since 3.0.0 Renamed from `$whitelisted_options` to `$safe_options`.
 	 *
-	 * @var array Multidimensional array with parameter details.
+	 * @var array<string, array<string, array<string>>> Multidimensional array with parameter details.
 	 *     $safe_options = array(
 	 *         (string) option name. = array(
 	 *             (string[]) 'valid_values' = array()
@@ -74,7 +71,7 @@ final class IniSetSniff extends AbstractFunctionParameterSniff {
 	 * @since 2.1.0
 	 * @since 3.0.0 Renamed from `$blacklisted_options` to `$disallowed_options`.
 	 *
-	 * @var array Multidimensional array with parameter details.
+	 * @var array<string, array<string, string|array<string>>> Multidimensional array with parameter details.
 	 *     $disallowed_options = array(
 	 *         (string) option name. = array(
 	 *             (string[]) 'invalid_values' = array()

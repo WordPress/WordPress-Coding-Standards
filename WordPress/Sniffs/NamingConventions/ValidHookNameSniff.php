@@ -69,7 +69,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.11.0
 	 *
-	 * @return array
+	 * @return array<string, array<string, array<string>>>
 	 */
 	public function getGroups() {
 		// Only retrieve functions which are not used for deprecated hooks.
