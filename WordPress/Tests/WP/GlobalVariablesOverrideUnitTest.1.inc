@@ -310,7 +310,3 @@ list(
 	array( $tab, $tabs ) => $not_a_wp_global,
 	get($year, $day) => &$not_a_wp_global[$year]
 ] = $array;
-
-// Live coding/parse error.
-// This has to be the last test in the file!
-list( $tab, $tabs
