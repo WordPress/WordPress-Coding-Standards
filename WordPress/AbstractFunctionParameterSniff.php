@@ -78,8 +78,8 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 			 * No need for extensive defensive coding as the `is_targetted_token()` method has already
 			 * validated the open and close parentheses exist.
 			 */
-			$next          = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next + 1 ), null, true );
+			$openParens    = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $openParens + 1 ), null, true );
 			if ( \T_ELLIPSIS === $this->tokens[ $firstNonEmpty ]['code'] ) {
 				return $this->process_first_class_callable( $stackPtr, $group_name, $matched_content );
 			} else {
