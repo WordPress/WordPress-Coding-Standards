@@ -48,7 +48,7 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 * @since 3.0.0 The format of the value has changed to support function calls
 	 *              using named parameters.
 	 *
-	 * @var array Multidimensional array with parameter details.
+	 * @var array<string, array<int, array<string, mixed>>> Multidimensional array with parameter details.
 	 *     $target_functions = array(
 	 *         (string) Function name. => array(
 	 *             (int) Target parameter position, 1-based. => array(

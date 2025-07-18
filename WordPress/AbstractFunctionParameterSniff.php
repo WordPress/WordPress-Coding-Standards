@@ -32,17 +32,17 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	/**
 	 * Functions this sniff is looking for. Should be defined in the child class.
 	 *
-	 * @var array The only requirement for this array is that the top level
-	 *            array keys are the names of the functions you're looking for.
-	 *            Other than that, the array can have arbitrary content
-	 *            depending on your needs.
+	 * @var array<string, mixed> The only requirement for this array is that the top level
+	 *                           array keys are the names of the functions you're looking for.
+	 *                           Other than that, the array can have arbitrary content
+	 *                           depending on your needs.
 	 */
 	protected $target_functions = array();
 
 	/**
 	 * Groups of functions to restrict.
 	 *
-	 * @return array
+	 * @return array<string, array<string, array<string>>>
 	 */
 	public function getGroups() {
 		if ( empty( $this->target_functions ) ) {
