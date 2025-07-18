@@ -5,7 +5,7 @@
  */
 
 if ( isset ( $_POST['prefix_myfield'] ) { // OK.
-	
+
 	do_something();
 	do_something();
 	do_something();

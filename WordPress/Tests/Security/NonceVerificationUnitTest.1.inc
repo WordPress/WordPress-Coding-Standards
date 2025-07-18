@@ -466,7 +466,7 @@ function function_containing_nested_enum_with_nonce_check() {
 			wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['my_nonce'] ) ), 'the_nonce' );
 		}
 	}
-	
+
 	echo $_POST['foo']; // Bad.
 }
 
