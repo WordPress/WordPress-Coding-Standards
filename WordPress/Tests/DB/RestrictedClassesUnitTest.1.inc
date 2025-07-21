@@ -112,6 +112,6 @@ $anon = new readonly class {
     public function PDO() {} // OK.
 };
 
-$anon = new readonly class extends PDOStatement {}; // Error.
+$anon = new readonly class() extends PDOStatement {}; // Error.
 
 $anon = new #[MyAttribute] readonly class {};

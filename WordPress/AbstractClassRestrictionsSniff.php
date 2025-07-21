@@ -128,7 +128,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 				if ( false === $nextNonEmpty
 					|| \in_array( $this->tokens[ $nextNonEmpty ]['code'], array( \T_READONLY, \T_ANON_CLASS, \T_ATTRIBUTE ), true )
 				) {
-					// Live coding or anonymous class (bow out for anonymous classes as they don't have a name).
+					// Live coding or anonymous class. Bow out.
 					return false;
 				}
 
