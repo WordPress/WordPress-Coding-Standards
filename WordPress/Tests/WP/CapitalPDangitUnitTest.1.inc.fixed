@@ -233,7 +233,7 @@ echo Some\Enum\WordPress::ENUM_CONSTANT;
 $anon = new class() {};
 
 /*
- * Safeguard that PHP 8.3+ typed class constants are handled correctly.
+ * Safeguard that PHP 8.3+ typed class constants are handled correctly (i.e. ignored).
  */
 class TypeClassConstants {
     public const string WORDPRESS = 'wordress';
