@@ -231,3 +231,16 @@ echo Some\Enum\WordPress::ENUM_CONSTANT;
 
 // Safeguard that the sniff doesn't act on anonymous classes.
 $anon = new class() {};
+
+/*
+ * Safeguard that PHP 8.3+ typed class constants are handled correctly (i.e. ignored).
+ */
+class TypeClassConstants {
+    public const string WORDPRESS = 'wordress';
+
+    public const ?string ANOTHER = 'value',
+        WORDPRESS_SOMETHING = 'wordpress';
+
+	// Ensures no false positives on incorrect casing in a class constant type name.
+    public const (\Fully\Qualified\MyClass&wordPRESS)|string ANOTHER_WORDPRESS = 'wordpress';
+}
