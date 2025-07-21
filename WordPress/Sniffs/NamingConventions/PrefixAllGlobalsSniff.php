@@ -147,7 +147,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
@@ -201,7 +201,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated functions should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0.
 	 *
@@ -322,6 +322,13 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentytwenty_get_customizer_css'                => true,
 		'twentytwenty_get_theme_svg'                     => true,
 		'twentytwenty_the_theme_svg'                     => true,
+		'twentytwentyfive_block_styles'                  => true,
+		'twentytwentyfive_editor_style'                  => true,
+		'twentytwentyfive_enqueue_styles'                => true,
+		'twentytwentyfive_format_binding'                => true,
+		'twentytwentyfive_pattern_categories'            => true,
+		'twentytwentyfive_post_format_setup'             => true,
+		'twentytwentyfive_register_block_bindings'       => true,
 		'twentytwentyfour_block_styles'                  => true,
 		'twentytwentyfour_block_stylesheets'             => true,
 		'twentytwentyfour_pattern_categories'            => true,
@@ -358,6 +365,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'wp_notify_postauthor'                           => true,
 		'wp_parse_auth_cookie'                           => true,
 		'wp_password_change_notification'                => true,
+		'wp_password_needs_rehash'                       => true,
 		'wp_rand'                                        => true,
 		'wp_redirect'                                    => true,
 		'wp_safe_redirect'                               => true,
@@ -382,7 +390,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated classes should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0.
 	 *

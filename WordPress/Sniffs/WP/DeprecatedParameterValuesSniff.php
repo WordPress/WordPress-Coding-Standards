@@ -42,7 +42,8 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 * The list of deprecated parameter values can be found by
 	 * looking for `_deprecated_argument()`.
 	 * The list is sorted alphabetically by function name.
-	 * Last updated for WordPress 4.9.6.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 The format of the value has changed to support function calls
@@ -203,6 +204,21 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 					'comment_whitelist' => array(
 						'alt'     => 'comment_previously_approved',
 						'version' => '5.5.0',
+					),
+				),
+			),
+		),
+		'wp_get_typography_font_size_value' => array(
+			2 => array(
+				'name'   => 'settings',
+				'values' => array(
+					'true' => array(
+						'alt'     => 'an array',
+						'version' => '6.6.0',
+					),
+					'false' => array(
+						'alt'     => 'an array',
+						'version' => '6.6.0',
 					),
 				),
 			),

@@ -41,7 +41,7 @@ final class DeprecatedClassesSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Version numbers should be fully qualified.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @var array
 	 */
