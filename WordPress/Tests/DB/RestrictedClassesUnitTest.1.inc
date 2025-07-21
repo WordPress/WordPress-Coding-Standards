@@ -104,3 +104,14 @@ $anon = new class extends PDOStatement {}; // Error.
 
 // PHP 8.1: enums can implement.
 enum MysqliEnum implements mysqli {} // Error.
+
+/*
+ * Safeguard handling of PHP 8.3+ readonly anonymous classes.
+ */
+$anon = new readonly class {
+    public function PDO() {} // OK.
+};
+
+$anon = new readonly class() extends PDOStatement {}; // Error.
+
+$anon = new #[MyAttribute] readonly class {};
