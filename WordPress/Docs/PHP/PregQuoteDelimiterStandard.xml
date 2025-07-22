@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Preg Quote Delimiter"
+    >
+    <standard>
+    <![CDATA[
+    Passing the $delimiter parameter to preg_quote() is strongly recommended. If it is not passed, the default delimiters `/` are presumed, which is often wrong.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: The delimiter is included.">
+        <![CDATA[
+preg_quote( $dir, '#' )
+        ]]>
+        </code>
+        <code title="Invalid: The delimiter is not included.">
+        <![CDATA[
+preg_quote( $dir );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
