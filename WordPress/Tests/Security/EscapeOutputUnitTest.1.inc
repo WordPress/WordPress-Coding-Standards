@@ -655,3 +655,13 @@ echo '<input type="search" value="' . get_search_query( false ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( 0 ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( escape: false ) . '">'; // OK, well not really, typo in param name, but that's not our concern.
 echo '<input type="search" value="' . get_search_query( escaped: false ) . '">'; // Bad.
+
+/*
+ * Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/2552
+ * Ensure that readonly anonymous classes and anonymous classes with attributes are handled
+ * correctly when part of a throw statement.
+ */
+throw new #[MyAttribute] readonly class( esc_html( $message ) ) extends Exception {}; // Good.
+throw new readonly class( $unescaped ) {}; // Bad.
+throw new #[MyAttribute] class( $unescaped ) extends Exception {}; // Bad.
+throw new #[MyAttribute] readonly class( $unescaped ) extends Exception {}; // Bad.
