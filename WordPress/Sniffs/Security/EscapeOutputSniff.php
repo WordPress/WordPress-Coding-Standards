@@ -53,6 +53,16 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 	use PrintingFunctionsTrait;
 
 	/**
+ * Custom list of functions whose output is already considered escaped.
+ *
+ * @var array<string, bool>
+ */
+protected $customAutoEscapedFunctions = array(
+    'do_blocks' => true,
+);
+
+
+	/**
 	 * Printing functions that incorporate unsafe values.
 	 *
 	 * @since 0.4.0
