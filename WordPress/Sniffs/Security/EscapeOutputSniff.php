@@ -216,10 +216,11 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			case \T_THROW:
 				// Find the open parentheses, while stepping over the exception creation tokens.
-				$ignore  = Tokens::$emptyTokens;
-				$ignore += Collections::namespacedNameTokens();
-				$ignore += Collections::functionCallTokens();
-				$ignore += Collections::objectOperators();
+				$ignore               = Tokens::$emptyTokens;
+				$ignore              += Collections::namespacedNameTokens();
+				$ignore              += Collections::functionCallTokens();
+				$ignore              += Collections::objectOperators();
+				$ignore[ T_READONLY ] = T_READONLY;
 
 				$next_relevant = $this->phpcsFile->findNext( $ignore, ( $stackPtr + 1 ), null, true );
 				if ( false === $next_relevant ) {
@@ -228,6 +229,24 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 				if ( \T_NEW === $this->tokens[ $next_relevant ]['code'] ) {
 					$next_relevant = $this->phpcsFile->findNext( $ignore, ( $next_relevant + 1 ), null, true );
+					if ( false === $next_relevant ) {
+						return;
+					}
+				}
+
+				// Skip over attribute declarations when searching for the open parenthesis.
+				if ( \T_ATTRIBUTE === $this->tokens[ $next_relevant ]['code'] ) {
+					if ( isset( $this->tokens[ $next_relevant ]['attribute_closer'] ) === false ) {
+						return;
+					}
+
+					$next_relevant = $this->phpcsFile->findNext(
+						$ignore,
+						( $this->tokens[ $next_relevant ]['attribute_closer'] + 1 ),
+						null,
+						true
+					);
+
 					if ( false === $next_relevant ) {
 						return;
 					}
