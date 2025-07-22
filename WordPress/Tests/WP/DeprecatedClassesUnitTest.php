@@ -28,11 +28,11 @@ final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		$start_line = 9;
-		$end_line   = 25;
+		$end_line   = 28;
 		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		// Unset the lines related to version comments.
-		unset( $errors[16], $errors[18], $errors[21] );
+		unset( $errors[16], $errors[18], $errors[21], $errors[26] );
 
 		return $errors;
 	}
@@ -43,9 +43,6 @@ final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
-		return array(
-			31 => 1,
-			32 => 1,
-		);
+		return array();
 	}
 }
