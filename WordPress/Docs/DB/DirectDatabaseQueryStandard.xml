@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Direct Database Query"
+    >
+    <standard>
+    <![CDATA[
+    You should not make direct database queries, but instead use abstractions such as WP_Query.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using WP_Query to retrieve data.">
+        <![CDATA[
+$my_query = new WP_Query(
+    [
+        'post_type' => 'foo',
+    ]
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using a direct query to retrieve data.">
+        <![CDATA[
+$results = $wpdb->get_results(
+    $wpdb->prepare(
+        "SELECT * FROM x WHERE y = %s",
+        'foo',
+    ),
+);
+        ]]>
+        </code>
+    </code_comparison>
+
+    <standard>
+    <![CDATA[
+    You should not make direct database queries without caching.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: The results of a direct database query are stored in the object cache.">
+        <![CDATA[
+function foo() {
+    global $wpdb;
+    
+    $cached = wp_cache_get( 'foo' );
+    if ( false !== $cached ) {
+        return $cached;
+    }
+
+    $results = $wpdb->query(
+        'SELECT x FROM foo'
+    );
+
+    wp_cache_set( 'foo', $results );
+    return $results;
+}
+        ]]>
+        </code>
+        <code title="Invalid: Direct database query is made without leveraging the object cache.">
+        <![CDATA[
+function foo() {
+    global $wpdb;
+    return $wpdb->query( 'SELECT x FROM foo' );
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: The results of a direct database query are stored in the object cache.">
+        <![CDATA[
+function foo() {
+    global $wpdb;
+
+    $cached = wp_cache_get( 'foo' );
+    if ( false !== $cached ) {
+        return $cached;
+    }
+
+    $results = $wpdb->query(
+        'SELECT x FROM foo'
+    );
+
+    wp_cache_set( 'foo', $results );
+    return $results;
+}
+        ]]>
+        </code>
+        <code title="Invalid: Incorrect implementation of caching with a direct database query.">
+        <![CDATA[
+function foo() {
+    global $wpdb;
+    $results = $wpdb->query(
+        'SELECT * from foo'
+    );
+
+    wp_cache_set( 'foo', $results );
+    return $results;
+}
+        ]]>
+        </code>
+    </code_comparison>
+
+    <standard>
+    <![CDATA[
+    You should not make direct database queries to alter the database schema.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Altering database schema using the dbDelta function.">
+        <![CDATA[
+dbDelta( 'CREATE TABLE foo' );
+        ]]>
+        </code>
+        <code title="Invalid: Altering database schema using a direct database query.">
+        <![CDATA[
+$wpdb->query( 'CREATE TABLE foo' );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
