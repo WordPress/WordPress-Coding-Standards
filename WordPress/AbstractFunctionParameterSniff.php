@@ -72,7 +72,19 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 		$parameters = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 
 		if ( empty( $parameters ) ) {
-			return $this->process_no_parameters( $stackPtr, $group_name, $matched_content );
+			/*
+			 * Check if this is a first class callable.
+			 *
+			 * No need for extensive defensive coding as the `is_targetted_token()` method has already
+			 * validated the open and close parentheses exist.
+			 */
+			$openParens    = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+			$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $openParens + 1 ), null, true );
+			if ( \T_ELLIPSIS === $this->tokens[ $firstNonEmpty ]['code'] ) {
+				return $this->process_first_class_callable( $stackPtr, $group_name, $matched_content );
+			} else {
+				return $this->process_no_parameters( $stackPtr, $group_name, $matched_content );
+			}
 		} else {
 			return $this->process_parameters( $stackPtr, $group_name, $matched_content, $parameters );
 		}
@@ -102,15 +114,6 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 		if ( isset( $this->tokens[ $next ]['parenthesis_closer'] ) === false ) {
 			// Syntax error or live coding: missing closing parenthesis.
 			return false;
-		}
-
-		// First class callable.
-		$firstNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next + 1 ), null, true );
-		if ( \T_ELLIPSIS === $this->tokens[ $firstNonEmpty ]['code'] ) {
-			$secondNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $firstNonEmpty + 1 ), null, true );
-			if ( \T_CLOSE_PARENTHESIS === $this->tokens[ $secondNonEmpty ]['code'] ) {
-				return false;
-			}
 		}
 
 		return true;
@@ -147,4 +150,20 @@ abstract class AbstractFunctionParameterSniff extends AbstractFunctionRestrictio
 	 *                  normal file processing.
 	 */
 	public function process_no_parameters( $stackPtr, $group_name, $matched_content ) {}
+
+	/**
+	 * Process the function if it is used as a first class callable.
+	 *
+	 * Defaults to doing nothing. Can be overloaded in child classes to implement specific checks
+	 * on first class callable use of the function.
+	 *
+	 * @param int    $stackPtr        The position of the current token in the stack.
+	 * @param string $group_name      The name of the group which was matched.
+	 * @param string $matched_content The token content (function name) which was matched
+	 *                                in lowercase.
+	 *
+	 * @return int|void Integer stack pointer to skip forward or void to continue
+	 *                  normal file processing.
+	 */
+	public function process_first_class_callable( $stackPtr, $group_name, $matched_content ) {}
 }
