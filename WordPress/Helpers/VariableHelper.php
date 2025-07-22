@@ -209,11 +209,11 @@ final class VariableHelper {
 	 *                                                      This must point to either a T_VARIABLE or
 	 *                                                      T_CLOSE_SQUARE_BRACKET token.
 	 * @param bool                        $include_coalesce Optional. Whether or not to regard the null
-	 *                                                      coalesce operator - ?? - as a comparison operator.
+	 *                                                      coalesce equal operator - `??=` - as an assignment operator.
 	 *                                                      Defaults to true.
-	 *                                                      Null coalesce is a special comparison operator in this
-	 *                                                      sense as it doesn't compare a variable to whatever is
-	 *                                                      on the other side of the comparison operator.
+	 *                                                      Null coalesce is a special assignment operator, in the
+	 *                                                      sense that the assignment will only happen if the variable
+	 *                                                      being assigned to is currently `null`.
 	 *
 	 * @return bool Whether the token is a variable being assigned a value.
 	 */
