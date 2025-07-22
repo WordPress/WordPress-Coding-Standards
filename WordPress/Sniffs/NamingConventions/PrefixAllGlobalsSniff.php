@@ -58,8 +58,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Minimal number of characters the prefix needs in order to be valid.
 	 *
-	 * @since 3.2.0 The minimum number of characters was raised from 3 to 4.
 	 * @since 2.2.0
+	 * @since 3.2.0 The minimum number of characters was raised from 3 to 4.
 	 *
 	 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1733 Issue 1733.
 	 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/2467 Issue 2467.
