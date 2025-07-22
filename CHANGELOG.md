@@ -175,10 +175,10 @@ More information is available in the [Upgrade Guide to WordPressCS 3.0.0 for Dev
 - `WordPress-Core`: The `Generic.Files.EndFileNewline` sniff has been replaced by the more comprehensive `PSR2.Files.EndFileNewline` sniff.
 - A number of sniffs support setting the minimum WP version for the code being scanned.
     This could be done in two different ways:
-	1. By setting the `minimum_supported_version` property for each sniff from a ruleset.
-	2. By passing `--runtime-set minimum_supported_wp_version #.#` on the command line.
-	The names of the property and the CLI setting have now been aligned to both use `minimum_wp_version` as the name.
-	Both ways of passing the value are still supported.
+    1. By setting the `minimum_supported_version` property for each sniff from a ruleset.
+    2. By passing `--runtime-set minimum_supported_wp_version #.#` on the command line.
+    The names of the property and the CLI setting have now been aligned to both use `minimum_wp_version` as the name.
+    Both ways of passing the value are still supported.
 - `WordPress.NamingConventions.PrefixAllGlobals`: the `custom_test_class_whitelist` property has been renamed to `custom_test_classes`.
 - `WordPress.NamingConventions.ValidVariableName`: the `customPropertiesWhitelist` property has been renamed to `allowed_custom_properties`.
 - `WordPress.PHP.NoSilencedErrors`: the `custom_whitelist` property has been renamed to `customAllowedFunctionsList`.
@@ -553,7 +553,7 @@ The move does not affect the package name for Packagist. This remains the same: 
 - New `Sniff::get_array_access_keys()` utility method to retrieve all array keys for a variable using multi-level array access.
 - New `Sniff::is_class_object_call()`, `Sniff::is_token_namespaced()` utility methods.
     These should help make the checking of whether or not a function call is a global function, method call or a namespaced function call more consistent.
-	This also implements allowing for the [namespace keyword being used as an operator](https://www.php.net/manual/en/language.namespaces.nsconstants.php#example-258).
+    This also implements allowing for the [namespace keyword being used as an operator](https://www.php.net/manual/en/language.namespaces.nsconstants.php#example-258).
 - New `Sniff::is_in_function_call()` utility method to facilitate checking whether a token is (part of) a parameter passed to a specific (set of) function(s).
 - New `Sniff::is_in_type_test()` utility method to determine if a variable is being type tested, along with a `Sniff::$typeTestFunctions` property containing the names of the functions this applies to.
 - New `Sniff::is_in_array_comparison()` utility method to determine if a variable is (part of) a parameter in an array-value comparison, along with a `Sniff::$arrayCompareFunctions` property containing the names of the relevant functions.
@@ -666,7 +666,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
     If you are referencing the old error code in a ruleset XML file or in inline annotations, you may need to update it.
 - The `WordPress.NamingConventions.PrefixAllGlobals` sniff used the same error code for some errors as well as warnings.
     The `NonPrefixedConstantFound` error code remains for the related error, but the warning will now use the new `VariableConstantNameFound` error code.
-	The `NonPrefixedHooknameFound` error code remains for the related error, but the warning will now use the new `DynamicHooknameFound` error code.
+    The `NonPrefixedHooknameFound` error code remains for the related error, but the warning will now use the new `DynamicHooknameFound` error code.
     If you are referencing the old error codes in a ruleset XML file or in inline annotations, you may need to update these to use the new codes instead.
 - `WordPress.NamingConventions.ValidVariableName`: the error messages and error codes used by this sniff have been changed for improved usability and consistency.
     - The error messages will now show a suggestion for a valid alternative name for the variable.
@@ -694,7 +694,7 @@ If you are a maintainer of an external standard based on WordPressCS and any of 
 - Updated the [custom ruleset example](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/phpcs.xml.dist.sample) to use the recommended ruleset syntax for `PHP_CodeSniffer` 3.3.1+, including using the new [array property format](https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/3.3.0) which is now supported.
 - Dev: The command to run the unit tests has changed. Please see the updated instructions in the [CONTRIBUTING.md](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/.github/CONTRIBUTING.md) file.
     The `bin/pre-commit` example git hook has been updated to match. Additionally a `run-tests` script has been added to the `composer.json` file for your convenience.
-	To facilitate this, PHPUnit has been added to `require-dev`, even though it is strictly speaking a dependency of PHPCS, not of WPCS.
+    To facilitate this, PHPUnit has been added to `require-dev`, even though it is strictly speaking a dependency of PHPCS, not of WPCS.
 - Dev: The [Composer PHPCS plugin] has been added to `require-dev`.
 - Various code tweaks and clean up.
 - User facing documentation, including the wiki, as well as inline documentation has been updated for all the changes contained in WordPressCS 2.0 and other recommended best practices for `PHP_CodeSniffer` 3.3.1+.
@@ -858,8 +858,8 @@ Note: This will be the last release supporting PHP_CodeSniffer 2.x.
     * Allows for a used-defined list of (additional) function names to be passed to the sniff via the `custom_whitelist` property in a custom ruleset, for which - if the error control operator is detected in front of a function call to one of the functions in this whitelist - no warnings will be thrown.
     * Displays a brief snippet of code in the `warning` message text to show the context in which the error control operator is being used. The length of the snippet (in tokens) can be customized via the `context_length` property.
     * Contains a public `use_default_whitelist` property which can be set from a custom ruleset which regulates whether or not the standard whitelist of PHP functions should be used by the sniff.
-	    The user-defined whitelist will always be respected.
-	    By default, this property is set to `true` for the `WordPress-Core` ruleset and to `false` for the `WordPress-Extra` ruleset (which is stricter regarding these kind of best practices).
+        The user-defined whitelist will always be respected.
+        By default, this property is set to `true` for the `WordPress-Core` ruleset and to `false` for the `WordPress-Extra` ruleset (which is stricter regarding these kind of best practices).
 - Metrics to the `WordPress.NamingConventions.PrefixAllGlobals` sniff to aid people in determining the most commonly used prefix in a legacy project.
     For an example of how to use this feature, please see the detailed explanation in the [pull request](https://github.com/WordPress/WordPress-Coding-Standards/pull/1437).
 
