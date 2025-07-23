@@ -671,4 +671,8 @@ die( status: $foo ); // Bad.
 throw new #[MyAttribute] readonly class( esc_html( $message ) ) extends Exception {}; // Good.
 throw new readonly class( $unescaped ) {}; // Bad.
 throw new #[MyAttribute] class( $unescaped ) extends Exception {}; // Bad.
-throw new #[MyAttribute] readonly class( $unescaped ) extends Exception {}; // Bad.
+throw new
+#[Attribute1]
+/* some comment */
+#[Attribute2('text', 10)]
+readonly class( $unescaped ) {}; // Bad.

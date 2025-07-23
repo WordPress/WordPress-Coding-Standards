@@ -235,7 +235,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				}
 
 				// Skip over attribute declarations when searching for the open parenthesis.
-				if ( \T_ATTRIBUTE === $this->tokens[ $next_relevant ]['code'] ) {
+				while ( \T_ATTRIBUTE === $this->tokens[ $next_relevant ]['code'] ) {
 					if ( isset( $this->tokens[ $next_relevant ]['attribute_closer'] ) === false ) {
 						return;
 					}
