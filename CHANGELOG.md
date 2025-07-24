@@ -8,6 +8,67 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 _No documentation available about unreleased changes as of yet._
 
+## [3.2.0] - 2025-07-24
+
+### Added
+- New `WordPress.WP.GetMetaSingle` sniff to the `WordPress-Extra` ruleset. Props [@rodrigoprimo]! [#2465]
+    This sniff warns when `get_*_meta()` and `get_metadata*()` functions are used with the `$meta_key`/`$key` param, but without the `$single` parameter as this could lead to unexpected behavior due to the different return types.
+- `WordPress-Extra`: the following additional sniffs have been added to the ruleset: `Generic.Strings.UnnecessaryHeredoc` and `Generic.WhiteSpace.HereNowdocIdentifierSpacing`. [#2534]
+- The `rest_sanitize_boolean()` functions to the list of known "sanitizing" functions. Props [@westonruter]. [#2530]
+- End-user documentation to the following existing sniffs: `WordPress.DB.PreparedSQL` (props [@jaymcp], [#2454]), `WordPress.NamingConventions.ValidFunctionName` (props [@richardkorthuis] and [@rodrigoprimo], [#2452], [#2531]), `WordPress.NamingConventions.ValidVariableName` (props [@richardkorthuis], [#2457]).
+    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Usage).
+
+### Changed
+- The minimum required `PHP_CodeSniffer` version to 3.13.0 (was 3.9.0). [#2532]
+- The minimum required `PHPCSUtils` version to 1.1.0 (was 1.0.10). [#2532]
+- The minimum required `PHPCSExtra` version to 1.4.0 (was 1.2.1). [#2532]
+- Sniffs based on the `AbstractFunctionParameterSniff` will now call a dedicated `process_first_class_callable()` method for PHP 8.1+ first class callables. Props [@rodrigoprimo], [@jrfnl]. [#2518], [#2544]
+    By default, the method won't do anything, but individual sniffs extending the `AbstractFunctionParameterSniff` class can choose to implement the method to handle first class callables.
+    Previously, first class callables were treated as a function call without parameters and would trigger the `process_no_parameters()` method.
+- The minimum required prefix length for the `WordPress.NamingConventions.PrefixAllGlobals` sniff has been changed from 3 to 4 characters. Props [@davidperezgar]. [#2479]
+- The default value for `minimum_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#various-sniffs-set-the-minimum-supported-wp-version), has been updated to `6.5`. [#2553]
+- `WordPress.NamingConventions.ValidVariableName` now allows for PHP 8.4 properties in interfaces. [#2532]
+- `WordPress.NamingConventions.PrefixAllGlobals` has been updated to recognize pluggable functions introduced in WP up to WP 6.8.1. [#2537]
+- `WordPress.WP.Capabilities` has been updated to recognize new capabilities introduced in WP up to WP 6.8.1. [#2537]
+- `WordPress.WP.ClassNameCase` has been updated to recognize classes introduced in WP up to WP 6.8.1. [#2537]
+- `WordPress.WP.DeprecatedFunctions` now detects functions deprecated in WordPress up to WP 6.8.1. [#2537]
+- `WordPress.WP.DeprecatedParameters` now detects parameters deprecated in WordPress up to WP 6.8.1. [#2537]
+- `WordPress.WP.DeprecatedParameterValues` now detects parameter values deprecated in WordPress up to WP 6.8.1. [#2537]
+- Minor performance improvements.
+- Developer happiness: prevent creating a `composer.lock` file. Thanks [@fredden]! [#2443]
+- Various housekeeping, including documentation and test improvements. Includes contributions by [@rodrigoprimo] and [@szepeviktor].
+- All sniffs are now also being tested against PHP 8.4 for consistent sniff results. [#2511]
+
+### Deprecated
+
+### Removed
+
+- The `Generic.Functions.CallTimePassByReference` has been removed from the `WordPress-Extra` ruleset. Props [@rodrigoprimo]. [#2536]
+    This sniff was dated anyway and deprecated in PHP_CodeSniffer. If you need to check if your code is PHP cross-version compatible, use the [PHPCompatibility] standard instead.
+
+### Fixed
+- Sniffs based on the `AbstractClassRestrictionsSniff` could previously run into a PHPCS `Internal.Exception`, leading to fixes not being made. [#2500]
+- Sniffs based on the `AbstractFunctionParameterSniff` will now bow out more often when it is sure the code under scan is not calling the target function and during live coding, preventing false positives. Props [@rodrigoprimo]. [#2518]
+
+[#2443]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2443
+[#2465]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2465
+[#2452]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2452
+[#2454]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2454
+[#2457]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2457
+[#2479]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2479
+[#2500]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2500
+[#2511]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2511
+[#2518]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2518
+[#2530]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2530
+[#2531]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2531
+[#2532]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2532
+[#2534]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2534
+[#2536]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2536
+[#2537]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2537
+[#2544]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2544
+[#2553]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2553
+
+
 ## [3.1.0] - 2024-03-25
 
 ### Added
@@ -1602,8 +1663,10 @@ Initial tagged release.
 
 [Composer PHPCS plugin]: https://github.com/PHPCSStandards/composer-installer
 [PHP_CodeSniffer]:       https://github.com/PHPCSStandards/PHP_CodeSniffer
+[PHPCompatibility]:      https://github.com/PHPCompatibility/PHPCompatibility
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/main...HEAD
+[3.2.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2.3.0...3.0.0
@@ -1635,20 +1698,25 @@ Initial tagged release.
 [0.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-10-06...0.3.0
 [2013-10-06]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
 
-[@anomiex]:       https://github.com/anomiex
-[@Chouby]:        https://github.com/Chouby
-[@ckanitz]:       https://github.com/ckanitz
-[@craigfrancis]:  https://github.com/craigfrancis
-[@dawidurbanski]: https://github.com/dawidurbanski
-[@desrosj]:       https://github.com/desrosj
-[@grappler]:      https://github.com/grappler
-[@Ipstenu]:       https://github.com/Ipstenu
-[@JDGrimes]:      https://github.com/JDGrimes
-[@khacoder]:      https://github.com/khacoder
-[@Luc45]:         https://github.com/Luc45
-[@marconmartins]: https://github.com/marconmartins
-[@NielsdeBlaauw]: https://github.com/NielsdeBlaauw
-[@rodrigoprimo]:  https://github.com/rodrigoprimo
-[@slaFFik]:       https://github.com/slaFFik
-[@sandeshjangam]: https://github.com/sandeshjangam
-[@westonruter]:   https://github.com/westonruter
+[@anomiex]:         https://github.com/anomiex
+[@Chouby]:          https://github.com/Chouby
+[@ckanitz]:         https://github.com/ckanitz
+[@craigfrancis]:    https://github.com/craigfrancis
+[@davidperezgar]:   https://github.com/davidperezgar
+[@dawidurbanski]:   https://github.com/dawidurbanski
+[@desrosj]:         https://github.com/desrosj
+[@fredden]:         https://github.com/fredden
+[@grappler]:        https://github.com/grappler
+[@Ipstenu]:         https://github.com/Ipstenu
+[@jaymcp]:          https://github.com/jaymcp
+[@JDGrimes]:        https://github.com/JDGrimes
+[@khacoder]:        https://github.com/khacoder
+[@Luc45]:           https://github.com/Luc45
+[@marconmartins]:   https://github.com/marconmartins
+[@NielsdeBlaauw]:   https://github.com/NielsdeBlaauw
+[@richardkorthuis]: https://github.com/richardkorthuis
+[@rodrigoprimo]:    https://github.com/rodrigoprimo
+[@slaFFik]:         https://github.com/slaFFik
+[@sandeshjangam]:   https://github.com/sandeshjangam
+[@szepeviktor]:     https://github.com/szepeviktor
+[@westonruter]:     https://github.com/westonruter
