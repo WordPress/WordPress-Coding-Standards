@@ -9,12 +9,12 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: use of a current (non-deprecated) class.">
+        <code title="Valid: Use of a current (non-deprecated) class.">
         <![CDATA[
 $a = new <em>WP_User_Query</em>();
         ]]>
         </code>
-        <code title="Invalid: use of a deprecated class.">
+        <code title="Invalid: Use of a deprecated class.">
         <![CDATA[
 $a = new <em>WP_User_Search</em>(); // Deprecated WP 3.1.
         ]]>

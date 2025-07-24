@@ -31,7 +31,7 @@ Alternatively, if you have push access to this repo, create a feature branch pre
 ## Public properties
 
 When writing sniffs, always remember that any `public` sniff property can be overruled via a custom ruleset by the end-user.
-Only make a property `public` if that is the intended behaviour.
+Only make a property `public` if that is the intended behavior.
 
 When you introduce new `public` sniff properties, or your sniff extends a class from which you inherit a `public` property, please don't forget to update the [public properties wiki page](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties) with the relevant details once your PR has been merged into the `develop` branch.
 
@@ -39,9 +39,9 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ## Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 3.9.0 or higher
-* PHPCSUtils 1.0.10 or higher
-* PHPCSExtra 1.2.1 or higher
+* PHP_CodeSniffer 3.13.0 or higher
+* PHPCSUtils 1.1.0 or higher
+* PHPCSExtra 1.4.0 or higher
 * PHPUnit 4.x - 9.x
 
 The WordPress Coding Standards use the `PHP_CodeSniffer` native unit test framework for unit testing the sniffs.

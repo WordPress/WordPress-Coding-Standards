@@ -37,7 +37,7 @@ trait WPDBTrait {
 	 * @since 3.0.0  - Moved from the Sniff class to this dedicated Trait.
 	 *               - The `$phpcsFile` parameter was added.
 	 *
-	 * {@internal This method should be refactored to not exhibit "magic" behaviour
+	 * {@internal This method should be refactored to not exhibit "magic" behavior
 	 *            for properties in the sniff class(es) using it.}}
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile      The file being scanned.

@@ -11,7 +11,7 @@
 
 function acronym_unfinished_global_statement($param) {
 	global $var1, $var2 // Deliberately missing semi-colon.
-	
+
 	foreach ($param as $var2) {}
 }
 

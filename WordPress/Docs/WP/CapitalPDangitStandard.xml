@@ -5,9 +5,9 @@
     >
     <standard>
     <![CDATA[
-The correct spelling of "WordPress" should be used in text strings, comments and object names.
+    The correct spelling of "WordPress" should be used in text strings, comments and object names.
 
-In select cases, when part of an identifier or a URL, WordPress does not have to be capitalized.
+    In select cases, when part of an identifier or a URL, WordPress does not have to be capitalized.
     ]]>
     </standard>
     <code_comparison>

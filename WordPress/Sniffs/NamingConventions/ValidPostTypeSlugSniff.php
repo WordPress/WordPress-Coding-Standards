@@ -63,7 +63,7 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Source: {@link https://developer.wordpress.org/reference/functions/register_post_type/#reserved-post-types}
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 2.2.0
 	 *

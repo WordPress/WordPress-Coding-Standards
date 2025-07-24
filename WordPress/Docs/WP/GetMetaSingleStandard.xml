@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Get Meta Function Single Parameter"
+    >
+    <standard>
+    <![CDATA[
+    When calling the `get_(comment|post|site|term|user)_meta()`, `get_metadata()`,
+    `get_metadata_default()`, and `get_metadata_raw()` functions, if the `$[meta_]key` parameter is
+    passed, the `$single` parameter should be passed as well to make it explicit whether the
+    functions should return a single value (the first value) or an array of values stored for the
+    meta key.
+
+    Note that these functions may still return `false` for an invalid ID. They may also return an
+    empty string if `$single` is `true` or an empty array if `$single` is `false` for a valid but
+    non-existing ID. This can be confusing as these might be valid values for a meta value.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Get meta functions called either without the `$[meta_]key` parameter; or with both the `$[meta_]key` and the `$single` parameters.">
+        <![CDATA[
+$admin_color = get_user_meta(
+    $user_id,
+    <em>'admin_color'</em>,
+    <em>true</em>
+);
+$post_meta = get_metadata( 'post', $post_id<em></em> );
+        ]]>
+        </code>
+        <code title="Invalid: Get meta function called with the `$[meta_]key` parameter, but without the `$single` parameter.">
+        <![CDATA[
+$admin_color = get_user_meta(
+    $user_id,
+    <em>'admin_color'</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

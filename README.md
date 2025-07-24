@@ -10,7 +10,7 @@
 [![codecov.io](https://codecov.io/gh/WordPress/WordPress-Coding-Standards/graph/badge.svg?token=UzFYn0RzVG&branch=develop)](https://codecov.io/gh/WordPress/WordPress-Coding-Standards?branch=develop)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Tested on PHP 5.4 to 8.3](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%207.3%20|%207.4%20|%208.0%20|%208.1%20|%208.2%20|%208.3-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
+[![Tested on PHP 5.4 to 8.4](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%207.3%20|%207.4%20|%208.0%20|%208.1%20|%208.2%20|%208.3%20|%208.4-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
 
 [![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/LICENSE)
 [![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
@@ -30,7 +30,7 @@
 * [Rulesets](#rulesets)
     + [Standards subsets](#standards-subsets)
     + [Using a custom ruleset](#using-a-custom-ruleset)
-    + [Customizing sniff behaviour](#customizing-sniff-behaviour)
+    + [Customizing sniff behavior](#customizing-sniff-behavior)
     + [Recommended additional rulesets](#recommended-additional-rulesets)
 * [How to use](#how-to-use)
     + [Command line](#command-line)
@@ -135,9 +135,9 @@ When you name this file either `.phpcs.xml`, `phpcs.xml`, `.phpcs.xml.dist` or `
 
 For more info, read about [using a default configuration file](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Advanced-Usage#using-a-default-configuration-file). See also the provided WordPressCS [`phpcs.xml.dist.sample`](phpcs.xml.dist.sample) file and the [fully annotated example ruleset](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-ruleset.xml) in the PHP_CodeSniffer documentation.
 
-### Customizing sniff behaviour
+### Customizing sniff behavior
 
-The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behaviour by setting a property for the sniff in your custom `[.]phpcs.xml[.dist]` file.
+The WordPress Coding Standard contains a number of sniffs which are configurable. This means that you can turn parts of the sniff on or off, or change the behavior by setting a property for the sniff in your custom `[.]phpcs.xml[.dist]` file.
 
 You can find a complete list of all the properties you can change for the WordPressCS sniffs in the [wiki](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties).
 
@@ -151,7 +151,7 @@ Information on custom properties which can be set for sniffs from PHP_CodeSniffe
 #### PHPCompatibility
 
 The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) ruleset and its subset [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) come highly recommended.
-The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) sniffs are designed to analyse your code for cross-version PHP compatibility.
+The [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) sniffs are designed to analyze your code for cross-version PHP compatibility.
 
 The [PHPCompatibilityWP](https://github.com/PHPCompatibility/PHPCompatibilityWP) ruleset is based on PHPCompatibility, but specifically crafted to prevent false positives for projects which expect to run within the context of WordPress, i.e. core, plugins and themes.
 

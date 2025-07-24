@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Valid Function Name"
+>
+    <standard>
+    <![CDATA[
+    Use lowercase letters in function names. Separate words using underscores. Do not use double underscores as a prefix.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Lowercase function name.">
+        <![CDATA[
+function <em>prefix_function_name()</em> {}
+        ]]>
+        </code>
+        <code title="Invalid: Mixed case function name.">
+        <![CDATA[
+function <em>Prefix_Function_NAME()</em> {}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Words separated by underscores.">
+        <![CDATA[
+class My_Class {
+    public static function <em>method_name()</em> {}
+}
+        ]]>
+        </code>
+        <code title="Invalid: Using camel case to separate words.">
+        <![CDATA[
+class My_Class {
+    public static function <em>methodName()</em> {}
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Single underscore prefix is allowed.">
+        <![CDATA[
+function <em>_prefix_function_name()</em> {}
+        ]]>
+        </code>
+        <code title="Invalid: Double underscore prefix is not allowed.">
+        <![CDATA[
+function <em>__prefix_function_name()</em> {}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

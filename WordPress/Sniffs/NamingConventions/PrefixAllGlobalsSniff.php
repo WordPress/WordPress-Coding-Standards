@@ -59,12 +59,14 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Minimal number of characters the prefix needs in order to be valid.
 	 *
 	 * @since 2.2.0
+	 * @since 3.2.0 The minimum number of characters was raised from 3 to 4.
 	 *
 	 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1733 Issue 1733.
+	 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/2467 Issue 2467.
 	 *
 	 * @var int
 	 */
-	const MIN_PREFIX_LENGTH = 3;
+	const MIN_PREFIX_LENGTH = 4;
 
 	/**
 	 * Target prefixes.
@@ -147,7 +149,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
@@ -201,7 +203,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated functions should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0.
 	 *
@@ -322,6 +324,13 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentytwenty_get_customizer_css'                => true,
 		'twentytwenty_get_theme_svg'                     => true,
 		'twentytwenty_the_theme_svg'                     => true,
+		'twentytwentyfive_block_styles'                  => true,
+		'twentytwentyfive_editor_style'                  => true,
+		'twentytwentyfive_enqueue_styles'                => true,
+		'twentytwentyfive_format_binding'                => true,
+		'twentytwentyfive_pattern_categories'            => true,
+		'twentytwentyfive_post_format_setup'             => true,
+		'twentytwentyfive_register_block_bindings'       => true,
 		'twentytwentyfour_block_styles'                  => true,
 		'twentytwentyfour_block_stylesheets'             => true,
 		'twentytwentyfour_pattern_categories'            => true,
@@ -358,6 +367,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'wp_notify_postauthor'                           => true,
 		'wp_parse_auth_cookie'                           => true,
 		'wp_password_change_notification'                => true,
+		'wp_password_needs_rehash'                       => true,
 		'wp_rand'                                        => true,
 		'wp_redirect'                                    => true,
 		'wp_safe_redirect'                               => true,
@@ -382,7 +392,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated classes should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0.
 	 *
@@ -617,7 +627,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 					if ( DeprecationHelper::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
 						/*
 						 * Deprecated functions don't have to comply with the naming conventions,
-						 * otherwise functions deprecated in favour of a function with a compliant
+						 * otherwise functions deprecated in favor of a function with a compliant
 						 * name would still trigger an error.
 						 */
 						return;
@@ -861,7 +871,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	protected function process_variable_assignment( $stackPtr, $in_list = false ) {
 		/*
 		 * We're only concerned with variables which are being defined.
-		 * `is_assigment()` will not recognize property assignments, which is good in this case.
+		 * `is_assignment()` will not recognize property assignments, which is good in this case.
 		 * However it will also not recognize $b in `foreach( $a as $b )` as an assignment, so
 		 * we need a separate check for that.
 		 */
@@ -1138,7 +1148,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 0.14.0 Allows for other non-word characters as well as underscores to better support hook names.
-	 * @since 1.0.0  Does not require a word seperator anymore after a prefix.
+	 * @since 1.0.0  Does not require a word separator anymore after a prefix.
 	 *               This allows for improved code style independent checking,
 	 *               i.e. allows for camelCase naming and the likes.
 	 * @since 1.0.1  - Added $stackPtr parameter.
@@ -1289,7 +1299,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 */
 	private function record_potential_prefix_metric( $stackPtr, $construct_name ) {
 		if ( preg_match( '`^([A-Z]*[a-z0-9]*+)`', ltrim( $construct_name, '\$_' ), $matches ) > 0
-			&& isset( $matches[1] ) && '' !== $matches[1]
+			&& '' !== $matches[1]
 		) {
 			$this->phpcsFile->recordMetric( $stackPtr, 'Prefix all globals: potential prefixes - start of non-prefixed construct', strtolower( $matches[1] ) );
 		}

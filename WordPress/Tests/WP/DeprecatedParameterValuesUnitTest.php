@@ -61,6 +61,9 @@ final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
-		return array();
+		return array(
+			55 => 1,
+			56 => 1,
+		);
 	}
 }

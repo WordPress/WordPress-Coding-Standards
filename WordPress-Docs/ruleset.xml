@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Docs" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress-Docs" xsi:noNamespaceSchemaLocation="https://schema.phpcodesniffer.com/phpcs.xsd">
 
 	<description>WordPress Coding Standards for Inline Documentation and Comments</description>
 
@@ -41,13 +41,13 @@
 		<exclude name="Squiz.Commenting.FileComment.MissingSubpackageTag"/>
 		<!-- WP doesn't require @copyright tags -->
 		<exclude name="Squiz.Commenting.FileComment.MissingCopyrightTag"/>
-		<!-- WP has a different prefered order of tags -->
+		<!-- WP has a different preferred order of tags -->
 		<exclude name="Squiz.Commenting.FileComment.PackageTagOrder"/>
-		<!-- WP has a different prefered order of tags -->
+		<!-- WP has a different preferred order of tags -->
 		<exclude name="Squiz.Commenting.FileComment.SubpackageTagOrder"/>
-		<!-- WP has a different prefered order of tags -->
+		<!-- WP has a different preferred order of tags -->
 		<exclude name="Squiz.Commenting.FileComment.AuthorTagOrder"/>
-		<!-- WP has a different prefered order of tags -->
+		<!-- WP has a different preferred order of tags -->
 		<exclude name="Squiz.Commenting.FileComment.CopyrightTagOrder"/>
 
 		<!-- WP prefers int and bool instead of integer and boolean -->
@@ -91,7 +91,7 @@
 	<rule ref="Generic.Commenting.DocComment">
 		<!-- WP has different alignment of tag values -->
 		<exclude name="Generic.Commenting.DocComment.TagValueIndent"/>
-		<!-- WP has a different prefered order of tags -->
+		<!-- WP has a different preferred order of tags -->
 		<exclude name="Generic.Commenting.DocComment.ParamNotFirst"/>
 		<!-- Excluded to allow param documentation for arrays  -->
 		<exclude name="Generic.Commenting.DocComment.ParamGroup"/>

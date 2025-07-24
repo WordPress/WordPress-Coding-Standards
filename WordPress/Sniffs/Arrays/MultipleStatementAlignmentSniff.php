@@ -112,7 +112,7 @@ final class MultipleStatementAlignmentSniff extends Sniff {
 	 *               * Setting this to `=0` is useless as in that case there are
 	 *                 no multi-line items in the array anyway.
 	 *
-	 * This setting will respect the `ignoreNewlines` and `maxColumnn` settings.
+	 * This setting will respect the `ignoreNewlines` and `maxColumn` settings.
 	 *
 	 * @since 0.14.0
 	 *

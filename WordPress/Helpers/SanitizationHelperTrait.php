@@ -126,7 +126,7 @@ trait SanitizationHelperTrait {
 	 *
 	 * This list is complementary to the `$sanitizingFunctions` list.
 	 * Sanitizing functions should be added to this list if they also
-	 * implicitely unslash data and to the `$sanitizingFunctions` list
+	 * implicitly unslash data and to the `$sanitizingFunctions` list
 	 * if they don't.
 	 *
 	 * @since 0.5.0
@@ -137,15 +137,16 @@ trait SanitizationHelperTrait {
 	 * @var array<string, bool>
 	 */
 	private $unslashingSanitizingFunctions = array(
-		'absint'               => true,
-		'boolval'              => true,
-		'count'                => true,
-		'doubleval'            => true,
-		'floatval'             => true,
-		'intval'               => true,
-		'sanitize_key'         => true,
-		'sanitize_locale_name' => true,
-		'sizeof'               => true,
+		'absint'                => true,
+		'boolval'               => true,
+		'count'                 => true,
+		'doubleval'             => true,
+		'floatval'              => true,
+		'intval'                => true,
+		'rest_sanitize_boolean' => true,
+		'sanitize_key'          => true,
+		'sanitize_locale_name'  => true,
+		'sizeof'                => true,
 	);
 
 	/**

@@ -5,16 +5,16 @@
     >
     <standard>
     <![CDATA[
-Capabilities passed should be valid capabilities (custom capabilities can be added in the ruleset).
+    Capabilities passed should be valid capabilities (custom capabilities can be added in the ruleset).
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: a WP native or registered custom user capability is used.">
+        <code title="Valid: A WP native or registered custom user capability is used.">
         <![CDATA[
 if ( author_can( $post, <em>'manage_sites'</em> ) ) { }
         ]]>
         </code>
-        <code title="Invalid: unknown/unsupported user capability is used.">
+        <code title="Invalid: Unknown/unsupported user capability is used.">
         <![CDATA[
 map_meta_cap( <em>'manage_site'</em>, $user->ID );
         ]]>
@@ -22,11 +22,11 @@ map_meta_cap( <em>'manage_site'</em>, $user->ID );
     </code_comparison>
     <standard>
     <![CDATA[
-Always use user capabilities instead of roles.
+    Always use user capabilities instead of roles.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: user capability is used.">
+        <code title="Valid: User capability is used.">
         <![CDATA[
 add_options_page(
     esc_html__( 'Options', 'textdomain' ),
@@ -37,7 +37,7 @@ add_options_page(
 );
         ]]>
         </code>
-        <code title="Invalid: user role is used instead of a capability.">
+        <code title="Invalid: User role is used instead of a capability.">
         <![CDATA[
 add_options_page(
     esc_html__( 'Options', 'textdomain' ),
@@ -51,16 +51,16 @@ add_options_page(
     </code_comparison>
     <standard>
     <![CDATA[
-Don't use deprecated capabilities.
+    Don't use deprecated capabilities.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: a WP native or registered custom user capability is used.">
+        <code title="Valid: A WP native or registered custom user capability is used.">
         <![CDATA[
 if ( author_can( $post, <em>'read'</em> ) ) { }
         ]]>
         </code>
-        <code title="Invalid: deprecated user capability is used.">
+        <code title="Invalid: Deprecated user capability is used.">
         <![CDATA[
 if ( author_can( $post, <em>'level_6'</em> ) ) { }
         ]]>

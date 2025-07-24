@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Prepared SQL"
+    >
+    <standard>
+    <![CDATA[
+    When querying the database, you should use $wpdb->prepare() to escape and quote the contents of variables. This prevents SQL injection.
+    Use placeholders for all variables used in the query. You should not use variable interpolation or concatenation.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Placeholders with $wpdb->prepare() used for all variables in query.">
+        <![CDATA[
+$wpdb->prepare(
+    'SELECT * from table
+        WHERE field = <em>%s</em>',
+    <em>$_GET['foo']</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Interpolated variables used in $wpdb->query().">
+        <![CDATA[
+$wpdb->query(
+    "SELECT * from table
+    WHERE field = <em>{$_GET['foo']}</em>"
+);
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Placeholders with $wpdb->prepare() used for all variables in query.">
+        <![CDATA[
+$wpdb->prepare(
+    'SELECT * from table
+        WHERE field = <em>%s</em>',
+    <em>$value</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Concatenation of variables used in $wpdb->*().">
+        <![CDATA[
+$wpdb->get_results(
+    "SELECT * from table
+    WHERE field = <em>" . $value</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

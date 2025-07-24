@@ -154,7 +154,7 @@ $where = $wpdb->prepare(
 ); // Bad x 2 - quotes between the () for the IN.
 
 /*
- * Test distinguising wildcard _ and %'s in LIKE statements.
+ * Test distinguishing wildcard _ and %'s in LIKE statements.
  */
 $sql = $wpdb->prepare( "SELECT * FROM $wpdb->posts WHERE post_content LIKE %s", $like ); // OK.
 $sql = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_content LIKE \'a string\'' ); // Warning x 2. Like without wildcard, no need for prepare.

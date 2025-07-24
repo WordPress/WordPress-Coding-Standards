@@ -290,7 +290,7 @@ function nullsafe_object_operator() {
 
 function stabilize_token_walking($other_db) {
 	global $wpdb;
-	// Overwritting $wpdb is bad, of course, but that's not the concern of this sniff.
+	// Overwriting $wpdb is bad, of course, but that's not the concern of this sniff.
 	// This test is making sure that the `$other_db->query` code is not flagged as if it were a call to a `$wpdb` method.
 	$wpdb = $other_db->query;
 }

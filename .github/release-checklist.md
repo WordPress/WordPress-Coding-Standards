@@ -32,6 +32,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] `$wp_time_constants` in `WordPress.WP.CronInterval` - PR #xxx
     - [ ] `$known_test_classes` in `IsUnitTestTrait` - PR #xxx
     - [ ] ...etc...
+- [ ] Verify there there has been no vandalism on the wiki (and if so, remove/fix it).
 
 ### Release prep
 
@@ -46,6 +47,8 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] Make sure all CI builds are green.
 - [ ] Tag and create a release against `main` (careful, GH defaults to `develop`!) & copy & paste the changelog to it.
     :pencil2: Check if anything from the link collection at the bottom of the changelog needs to be copied in!
+    - Remove square brackets from all ticket links or make them proper full links (as GH markdown parser doesn't parse these correctly).
+    - Change all contributor links to full inline links (as GH markdown parser on the Releases page doesn't parse these correctly).
 - [ ] Make sure all CI builds are green.
 - [ ] Close the milestone.
 - [ ] Open a new milestone for the next release.

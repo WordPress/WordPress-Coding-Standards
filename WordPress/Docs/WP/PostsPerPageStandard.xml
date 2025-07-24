@@ -5,9 +5,9 @@
     >
     <standard>
     <![CDATA[
-Using "posts_per_page" or "numberposts" with the value set to an high number opens up the potential for making requests slow if the query ends up querying thousands of posts.
+    Using "posts_per_page" or "numberposts" with the value set to an high number opens up the potential for making requests slow if the query ends up querying thousands of posts.
 
-You should always fetch the lowest number possible that still gives you the number of results you find acceptable.
+    You should always fetch the lowest number possible that still gives you the number of results you find acceptable.
     ]]>
     </standard>
     <code_comparison>

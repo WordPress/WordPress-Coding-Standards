@@ -123,13 +123,24 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 		if ( \in_array( $token['code'], array( \T_NEW, \T_EXTENDS, \T_IMPLEMENTS ), true ) ) {
 			if ( \T_NEW === $token['code'] ) {
+				$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
+
+				if ( false === $nextNonEmpty
+					|| \in_array( $this->tokens[ $nextNonEmpty ]['code'], array( \T_READONLY, \T_ANON_CLASS, \T_ATTRIBUTE ), true )
+				) {
+					// Live coding or anonymous class. Bow out.
+					return false;
+				}
+
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_TAG ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_CLOSE_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
 			}
 
-			$classname = GetTokensAsString::noEmpties( $this->phpcsFile, ( $stackPtr + 2 ), $nameEnd );
-			$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
+			if ( isset( $this->tokens[ $stackPtr + 2 ] ) && false !== $nameEnd ) {
+				$classname = GetTokensAsString::noEmpties( $this->phpcsFile, ( $stackPtr + 2 ), $nameEnd );
+				$classname = $this->get_namespaced_classname( $classname, ( $stackPtr - 1 ) );
+			}
 		}
 
 		if ( \T_DOUBLE_COLON === $token['code'] ) {
@@ -159,7 +170,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 	}
 
 	/**
-	 * Verify if the current token is one of the targetted classes.
+	 * Verify if the current token is one of the targeted classes.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *

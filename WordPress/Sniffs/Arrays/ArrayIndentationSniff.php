@@ -243,7 +243,7 @@ final class ArrayIndentationSniff extends Sniff {
 			 * Multi-line array items.
 			 *
 			 * Verify & if needed, correct the indentation of subsequent lines.
-			 * Subsequent lines may be indented more or less than the mimimum expected indent,
+			 * Subsequent lines may be indented more or less than the minimum expected indent,
 			 * but the "first line after" should be indented - at least - as much as the very first line
 			 * of the array item.
 			 * Indentation correction for subsequent lines will be based on that diff.

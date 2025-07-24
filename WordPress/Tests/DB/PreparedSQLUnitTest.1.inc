@@ -140,7 +140,7 @@ $wpdb = new WPDB();
 $foo = $wpdb->propertyAccess;
 echo $wpdb::CONSTANT_NAME;
 
-// Not an identifyable method call.
+// Not an identifiable method call.
 $wpdb->{$methodName}('query');
 
 // Don't throw an error during live coding.

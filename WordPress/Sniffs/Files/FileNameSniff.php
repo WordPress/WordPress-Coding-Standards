@@ -154,7 +154,7 @@ final class FileNameSniff extends Sniff {
 		// Usage of `stripQuotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
 		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
 		if ( 'STDIN' === $file ) {
-			return;
+			return $this->phpcsFile->numTokens;
 		}
 
 		$class_ptr = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
@@ -163,7 +163,7 @@ final class FileNameSniff extends Sniff {
 			 * This rule should not be applied to test classes (at all).
 			 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1995
 			 */
-			return;
+			return $this->phpcsFile->numTokens;
 		}
 
 		// Respect phpcs:disable comments as long as they are not accompanied by an enable.
@@ -184,7 +184,7 @@ final class FileNameSniff extends Sniff {
 
 				if ( false === $i ) {
 					// The entire (rest of the) file is disabled.
-					return;
+					return $this->phpcsFile->numTokens;
 				}
 			}
 		}
@@ -204,7 +204,7 @@ final class FileNameSniff extends Sniff {
 		}
 
 		// Only run this sniff once per file, no need to run it again.
-		return ( $this->phpcsFile->numTokens + 1 );
+		return $this->phpcsFile->numTokens;
 	}
 
 	/**

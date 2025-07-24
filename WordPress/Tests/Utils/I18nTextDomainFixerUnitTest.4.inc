@@ -167,7 +167,7 @@ _get_path_to_translation_from_lang_dir();
 _get_path_to_translation();
 
 /*
- * Missing text domain and preceeding args, only throw warning.
+ * Missing text domain and preceding args, only throw warning.
  */
 __();
 _e(   /* comment */  );
@@ -244,6 +244,41 @@ esc_html_x(
 	$text,
 	domain: 'text-domain',
 	context: $context,
+);
+
+/*
+ * Test that `AbstractFunctionParameterSniff::is_targetted_token()` does not treat first class
+ * callables and function imports as a function call without parameters. This test is added here as
+ * there are no dedicated tests for the WPCS abstract classes. The WPCS abstract classes will be
+ * replaced with PHPCSUtils similar classes in the future, so it is not worth creating dedicated
+ * tests at this point.
+ */
+use function __;
+use function __ as my_function;
+use function
+    __ /* comment */
+    as /* comment */
+    my_function;
+use function
+    _n, // comment
+    _e, /* comment */
+    __ as my_function;
+add_action('my_action', __(...));
+add_action(
+    'my_action',
+    __ /* comment */
+    (
+        /* comment */ ... /* comment */
+    )
+);
+// The tests below ensure that the AbstractFunctionParameterSniff does not incorrectly ignore
+// function calls with variable unpacking. But they are also false positives in the context of the
+// I18nTextDomainFixer sniff and will be addressed in a future update.
+__(...$args);
+__ (
+    ...
+    /* comment */
+    $args
 );
 
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]

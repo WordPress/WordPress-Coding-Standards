@@ -43,7 +43,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * To retrieve a function list for comparison, the following tool is available:
 	 * https://github.com/JDGrimes/wp-deprecated-code-scanner
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @var array
 	 */
@@ -1529,6 +1529,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '6.3.0',
 		),
 		'block_core_navigation_submenu_build_css_colors' => array(
+			// Verified correct alternative.
 			'alt'     => 'wp_apply_colors_support()',
 			'version' => '6.3.0',
 		),
@@ -1545,7 +1546,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '6.3.0',
 		),
 		'wp_get_duotone_filter_svg' => array(
-			'alt'     => '',
+			'alt'     => 'WP_Duotone::get_filter_svg_from_preset()',
 			'version' => '6.3.0',
 		),
 		'wp_get_global_styles_svg_filters' => array(
@@ -1603,11 +1604,11 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '6.4.0',
 		),
 		'_inject_theme_attribute_in_block_template_content' => array(
-			'alt'     => 'traverse_and_serialize_blocks( parse_blocks( $template_content ), \'_inject_theme_attribute_in_template_part_block\' )',
+			'alt'     => 'traverse_and_serialize_blocks( parse_blocks( $template_content ), "_inject_theme_attribute_in_template_part_block" )',
 			'version' => '6.4.0',
 		),
 		'_remove_theme_attribute_in_block_template_content' => array(
-			'alt'     => 'traverse_and_serialize_blocks( parse_blocks( $template_content ), \'_remove_theme_attribute_from_template_part_block\' )',
+			'alt'     => 'traverse_and_serialize_blocks( parse_blocks( $template_content ), "_remove_theme_attribute_from_template_part_block" )',
 			'version' => '6.4.0',
 		),
 		'_wp_theme_json_webfonts_handler' => array(
@@ -1635,6 +1636,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 			'version' => '6.4.0',
 		),
 		'wp_update_https_detection_errors' => array(
+			// Verified correct alternative.
 			'alt'     => 'wp_get_https_detection_errors()',
 			'version' => '6.4.0',
 		),
@@ -1651,6 +1653,60 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'block_core_query_ensure_interactivity_dependency' => array(
 			'alt'     => 'wp_register_script_module()',
 			'version' => '6.5.0',
+		),
+
+		// WP 6.6.0.
+		'wp_interactivity_process_directives_of_interactive_blocks' => array(
+			'alt'     => '',
+			'version' => '6.6.0',
+		),
+		'wp_render_elements_support' => array(
+			'alt'     => 'wp_render_elements_class_name()',
+			'version' => '6.6.0',
+		),
+
+		// WP 6.7.0.
+		'current_user_can_for_blog' => array(
+			'alt'     => 'current_user_can_for_site()',
+			'version' => '6.7.0',
+		),
+		'wp_create_block_style_variation_instance_name' => array(
+			'alt'     => 'wp_unique_id( $variation . \'--\' )',
+			'version' => '6.7.0',
+		),
+		'wp_enqueue_global_styles_custom_css' => array(
+			'alt'     => 'wp_enqueue_global_styles()',
+			'version' => '6.7.0',
+		),
+		'wp_get_global_styles_custom_css' => array(
+			'alt'     => 'wp_get_global_stylesheet() or WP_Theme_JSON::get_styles_for_block()',
+			'version' => '6.7.0',
+		),
+		'wp_init_targeted_link_rel_filters' => array(
+			'alt'     => '',
+			'version' => '6.7.0',
+		),
+		'wp_remove_targeted_link_rel_filters' => array(
+			'alt'     => '',
+			'version' => '6.7.0',
+		),
+		'wp_simplepie_autoload' => array(
+			'alt'     => 'SimplePie_Autoloader',
+			'version' => '6.7.0',
+		),
+		'wp_targeted_link_rel' => array(
+			'alt'     => '',
+			'version' => '6.7.0',
+		),
+		'wp_targeted_link_rel_callback' => array(
+			'alt'     => '',
+			'version' => '6.7.0',
+		),
+
+		// WP 6.8.0.
+		'wp_add_editor_classic_theme_styles' => array(
+			'alt'     => 'wp_enqueue_classic_theme_styles()',
+			'version' => '6.8.0',
 		),
 	);
 
