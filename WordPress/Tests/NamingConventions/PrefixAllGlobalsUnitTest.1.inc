@@ -673,4 +673,14 @@ class WP_Atom_Server {
 	}
 }
 
+/*
+ * Safeguard that PHP 8.4+ asymmetric visibility properties don't lead to false positives.
+ * Including those defined using constructor property promotion.
+ */
+class Acronym_AsymmetricVisibilityProperties {
+    public private(set) string $bar = 'bar'; // Ok.
+
+    public function __construct(public protected(set) int $foo = 0) {} // Ok.
+}
+
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
