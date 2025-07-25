@@ -172,8 +172,8 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		);
 
 		// Warn for dynamic parts in the slug parameter.
-		if ( 'T_DOUBLE_QUOTED_STRING' === $this->tokens[ $string_pos ]['type']
-			|| ( 'T_HEREDOC' === $this->tokens[ $string_pos ]['type']
+		if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $string_pos ]['code']
+			|| ( \T_HEREDOC === $this->tokens[ $string_pos ]['code']
 			&& strpos( $this->tokens[ $string_pos ]['content'], '$' ) !== false )
 		) {
 			$this->phpcsFile->addWarning(
