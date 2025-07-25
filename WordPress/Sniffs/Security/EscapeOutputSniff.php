@@ -216,41 +216,35 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			case \T_THROW:
 				// Find the open parentheses, while stepping over the exception creation tokens.
-				$ignore               = Tokens::$emptyTokens;
-				$ignore              += Collections::namespacedNameTokens();
-				$ignore              += Collections::functionCallTokens();
-				$ignore              += Collections::objectOperators();
-				$ignore[ T_READONLY ] = T_READONLY;
+				$ignore                = Tokens::$emptyTokens;
+				$ignore               += Collections::namespacedNameTokens();
+				$ignore               += Collections::functionCallTokens();
+				$ignore               += Collections::objectOperators();
+				$ignore[ \T_READONLY ] = \T_READONLY;
 
-				$next_relevant = $this->phpcsFile->findNext( $ignore, ( $stackPtr + 1 ), null, true );
-				if ( false === $next_relevant ) {
-					return;
-				}
-
-				if ( \T_NEW === $this->tokens[ $next_relevant ]['code'] ) {
+				$next_relevant = $stackPtr;
+				do {
 					$next_relevant = $this->phpcsFile->findNext( $ignore, ( $next_relevant + 1 ), null, true );
 					if ( false === $next_relevant ) {
 						return;
 					}
-				}
 
-				// Skip over attribute declarations when searching for the open parenthesis.
-				while ( \T_ATTRIBUTE === $this->tokens[ $next_relevant ]['code'] ) {
-					if ( isset( $this->tokens[ $next_relevant ]['attribute_closer'] ) === false ) {
-						return;
+					if ( \T_NEW === $this->tokens[ $next_relevant ]['code'] ) {
+						continue;
 					}
 
-					$next_relevant = $this->phpcsFile->findNext(
-						$ignore,
-						( $this->tokens[ $next_relevant ]['attribute_closer'] + 1 ),
-						null,
-						true
-					);
+					// Skip over attribute declarations when searching for the open parenthesis.
+					if ( \T_ATTRIBUTE === $this->tokens[ $next_relevant ]['code'] ) {
+						if ( isset( $this->tokens[ $next_relevant ]['attribute_closer'] ) === false ) {
+							return;
+						}
 
-					if ( false === $next_relevant ) {
-						return;
+						$next_relevant = $this->tokens[ $next_relevant ]['attribute_closer'];
+						continue;
 					}
-				}
+
+					break;
+				} while ( $next_relevant < ( $this->phpcsFile->numTokens - 1 ) );
 
 				if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_relevant ]['code']
 					|| isset( $this->tokens[ $next_relevant ]['parenthesis_closer'] ) === false

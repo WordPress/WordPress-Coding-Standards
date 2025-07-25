@@ -68,6 +68,7 @@
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesceFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesce_equalFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_yield_fromFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_readonlyFound"/>
 	</rule>
 
 	<!-- Enforce PSR1 compatible namespaces. -->
