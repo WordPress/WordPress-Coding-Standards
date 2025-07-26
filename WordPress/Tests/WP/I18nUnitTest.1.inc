@@ -317,4 +317,50 @@ esc_html_e( 'foo', '' ); // Bad: text-domain can not be empty.
 // PHP 8.0+: safeguard handling of newly introduced placeholders.
 __( 'There are %1$h monkeys in the %H', 'my-slug' ); // Bad: multiple arguments should be numbered.
 
+__( ' string', 'my-slug' ); // Bad: leading space.
+_e( 'string ', 'my-slug' ); // Bad: trailing space.
+_x( ' string ', 'context', 'my-slug' ); // Bad: leading and trailing spaces.
+_ex( '   string', 'context', 'my-slug' ); // Bad: leading spaces.
+_n( ' There is %1$d monkey in the %2$s', 'In the %2$s there are %1$d monkeys', $number, 'my-slug' ); // Bad: leading space.
+_n( 'There is %1$d monkey in the %2$s', 'In the %2$s there are %1$d monkeys ', $number, 'my-slug' ); // Bad: trailing space.
+_n( '  There is %1$d monkey in the %2$s', 'In the %2$s there are %1$d monkeys  ', $number, 'my-slug' ); // Bad: leading and trailing spaces.
+_nx( '  I have %d cat.', 'I have %d cats.', $number, 'Not really.', 'my-slug' ); // Bad: leading spaces.
+_nx( 'I have %d cat.', 'I have %d cats.  ', $number, 'Not really.', 'my-slug' ); // Bad: trailing spaces.
+_nx( '  I have %d cat.', 'I have %d cats.  ', $number, 'Not really.', 'my-slug' ); // Bad: leading and trailing spaces.
+_n_noop( ' I have %d cat.', 'I have %d cats.', 'my-slug' ); // Bad: leading space.
+_n_noop( 'I have %d cat.', 'I have %d cats. ', 'my-slug' ); // Bad: trailing space.
+_n_noop( ' I have %d cat.', 'I have %d cats. ', 'my-slug' ); // Bad: leading and trailing spaces.
+_nx_noop( '  I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug' ); // Bad: leading spaces.
+_nx_noop( 'I have %d cat.', 'I have %d cats.  ', 'Not really.', 'my-slug' ); // Bad: trailing spaces.
+_nx_noop( ' I have %d cat.', 'I have %d cats.   ', 'Not really.', 'my-slug' ); // Bad: leading and trailing spaces.
+esc_html__( ' string', 'my-slug' ); // Bad: leading space.
+esc_html_e( 'string ', 'my-slug' ); // Bad: trailing space.
+esc_html_x( ' string ', 'context', 'my-slug' ); // Bad: leading and trailing spaces.
+esc_attr__( ' string', 'my-slug' ); // Bad: leading space.
+esc_attr_e( 'string ', 'my-slug' ); // Bad: trailing space.
+esc_attr_x( ' string ', 'context', 'my-slug' ); // Bad: leading and trailing spaces.
+__( '	string', 'my-slug' ); // Bad: leading tab.
+__( 'string	', 'my-slug' ); // Bad: trailing tab.
+__( '	string	', 'my-slug' ); // Bad: leading and trailing tabs.
+__( '		string', 'my-slug' ); // Bad: two leading tabs.
+__( 'string		', 'my-slug' ); // Bad: two trailing tabs.
+__( "String with leading vertical tab", 'my-slug' ); // Bad: leading vertical tab.
+__( "String with trailing vertical tab", 'my-slug' ); // Bad: trailing vertical tab.
+__( "String with leading and trailing vertical tabs", 'my-slug' ); // Bad: leading and trailing vertical tabs.
+__( "String with 2 leading vertical tabs", 'my-slug' ); // Bad: 2 leading vertical tabs.
+__( "String with 2 trailing vertical tabs", 'my-slug' ); // Bad: 2 trailing vertical tabs.
+__( '
+string', 'my-slug' ); // Bad: leading new line.
+__( 'string
+', 'my-slug' ); // Bad: trailing new line.
+__( '
+string
+', 'my-slug' ); // Bad: leading and trailing new line.
+__( '
+
+string', 'my-slug' ); // Bad: two leading new lines.
+__( 'string
+
+', 'my-slug' ); // Bad: two trailing new lines.
+
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
