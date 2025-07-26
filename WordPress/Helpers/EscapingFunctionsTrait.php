@@ -90,7 +90,6 @@ trait EscapingFunctionsTrait {
 		'urlencode_deep'             => true,
 		'urlencode'                  => true,
 		'wp_json_encode'             => true,
-		'wp_kses_allowed_html'       => true,
 		'wp_kses_data'               => true,
 		'wp_kses_one_attr'           => true,
 		'wp_kses_post'               => true,
