@@ -655,3 +655,10 @@ echo '<input type="search" value="' . get_search_query( false ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( 0 ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( escape: false ) . '">'; // OK, well not really, typo in param name, but that's not our concern.
 echo '<input type="search" value="' . get_search_query( escaped: false ) . '">'; // Bad.
+
+// PHP 8.4: exit/die using named parameters.
+exit( status: esc_html( $foo ) ); // Ok.
+die( status: esc_html( $foo ) ); // Ok.
+
+exit( status: $foo ); // Bad.
+die( status: $foo ); // Bad.
