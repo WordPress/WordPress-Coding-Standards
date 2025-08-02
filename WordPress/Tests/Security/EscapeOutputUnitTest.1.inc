@@ -662,3 +662,17 @@ die( status: esc_html( $foo ) ); // Ok.
 
 exit( status: $foo ); // Bad.
 die( status: $foo ); // Bad.
+
+/*
+ * Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/2552
+ * Ensure that readonly anonymous classes and anonymous classes with attributes are handled
+ * correctly when part of a throw statement.
+ */
+throw new #[MyAttribute] readonly class( esc_html( $message ) ) extends Exception {}; // Good.
+throw new readonly class( $unescaped ) {}; // Bad.
+throw new #[MyAttribute] class( $unescaped ) extends Exception {}; // Bad.
+throw new
+#[Attribute1]
+/* some comment */
+#[Attribute2('text', 10)]
+readonly class( $unescaped ) {}; // Bad.
