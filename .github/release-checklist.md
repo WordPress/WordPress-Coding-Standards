@@ -62,13 +62,13 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 ### Publicize
 
 - [ ] [Major releases only] Publish post about the release on Make WordPress.
-- [ ] Tweet, toot, etc about the release.
-- [ ] Post about it in Slack.
-- [ ] Submit for ["Month in WordPress"][month-in-wp].
+- [ ] Tweet, toot, etc about the release from your personal account (there is no official WPCS account).
+- [ ] Post about it in #core channel on the WordPress.org Slack.
+- [ ] Create a Marketing team ["amplify request"][amplify-request].
 - [ ] Submit for the ["Monthy Dev Roundup"][dev-roundup].
 
 [phpcs-releases]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/releases
 [phpcsutils-releases]: https://github.com/PHPCSStandards/PHPCSUtils/releases
 [phpcsextra-releases]: https://github.com/PHPCSStandards/PHPCSExtra/releases
-[month-in-wp]:         https://make.wordpress.org/community/month-in-wordpress-submissions/
+[amplify-request]:     https://github.com/WordPress/Marketing-Team/issues/new?template=2-request-for-amplification-template.yml
 [dev-roundup]:         https://github.com/WordPress/developer-blog-content/issues?q=is%3Aissue+label%3A%22Monthly+Roundup%22
