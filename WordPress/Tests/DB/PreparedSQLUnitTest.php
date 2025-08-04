@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\DB;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PreparedSQL sniff.
@@ -22,7 +22,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\FormattingFunctionsHelper
  * @covers \WordPressCS\WordPress\Sniffs\DB\PreparedSQLSniff
  */
-final class PreparedSQLUnitTest extends AbstractSniffUnitTest {
+final class PreparedSQLUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

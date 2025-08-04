@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Arrays;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ArrayKeySpacingRestrictions sniff.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\Arrays\ArrayKeySpacingRestrictionsSniff
  */
-final class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffUnitTest {
+final class ArrayKeySpacingRestrictionsUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ControlStructureSpacing sniff.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\WhiteSpace\ControlStructureSpacingSniff
  */
-final class ControlStructureSpacingUnitTest extends AbstractSniffUnitTest {
+final class ControlStructureSpacingUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PHPCS_DEV: '3.x-dev'
+  PHPCS_3_DEV: '3.x-dev'
+  PHPCS_4_DEV: '4.x-dev'
   UTILS_DEV: 'dev-develop'
   EXTRA_DEV: 'dev-develop'
 
@@ -21,8 +22,12 @@ jobs:
   # Check code style of sniffs, rulesets and XML documentation.
   # Check that all sniffs are feature complete.
   sniffs:
-    name: Run code sniffs
+    name: "Run code sniffs (PHPCS ${{ matrix.dependencies }})"
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dependencies: [ 'phpcs-3-dev', 'phpcs-4-dev' ]
 
     steps:
       - name: Checkout repository
@@ -45,7 +50,7 @@ jobs:
       - name: "Composer: set PHPCS dependencies (dev)"
         run: >
           composer require --no-update --no-scripts --no-interaction
-          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          squizlabs/php_codesniffer:"${{ matrix.dependencies == 'phpcs-3-dev' && env.PHPCS_3_DEV || env.PHPCS_4_DEV }}"
           phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
           phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
@@ -151,7 +156,7 @@ jobs:
     strategy:
       matrix:
         php: [ 'latest' ]
-        dependencies: [ 'lowest', 'stable', 'dev' ]
+        dependencies: [ 'lowest', 'stable', 'phpcs-3-dev', 'phpcs-4-dev' ]
 
     name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}"
 
@@ -170,10 +175,10 @@ jobs:
           coverage: none
 
       - name: "Composer: set PHPCS dependencies for tests (dev)"
-        if: ${{ matrix.dependencies == 'dev' }}
+        if: ${{ matrix.dependencies == 'phpcs-3-dev' || matrix.dependencies == 'phpcs-4-dev' }}
         run: >
           composer require --no-update --no-scripts --no-interaction
-          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          squizlabs/php_codesniffer:"${{ matrix.dependencies == 'phpcs-3-dev' && env.PHPCS_3_DEV || env.PHPCS_4_DEV }}"
           phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
           phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
@@ -216,10 +221,10 @@ jobs:
 
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
-      # If only fixable errors are found, the exit code will be 1, which can be interpreted as success.
-      # This check is only run against "dev" as conflicts can not be fixed for already released versions.
+      # If only fixable errors are found, the exit code will be 1 on PHPCS 3.x and 2 on PHPCS 4.x, nad the test succeeded.
+      # This check is only run against the dev versions as conflicts can not be fixed for already released versions.
       - name: Test for fixer conflicts (fixes expected)
-        if: ${{ matrix.dependencies == 'dev' }}
+        if: ${{ matrix.dependencies == 'phpcs-3-dev' || matrix.dependencies == 'phpcs-4-dev' }}
         id: phpcbf
         continue-on-error: true
         run: |
@@ -230,7 +235,12 @@ jobs:
           exit "$exitcode"
 
       - name: Fail the build on fixer conflicts and other errors
-        if: ${{ steps.phpcbf.outputs.EXITCODE != 0 && steps.phpcbf.outputs.EXITCODE != 1 }}
+        if: >-
+          ${{
+            steps.phpcbf.outputs.EXITCODE != 0
+            && steps.phpcbf.outputs.EXITCODE != 1
+            && ! (matrix.dependencies == 'phpcs-4-dev' && steps.phpcbf.outputs.EXITCODE == 2)
+          }}
         run: exit ${{ steps.phpcbf.outputs.EXITCODE }}
 
   phpstan:

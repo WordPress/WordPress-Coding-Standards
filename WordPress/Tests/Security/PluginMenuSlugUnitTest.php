@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Security;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PluginMenuSlug sniff.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\Security\PluginMenuSlugSniff
  */
-final class PluginMenuSlugUnitTest extends AbstractSniffUnitTest {
+final class PluginMenuSlugUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

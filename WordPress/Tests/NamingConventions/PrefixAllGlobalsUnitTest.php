@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\NamingConventions;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PrefixAllGlobals sniff.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\IsUnitTestTrait
  * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\PrefixAllGlobalsSniff
  */
-final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
+final class PrefixAllGlobalsUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

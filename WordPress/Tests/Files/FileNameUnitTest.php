@@ -11,7 +11,7 @@ namespace WordPressCS\WordPress\Tests\Files;
 
 use PHP_CodeSniffer\Files\DummyFile;
 use PHP_CodeSniffer\Ruleset;
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\TestUtils\ConfigDouble;
 
@@ -24,7 +24,7 @@ use PHPCSUtils\TestUtils\ConfigDouble;
  *
  * @covers \WordPressCS\WordPress\Sniffs\Files\FileNameSniff
  */
-final class FileNameUnitTest extends AbstractSniffUnitTest {
+final class FileNameUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Error files with the expected nr of errors.

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\DB;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
@@ -23,7 +23,7 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  * @covers \WordPressCS\WordPress\Helpers\RulesetPropertyHelper
  * @covers \WordPressCS\WordPress\Sniffs\DB\RestrictedClassesSniff
  */
-final class RestrictedClassesUnitTest extends AbstractSniffUnitTest {
+final class RestrictedClassesUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Add a number of extra restricted classes to unit test the abstract

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Arrays;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the Arrays.MultipleStatementAlignment sniff.
@@ -22,7 +22,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\Arrays\MultipleStatementAlignmentSniff
  */
-final class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest {
+final class MultipleStatementAlignmentUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * The tab width to use during testing.

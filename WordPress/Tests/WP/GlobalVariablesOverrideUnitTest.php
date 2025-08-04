@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the GlobalVariables sniff.
@@ -23,7 +23,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\WPGlobalVariablesHelper
  * @covers \WordPressCS\WordPress\Sniffs\WP\GlobalVariablesOverrideSniff
  */
-final class GlobalVariablesOverrideUnitTest extends AbstractSniffUnitTest {
+final class GlobalVariablesOverrideUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

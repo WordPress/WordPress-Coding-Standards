@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Arrays;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ArrayIndentation sniff.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\Arrays\ArrayIndentationSniff
  */
-final class ArrayIndentationUnitTest extends AbstractSniffUnitTest {
+final class ArrayIndentationUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * The tab width to use during testing.

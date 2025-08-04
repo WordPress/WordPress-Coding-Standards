@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\DB;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the DirectDatabaseQuery sniff.
@@ -21,7 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\RulesetPropertyHelper
  * @covers \WordPressCS\WordPress\Sniffs\DB\DirectDatabaseQuerySniff
  */
-final class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
+final class DirectDatabaseQueryUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Security;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ValidatedSanitizedInput sniff.
@@ -23,7 +23,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\VariableHelper
  * @covers \WordPressCS\WordPress\Sniffs\Security\ValidatedSanitizedInputSniff
  */
-final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
+final class ValidatedSanitizedInputUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

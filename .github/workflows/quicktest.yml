@@ -65,13 +65,25 @@ jobs:
         if: ${{ matrix.dependencies == 'stable' }}
         run: composer lint
 
-      - name: Run the unit tests without code coverage
-        if: ${{ github.event.repository.fork == true || github.ref_name != 'develop' }}
-        run: composer run-tests
+      - name: Grab PHPCS version
+        id: phpcs_version
+        run: echo "VERSION=$(vendor/bin/phpcs --version | grep --only-matching --max-count=1 --extended-regexp '\b[0-9]+\.[0-9]+')" >> "$GITHUB_OUTPUT"
 
-      - name: Run the unit tests with code coverage
-        if: ${{ github.event.repository.fork == false && github.ref_name == 'develop' }}
-        run: composer coverage
+      - name: Run the unit tests without code coverage (PHPCS 3.x)
+        if: ${{ (github.event.repository.fork == true || github.ref_name != 'develop') && startsWith( steps.phpcs_version.outputs.VERSION, '3.' ) }}
+        run: composer run-tests-phpcs3
+
+      - name: Run the unit tests without code coverage (PHPCS 4.x)
+        if: ${{ (github.event.repository.fork == true || github.ref_name != 'develop') && startsWith( steps.phpcs_version.outputs.VERSION, '4.' ) }}
+        run: composer run-tests-phpcs4
+
+      - name: Run the unit tests with code coverage (PHPCS 3.x)
+        if: ${{ github.event.repository.fork == false && github.ref_name == 'develop' && startsWith( steps.phpcs_version.outputs.VERSION, '3.' ) }}
+        run: composer coverage-phpcs3
+
+      - name: Run the unit tests with code coverage (PHPCS 4.x)
+        if: ${{ github.event.repository.fork == false && github.ref_name == 'develop' && startsWith( steps.phpcs_version.outputs.VERSION, '4.' ) }}
+        run: composer coverage-phpcs4
 
       - name: Send coverage report to Codecov
         if: ${{ success() && github.event.repository.fork == false && github.ref_name == 'develop' }}
