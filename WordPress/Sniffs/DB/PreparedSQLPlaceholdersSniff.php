@@ -266,8 +266,13 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 						unset( $sprintf_parameters, $valid_sprintf, $last_param );
 
 					} elseif ( 'implode' === strtolower( $this->tokens[ $i ]['content'] ) ) {
+						$ignore_tokens = Tokens::$emptyTokens + array(
+							\T_STRING_CONCAT => \T_STRING_CONCAT,
+							\T_NS_SEPARATOR  => \T_NS_SEPARATOR,
+						);
+
 						$prev = $this->phpcsFile->findPrevious(
-							Tokens::$emptyTokens + array( \T_STRING_CONCAT => \T_STRING_CONCAT ),
+							$ignore_tokens,
 							( $i - 1 ),
 							$query['start'],
 							true

@@ -148,7 +148,7 @@ $where = $wpdb->prepare(
 	"{$wpdb->posts}.post_type IN (\""
 		. implode( ',', array_fill( 0, count($post_types), '%s' ) )
 		. "\") AND {$wpdb->posts}.post_status IN ('"
-		. implode( ',', array_fill( 0, count($post_statusses), '%s' ) )
+		. \implode( ',', array_fill( 0, count($post_statusses), '%s' ) )
 		. '\')',
 	array_merge( $post_types, $post_statusses )
 ); // Bad x 2 - quotes between the () for the IN.
