@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Tests\DB;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the PreparedSQLPlaceholders sniff.
@@ -119,6 +120,9 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffTestCase {
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		return array(
 			12  => 1,
 			16  => 1,
@@ -183,6 +187,17 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffTestCase {
 			641 => 1,
 			647 => 1,
 			653 => 1,
+
+			/*
+			 * Namespaced sprintf() calls.
+			 *
+			 * False negatives on PHPCS 3.x. Flagged on PHPCS 4.x due to the changed tokenization of
+			 * namespaced names. See https://github.com/WordPress/WordPress-Coding-Standards/issues/2720.
+			 */
+			668 => ( true === $is_phpcs_4 ? 1 : 0 ),
+			675 => ( true === $is_phpcs_4 ? 1 : 0 ),
+			682 => ( true === $is_phpcs_4 ? 1 : 0 ),
+			689 => ( true === $is_phpcs_4 ? 1 : 0 ),
 
 			// Method sprintf/implode/array_fill calls.
 			728 => 1,

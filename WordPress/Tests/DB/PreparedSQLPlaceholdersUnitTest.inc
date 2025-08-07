@@ -661,8 +661,8 @@ $where = $wpdb->prepare(
  * Safeguard correct handling of all types of namespaced calls to sprintf() except fully qualified calls to the
  * global sprintf() function, which is already handled above.
  *
- * The calls below are currently false negatives. The sniff incorrectly treats namespaced sprintf() calls as
- * calls to the global sprintf() function and does not flag them.
+ * On PHPCS 3.x these are false negatives: the sniff mistakes the namespaced sprintf() calls for the global
+ * sprintf() function and does not flag them. On PHPCS 4.x, the changed name tokenization means they are flagged.
  * See: https://github.com/WordPress/WordPress-Coding-Standards/issues/2720
  */
 $where = $wpdb->prepare(
