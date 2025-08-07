@@ -238,7 +238,7 @@ final class DirectDatabaseQuerySniff extends Sniff {
 			$scopeEnd   = $this->tokens[ $scope_function ]['scope_closer'];
 
 			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
-				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+				if ( isset( Collections::nameTokens()[ $this->tokens[ $i ]['code'] ] ) ) {
 					$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
 
 					if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $nextNonEmpty ]['code'] ) {
@@ -246,6 +246,11 @@ final class DirectDatabaseQuerySniff extends Sniff {
 					}
 
 					$content = strtolower( $this->tokens[ $i ]['content'] );
+
+					if ( strpos( $content, '\\' ) !== false ) {
+						// Namespaced function call, get only the function name.
+						$content = substr( $content, strrpos( $content, '\\' ) + 1 );
+					}
 
 					if ( isset( $this->cacheDeleteFunctions[ $content ] ) ) {
 
