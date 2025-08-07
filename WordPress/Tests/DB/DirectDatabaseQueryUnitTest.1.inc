@@ -354,3 +354,28 @@ function cache_custom_mixed_case_B() {
 // phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[]
 // phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[]
 // phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[]
+
+// Protect against false negatives where the cache function names are used as the content
+// of a T_STRING token that is not a function call.
+function notCacheFunctionCalls() {
+    global $wpdb;
+
+    $bar->wp_cache_get = 'something';
+    $listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning x 2.
+    $foo = wp_cache_set;
+
+    return $listofthings;
+}
+
+// The sniff deliberately does not distinguish between calls to cache functions and calls to methods with the same name as the functions,
+// as those method calls are likely custom cache functions.
+function methodNamesSameAsCacheFunctions() {
+	global $wpdb, $bar;
+
+	if ( ! ( $listofthings = $bar->wp_cache_get( 'foo' ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		$bar->wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
