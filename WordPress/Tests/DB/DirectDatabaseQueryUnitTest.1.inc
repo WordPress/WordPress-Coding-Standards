@@ -21,13 +21,13 @@ function bar() {
 
 function baz() {
 	global $wpdb;
-	$baz = wp_cache_get( 'baz' );
+	$baz = WP_CACHE_GET( 'baz' );
 	if ( false !== $baz ) {
 		$wpdb->query( 'ALTER TABLE TO ADD SOME FIELDS' ); // Warning x 2.
 		$wpdb->query( $wpdb->prepare( 'CREATE TABLE ' ) ); // Warning x 2.
 		$wpdb->query( 'SELECT QUERY' ); // Warning.
 		$baz = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // Warning.
-		wp_cache_set( 'baz', $baz );
+		WP_cache_SET( 'baz', $baz );
 	}
 }
 
@@ -66,7 +66,7 @@ function cache_delete_only() {
 	$wpdb->get_row( 'SELECT X FROM Y' ); // Warning x 2.
 	$wpdb->get_col( 'SELECT X FROM Y' ); // Warning x 2.
 
-	wp_cache_delete( 'key', 'group' );
+	WP_CACHE_DELETE( 'key', 'group' );
 }
 
 // It is OK to use the wp_cache_add() function instead of wp_cache_set().
@@ -332,3 +332,25 @@ function method_names_are_caseinsensitive() {
 	global $wpdb;
 	$autoload = $wpdb->Get_Var( $wpdb->Prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // Warning x 2.
 }
+
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[] MY_cacheget
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_CACHESET
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] MY_cachedel
+function cache_custom_mixed_case_A() {
+	global $wpdb;
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom_mixed_case_B() {
+	global $wpdb;
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	my_cachedel( 'key', 'group' );
+}
+
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[]
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[]
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[]
