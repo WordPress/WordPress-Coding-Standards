@@ -93,7 +93,7 @@ function cache_add_instead_of_set() {
 $b = function () {
 	global $wpdb;
 
-	if ( ! ( $listofthings = wp_cache_get( $foo ) ) ) {
+	if ( ! ( $listofthings = \Wp_Cache_Get( $foo ) ) ) {
 		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning.
 		wp_cache_set( 'foo', $listofthings );
 	}
@@ -378,4 +378,100 @@ function methodNamesSameAsCacheFunctions() {
 	}
 
 	return $listofthings;
+}
+
+/*
+ * Safeguard correct handling of namespaced function calls. The sniff deliberately does not distinguish between calls to
+ * WP global cache functions and calls to namespaced functions that mirror the name of the WP global cache functions as
+ * those are likely custom cache functions. This is consistent with the behavior for method calls (see the
+ * methodNamesSameAsCacheFunctions() test above).
+ */
+function callToFullyQualifiedCacheGetSet() {
+    global $wpdb;
+
+    if ( ! ( $listofthings = \wp_cache_get( $foo ) ) ) {
+        $listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+        \wp_cache_set( 'foo', $listofthings );
+    }
+
+    return $listofthings;
+}
+
+function callToQualifiedNamespacedCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = MyNamespace\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		MyNamespace\wp_cache_add( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToFullyQualifiedNamespacedCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = \MyNamespace\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		\MyNamespace\wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToRelativeNamespacedCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = namespace\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		namespace\wp_cache_add( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToMultiLevelNamespaceRelativeCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = namespace\Sub\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		namespace\Sub\wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToFullyQualifiedCacheDelete() {
+    global $wpdb;
+
+    $wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+    \wp_cache_delete( 'key', 'group' );
+}
+
+function callToQualifiedNamespacedCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	MyNamespace\clean_attachment_cache( 1 );
+}
+
+function callToFullyQualifiedNamespacedCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	\MyNamespace\CLEAN_POST_CACHE( 1 );
+}
+
+function callToRelativeNamespacedCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	namespace\clean_user_cache( 1 );
+}
+
+function callToMultiLevelNamespaceRelativeCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	namespace\Sub\clean_blog_cache( 1 );
 }
