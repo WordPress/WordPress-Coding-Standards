@@ -31,6 +31,7 @@ MyNamespace\wpdb::esc_like /* testPartiallyQualifiedOpenParen */ ( $find );
 namespace\wpdb::esc_like /* testNamespaceRelativeOpenParen */ ( $find ); // The method should start recognizing this as a WPDB method call once it can resolve relative namespaces since this test file is not namespaced.
 /* testNamespaceRelativeSub */
 namespace\Sub\wpdb::esc_like /* testNamespaceRelativeSubOpenParen */ ( $find );
+my_function( /* testNotStringOrVariable */ )->prepare /* testNotStringOrVariableOpenParen */ ( 'SELECT * FROM table' );
 
 /*
  * The below should be recognized as a $wpdb method call.
