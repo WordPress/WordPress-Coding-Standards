@@ -145,6 +145,7 @@ final class PreparedSQLSniff extends Sniff {
 		return array(
 			\T_VARIABLE,
 			\T_STRING,
+			\T_NAME_FULLY_QUALIFIED,
 		);
 	}
 
@@ -206,8 +207,14 @@ final class PreparedSQLSniff extends Sniff {
 				}
 			}
 
-			if ( \T_STRING === $this->tokens[ $this->i ]['code'] ) {
+			if ( \T_STRING === $this->tokens[ $this->i ]['code']
+				|| \T_NAME_FULLY_QUALIFIED === $this->tokens[ $this->i ]['code']
+			) {
 				$content_lowercase = strtolower( $this->tokens[ $this->i ]['content'] );
+
+				if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $this->i ]['code'] ) {
+					$content_lowercase = \ltrim( $content_lowercase, '\\' );
+				}
 
 				if (
 					isset( $this->SQLEscapingFunctions[ $content_lowercase ] )
@@ -225,7 +232,7 @@ final class PreparedSQLSniff extends Sniff {
 						$this->i = $this->tokens[ $opening_paren ]['parenthesis_closer'];
 						continue;
 					}
-				} elseif ( FormattingFunctionsHelper::is_formatting_function( $this->tokens[ $this->i ]['content'] ) ) {
+				} elseif ( FormattingFunctionsHelper::is_formatting_function( $content_lowercase ) ) {
 					continue;
 				}
 			}

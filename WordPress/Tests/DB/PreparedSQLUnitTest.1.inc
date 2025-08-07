@@ -173,7 +173,7 @@ namespace\Sub\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '
  */
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \absint( $foo ) );
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . MyNamespace\esc_sql( $foo ) );
-$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \MyNamespace\intval( $foo ) );
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \MyNamespace\intval( $foo, $bar ) );
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . namespace\floatval( $foo ) ); // This should NOT be flagged in the future once the sniff is able to resolve relative namespaces.
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . namespace\Sub\like_escape( $foo ) );
 
