@@ -142,6 +142,3 @@ echo $wpdb::CONSTANT_NAME;
 
 // Not an identifiable method call.
 $wpdb->{$methodName}('query');
-
-// Don't throw an error during live coding.
-wpdb::prepare( "SELECT * FROM $wpdb->posts
