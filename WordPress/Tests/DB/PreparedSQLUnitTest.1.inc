@@ -30,7 +30,7 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
 ), $post_ids ) );
 
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . esc_sql( $foo ) . "';" ); // Ok.
-$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . absint( $foo ) . ";" ); // Ok.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . ABSINT( $foo ) . ";" ); // Ok.
 
 // Test multi-line strings.
 $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
@@ -79,7 +79,7 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf( <<<'ND'
 		AND `post_id` IN (%s)
 ND
 	, $wpdb->postmeta,
-	IMPLODE( ',', array_fill( 0, count( $post_ids ), '%d' ) )
+	IMPLODE( ',', array_fill( 0, COUNT( $post_ids ), '%d' ) )
 ), $post_ids ) ); // OK.
 
 wpdb::prepare( "SELECT * FROM $wpdb?->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
