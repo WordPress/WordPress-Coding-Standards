@@ -38,7 +38,7 @@ jobs:
           php-version: ${{ matrix.php }}
           # With stable PHPCS dependencies, allow for PHP deprecation notices.
           # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
-          ini-values: error_reporting=-1, display_errors=On
+          ini-values: error_reporting=-1, display_errors=On, display_startup_errors=On
           coverage:  ${{ github.ref_name == 'develop' && 'xdebug' || 'none' }}
 
       - name: Enable creation of `composer.lock` file
