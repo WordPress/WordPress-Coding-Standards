@@ -219,14 +219,15 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 			$var_name = '';
 			$start    = ( $bracketPtr + 1 );
 			for ( $ptr = $start; $ptr < $this->tokens[ $bracketPtr ]['bracket_closer']; $ptr++ ) {
+				$ignored_tokens                            = Collections::nameTokens();
+				$ignored_tokens[ \T_VARIABLE ]             = \T_VARIABLE;
+				$ignored_tokens[ \T_DOUBLE_QUOTED_STRING ] = \T_DOUBLE_QUOTED_STRING;
+
 				/*
 				 * If the globals array key contains a variable, constant, function call
 				 * or interpolated variable, bow out.
 				 */
-				if ( \T_VARIABLE === $this->tokens[ $ptr ]['code']
-					|| \T_STRING === $this->tokens[ $ptr ]['code']
-					|| \T_DOUBLE_QUOTED_STRING === $this->tokens[ $ptr ]['code']
-				) {
+				if ( isset( $ignored_tokens[ $this->tokens[ $ptr ]['code'] ] ) === true ) {
 					return;
 				}
 
