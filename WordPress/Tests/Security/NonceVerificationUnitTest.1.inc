@@ -486,3 +486,10 @@ enum MyEnum {
 		echo $_POST['foo']; // OK.
 	}
 }
+
+// Good, has a nonce check. Ensure the check is case-insensitive as function names are case-insensitive in PHP.
+function ajax_process() {
+    CHECK_AJAX_REFERER( 'something' );
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}

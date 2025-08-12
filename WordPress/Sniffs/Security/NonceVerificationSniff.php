@@ -309,8 +309,10 @@ class NonceVerificationSniff extends Sniff {
 				continue;
 			}
 
+			$content_lc = \strtolower( $this->tokens[ $i ]['content'] );
+
 			// If this is one of the nonce verification functions, we can bail out.
-			if ( isset( $this->nonceVerificationFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+			if ( isset( $this->nonceVerificationFunctions[ $content_lc ] ) ) {
 				/*
 				 * Now, make sure it is a call to a global function.
 				 */
