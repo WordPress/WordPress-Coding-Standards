@@ -320,3 +320,15 @@ class AsymmetricVisibilityProperties {
 
     public function __construct(public protected(set) int $page = 0) {} // Ok.
 }
+
+/*
+ * $GLOBALS with non-string key, unable to determine if it is a global variable override or not.
+ */
+$GLOBALS[ "some{$name}" ] = 'test'; // Ok.
+$GLOBALS[ $obj->global_name ] = 'test'; // Ok.
+$GLOBALS[ MyClass::GLOBAL_NAME ] = 'test'; // Ok.
+$GLOBALS[ GLOBAL_NAME_CONSTANT ] = 'test'; // Ok.
+$GLOBALS[ get_my_global_name() ] = 'test'; // Ok.
+$GLOBALS[ MyNamespace\get_my_global_name() ] = 'test'; // Ok.
+$GLOBALS[ \MyNamespace\get_my_global_name() ] = 'test'; // Ok.
+$GLOBALS[ namespace\get_my_global_name() ] = 'test'; // Ok.
