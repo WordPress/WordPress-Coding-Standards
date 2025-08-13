@@ -83,3 +83,15 @@ wp_register_script( 'someScript-js', $url, [], 0_0.0_0, true ); // Error - 0, fa
 
 // Safeguard handling of PHP 8.1 explicit octals.
 wp_register_script( 'someScript-js', $url, [], 0o0, true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard against PHP 8.5 deprecation of non-standard cast names.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (boolean) 1, true ); // OK.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (boolean) 0, true ); // Error - 0, false or NULL are not allowed.
+
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (integer) 1, true ); // OK.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (integer) 0, true ); // Error - 0, false or NULL are not allowed.
+
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (double) 1, true ); // OK.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (double) 0, true ); // Error - 0, false or NULL are not allowed.
+
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (binary) 0, true ); // Error - 0, false or NULL are not allowed.
