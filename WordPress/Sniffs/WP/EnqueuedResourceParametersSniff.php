@@ -227,6 +227,30 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 				continue;
 			}
 
+			// Make sure that when deprecated casts are used in the code under scan and the sniff is run on PHP 8.5,
+			// the eval() won't cause a deprecation notice, borking the scan of the file.
+			if ( \PHP_VERSION_ID >= 80500 ) {
+				if ( \T_INT_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(int)';
+					continue;
+				}
+
+				if ( \T_DOUBLE_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(float)';
+					continue;
+				}
+
+				if ( \T_BOOL_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(bool)';
+					continue;
+				}
+
+				if ( \T_BINARY_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(string)';
+					continue;
+				}
+			}
+
 			$code_string .= $this->tokens[ $i ]['content'];
 		}
 
