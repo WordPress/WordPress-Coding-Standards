@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Sniffs\NamingConventions;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\WPHookHelper;
@@ -137,7 +138,7 @@ class ValidHookNameSniff extends AbstractFunctionParameterSniff {
 
 			// Skip over parameters passed to function calls.
 			if ( \T_OPEN_PARENTHESIS === $this->tokens[ $i ]['code']
-				&& ( \T_STRING === $this->tokens[ $last_non_empty ]['code']
+				&& ( isset( Collections::nameTokens()[ $this->tokens[ $last_non_empty ]['code'] ] )
 				|| \T_VARIABLE === $this->tokens[ $last_non_empty ]['code'] )
 				&& isset( $this->tokens[ $i ]['parenthesis_closer'] )
 			) {
