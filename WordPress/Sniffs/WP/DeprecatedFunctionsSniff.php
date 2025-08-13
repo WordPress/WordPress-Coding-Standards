@@ -1759,7 +1759,8 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * @param string $group_name      The name of the group which was matched. Will
 	 *                                always be 'deprecated_functions'.
 	 * @param string $matched_content The token content (function name) which was matched
-	 *                                in lowercase.
+	 *                                in lowercase. For T_NAME_FULLY_QUALIFIED tokens,
+	 *                                the leading backslash is removed.
 	 *
 	 * @return void
 	 */

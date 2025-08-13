@@ -213,7 +213,8 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched
-	 *                                in lowercase.
+	 *                                in lowercase. For T_NAME_FULLY_QUALIFIED tokens,
+	 *                                the leading backslash is removed.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.
