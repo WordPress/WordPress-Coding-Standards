@@ -114,6 +114,19 @@ final class ContextHelper {
 	);
 
 	/**
+	 * List of tokens representing qualified names.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var array<int|string, bool>
+	 */
+	private static $qualifiedNameTokens = array(
+		\T_NAME_FULLY_QUALIFIED => true,
+		\T_NAME_QUALIFIED       => true,
+		\T_NAME_RELATIVE        => true,
+	);
+
+	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
 	 * {@internal Note: this may still mistake a namespaced function imported via a `use` statement for
@@ -186,7 +199,7 @@ final class ContextHelper {
 	 *
 	 * For example: this function could be used to determine if the variable `$foo` is used
 	 * in a global function call to the function `is_foo()`.
-	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
+	 * In that case, a call to this function would return the stackPtr to the name token `is_foo`
 	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
 	 * the following code `is_bar( $foo, 'some_other_param' )`.
 	 *
@@ -215,7 +228,7 @@ final class ContextHelper {
 	 *                                                     or only `strtolower( $var )`.
 	 *                                                     Defaults to `false`.
 	 *
-	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
+	 * @return int|bool Stack pointer to the function call name token or false otherwise.
 	 */
 	public static function is_in_function_call( File $phpcsFile, $stackPtr, array $valid_functions, $global_function = true, $allow_nested = false ) {
 		$valid_functions = array_change_key_case( $valid_functions, \CASE_LOWER );
@@ -232,11 +245,25 @@ final class ContextHelper {
 
 		foreach ( $nested_parenthesis as $open => $close ) {
 			$prev_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true );
-			if ( false === $prev_non_empty || \T_STRING !== $tokens[ $prev_non_empty ]['code'] ) {
+			if ( false === $prev_non_empty || isset( Collections::nameTokens()[ $tokens[ $prev_non_empty ]['code'] ] ) === false ) {
 				continue;
 			}
 
-			if ( isset( $valid_functions[ strtolower( $tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
+			$functionNameLC = \strtolower( $tokens[ $prev_non_empty ]['content'] );
+
+			if ( true === $global_function
+				&& \T_NAME_FULLY_QUALIFIED === $tokens[ $prev_non_empty ]['code']
+			) {
+				$functionNameLC = \ltrim( $functionNameLC, '\\' );
+			}
+
+			if ( false === $global_function
+				&& isset( self::$qualifiedNameTokens[ $tokens[ $prev_non_empty ]['code'] ] ) === true
+			) {
+				$functionNameLC = \substr( $functionNameLC, \strrpos( $functionNameLC, '\\' ) + 1 );
+			}
+
+			if ( isset( $valid_functions[ $functionNameLC ] ) === false ) {
 				if ( false === $allow_nested ) {
 					// Function call encountered, but not to one of the allowed functions.
 					return false;
