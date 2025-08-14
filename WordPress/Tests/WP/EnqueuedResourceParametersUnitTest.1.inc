@@ -98,3 +98,13 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 
 // Safeguard handling of non-lowercase `null`.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), NULL, true ); // Warning - 0, false or NULL are not allowed.
+
+/*
+ * Safeguard handling of fully qualified \true, \false and \null.
+ * Also safeguard that adding T_NS_SEPARATOR to $false_tokens doesn't cause false positives due to problems in is_falsy().
+ */
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \FALSE, \true ); // Error - 0, false or NULL are not allowed.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \null, \TRUE ); // Warning - 0, false or NULL are not allowed.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \Null, true ); // Warning - 0, false or NULL are not allowed.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \true, \False ); // Ok.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \get_version(), \null ); // OK.

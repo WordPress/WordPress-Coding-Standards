@@ -31,22 +31,23 @@ final class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'EnqueuedResourceParametersUnitTest.1.inc':
 				return array(
-					6  => 1,
-					9  => 1,
-					10 => 1,
-					12 => 1,
-					13 => 1,
-					14 => 1,
-					22 => 1,
-					54 => 1,
-					57 => 1,
-					61 => 1,
-					82 => 1,
-					85 => 1,
-					89 => 1,
-					92 => 1,
-					95 => 1,
-					97 => 1,
+					6   => 1,
+					9   => 1,
+					10  => 1,
+					12  => 1,
+					13  => 1,
+					14  => 1,
+					22  => 1,
+					54  => 1,
+					57  => 1,
+					61  => 1,
+					82  => 1,
+					85  => 1,
+					89  => 1,
+					92  => 1,
+					95  => 1,
+					97  => 1,
+					106 => 1,
 				);
 
 			case 'EnqueuedResourceParametersUnitTest.2.inc':
@@ -79,6 +80,8 @@ final class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 					66  => 2,
 					77  => 1,
 					100 => 1,
+					107 => 1,
+					108 => 1,
 				);
 
 			default:

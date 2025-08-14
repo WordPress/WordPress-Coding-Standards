@@ -54,14 +54,15 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	);
 
 	/**
-	 * False + the empty tokens array.
+	 * False + T_NS_SEPARATOR + the empty tokens array.
 	 *
 	 * This array is enriched with the $emptyTokens array in the register() method.
 	 *
 	 * @var array<int|string, int|string>
 	 */
 	private $false_tokens = array(
-		\T_FALSE => \T_FALSE,
+		\T_FALSE        => \T_FALSE,
+		\T_NS_SEPARATOR => \T_NS_SEPARATOR, // Needed to handle fully qualified \false (PHPCS 3.x).
 	);
 
 	/**
@@ -141,7 +142,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 			}
 		}
 
-		if ( false === $version_param || 'null' === strtolower( $version_param['clean'] ) ) {
+		if ( false === $version_param || strtolower( ltrim( $version_param['clean'], '\\' ) ) === 'null' ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
 				$type = 'style';
