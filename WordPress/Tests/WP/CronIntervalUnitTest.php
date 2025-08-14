@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress\Tests\WP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the CronInterval sniff.
@@ -37,6 +38,9 @@ final class CronIntervalUnitTest extends AbstractSniffTestCase {
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		return array(
 			12  => 1,
 			17  => 1,
@@ -65,11 +69,15 @@ final class CronIntervalUnitTest extends AbstractSniffTestCase {
 			286 => 1,
 			288 => 1,
 			290 => 1,
+			319 => ( true === $is_phpcs_4 ) ? 1 : 0,
 			328 => 1,
 			329 => 1,
 			330 => 1,
 			331 => 1,
 			332 => 1,
+			341 => ( true === $is_phpcs_4 ) ? 1 : 0,
+			342 => ( true === $is_phpcs_4 ) ? 1 : 0,
+			343 => ( true === $is_phpcs_4 ) ? 1 : 0,
 			352 => 1,
 			353 => 1,
 			354 => 1,
