@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\ConstantsHelper;
 
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\TestUtils\UtilityMethodTestCase;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
 
@@ -62,6 +63,9 @@ final class IsUseOfGlobalConstantUnitTest extends UtilityMethodTestCase {
 	 * @return array<string, array<string, bool|int|string>>
 	 */
 	public static function dataIsUseOfGlobalConstant() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		return array(
 			// Cases that should return false.
 			'variable_assignment' => array(
@@ -184,24 +188,26 @@ final class IsUseOfGlobalConstantUnitTest extends UtilityMethodTestCase {
 			'partially_qualified_namespaced_constant' => array(
 				'testMarker'     => '/* testPartiallyQualifiedNamespacedConstant */',
 				'expectedResult' => false,
-				'tokenType'      => \T_STRING,
-				'tokenContent'   => 'PHP_OS',
+				'tokenType'      => ( true === $is_phpcs_4 ? \T_NAME_QUALIFIED : \T_STRING ),
+				'tokenContent'   => ( true === $is_phpcs_4 ? 'MyNamespace\PHP_OS' : 'PHP_OS' ),
 			),
 			'fully_qualified_namespaced_constant' => array(
 				'testMarker'     => '/* testFullyQualifiedNamespacedConstant */',
 				'expectedResult' => false,
-				'tokenType'      => \T_STRING,
-				'tokenContent'   => 'PHP_OS',
+				'tokenType'      => ( true === $is_phpcs_4 ? \T_NAME_FULLY_QUALIFIED : \T_STRING ),
+				'tokenContent'   => ( true === $is_phpcs_4 ? '\MyNamespace\PHP_OS' : 'PHP_OS' ),
 			),
 			'namespace_relative_constant' => array(
 				'testMarker'     => '/* testNamespaceRelativeConstant */',
 				'expectedResult' => false,
+				'tokenType'      => ( true === $is_phpcs_4 ? \T_NAME_RELATIVE : \T_STRING ),
+				'tokenContent'   => ( true === $is_phpcs_4 ? 'namespace\PHP_OS' : 'PHP_OS' ),
 			),
 			'namespace_relative_sub_constant' => array(
 				'testMarker'     => '/* testNamespaceRelativeSubConstant */',
 				'expectedResult' => false,
-				'tokenType'      => \T_STRING,
-				'tokenContent'   => 'PHP_OS',
+				'tokenType'      => ( true === $is_phpcs_4 ? \T_NAME_RELATIVE : \T_STRING ),
+				'tokenContent'   => ( true === $is_phpcs_4 ? 'namespace\Sub\PHP_OS' : 'PHP_OS' ),
 			),
 			'class_constant_declaration' => array(
 				'testMarker'     => '/* testClassConstantDeclaration */',
@@ -224,6 +230,8 @@ final class IsUseOfGlobalConstantUnitTest extends UtilityMethodTestCase {
 			'echo_statement_fully_qualified' => array(
 				'testMarker'     => '/* testEchoStatementFullyQualified */',
 				'expectedResult' => true,
+				'tokenType'      => ( true === $is_phpcs_4 ? \T_NAME_FULLY_QUALIFIED : \T_STRING ),
+				'tokenContent'   => ( true === $is_phpcs_4 ? '\PHP_OS' : 'PHP_OS' ),
 			),
 			'const_declaration' => array(
 				'testMarker'     => '/* testConstDeclaration */',

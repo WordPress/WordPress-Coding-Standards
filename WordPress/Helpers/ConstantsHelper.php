@@ -34,7 +34,8 @@ use WordPressCS\WordPress\Helpers\ContextHelper;
 final class ConstantsHelper {
 
 	/**
-	 * Determine whether an arbitrary T_STRING token is the use of a global constant.
+	 * Determine whether an arbitrary T_STRING or T_NAME_FULLY_QUALIFIED token is the use of a
+	 * global constant.
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 - Moved from the Sniff class to this class.
@@ -42,7 +43,7 @@ final class ConstantsHelper {
 	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The position of the T_STRING token.
+	 * @param int                         $stackPtr  The position of the T_STRING or T_NAME_FULLY_QUALIFIED token.
 	 *
 	 * @return bool
 	 */
@@ -55,7 +56,9 @@ final class ConstantsHelper {
 		}
 
 		// Is this one of the tokens this function handles ?
-		if ( \T_STRING !== $tokens[ $stackPtr ]['code'] ) {
+		if ( \T_STRING !== $tokens[ $stackPtr ]['code']
+			&& \T_NAME_FULLY_QUALIFIED !== $tokens[ $stackPtr ]['code']
+		) {
 			return false;
 		}
 
@@ -89,6 +92,14 @@ final class ConstantsHelper {
 		if ( isset( $tokens_to_ignore[ $tokens[ $prev ]['code'] ] ) ) {
 			// Not the use of a constant.
 			return false;
+		}
+
+		// If the token is a fully qualified name, ensure it does not include a namespace path.
+		if ( \T_NAME_FULLY_QUALIFIED === $tokens[ $stackPtr ]['code'] ) {
+			$trimmed = \ltrim( $tokens[ $stackPtr ]['content'], '\\' );
+			if ( \strpos( $trimmed, '\\' ) !== false ) {
+				return false;
+			}
 		}
 
 		if ( ContextHelper::is_token_namespaced( $phpcsFile, $stackPtr ) === true ) {
