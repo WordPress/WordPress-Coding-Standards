@@ -81,6 +81,10 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/pull/1264 -->
 	<rule ref="WordPress.Security.SafeRedirect"/>
 
+	<!-- Encourage use of wp_safe_remote_* functions to avoid potential security issues.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1288 -->
+	<rule ref="WordPress.Security.SafeRemoteRequest"/>
+
 	<!-- Verify that a nonce check is done before using values in superglobals.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/73 -->
 	<rule ref="WordPress.Security.NonceVerification"/>

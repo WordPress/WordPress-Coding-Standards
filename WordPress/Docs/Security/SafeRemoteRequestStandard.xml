@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Safe Remote Request"
+    >
+    <standard>
+    <![CDATA[
+    The wp_safe_remote_* functions should be used instead of wp_remote_* functions when dealing with URLs that might be user-controlled. The wp_remote_* functions do not validate URLs, which can lead to potential malicious requests. The wp_safe_remote_* functions validate URLs to avoid redirection and request forgery attacks (SSRF - Server-Side Request Forgery).
+
+    This is particularly important when:
+    - The URL comes from user input ($_GET, $_POST, etc.)
+    - The URL is stored in the database and could have been modified
+    - The URL comes from any untrusted source
+
+    The safe alternatives are:
+    - wp_safe_remote_get() instead of wp_remote_get()
+    - wp_safe_remote_post() instead of wp_remote_post()
+    - wp_safe_remote_head() instead of wp_remote_head()
+    - wp_safe_remote_request() instead of wp_remote_request()
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using safe remote request functions.">
+        <![CDATA[
+// GET request with URL validation
+$response = <em>wp_safe_remote_get</em>( $url );
+
+// POST request with URL validation
+$response = <em>wp_safe_remote_post</em>( $url, array(
+    'body' => $data
+) );
+
+// HEAD request with URL validation
+$response = <em>wp_safe_remote_head</em>( $url );
+
+// Generic request with URL validation
+$response = <em>wp_safe_remote_request</em>( $url, array(
+    'method' => 'DELETE'
+) );
+        ]]>
+        </code>
+        <code title="Invalid: Using unsafe remote request functions.">
+        <![CDATA[
+// GET request without URL validation
+$response = <em>wp_remote_get</em>( $url );
+
+// POST request without URL validation
+$response = <em>wp_remote_post</em>( $url, array(
+    'body' => $data
+) );
+
+// HEAD request without URL validation
+$response = <em>wp_remote_head</em>( $url );
+
+// Generic request without URL validation
+$response = <em>wp_remote_request</em>( $url, array(
+    'method' => 'DELETE'
+) );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
