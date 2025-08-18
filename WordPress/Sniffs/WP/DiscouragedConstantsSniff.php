@@ -72,7 +72,13 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		if ( isset( $this->target_functions[ strtolower( $this->tokens[ $stackPtr ]['content'] ) ] ) ) {
+		$content_lc = strtolower( $this->tokens[ $stackPtr ]['content'] );
+
+		if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $stackPtr ]['code'] ) {
+			$content_lc = \ltrim( $content_lc, '\\' );
+		}
+
+		if ( isset( $this->target_functions[ $content_lc ] ) ) {
 			// Disallow excluding function groups for this sniff.
 			$this->exclude = array();
 
@@ -84,7 +90,8 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	}
 
 	/**
-	 * Process an arbitrary T_STRING token to determine whether it is one of the target constants.
+	 * Process an arbitrary T_STRING or T_NAME_FULLY_QUALIFIED token to determine whether it is one
+	 * of the target constants.
 	 *
 	 * @since 0.14.0
 	 *
@@ -94,6 +101,10 @@ final class DiscouragedConstantsSniff extends AbstractFunctionParameterSniff {
 	 */
 	public function process_arbitrary_tstring( $stackPtr ) {
 		$content = $this->tokens[ $stackPtr ]['content'];
+
+		if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $stackPtr ]['code'] ) {
+			$content = \ltrim( $content, '\\' );
+		}
 
 		if ( ! isset( $this->discouraged_constants[ $content ] ) ) {
 			return;
