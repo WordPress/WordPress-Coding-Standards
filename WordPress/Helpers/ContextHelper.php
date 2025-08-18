@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\PassedParameters;
@@ -176,6 +177,28 @@ final class ContextHelper {
 			return false;
 		}
 
+		$isPhpcs3 = version_compare( Helper::getVersion(), '3.99.99', '<=' );
+
+		if ( true === $isPhpcs3 ) {
+			return self::is_token_namespaced_phpcs3( $phpcsFile, $stackPtr );
+		}
+
+		return self::is_token_namespaced_phpcs4( $phpcsFile, $stackPtr );
+	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace when running PHPCS 3. Different
+	 * methods are necessary because the tokenization of namespaced names changed between PHPCS 3
+	 * and 4.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	private static function is_token_namespaced_phpcs3( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
 		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		if ( \T_NS_SEPARATOR !== $tokens[ $prev ]['code'] ) {
@@ -190,6 +213,35 @@ final class ContextHelper {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace when running PHPCS 4. Different
+	 * methods are necessary because the tokenization of namespaced names changed between PHPCS 3
+	 * and 4.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	private static function is_token_namespaced_phpcs4( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( \T_NAME_QUALIFIED === $tokens[ $stackPtr ]['code']
+			|| \T_NAME_RELATIVE === $tokens[ $stackPtr ]['code']
+		) {
+			return true;
+		}
+
+		// If the token is a fully qualified name, consider it as namespaced if it contains
+		// more than one namespace separator (i.e., not in the global namespace).
+		if ( \T_NAME_FULLY_QUALIFIED === $tokens[ $stackPtr ]['code']
+			&& \substr_count( $tokens[ $stackPtr ]['content'], '\\' ) > 1 ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

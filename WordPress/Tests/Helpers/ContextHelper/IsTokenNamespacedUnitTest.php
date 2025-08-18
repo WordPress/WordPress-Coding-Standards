@@ -9,6 +9,8 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\ContextHelper;
 
+use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\TestUtils\UtilityMethodTestCase;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 
@@ -42,7 +44,7 @@ final class IsTokenNamespacedUnitTest extends UtilityMethodTestCase {
 	 * @return void
 	 */
 	public function testIsTokenNamespaced( $testMarker, $expectedResult, $tokenContent ) {
-		$stackPtr = $this->getTargetToken( $testMarker, \T_STRING, $tokenContent );
+		$stackPtr = $this->getTargetToken( $testMarker, Collections::nameTokens(), $tokenContent );
 		$result   = ContextHelper::is_token_namespaced( self::$phpcsFile, $stackPtr );
 
 		$this->assertSame( $expectedResult, $result );
@@ -56,6 +58,8 @@ final class IsTokenNamespacedUnitTest extends UtilityMethodTestCase {
 	 * @return array<string, array<string, bool|string>>
 	 */
 	public static function dataIsTokenNamespaced() {
+		$isPhpcs3 = version_compare( Helper::getVersion(), '3.99.99', '<=' );
+
 		return array(
 			// Cases that should return false.
 			'unqualified' => array(
@@ -66,29 +70,29 @@ final class IsTokenNamespacedUnitTest extends UtilityMethodTestCase {
 			'fully_qualified' => array(
 				'testMarker'     => '/* testFullyQualified */',
 				'expectedResult' => false,
-				'tokenContent'   => 'MY_CONSTANT',
+				'tokenContent'   => ( $isPhpcs3 ? 'MY_CONSTANT' : '\MY_CONSTANT' ),
 			),
 
 			// Cases that should return true.
 			'partially_qualified' => array(
 				'testMarker'     => '/* testPartiallyQualified */',
 				'expectedResult' => true,
-				'tokenContent'   => 'my_function',
+				'tokenContent'   => ( $isPhpcs3 ? 'my_function' : 'MyNamespace\my_function' ),
 			),
 			'fully_qualified_namespaced' => array(
 				'testMarker'     => '/* testFullyQualifiedNamespaced */',
 				'expectedResult' => true,
-				'tokenContent'   => 'MyClass',
+				'tokenContent'   => ( $isPhpcs3 ? 'MyClass' : '\MyNamespace\MyClass' ),
 			),
 			'namespace_relative' => array(
 				'testMarker'     => '/* testNamespaceRelative */',
 				'expectedResult' => true,
-				'tokenContent'   => 'MY_CONSTANT',
+				'tokenContent'   => ( $isPhpcs3 ? 'MY_CONSTANT' : 'namespace\MY_CONSTANT' ),
 			),
 			'namespace_relative_sub' => array(
 				'testMarker'     => '/* testNamespaceRelativeSub */',
 				'expectedResult' => true,
-				'tokenContent'   => 'my_function',
+				'tokenContent'   => ( $isPhpcs3 ? 'my_function' : 'namespace\Sub\my_function' ),
 			),
 		);
 	}
