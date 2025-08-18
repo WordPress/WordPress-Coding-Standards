@@ -80,10 +80,10 @@ enum BACKGROUND_COLOR: string implements Colorful {}
 
 // Safeguard support for PHP 8.0+ named parameters.
 define( case_insensitive: false, value: 'something' ); // OK. Well, not really as missing a required param, but that's not the concern of this sniff.
-define( case_insensitive: false, constant_name: 'STYLESHEETPATH', value: 'something' ); // Bad.
+\DEFINE( case_insensitive: false, constant_name: 'STYLESHEETPATH', value: 'something' ); // Bad.
 
 // Safeguard that comments in the parameters are ignored.
-define(
+Define(
 	// Name.
 	'STYLESHEETPATH',
 	// Value.
@@ -102,3 +102,11 @@ enum ContainsConst {
 }
 
 echo HEADER_TEXTCOLOR::$var; // OK.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\define( 'HEADER_IMAGE', 'something' ); // Bad.
+\MyNamespace\define( 'TEMPLATEPATH', 'something' ); // Ok.
+MyNamespace\define( 'PLUGINDIR', 'something' ); // Ok.
+namespace\define( 'MUPLUGINDIR', 'something' ); // Ok.
