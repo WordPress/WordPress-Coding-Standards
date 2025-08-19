@@ -187,6 +187,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 		$start = ( $stackPtr + 1 );
 
 		switch ( $this->tokens[ $stackPtr ]['code'] ) {
+			case \T_NAME_FULLY_QUALIFIED:
 			case \T_STRING:
 				// Prevent exclusion of any of the function groups.
 				$this->exclude = array();
@@ -575,9 +576,15 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				continue;
 			}
 
+			$content = $this->tokens[ $i ]['content'];
+
+			if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $i ]['code'] ) {
+				$content = \ltrim( $content, '\\' );
+			}
+
 			// Ignore safe PHP native constants.
-			if ( \T_STRING === $this->tokens[ $i ]['code']
-				&& isset( $this->safe_php_constants[ $this->tokens[ $i ]['content'] ] )
+			if ( ( \T_STRING === $this->tokens[ $i ]['code'] || \T_NAME_FULLY_QUALIFIED === $this->tokens[ $i ]['code'] )
+				&& isset( $this->safe_php_constants[ $content ] )
 				&& ConstantsHelper::is_use_of_global_constant( $this->phpcsFile, $i )
 			) {
 				continue;
@@ -613,7 +620,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			}
 
 			// Check for use of *::class.
-			if ( \T_STRING === $this->tokens[ $i ]['code']
+			if ( isset( Collections::nameTokens()[ $this->tokens[ $i ]['code'] ] )
 				|| \T_VARIABLE === $this->tokens[ $i ]['code']
 				|| isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $i ]['code'] ] )
 				|| \T_NAMESPACE === $this->tokens[ $i ]['code']
@@ -679,9 +686,9 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			}
 
 			// Now check that the next token is a function call.
-			if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+			if ( \T_STRING === $this->tokens[ $i ]['code'] || \T_NAME_FULLY_QUALIFIED === $this->tokens[ $i ]['code'] ) {
 				$ptr                    = $i;
-				$functionName           = $this->tokens[ $i ]['content'];
+				$functionName           = $content;
 				$function_opener        = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
 				$is_formatting_function = FormattingFunctionsHelper::is_formatting_function( $functionName );
 
