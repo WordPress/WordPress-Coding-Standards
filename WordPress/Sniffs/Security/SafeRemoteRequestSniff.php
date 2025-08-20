@@ -62,7 +62,8 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 
 		// If we can't find the parameter, trigger the warning (defensive).
 		if ( false === $url_param ) {
-			return $this->trigger_warning( $stackPtr, $group_name, $matched_content );
+			$this->trigger_warning( $stackPtr, $group_name, $matched_content );
+			return;
 		}
 
 		// Check if this is an expression containing only safe elements.
@@ -71,7 +72,7 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		// For all other cases, trigger the warning.
-		return $this->trigger_warning( $stackPtr, $group_name, $matched_content );
+		$this->trigger_warning( $stackPtr, $group_name, $matched_content );
 	}
 
 	/**
@@ -80,7 +81,7 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 	 * @param array $url_param The URL parameter information.
 	 * @return bool Whether the expression is safe.
 	 */
-	private function is_safe_expression( array $url_param ): bool {
+	private function is_safe_expression( array $url_param ) {
 		// If the URL is a string literal, it's not user-controlled so we don't trigger a warning.
 		if ( StringLiteralHelper::is_string_literal( $url_param, $this->phpcsFile->getTokens() ) ) {
 			return true;
@@ -115,7 +116,7 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 					\T_SELF,
 					\T_STATIC,
 					\T_NS_SEPARATOR,
-					\T_PARENT
+					\T_PARENT,
 				),
 				true
 			) ) {
@@ -148,13 +149,14 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 		// Extract the function type (get, post, head, request) from the matched function name.
 		$function_type = str_replace( 'wp_remote_', '', $matched_content );
 
-		// Build the custom message with the specific safe alternative.
-		$message = sprintf(
+		$this->phpcsFile->addWarning(
 			$this->groups[ $group_name ]['message'],
-			$matched_content,
-			$function_type
+			$stackPtr,
+			'Found',
+			array(
+				$matched_content,
+				$function_type,
+			)
 		);
-
-		$this->phpcsFile->addWarning( $message, $stackPtr, 'Found' );
 	}
 }

@@ -55,7 +55,7 @@ final class StringLiteralHelper {
 		$non_empty_count = 0;
 		for ( $i = $param_info['start']; $i <= $param_info['end']; $i++ ) {
 			if ( ! isset( Tokens::$emptyTokens[ $tokens[ $i ]['code'] ] ) ) {
-				$non_empty_count++;
+				++$non_empty_count;
 				if ( $non_empty_count > 1 ) {
 					// More than one non-empty token means concatenation or complex expression.
 					return false;
