@@ -36,7 +36,7 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 		return array(
 			'unsafe_remote_requests' => array(
 				'type'      => 'warning',
-				'message'   => '%s() found. Using wp_safe_remote_%s() instead can help avoid redirection and request forgery attacks when dealing with user-controlled URLs.',
+				'message'   => 'Found: %s(). Using wp_safe_remote_%s() instead can help avoid redirection and request forgery attacks when dealing with user-controlled URLs.',
 				'functions' => array(
 					'wp_remote_get',
 					'wp_remote_post',
