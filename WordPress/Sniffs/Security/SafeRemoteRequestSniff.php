@@ -65,18 +65,75 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 			return $this->trigger_warning( $stackPtr, $group_name, $matched_content );
 		}
 
-		// If the URL is a string literal, it's not user-controlled so we don't trigger a warning.
-		if ( StringLiteralHelper::is_string_literal( $url_param, $this->phpcsFile->getTokens() ) ) {
-			return;
-		}
-
-		// If the URL is a class constant, it's not user-controlled so we don't trigger a warning.
-		if ( ConstantsHelper::is_use_of_class_constant( $this->phpcsFile, $url_param['start'], $url_param['end'] ) ) {
+		// Check if this is an expression containing only safe elements.
+		if ( $this->is_safe_expression( $url_param ) ) {
 			return;
 		}
 
 		// For all other cases, trigger the warning.
 		return $this->trigger_warning( $stackPtr, $group_name, $matched_content );
+	}
+
+	/**
+	 * Check if this is a safe expression containing only constant and literal values.
+	 *
+	 * @param array $url_param The URL parameter information.
+	 * @return bool Whether the expression is safe.
+	 */
+	private function is_safe_expression( array $url_param ): bool {
+		// If the URL is a string literal, it's not user-controlled so we don't trigger a warning.
+		if ( StringLiteralHelper::is_string_literal( $url_param, $this->phpcsFile->getTokens() ) ) {
+			return true;
+		}
+
+		// If the URL is a class constant, it's not user-controlled so we don't trigger a warning.
+		if ( ConstantsHelper::is_use_of_class_constant( $this->phpcsFile, $url_param['start'], $url_param['end'] ) ) {
+			return true;
+		}
+
+		$tokens = $this->phpcsFile->getTokens();
+
+		for ( $i = $url_param['start']; $i <= $url_param['end']; $i++ ) {
+			$token = $tokens[ $i ];
+
+			// Safe tokens we can skip.
+			if ( \T_WHITESPACE === $token['code'] || \T_STRING_CONCAT === $token['code'] ) {
+				continue;
+			}
+
+			// Safe: string literals.
+			if ( \in_array( $token['code'], array( \T_CONSTANT_ENCAPSED_STRING, \T_DOUBLE_QUOTED_STRING ), true ) ) {
+				continue;
+			}
+
+			// Potentially safe: class constants and namespaces, but check for function calls.
+			if ( \in_array(
+				$token['code'],
+				array(
+					\T_STRING,
+					\T_DOUBLE_COLON,
+					\T_SELF,
+					\T_STATIC,
+					\T_NS_SEPARATOR,
+					\T_PARENT
+				),
+				true
+			) ) {
+				// Unsafe: if followed by opening parenthesis, it's a function call.
+				$next_meaningful = $this->phpcsFile->findNext( array( \T_WHITESPACE ), $i + 1, null, true );
+				if ( false !== $next_meaningful && \T_OPEN_PARENTHESIS === $tokens[ $next_meaningful ]['code'] ) {
+					return false;
+				}
+				continue;
+			}
+
+			// Unsafe: any other token type (variables, function calls, etc.).
+			// Fail safe by default - unknown/unhandled tokens are treated as unsafe.
+			return false;
+		}
+
+		// Safe: if we've examined all tokens and found only safe ones.
+		return true;
 	}
 
 	/**
