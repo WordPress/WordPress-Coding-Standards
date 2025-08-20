@@ -134,58 +134,102 @@ final class ConstantsHelper {
 	}
 
 	/**
-	 * Check if a parameter is a class constant (e.g., MyClass::CONSTANT).
+	 * Check if a token range represents a class constant usage (e.g., MyClass::CONSTANT).
+	 *
+	 * This method detects when a class constant is being *accessed/used*, not when it's being *declared*.
+	 * For detecting class constant *declarations* (e.g., `const API_URL = '...'` inside a class),
+	 * use `PHPCSUtils\Utils\Scopes::isOOConstant()` instead.
 	 *
 	 * @since x.y.z
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile   The file being scanned.
-	 * @param array                       $param_info  Parameter info array as received from PassedParameters::getParameter().
-	 * @return bool True if the parameter is a class constant, false otherwise.
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $startPtr  The start position of the token range.
+	 * @param int                         $endPtr    The end position of the token range.
+	 * @return bool Whether the token range represents class constant usage.
 	 */
-	public static function is_class_constant( File $phpcsFile, $param_info ) {
-		if ( false === $param_info || '' === $param_info['clean'] ) {
+	public static function is_use_of_class_constant( File $phpcsFile, $startPtr, $endPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $startPtr ] ) || ! isset( $tokens[ $endPtr ] ) ) {
 			return false;
 		}
 
-		$tokens = $phpcsFile->getTokens();
+		$invalid_tokens = array(
+			\T_STRING_CONCAT        => true,
+			\T_PLUS                 => true,
+			\T_MINUS                => true,
+			\T_MULTIPLY             => true,
+			\T_DIVIDE               => true,
+			\T_MODULUS              => true,
+			\T_VARIABLE             => true,
+			\T_OPEN_PARENTHESIS     => true,
+			\T_OPEN_SQUARE_BRACKET  => true,
+		);
 
-		// Look for T_DOUBLE_COLON (::) in the parameter range.
-		for ( $i = $param_info['start']; $i <= $param_info['end']; $i++ ) {
+		// Check if the token range contains any invalid tokens for a pure class constant.
+		for ( $i = $startPtr; $i <= $endPtr; $i++ ) {
+			if ( isset( $invalid_tokens[ $tokens[ $i ]['code'] ] ) ) {
+				return false;
+			}
+		}
+
+		$double_colon_pos = null;
+		for ( $i = $startPtr; $i <= $endPtr; $i++ ) {
 			if ( \T_DOUBLE_COLON === $tokens[ $i ]['code'] ) {
-				// Found a double colon, this could be a class constant.
-				// Check if there's something before and after the double colon within the parameter.
-				$prev_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $i - 1 ), $param_info['start'], true );
-				$next_non_empty = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+				$double_colon_pos = $i;
+				break;
+			}
+		}
 
-				if ( false !== $prev_non_empty && false !== $next_non_empty ) {
-					// Check if we have valid tokens before and after the double colon.
-					// Before the :: should be T_STRING, T_STATIC, T_SELF, T_PARENT, or T_NS_SEPARATOR.
-					$valid_before_tokens = array(
-						\T_STRING        => true,
-						\T_STATIC        => true,
-						\T_SELF          => true,
-						\T_PARENT        => true,
-						\T_NS_SEPARATOR  => true,
-					);
+		// If no double colon found, it's not a class constant.
+		if ( null === $double_colon_pos ) {
+			return false;
+		}
 
-					// After the :: should be T_STRING (the constant name).
-					// Also ensure that the constant name token is still within reasonable bounds
-					// (not extending past potential parameter boundaries like commas).
-					if ( isset( $valid_before_tokens[ $tokens[ $prev_non_empty ]['code'] ] )
-						&& \T_STRING === $tokens[ $next_non_empty ]['code']
-						&& $next_non_empty <= ( $i + 10 ) // Reasonable proximity check
-					) {
-						// Additional check: make sure we're not crossing into another parameter.
-						// Look for comma between the double colon and the end of what we think is the constant.
-						$comma_check = $phpcsFile->findNext( \T_COMMA, ( $i + 1 ), $next_non_empty, false );
-						if ( false === $comma_check ) {
-							return true;
-						}
-					}
+		// Ensure there's exactly one double colon in the range.
+		for ( $i = $double_colon_pos + 1; $i <= $endPtr; $i++ ) {
+			if ( \T_DOUBLE_COLON === $tokens[ $i ]['code'] ) {
+				// Multiple double colons found.
+				return false;
+			}
+		}
+
+		// Check that there's a valid constant name after the double colon within the range.
+		$after_colon = $phpcsFile->findNext( Tokens::$emptyTokens, ( $double_colon_pos + 1 ), ( $endPtr + 1 ), true );
+		if ( false === $after_colon || $after_colon > $endPtr || \T_STRING !== $tokens[ $after_colon ]['code'] ) {
+			return false;
+		}
+
+		// Check that there are no more significant tokens after the constant name within the range.
+		$after_constant = $phpcsFile->findNext( Tokens::$emptyTokens, ( $after_colon + 1 ), ( $endPtr + 1 ), true );
+		if ( false !== $after_constant && $after_constant <= $endPtr ) {
+			// There are more tokens after the constant name within the range.
+			return false;
+		}
+
+		// Check that there's a valid class reference before the double colon within the range.
+		$before_colon = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $double_colon_pos - 1 ), ( $startPtr - 1 ), true );
+		if ( false === $before_colon || $before_colon < $startPtr ) {
+			return false;
+		}
+
+		// Validate all tokens before the double colon are valid class reference tokens.
+		for ( $i = $startPtr; $i < $double_colon_pos; $i++ ) {
+			if ( ! isset( Tokens::$emptyTokens[ $tokens[ $i ]['code'] ] ) ) {
+				$valid_tokens = array(
+					\T_STRING        => true,
+					\T_SELF          => true,
+					\T_STATIC        => true,
+					\T_PARENT        => true,
+					\T_NS_SEPARATOR  => true,
+				);
+
+				if ( ! isset( $valid_tokens[ $tokens[ $i ]['code'] ] ) ) {
+					return false;
 				}
 			}
 		}
 
-		return false;
+		return true;
 	}
 }

@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
+use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
@@ -71,7 +72,7 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 		}
 
 		// If the URL is a class constant, it's not user-controlled so we don't trigger a warning.
-		if ( ConstantsHelper::is_class_constant( $this->phpcsFile, $url_param ) ) {
+		if ( ConstantsHelper::is_use_of_class_constant( $this->phpcsFile, $url_param['start'], $url_param['end'] ) ) {
 			return;
 		}
 
