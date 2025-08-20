@@ -20,42 +20,54 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using safe remote request functions.">
+        <code title="Valid: Using safe request functions.">
         <![CDATA[
 // GET request with URL validation
 $response = <em>wp_safe_remote_get</em>( $url );
 
 // POST request with URL validation
-$response = <em>wp_safe_remote_post</em>( $url, array(
-    'body' => $data
-) );
+$response = <em>wp_safe_remote_post</em>(
+    $url,
+    array(
+        'body' => $data
+    )
+);
 
 // HEAD request with URL validation
 $response = <em>wp_safe_remote_head</em>( $url );
 
 // Generic request with URL validation
-$response = <em>wp_safe_remote_request</em>( $url, array(
-    'method' => 'DELETE'
-) );
+$response = <em>wp_safe_remote_request</em>(
+    $url,
+    array(
+        'method' => 'DELETE'
+    )
+);
         ]]>
         </code>
-        <code title="Invalid: Using unsafe remote request functions.">
+        <code title="Invalid: Using unsafe request functions.">
         <![CDATA[
 // GET request without URL validation
 $response = <em>wp_remote_get</em>( $url );
 
 // POST request without URL validation
-$response = <em>wp_remote_post</em>( $url, array(
-    'body' => $data
-) );
+$response = <em>wp_remote_post</em>(
+    $url,
+    array(
+        'body' => $data
+    )
+);
 
 // HEAD request without URL validation
 $response = <em>wp_remote_head</em>( $url );
 
 // Generic request without URL validation
-$response = <em>wp_remote_request</em>( $url, array(
-    'method' => 'DELETE'
-) );
+$response = <em>wp_remote_request</em>(
+    $url,
+    array(
+        'method' => 'DELETE'
+    )
+);
         ]]>
         </code>
     </code_comparison>
