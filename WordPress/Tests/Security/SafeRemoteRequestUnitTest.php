@@ -48,6 +48,14 @@ final class SafeRemoteRequestUnitTest extends AbstractSniffUnitTest {
 			28 => 1,
 			29 => 1,
 			30 => 1,
+			48 => 1,
+			49 => 1,
+			50 => 1,
+			51 => 1,
+			54 => 1,
+			55 => 1,
+			58 => 1,
+			59 => 1,
 		);
 	}
 }

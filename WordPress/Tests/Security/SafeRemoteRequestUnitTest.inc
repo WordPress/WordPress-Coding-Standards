@@ -37,3 +37,23 @@ wp_remote_retrieve_header( $response, 'Content-Type' ); // OK.
 wp_remote_retrieve_response_message( $response ); // OK.
 wp_remote_retrieve_cookie( $response, 'session' ); // OK.
 wp_remote_retrieve_cookies( $response ); // OK.
+
+// Test with literal string URLs - these should NOT trigger warnings since they're not user-controlled.
+wp_remote_get( 'https://api.example.com/data' ); // OK - literal string.
+wp_remote_post( "https://api.wordpress.org/stats", $args ); // OK - literal string.
+wp_remote_head( 'http://example.com' ); // OK - literal string.
+wp_remote_request( 'https://secure-api.example.com/endpoint', $args ); // OK - literal string.
+
+// Test with variable URLs - these SHOULD trigger warnings.
+wp_remote_get( $dynamic_url ); // Warning.
+wp_remote_post( get_option( 'api_url' ), $args ); // Warning.
+wp_remote_head( $_POST['url'] ); // Warning.
+wp_remote_request( $base_url . '/endpoint', $args ); // Warning.
+
+// Test with concatenated strings - these SHOULD trigger warnings.
+wp_remote_get( 'https://api.example.com/' . $endpoint ); // Warning.
+wp_remote_post( $protocol . '://api.example.com', $args ); // Warning.
+
+// Test with function calls returning URLs - these SHOULD trigger warnings.
+wp_remote_get( home_url( '/api/v1' ) ); // Warning.
+wp_remote_post( esc_url( $url ), $args ); // Warning.
