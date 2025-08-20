@@ -9,7 +9,6 @@
 
 namespace WordPressCS\WordPress\Sniffs\Security;
 
-use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
