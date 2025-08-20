@@ -74,3 +74,31 @@ wp_remote_post( ApiConfig::BASE_URL . '?param=value', $args ); // OK.
 // Test mixed expressions with class constants - these SHOULD trigger warnings as they're not pure constants.
 wp_remote_head( self::API_URL . $user_input ); // Warning - mixed expression.
 wp_remote_request( static::ENDPOINT_URL . '&token=' . $_GET['token'], $args ); // Warning - mixed expression.
+
+// Fully qualified function calls - these should NOT trigger warnings as they're not WordPress functions.
+\MyNamespace\wp_remote_get( $url ); // OK - namespaced function.
+\CustomLib\wp_remote_post( $url, $args ); // OK - namespaced function.
+\External\wp_remote_head( $url ); // OK - namespaced function.
+\ThirdParty\wp_remote_request( $url, $args ); // OK - namespaced function.
+
+// Method calls with same names - these should NOT trigger warnings as they're not WordPress functions.
+$client->wp_remote_get( $url ); // OK - method call.
+$http->wp_remote_post( $url, $args ); // OK - method call.
+$api->wp_remote_head( $url ); // OK - method call.
+$request->wp_remote_request( $url, $args ); // OK - method call.
+
+// Static method calls with same names - these should NOT trigger warnings.
+HttpClient::wp_remote_get( $url ); // OK - static method call.
+ApiClient::wp_remote_post( $url, $args ); // OK - static method call.
+RemoteClient::wp_remote_head( $url ); // OK - static method call.
+RequestHandler::wp_remote_request( $url, $args ); // OK - static method call.
+
+// Namespaced static method calls - these should NOT trigger warnings.
+\MyNamespace\HttpClient::wp_remote_get( $url ); // OK - namespaced static method call.
+\External\ApiClient::wp_remote_post( $url, $args ); // OK - namespaced static method call.
+
+// Constants with same names - these should NOT trigger warnings as they're not function calls.
+echo wp_remote_get; // OK - constant reference.
+$value = wp_remote_post; // OK - constant reference.
+define( 'wp_remote_head', 'some value' ); // OK - constant definition.
+echo \MyNamespace\wp_remote_request; // OK - namespaced constant.
