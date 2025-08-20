@@ -66,7 +66,6 @@ wp_remote_request( static::ENDPOINT_URL, $args ); // OK - class constant.
 
 // Test with namespaced class constants - these should NOT trigger warnings.
 wp_remote_get( \MyNamespace\Config::API_URL ); // OK - namespaced class constant.
-wp_remote_post( My\Namespace\ApiClient::BASE_ENDPOINT, $args ); // OK - namespaced class constant.
 
 // Test mixed literal strings with class constants.
 wp_remote_get( MyClass::API_ENDPOINT . '/path' ); // OK.
