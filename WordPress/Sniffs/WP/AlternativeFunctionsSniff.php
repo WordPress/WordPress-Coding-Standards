@@ -96,7 +96,7 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 		return array(
 			'curl' => array(
 				'type'      => 'warning',
-				'message'   => 'Using cURL functions is highly discouraged. Use wp_remote_get() instead.',
+				'message'   => 'Using cURL functions is highly discouraged. Use wp_safe_remote_get() or wp_remote_get() instead.',
 				'since'     => '2.7.0',
 				'functions' => array(
 					'curl_*',
@@ -126,7 +126,7 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 
 			'file_get_contents' => array(
 				'type'      => 'warning',
-				'message'   => '%s() is discouraged. Use wp_remote_get() for remote URLs instead.',
+				'message'   => '%s() is discouraged. Use wp_safe_remote_get() or wp_remote_get() for remote URLs instead.',
 				'since'     => '2.7.0',
 				'functions' => array(
 					'file_get_contents',
