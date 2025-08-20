@@ -132,4 +132,60 @@ final class ConstantsHelper {
 
 		return true;
 	}
+
+	/**
+	 * Check if a parameter is a class constant (e.g., MyClass::CONSTANT).
+	 *
+	 * @since x.y.z
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile   The file being scanned.
+	 * @param array                       $param_info  Parameter info array as received from PassedParameters::getParameter().
+	 * @return bool True if the parameter is a class constant, false otherwise.
+	 */
+	public static function is_class_constant( File $phpcsFile, $param_info ) {
+		if ( false === $param_info || '' === $param_info['clean'] ) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		// Look for T_DOUBLE_COLON (::) in the parameter range.
+		for ( $i = $param_info['start']; $i <= $param_info['end']; $i++ ) {
+			if ( \T_DOUBLE_COLON === $tokens[ $i ]['code'] ) {
+				// Found a double colon, this could be a class constant.
+				// Check if there's something before and after the double colon within the parameter.
+				$prev_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $i - 1 ), $param_info['start'], true );
+				$next_non_empty = $phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+
+				if ( false !== $prev_non_empty && false !== $next_non_empty ) {
+					// Check if we have valid tokens before and after the double colon.
+					// Before the :: should be T_STRING, T_STATIC, T_SELF, T_PARENT, or T_NS_SEPARATOR.
+					$valid_before_tokens = array(
+						\T_STRING        => true,
+						\T_STATIC        => true,
+						\T_SELF          => true,
+						\T_PARENT        => true,
+						\T_NS_SEPARATOR  => true,
+					);
+
+					// After the :: should be T_STRING (the constant name).
+					// Also ensure that the constant name token is still within reasonable bounds
+					// (not extending past potential parameter boundaries like commas).
+					if ( isset( $valid_before_tokens[ $tokens[ $prev_non_empty ]['code'] ] )
+						&& \T_STRING === $tokens[ $next_non_empty ]['code']
+						&& $next_non_empty <= ( $i + 10 ) // Reasonable proximity check
+					) {
+						// Additional check: make sure we're not crossing into another parameter.
+						// Look for comma between the double colon and the end of what we think is the constant.
+						$comma_check = $phpcsFile->findNext( \T_COMMA, ( $i + 1 ), $next_non_empty, false );
+						if ( false === $comma_check ) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
 }

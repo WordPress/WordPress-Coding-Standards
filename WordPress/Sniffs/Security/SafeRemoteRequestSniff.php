@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\Security;
 
 use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
+use WordPressCS\WordPress\Helpers\ConstantsHelper;
 use WordPressCS\WordPress\Helpers\StringLiteralHelper;
 
 /**
@@ -66,6 +67,11 @@ final class SafeRemoteRequestSniff extends AbstractFunctionRestrictionsSniff {
 
 		// If the URL is a string literal, it's not user-controlled so we don't trigger a warning.
 		if ( StringLiteralHelper::is_string_literal( $url_param, $this->phpcsFile->getTokens() ) ) {
+			return;
+		}
+
+		// If the URL is a class constant, it's not user-controlled so we don't trigger a warning.
+		if ( ConstantsHelper::is_class_constant( $this->phpcsFile, $url_param ) ) {
 			return;
 		}
 

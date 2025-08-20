@@ -57,3 +57,13 @@ wp_remote_post( $protocol . '://api.example.com', $args ); // Warning.
 // Test with function calls returning URLs - these SHOULD trigger warnings.
 wp_remote_get( home_url( '/api/v1' ) ); // Warning.
 wp_remote_post( esc_url( $url ), $args ); // Warning.
+
+// Test with class constants - these should NOT trigger warnings since they're not user-controlled.
+wp_remote_get( MyClass::API_ENDPOINT ); // OK - class constant.
+wp_remote_post( ApiConfig::BASE_URL, $args ); // OK - class constant.
+wp_remote_head( self::API_URL ); // OK - class constant.
+wp_remote_request( static::ENDPOINT_URL, $args ); // OK - class constant.
+
+// Test with namespaced class constants - these should NOT trigger warnings.
+wp_remote_get( \MyNamespace\Config::API_URL ); // OK - namespaced class constant.
+wp_remote_post( My\Namespace\ApiClient::BASE_ENDPOINT, $args ); // OK - namespaced class constant.
