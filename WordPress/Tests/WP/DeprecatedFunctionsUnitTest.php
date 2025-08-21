@@ -89,6 +89,11 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 
 				return $errors;
 
+			case 'DeprecatedFunctionsUnitTest.2.inc':
+				return array(
+					6 => 1,
+				);
+
 			default:
 				return array();
 		}
