@@ -165,9 +165,9 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 class FQNConstants {
 	public function add_schedules() {
 		add_filter( 'cron_schedules', array( $this, 'add_weekly_schedule' ) ); // Ok: > 15 min.
-		add_filter( 'cron_schedules', array( $this, 'add_eight_minute_schedule' ) ); // Warning: 8 min.
-		add_filter( 'cron_schedules', array( $this, 'add_hundred_minute_schedule' ) ); // Warning: time undetermined.
-		add_filter( 'cron_schedules', array( $this, 'sneaky_fake_wp_constant_schedule' ) ); // Warning: time undetermined.
+		\add_filter( 'cron_schedules', array( $this, 'add_eight_minute_schedule' ) ); // Warning: 8 min.
+		ADD_FILTER( 'cron_schedules', array( $this, 'add_hundred_minute_schedule' ) ); // Warning: time undetermined.
+		\Add_Filter( 'cron_schedules', array( $this, 'sneaky_fake_wp_constant_schedule' ) ); // Warning: time undetermined.
 	}
 
 	public function add_weekly_schedule( $schedules ) {
@@ -316,6 +316,7 @@ function first_class_weekly_schedule( $schedules ) {
 }
 add_filter( 'cron_schedules', 'first_class_weekly_schedule'(...)); // Ok: > 15 min.
 add_filter( 'cron_schedules', first_class_weekly_schedule(...)); // Ok: > 15 min.
+add_filter( 'cron_schedules', namespace\first_class_weekly_schedule(...)); // Ok: > 15 min.
 
 function first_class_six_min_schedule( $schedules ) {
 	$schedules['every_6_mins'] = array(
@@ -326,3 +327,35 @@ function first_class_six_min_schedule( $schedules ) {
 }
 add_filter( 'cron_schedules', first_class_six_min_schedule(...)); // Warning: 6 min.
 add_filter( 'cron_schedules', 'first_class_six_min_schedule'(...)); // Warning: 6 min.
+add_filter( 'cron_schedules', \first_class_six_min_schedule(...)); // Warning: 6 min.
+add_filter( 'cron_schedules', namespace\first_class_six_min_schedule(...)); // Warning: 6 min.
+
+/*
+ * The tests below document the current behavior of the sniff, even though they are false negatives. The sniff treats
+ * the first-class callable examples below as if referencing the global function first_class_six_min_schedule()
+ * and not a namespaced function with the same name.
+ *
+ * Related to: https://github.com/WordPress/WordPress-Coding-Standards/issues/2644.
+ */
+add_filter( 'cron_schedules', MyNamespace\first_class_weekly_schedule(...)); // False negative - Ok: > 15 min, but should be marked `ChangeDetected`.
+add_filter( 'cron_schedules', \MyNamespace\first_class_weekly_schedule(...)); // False negative - Ok: > 15 min, but should be marked `ChangeDetected`.
+add_filter( 'cron_schedules', namespace\Sub\first_class_weekly_schedule(...)); // False negative - Ok: > 15 min, but should be marked `ChangeDetected`.
+
+/*
+ * The tests below document the current behavior of the sniff, even though they are false positives. The sniff treats
+ * the first-class callable examples below as if referencing the global function first_class_six_min_schedule()
+ * and not a namespaced function with the same name. Fixing this incorrect behavior is not trivial.
+ *
+ * Related to: https://github.com/WordPress/WordPress-Coding-Standards/issues/2644.
+ */
+add_filter( 'cron_schedules', MyNamespace\first_class_six_min_schedule(...)); // False positive - `CronSchedulesInterval` warning (6 min), but should be `ChangeDetected`.
+add_filter( 'cron_schedules', \MyNamespace\first_class_six_min_schedule(...)); // False positive - `CronSchedulesInterval` warning (6 min), but should be `ChangeDetected`.
+add_filter( 'cron_schedules', namespace\Sub\first_class_six_min_schedule(...)); // False positive - `CronSchedulesInterval` warning (6 min), but should be `ChangeDetected`.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls (except FQN global function call which is
+ * handled above).
+ */
+MyNamespace\add_filter( 'cron_schedules', 'unknown_callback' ); // Ok.
+\MyNamespace\add_filter( 'cron_schedules', 'unknown_callback' ); // Ok.
+namespace\add_filter( 'cron_schedules', 'unknown_callback' ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
