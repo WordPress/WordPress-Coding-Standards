@@ -615,8 +615,13 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			if ( \T_STRING === $this->tokens[ $i ]['code']
 				|| \T_VARIABLE === $this->tokens[ $i ]['code']
 				|| isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $i ]['code'] ] )
+				|| \T_NAMESPACE === $this->tokens[ $i ]['code']
 			) {
-				$double_colon = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				$skip_tokens                    = Tokens::$emptyTokens;
+				$skip_tokens[ \T_STRING ]       = \T_STRING;
+				$skip_tokens[ \T_NS_SEPARATOR ] = \T_NS_SEPARATOR;
+
+				$double_colon = $this->phpcsFile->findNext( $skip_tokens, ( $i + 1 ), $end, true );
 				if ( false !== $double_colon
 					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
 				) {

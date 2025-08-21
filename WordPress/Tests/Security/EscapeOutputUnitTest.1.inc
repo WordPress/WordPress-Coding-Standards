@@ -676,3 +676,14 @@ throw new
 /* some comment */
 #[Attribute2('text', 10)]
 readonly class( $unescaped ) {}; // Bad.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls when *::class is used.
+ *
+ * Note: using ::class on fully qualified or namespace relative class names doesn't provide
+ * any real value in practice.
+ */
+_deprecated_function( __METHOD__, 'x.x.x', \ClassName::class ); // OK.
+die( \MyNamespace\ClassName::class . ' has been abandoned' ); // OK.
+echo 'Do not use ' . MyNamespace\ClassName::class; // OK.
+_deprecated_function( __METHOD__, 'x.x.x', namespace\ClassName::class ); // OK.
