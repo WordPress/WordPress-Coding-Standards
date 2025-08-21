@@ -250,7 +250,7 @@ function allow_for_unslash_before_noncecheck() {
 }
 
 function allow_for_unslash_in_sanitization() {
-	$var = sanitize_text_field( wp_unslash( $_POST['foo'] ) ); // OK.
+	$var = sanitize_text_field( WP_UNSLASH( $_POST['foo'] ) ); // OK.
 	wp_verify_nonce( $var );
 	echo $var;
 }
@@ -314,7 +314,7 @@ function allow_in_array_key_exists_before_noncecheck() {
 }
 
 function allow_in_key_exists_before_noncecheck() {
-	if (key_exists('foo', $_POST['subset']) === false) { // OK.
+	if (Key_Exists('foo', $_POST['subset']) === false) { // OK.
 		return;
 	}
 
@@ -369,7 +369,7 @@ function disallow_for_non_array_comparison_in_condition() {
 }
 
 function allow_for_array_comparison_in_condition_with_named_params() {
-	if ( array_keys( filter_value: 'my_action', array: $_GET['actions'], strict: true, ) ) { // OK.
+	if ( \array_KEYS( filter_value: 'my_action', array: $_GET['actions'], strict: true, ) ) { // OK.
 		check_admin_referer( 'foo' );
 		foo();
 	}
@@ -524,3 +524,168 @@ function different_function_name() {
     update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
 }
 // phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
+
+function test_fully_qualified_call_to_global_nonce_verification_function() {
+    if ( ! IS_NUMERIC( $_POST['foo'] ) ) { // OK.
+        return;
+    }
+
+    \wp_verify_nonce( 'some_action' );
+}
+
+function test_namespace_relative_call_to_global_nonce_verification_function() {
+	if ( ! IS_NUMERIC( $_POST['foo'] ) ) { // Bad, but should become ok once the sniff is able to resolve relative namespaces.
+		return;
+	}
+
+	namespace\wp_verify_nonce( 'some_action' );
+}
+
+function test_namespaced_calls_to_incorrect_nonce_verification_functions() {
+    if ( ! is_numeric( $_POST['foo'] ) ) { // Bad - none of the below are the WP global functions, so no nonce verification.
+        return;
+    }
+
+    MyNamespace\wp_verify_nonce( 'some_action' );
+    \MyNamespace\check_admin_referer( 'some_action' );
+    namespace\Sub\check_ajax_referer( 'some_action' );
+}
+
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] my_nonce_check
+
+function test_namespace_relative_call_to_custom_nonce_verification_function() {
+	if ( ! is_int( $_POST['foo'] ) ) { // Bad, but should become ok once the sniff is able to resolve relative namespaces.
+		return;
+	}
+
+	namespace\my_nonce_check( 'some_action' );
+}
+
+function test_namespaced_calls_to_incorrect_custom_nonce_verification_functions() {
+	if ( ! is_string( $_POST['foo'] ) ) { // Bad - none of the below are a custom nonce verification function.
+		return;
+	}
+
+	MyNamespace\my_nonce_check( 'some_action' );
+	\MyNamespace\my_nonce_check( 'some_action' );
+	namespace\Sub\my_nonce_check( 'some_action' );
+}
+
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
+
+function allow_fully_qualified_key_exists_functions() {
+    if ( \array_key_exists('foo', $_POST) === false ) { // OK.
+        return;
+    }
+
+    \WP_VERIFY_NONCE( 'some_action' );
+}
+
+function allow_fully_qualified_key_exists_functions_with_mixed_case() {
+	if ( \Key_Exists('foo', $_POST) === false ) { // OK.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function allow_namespace_relative_call_to_global_key_exists_functions() {
+	if ( namespace\array_key_exists('foo', $_POST) === false ) { // Bad, but should become ok once the sniff is able to resolve relative namespaces.
+		return;
+	}
+
+	wp_verify_nonce( 'some_action' );
+}
+
+function disallow_namespaced_key_exists_functions() {
+    if ( MyNamespace\array_key_exists( 'foo', $_POST ) === false // Bad.
+        || \MyNamespace\key_exists( 'foo', $_POST ) === false // Bad.
+        || namespace\Sub\key_exists( 'foo', $_POST ) === false // Bad.
+    ) {
+        return;
+    }
+
+    wp_verify_nonce( 'some_action' );
+}
+
+function allow_fully_qualified_type_test_functions() {
+    if ( ! \is_numeric( $_POST['foo'] ) ) { // OK.
+        return;
+    }
+
+    \wp_verify_nonce( 'some_action' );
+}
+
+function allow_fully_qualified_type_test_functions_uppercase() {
+	if ( ! \IS_int( $_POST['foo'] ) ) { // OK.
+		return;
+	}
+
+	\wp_verify_nonce( 'some_action' );
+}
+
+function allow_namespace_relative_call_to_global_type_test_functions() {
+	if ( ! namespace\is_numeric( $_POST['foo'] ) ) { // Bad, but should become ok once the sniff is able to resolve relative namespaces.
+		return;
+	}
+
+	\wp_verify_nonce( 'some_action' );
+}
+
+function disallow_namespaced_type_test_functions() {
+    if ( ! MyNamespace\is_bool( $_POST['foo'] ) // Bad.
+        || ! \MyNamespace\is_object( $_POST['foo'] ) // Bad.
+        || ! namespace\Sub\is_string( $_POST['foo'] ) ) // Bad.
+    {
+        return;
+    }
+
+    \wp_verify_nonce( 'some_action' );
+}
+
+function allow_fully_qualified_array_comparison_functions() {
+    if ( \in_array( $_GET['action'], $valid_actions, true ) ) { // OK.
+        check_admin_referer( 'foo' );
+    }
+}
+
+function allow_namespace_relative_call_to_global_array_comparison_functions() {
+	if ( namespace\in_array( $_GET['action'], $valid_actions, true ) ) { // Bad, but should become ok once the sniff is able to resolve relative namespaces.
+		check_admin_referer( 'foo' );
+	}
+}
+
+function disallow_namespaced_array_comparison_functions() {
+    if ( MyNamespace\in_array( $_GET['action'], $valid_actions, true ) // Bad.
+        || \MyNamespace\array_search( array( 'subscribe', 'unsubscribe' ), $_GET['action'], true ) // Bad.
+        || namespace\Sub\array_keys( $_GET['actions'], 'my_action', true ) // Bad.
+    ) {
+        check_admin_referer( 'foo' );
+    }
+}
+
+function allow_fully_qualified_unslashing_functions() {
+    $var = \stripslashes_from_strings_only( $_POST['foo'] ); // OK.
+    wp_verify_nonce( $var );
+    echo $var;
+}
+
+function allow_fully_qualified_unslashing_functions_mixed_case() {
+	$var = \stripslashes_FROM_strings_ONLY( $_POST['foo'] ); // OK.
+	wp_verify_nonce( $var );
+	echo $var;
+}
+
+function allow_namespace_relative_call_to_global_unslashing_functions() {
+	$var = namespace\stripslashes_from_strings_only( $_POST['foo'] ); // Bad, but should become ok once the sniff is able to resolve relative namespaces.
+	wp_verify_nonce( $var );
+	echo $var;
+}
+
+function disallow_namespaced_unslashing_functions() {
+    $var = MyNamespace\stripslashes_from_strings_only( $_POST['foo'] ); // Bad.
+    $var = \MyNamespace\stripslashes_deep( $_POST['foo'] ); // Bad.
+    $var = namespace\Sub\wp_unslash( $_POST['foo'] ); // Bad.
+    wp_verify_nonce( $var );
+    echo $var;
+}
