@@ -27,7 +27,8 @@ final class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
+			3  => 1,
+			10 => 1,
 		);
 	}
 
