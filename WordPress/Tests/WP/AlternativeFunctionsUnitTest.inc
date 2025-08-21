@@ -32,7 +32,7 @@ file_get_contents( $local_file, true ); // OK.
 file_get_contents( $url, false ); // Warning.
 file_get_contents(); // OK - no params, so nothing to do.
 file_get_contents( 'http://remoteurl.com/file/?w=1' ); // Warning.
-file_get_contents( 'https://wordpress.org' ); // Warning.
+\file_GET_contents( 'https://wordpress.org' ); // Warning.
 file_get_contents(ABSPATH . 'wp-admin/css/some-file.css'); // OK.
 file_get_contents(MYABSPATH . 'plugin-file.json'); // Warning.
 file_get_contents( MUPLUGINDIR . 'some-file.xml' ); // OK.
@@ -147,3 +147,12 @@ file_get_contents(
 	// Not using plugin_dir_path() for reasons.
 	$url
 ); // Warning.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls
+ */
+\curl_init();
+MyNamespace\parse_url( 'http://example.com/' );
+\MyNamespace\json_encode( $data );
+namespace\unlink(); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\strip_tags( $string );
