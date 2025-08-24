@@ -311,6 +311,14 @@ list(
 	get($year, $day) => &$not_a_wp_global[$year]
 ] = $array;
 
-// Live coding/parse error.
-// This has to be the last test in the file!
-list( $tab, $tabs
+/*
+ * $GLOBALS with non-string key, unable to determine if it is a global variable override or not.
+ */
+$GLOBALS[ "some{$name}" ] = 'test'; // Ok.
+$GLOBALS[ $obj->global_name ] = 'test'; // Ok.
+$GLOBALS[ MyClass::GLOBAL_NAME ] = 'test'; // Ok.
+$GLOBALS[ GLOBAL_NAME_CONSTANT ] = 'test'; // Ok.
+$GLOBALS[ get_my_global_name() ] = 'test'; // Ok.
+$GLOBALS[ MyNamespace\get_my_global_name() ] = 'test'; // Ok.
+$GLOBALS[ \MyNamespace\get_my_global_name() ] = 'test'; // Ok.
+$GLOBALS[ namespace\get_my_global_name() ] = 'test'; // Ok.
