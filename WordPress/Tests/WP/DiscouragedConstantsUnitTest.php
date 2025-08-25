@@ -49,7 +49,6 @@ final class DiscouragedConstantsUnitTest extends AbstractSniffUnitTest {
 			60 => 1,
 			61 => 1,
 			63 => 1,
-			64 => 1,
 			66 => 1,
 			67 => 1,
 			71 => 1,
