@@ -147,3 +147,11 @@ file_get_contents(
 	// Not using plugin_dir_path() for reasons.
 	$url
 ); // Warning.
+
+/*
+ * Safeguard support for PHP 8.0+ tokenization of namespaced "names".
+ */
+\curl_init();
+MyNamespace\curl_init();
+\MyNamespace\curl_init();
+namespace\curl_init(); // The sniff should start flagging this once it can resolve relative namespaces.

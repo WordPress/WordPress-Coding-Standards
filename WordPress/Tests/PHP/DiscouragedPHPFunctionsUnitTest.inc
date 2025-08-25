@@ -41,3 +41,11 @@ $handle = popen( '/bin/ls', 'r' );
 // Issue #898.
 class System {}
 class Serialize {}
+
+/*
+ * Safeguard support for PHP 8.0+ tokenization of namespaced "names".
+ */
+\serialize( $value );
+MyNamespace\serialize( $value );
+\MyNamespace\serialize( $value );
+namespace\serialize( $value ); // The sniff should start flagging this once it can resolve relative namespaces.

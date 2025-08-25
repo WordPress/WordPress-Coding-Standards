@@ -14,8 +14,8 @@ $obj?->query_posts(); // OK, not the global function.
 
 // Ensure the sniff doesn't act on namespaced calls.
 MyNamespace\query_posts(); // OK, not the global function.
+\MyNamespace\query_posts(); // OK, not the global function.
 namespace\query_posts(); // OK, not the global function.
-
 // ... but does act on fully qualified function calls.
 \query_posts(); // Warning.
 
