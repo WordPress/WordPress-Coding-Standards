@@ -137,7 +137,7 @@ class Acronym_Example {
 	function do_something( $param = 'default' ) {}
 }
 
-$acronym_class = new class {
+$acronym_class = new readonly class {
 	const SOME_CONSTANT = 'value';
 
 	public $var = 'abc';
