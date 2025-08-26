@@ -9,14 +9,14 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using wp_safe_redirect().">
+        <code title="Valid: Using wp_json_encode() to encode JSON data.">
         <![CDATA[
-        wp_safe_redirect( $url );
+        <em>wp_json_encode( $data );</em>
         ]]>
         </code>
-        <code title="Invalid: Using PHP's header() function for redirection.">
+        <code title="Invalid: Using PHP's json_encode() to encode JSON data.">
         <![CDATA[
-        header( "Location: $url" );
+        <em>json_encode( $data );</em>
         ]]>
         </code>
     </code_comparison>
@@ -28,12 +28,12 @@
     <code_comparison>
         <code title="Valid: Using wp_remote_get() for HTTP requests.">
         <![CDATA[
-        $response = wp_remote_get( $url );
+        $response = <em>wp_remote_get( $url );</em>
         ]]>
         </code>
         <code title="Invalid: Using file_get_contents() for HTTP requests.">
         <![CDATA[
-        $response = file_get_contents( $url );
+        $response = <em>file_get_contents( $url );</em>
         ]]>
         </code>
     </code_comparison>
@@ -45,13 +45,13 @@
     <code_comparison>
         <code title="Valid: Using _e() or __() for translatable text.">
         <![CDATA[
-        _e( 'Hello, World!', 'text-domain' );
-        $greeting = __( 'Hello, World!', 'text-domain' );
+<em>_e( 'Hello, World!', 'text-domain' );</em>
+$hello = <em>__( 'Hello, World!', 'text-domain' );</em>
         ]]>
         </code>
         <code title="Invalid: Echoing plain text strings.">
         <![CDATA[
-        echo 'Hello, World!';
+        <em>echo 'Hello, World!';</em>
         ]]>
         </code>
     </code_comparison>
@@ -63,32 +63,12 @@
     <code_comparison>
         <code title="Valid: Using esc_html() to escape HTML output.">
         <![CDATA[
-        echo esc_html( $user_input );
+        <em>echo esc_html( $user_input );</em>
         ]]>
         </code>
         <code title="Invalid: Outputting user input without escaping.">
         <![CDATA[
-        echo $user_input;
-        ]]>
-        </code>
-    </code_comparison>
-    <standard>
-    <![CDATA[
-    Use WordPress's wp_nonce_* functions for security and form validation.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: Using wp_nonce_field() and wp_verify_nonce().">
-        <![CDATA[
-        wp_nonce_field( 'save_post', 'my_nonce' );
-        if ( wp_verify_nonce( $_POST['my_nonce'], 'save_post' ) ) {
-        // Process form submission.
-        }
-        ]]>
-        </code>
-        <code title="Invalid: Not using nonces for form validation.">
-        <![CDATA[
-        // No nonce used for form validation.
+        <em>echo $user_input;</em>
         ]]>
         </code>
     </code_comparison>
