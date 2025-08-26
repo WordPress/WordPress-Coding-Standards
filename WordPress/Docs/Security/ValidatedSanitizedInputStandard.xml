@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Validated Sanitized Input"
+    >
+    <standard>
+    <![CDATA[
+    All user input data ($_POST, $_GET, $_REQUEST, $_SERVER, $_COOKIE, $_FILES, $_SESSION, $_ENV) must be validated, unslashed, and sanitized before use to prevent security vulnerabilities like XSS, SQL injection, and code injection attacks.
+
+    Validation ensures the input key exists (using isset(), empty(), or array_key_exists()). Unslashing removes WordPress's automatic backslashes using wp_unslash() or similar functions. Sanitization cleans the data using appropriate functions like sanitize_text_field(), absint(), etc.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Input is validated, unslashed and sanitized.">
+        <![CDATA[
+if ( <em>isset( $_POST['name'] )</em> ) {
+    $name = <em>sanitize_text_field( 
+        wp_unslash( $_POST['name'] ) 
+    )</em>;
+}
+        ]]>
+        </code>
+        <code title="Invalid: Input used without validation.">
+        <![CDATA[
+$name = <em>sanitize_text_field( 
+    wp_unslash( $_POST['name'] ) 
+)</em>;
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Numeric input properly cast.">
+        <![CDATA[
+if ( isset( $_GET['id'] ) ) {
+    $id = <em>(int) $_GET['id']</em>;
+}
+        ]]>
+        </code>
+        <code title="Invalid: Missing unslashing before sanitization.">
+        <![CDATA[
+if ( isset( $_POST['text'] ) ) {
+    $text = <em>sanitize_text_field( $_POST['text'] )</em>;
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Array input properly handled.">
+        <![CDATA[
+$clean = <em>array_map( 
+    'sanitize_text_field', 
+    wp_unslash( $_GET['items'] ) 
+)</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Input used without sanitization.">
+        <![CDATA[
+if ( isset( $_POST['data'] ) ) {
+    echo <em>wp_unslash( $_POST['data'] )</em>;
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
