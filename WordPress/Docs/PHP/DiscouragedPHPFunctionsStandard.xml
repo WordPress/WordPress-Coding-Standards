@@ -10,33 +10,33 @@ Use JSON instead of serialized data, which has known vulnerability problems with
     </standard>
     <code_comparison>
         <code title="Valid: Using JSON for serialized data.">
-            <![CDATA[
-$serialized = json_encode( $array );
-$serialized = wp_json_encode( $array );
-$unserialized = json_decode( $array );
+        <![CDATA[
+$serialized = <em>json_encode</em>( $array );
+$serialized = <em>wp_json_encode</em>( $array );
+$unserialized = <em>json_decode</em>( $array );
         ]]>
         </code>
         <code title="Invalid: Using serialized data strings.">
-            <![CDATA[
-$serialized = serialize( $array );
-$unserialized = unserialize( $array );
+        <![CDATA[
+$serialized = <em>serialize</em>( $array );
+$unserialized = <em>unserialize</em>( $array );
         ]]>
         </code>
     </code_comparison>
     <standard>
-        <![CDATA[
+    <![CDATA[
 URLs should now be encoded using rawurlencode(). Only legacy applications should use urlencode().
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Encoding a url using rawurlencode().">
-            <![CDATA[
-rawurlencode( get_site_url() );
+        <![CDATA[
+<em>rawurlencode</em>( get_site_url() );
         ]]>
         </code>
         <code title="Invalid: Encoding a url using urlencode().">
-            <![CDATA[
-urlencode( get_site_url() );
+        <![CDATA[
+<em>urlencode</em>( get_site_url() );
         ]]>
         </code>
     </code_comparison>
@@ -47,12 +47,12 @@ Avoid using functions which change configuration values at runtime.
     </standard>
     <code_comparison>
         <code title="Valid: Not changing configuration at runtime.">
-            <![CDATA[
+        <![CDATA[
 // Configuration not changed at runtime.
         ]]>
         </code>
         <code title="Invalid: Changing configuration at runtime">
-            <![CDATA[
+        <![CDATA[
 error_reporting( 0 );
 ini_restore( $option );
 apache_setenv( $variable, $value );
@@ -70,14 +70,14 @@ dl( $extension_filename );
 Do not use PHP system calls. They are often disabled by server admins.
     ]]>
     </standard>
-<code_comparison>
-<code title="Valid: Not using PHP system calls.">
-    <![CDATA[
+    <code_comparison>
+        <code title="Valid: Not using PHP system calls.">
+        <![CDATA[
 // Avoiding using PHP system calls.
         ]]>
-</code>
-<code title="Invalid: Using PHP system calls.">
-    <![CDATA[
+        </code>
+        <code title="Invalid: Using PHP system calls.">
+        <![CDATA[
 exec( $command );
 passthru( $command );
 proc_open( 'php', $desc, $pipes, $cwd, $env );
@@ -85,12 +85,12 @@ shell_exec( $command );
 system( $command );
 popen( $command, $mode );
         ]]>
-</code>
-</code_comparison>
+        </code>
+    </code_comparison>
     <standard>
     <![CDATA[
 Functions often used for obfuscating code are strongly discouraged. Make sure the function is used for benign reasons.
-     ]]>
+    ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Using functions for benign reasons.">
@@ -101,7 +101,7 @@ base64_decode( $expected_md5 );
         </code>
         <code title="Invalid: Using functions to obfuscate code.">
         <![CDATA[
-eval( base64_decode( $code_str ) );
+<em>eval</em>( base64_decode( $code_str ) );
         ]]>
         </code>
     </code_comparison>
