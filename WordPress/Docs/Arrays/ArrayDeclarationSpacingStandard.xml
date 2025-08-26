@@ -12,8 +12,8 @@
         <code title="Valid: There is only one pair of key and value per line.">
         <![CDATA[
 $args = array(
-    <em>'post_id' => 22,
-    'category' => 1</em>
+    <em>'post_id' => 22</em>,
+    <em>'category' => 1</em>
 );
         ]]>
         </code>
@@ -34,9 +34,9 @@ $args = array(
         <code title="Valid: Only one array item per line.">
         <![CDATA[
 $args = array(
-    <em>'post_id',
-    'comment_count',
-    'post_type'</em>
+    <em>'post_id'</em>,
+    <em>'comment_count'</em>,
+    <em>'post_type'</em>
 );
         ]]>
         </code>
