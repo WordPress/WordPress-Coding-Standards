@@ -5,11 +5,32 @@
     >
     <standard>
     <![CDATA[
-    Filenames should be all lowercase with hyphens separating words. If `$is_theme` property is set to `true` certain theme specific exceptions are made for underscores.
+File name must not be a mimetype sublevel only file names, such as `plain.php`.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: All lowercase with only hyphens as word separators.">
+        <code title="Valid: Is not a mimetype only file name.">
+        <![CDATA[
+<em>taxonomy-term</em>.inc
+<em>class-test-sample</em>.php
+<em>other-punctuation</em>.inc
+        ]]>
+        </code>
+        <code title="Invalid: Is a mimetype only file name.">
+        <![CDATA[
+<em>text-plain</em>.php
+<em>html</em>.inc
+<em>richtext</em>.php
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+Filenames should be all lowercase with hyphens separating words. If `$is_theme` property is set to `true` certain theme specific exceptions are made for underscores.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Lowercase and `-` separators.">
         <![CDATA[
 taxonomy<em>-</em>my<em>-</em>term.inc
 <em>s</em>ome<em>f</em>ile.inc
@@ -17,12 +38,31 @@ taxonomy<em>-</em>my<em>-</em>term.inc
 other<em>-</em>punctuation.inc
         ]]>
         </code>
-        <code title="Invalid: Use of other punctuation or mixed case.">
+        <code title="Invalid: Other punctuation or mixed case.">
         <![CDATA[
-taxonomy-my<em>_</em>term.inc.
+taxonomy-my<em>_</em>term.inc
 <em>S</em>ome<em>F</em>ile.inc
-<em>testsample</em>-unit-2.inc
+<em>testsample</em>-Unit2.inc
 other<em>+</em>punctuation<em>#</em>.inc
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Class file names should be based on the class name with `class-` prepended.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: File name matches prefix and class.">
+        <![CDATA[
+<em>class-bulkupdater</em>.php
+        ]]>
+        </code>
+        <code title="Invalid: File name missing prefix or class.">
+        <![CDATA[
+<em>class.</em>bulk-updater.php
+<em>bulkupdater-class</em>.php
+class-<em>CustomFormatter</em>.php
         ]]>
         </code>
     </code_comparison>
