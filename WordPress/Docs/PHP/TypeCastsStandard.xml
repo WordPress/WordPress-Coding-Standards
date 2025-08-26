@@ -14,42 +14,42 @@
     </standard>
 
     <code_comparison>
-        <code title="Invalid: Using legacy float casts.">
-        <![CDATA[
-$price = <em>(double)</em> $value;
-$size  = <em>(real)</em>   $value;
-        ]]>
-        </code>
         <code title="Valid: Using normalized float casts.">
         <![CDATA[
 $price = <em>(float)</em> $value;
 $size  = <em>(float)</em> $value;
         ]]>
         </code>
+        <code title="Invalid: Using legacy float casts.">
+        <![CDATA[
+$price = <em>(double)</em> $value;
+$size  = <em>(real)</em>   $value;
+        ]]>
+        </code>
     </code_comparison>
 
     <code_comparison>
-        <code title="Invalid: Using the (unset) cast.">
-        <![CDATA[
-$result = <em>(unset)</em> $value;
-        ]]>
-        </code>
         <code title="Valid: Use unset().">
         <![CDATA[
 unset( $value );
         ]]>
         </code>
+        <code title="Invalid: Using the (unset) cast.">
+        <![CDATA[
+result = <em>(unset)</em> $value;
+        ]]>
+        </code>
     </code_comparison>
 
     <code_comparison>
-        <code title="Invalid: Using the (binary) cast.">
-        <![CDATA[
-$bytes = <em>(binary)</em> $value;
-        ]]>
-        </code>
         <code title="Valid: Prefer a clear alternative.">
         <![CDATA[
-$bytes = (string) $value;
+bytes = (string) $value;
+        ]]>
+        </code>
+        <code title="Invalid: Using the (binary) cast.">
+        <![CDATA[
+bytes = <em>(binary)</em> $value;
         ]]>
         </code>
     </code_comparison>
