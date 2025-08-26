@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Global Variables Override"
+    >
+    <standard>
+    <![CDATA[
+    WordPress global variables should not be overridden. This includes variables imported with 
+    the `global` statement within functions, variables assigned via the `$GLOBALS` superglobal array,
+    and variables assigned in the global namespace.
+
+    A few select WordPress global variables like `$content_width` and `$wp_cockneyreplace` are 
+    specifically intended to be overridden by themes/plugins and are exempt from this rule.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Different variable name.">
+        <![CDATA[
+$my_query = new WP_Query( $args );
+        ]]>
+        </code>
+        <code title="Invalid: Global variable overridden.">
+        <![CDATA[
+<em>global $wp_query;</em>
+<em>$wp_query = new WP_Query( $args );</em>
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Custom Superglobal variable.">
+        <![CDATA[
+$GLOBALS['my_data'] = array( 'key' => 'value' );
+        ]]>
+        </code>
+        <code title="Invalid: WordPress Superglobal variable overridden.">
+        <![CDATA[
+<em>$GLOBALS['wp_query'] = new WP_Query( $args );</em>
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
