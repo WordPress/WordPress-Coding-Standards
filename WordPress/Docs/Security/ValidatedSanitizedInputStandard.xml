@@ -10,12 +10,12 @@
     Validation ensures the input key exists (using isset(), empty(), array_key_exists(), or null coalescing operators). Unslashing removes WordPress's automatic backslashes using wp_unslash() or similar functions. Sanitization cleans the data using appropriate functions like sanitize_text_field(), absint(), etc.
     ]]>
     </standard>
+    <standard>
+    <![CDATA[
+    String interpolation with superglobals requires validation and sanitization. Using $_POST, $_GET, etc. directly in strings can lead to XSS attacks if the input contains malicious code.
+    ]]>
+    </standard>
     <code_comparison>
-        <standard>
-        <![CDATA[
-        String interpolation with superglobals requires validation and sanitization. Using $_POST, $_GET, etc. directly in strings can lead to XSS attacks if the input contains malicious code.
-        ]]>
-        </standard>
         <code title="Valid: String interpolation with proper validation and sanitization.">
         <![CDATA[
 if ( isset( $_POST['name'] ) ) {
@@ -30,12 +30,12 @@ echo "Hello {$_POST['name']}";
         ]]>
         </code>
     </code_comparison>
+    <standard>
+    <![CDATA[
+    All superglobal array access must be validated to ensure the key exists before use. This prevents undefined index notices and potential security issues.
+    ]]>
+    </standard>
     <code_comparison>
-        <standard>
-        <![CDATA[
-        All superglobal array access must be validated to ensure the key exists before use. This prevents undefined index notices and potential security issues.
-        ]]>
-        </standard>
         <code title="Valid: Input is validated before use.">
         <![CDATA[
 if ( isset( $_POST['name'] ) ) {
@@ -49,12 +49,12 @@ $name = sanitize_text_field( wp_unslash( $_POST['name'] ) );
         ]]>
         </code>
     </code_comparison>
+    <standard>
+    <![CDATA[
+    All validated input must be sanitized to remove or escape potentially malicious content before processing or output.
+    ]]>
+    </standard>
     <code_comparison>
-        <standard>
-        <![CDATA[
-        All validated input must be sanitized to remove or escape potentially malicious content before processing or output.
-        ]]>
-        </standard>
         <code title="Valid: Input is validated and sanitized.">
         <![CDATA[
 if ( isset( $_POST['text'] ) ) {
@@ -70,12 +70,12 @@ if ( isset( $_POST['text'] ) ) {
         ]]>
         </code>
     </code_comparison>
+    <standard>
+    <![CDATA[
+    WordPress automatically adds backslashes to certain superglobals. These must be removed using wp_unslash() or similar functions before sanitization to prevent double-escaping issues.
+    ]]>
+    </standard>
     <code_comparison>
-        <standard>
-        <![CDATA[
-        WordPress automatically adds backslashes to certain superglobals. These must be removed using wp_unslash() or similar functions before sanitization to prevent double-escaping issues.
-        ]]>
-        </standard>
         <code title="Valid: Input is unslashed before sanitization.">
         <![CDATA[
 if ( isset( $_POST['data'] ) ) {
