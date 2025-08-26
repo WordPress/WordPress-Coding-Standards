@@ -275,39 +275,36 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 		   $is_constant = false;
 		   for ( $i = $start; $i <= $end; $i++ ) {
 			   if ( $tokens[$i]['code'] === T_CONSTANT_ENCAPSED_STRING ) {
-				   $value .= TextStrings::stripQuotes($tokens[$i]['content']);
-			   } elseif ( $tokens[$i]['code'] === T_STRING_CONCAT ) {
-				   // Concatenation operator, skip.
-				   continue;
-			   } elseif ( $tokens[$i]['code'] === T_STRING ) {
-				   // Possible constant.
-				   $value .= $tokens[$i]['content'];
-				   $is_constant = true;
-			   }
-		   }
+				$value .= TextStrings::stripQuotes( $tokens[ $i ]['content'] );
+			} elseif ( T_STRING_CONCAT === $tokens[ $i ]['code'] ) {
+				// Concatenation operator, skip.
+				continue;
+			} elseif ( T_STRING === $tokens[ $i ]['code'] ) {
+				// Possible constant.
+				$value .= $tokens[ $i ]['content'];
+				$is_constant = true;
+			}
+		}
 
-		   // Only check string literals, not constants.
-		   if ( $is_constant ) {
-			   return;
-		   }
+		// Only check string literals, not constants.
+		if ( true === $is_constant ) {
+			return;
+		}
 
-		   if ( ! isset( $parameter_args[ $value ] ) ) {
-			   return;
-		   }
+		if ( ! isset( $parameter_args[ $value ] ) ) {
+			return;
+		}
 
-		   $message = 'The parameter value "%s" has been deprecated since WordPress version %s.';
-		   $data    = array(
-			   $value,
-			   $parameter_args[ $value ]['version'],
-		   );
+		$message = 'The parameter value "%s" has been deprecated since WordPress version %s.';
+		$data    = array( $value, $parameter_args[ $value ]['version'] );
 
-		   if ( ! empty( $parameter_args[ $value ]['alt'] ) ) {
-			   $message .= ' Use %s instead.';
-			   $data[]   = $parameter_args[ $value ]['alt'];
-		   }
+		if ( ! empty( $parameter_args[ $value ]['alt'] ) ) {
+			$message .= ' Use %s instead.';
+			$data[]   = $parameter_args[ $value ]['alt'];
+		}
 
-		   $is_error = $this->wp_version_compare( $parameter_args[ $value ]['version'], $this->minimum_wp_version, '<' );
-		   MessageHelper::addMessage(
+		$is_error = $this->wp_version_compare( $parameter_args[ $value ]['version'], $this->minimum_wp_version, '<' );
+		MessageHelper::addMessage(
 			   $this->phpcsFile,
 			   $message,
 			   $start,
