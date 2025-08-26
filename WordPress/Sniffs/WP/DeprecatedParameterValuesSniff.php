@@ -267,41 +267,53 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 */
 	protected function process_parameter( $matched_content, $parameter, $parameter_args ) {
 
-		$parameter_position = $this->phpcsFile->findNext(
-			Tokens::$emptyTokens,
-			$parameter['start'],
-			$parameter['end'] + 1,
-			true
-		);
+		   // Collect the full parameter value, including concatenated strings and constants.
+		   $tokens = $this->tokens;
+		   $value = '';
+		   $start = $parameter['start'];
+		   $end = $parameter['end'];
+		   $is_constant = false;
+		   for ( $i = $start; $i <= $end; $i++ ) {
+			   if ( $tokens[$i]['code'] === T_CONSTANT_ENCAPSED_STRING ) {
+				   $value .= TextStrings::stripQuotes($tokens[$i]['content']);
+			   } elseif ( $tokens[$i]['code'] === T_STRING_CONCAT ) {
+				   // Concatenation operator, skip.
+				   continue;
+			   } elseif ( $tokens[$i]['code'] === T_STRING ) {
+				   // Possible constant.
+				   $value .= $tokens[$i]['content'];
+				   $is_constant = true;
+			   }
+		   }
 
-		if ( false === $parameter_position ) {
-			return;
-		}
+		   // Only check string literals, not constants.
+		   if ( $is_constant ) {
+			   return;
+		   }
 
-		$matched_parameter = TextStrings::stripQuotes( $this->tokens[ $parameter_position ]['content'] );
-		if ( ! isset( $parameter_args[ $matched_parameter ] ) ) {
-			return;
-		}
+		   if ( ! isset( $parameter_args[ $value ] ) ) {
+			   return;
+		   }
 
-		$message = 'The parameter value "%s" has been deprecated since WordPress version %s.';
-		$data    = array(
-			$matched_parameter,
-			$parameter_args[ $matched_parameter ]['version'],
-		);
+		   $message = 'The parameter value "%s" has been deprecated since WordPress version %s.';
+		   $data    = array(
+			   $value,
+			   $parameter_args[ $value ]['version'],
+		   );
 
-		if ( ! empty( $parameter_args[ $matched_parameter ]['alt'] ) ) {
-			$message .= ' Use %s instead.';
-			$data[]   = $parameter_args[ $matched_parameter ]['alt'];
-		}
+		   if ( ! empty( $parameter_args[ $value ]['alt'] ) ) {
+			   $message .= ' Use %s instead.';
+			   $data[]   = $parameter_args[ $value ]['alt'];
+		   }
 
-		$is_error = $this->wp_version_compare( $parameter_args[ $matched_parameter ]['version'], $this->minimum_wp_version, '<' );
-		MessageHelper::addMessage(
-			$this->phpcsFile,
-			$message,
-			$parameter_position,
-			$is_error,
-			'Found',
-			$data
-		);
+		   $is_error = $this->wp_version_compare( $parameter_args[ $value ]['version'], $this->minimum_wp_version, '<' );
+		   MessageHelper::addMessage(
+			   $this->phpcsFile,
+			   $message,
+			   $start,
+			   $is_error,
+			   'Found',
+			   $data
+		   );
 	}
 }
