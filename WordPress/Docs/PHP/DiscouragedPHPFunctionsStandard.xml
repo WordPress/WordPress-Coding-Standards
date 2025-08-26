@@ -95,13 +95,18 @@ Functions often used for obfuscating code are strongly discouraged. Make sure th
     <code_comparison>
         <code title="Valid: Using functions for benign reasons.">
         <![CDATA[
-base64_encode($username);
-base64_decode( $expected_md5 );
+base64_encode( $string );
+base64_decode( $encrypted_string );
+convert_uuencode( $string );
+convert_uudecode( $encrypted_string );
+str_rot13( $string );
         ]]>
         </code>
         <code title="Invalid: Using functions to obfuscate code.">
         <![CDATA[
-<em>eval</em>( base64_decode( $code_str ) );
+<em>eval( </em>base64_decode( $code_str )<em> )</em>;
+<em>eval( </em>convert_uudecode( $uuencoded )<em> )</em>;
+<em>eval( </em>str_rot13( $rot13_encoded )<em> )</em>;
         ]]>
         </code>
     </code_comparison>
