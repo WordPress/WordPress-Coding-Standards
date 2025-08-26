@@ -5,44 +5,35 @@
     >
     <standard>
     <![CDATA[
-    The usage of WordPress Constants is discouraged.
+    The use of certain WordPress constants is discouraged. Examples include `TEMPLATEPATH` and `STYLESHEETPATH`.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: A function is used in the code to retrieve the theme directory.">
+        <code title="Valid: Function used instead of constant.">
         <![CDATA[
-<img src="
-<?php echo <em>get_template_directory_uri()</em>; ?>
-/img/logo.svg" />
+$subdir = <em>get_template_directory()</em> . '/subdir';
         ]]>
         </code>
         <code title="Invalid: The TEMPLATEPATH constant is used in the code.">
         <![CDATA[
-<img src="
-<?php echo <em>TEMPLATEPATH</em>;?>
-/img/logo.svg" />
+$subdir = <em>TEMPLATEPATH</em> . '/subdir';
         ]]>
         </code>
     </code_comparison>
     <standard>
     <![CDATA[
-    Defining WordPress Constants is discouraged.
+    The use of certain WordPress constants is discouraged. Examples include `TEMPLATEPATH` and `STYLESHEETPATH`.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: A function is used in the code to retrieve the theme directory.">
+        <code title="Valid: Function used instead of constant.">
         <![CDATA[
-<img src="
-<?php echo <em>get_template_directory_uri()</em>; ?>
-/img/logo.svg" />
+$dir = <em>get_stylesheet_directory()</em>;
         ]]>
         </code>
-        <code title="Invalid: The TEMPLATEPATH constant is set by a theme.">
+        <code title="Invalid: The STYLESHEETPATH constant is used in the code.">
         <![CDATA[
-<em>define("TEMPLATEPATH", "foo");</em>
-<img src="
-<?php echo <em>$foo</em>; ?>
-/img/logo.svg" />
+$dir = <em>STYLESHEETPATH</em>;
         ]]>
         </code>
     </code_comparison>
