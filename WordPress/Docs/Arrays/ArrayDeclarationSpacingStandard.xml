@@ -12,15 +12,15 @@
         <code title="Valid: There is only one key/value pair per line.">
         <![CDATA[
 $args = array(
-    <em>'post_id' => 22</em>,
-    <em>'category' => 1</em>
+    <em>'post_id'  => 22</em>,
+    <em>'category' => 1</em>,
 );
         ]]>
         </code>
         <code title="Invalid: More than one key/value pair per line.">
         <![CDATA[
 $args = array(
-    <em>'post_id' => 22, 'category' => 1</em>
+    <em>'post_id' => 22, 'category' => 1</em>,
 );
         ]]>
         </code>
@@ -36,14 +36,14 @@ $args = array(
 $args = array(
     <em>'post_id'</em>,
     <em>'comment_count'</em>,
-    <em>'post_type'</em>
+    <em>'post_type'</em>,
 );
         ]]>
         </code>
         <code title="Invalid: More than one item per line in a multi-line array.">
         <![CDATA[
 $args = array(
-    <em>'post_id', 'comment_count', 'post_type'</em>
+    <em>'post_id', 'comment_count', 'post_type'</em>,
 );
         ]]>
         </code>
@@ -57,9 +57,9 @@ $args = array(
         <code title="Valid: Each key-value pair on its own line.">
         <![CDATA[
 $settings = array(
-    <em>'width' => 300</em>,
+    <em>'width'  => 300</em>,
     <em>'height' => 200</em>,
-    <em>'color' => 'blue'</em>
+    <em>'color'  => 'blue'</em>,
 );
         ]]>
         </code>
@@ -67,7 +67,7 @@ $settings = array(
         <![CDATA[
 $settings = array(
     <em>'width' => 300, 'height' => 200</em>,
-    <em>'color' => 'blue'</em>
+    <em>'color' => 'blue'</em>,
 );
         ]]>
         </code>
