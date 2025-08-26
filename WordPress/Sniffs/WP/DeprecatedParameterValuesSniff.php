@@ -267,21 +267,21 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 */
 	protected function process_parameter( $matched_content, $parameter, $parameter_args ) {
 
-		   // Collect the full parameter value, including concatenated strings and constants.
-		   $tokens = $this->tokens;
-		   $value = '';
-		   $start = $parameter['start'];
-		   $end = $parameter['end'];
-		   $is_constant = false;
-		   for ( $i = $start; $i <= $end; $i++ ) {
-			   if ( $tokens[$i]['code'] === T_CONSTANT_ENCAPSED_STRING ) {
+			// Collect the full parameter value, including concatenated strings and constants.
+			$tokens      = $this->tokens;
+			$value       = '';
+			$start       = $parameter['start'];
+			$end         = $parameter['end'];
+			$is_constant = false;
+		for ( $i = $start; $i <= $end; $i++ ) {
+			if ( T_CONSTANT_ENCAPSED_STRING === $tokens[ $i ]['code'] ) {
 				$value .= TextStrings::stripQuotes( $tokens[ $i ]['content'] );
 			} elseif ( T_STRING_CONCAT === $tokens[ $i ]['code'] ) {
 				// Concatenation operator, skip.
 				continue;
 			} elseif ( T_STRING === $tokens[ $i ]['code'] ) {
 				// Possible constant.
-				$value .= $tokens[ $i ]['content'];
+				$value      .= $tokens[ $i ]['content'];
 				$is_constant = true;
 			}
 		}
@@ -305,12 +305,12 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 
 		$is_error = $this->wp_version_compare( $parameter_args[ $value ]['version'], $this->minimum_wp_version, '<' );
 		MessageHelper::addMessage(
-			   $this->phpcsFile,
-			   $message,
-			   $start,
-			   $is_error,
-			   'Found',
-			   $data
-		   );
+			$this->phpcsFile,
+			$message,
+			$start,
+			$is_error,
+			'Found',
+			$data
+		);
 	}
 }
