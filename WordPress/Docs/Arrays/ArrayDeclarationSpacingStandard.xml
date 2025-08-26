@@ -5,11 +5,11 @@
     >
     <standard>
     <![CDATA[
-    When an array uses associative keys, each pair of key and value must start on a new line.
+    When an array uses keys, each key/value pair must start on a new line.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: There is only one pair of key and value per line.">
+        <code title="Valid: There is only one key/value pair per line.">
         <![CDATA[
 $args = array(
     <em>'post_id' => 22</em>,
@@ -17,7 +17,7 @@ $args = array(
 );
         ]]>
         </code>
-        <code title="Invalid: More than one pair of key and value per line.">
+        <code title="Invalid: More than one key/value pair per line.">
         <![CDATA[
 $args = array(
     <em>'post_id' => 22, 'category' => 1</em>
