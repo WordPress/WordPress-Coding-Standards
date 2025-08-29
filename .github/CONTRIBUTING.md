@@ -32,14 +32,14 @@ Alternatively, if you have push access to this repo, create a feature branch pre
 
 Only submit a PR with your own original code. Do NOT submit a PR containing code which you have largely copied from an externally available sniff, unless you wrote said sniff yourself.
 Open source does not mean that copyright does not apply.
-Copyright infringements will not be tolerated and can lead to you being banned from the repo.
+Copyright infringements will not be tolerated and may result in a ban from the repository.
 
 #### Do Not Submit AI Generated PRs
 
-AI-generated (both fully and primarily) PRs are not welcome as they will be based on copyrighted code from others without accreditation and without taking the license of the original code into account, let alone getting permission for the use of the code or for re-licensing.
+AI-generated (both fully and primarily) PRs are not welcome as they will be based on copyrighted code from others without accreditation and without considering the license of the original code, let alone obtaining permission for the use of the code or for re-licensing.
 
 Aside from that, the experience is that AI-generated PRs will be incorrect 100% of the time and cost reviewers too much time.
-Submitting a (largely) AI-generated PR will lead to you being banned from the repo.
+Submitting a (largely) AI-generated PR will lead to you being banned from the repository.
 
 ### Licensing
 
