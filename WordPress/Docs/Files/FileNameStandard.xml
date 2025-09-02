@@ -12,14 +12,14 @@
         <code title="Valid: Lowercase and `-` separators.">
         <![CDATA[
 taxonomy<em>-</em>my<em>-</em>term.inc
-<em>s</em>ome-<em>f</em>ile.inc
+<em>some</em>-<em>file</em>.inc
 other<em>-</em>punctuation.inc
         ]]>
         </code>
         <code title="Invalid: Other punctuation or mixed case.">
         <![CDATA[
 taxonomy-my<em>_</em>term.inc
-<em>S</em>ome<em>F</em>ile.inc
+<em>Some</em>-<em>File</em>.inc
 other<em>+</em>punctuation<em>#</em>.inc
         ]]>
         </code>
