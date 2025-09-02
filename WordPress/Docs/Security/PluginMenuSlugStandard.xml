@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Plugin functions which can be used to add pages to the WP Admin menu should not include `__FILE__` for page registration.
+    Wordpress functions that can be used to add pages to the WP Admin menu should not include `__FILE__` for the menu slug (or parent menu slug) parameter to avoid revealing system paths.
     ]]>
     </standard>
     <code_comparison>
@@ -15,8 +15,17 @@ add_menu_page(
     'My Plugin Main Page',
     'My Plugin',
     'manage_options',
-    <em>my-plugin-main</em>,
+    <em>'my-plugin-main'</em>,
     'my_plugin_main_page'
+);
+
+add_submenu_page(
+    'my_plugin_main_page',
+    'My Plugin Subpage',
+    'Subpage',
+    'manage_options',
+    <em>'my-plugin-subpage'</em>,
+    'my_plugin_subpage'
 );
         ]]>
         </code>
@@ -28,6 +37,15 @@ add_menu_page(
     'manage_options',
     <em>__FILE__</em>,
     'my_plugin_main_page'
+);
+
+add_submenu_page(
+    'my_plugin_main_page',
+    'My Plugin Subpage',
+    'Subpage',
+    'manage_options',
+    <em>__FILE__</em>,
+    'my_plugin_subpage'
 );
         ]]>
         </code>
