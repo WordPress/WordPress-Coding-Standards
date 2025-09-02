@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress-Coding-Standards">
+    <description>Test configuration for WordPress Coding Standards</description>
+    <config name="installed_paths" value="../../phpcompatibility/php-compatibility,WordPress" />
+    <rule ref="WordPress">
+        <exclude name="WordPress.NamingConventions.ValidTestClassName"/>
+    </rule>
+    <rule ref="WordPress.NamingConventions.ValidTestClassName"/>
+</ruleset>

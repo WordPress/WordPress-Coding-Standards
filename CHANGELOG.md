@@ -6,7 +6,12 @@ This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a 
 
 ## [Unreleased]
 
-_No documentation available about unreleased changes as of yet._
+### Added
+- New `WordPress.NamingConventions.ValidTestClassName` sniff to the `WordPress-Extra` ruleset. This sniff enforces that PHPUnit test classes follow WordPress coding standards by:
+  - Requiring test class names to end with 'Test'
+  - Ensuring test class names use PascalCase
+  - Verifying that the class name matches the filename (without .php)
+  - Only checking classes that extend a known test case class (PHPUnit or WP_UnitTestCase)
 
 ## [3.2.0] - 2025-07-24
 

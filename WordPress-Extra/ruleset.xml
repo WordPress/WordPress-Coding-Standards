@@ -106,6 +106,10 @@
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/26 -->
 	<rule ref="WordPress.WP.GlobalVariablesOverride"/>
 
+	<!-- Enforce consistent test class naming conventions.
+		 https://github.com/WordPress/WordPress-Coding-Standards/issues/2484 -->
+	<rule ref="WordPress.NamingConventions.ValidTestClassName"/>
+
 	<!-- Detect incorrect or risky use of the `ini_set()` function.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/1447 -->
 	<rule ref="WordPress.PHP.IniSet"/>
@@ -199,7 +203,8 @@
 	#############################################################################
 	-->
 
-	<!-- Check for single blank line after namespace declaration. -->
-	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
+	<!-- Enforce consistent test class naming conventions.
+	     https://github.com/WordPress/WordPress-Coding-Standards/issues/2484 -->
+	<rule ref="WordPress.NamingConventions.ValidTestClassName"/>
 
 </ruleset>
