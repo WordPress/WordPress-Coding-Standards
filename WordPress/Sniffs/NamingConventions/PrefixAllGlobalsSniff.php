@@ -630,11 +630,11 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			switch ( $this->tokens[ $stackPtr ]['code'] ) {
 				case \T_FUNCTION:
 					// Methods in a class do not need to be prefixed.
-					if ( Scopes::isOOMethod( $this->phpcsFile, $stackPtr ) === true ) {
+					if ( Scopes::isOOMethod( $this->phpcsFile, $stackPtr ) ) {
 						return;
 					}
 
-					if ( DeprecationHelper::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
+					if ( DeprecationHelper::is_function_deprecated( $this->phpcsFile, $stackPtr ) ) {
 						/*
 						 * Deprecated functions don't have to comply with the naming conventions,
 						 * otherwise functions deprecated in favor of a function with a compliant
