@@ -13,6 +13,11 @@
 
     The prefix used for a plugin/theme may be chosen by the developers and should be defined in a custom PHPCS ruleset to allow for this sniff to verify that the prefix is consistently used.
     Prefixes will be treated in a case-insensitive manner.
+    
+    You can extend the blocklist of reserved prefixes at runtime using the `prefix_blocklist` property:
+    Example usage:
+    phpcs --runtime-set prefix_blocklist admin,plugin
+    This will flag any global names starting with these prefixes in addition to the defaults.
     https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#naming-conventions-prefix-everything-in-the-global-namespace
     ]]>
     </standard>

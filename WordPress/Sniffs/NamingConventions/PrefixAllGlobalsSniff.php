@@ -82,16 +82,24 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @since 0.12.0
 	 * @since 3.0.0  Renamed from `$prefix_blacklist` to `$prefix_blocklist`.
+	 * @since 3.3.0  Now supports runtime extension via the `prefix_blocklist` property.
+	 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/2481
 	 *
-	 * @var array<string, true> Key is prefix, value irrelevant.
+	 * @var string Comma-separated list of additional reserved prefixes for global functions.
+	 * Example usage: --runtime-set prefix_blocklist admin,plugin
 	 */
-	protected $prefix_blocklist = array(
+	public $prefix_blocklist = '';
+
+	/**
+	 * Internal: Default blocklist.
+	 *
+	 * @var array<string, true>
+	 */
+	private $default_prefix_blocklist = array(
 		'wordpress' => true,
 		'wp'        => true,
 		'_'         => true,
-		'php'       => true, // See #1728, the 'php' prefix is reserved by PHP itself.
-		'admin'     => true,
-		'plugin'    => true,
+		'php'       => true,
 	);
 
 	/**
@@ -1222,10 +1230,21 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		// Validate the passed prefix(es).
 		$prefixes    = array();
 		$ns_prefixes = array();
+		// Merge default blocklist with runtime blocklist.
+		$runtime_blocklist = array();
+		if ( ! empty( $this->prefix_blocklist ) ) {
+			foreach ( array_map( 'trim', explode( ',', $this->prefix_blocklist ) ) as $prefix ) {
+				if ( $prefix !== '' ) {
+					$runtime_blocklist[ strtolower( $prefix ) ] = true;
+				}
+			}
+		}
+		$final_blocklist = array_merge( $this->default_prefix_blocklist, $runtime_blocklist );
+
 		foreach ( $this->prefixes as $key => $prefix ) {
 			$prefixLC = strtolower( $prefix );
 
-			if ( isset( $this->prefix_blocklist[ $prefixLC ] ) ) {
+			if ( isset( $final_blocklist[ $prefixLC ] ) ) {
 				$this->phpcsFile->addError(
 					'The "%s" prefix is not allowed.',
 					0,
