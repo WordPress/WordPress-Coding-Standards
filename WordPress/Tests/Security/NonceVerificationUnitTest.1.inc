@@ -501,3 +501,26 @@ function non_ascii_characters() {
     update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
 }
 // phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
+
+/*
+ * Test case handling of non-ASCII characters in function names.
+ */
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] déjà_vu
+function same_function_same_case() {
+    déjà_vu( 'something' ); // Ok.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+
+function same_function_different_case() {
+    DéJà_VU( 'something' ); // Ok.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+
+function different_function_name() {
+    dÉjÀ_vu( 'something' ); // Bad, dÉjÀ_vu() and déjà_vu() are NOT the same function.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
