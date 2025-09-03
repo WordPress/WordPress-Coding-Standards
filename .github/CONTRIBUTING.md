@@ -35,7 +35,7 @@ We welcome contributions from everyone, and want your PR to have the best chance
   Take time to explain *why* the change is needed, and include tests or examples where appropriate. Clear, self-written explanations make it more straightforward for reviewers to understand what you are trying to achieve.
 
 * **Think about long-term maintainability.**
-  Code should align with WordPress coding standards and be written in a way that others can readily read, understand, and maintain.
+  Code should align with WordPress Coding Standards and be written in a way that others can readily read, understand, and maintain.
 
 * **Be collaborative.**
   If you’re unsure about an approach, open an issue or draft PR first to start a conversation.
