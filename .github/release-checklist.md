@@ -36,6 +36,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 
 ### Release prep
 
+- [ ] Double-check that all PRs which were merged since the last release have a milestone attached to it.
 - [ ] Add changelog for the release - PR #xxx
     :pencil2: Remember to add a release link at the bottom!
 - [ ] Update `README` (if applicable) - PR #xxx
