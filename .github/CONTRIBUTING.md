@@ -21,6 +21,27 @@ If the error message in question doesn't come from a sniff whose name starts wit
 
 ## Contributing patches and new features
 
+### Tips for Successful PRs
+
+We welcome contributions from everyone, and want your PR to have the best chance of being reviewed and merged. To help with this, please keep the following in mind:
+
+* **Respect copyright and licensing.**
+  Only submit code that you have written yourself or that comes from sources where the license clearly allows inclusion. Submitting code that infringes on copyright or licensing terms puts both you and the project at legal risk, and such contributions cannot be accepted.
+
+* **Do not submit AI-generated code.**
+  Pull requests containing AI-generated code are not acceptable. Beyond copyright and licensing uncertainties, AI-generated contributions consistently require disproportionate amounts of maintainer time to review, correct, or rewrite. This wastes limited project resources and slows progress for everyone. Submitting AI-generated code may be treated as a violation of our [Code of Conduct](../CODE_OF_CONDUCT.md).
+
+* **Focus on quality and clarity.**
+  Take time to explain *why* the change is needed, and include tests or examples where appropriate. Clear, self-written explanations make it more straightforward for reviewers to understand what you are trying to achieve.
+
+* **Think about long-term maintainability.**
+  Code should align with WordPress coding standards and be written in a way that others can readily read, understand, and maintain.
+
+* **Be collaborative.**
+  If you’re unsure about an approach, open an issue or draft PR first to start a conversation.
+
+By following these tips, you’ll save time for both yourself and the maintainers — and increase the likelihood that your contribution can be merged smoothly.
+
 ### Branches
 
 Ongoing development will be done in the `develop` branch with merges to `main` once considered stable.
