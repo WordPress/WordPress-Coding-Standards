@@ -493,3 +493,11 @@ function ajax_process() {
 
     update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
 }
+
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] MIXED_case_NAME
+function non_ascii_characters() {
+    MIXED_case_NAME( $_POST['something'] ); // Passing $_POST to ensure the sniff bails correctly for variables inside the nonce verification function.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
