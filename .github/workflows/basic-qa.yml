@@ -252,6 +252,9 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
+      - name: Install PHPStan globally
+        run: composer global require phpstan/phpstan
+
       - name: Run PHPStan
         run: phpstan analyse
 
