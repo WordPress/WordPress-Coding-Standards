@@ -15,7 +15,7 @@ _No documentation available about unreleased changes as of yet._
     This sniff warns when `get_*_meta()` and `get_metadata*()` functions are used with the `$meta_key`/`$key` param, but without the `$single` parameter as this could lead to unexpected behavior due to the different return types.
 - `WordPress-Extra`: the following additional sniffs have been added to the ruleset: `Generic.Strings.UnnecessaryHeredoc` and `Generic.WhiteSpace.HereNowdocIdentifierSpacing`. [#2534]
 - The `rest_sanitize_boolean()` functions to the list of known "sanitizing" functions. Props [@westonruter]. [#2530]
-- End-user documentation to the following existing sniffs: `WordPress.DB.PreparedSQL` (props [@jaymcp], [#2454]), `WordPress.NamingConventions.ValidFunctionName` (props [@richardkorthuis] and [@rodrigoprimo], [#2452], [#2531]), `WordPress.NamingConventions.ValidVariableName` (props [@richardkorthuis], [#2457]).
+- End-user documentation to the following existing sniffs: `WordPress.DB.PreparedSQL` (props [@jaymcp], [#2454]), `WordPress.NamingConventions.ValidFunctionName` (props [@richardkorthuis] and [@rodrigoprimo], [#2452], [#2531]), `WordPress.NamingConventions.ValidVariableName` (props [@richardkorthuis], [#2457]), `WordPress.PHP.DontExtract` (props [@aiolachiara], [#2456]).
     This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Usage).
 
 ### Changed
@@ -54,6 +54,7 @@ _No documentation available about unreleased changes as of yet._
 [#2465]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2465
 [#2452]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2452
 [#2454]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2454
+[#2456]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2456
 [#2457]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2457
 [#2479]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2479
 [#2500]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2500
@@ -1699,6 +1700,7 @@ Initial tagged release.
 [2013-10-06]: https://github.com/WordPress/WordPress-Coding-Standards/compare/2013-06-11...2013-10-06
 
 [@anomiex]:         https://github.com/anomiex
+[@aiolachiara]:     https://github.com/aiolachiara
 [@Chouby]:          https://github.com/Chouby
 [@ckanitz]:         https://github.com/ckanitz
 [@craigfrancis]:    https://github.com/craigfrancis
