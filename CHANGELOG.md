@@ -1707,11 +1707,14 @@ Initial tagged release.
 [@davidperezgar]:   https://github.com/davidperezgar
 [@dawidurbanski]:   https://github.com/dawidurbanski
 [@desrosj]:         https://github.com/desrosj
+[@dingo-d]:         https://github.com/dingo-d
 [@fredden]:         https://github.com/fredden
+[@GaryJones]:       https://github.com/GaryJones
 [@grappler]:        https://github.com/grappler
 [@Ipstenu]:         https://github.com/Ipstenu
 [@jaymcp]:          https://github.com/jaymcp
 [@JDGrimes]:        https://github.com/JDGrimes
+[@jrfnl]:           https://github.com/jrfnl
 [@khacoder]:        https://github.com/khacoder
 [@Luc45]:           https://github.com/Luc45
 [@marconmartins]:   https://github.com/marconmartins
