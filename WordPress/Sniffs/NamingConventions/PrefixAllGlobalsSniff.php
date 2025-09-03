@@ -1234,7 +1234,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$runtime_blocklist = array();
 		if ( ! empty( $this->prefix_blocklist ) ) {
 			foreach ( array_map( 'trim', explode( ',', $this->prefix_blocklist ) ) as $prefix ) {
-				if ( $prefix !== '' ) {
+				if ( '' !== $prefix ) {
 					$runtime_blocklist[ strtolower( $prefix ) ] = true;
 				}
 			}
