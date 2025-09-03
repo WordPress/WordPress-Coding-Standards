@@ -40,7 +40,7 @@ We welcome contributions from everyone, and want your PR to have the best chance
 * **Be collaborative.**
   If you're unsure about an approach, open an issue first to start a conversation.
 
-By following these tips, you’ll save time for both yourself and the maintainers — and increase the likelihood that your contribution can be merged smoothly.
+By following these tips, you'll save time for both yourself and the maintainers — and increase the likelihood that your contribution can be merged smoothly.
 
 ### Branches
 
