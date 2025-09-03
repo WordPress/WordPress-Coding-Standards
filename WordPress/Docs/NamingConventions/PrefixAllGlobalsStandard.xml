@@ -9,6 +9,8 @@
 
     A prefix must be distinct and unique to the plugin/theme, in order to prevent potential conflicts with other plugins/themes and with WordPress itself.
 
+        Note: The following prefixes are reserved and should not be used as theme/plugin prefixes: 'wordpress', 'wp', '_', 'php', 'admin', 'plugin'.
+
     The prefix used for a plugin/theme may be chosen by the developers and should be defined in a custom PHPCS ruleset to allow for this sniff to verify that the prefix is consistently used.
     Prefixes will be treated in a case-insensitive manner.
     https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#naming-conventions-prefix-everything-in-the-global-namespace

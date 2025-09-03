@@ -85,12 +85,14 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, true> Key is prefix, value irrelevant.
 	 */
-	protected $prefix_blocklist = array(
-		'wordpress' => true,
-		'wp'        => true,
-		'_'         => true,
-		'php'       => true, // See #1728, the 'php' prefix is reserved by PHP itself.
-	);
+protected $prefix_blocklist = array(
+	'wordpress' => true,
+	'wp'        => true,
+	'_'         => true,
+	'php'       => true, // See #1728, the 'php' prefix is reserved by PHP itself.
+	'admin'     => true,
+	'plugin'    => true,
+);
 
 	/**
 	 * Target prefixes after validation.
