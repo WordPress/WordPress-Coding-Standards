@@ -2,7 +2,7 @@
 
 <!--
 ============================================================================================
-Warning: AI-generated PRs are NOT welcome and will result in a ban from this repository.
+Warning: AI-generated PRs are NOT welcome and may result in a ban from this repository.
 
 Please read the CONTRIBUTING guide before submitting your pull request.
 
