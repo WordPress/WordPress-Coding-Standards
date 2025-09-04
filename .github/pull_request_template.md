@@ -25,6 +25,7 @@ Describe your changes in detail and, if relevant, explain which choices you have
 ## Suggested changelog entry
 <!--
 Please provide a short description of the change for the changelog.
+See the https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/CHANGELOG.md file if you need examples.
 -->
 
 
