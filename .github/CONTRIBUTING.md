@@ -26,26 +26,6 @@ Ongoing development will be done in the `develop` branch with merges to `main` o
 To contribute an improvement to this project, fork the repo, run `composer install`, make your changes to the code, run the unit tests and code style checks by running `composer check-all`, and if all is good, open a pull request to the `develop` branch.
 Alternatively, if you have push access to this repo, create a feature branch prefixed by `feature/` and then open an intra-repo PR from that branch to `develop`.
 
-### Words of Warning
-
-#### Do Not Violate Copyright
-
-Only submit a PR with your own original code. Do NOT submit a PR containing code which you have largely copied from an externally available sniff, unless you wrote said sniff yourself.
-Open source does not mean that copyright does not apply.
-Copyright infringements will not be tolerated and may result in a ban from the repository.
-
-#### Do Not Submit AI Generated PRs
-
-AI-generated (both fully and primarily) PRs are not welcome as they will be based on copyrighted code from others without accreditation and without considering the license of the original code, let alone obtaining permission for the use of the code or for re-licensing.
-
-Aside from that, the experience is that AI-generated PRs will be incorrect 100% of the time and cost reviewers too much time.
-Submitting a (largely) AI-generated PR will lead to you being banned from the repository.
-
-### Licensing
-
-By contributing code to this repository, you agree to license your code for use under the
-[MIT license](https://github.com/WordPress/WordPress-Coding-Standards/blob/main/LICENSE).
-
 # Considerations when writing sniffs
 
 ## Public properties
