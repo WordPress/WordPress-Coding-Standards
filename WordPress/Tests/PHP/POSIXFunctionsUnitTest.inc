@@ -13,9 +13,9 @@ $title = preg_split( 'cool', get_the_title() ); // Good.
 if ( ereg( '[A-Za-z]+', $title, $regs ) ) // Bad, ereg deprecated. Use preg_match instead.
 	die( $regs );
 
-if ( eregi( '[a-z]+', $title, $regs ) ) {} // Bad, eregi deprecated. Use preg_match instead.
+if ( \EREGI( '[a-z]+', $title, $regs ) ) {} // Bad, eregi deprecated. Use preg_match instead.
 
-$title = ereg_replace( 'cool', 'not cool', get_the_title() ); // Bad, ereg_replace has been deprecated. Use preg_replace instead.
+$title = ereg_REPLACE( 'cool', 'not cool', get_the_title() ); // Bad, ereg_replace has been deprecated. Use preg_replace instead.
 
 $title = eregi_replace( 'cool', 'not cool', get_the_title() ); // Bad, eregi_replace also deprecated. Use preg_replace instead.
 

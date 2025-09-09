@@ -30,7 +30,7 @@ phpinfo(); // Ok - within excluded group.
 
 // Reset group exclusions.
 // phpcs:set WordPress.PHP.DevelopmentFunctions exclude[]
-trigger_error(); // Error.
+\TRIGGER_ERROR(); // Error.
 phpinfo(); // Error.
 
 Wrapper_Class::var_dump(); // OK, not the native PHP function.

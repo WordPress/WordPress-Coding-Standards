@@ -7,7 +7,7 @@ namespace\serialize( $value ); // The sniff should start flagging this once it c
 
 serialize(); // Warning.
 \serialize( $value ); // Warning.
-unserialize(); // Warning.
+UNserialize(); // Warning.
 
 urlencode(); // Warning.
 rawurlencode(); // Ok.
@@ -19,7 +19,7 @@ ini_restore(); // Warning.
 magic_quotes_runtime(); // Warning.
 set_magic_quotes_runtime(); // Warning.
 apache_setenv(); // Warning.
-putenv(); // Warning.
+\PUTENV(); // Warning.
 set_include_path(); // Warning.
 restore_include_path(); // Warning.
 

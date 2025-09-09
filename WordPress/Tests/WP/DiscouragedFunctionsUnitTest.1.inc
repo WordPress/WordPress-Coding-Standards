@@ -1,7 +1,7 @@
 <?php
 
 query_posts(); // Warning, use WP_Query instead.
-wp_reset_query(); // Warning, use wp_reset_postdata instead.
+WP_reset_QUERY(); // Warning, use wp_reset_postdata instead.
 
 /*
  * Tests which are more specifically for the AbstractFunctionRestrictionsSniff class and Helper methods.
@@ -17,7 +17,7 @@ MyNamespace\query_posts(); // OK, not the global function.
 \MyNamespace\query_posts(); // OK, not the global function.
 namespace\query_posts(); // OK, not the global function.
 // ... but does act on fully qualified function calls.
-\query_posts(); // Warning.
+\query_POSTS(); // Warning.
 
 // Ensure the sniff doesn't act on functions not listed in the target functions array.
 query_post(); // OK, not one of the target functions.

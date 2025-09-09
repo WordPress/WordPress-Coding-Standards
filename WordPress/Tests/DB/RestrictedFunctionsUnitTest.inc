@@ -23,8 +23,8 @@ prefix_mysql_info(); // Ok.
 
 // MYSQL Extension.
 mysql_affected_rows();
-mysql_connect();
-mysql_close();
+Mysql_CONNECT();
+\MYSQL_close();
 mysql_fetch_row();
 mysql_info();
 mysql_numrows();
