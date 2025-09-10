@@ -538,7 +538,7 @@ _deprecated_function( __METHOD__, 'x.x.x', ClassName::class ); // OK.
 die( self::CLASS . ' has been abandoned' ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', parent::Class ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', static::class ); // OK.
-echo 'Do not use ' . $object::class ); // OK.
+echo 'Do not use ' . $object::class; // OK.
 
 /*
  * Examine the parameters passed for exception creation via throw.
