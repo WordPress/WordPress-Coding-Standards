@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.4', 'latest' ]
+        php: [ '7.2', 'latest' ]
         dependencies: [ 'lowest', 'stable' ]
 
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}

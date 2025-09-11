@@ -50,24 +50,13 @@
 
 		<!-- Linting is done in a separate CI job, no need to duplicate it. -->
 		<exclude name="Generic.PHP.Syntax"/>
-
-		<!-- WordPressCS still has a PHP 5.4 minimum. -->
-		<exclude name="Modernize.FunctionCalls.Dirname"/>
 	</rule>
 
 	<!-- Check code for cross-version PHP compatibility. -->
-	<config name="testVersion" value="5.4-"/>
+	<config name="testVersion" value="7.2-"/>
 	<rule ref="PHPCompatibility">
 		<!-- Exclude PHP constants back-filled by PHPCS. -->
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_finallyFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_yieldFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_ellipsisFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_powFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_pow_equalFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_spaceshipFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesceFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesce_equalFound"/>
-		<exclude name="PHPCompatibility.Constants.NewConstants.t_yield_fromFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_readonlyFound"/>
 	</rule>
 
