@@ -108,18 +108,18 @@ phpunit --filter WordPress /path/to/PHP_CodeSniffer/tests/AllTests.php
 
 Expected output:
 ```
-PHPUnit 9.6.15 by Sebastian Bergmann and contributors.
+PHPUnit 9.6.26 by Sebastian Bergmann and contributors.
 
-Runtime:       PHP 8.3.0
+Runtime:       PHP 8.4.12
 Configuration: /WordPressCS/phpunit.xml.dist
 
-.........................................................         57 / 57 (100%)
+............................................................      60 / 60 (100%)
 
-201 sniff test files generated 744 unique error codes; 50 were fixable (6%)
+210 sniff test files generated 775 unique error codes; 50 were fixable (6%)
 
-Time: 10.19 seconds, Memory: 40.00 MB
+Time: 00:03.396, Memory: 60.00 MB
 
-OK (57 tests, 0 assertions)
+OK (60 tests, 6 assertions)
 ```
 
 ### Unit Testing conventions
