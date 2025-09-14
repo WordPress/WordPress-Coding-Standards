@@ -81,7 +81,7 @@ $unserialized = <em>unserialize</em>( $my_array );
     <code_comparison>
         <code title="Valid: Using functions for benign reasons.">
         <![CDATA[
-// It is up to the developer to determine if the functino is used for benign purposes or if they want to keep it.
+// It is up to the developer to determine if the function is used for benign purposes or if they want to keep it.
         ]]>
         </code>
         <code title="Invalid: Using functions to obfuscate code.">
