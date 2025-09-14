@@ -35,12 +35,12 @@ add_menu_page(
     'My Plugin Main Page',
     'My Plugin',
     'manage_options',
-    <em>__FILE__ . </em>'my-plugin-subpage',
+    <em>__FILE__</em>,
     'my_plugin_main_page'
 );
 
 add_submenu_page(
-    <em>__FILE__ . </em>'my_plugin_main_page',
+    <em>__FILE__</em> . 'my_plugin_main_page',
     'My Plugin Subpage',
     'Subpage',
     'manage_options',
