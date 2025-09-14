@@ -5,27 +5,26 @@
     >
     <standard>
     <![CDATA[
-Use JSON instead of serialized data, which has known vulnerability problems with object injection.
+    Use JSON instead of serialized data, which has known vulnerability problems with object injection.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using JSON for serialized data.">
+        <code title="Valid: Using JSON to encode data.">
         <![CDATA[
-$serialized = <em>json_encode</em>( $array );
-$serialized = <em>wp_json_encode</em>( $array );
-$unserialized = <em>json_decode</em>( $array );
+$serialized = <em>wp_json_encode</em>( $my_array );
+$unserialized = <em>json_decode</em>( $my_array );
         ]]>
         </code>
         <code title="Invalid: Using serialized data strings.">
         <![CDATA[
-$serialized = <em>serialize</em>( $array );
-$unserialized = <em>unserialize</em>( $array );
+$serialized = <em>serialize</em>( $my_array );
+$unserialized = <em>unserialize</em>( $my_array );
         ]]>
         </code>
     </code_comparison>
     <standard>
     <![CDATA[
-URLs should now be encoded using rawurlencode(). Only legacy applications should use urlencode().
+    URLs should now be encoded using rawurlencode().
     ]]>
     </standard>
     <code_comparison>
@@ -42,7 +41,7 @@ URLs should now be encoded using rawurlencode(). Only legacy applications should
     </code_comparison>
     <standard>
     <![CDATA[
-Avoid using functions which change configuration values at runtime.
+    Avoid using functions which change configuration values at runtime. Invalid runtime configuration functions include `error_reporting()`, `ini_restore()`, `apache_setenv()`, `putenv()`, `set_include_path()`, `restore_include_path()`, `magic_quotes_runtime()`, `set_magic_quotes_runtime()`, and `dl()`.
     ]]>
     </standard>
     <code_comparison>
@@ -53,21 +52,13 @@ Avoid using functions which change configuration values at runtime.
         </code>
         <code title="Invalid: Changing configuration at runtime">
         <![CDATA[
-error_reporting( 0 );
-ini_restore( $option );
-apache_setenv( $variable, $value );
-putenv( $assignment );
-set_include_path( $include_path );
-restore_include_path();
-magic_quotes_runtime( $new_setting );
-set_magic_quotes_runtime( $new_setting );
-dl( $extension_filename );
+<em>apache_setenv( $variable, $value );</em>
         ]]>
         </code>
     </code_comparison>
     <standard>
     <![CDATA[
-Do not use PHP system calls. They are often disabled by server admins.
+    Do not use PHP system calls. They are often disabled by server admins. Disallowed system call functions include `exec()`, `passthru()`, `proc_open()`, `shell_exec()`, `system()`, and `popen()`.
     ]]>
     </standard>
     <code_comparison>
@@ -78,35 +69,26 @@ Do not use PHP system calls. They are often disabled by server admins.
         </code>
         <code title="Invalid: Using PHP system calls.">
         <![CDATA[
-exec( $command );
-passthru( $command );
-proc_open( 'php', $desc, $pipes, $cwd, $env );
-shell_exec( $command );
-system( $command );
-popen( $command, $mode );
+<em>exec( $my_command );</em>
         ]]>
         </code>
     </code_comparison>
     <standard>
     <![CDATA[
-Functions often used for obfuscating code are strongly discouraged. Make sure the function is used for benign reasons.
+    Functions often used for obfuscating code are strongly discouraged. Make sure the function is used for benign reasons.
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Using functions for benign reasons.">
         <![CDATA[
-base64_encode( $string );
-base64_decode( $encrypted_string );
-convert_uuencode( $string );
-convert_uudecode( $encrypted_string );
-str_rot13( $string );
+// It is up to the developer to determine if the functino is used for benign purposes or if they want to keep it.
         ]]>
         </code>
         <code title="Invalid: Using functions to obfuscate code.">
         <![CDATA[
 <em>eval( </em>base64_decode( $code_str )<em> )</em>;
-<em>eval( </em>convert_uudecode( $uuencoded )<em> )</em>;
-<em>eval( </em>str_rot13( $rot13_encoded )<em> )</em>;
+<em>convert_uudecode( $uuencoded )</code>em>;
+<em>str_rot13( $rot13_encoded )</em>;
         ]]>
         </code>
     </code_comparison>
