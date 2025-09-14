@@ -32,7 +32,7 @@ other<em>+</em>punctuation<em>#</em>.inc
     <code_comparison>
         <code title="Valid: File name matches prefix and class.">
         <![CDATA[
-<em>class</em>-<em>bulk-updater</em>.php
+<em>class-bulk-updater</em>.php // For a class named `Bulk_Updater`.
         ]]>
         </code>
         <code title="Invalid: File name missing prefix or class.">
