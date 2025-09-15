@@ -32,11 +32,6 @@ jobs:
         coverage: [false]
 
         include:
-          - php: '7.2'
-            dependencies: 'stable'
-            extensions: ':mbstring' # = Disable Mbstring.
-            coverage: true # Make sure coverage is recorded for this too.
-
           # Run code coverage builds against high/low PHP and high/low PHPCS.
           - php: '7.2'
             dependencies: 'stable'
