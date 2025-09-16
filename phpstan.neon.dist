@@ -1,5 +1,5 @@
 parameters:
-    phpVersion: 70100 # Needs to be 70100 or higher... sigh...
+    phpVersion: 70200
     level: 5
     paths:
         - WordPress

@@ -10,7 +10,7 @@
 [![codecov.io](https://codecov.io/gh/WordPress/WordPress-Coding-Standards/graph/badge.svg?token=UzFYn0RzVG&branch=develop)](https://codecov.io/gh/WordPress/WordPress-Coding-Standards?branch=develop)
 
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
-[![Tested on PHP 5.4 to 8.4](https://img.shields.io/badge/tested%20on-PHP%205.4%20|%205.5%20|%205.6%20|%207.0%20|%207.1%20|%207.2%20|%207.3%20|%207.4%20|%208.0%20|%208.1%20|%208.2%20|%208.3%20|%208.4-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
+[![Tested on PHP 7.2 to 8.4](https://img.shields.io/badge/tested%20on-PHP%207.2%20|%207.3%20|%207.4%20|%208.0%20|%208.1%20|%208.2%20|%208.3%20|%208.4-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
 
 [![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/LICENSE)
 [![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
@@ -53,7 +53,7 @@ This project is a collection of [PHP_CodeSniffer](https://github.com/PHPCSStanda
 ## Minimum Requirements
 
 The WordPress Coding Standards package requires:
-* PHP 5.4 or higher with the following extensions enabled:
+* PHP 7.2 or higher with the following extensions enabled:
     - [Filter](https://www.php.net/book.filter)
     - [libxml](https://www.php.net/book.libxml)
     - [Tokenizer](https://www.php.net/book.tokenizer)

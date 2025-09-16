@@ -26,23 +26,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.5' ]
+        php: [ '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.5' ]
         dependencies: [ 'lowest', 'stable' ]
         extensions: [ '' ]
         coverage: [false]
 
         include:
-          - php: '7.2'
-            dependencies: 'stable'
-            extensions: ':mbstring' # = Disable Mbstring.
-            coverage: true # Make sure coverage is recorded for this too.
-
           # Run code coverage builds against high/low PHP and high/low PHPCS.
-          - php: '5.4'
+          - php: '7.2'
             dependencies: 'stable'
             extensions: ''
             coverage: true
-          - php: '5.4'
+          - php: '7.2'
             dependencies: 'lowest'
             extensions: ''
             coverage: true
@@ -56,15 +51,11 @@ jobs:
             coverage: true
 
           # Test against dev versions of all dependencies with select PHP versions for early detection of issues.
-          - php: '5.4'
+          - php: '7.2'
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '7.0'
-            dependencies: 'dev'
-            extensions: ''
-            coverage: false
-          - php: '7.4'
+          - php: '8.1'
             dependencies: 'dev'
             extensions: ''
             coverage: false

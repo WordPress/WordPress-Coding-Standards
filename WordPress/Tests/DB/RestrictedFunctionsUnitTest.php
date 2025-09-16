@@ -27,13 +27,10 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 * Add a number of extra restricted functions to unit test the abstract
 	 * AbstractFunctionRestrictionsSniff class.
 	 *
-	 * @before
-	 *
 	 * @return void
 	 */
-	protected function enhanceGroups() {
+	protected function setUp(): void {
 		parent::setUp();
-
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array(
 			'test-empty-functions-array' => array(
 				'type'      => 'error',
@@ -52,11 +49,9 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Reset the $groups property.
 	 *
-	 * @after
-	 *
 	 * @return void
 	 */
-	protected function resetGroups() {
+	protected function tearDown(): void {
 		AbstractFunctionRestrictionsSniff::$unittest_groups = array();
 		parent::tearDown();
 	}
