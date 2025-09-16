@@ -8,6 +8,15 @@
 	<rule ref="WordPress-Core"/>
 	-->
 	<rule ref="WordPress-Docs"/>
-	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Extra">
+		<!--
+		Exclude deprecated sniffs.
+
+		Note: While this exclusion has nothing to do with the included Extra ruleset, exclusions must be placed within a "rule"
+		and as all sniffs from WordPressCS are automatically included, we don't have a "WordPress"
+		rule in which to place the exclusion, so this will have to do for now.
+		-->
+		<exclude name="WordPress.PHP.POSIXFunctions"/>
+	</rule>
 
 </ruleset>
