@@ -229,18 +229,19 @@ final class DirectDatabaseQuerySniff extends Sniff {
 
 			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					$content = strtolower( $this->tokens[ $i ]['content'] );
 
-					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					if ( isset( $this->cacheDeleteFunctions[ $content ] ) ) {
 
 						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 							$cached = true;
 							break;
 						}
-					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheGetFunctions[ $content ] ) ) {
 
 						$wp_cache_get = true;
 
-					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheSetFunctions[ $content ] ) ) {
 
 						if ( $wp_cache_get ) {
 							$cached = true;
@@ -277,6 +278,8 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				$this->cacheGetFunctions
 			);
 
+			$this->cacheGetFunctions = array_change_key_case( $this->cacheGetFunctions );
+
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
@@ -286,6 +289,8 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				$this->cacheSetFunctions
 			);
 
+			$this->cacheSetFunctions = array_change_key_case( $this->cacheSetFunctions );
+
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
@@ -294,6 +299,8 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);
+
+			$this->cacheDeleteFunctions = array_change_key_case( $this->cacheDeleteFunctions );
 
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}
