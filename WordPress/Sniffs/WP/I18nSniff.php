@@ -380,6 +380,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				$has_content = $this->check_string_has_translatable_content( $matched_content, $param_name, $param_info );
 				if ( true === $has_content ) {
 					$this->check_string_has_no_html_wrapper( $matched_content, $param_name, $param_info );
+					$this->check_string_has_no_leading_trailing_spaces( $matched_content, $param_name, $param_info );
 				}
 			}
 		}
@@ -799,6 +800,115 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				'Translatable string should not be wrapped in HTML. Found: %s',
 				$first_non_empty,
 				'NoHtmlWrappedStrings',
+				array( $param_info['clean'] )
+			);
+		}
+	}
+
+	/**
+	 * Check if a translatable string has leading or trailing spaces.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
+	 * @param string      $param_name      The name of the parameter being examined.
+	 * @param array|false $param_info      Parameter info array for an individual parameter,
+	 *                                     as received from the PassedParameters class.
+	 *
+	 * @return void
+	 */
+	private function check_string_has_no_leading_trailing_spaces( $matched_content, $param_name, $param_info ) {
+		// Strip surrounding quotes.
+		$content_without_quotes = TextStrings::stripQuotes( $param_info['clean'] );
+		$first_non_empty        = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
+
+		// Define regex patterns.
+		$pattern_leading_spaces  = '/^[\x20]+/u';
+		$pattern_trailing_spaces = '/[\x20]+$/u';
+		$pattern_leading_tabs    = '/^\x09+/u';
+		$pattern_trailing_tabs   = '/\x09+$/u';
+		$pattern_leading_vtabs   = '/^\x0B+/u';
+		$pattern_trailing_vtabs  = '/\x0B+$/u';
+		$pattern_leading_newlines = '/^\x0A+/u';
+		$pattern_trailing_newlines = '/\x0A+$/u';
+
+		// Check for leading spaces.
+		if ( preg_match( $pattern_leading_spaces, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading spaces. Found: %s',
+				$first_non_empty,
+				'LeadingSpaces',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for trailing spaces.
+		if ( preg_match( $pattern_trailing_spaces, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing spaces. Found: %s',
+				$first_non_empty,
+				'TrailingSpaces',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for leading tabs.
+		if ( preg_match( $pattern_leading_tabs, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading tabs. Found: %s',
+				$first_non_empty,
+				'LeadingTabs',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for trailing tabs.
+		if ( preg_match( $pattern_trailing_tabs, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing tabs. Found: %s',
+				$first_non_empty,
+				'TrailingTabs',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for leading vertical tabs.
+		if ( preg_match( $pattern_leading_vtabs, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading vertical tabs. Found: %s',
+				$first_non_empty,
+				'LeadingVTabs',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for trailing vertical tabs.
+		if ( preg_match( $pattern_trailing_vtabs, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing vertical tabs. Found: %s',
+				$first_non_empty,
+				'TrailingVTabs',
+				array( $param_info['clean'] )
+			);
+		}
+
+		// Check for leading new lines.
+		if ( preg_match( $pattern_leading_newlines, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading new lines. Found: %s',
+				$first_non_empty,
+				'LeadingNewLines',
+				array( $param_info['clean'] )
+			);
+		}
+		
+		// Check for trailing new lines.
+		if ( preg_match( $pattern_trailing_newlines, $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing new lines. Found: %s',
+				$first_non_empty,
+				'TrailingNewLines',
 				array( $param_info['clean'] )
 			);
 		}
