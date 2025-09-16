@@ -156,3 +156,14 @@ MyNamespace\parse_url( 'http://example.com/' );
 \MyNamespace\json_encode( $data );
 namespace\unlink(); // The sniff should start flagging this once it can resolve relative namespaces.
 namespace\Sub\strip_tags( $string );
+
+/*
+ * Safeguard that the sniff does not incorrectly ignore class methods/constants with the same
+ * name as WordPress global functions/constants when used in file_get_contents().
+ */
+file_get_contents( MyClass::wp_upload_dir() . 'subdir/file.inc' );
+file_get_contents( $this->GET_HOME_PATH() . 'subdir/file.inc' );
+file_get_contents( $this?->plugin_dir_path() . 'subdir/file.inc' );
+file_get_contents( MyClass::ABSPATH . 'subdir/file.inc' );
+file_get_contents( $this->WPMU_PLUGIN_DIR . 'subdir/file.inc' );
+file_get_contents( $this?->TEMPLATEPATH . 'subdir/file.inc' );

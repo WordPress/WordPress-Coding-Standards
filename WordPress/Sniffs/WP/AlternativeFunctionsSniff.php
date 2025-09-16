@@ -283,7 +283,7 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 				}
 
 				$contains_wp_path_constant = preg_match(
-					'`\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`',
+					'`(?<!->|::)\b(?:ABSPATH|WP_(?:CONTENT|PLUGIN)_DIR|WPMU_PLUGIN_DIR|TEMPLATEPATH|STYLESHEETPATH|(?:MU)?PLUGINDIR)\b`',
 					$filename_param['clean']
 				);
 				if ( 1 === $contains_wp_path_constant ) {
@@ -292,7 +292,7 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 				}
 
 				$contains_wp_path_function_call = preg_match(
-					'`(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i',
+					'`(?<!->|::)(?:get_home_path|plugin_dir_path|get_(?:stylesheet|template)_directory|wp_upload_dir)\s*\(`i',
 					$filename_param['clean']
 				);
 				if ( 1 === $contains_wp_path_function_call ) {
