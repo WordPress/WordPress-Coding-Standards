@@ -59,7 +59,7 @@ final class ValidFunctionNameSniff extends Sniff {
 		if ( DeprecationHelper::is_function_deprecated( $this->phpcsFile, $stackPtr ) === true ) {
 			/*
 			 * Deprecated functions don't have to comply with the naming conventions,
-			 * otherwise functions deprecated in favour of a function with a compliant
+			 * otherwise functions deprecated in favor of a function with a compliant
 			 * name would still trigger an error.
 			 */
 			return;

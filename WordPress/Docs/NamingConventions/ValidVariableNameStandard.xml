@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Valid Variable Name"
+>
+    <standard>
+    <![CDATA[
+    Use lowercase letters in variable names. Separate words using underscores.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Lowercase variable name.">
+        <![CDATA[
+<em>$prefix_variable_name</em> = 'value';
+
+echo <em>$prefix_variable_name</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Mixed case function name.">
+        <![CDATA[
+<em>$Prefix_Variable_NAME</em> = 'value';
+
+echo <em>$Prefix_Variable_NAME</em>;
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Words separated by underscores.">
+        <![CDATA[
+class My_Class {
+    public <em>$property_name</em> = 'value';
+}
+        ]]>
+        </code>
+        <code title="Invalid: Using camel case to separate words.">
+        <![CDATA[
+class My_Class {
+    public <em>$propertyName</em> = 'value';
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

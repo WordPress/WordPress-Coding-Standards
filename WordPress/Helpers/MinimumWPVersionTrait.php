@@ -35,7 +35,7 @@ trait MinimumWPVersionTrait {
 	 * `WordPress.WP.DeprecatedClasses`, `WordPress.WP.DeprecatedFunctions`,
 	 * `WordPress.WP.DeprecatedParameter` and the `WordPress.WP.DeprecatedParameterValues` sniff.
 	 *
-	 * These sniffs will adapt their behaviour based on the minimum supported WP version
+	 * These sniffs will adapt their behavior based on the minimum supported WP version
 	 * indicated.
 	 * By default, it is set to presume that a project will support the current
 	 * WP version and up to three releases before.
@@ -79,7 +79,7 @@ trait MinimumWPVersionTrait {
 	 *
 	 * @var string WordPress version.
 	 */
-	private $default_minimum_wp_version = '6.2';
+	private $default_minimum_wp_version = '6.5';
 
 	/**
 	 * Overrule the minimum supported WordPress version with a command-line/config value.
@@ -141,7 +141,7 @@ trait MinimumWPVersionTrait {
 	 * Ensures that a version number is comparable via the PHP version_compare() function
 	 * by making sure it complies with the minimum "PHP-standardized" version number requirements.
 	 *
-	 * Presumes the input is a numeric version number string. The behaviour with other input is undefined.
+	 * Presumes the input is a numeric version number string. The behavior with other input is undefined.
 	 *
 	 * @since 3.0.0
 	 *

@@ -259,7 +259,7 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 			case 'file_get_contents':
 				/*
 				 * Using `wp_remote_get()` will only work for remote URLs.
-				 * See if we can determine is this function call is for a local file and if so, bow out.
+				 * See if we can determine if this function call is for a local file and if so, bow out.
 				 */
 				$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
 

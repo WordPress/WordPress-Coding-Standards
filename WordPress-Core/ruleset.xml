@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress Core" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WordPress-Core" xsi:noNamespaceSchemaLocation="https://schema.phpcodesniffer.com/phpcs.xsd">
 
 	<description>Non-controversial generally-agreed upon WordPress Coding Standards</description>
 
@@ -718,7 +718,7 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#increment-decrement-operators
 	#############################################################################
 	-->
-	<!-- Covers rule: Pre-increment/decrement should be favoured over post-increment/decrement
+	<!-- Covers rule: Pre-increment/decrement should be favored over post-increment/decrement
 		 for stand-alone statements. -->
 	<rule ref="Universal.Operators.DisallowStandalonePostIncrementDecrement">
 		<type>warning</type>
@@ -778,7 +778,7 @@
 	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 
 	<!-- Covers rule: Unless absolutely necessary, loose comparisons should not be used,
-		 as their behaviour can be misleading. -->
+		 as their behavior can be misleading. -->
 	<rule phpcs-only="true" ref="Universal.Operators.StrictComparisons">
 		<type>warning</type>
 	</rule>
@@ -940,8 +940,8 @@
 	<!-- Check that class name references use the correct case. -->
 	<rule ref="WordPress.WP.ClassNameCase"/>
 
-	<!-- Check that __DIR__ is favoured over dirname(__FILE__)
-		 and that dirname( __DIR__, $levels ) is favoured over nested calls to dirname().
+	<!-- Check that __DIR__ is favored over dirname(__FILE__)
+		 and that dirname( __DIR__, $levels ) is favored over nested calls to dirname().
 		 See: https://core.trac.wordpress.org/ticket/48082 -->
 	<rule ref="Modernize.FunctionCalls.Dirname"/>
 

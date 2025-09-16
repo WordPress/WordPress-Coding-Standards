@@ -9,7 +9,11 @@
 
 namespace WordPressCS\WordPress\Tests\Files;
 
+use PHP_CodeSniffer\Files\DummyFile;
+use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHPCSUtils\BackCompat\Helper;
+use PHPCSUtils\TestUtils\ConfigDouble;
 
 /**
  * Unit test class for the FileName sniff.
@@ -171,5 +175,27 @@ final class FileNameUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array();
+	}
+
+	/**
+	 * Test the sniff bails early when handling STDIN.
+	 *
+	 * @return void
+	 */
+	public function testStdIn() {
+		$config = new ConfigDouble();
+		Helper::setConfigData( 'installed_paths', dirname( dirname( __DIR__ ) ), true, $config );
+		$config->standards = array( 'WordPress' );
+		$config->sniffs    = array( 'WordPress.Files.FileName' );
+
+		$ruleset = new Ruleset( $config );
+
+		$content = '<?php ';
+		$file    = new DummyFile( $content, $ruleset, $config );
+		$file->process();
+
+		$this->assertSame( 0, $file->getErrorCount() );
+		$this->assertSame( 0, $file->getWarningCount() );
+		$this->assertCount( 0, $file->getErrors() );
 	}
 }

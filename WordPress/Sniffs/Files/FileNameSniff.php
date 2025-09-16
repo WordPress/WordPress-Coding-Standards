@@ -10,8 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\Files;
 
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\FilePath;
 use PHPCSUtils\Utils\ObjectDeclarations;
-use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 use WordPressCS\WordPress\Sniff;
 
@@ -151,10 +151,9 @@ final class FileNameSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		// Usage of `stripQuotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
-		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
+		$file = FilePath::getName( $this->phpcsFile );
 		if ( 'STDIN' === $file ) {
-			return;
+			return $this->phpcsFile->numTokens;
 		}
 
 		$class_ptr = $this->phpcsFile->findNext( \T_CLASS, $stackPtr );
@@ -163,7 +162,7 @@ final class FileNameSniff extends Sniff {
 			 * This rule should not be applied to test classes (at all).
 			 * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/1995
 			 */
-			return;
+			return $this->phpcsFile->numTokens;
 		}
 
 		// Respect phpcs:disable comments as long as they are not accompanied by an enable.
@@ -184,7 +183,7 @@ final class FileNameSniff extends Sniff {
 
 				if ( false === $i ) {
 					// The entire (rest of the) file is disabled.
-					return;
+					return $this->phpcsFile->numTokens;
 				}
 			}
 		}
@@ -197,14 +196,14 @@ final class FileNameSniff extends Sniff {
 			$this->check_filename_has_class_prefix( $class_ptr, $file_name );
 		}
 
-		if ( false !== strpos( $file, \DIRECTORY_SEPARATOR . 'wp-includes' . \DIRECTORY_SEPARATOR )
+		if ( false !== strpos( $file, '/wp-includes/' )
 			&& false === $class_ptr
 		) {
 			$this->check_filename_for_template_suffix( $stackPtr, $file_name );
 		}
 
 		// Only run this sniff once per file, no need to run it again.
-		return ( $this->phpcsFile->numTokens + 1 );
+		return $this->phpcsFile->numTokens;
 	}
 
 	/**

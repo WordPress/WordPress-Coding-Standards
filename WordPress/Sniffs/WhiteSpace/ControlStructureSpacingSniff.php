@@ -410,7 +410,7 @@ final class ControlStructureSpacingSniff extends Sniff {
 
 			// Move past end comments.
 			if ( $this->tokens[ $trailingContent ]['line'] === $this->tokens[ $scopeCloser ]['line'] ) {
-				if ( preg_match( '`^//[ ]?end`i', $this->tokens[ $trailingContent ]['content'], $matches ) > 0 ) {
+				if ( preg_match( '`^//[ ]?end`i', $this->tokens[ $trailingContent ]['content'] ) > 0 ) {
 					$scopeCloser     = $trailingContent;
 					$trailingContent = $this->phpcsFile->findNext( \T_WHITESPACE, ( $trailingContent + 1 ), null, true );
 				}

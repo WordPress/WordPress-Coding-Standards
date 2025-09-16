@@ -102,7 +102,7 @@ if ( $counts['wordpress'] ) { // OK.
  *
  * @link OK: http://justintadlock.com/archives/2011/07/01/captions-in-wordpress
  */
- 
+
 if ( file_exists( ABSPATH . 'wp-content/plugins/wordpress-importer/wordpress-importer.php' ) ) { // OK.
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
@@ -129,8 +129,8 @@ $default_editor_settings = [
 				'label' 		=> __( 'Arouse Documentation', 'arouse' ),
 				'content' 		=> __( '<a class="button" href="https://themezhut.com/arouse-wordpress-theme-documentation/" target="_blank">Read the documentation.</a>', 'arouse' ), // OK.
 			)
-		) 
-	);	
+		)
+	);
 
 ?>
 
@@ -231,3 +231,16 @@ echo Some\Enum\WordPress::ENUM_CONSTANT;
 
 // Safeguard that the sniff doesn't act on anonymous classes.
 $anon = new class() {};
+
+/*
+ * Safeguard that PHP 8.3+ typed class constants are handled correctly (i.e. ignored).
+ */
+class TypeClassConstants {
+    public const string WORDPRESS = 'wordress';
+
+    public const ?string ANOTHER = 'value',
+        WORDPRESS_SOMETHING = 'wordpress';
+
+	// Ensures no false positives on incorrect casing in a class constant type name.
+    public const (\Fully\Qualified\MyClass&wordPRESS)|string ANOTHER_WORDPRESS = 'wordpress';
+}

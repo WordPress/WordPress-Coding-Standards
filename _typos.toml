@@ -1,0 +1,26 @@
+[files]
+extend-exclude = [
+    "WordPress/Tests/*/*.inc",
+    "WordPress/Tests/*/*.fixed",
+    "WordPress/Tests/*/*.css",
+    "WordPress/Tests/*/*.js",
+]
+ignore-hidden = true
+
+[default]
+locale = "en-us"
+check-filename = true
+extend-ignore-identifiers-re = [
+    # Renaming these (function/array key) names would be a BC-break.
+    'analyse_implode',
+    'analyse_sprintf',
+    'cachable',
+    'is_targetted_token',
+    # These are search targets for sniffs, can't be helped.
+    'avail_post_stati',
+    'url_is_accessable_via_ssl',
+]
+
+[default.extend-words]
+# Don't correct a limited list of specific words.
+Automattic = "Automattic"

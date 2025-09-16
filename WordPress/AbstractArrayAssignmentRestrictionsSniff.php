@@ -21,7 +21,7 @@ use WordPressCS\WordPress\Sniff;
  * Restricts array assignment of certain keys.
  *
  * @since 0.3.0
- * @since 0.10.0 Class became a proper abstract class. This was already the behaviour.
+ * @since 0.10.0 Class became a proper abstract class. This was already the behavior.
  *               Moved the file and renamed the class from
  *               `\WordPressCS\WordPress\Sniffs\Arrays\ArrayAssignmentRestrictionsSniff` to
  *               `\WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff`.

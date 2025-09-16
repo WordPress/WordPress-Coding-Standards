@@ -380,10 +380,6 @@ install_global_terms();
 sync_category_tag_slugs();
 wp_get_attachment_thumb_file();
 wp_typography_get_css_variable_inline_style();
-
-/*
- * Warning.
- */
 /* ============ WP 6.2 ============ */
 _resolve_home_block_template();
 get_page_by_title();
@@ -422,7 +418,26 @@ the_block_template_skip_link();
 wp_admin_bar_header();
 wp_img_tag_add_decoding_attr();
 wp_update_https_detection_errors();
+
+/*
+ * Warning.
+ */
 /* ============ WP 6.5 ============ */
 block_core_file_ensure_interactivity_dependency();
 block_core_image_ensure_interactivity_dependency();
 block_core_query_ensure_interactivity_dependency();
+/* ============ WP 6.6 ============ */
+wp_interactivity_process_directives_of_interactive_blocks();
+wp_render_elements_support();
+/* ============ WP 6.7 ============ */
+current_user_can_for_blog();
+wp_create_block_style_variation_instance_name();
+wp_enqueue_global_styles_custom_css();
+wp_get_global_styles_custom_css();
+wp_init_targeted_link_rel_filters();
+wp_remove_targeted_link_rel_filters();
+wp_simplepie_autoload();
+wp_targeted_link_rel();
+wp_targeted_link_rel_callback();
+/* ============ WP 6.8 ============ */
+wp_add_editor_classic_theme_styles();

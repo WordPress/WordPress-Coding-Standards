@@ -6,8 +6,8 @@
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] wp
 function wp_do_something() {}
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ^%&
-function ^%&_do_something() {}
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ^%&%
+function ^%&%_do_something() {}
 
 // Now let's set the real prefixes we want to test for.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
@@ -137,7 +137,7 @@ class Acronym_Example {
 	function do_something( $param = 'default' ) {}
 }
 
-$acronym_class = new class {
+$acronym_class = new readonly class {
 	const SOME_CONSTANT = 'value';
 
 	public $var = 'abc';
@@ -276,7 +276,7 @@ apply_filters( $_REQUEST['else'] ); // Warning.
 
 class Acronym_Dynamic_Hooks {
 	const FILTER = 'acronym';
-	const FILTER_WITH_UNDERSCORE = 'acronym_';
+	const ?string FILTER_WITH_UNDERSCORE = 'acronym_';
 
 	protected $filter = 'acronym';
 	protected $filter_with_underscore = 'acronym_';
@@ -509,15 +509,15 @@ function a_do_something(){}
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] aa
 function aa_do_something(){}
 
-// The following line mimicks an empty prefix value.
+// The following line mimics an empty prefix value.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] ,
-function aaa_do_something(){}
+function aaaa_do_something(){}
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊
 function 😊_do_something(){}
 
-// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊
-function 😊😊_do_something(){}
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] 😊😊😊
+function 😊😊😊_do_something(){}
 
 // Reset to the standard test prefixes.
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym,tgmpa
@@ -671,6 +671,16 @@ class WP_Atom_Server {
 	public static function __callStatic( $name, $arguments ) {
 		// Do something.
 	}
+}
+
+/*
+ * Safeguard that PHP 8.4+ asymmetric visibility properties don't lead to false positives.
+ * Including those defined using constructor property promotion.
+ */
+class Acronym_AsymmetricVisibilityProperties {
+    public private(set) string $bar = 'bar'; // Ok.
+
+    public function __construct(public protected(set) int $foo = 0) {} // Ok.
 }
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

@@ -189,7 +189,7 @@ class MultiVarDeclarations {
 
 echo "This is $post_ID with $ThisShouldBeFlagged"; // Bad.
 
-// Safeguard that illegal property declarations are ignored.
+// Properties in interfaces are allowed since PHP 8.4.
 interface PropertiesNotAllowed {
 	public $notAllowed;
 }
@@ -237,3 +237,11 @@ class Has_Mixed_Case_Property {
 $lähtöaika = true; // OK.
 $lÄhtÖaika = true; // Bad, but only handled by the sniff if Mbstring is available.
 $lÄhtOaika = true; // Bad, handled via transliteration of non-ASCII chars if Mbstring is not available.
+
+/*
+ * Safeguard that the sniff handles PHP 8.4+ asymmetric visibility properties correctly.
+ */
+class Acronym_AsymmetricVisibilityProperties {
+    public private(set) string $valid_name = 'bar'; // Ok.
+    public(set) string $invalidName = 'bar'; // Bad.
+}

@@ -25,7 +25,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -97,6 +97,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Text_Diff_Op_delete',
 		'Text_Diff_Renderer',
 		'Text_Diff_Renderer_inline',
+		'Text_Exception',
 		'Text_MappedDiff',
 		'Theme_Installer_Skin',
 		'Theme_Upgrader',
@@ -125,6 +126,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Block_Bindings_Source',
 		'WP_Block_Editor_Context',
 		'WP_Block_List',
+		'WP_Block_Metadata_Registry',
 		'WP_Block_Parser',
 		'WP_Block_Parser_Block',
 		'WP_Block_Parser_Frame',
@@ -133,6 +135,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Block_Styles_Registry',
 		'WP_Block_Supports',
 		'WP_Block_Template',
+		'WP_Block_Templates_Registry',
 		'WP_Block_Type',
 		'WP_Block_Type_Registry',
 		'WP_Classic_To_Block_Menu_Converter',
@@ -186,6 +189,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Duotone',
 		'WP_Embed',
 		'WP_Error',
+		'WP_Exception',
 		'WP_Fatal_Error_Handler',
 		'WP_Feed_Cache',
 		'WP_Feed_Cache_Transient',
@@ -201,10 +205,13 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Font_Utils',
 		'WP_HTML_Active_Formatting_Elements',
 		'WP_HTML_Attribute_Token',
+		'WP_HTML_Decoder',
+		'WP_HTML_Doctype_Info',
 		'WP_HTML_Open_Elements',
 		'WP_HTML_Processor',
 		'WP_HTML_Processor_State',
 		'WP_HTML_Span',
+		'WP_HTML_Stack_Event',
 		'WP_HTML_Tag_Processor',
 		'WP_HTML_Text_Replacement',
 		'WP_HTML_Token',
@@ -246,6 +253,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Network',
 		'WP_Network_Query',
 		'WP_Object_Cache',
+		'WP_PHPMailer',
 		'WP_Paused_Extensions_Storage',
 		'WP_Plugin_Dependencies',
 		'WP_Plugin_Install_List_Table',
@@ -343,6 +351,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Sitemaps_Stylesheet',
 		'WP_Sitemaps_Taxonomies',
 		'WP_Sitemaps_Users',
+		'WP_Speculation_Rules',
 		'WP_Style_Engine',
 		'WP_Style_Engine_CSS_Declarations',
 		'WP_Style_Engine_CSS_Rule',
@@ -364,11 +373,13 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Theme_JSON_Resolver',
 		'WP_Theme_JSON_Schema',
 		'WP_Themes_List_Table',
+		'WP_Token_Map',
 		'WP_Translation_Controller',
 		'WP_Translation_File',
 		'WP_Translation_File_MO',
 		'WP_Translation_File_PHP',
 		'WP_Translations',
+		'WP_URL_Pattern_Prefixer',
 		'WP_Upgrader',
 		'WP_Upgrader_Skin',
 		'WP_User',
@@ -412,7 +423,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -444,7 +455,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.1.0
 	 *
@@ -466,7 +477,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -502,7 +513,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -520,7 +531,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -664,7 +675,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.5-RC3.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -672,11 +683,18 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *               The constructor will add the lowercased class name as a key to each entry.
 	 */
 	private $simplepie_classes = array(
-		// Interfaces.
+		// Interfaces, SimplePie v1.
 		'SimplePie_Cache_Base',
 
-		// Classes.
+		// Interfaces, SimplePie v2 (with BC layer in v1).
+		'SimplePie\Cache\Base',
+		'SimplePie\Cache\DataCache',
+		'SimplePie\Cache\NameFilter',
+		'SimplePie\RegistryAware',
+
+		// Classes, SimplePie v1.
 		'SimplePie',
+		'SimplePie_Autoloader',
 		'SimplePie_Author',
 		'SimplePie_Cache',
 		'SimplePie_Cache_DB',
@@ -710,6 +728,43 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'SimplePie_Source',
 		'SimplePie_XML_Declaration_Parser',
 		'SimplePie_gzdecode',
+
+		// Classes, SimplePie v2 (with BC layer in v1).
+		'SimplePie\Author',
+		'SimplePie\Cache',
+		'SimplePie\Cache\BaseDataCache',
+		'SimplePie\Cache\CallableNameFilter',
+		'SimplePie\Cache\DB',
+		'SimplePie\Cache\File',
+		'SimplePie\Cache\Memcache',
+		'SimplePie\Cache\Memcached',
+		'SimplePie\Cache\MySQL',
+		'SimplePie\Cache\Psr16',
+		'SimplePie\Cache\Redis',
+		'SimplePie\Caption',
+		'SimplePie\Category',
+		'SimplePie\Content\Type\Sniffer',
+		'SimplePie\Copyright',
+		'SimplePie\Credit',
+		'SimplePie\Enclosure',
+		'SimplePie\Exception',
+		'SimplePie\File',
+		'SimplePie\Gzdecode',
+		'SimplePie\HTTP\Parser',
+		'SimplePie\IRI',
+		'SimplePie\Item',
+		'SimplePie\Locator',
+		'SimplePie\Misc',
+		'SimplePie\Net\IPv6',
+		'SimplePie\Parse\Date',
+		'SimplePie\Parser',
+		'SimplePie\Rating',
+		'SimplePie\Registry',
+		'SimplePie\Restriction',
+		'SimplePie\Sanitize',
+		'SimplePie\SimplePie',
+		'SimplePie\Source',
+		'SimplePie\XML\Declaration\Parser',
 	);
 
 	/**

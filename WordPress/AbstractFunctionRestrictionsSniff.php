@@ -20,7 +20,7 @@ use WordPressCS\WordPress\Sniff;
  * Restricts usage of some functions.
  *
  * @since 0.3.0
- * @since 0.10.0 Class became a proper abstract class. This was already the behaviour.
+ * @since 0.10.0 Class became a proper abstract class. This was already the behavior.
  *               Moved the file and renamed the class from
  *               `\WordPressCS\WordPress\Sniffs\Functions\FunctionRestrictionsSniff` to
  *               `\WordPressCS\WordPress\AbstractFunctionRestrictionsSniff`.
@@ -214,7 +214,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	}
 
 	/**
-	 * Verify is the current token is a function call.
+	 * Verify if the current token is a function call.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *
@@ -276,7 +276,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	}
 
 	/**
-	 * Verify if the current token is one of the targetted functions.
+	 * Verify if the current token is one of the targeted functions.
 	 *
 	 * @since 0.11.0 Split out from the `process()` method.
 	 *

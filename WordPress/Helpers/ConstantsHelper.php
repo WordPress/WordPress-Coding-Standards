@@ -16,7 +16,7 @@ use PHPCSUtils\Utils\Scopes;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 
 /**
- * Helper utilities for checking the context in which a token is used.
+ * Helper utilities for identifying the use of global constants in PHP code.
  *
  * ---------------------------------------------------------------------------------------------
  * This class is only intended for internal use by WordPressCS and is not part of the public API.
@@ -42,7 +42,7 @@ final class ConstantsHelper {
 	 *              - The `$phpcsFile` parameter was added.
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-	 * @param int                         $stackPtr  The position of the function call token.
+	 * @param int                         $stackPtr  The position of the T_STRING token.
 	 *
 	 * @return bool
 	 */

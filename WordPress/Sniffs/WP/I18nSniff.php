@@ -449,7 +449,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return bool Whether or not the argument is a string literal.
 	 */
@@ -550,7 +550,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -642,7 +642,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -724,7 +724,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return bool Whether or not the text string has translatable content.
 	 */
@@ -759,7 +759,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *                                     in lowercase.
 	 * @param string      $param_name      The name of the parameter being examined.
 	 * @param array|false $param_info      Parameter info array for an individual parameter,
-	 *                                     as received from the PassedParemeters class.
+	 *                                     as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -813,9 +813,9 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @param int   $stackPtr          The position of the function call token in the stack.
 	 * @param array $param_info_single Parameter info array for the `$single` parameter,
-	 *                                 as received from the PassedParemeters class.
+	 *                                 as received from the PassedParameters class.
 	 * @param array $param_info_plural Parameter info array for the `$plural` parameter,
-	 *                                 as received from the PassedParemeters class.
+	 *                                 as received from the PassedParameters class.
 	 *
 	 * @return void
 	 */
@@ -873,7 +873,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				continue;
 			}
 
-			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $param_info['clean'], $placeholders ) === 1 ) {
+			if ( preg_match( self::SPRINTF_PLACEHOLDER_REGEX, $param_info['clean'] ) === 1 ) {
 				$needs_translators_comment = true;
 				break;
 			}
@@ -969,7 +969,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 	 * @return bool
 	 */
 	private function is_translators_comment( $content ) {
-		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`i', $content, $matches ) === 1 ) {
+		if ( preg_match( '`^(?:(?://|/\*{1,2}) )?translators:`i', $content ) === 1 ) {
 			return true;
 		}
 		return false;

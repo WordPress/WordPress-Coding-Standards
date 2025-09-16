@@ -84,6 +84,7 @@ final class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 			184 => 1,
 			186 => 1,
 			190 => 1,
+			194 => 1,
 			199 => 1,
 			200 => 1,
 			202 => 1,
@@ -97,6 +98,7 @@ final class ValidVariableNameUnitTest extends AbstractSniffUnitTest {
 			227 => 1,
 			238 => function_exists( 'mb_strtolower' ) ? 1 : 0,
 			239 => 1,
+			246 => 1,
 		);
 	}
 

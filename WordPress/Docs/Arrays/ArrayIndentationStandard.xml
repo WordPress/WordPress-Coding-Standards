@@ -72,7 +72,7 @@ For heredocs/nowdocs, this does not apply to the content of the heredoc/nowdoc o
         <![CDATA[
 $args = array(
     'phrase' => 'start of phrase'
-        . 'concatented additional phrase'
+        . 'concatenated additional phrase'
         . 'more text',
 );
         ]]>
@@ -81,7 +81,7 @@ $args = array(
         <![CDATA[
 $args = array(
     'phrase' => 'start of phrase'
-. 'concatented additional phrase'
+. 'concatenated additional phrase'
 . 'more text',
 );
         ]]>
@@ -93,7 +93,7 @@ $args = array(
 $text = array(
     <<<EOD
     start of phrase
-    concatented additional phrase
+    concatenated additional phrase
     more text
 EOD
     ,
@@ -105,7 +105,7 @@ EOD
 $text = array(
 <em><<<EOD</em>
     start of phrase
-    concatented additional phrase
+    concatenated additional phrase
     more text
 EOD
 <em>,</em>

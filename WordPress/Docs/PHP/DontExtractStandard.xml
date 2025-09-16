@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Detect Use Of `extract()`"
+    >
+    <standard>
+    <![CDATA[
+    Forbids the usage of the PHP native `extract()` function. Using `extract()` makes code harder to debug, harder to understand and may cause unexpected behavior when variables names conflict.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Accessing array elements directly.">
+        <![CDATA[
+$post_data = array(
+    'title'   => 'My title',
+    'content' => 'My content',
+    'ID'      => 123
+);
+<em>echo $post_data['title'];</em>
+        ]]>
+        </code>
+        <code title="Invalid: Using the `extract()` function.">
+        <![CDATA[
+$var_array = array(
+    'title'    => 'My title',
+    'content'  => 'My content',
+    'ID'       => 123
+);
+
+<em>extract( $var_array );</em>
+echo $title;
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
