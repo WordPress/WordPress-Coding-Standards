@@ -124,16 +124,16 @@ OK (60 tests, 6 assertions)
 
 ### Unit Testing conventions
 
-If you look inside the `WordPress/Tests` subdirectory, you'll see the structure mimics the `WordPress/Sniffs` subdirectory structure. For example, the `WordPress/Sniffs/PHP/POSIXFunctionsSniff.php` sniff has its unit test class defined in `WordPress/Tests/PHP/POSIXFunctionsUnitTest.php` which checks the `WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc` test case file. See the file naming convention?
+If you look inside the `WordPress/Tests` subdirectory, you'll see the structure mimics the `WordPress/Sniffs` subdirectory structure. For example, the `WordPress/Sniffs/PHP/TypeCastsSniff.php` sniff has its unit test class defined in `WordPress/Tests/PHP/TypeCastsUnitTest.php` which checks the `WordPress/Tests/PHP/TypeCastsUnitTest.inc` test case file. See the file naming convention?
 
-Lets take a look at what's inside `POSIXFunctionsUnitTest.php`:
+Lets take a look at what's inside `TypeCastsUnitTest.php`:
 
 ```php
 namespace WordPressCS\WordPress\Tests\PHP;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
-final class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
+final class TypeCastsUnitTest extends AbstractSniffUnitTest {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -142,13 +142,12 @@ final class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
+			10 => 1,
+			11 => 1,
 			13 => 1,
-			16 => 1,
-			18 => 1,
-			20 => 1,
-			22 => 1,
-			24 => 1,
 			26 => 1,
+			27 => 1,
+			28 => 1,
 		);
 	}
 
@@ -156,39 +155,41 @@ final class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 }
 ```
 
-Also note the class name convention. The method `getErrorList()` MUST return an array of line numbers indicating errors (when running `phpcs`) found in `WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc`. Similarly, the `getWarningList()` method must return an array of line numbers with the number of expected warnings.
+Also note the class name convention. The method `getErrorList()` MUST return an array of line numbers indicating errors (when running `phpcs`) found in `WordPress/Tests/PHP/TypeCastsUnitTest.inc`. Similarly, the `getWarningList()` method must return an array of line numbers with the number of expected warnings.
 
 If you run the following from the root directory of your WordPressCS clone:
 
 ```sh
-$ "vendor/bin/phpcs" --standard=Wordpress -s ./WordPress/Tests/PHP/POSIXFunctionsUnitTest.inc --sniffs=WordPress.PHP.POSIXFunctions
+$ "vendor/bin/phpcs" --standard=Wordpress -s ./WordPress/Tests/PHP/TypeCastsUnitTest.inc --sniffs=WordPress.PHP.TypeCasts
 ...
---------------------------------------------------------------------------------
-FOUND 7 ERRORS AFFECTING 7 LINES
---------------------------------------------------------------------------------
- 13 | ERROR | ereg() has been deprecated since PHP 5.3 and removed in PHP 7.0,
-    |       | please use preg_match() instead.
-    |       | (WordPress.PHP.POSIXFunctions.ereg_ereg)
- 16 | ERROR | eregi() has been deprecated since PHP 5.3 and removed in PHP 7.0,
-    |       | please use preg_match() instead.
-    |       | (WordPress.PHP.POSIXFunctions.ereg_eregi)
- 18 | ERROR | ereg_replace() has been deprecated since PHP 5.3 and removed in
-    |       | PHP 7.0, please use preg_replace() instead.
-    |       | (WordPress.PHP.POSIXFunctions.ereg_replace_ereg_replace)
- 20 | ERROR | eregi_replace() has been deprecated since PHP 5.3 and removed in
-    |       | PHP 7.0, please use preg_replace() instead.
-    |       | (WordPress.PHP.POSIXFunctions.ereg_replace_eregi_replace)
- 22 | ERROR | split() has been deprecated since PHP 5.3 and removed in PHP 7.0,
-    |       | please use explode(), str_split() or preg_split() instead.
-    |       | (WordPress.PHP.POSIXFunctions.split_split)
- 24 | ERROR | spliti() has been deprecated since PHP 5.3 and removed in PHP
-    |       | 7.0, please use explode(), str_split() or preg_split()
-    |       | instead. (WordPress.PHP.POSIXFunctions.split_spliti)
- 26 | ERROR | sql_regcase() has been deprecated since PHP 5.3 and removed in
-    |       | PHP 7.0, please use preg_match() instead.
-    |       | (WordPress.PHP.POSIXFunctions.ereg_sql_regcase)
---------------------------------------------------------------------------------
-...
+----------------------------------------------------------------------------------------------------
+FOUND 6 ERRORS AND 4 WARNINGS AFFECTING 10 LINES
+----------------------------------------------------------------------------------------------------
+ 10 | ERROR   | [x] Normalized type keywords must be used; expected "(float)" but found "(double)"
+    |         |     (WordPress.PHP.TypeCasts.DoubleRealFound)
+ 11 | ERROR   | [x] Normalized type keywords must be used; expected "(float)" but found "(real)"
+    |         |     (WordPress.PHP.TypeCasts.DoubleRealFound)
+ 13 | ERROR   | [ ] Using the "(unset)" cast is forbidden as the type cast is removed in PHP 8.0.
+    |         |     Use the "unset()" language construct instead.
+    |         |     (WordPress.PHP.TypeCasts.UnsetFound)
+ 15 | WARNING | [ ] Using binary casting is strongly discouraged. Found: "(binary)"
+    |         |     (WordPress.PHP.TypeCasts.BinaryFound)
+ 16 | WARNING | [ ] Using binary casting is strongly discouraged. Found: "b"
+    |         |     (WordPress.PHP.TypeCasts.BinaryFound)
+ 17 | WARNING | [ ] Using binary casting is strongly discouraged. Found: "b"
+    |         |     (WordPress.PHP.TypeCasts.BinaryFound)
+ 26 | ERROR   | [x] Normalized type keywords must be used; expected "(float)" but found "(double)"
+    |         |     (WordPress.PHP.TypeCasts.DoubleRealFound)
+ 27 | ERROR   | [x] Normalized type keywords must be used; expected "(float)" but found "(real)"
+    |         |     (WordPress.PHP.TypeCasts.DoubleRealFound)
+ 28 | ERROR   | [ ] Using the "(unset)" cast is forbidden as the type cast is removed in PHP 8.0.
+    |         |     Use the "unset()" language construct instead.
+    |         |     (WordPress.PHP.TypeCasts.UnsetFound)
+ 29 | WARNING | [ ] Using binary casting is strongly discouraged. Found: "(binary)"
+    |         |     (WordPress.PHP.TypeCasts.BinaryFound)
+----------------------------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------------------------------------
 ```
 You'll see the line number and number of ERRORs we need to return in the `getErrorList()` method.
 
