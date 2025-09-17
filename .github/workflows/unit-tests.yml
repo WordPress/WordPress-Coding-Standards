@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PHPCS_DEV: 'dev-master'
+  PHPCS_DEV: '3.x-dev'
   UTILS_DEV: 'dev-develop'
   EXTRA_DEV: 'dev-develop'
 
