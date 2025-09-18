@@ -24,3 +24,11 @@ list( $year, $month, $day ) = split( ':', $date ); // Bad, split has been deprec
 $title_parts = spliti( ' ', get_the_title(), 4 ); // Bad, spliti also deprecated. Use preg_split instead.
 
 sql_regcase( 'Foo - bar.'); // Bad. Deprecated.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\split( ':', $date );
+MyNamespace\split( ':', $date );
+\MyNamespace\split( ':', $date );
+namespace\split( ':', $date ); // The sniff should start flagging this once it can resolve relative namespaces.
