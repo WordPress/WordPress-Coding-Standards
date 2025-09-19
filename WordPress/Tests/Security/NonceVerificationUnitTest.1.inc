@@ -486,3 +486,41 @@ enum MyEnum {
 		echo $_POST['foo']; // OK.
 	}
 }
+
+// Good, has a nonce check. Ensure the check is case-insensitive as function names are case-insensitive in PHP.
+function ajax_process() {
+    CHECK_AJAX_REFERER( 'something' );
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] MIXED_case_NAME
+function non_ascii_characters() {
+    MIXED_case_NAME( $_POST['something'] ); // Passing $_POST to ensure the sniff bails correctly for variables inside the nonce verification function.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
+
+/*
+ * Test case handling of non-ASCII characters in function names.
+ */
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[] déjà_vu
+function same_function_same_case() {
+    déjà_vu( 'something' ); // Ok.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+
+function same_function_different_case() {
+    DéJà_VU( 'something' ); // Ok.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+
+function different_function_name() {
+    dÉjÀ_vu( 'something' ); // Bad, dÉjÀ_vu() and déjà_vu() are NOT the same function.
+
+    update_post_meta( (int) $_POST['id'], 'a_key', $_POST['a_value'] );
+}
+// phpcs:set WordPress.Security.NonceVerification customNonceVerificationFunctions[]
