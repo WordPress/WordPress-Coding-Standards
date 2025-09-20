@@ -296,3 +296,30 @@ jobs:
 
       - name: "Search for misspellings"
         uses: "crate-ci/typos@7f9d0819ca1c008ade73f4b41fa9d258d48f605b" # v1.51.1
+
+  pinact:
+    permissions:
+      contents: read # To clone the repo.
+
+    name: 'Run Pinact'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # See: https://github.com/suzuki-shunsuke/pinact/blob/main/README.md
+      # See: https://github.com/suzuki-shunsuke/pinact/blob/main/docs/codes/001.md
+      - name: Verify action runners are pinned
+        uses: suzuki-shunsuke/pinact-action@896d595f299e71d65b9d28349d6956abe144390a # v3.0.0
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          skip_push: "true"
+          update: "true"
+          fix: "true"
+          verify: "true" # = verify trailing version comments
+          verify_min_age: "true" # verify base on cooldown period
+          review: ${{ github.event_name == 'pull_request' }}
+          reviewdog_level: "error"
