@@ -15,18 +15,24 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Permissions should be configured at the job level.
+permissions: {}
+
 jobs:
   # Performs some quick tests.
   # This is a much quicker test suite which only runs the unit tests and linting
   # against the low/high supported PHP/PHPCS combinations.
   quick-tests:
-    runs-on: ubuntu-latest
+    permissions:
+      contents: read # To clone the repo.
+
     strategy:
       matrix:
         php: [ '7.2', 'latest' ]
         dependencies: [ 'lowest', 'stable' ]
 
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository

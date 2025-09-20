@@ -12,6 +12,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Permissions should be configured at the job level.
+permissions: {}
+
 env:
   PHPCS_DEV: '3.x-dev'
   UTILS_DEV: 'dev-develop'
@@ -21,6 +24,9 @@ jobs:
   # Check code style of sniffs, rulesets and XML documentation.
   # Check that all sniffs are feature complete.
   sniffs:
+    permissions:
+      contents: read # To clone the repo.
+
     name: Run code sniffs
     runs-on: ubuntu-latest
 
@@ -109,6 +115,9 @@ jobs:
         run: composer check-complete
 
   xml-cs:
+    permissions:
+      contents: read # To clone the repo.
+
     name: 'XML Code style'
     runs-on: ubuntu-latest
 
@@ -147,13 +156,16 @@ jobs:
   # This workflow needs to be run against a high PHP version to prevent triggering the syntax error check.
   # It also needs to be run against all dependency versions WPCS is tested against.
   ruleset-tests:
-    runs-on: ubuntu-latest
+    permissions:
+      contents: read # To clone the repo.
+
     strategy:
       matrix:
         php: [ 'latest' ]
         dependencies: [ 'lowest', 'stable', 'dev' ]
 
     name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}"
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -236,8 +248,10 @@ jobs:
         run: exit ${{ steps.phpcbf.outputs.EXITCODE }}
 
   phpstan:
-    name: "PHPStan"
+    permissions:
+      contents: read # To clone the repo.
 
+    name: "PHPStan"
     runs-on: "ubuntu-latest"
 
     steps:
@@ -268,8 +282,10 @@ jobs:
         run: phpstan analyse
 
   typos-check:
-    name: "Find typos"
+    permissions:
+      contents: read # To clone the repo.
 
+    name: "Find typos"
     runs-on: "ubuntu-latest"
 
     steps:
