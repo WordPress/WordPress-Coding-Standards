@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Array Declaration Spacing"
+    >
+    <standard>
+    <![CDATA[
+    When an array uses associative keys, each pair of key and value must start on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: There is only one pair of key and value per line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id' => 22,
+    'category' => 1</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: More than one pair of key and value per line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id' => 22, 'category' => 1</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Each item in a multi-line array must be on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Only one array item per line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id',
+    'comment_count',
+    'post_type'</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Multiple array items in the same line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id', 'comment_count', 'post_type'</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
