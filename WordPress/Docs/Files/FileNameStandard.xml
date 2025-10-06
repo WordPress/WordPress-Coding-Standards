@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd" 
+    title="File Name Standards"
+    >
+    <standard>
+    <![CDATA[
+    Ensures that file names meet the following standards:
+    - Filenames should be all lowercase with hyphens separating words.
+    - Class file names should be based on the class name with "class-" prepended.
+    - Files in `wp-includes` containing template tags should end in `-template`.
+
+    If `$is_theme` property is set to `true` certain theme specific exceptions are made for underscores.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: All lowercase with only hyphens as word separators and proper use of prefix/suffix.">
+        <![CDATA[
+taxonomy<em>-</em>my<em>-</em>term.inc
+<em>s</em>ome<em>f</em>ile.inc
+<em>class</em>-testsample.inc
+other<em>-</em>punctuation.inc
+general<em>-template</em>.php
+        ]]>
+        </code>
+        <code title="Invalid: Use of other punctuation, uppercase, or missing prefix/suffix.">
+        <![CDATA[
+taxonomy-my<em>_</em>term.inc.
+<em>S</em>ome<em>F</em>ile.inc
+<em>testsample</em>-unit-2.inc
+other<em>+</em>punctuation<em>#</em>.inc
+<em>general</em>.php
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
