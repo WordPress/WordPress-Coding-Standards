@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Discourage the use of the PHP error silencing operator"
+    >
+    <standard>
+    <![CDATA[
+    Silencing errors is strongly discouraged. Use proper error checking instead.
+
+    Using the error operator with certain functions is allowed because no amount of error checking can fully prevent PHP from throwing errors when these functions are executed. The functions where this is permitted include, but are not limited to:
+
+    - `file_exists()`
+    - `file_get_contents()`
+    - `filesize()`
+    - `filetype()`
+    - `fopen()`
+    - `ftp_login()`
+    - `ftp_rename()`
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using proper error checking when calling functions not in the allowed list.">
+        <![CDATA[
+$conn_id = ftp_connect( $ftp_server );
+if ( ! $conn_id ) {
+  // Handle it as needed.
+}
+        ]]>
+        </code>
+        <code title="Invalid: Using the error operator to silence errors.">
+        <![CDATA[
+$conn_id = <em>@ftp_connect( $ftp_server );</em>
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
