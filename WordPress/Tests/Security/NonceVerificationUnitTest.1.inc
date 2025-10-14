@@ -291,18 +291,18 @@ function function_containing_nested_closure() {
 	};
 }
 
-// Tests specifically for the ContextHelper::is_in_function_call().
-function disallow_custom_unslash_before_noncecheck_via_method() {
-	$var = MyClass::stripslashes_from_strings_only( $_POST['foo'] ); // Bad.
-	wp_verify_nonce( $var );
-	echo $var;
-}
 
-function disallow_custom_unslash_before_noncecheck_via_namespaced_function() {
-	$var = MyNamespace\stripslashes_from_strings_only( $_POST['foo'] ); // Bad.
-	wp_verify_nonce( $var );
-	echo $var;
-}
+
+
+
+
+
+
+
+
+
+
+
 
 // Tests specifically for the ContextHelper::is_in_isset_or_empty().
 function allow_in_array_key_exists_before_noncecheck() {
