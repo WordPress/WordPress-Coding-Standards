@@ -54,11 +54,11 @@
 		],
 		"run-tests": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php --no-coverage",
-            "@php ./vendor/phpunit/phpunit/phpunit WordPress/Util/Tests/ --no-coverage"
+			"@php ./vendor/phpunit/phpunit/phpunit WordPress/Util/Tests/ --no-coverage"
 		],
 		"coverage": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php",
-            "@php ./vendor/phpunit/phpunit/phpunit WordPress/Util/Tests/"
+			"@php ./vendor/phpunit/phpunit/phpunit WordPress/Util/Tests/"
 		],
 		"check-complete": [
 			"@php ./vendor/phpcsstandards/phpcsdevtools/bin/phpcs-check-feature-completeness -q ./WordPress"
