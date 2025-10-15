@@ -141,7 +141,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 			}
 		}
 
-		if ( false === $version_param || 'null' === $version_param['clean'] ) {
+		if ( false === $version_param || 'null' === strtolower( $version_param['clean'] ) ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
 				$type = 'style';

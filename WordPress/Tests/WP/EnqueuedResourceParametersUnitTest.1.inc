@@ -95,3 +95,6 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (double) 0, true ); // Error - 0, false or NULL are not allowed.
 
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (binary) 0, true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard handling of non-lowercase `null`.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), NULL, true ); // Warning - 0, false or NULL are not allowed.
