@@ -15,10 +15,11 @@ use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
- * This checks the enqueued 4th and 5th parameters to make sure the version and in_footer are set.
+ * This checks that the 4th ($ver) parameter is set for all enqueued resources and that the 5th ($in_footer) parameter
+ * is set for wp_register_script() and wp_enqueue_script().
  *
  * If a source ($src) value is passed, then version ($ver) needs to have non-falsy value.
- * If a source ($src) value is passed a check for in footer ($in_footer), warn the user if the value is falsy.
+ * If a source ($src) value is passed, then it is recommended to explicitly set the $in_footer parameter.
  *
  * @link https://developer.wordpress.org/reference/functions/wp_register_script/
  * @link https://developer.wordpress.org/reference/functions/wp_enqueue_script/
@@ -66,7 +67,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	/**
 	 * Token codes which are "safe" to accept to determine whether a version would evaluate to `false`.
 	 *
-	 * This array is enriched with the several of the PHPCS token arrays in the register() method.
+	 * This array is enriched with several of the PHPCS token arrays in the register() method.
 	 *
 	 * @var array<int|string, int|string>
 	 */
@@ -88,7 +89,8 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
-	 * Overloads and calls the parent method to allow for adding additional tokens to the $safe_tokens property.
+	 * Overloads and calls the parent method to allow for adding additional tokens to the
+	 * $false_tokens and $safe_tokens properties.
 	 *
 	 * @return array
 	 */
@@ -165,8 +167,8 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 		/*
 		 * In footer Check
 		 *
-		 * Check to make sure that $in_footer is set to true.
-		 * It will warn the user to make sure it is intended.
+		 * Check to make sure that $in_footer is explicitly set.
+		 * Warn the user if it is not set.
 		 *
 		 * Only wp_register_script and wp_enqueue_script need this check,
 		 * as this parameter is not available to wp_register_style and wp_enqueue_style.
