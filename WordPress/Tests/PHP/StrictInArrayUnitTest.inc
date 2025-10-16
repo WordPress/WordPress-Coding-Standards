@@ -3,7 +3,7 @@
 in_array( 1, array( '1', 1, true ), true ); // Ok.
 
 in_array( 1, array( '1', 1, true ) ); // Warning.
-in_array( 1, array( '1', 1, true ), false ); // Warning.
+\In_Array( 1, array( '1', 1, true ), false ); // Warning.
 IN_ARRAY( 1, array( '1', 1, true ), false ); // Warning.
 
 Foo::in_array( 1, array( '1', 1, true ) ); // Ok.
@@ -55,3 +55,12 @@ array_search(
 	$haystack,
 	true // Use strict typing.
 ); // Ok.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\in_array( 1, array( '1', 2 ) ); // Bad.
+MyNamespace\array_search( 1, array( '1', 2 ) ); // Ok.
+\MyNamespace\array_keys( array( '1', 2 ) ); // Ok.
+namespace\in_array( 1, array( '1', 2 ) ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\array_search( 1, array( '1', 2 ) ); // Ok.
