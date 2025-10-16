@@ -31,7 +31,7 @@ $incorrect_but_ok = get_metadata( 'post' );
  * These should all be flagged with a warning.
  */
 $warning = \get_post_meta( $post_id, $meta_key );
-implode(', ', get_post_meta( $post_id, $meta_key ));
+implode(', ', \GET_POST_META( $post_id, $meta_key ));
 if (get_post_meta( $post_id, key: $meta_key )) {}
 $warning = get_post_meta( $post_id, key: $meta_key, sinngle: true ); // Typo in parameter name.
 echo get_comment_meta( $comment_id, $meta_key );
@@ -46,3 +46,11 @@ $warning = get_metadata(
 );
 $warning = get_metadata_raw( 'post', $post_id, $meta_key );
 $warning = get_metadata_default( 'post', $post_id, $meta_key );
+
+/*
+ * Safeguard correct handling of fully qualified and relative namespaced function calls (fully qualified global function
+ * call and partially qualified namespaced function call are already handled above).
+ */
+\MyNamespace\get_user_meta( $user_id, $meta_key );
+namespace\get_metadata( 'post', $post_id, $meta_key ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\get_comment_meta( $comment_id, $meta_key );
