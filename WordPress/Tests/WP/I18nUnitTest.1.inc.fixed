@@ -47,7 +47,7 @@ _n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug' ); // OK.
 _n( 'I have %d cat.', 'I have %d cats.', $number, "illegal $string" ); // Bad.
 _n( 'I have %d cat.', 'I have %d cats.', $number, SOMETHING ); // Bad.
 
-_n_noop( 'I have %d cat.', 'I have %d cats.' ); // Bad, no text domain.
+_N_NOOP( 'I have %d cat.', 'I have %d cats.' ); // Bad, no text domain.
 _n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug' ); // OK.
 _n_noop( 'I have %d cat.', 'I have %d cats.', "illegal $string" ); // Bad.
 _n_noop( 'I have %d cat.', 'I have %d cats.',  SOMETHING ); // Bad.
@@ -75,7 +75,7 @@ __( 'foo', 'my-slug', 'too-many-args' ); // Bad.
 _x( 'string', 'context', 'my-slug', 'too-many-args' ); // Bad.
 _n( 'I have %d cat.', 'I have %d cats.', $number, 'my-slug', 'too-many-args' ); // Bad.
 _n_noop( 'I have %d cat.', 'I have %d cats.', 'my-slug', 'too-many-args' ); // Bad.
-_nx_noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
+\_Nx_Noop( 'I have %d cat.', 'I have %d cats.', 'Not really.', 'my-slug', 'too-many-args' ); // Bad.
 
 // Make sure that multi-line string literals are accepted.
 _nx( 'I have
@@ -316,5 +316,16 @@ esc_html_e( 'foo', '' ); // Bad: text-domain can not be empty.
 
 // PHP 8.0+: safeguard handling of newly introduced placeholders.
 __( 'There are %1$h monkeys in the %H', 'my-slug' ); // Bad: multiple arguments should be numbered.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\_( 'foo', 'my-slug' ); // Bad.
+\translate( 'foo', 'my-slug' ); // Bad.
+\translate_with_gettext_context( 'foo', 'bar', 'my-slug' ); // Bad.
+MyNamespace\__( 'foo', 'my-slug' ); // Ok.
+\MyNamespace\_e( 'foo', 'my-slug' ); // Ok.
+namespace\esc_html_e( 'foo', '' ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\translate( 'foo', 'my-slug' ); // Ok.
 
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
