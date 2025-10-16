@@ -54,6 +54,3 @@ update_option(autoload: true, value: $value, option: 'blacklist_keys');
 wp_get_typography_font_size_value( $preset, array() ); // OK.
 wp_get_typography_font_size_value( $preset, true ); // Error.
 wp_get_typography_font_size_value( $preset, false ); // Error.
-
-// Live coding/parse error.
-get_bloginfo( show: /*to do*/, );
