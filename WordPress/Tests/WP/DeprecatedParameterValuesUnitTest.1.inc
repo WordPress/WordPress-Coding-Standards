@@ -3,8 +3,8 @@
 // All will give an ERROR.
 
 get_bloginfo( 'home' );
-get_bloginfo( 'siteurl' );
-get_bloginfo( "text_direction" );
+\GeT_bLoGiNfO( 'siteurl' );
+Get_Bloginfo( "text_direction" );
 echo bloginfo( 'home' );
 echo bloginfo( "siteurl" );
 echo bloginfo( 'text_direction' );
@@ -54,3 +54,12 @@ update_option(autoload: true, value: $value, option: 'blacklist_keys');
 wp_get_typography_font_size_value( $preset, array() ); // OK.
 wp_get_typography_font_size_value( $preset, true ); // Error.
 wp_get_typography_font_size_value( $preset, false ); // Error.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\get_bloginfo( 'home' ); // Bad.
+MyNamespace\register_setting( 'privacy' ); // Ok.
+\MyNamespace\unregister_setting( 'misc' ); // Ok.
+namespace\get_option('blacklist_keys'); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\add_option('comment_whitelist', $value); // Ok.
