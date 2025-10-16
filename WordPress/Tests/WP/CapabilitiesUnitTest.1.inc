@@ -112,7 +112,3 @@ add_menu_page( [] ); // Should bow out because the parameter is not found.
 
 $obj->current_user_can( 'foo_bar' ); // Ok. We're not checking for method calls.
 My\NamespaceS\add_posts_page( 'page_title', 'menu_title', 'administrator', 'menu_slug', 'function' ); // Ok. We're not checking namespaced functions.
-
-// Parse error, should be handled correctly by bowing out.
-// This must be the last test in the file!
-add_posts_page( 'page_title',
