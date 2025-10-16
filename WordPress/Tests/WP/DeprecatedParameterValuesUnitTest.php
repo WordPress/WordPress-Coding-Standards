@@ -56,6 +56,7 @@ final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 					49 => 1,
 					50 => 1,
 					51 => 1,
+					61 => 1,
 				);
 
 			default:
