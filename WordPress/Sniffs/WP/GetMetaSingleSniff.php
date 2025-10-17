@@ -39,7 +39,7 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	 * These functions use 'key' as the parameter name at position 2 and
 	 * 'single' as the parameter name at position 3.
 	 *
-	 * @since 3.2.0
+	 * @since 3.3.0
 	 *
 	 * @var array<string, array<string, int|string>>
 	 */
@@ -60,7 +60,7 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	 * These functions use 'meta_key' as the parameter name at position 3 and
 	 * 'single' as the parameter name at position 4.
 	 *
-	 * @since 3.2.0
+	 * @since 3.3.0
 	 *
 	 * @var array<string, array<string, int|string>>
 	 */
