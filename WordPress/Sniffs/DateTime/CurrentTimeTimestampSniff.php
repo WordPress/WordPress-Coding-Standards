@@ -161,7 +161,13 @@ final class CurrentTimeTimestampSniff extends AbstractFunctionParameterSniff {
 				$this->phpcsFile->fixer->replaceToken( $i, '' );
 			}
 
-			$this->phpcsFile->fixer->replaceToken( $stackPtr, 'time(' );
+			$replacement_content = 'time(';
+
+			if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $stackPtr ]['code'] ) {
+				$replacement_content = '\time(';
+			}
+
+			$this->phpcsFile->fixer->replaceToken( $stackPtr, $replacement_content );
 			$this->phpcsFile->fixer->endChangeset();
 		}
 	}
