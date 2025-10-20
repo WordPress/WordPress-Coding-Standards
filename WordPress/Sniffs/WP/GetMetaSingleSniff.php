@@ -34,27 +34,6 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	const METRIC_NAME = 'get_*meta() function called with $single parameter';
 
 	/**
-	 * Relevant signature structure for specific meta functions.
-	 *
-	 * These functions use 'key' as the parameter name at position 2 and
-	 * 'single' as the parameter name at position 3.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @var array<string, array<string, int|string>>
-	 */
-	const SPECIFIC_META_FUNCTIONS_FORMAT = array(
-		'condition'   => array(
-			'param_name' => 'key',
-			'position'   => 2,
-		),
-		'recommended' => array(
-			'param_name' => 'single',
-			'position'   => 3,
-		),
-	);
-
-	/**
 	 * Relevant signature structure for generic meta functions.
 	 *
 	 * These functions use 'meta_key' as the parameter name at position 3 and
@@ -72,6 +51,27 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 		'recommended' => array(
 			'param_name' => 'single',
 			'position'   => 4,
+		),
+	);
+
+	/**
+	 * Relevant signature structure for specific meta functions.
+	 *
+	 * These functions use 'key' as the parameter name at position 2 and
+	 * 'single' as the parameter name at position 3.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var array<string, array<string, int|string>>
+	 */
+	const SPECIFIC_META_FUNCTIONS_FORMAT = array(
+		'condition'   => array(
+			'param_name' => 'key',
+			'position'   => 2,
+		),
+		'recommended' => array(
+			'param_name' => 'single',
+			'position'   => 3,
 		),
 	);
 
