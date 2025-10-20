@@ -43,7 +43,7 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, array<string, int|string>>
 	 */
-	const GENERIC_META_FUNCTIONS_FORMAT = array(
+	private const GENERIC_META_FUNCTIONS_FORMAT = array(
 		'condition'   => array(
 			'param_name' => 'meta_key',
 			'position'   => 3,
@@ -64,7 +64,7 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * @var array<string, array<string, int|string>>
 	 */
-	const SPECIFIC_META_FUNCTIONS_FORMAT = array(
+	private const SPECIFIC_META_FUNCTIONS_FORMAT = array(
 		'condition'   => array(
 			'param_name' => 'key',
 			'position'   => 2,
