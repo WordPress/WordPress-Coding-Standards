@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="I18nTextDomainFixerStdInTest" xsi:noNamespaceSchemaLocation="https://schema.phpcodesniffer.com/phpcs.xsd">
+	<description>Ruleset for testing I18nTextDomainFixer with STDIN.</description>
+
+	<rule ref="WordPress.Utils.I18nTextDomainFixer"/>
+
+</ruleset>

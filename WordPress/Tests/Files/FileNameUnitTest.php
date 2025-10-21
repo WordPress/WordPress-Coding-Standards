@@ -185,8 +185,7 @@ final class FileNameUnitTest extends AbstractSniffTestCase {
 	public function testStdIn() {
 		$config = new ConfigDouble();
 		Helper::setConfigData( 'installed_paths', dirname( dirname( __DIR__ ) ), true, $config );
-		$config->standards = array( 'WordPress' );
-		$config->sniffs    = array( 'WordPress.Files.FileName' );
+		$config->standards = array( __DIR__ . '/FileNameStdInTest.xml' );
 
 		$ruleset = new Ruleset( $config );
 
