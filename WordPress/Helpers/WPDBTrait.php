@@ -23,12 +23,22 @@ use PHPCSUtils\Tokens\Collections;
 trait WPDBTrait {
 
 	/**
-	 * Checks whether this is a call to a $wpdb method that we want to sniff.
+	 * Checks whether this is a call to a $wpdb method.
 	 *
-	 * If available in the class using this trait, the $methodPtr, $i and $end properties
-	 * are automatically set to correspond to the start and end of the method call.
-	 * The $i property is also set if this is not a method call but rather the
-	 * use of a $wpdb property.
+	 * Supports both instance method calls (e.g., `$wpdb->prepare()`) and static
+	 * method calls (e.g., `wpdb::esc_like()`).
+	 *
+	 * Note: Static calls to wpdb methods trigger a deprecation notice in PHP 7.0+
+	 * and result in a fatal error in PHP 8.0+ as wpdb methods are not declared static.
+	 *
+	 * If available in the class using this trait, the following properties are automatically set:
+	 * - $methodPtr: Stack pointer to the method name.
+	 * - $i: Stack pointer to the opening parenthesis of the method call.
+	 * - $end: Stack pointer to the comma after the first parameter, or to one
+	 *         past the last token of the first parameter if there is no comma.
+	 *
+	 * The $methodPtr and $i properties may be set even when this method returns false
+	 * (e.g., for property access like `$wpdb->show_errors`).
 	 *
 	 * @since 0.8.0
 	 * @since 0.9.0  The return value is now always boolean. The $end and $i member
@@ -41,7 +51,7 @@ trait WPDBTrait {
 	 *            for properties in the sniff class(es) using it.}}
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile      The file being scanned.
-	 * @param int                         $stackPtr       The index of the $wpdb variable.
+	 * @param int                         $stackPtr       The index of the $wpdb variable or wpdb class name token.
 	 * @param array                       $target_methods Array of methods. Key(s) should be method name
 	 *                                                    in lowercase.
 	 *
