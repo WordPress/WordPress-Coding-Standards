@@ -248,6 +248,8 @@ At this moment, WordPressCS offer the following tools:
     - `old_text_domain`: an array with one or more (old) text domain names which need to be replaced;
     - `new_text_domain`: the correct (new) text domain as a string.
 
+    **Note**: When using PHP_CodeSniffer 4.0+, this sniff will fix the text domain everywhere for plugins, but it will **not** fix the text domain in the CSS file header for themes, as PHP_CodeSniffer 4.0+ does not support scanning CSS files. Manual intervention will be required to update the `Text Domain` header in the theme's CSS file.
+
 
 ## Contributing
 
