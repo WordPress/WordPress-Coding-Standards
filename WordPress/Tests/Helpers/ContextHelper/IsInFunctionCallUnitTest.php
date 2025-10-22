@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace WordPressCS\WordPress\Util\Tests\Helpers\ContextHelper;
+namespace WordPressCS\WordPress\Tests\Helpers\ContextHelper;
 
 use PHPCSUtils\Tokens\Collections;
 use WordPressCS\WordPress\Helpers\ContextHelper;
