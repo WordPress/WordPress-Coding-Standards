@@ -13,10 +13,7 @@
 	forceCoversAnnotation="true">
 
 	<testsuites>
-		<testsuite name="WordPress Utilities Tests">
-			<directory suffix="UnitTest.php">./WordPress/Util/Tests/</directory>
-		</testsuite>
-		<testsuite name="WordPress Sniffs Tests">
+		<testsuite name="WordPress">
 			<directory suffix="UnitTest.php">./WordPress/Tests/</directory>
 		</testsuite>
 	</testsuites>

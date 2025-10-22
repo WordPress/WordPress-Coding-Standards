@@ -45,21 +45,6 @@ if ( false !== $phpcsDir
 ) {
 	require_once $phpcsDir . $ds . 'autoload.php';
 	require_once $phpcsDir . $ds . 'tests' . $ds . 'bootstrap.php'; // PHPUnit 6.x+ support.
-
-	spl_autoload_register(
-		function ( $className ) {
-			// Only try & load our own classes.
-			if ( stripos( $className, 'WordPressCS' ) !== 0 ) {
-				return;
-			}
-
-			$file = realpath( dirname( __DIR__ ) ) . DIRECTORY_SEPARATOR . strtr( str_replace( 'WordPressCS\\', '', $className ), '\\', DIRECTORY_SEPARATOR ) . '.php';
-
-			if ( file_exists( $file ) ) {
-				include_once $file;
-			}
-		}
-	);
 } else {
 	echo 'Uh oh... can\'t find PHPCS.
 
