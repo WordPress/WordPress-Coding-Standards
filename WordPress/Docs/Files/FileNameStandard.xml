@@ -54,7 +54,7 @@ bulk-updater<em>-class</em>.php
 general<em>-template</em>.php
         ]]>
         </code>
-        <code title="Invalid: File name missing prefix/suffix.">
+        <code title="Invalid: File name missing suffix.">
         <![CDATA[
 <em>general</em>.php
         ]]>
