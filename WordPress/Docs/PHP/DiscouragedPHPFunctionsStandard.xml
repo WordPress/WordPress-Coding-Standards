@@ -50,7 +50,7 @@ $unserialized = <em>unserialize</em>( $my_array );
 // Configuration not changed at runtime.
         ]]>
         </code>
-        <code title="Invalid: Changing configuration at runtime">
+        <code title="Invalid: Changing configuration at runtime.">
         <![CDATA[
 <em>apache_setenv( $variable, $value );</em>
         ]]>
@@ -58,7 +58,7 @@ $unserialized = <em>unserialize</em>( $my_array );
     </code_comparison>
     <standard>
     <![CDATA[
-    Do not use PHP system calls. They are often disabled by server admins. Disallowed system call functions include `exec()`, `passthru()`, `proc_open()`, `shell_exec()`, `system()`, and `popen()`.
+    Avoid PHP system calls as they are often disabled by server admins. Disallowed system call functions include `exec()`, `passthru()`, `proc_open()`, `shell_exec()`, `system()`, and `popen()`.
     ]]>
     </standard>
     <code_comparison>
