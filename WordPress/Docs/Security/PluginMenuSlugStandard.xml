@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Wordpress functions that can be used to add pages to the WP Admin menu should not include `__FILE__` for the menu slug (or parent menu slug) parameter to avoid revealing system paths.
+    WordPress functions that can be used to add pages to the WP Admin menu should not include `__FILE__` for the menu slug (or parent menu slug) parameter to avoid revealing system paths.
     ]]>
     </standard>
     <code_comparison>
