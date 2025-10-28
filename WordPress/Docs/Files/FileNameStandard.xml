@@ -30,16 +30,18 @@ other<em>+</em>punctuation<em>#</em>.inc
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: File name matches prefix and class.">
+        <code title="Valid: File name matches class name with proper prefix.">
         <![CDATA[
-<em>class-bulk-updater</em>.php // For a class named `Bulk_Updater`.
+<em>class-bulk-updater</em>.php // `Bulk_Updater`.
+<em>class-user-profile</em>.php // `User_Profile`.
+<em>class-export-data</em>.php // `Export_Data`.
         ]]>
         </code>
-        <code title="Invalid: File name missing prefix or class.">
+        <code title="Invalid: File name does not match class name or the prefix is incorrect.">
         <![CDATA[
-class<em>.</em>bulk-updater.php
-<em>bulk-updater</em>.php
-bulk-updater<em>-class</em>.php
+class-<em>update-in-bulk</em>.php // `Bulk_Updater`.
+<em></em>user-profile.php // `User_Profile`.
+<em>class.</em>export-data.php // `Export_Data`.
         ]]>
         </code>
     </code_comparison>
