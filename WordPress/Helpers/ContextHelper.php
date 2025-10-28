@@ -461,6 +461,11 @@ final class ContextHelper {
 
 		$tokens        = $phpcsFile->getTokens();
 		$function_name = strtolower( $tokens[ $function_ptr ]['content'] );
+
+		if ( \T_NAME_FULLY_QUALIFIED === $tokens[ $function_ptr ]['code'] ) {
+			$function_name = \ltrim( $function_name, '\\' );
+		}
+
 		if ( true === self::$arrayCompareFunctions[ $function_name ] ) {
 			return true;
 		}
