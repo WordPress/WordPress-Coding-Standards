@@ -11,9 +11,9 @@
     <code_comparison>
         <code title="Valid: Lowercase and `-` separators.">
         <![CDATA[
-taxonomy<em>-</em>my<em>-</em>term.inc
-<em>some</em>-<em>file</em>.inc
-other<em>-</em>punctuation.inc
+<em>taxonomy-my-term</em>.inc
+<em>some-file</em>.inc
+<em>other-punctuation</em>.inc
         ]]>
         </code>
         <code title="Invalid: Other punctuation or mixed case.">
