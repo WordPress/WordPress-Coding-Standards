@@ -175,7 +175,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 
 		if ( false === $validated ) {
 			$this->phpcsFile->addError(
-				'Detected usage of a possibly undefined superglobal array index: %s. Use isset() or empty() to check the index exists before using it',
+				'Detected usage of a possibly undefined superglobal array index: %s. Check that the array index exists before using it.',
 				$stackPtr,
 				'InputNotValidated',
 				$error_data
