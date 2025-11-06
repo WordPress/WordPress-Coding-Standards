@@ -39,6 +39,17 @@ final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 				unset( $errors[16], $errors[18], $errors[21], $errors[26] );
 
 				return $errors;
+
+			case 'DeprecatedClassesUnitTest.2.inc':
+				return array(
+					6  => 1,
+					10 => 1,
+					11 => 1,
+					15 => 1,
+					16 => 1,
+					20 => 1,
+				);
+
 			default:
 				return array();
 		}
