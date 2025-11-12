@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd" 
+    title="File Name"
+    >
+    <standard>
+    <![CDATA[
+    Filenames should be all lowercase with hyphens separating words.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Lowercase and `-` separators.">
+        <![CDATA[
+<em>taxonomy-my-term</em>.inc
+<em>some-file</em>.inc
+<em>other-punctuation</em>.inc
+        ]]>
+        </code>
+        <code title="Invalid: Other punctuation or mixed case.">
+        <![CDATA[
+taxonomy-my<em>_</em>term.inc
+<em>Some</em>-<em>File</em>.inc
+other<em>+</em>punctuation<em>#</em>.inc
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Class file names should be based on the class name with `class-` prepended.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: File name matches class name with proper prefix.">
+        <![CDATA[
+<em>class-bulk-updater</em>.php // `Bulk_Updater`.
+<em>class-user-profile</em>.php // `User_Profile`.
+<em>class-export-data</em>.php // `Export_Data`.
+        ]]>
+        </code>
+        <code title="Invalid: File name does not match class name or the prefix is incorrect.">
+        <![CDATA[
+class-<em>update-in-bulk</em>.php // `Bulk_Updater`.
+<em></em>user-profile.php // `User_Profile`.
+<em>class.</em>export-data.php // `Export_Data`.
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Non-class files in the directory `wp-includes` with a "@subpackage Template" tag should use the `-template` suffix.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: File name with proper suffix.">
+        <![CDATA[
+general<em>-template</em>.php
+        ]]>
+        </code>
+        <code title="Invalid: File name missing suffix.">
+        <![CDATA[
+<em>general</em>.php
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
