@@ -79,6 +79,7 @@ final class ConstantsHelper {
 			\T_INSTANCEOF => true,
 			\T_INSTEADOF  => true,
 			\T_GOTO       => true,
+			\T_AS         => true,
 		);
 		$tokens_to_ignore += Tokens::$ooScopeTokens;
 		$tokens_to_ignore += Collections::objectOperators();
