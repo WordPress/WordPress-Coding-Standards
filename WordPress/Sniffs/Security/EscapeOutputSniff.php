@@ -438,7 +438,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			if ( false !== $file_param ) {
 				// Check for a particular code pattern which can safely be ignored.
-				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $file_param['clean'] ) === 1 ) {
+				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`i', $file_param['clean'] ) === 1 ) {
 					unset( $params[1], $params['file'] ); // Remove the param, whether passed positionally or named.
 				}
 			}
