@@ -752,3 +752,17 @@ namespace\Sub\user_error( $message ); // Ok.
 namespace\_deprecated_file( basename( __FILE__ ), '1.3.0' ); // Ok.
 namespace\_DEPRECATED_FILE( $file, '1.3.0' ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
 namespace\Sub\_deprecated_file( $file, '1.3.0' ); // Ok.
+
+/*
+ * Safeguard that the basename( __FILE__ ) pattern recognition in _deprecated_file() only applies to
+ * the global basename() function and not to other constructs.
+ */
+_deprecated_file( $obj->basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( $obj?->basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( MyClass::basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( BASENAME, __FILE__ ); // Bad.
+_deprecated_file( MyNamespace\basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( \MyNamespace\basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( namespace\basename( __FILE__ ), '1.3.0' ); // Bad. We might want to update the regex so that the sniff stop flagging this once it can resolve relative namespaces.
+_deprecated_file( namespace\Sub\basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( basename(...), '1.3.0' ); // Bad.

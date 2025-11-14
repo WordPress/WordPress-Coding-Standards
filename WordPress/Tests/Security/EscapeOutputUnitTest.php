@@ -191,6 +191,15 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 					741 => 1,
 					747 => 1,
 					751 => 1,
+					760 => 1,
+					761 => 1,
+					762 => 1,
+					763 => 1,
+					764 => 1,
+					765 => 1,
+					766 => 1,
+					767 => 1,
+					768 => 1,
 				);
 
 			case 'EscapeOutputUnitTest.6.inc':
