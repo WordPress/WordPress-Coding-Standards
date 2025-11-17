@@ -75,6 +75,22 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 					470 => 1,
 					478 => 1,
 					524 => 2,
+					537 => 1,
+					545 => 1,
+					557 => 1,
+					565 => 1,
+					593 => 1,
+					601 => 1,
+					602 => 1,
+					603 => 1,
+					628 => 1,
+					636 => 1,
+					637 => 1,
+					638 => 1,
+					680 => 1,
+					686 => 1,
+					687 => 1,
+					688 => 1,
 				);
 
 			case 'NonceVerificationUnitTest.2.inc':
@@ -107,6 +123,10 @@ final class NonceVerificationUnitTest extends AbstractSniffUnitTest {
 				return array(
 					365 => 1,
 					379 => 1,
+					653 => 1,
+					659 => 1,
+					660 => 1,
+					661 => 1,
 				);
 
 			case 'NonceVerificationUnitTest.4.inc':
