@@ -29,7 +29,7 @@ sql_regcase( 'Foo - bar.'); // Bad. Deprecated.
  * Safeguard correct handling of all types of namespaced function calls.
  */
 \split( ':', $date );
-MyNamespace\split( ':', $date );
-\MyNamespace\split( ':', $date );
-namespace\split( ':', $date ); // The sniff should start flagging this once it can resolve relative namespaces.
-namespace\Sub\split( ':', $date );
+MyNamespace\ereg( 'pattern', $string );
+\MyNamespace\ereg_replace( 'pattern', 'replacement', $string );
+namespace\spliti( ':', $date ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\sql_regcase( 'string' );

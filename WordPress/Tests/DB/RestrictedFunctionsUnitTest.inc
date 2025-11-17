@@ -99,7 +99,7 @@ Myfictional(); // OK.
  * Safeguard correct handling of all types of namespaced function calls.
  */
 \mysql_connect();
-MyNamespace\mysql_connect();
-\MyNamespace\mysql_connect();
-namespace\mysql_connect(); // The sniff should start flagging this once it can resolve relative namespaces.
-namespace\Sub\mysql_connect();
+MyNamespace\mysqli_init();
+\MyNamespace\mysqlnd_qc_clear_cache();
+namespace\maxdb_close(); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\mysqli_fetch();

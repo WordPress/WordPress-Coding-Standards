@@ -68,7 +68,7 @@ call_user_func( query_posts(...), $param ); // Warning.
  * Safeguard correct handling of all types of namespaced function calls.
  */
 \query_POSTS(); // Warning.
-MyNamespace\query_posts(); // OK, not the global function.
+MyNamespace\wp_reset_query(); // OK, not the global function.
 \MyNamespace\query_posts(); // OK, not the global function.
-namespace\query_posts(); // OK, not the global function.
+namespace\wp_reset_query(); // OK, not the global function.
 namespace\Sub\query_posts(); // OK, not the global function.

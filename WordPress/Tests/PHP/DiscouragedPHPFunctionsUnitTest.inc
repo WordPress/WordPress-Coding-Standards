@@ -45,7 +45,7 @@ class Serialize {}
 /*
  * Safeguard correct handling of all types of namespaced function calls.
  */
-MyNamespace\serialize( $value );
-\MyNamespace\serialize( $value );
-namespace\serialize( $value ); // The sniff should start flagging this once it can resolve relative namespaces.
-namespace\Sub\serialize( $value );
+MyNamespace\urlencode( $value );
+\MyNamespace\putenv( $value );
+namespace\exec( $command ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\base64_decode( $value );
