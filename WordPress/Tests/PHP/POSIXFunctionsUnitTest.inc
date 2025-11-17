@@ -32,3 +32,4 @@ sql_regcase( 'Foo - bar.'); // Bad. Deprecated.
 MyNamespace\split( ':', $date );
 \MyNamespace\split( ':', $date );
 namespace\split( ':', $date ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\split( ':', $date );

@@ -46,12 +46,12 @@ final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
 				return array(
 					3  => 1,
 					4  => 1,
-					20 => 1,
 					33 => 1,
 					34 => 1,
 					53 => 1,
 					62 => 1,
 					65 => 1,
+					70 => 1,
 				);
 
 			default:

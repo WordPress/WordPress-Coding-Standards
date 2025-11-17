@@ -43,3 +43,4 @@ $wrapper ->var_dump(); // OK, not the native PHP function.
 MyNamespace\var_dump( $value );
 \MyNamespace\var_dump( $value );
 namespace\var_dump( $value ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\var_dump( $value );

@@ -102,3 +102,4 @@ Myfictional(); // OK.
 MyNamespace\mysql_connect();
 \MyNamespace\mysql_connect();
 namespace\mysql_connect(); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\mysql_connect();

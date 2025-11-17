@@ -8,3 +8,4 @@
 MyNamespace\the_category_ID();
 \MyNamespace\the_category_ID();
 namespace\the_category_ID(); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\the_category_ID();

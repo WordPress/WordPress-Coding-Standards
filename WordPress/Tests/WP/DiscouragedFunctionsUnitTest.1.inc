@@ -12,12 +12,12 @@ $obj->query_posts(); // OK, not the global function.
 MyClass::wp_reset_query(); // OK, not the global function.
 $obj?->query_posts(); // OK, not the global function.
 
-// Ensure the sniff doesn't act on namespaced calls.
-MyNamespace\query_posts(); // OK, not the global function.
-\MyNamespace\query_posts(); // OK, not the global function.
-namespace\query_posts(); // OK, not the global function.
-// ... but does act on fully qualified function calls.
-\query_POSTS(); // Warning.
+
+
+
+
+
+
 
 // Ensure the sniff doesn't act on functions not listed in the target functions array.
 query_post(); // OK, not one of the target functions.
@@ -63,3 +63,12 @@ wp_reset_query(); // OK, excluded group.
 
 // Safeguard that a function used as a PHP 8.1+ first class callable is also flagged.
 call_user_func( query_posts(...), $param ); // Warning.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\query_POSTS(); // Warning.
+MyNamespace\query_posts(); // OK, not the global function.
+\MyNamespace\query_posts(); // OK, not the global function.
+namespace\query_posts(); // OK, not the global function.
+namespace\Sub\query_posts(); // OK, not the global function.

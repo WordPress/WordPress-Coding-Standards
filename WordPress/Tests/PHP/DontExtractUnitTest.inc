@@ -17,3 +17,4 @@ $my_object->extract(); // Ok.
 MyNamespace\extract( array( 'a' => 1 ) );
 \MyNamespace\extract( array( 'a' => 1 ) );
 namespace\extract( array( 'a' => 1 ) ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\extract( array( 'a' => 1 ) );
