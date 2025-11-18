@@ -63,8 +63,8 @@ add_menu_page( $pagetitle, 'menu_title', 'foo_bar', 'handle', 'function', 'icon_
  * Roles found instead of capabilities.
  */
 add_posts_page( 'page_title', 'menu_title', 'administrator', 'menu_slug', 'function' ); // Error.
-add_media_page( 'page_title', 'menu_title', 'editor', 'menu_slug', 'function' ); // Error.
-add_pages_page( 'page_title', 'menu_title', 'author', 'menu_slug', 'function' ); // Error.
+\aDd_MeDiA_pAgE( 'page_title', 'menu_title', 'editor', 'menu_slug', 'function' ); // Error.
+ADD_PAGES_PAGE( 'page_title', 'menu_title', 'author', 'menu_slug', 'function' ); // Error.
 add_comments_page( 'page_title', 'menu_title', 'contributor', 'menu_slug', 'function' ); // Error.
 add_theme_page( 'page_title', $menu_title, 'subscriber', 'menu_slug', 'function' ); // Error.
 add_plugins_page( 'page_title', 'menu_title', 'super_admin', 'menu_slug', 'function' ); // Error.
@@ -111,8 +111,12 @@ add_menu_page( $p, $t, /* deliberately empty */, $slug, );
 add_menu_page( [] ); // Should bow out because the parameter is not found.
 
 $obj->current_user_can( 'foo_bar' ); // Ok. We're not checking for method calls.
-My\NamespaceS\add_posts_page( 'page_title', 'menu_title', 'administrator', 'menu_slug', 'function' ); // Ok. We're not checking namespaced functions.
 
-// Parse error, should be handled correctly by bowing out.
-// This must be the last test in the file!
-add_posts_page( 'page_title',
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\add_posts_page( 'page_title', 'menu_title', 'administrator', 'menu_slug', 'function' ); // Bad.
+My\NamespaceS\current_user_can( 'administrator' ); // Ok.
+\MyNamespace\add_comments_page( 'page_title', 'menu_title', 'administrator', 'menu_slug', 'function' ); // Ok.
+namespace\author_can( $post, 'administrator' ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\add_posts_page( 'page_title', 'menu_title', 'administrator', 'menu_slug', 'function' ); // Ok.
