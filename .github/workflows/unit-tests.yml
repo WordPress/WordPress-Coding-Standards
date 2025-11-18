@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.5' ]
+        php: [ '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.6' ]
         dependencies: [ 'lowest', 'stable' ]
         extensions: [ '' ]
         coverage: [false]
@@ -41,11 +41,11 @@ jobs:
             dependencies: 'lowest'
             extensions: ''
             coverage: true
-          - php: '8.4'
+          - php: '8.5'
             dependencies: 'stable'
             extensions: ''
             coverage: true
-          - php: '8.4'
+          - php: '8.5'
             dependencies: 'lowest'
             extensions: ''
             coverage: true
@@ -59,7 +59,7 @@ jobs:
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '8.4'
+          - php: '8.5'
             dependencies: 'dev'
             extensions: ''
             coverage: false
@@ -70,7 +70,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
 
-    continue-on-error: ${{ matrix.php == '8.5' }}
+    continue-on-error: ${{ matrix.php == '8.6' }}
 
     steps:
       - name: Checkout repository
