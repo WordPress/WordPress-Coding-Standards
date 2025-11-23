@@ -99,6 +99,16 @@ final class DirectDatabaseQueryUnitTest extends AbstractSniffUnitTest {
 					350 => 1,
 					364 => 2,
 					376 => 1,
+					393 => 1,
+					404 => 1,
+					415 => 1,
+					426 => 1,
+					437 => 1,
+					447 => 1,
+					454 => 1,
+					461 => 1,
+					468 => 1,
+					475 => 1,
 				);
 			default:
 				return array();
