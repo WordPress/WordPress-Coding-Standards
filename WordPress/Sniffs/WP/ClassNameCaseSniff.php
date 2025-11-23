@@ -25,7 +25,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -115,6 +115,10 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Walker_Page',
 		'Walker_PageDropdown',
 		'WP',
+		'WP_Abilities_Registry',
+		'WP_Ability',
+		'WP_Ability_Categories_Registry',
+		'WP_Ability_Category',
 		'WP_Admin_Bar',
 		'WP_Ajax_Response',
 		'WP_Ajax_Upgrader_Skin',
@@ -124,6 +128,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Block',
 		'WP_Block_Bindings_Registry',
 		'WP_Block_Bindings_Source',
+		'WP_Block_Cloner',
 		'WP_Block_Editor_Context',
 		'WP_Block_List',
 		'WP_Block_Metadata_Registry',
@@ -132,6 +137,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Block_Parser_Frame',
 		'WP_Block_Pattern_Categories_Registry',
 		'WP_Block_Patterns_Registry',
+		'WP_Block_Processor',
 		'WP_Block_Styles_Registry',
 		'WP_Block_Supports',
 		'WP_Block_Template',
@@ -269,6 +275,9 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Privacy_Policy_Content',
 		'WP_Privacy_Requests_Table',
 		'WP_Query',
+		'WP_REST_Abilities_V1_Categories_Controller',
+		'WP_REST_Abilities_V1_List_Controller',
+		'WP_REST_Abilities_V1_Run_Controller',
 		'WP_REST_Application_Passwords_Controller',
 		'WP_REST_Attachments_Controller',
 		'WP_REST_Autosaves_Controller',
@@ -423,7 +432,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -455,7 +464,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.1.0
 	 *
@@ -477,7 +486,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -513,7 +522,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -521,9 +530,16 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *               The constructor will add the lowercased class name as a key to each entry.
 	 */
 	private $phpmailer_classes = array(
+		// Classes.
+		'PHPMailer\\PHPMailer\\DSNConfigurator',
 		'PHPMailer\\PHPMailer\\Exception',
+		'PHPMailer\\PHPMailer\\OAuth',
 		'PHPMailer\\PHPMailer\\PHPMailer',
+		'PHPMailer\\PHPMailer\\POP3',
 		'PHPMailer\\PHPMailer\\SMTP',
+
+		// Interfaces.
+		'PHPMailer\\PHPMailer\\OAuthTokenProvider',
 	);
 
 	/**
@@ -531,7 +547,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -675,7 +691,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -690,6 +706,8 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'SimplePie\Cache\Base',
 		'SimplePie\Cache\DataCache',
 		'SimplePie\Cache\NameFilter',
+		'SimplePie\HTTP\Client',
+		'SimplePie\HTTP\Response',
 		'SimplePie\RegistryAware',
 
 		// Classes, SimplePie v1.
@@ -750,7 +768,12 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'SimplePie\Exception',
 		'SimplePie\File',
 		'SimplePie\Gzdecode',
+		'SimplePie\HTTP\ClientException',
+		'SimplePie\HTTP\FileClient',
 		'SimplePie\HTTP\Parser',
+		'SimplePie\HTTP\Psr7Response',
+		'SimplePie\HTTP\Psr18Client',
+		'SimplePie\HTTP\RawTextResponse',
 		'SimplePie\IRI',
 		'SimplePie\Item',
 		'SimplePie\Locator',
