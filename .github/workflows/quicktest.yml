@@ -66,15 +66,15 @@ jobs:
         run: composer lint
 
       - name: Run the unit tests without code coverage
-        if: ${{ github.repository_owner != 'WordPress' || github.ref_name != 'develop' }}
+        if: ${{ github.event.repository.fork == true || github.ref_name != 'develop' }}
         run: composer run-tests
 
       - name: Run the unit tests with code coverage
-        if: ${{ github.repository_owner == 'WordPress' && github.ref_name == 'develop' }}
+        if: ${{ github.event.repository.fork == false && github.ref_name == 'develop' }}
         run: composer coverage
 
       - name: Send coverage report to Codecov
-        if: ${{ success() && github.repository_owner == 'WordPress' && github.ref_name == 'develop' }}
+        if: ${{ success() && github.event.repository.fork == false && github.ref_name == 'develop' }}
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           files: ./build/logs/clover.xml
