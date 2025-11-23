@@ -26,7 +26,7 @@
 		"phpcsstandards/phpcsextra": "^1.5.0"
 	},
 	"require-dev": {
-		"phpcompatibility/php-compatibility": "^9.0",
+		"phpcompatibility/php-compatibility": "^10.0.0@dev",
 		"phpunit/phpunit": "^8.0 || ^9.0",
 		"phpcsstandards/phpcsdevtools": "^1.2.0",
 		"php-parallel-lint/php-parallel-lint": "^1.4.0",
@@ -36,6 +36,8 @@
 		"ext-iconv": "For improved results",
 		"ext-mbstring": "For improved results"
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true

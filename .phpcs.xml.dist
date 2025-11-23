@@ -57,7 +57,20 @@
 	<rule ref="PHPCompatibility">
 		<!-- Exclude PHP constants back-filled by PHPCS. -->
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_coalesce_equalFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_bad_characterFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_fnFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_attributeFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_matchFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_nullsafe_object_operatorFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_name_fully_qualifiedFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_name_qualifiedFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_name_relativeFound"/>
 		<exclude name="PHPCompatibility.Constants.NewConstants.t_readonlyFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_enumFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_public_setFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_protected_setFound"/>
+		<exclude name="PHPCompatibility.Constants.NewConstants.t_private_setFound"/>
+		<exclude name="PHPCompatibility.Constants.RemovedConstants.t_bad_characterFound"/>
 	</rule>
 
 	<!-- Enforce PSR1 compatible namespaces. -->
