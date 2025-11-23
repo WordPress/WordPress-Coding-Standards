@@ -54,6 +54,7 @@ final class DeprecatedParametersUnitTest extends AbstractSniffUnitTest {
 		return array(
 			100 => 1,
 			101 => 1,
+			102 => 1,
 		);
 	}
 }
