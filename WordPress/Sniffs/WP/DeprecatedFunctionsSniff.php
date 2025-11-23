@@ -43,7 +43,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * To retrieve a function list for comparison, the following tool is available:
 	 * https://github.com/JDGrimes/wp-deprecated-code-scanner
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @var array
 	 */
@@ -1707,6 +1707,18 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_add_editor_classic_theme_styles' => array(
 			'alt'     => 'wp_enqueue_classic_theme_styles()',
 			'version' => '6.8.0',
+		),
+
+		// WP 6.9.0.
+		// Note: the deprecation of the (polyfilled) `utf8_encode()` and `utf8_decode()` functions is deliberately
+		// not listed here as these are polyfills for the PHP native functions, not WP native functions.
+		'seems_utf8' => array(
+			'alt'     => 'wp_is_valid_utf8()',
+			'version' => '6.9.0',
+		),
+		'wp_print_auto_sizes_contain_css_fix' => array(
+			'alt'     => 'wp_enqueue_img_auto_sizes_contain_css_fix()',
+			'version' => '6.9.0',
 		),
 	);
 

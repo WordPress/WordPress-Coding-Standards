@@ -441,3 +441,6 @@ wp_targeted_link_rel();
 wp_targeted_link_rel_callback();
 /* ============ WP 6.8 ============ */
 wp_add_editor_classic_theme_styles();
+/* ============ WP 6.9 ============ */
+seems_utf8();
+wp_print_auto_sizes_contain_css_fix();
