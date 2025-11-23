@@ -475,3 +475,34 @@ function callToMultiLevelNamespaceRelativeCacheDelete() {
 	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
 	namespace\Sub\clean_blog_cache( 1 );
 }
+
+// Handle more caching functions.
+function cache_multiple() {
+	global $wpdb;
+	$data = wp_cache_get_multiple( ['keyA', 'keyB'] );
+	if ( false !== $data ) {
+		$data = $wpdb->get_results( $query ); // Warning direct DB call.
+		\wp_cache_add_multiple( $data );
+	}
+}
+
+function cache_multiple_salted() {
+	global $wpdb;
+	$data = \wp_cache_get_multiple_salted( ...$params );
+	if ( false !== $data ) {
+		$data = $wpdb->get_col( $query ); // Warning direct DB call.
+		wp_cache_set_multiple_salted( ...$params );
+	}
+}
+
+function cache_delete_multiple() {
+	global $wpdb;
+	$wpdb->replace( $query ); // Warning direct DB call.
+	WP_cache_delete_multiple( ['keyA', 'keyB'] );
+}
+
+function cache_flush_group() {
+	global $wpdb;
+	$wpdb->delete( $query ); // Warning direct DB call.
+	wp_cache_flush_group( 'group' );
+}
