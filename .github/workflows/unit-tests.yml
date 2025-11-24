@@ -128,15 +128,15 @@ jobs:
         run: composer lint -- --checkstyle | cs2pr
 
       - name: Run the unit tests without code coverage
-        if: ${{ matrix.coverage == false || github.repository_owner != 'WordPress' }}
+        if: ${{ matrix.coverage == false || github.event.repository.fork == true }}
         run: composer run-tests
 
       - name: Run the unit tests with code coverage
-        if: ${{ matrix.coverage == true && github.repository_owner == 'WordPress' }}
+        if: ${{ matrix.coverage == true && github.event.repository.fork == false }}
         run: composer coverage
 
       - name: Send coverage report to Codecov
-        if: ${{ success() && matrix.coverage == true && github.repository_owner == 'WordPress' }}
+        if: ${{ success() && matrix.coverage == true && github.event.repository.fork == false }}
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           files: ./build/logs/clover.xml
