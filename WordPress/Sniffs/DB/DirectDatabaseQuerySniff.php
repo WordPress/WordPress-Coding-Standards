@@ -82,7 +82,10 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $cacheGetFunctions = array(
-		'wp_cache_get' => true,
+		'wp_cache_get'                 => true,
+		'wp_cache_get_multiple'        => true,
+		'wp_cache_get_multiple_salted' => true,
+		'wp_cache_get_salted'          => true,
 	);
 
 	/**
@@ -95,8 +98,12 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $cacheSetFunctions = array(
-		'wp_cache_set' => true,
-		'wp_cache_add' => true,
+		'wp_cache_add'                 => true,
+		'wp_cache_add_multiple'        => true,
+		'wp_cache_set'                 => true,
+		'wp_cache_set_multiple'        => true,
+		'wp_cache_set_multiple_salted' => true,
+		'wp_cache_set_salted'          => true,
 	);
 
 	/**
@@ -109,18 +116,21 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $cacheDeleteFunctions = array(
-		'wp_cache_delete'         => true,
-		'clean_attachment_cache'  => true,
-		'clean_blog_cache'        => true,
-		'clean_bookmark_cache'    => true,
-		'clean_category_cache'    => true,
-		'clean_comment_cache'     => true,
-		'clean_network_cache'     => true,
-		'clean_object_term_cache' => true,
-		'clean_page_cache'        => true,
-		'clean_post_cache'        => true,
-		'clean_term_cache'        => true,
-		'clean_user_cache'        => true,
+		'wp_cache_delete'          => true,
+		'wp_cache_delete_multiple' => true,
+		'wp_cache_flush_group'     => true,
+		'wp_cache_flush_runtime'   => true,
+		'clean_attachment_cache'   => true,
+		'clean_blog_cache'         => true,
+		'clean_bookmark_cache'     => true,
+		'clean_category_cache'     => true,
+		'clean_comment_cache'      => true,
+		'clean_network_cache'      => true,
+		'clean_object_term_cache'  => true,
+		'clean_page_cache'         => true,
+		'clean_post_cache'         => true,
+		'clean_term_cache'         => true,
+		'clean_user_cache'         => true,
 	);
 
 	/**
