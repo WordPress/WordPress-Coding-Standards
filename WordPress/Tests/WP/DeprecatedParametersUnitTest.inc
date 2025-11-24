@@ -99,3 +99,4 @@ global_terms( $foo, 'deprecated' );
 // All will give an WARNING as they have been deprecated after WP 6.5.
 inject_ignored_hooked_blocks_metadata_attributes('', 'deprecated');
 wp_render_elements_support_styles('deprecated');
+_wp_can_use_pcre_u('deprecated');

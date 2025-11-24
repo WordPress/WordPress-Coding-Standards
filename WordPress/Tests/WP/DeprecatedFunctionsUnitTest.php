@@ -110,14 +110,15 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'DeprecatedFunctionsUnitTest.1.inc':
 				$start_line = 426;
-				$end_line   = 443;
+				$end_line   = 446;
 				$warnings   = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 				// Unset the lines related to version comments.
 				unset(
 					$warnings[429],
 					$warnings[432],
-					$warnings[442]
+					$warnings[442],
+					$warnings[444]
 				);
 
 				return $warnings;
