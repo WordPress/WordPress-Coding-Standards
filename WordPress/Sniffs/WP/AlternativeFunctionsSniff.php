@@ -353,7 +353,9 @@ final class AlternativeFunctionsSniff extends AbstractFunctionRestrictionsSniff 
 	 */
 	protected function is_local_data_stream( $clean_param_value ) {
 
-		$stripped = TextStrings::stripQuotes( $clean_param_value );
+		$stripped          = TextStrings::stripQuotes( $clean_param_value );
+		$clean_param_value = ltrim( $clean_param_value, '\\' );
+
 		if ( isset( $this->allowed_local_streams[ $stripped ] )
 			|| isset( $this->allowed_local_stream_constants[ $clean_param_value ] )
 		) {

@@ -167,3 +167,16 @@ file_get_contents( $this?->plugin_dir_path() . 'subdir/file.inc' );
 file_get_contents( MyClass::ABSPATH . 'subdir/file.inc' );
 file_get_contents( $this->WPMU_PLUGIN_DIR . 'subdir/file.inc' );
 file_get_contents( $this?->TEMPLATEPATH . 'subdir/file.inc' );
+
+/*
+ * Safeguard correct handling of namespaced variants of STDIN/STDOUT/STDERR constants.
+ *
+ * Note: passing stream resources to these functions is not valid PHP and will be addressed in
+ * https://github.com/WordPress/WordPress-Coding-Standards/issues/2602. These tests document the current behavior of the
+ * sniff.
+ */
+fopen( \STDIN, 'r' );
+file_put_contents( MyNamespace\STDOUT, $data );
+file_get_contents( \MyNamespace\STDIN );
+file_put_contents( namespace\STDERR, $data ); // The sniff should not flag this once it can resolve relative namespaces.
+readfile( namespace\Sub\STDIN );
