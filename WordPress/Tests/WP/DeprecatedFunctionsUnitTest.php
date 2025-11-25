@@ -32,7 +32,7 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 		switch ( $testFile ) {
 			case 'DeprecatedFunctionsUnitTest.1.inc':
 				$start_line = 8;
-				$end_line   = 420;
+				$end_line   = 424;
 				$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 				// Unset the lines related to version comments.
@@ -84,7 +84,8 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 					$errors[373],
 					$errors[383],
 					$errors[386],
-					$errors[410]
+					$errors[410],
+					$errors[421]
 				);
 
 				return $errors;
@@ -109,13 +110,12 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 	public function getWarningList( $testFile = '' ) {
 		switch ( $testFile ) {
 			case 'DeprecatedFunctionsUnitTest.1.inc':
-				$start_line = 426;
+				$start_line = 430;
 				$end_line   = 446;
 				$warnings   = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 				// Unset the lines related to version comments.
 				unset(
-					$warnings[429],
 					$warnings[432],
 					$warnings[442],
 					$warnings[444]
