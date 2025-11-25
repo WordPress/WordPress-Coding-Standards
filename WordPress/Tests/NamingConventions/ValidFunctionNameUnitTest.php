@@ -25,38 +25,48 @@ final class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
-	public function getErrorList() {
-		return array(
-			3   => 1,
-			9   => 1,
-			13  => 1,
-			15  => 1,
-			79  => 2,
-			80  => 2,
-			81  => 2,
-			82  => 2,
-			83  => 2,
-			84  => 2,
-			85  => 2,
-			86  => 2,
-			87  => 2,
-			88  => 2,
-			89  => 2,
-			106 => 2,
-			116 => 1,
-			117 => 1,
-			157 => 2,
-			183 => 1,
-			184 => 1,
-			185 => 1,
-			199 => 1,
-			208 => 2,
-			210 => 1,
-			223 => function_exists( 'mb_strtolower' ) ? 1 : 0,
-			224 => 1,
-		);
+	public function getErrorList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'ValidFunctionNameUnitTest.1.inc':
+				return array(
+					3   => 1,
+					9   => 1,
+					13  => 1,
+					15  => 1,
+					79  => 2,
+					80  => 2,
+					81  => 2,
+					82  => 2,
+					83  => 2,
+					84  => 2,
+					85  => 2,
+					86  => 2,
+					87  => 2,
+					88  => 2,
+					89  => 2,
+					106 => 2,
+					116 => 1,
+					117 => 1,
+					157 => 2,
+					183 => 1,
+					184 => 1,
+					185 => 1,
+					199 => 1,
+					208 => 2,
+					210 => 1,
+					223 => function_exists( 'mb_strtolower' ) ? 1 : 0,
+					224 => 1,
+					230 => 1,
+					231 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**

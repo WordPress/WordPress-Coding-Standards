@@ -15,10 +15,11 @@ use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
- * This checks the enqueued 4th and 5th parameters to make sure the version and in_footer are set.
+ * This checks that the 4th ($ver) parameter is set for all enqueued resources and that the 5th ($in_footer) parameter
+ * is set for wp_register_script() and wp_enqueue_script().
  *
  * If a source ($src) value is passed, then version ($ver) needs to have non-falsy value.
- * If a source ($src) value is passed a check for in footer ($in_footer), warn the user if the value is falsy.
+ * If a source ($src) value is passed, then it is recommended to explicitly set the $in_footer parameter.
  *
  * @link https://developer.wordpress.org/reference/functions/wp_register_script/
  * @link https://developer.wordpress.org/reference/functions/wp_enqueue_script/
@@ -53,20 +54,21 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	);
 
 	/**
-	 * False + the empty tokens array.
+	 * False + T_NS_SEPARATOR + the empty tokens array.
 	 *
 	 * This array is enriched with the $emptyTokens array in the register() method.
 	 *
 	 * @var array<int|string, int|string>
 	 */
 	private $false_tokens = array(
-		\T_FALSE => \T_FALSE,
+		\T_FALSE        => \T_FALSE,
+		\T_NS_SEPARATOR => \T_NS_SEPARATOR, // Needed to handle fully qualified \false (PHPCS 3.x).
 	);
 
 	/**
 	 * Token codes which are "safe" to accept to determine whether a version would evaluate to `false`.
 	 *
-	 * This array is enriched with the several of the PHPCS token arrays in the register() method.
+	 * This array is enriched with several of the PHPCS token arrays in the register() method.
 	 *
 	 * @var array<int|string, int|string>
 	 */
@@ -88,7 +90,8 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
-	 * Overloads and calls the parent method to allow for adding additional tokens to the $safe_tokens property.
+	 * Overloads and calls the parent method to allow for adding additional tokens to the
+	 * $false_tokens and $safe_tokens properties.
 	 *
 	 * @return array
 	 */
@@ -139,7 +142,7 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 			}
 		}
 
-		if ( false === $version_param || 'null' === $version_param['clean'] ) {
+		if ( false === $version_param || strtolower( ltrim( $version_param['clean'], '\\' ) ) === 'null' ) {
 			$type = 'script';
 			if ( strpos( $matched_content, '_style' ) !== false ) {
 				$type = 'style';
@@ -165,8 +168,8 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 		/*
 		 * In footer Check
 		 *
-		 * Check to make sure that $in_footer is set to true.
-		 * It will warn the user to make sure it is intended.
+		 * Check to make sure that $in_footer is explicitly set.
+		 * Warn the user if it is not set.
 		 *
 		 * Only wp_register_script and wp_enqueue_script need this check,
 		 * as this parameter is not available to wp_register_style and wp_enqueue_style.
@@ -225,6 +228,30 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 				$code_string .= $number_info['decimal'];
 				$i            = $number_info['last_token'];
 				continue;
+			}
+
+			// Make sure that when deprecated casts are used in the code under scan and the sniff is run on PHP 8.5,
+			// the eval() won't cause a deprecation notice, borking the scan of the file.
+			if ( \PHP_VERSION_ID >= 80500 ) {
+				if ( \T_INT_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(int)';
+					continue;
+				}
+
+				if ( \T_DOUBLE_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(float)';
+					continue;
+				}
+
+				if ( \T_BOOL_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(bool)';
+					continue;
+				}
+
+				if ( \T_BINARY_CAST === $this->tokens[ $i ]['code'] ) {
+					$code_string .= '(string)';
+					continue;
+				}
 			}
 
 			$code_string .= $this->tokens[ $i ]['content'];

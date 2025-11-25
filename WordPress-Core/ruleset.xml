@@ -827,10 +827,6 @@
 	Ref: https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#regular-expressions
 	#############################################################################
 	-->
-	<!-- Covers rule: Perl compatible regular expressions should be used in preference
-		 to their POSIX counterparts. -->
-	<rule ref="WordPress.PHP.POSIXFunctions"/>
-
 	<!-- Rule: Never use the /e switch, use preg_replace_callback instead.
 		 https://github.com/WordPress/WordPress-Coding-Standards/issues/632 -->
 

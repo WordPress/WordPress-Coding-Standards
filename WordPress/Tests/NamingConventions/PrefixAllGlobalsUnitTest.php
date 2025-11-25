@@ -96,6 +96,16 @@ final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 					616 => 1,
 					617 => 1,
 					633 => 1,
+					689 => 1,
+					693 => 1,
+				);
+
+			case 'PrefixAllGlobalsUnitTest.3.inc':
+				return array(
+					28 => 1,
+					38 => 1,
+					45 => 1,
+					52 => 1,
 				);
 
 			case 'PrefixAllGlobalsUnitTest.4.inc':
@@ -106,8 +116,6 @@ final class PrefixAllGlobalsUnitTest extends AbstractSniffUnitTest {
 
 			case 'PrefixAllGlobalsUnitTest.2.inc':
 				// Namespaced - all OK, fall through to the default case.
-			case 'PrefixAllGlobalsUnitTest.3.inc':
-				// Test class - non-prefixed constant is fine, fall through to the default case.
 			default:
 				return array();
 		}

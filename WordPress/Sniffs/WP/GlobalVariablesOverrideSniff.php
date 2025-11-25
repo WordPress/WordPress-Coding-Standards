@@ -174,7 +174,7 @@ final class GlobalVariablesOverrideSniff extends Sniff {
 	protected function process_list_assignment( $stackPtr ) {
 		$list_open_close = Lists::getOpenClose( $this->phpcsFile, $stackPtr );
 		if ( false === $list_open_close ) {
-			// Short array, not short list.
+			// Live coding or short array, not short list.
 			return;
 		}
 

@@ -137,7 +137,7 @@ class Acronym_Example {
 	function do_something( $param = 'default' ) {}
 }
 
-$acronym_class = new class {
+$acronym_class = new readonly class {
 	const SOME_CONSTANT = 'value';
 
 	public $var = 'abc';
@@ -260,10 +260,10 @@ $GLOBALS[ $something ] = 'value'; // Warning.
 $GLOBALS[ "{$something}_something" ] = 'value'; // Warning.
 $GLOBALS[ ${$something} ] = 'value'; // Warning.
 
-define( ${$something}, 'value' ); // Warning.
+DEFINE( ${$something}, 'value' ); // Warning.
 define( $something, 'value' ); // Warning.
 define( $something . '_CONSTANT', 'value' ); // Warning.
-define( "{$something}_CONSTANT", 'value' ); // Warning.
+\Define( "{$something}_CONSTANT", 'value' ); // Warning.
 define( $something . '_CONSTANT', 'value' ); // Warning.
 
 do_action( "{$acronym_filter_var}_hook_name" ); // Warning.
@@ -672,5 +672,27 @@ class WP_Atom_Server {
 		// Do something.
 	}
 }
+
+/*
+ * Safeguard that PHP 8.4+ asymmetric visibility properties don't lead to false positives.
+ * Including those defined using constructor property promotion.
+ */
+class Acronym_AsymmetricVisibilityProperties {
+    public private(set) string $bar = 'bar'; // Ok.
+
+    public function __construct(public protected(set) int $foo = 0) {} // Ok.
+}
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\define('SOME_GLOBAL', [ 1, 2, 3 ]); // Bad.
+MyNamespace\define('SOME_GLOBAL', [ 1, 2, 3 ]); // Ok.
+\MyNamespace\define('SOME_GLOBAL', [ 1, 2, 3 ]); // Ok.
+namespace\define('SOME_GLOBAL', [ 1, 2, 3 ]); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
+\do_action( 'plugin_action' ); // Bad.
+MyNamespace\do_action( 'plugin_action' ); // Ok.
+\MyNamespace\apply_filters( 'plugin_filter', $variable ); // Ok.
+namespace\do_action_ref_array( 'plugin_action', array( $variable ) ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

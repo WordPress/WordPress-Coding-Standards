@@ -36,6 +36,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 
 ### Release prep
 
+- [ ] Double-check that all PRs which were merged since the last release have a milestone attached to it.
 - [ ] Add changelog for the release - PR #xxx
     :pencil2: Remember to add a release link at the bottom!
 - [ ] Update `README` (if applicable) - PR #xxx
@@ -45,7 +46,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 
 - [ ] Merge this PR.
 - [ ] Make sure all CI builds are green.
-- [ ] Tag and create a release against `main` (careful, GH defaults to `develop`!) & copy & paste the changelog to it.
+- [ ] Tag and create a release against `main` (careful, GH defaults to `develop`!) & copy & paste the changelog to it.  
     :pencil2: Check if anything from the link collection at the bottom of the changelog needs to be copied in!
     - Remove square brackets from all ticket links or make them proper full links (as GH markdown parser doesn't parse these correctly).
     - Change all contributor links to full inline links (as GH markdown parser on the Releases page doesn't parse these correctly).
@@ -62,13 +63,16 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 ### Publicize
 
 - [ ] [Major releases only] Publish post about the release on Make WordPress.
-- [ ] Tweet, toot, etc about the release.
-- [ ] Post about it in Slack.
-- [ ] Submit for ["Month in WordPress"][month-in-wp].
+- [ ] Tweet, toot, etc about the release from your personal account (there is no official WPCS account).
+- [ ] Post about it in #core channel on the WordPress.org Slack.  
+    :pencil2: No need to post in the #core-coding-standard channel as that gets an automated release notification anyway.
+    - [ ] Optionally post in #plugin-review if a sniff was added in a release which was requested by the plugin review team.
+    - [ ] Optionally post in #core-docs if significant updates were made to the documentation ruleset.
+- [ ] Create a Marketing team ["amplify request"][amplify-request].
 - [ ] Submit for the ["Monthy Dev Roundup"][dev-roundup].
 
 [phpcs-releases]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/releases
 [phpcsutils-releases]: https://github.com/PHPCSStandards/PHPCSUtils/releases
 [phpcsextra-releases]: https://github.com/PHPCSStandards/PHPCSExtra/releases
-[month-in-wp]:         https://make.wordpress.org/community/month-in-wordpress-submissions/
+[amplify-request]:     https://github.com/WordPress/Marketing-Team/issues/new?template=2-request-for-amplification-template.yml
 [dev-roundup]:         https://github.com/WordPress/developer-blog-content/issues?q=is%3Aissue+label%3A%22Monthly+Roundup%22

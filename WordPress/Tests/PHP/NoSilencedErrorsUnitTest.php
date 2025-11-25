@@ -61,6 +61,10 @@ final class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
 			71 => 1,
 			78 => 1,
 			85 => 1,
+			91 => 1,
+			92 => 1,
+			93 => 1,
+			94 => 1,
 		);
 	}
 }

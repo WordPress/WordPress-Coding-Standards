@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PHPCS_DEV: 'dev-master'
+  PHPCS_DEV: '3.x-dev'
   UTILS_DEV: 'dev-develop'
   EXTRA_DEV: 'dev-develop'
 
@@ -26,49 +26,40 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.5' ]
+        php: [ '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.6' ]
         dependencies: [ 'lowest', 'stable' ]
         extensions: [ '' ]
         coverage: [false]
 
         include:
-          - php: '7.2'
-            dependencies: 'stable'
-            extensions: ':mbstring' # = Disable Mbstring.
-            coverage: true # Make sure coverage is recorded for this too.
-
           # Run code coverage builds against high/low PHP and high/low PHPCS.
-          - php: '5.4'
+          - php: '7.2'
             dependencies: 'stable'
             extensions: ''
             coverage: true
-          - php: '5.4'
+          - php: '7.2'
             dependencies: 'lowest'
             extensions: ''
             coverage: true
-          - php: '8.4'
+          - php: '8.5'
             dependencies: 'stable'
             extensions: ''
             coverage: true
-          - php: '8.4'
+          - php: '8.5'
             dependencies: 'lowest'
             extensions: ''
             coverage: true
 
           # Test against dev versions of all dependencies with select PHP versions for early detection of issues.
-          - php: '5.4'
+          - php: '7.2'
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '7.0'
+          - php: '8.1'
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '7.4'
-            dependencies: 'dev'
-            extensions: ''
-            coverage: false
-          - php: '8.4'
+          - php: '8.5'
             dependencies: 'dev'
             extensions: ''
             coverage: false
@@ -79,11 +70,13 @@ jobs:
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
 
-    continue-on-error: ${{ matrix.php == '8.5' }}
+    continue-on-error: ${{ matrix.php == '8.6' }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
 
       # With stable PHPCS dependencies, allow for PHP deprecation notices.
       # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
@@ -91,13 +84,13 @@ jobs:
         id: set_ini
         run: |
           if [ "${{ matrix.dependencies }}" != "dev" ]; then
-            echo 'PHP_INI=error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On' >> "$GITHUB_OUTPUT"
+            echo 'PHP_INI=error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On, display_startup_errors=On' >> "$GITHUB_OUTPUT"
           else
-            echo 'PHP_INI=error_reporting=-1, display_errors=On' >> "$GITHUB_OUTPUT"
+            echo 'PHP_INI=error_reporting=-1, display_errors=On, display_startup_errors=On' >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
         with:
           php-version: ${{ matrix.php }}
           ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
@@ -117,7 +110,7 @@ jobs:
         run: composer config --unset lock
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520 # 3.1.1
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -135,16 +128,16 @@ jobs:
         run: composer lint -- --checkstyle | cs2pr
 
       - name: Run the unit tests without code coverage
-        if: ${{ matrix.coverage == false }}
+        if: ${{ matrix.coverage == false || github.event.repository.fork == true }}
         run: composer run-tests
 
       - name: Run the unit tests with code coverage
-        if: ${{ matrix.coverage == true  }}
+        if: ${{ matrix.coverage == true && github.event.repository.fork == false }}
         run: composer coverage
 
       - name: Send coverage report to Codecov
-        if: ${{ success() && matrix.coverage == true }}
-        uses: codecov/codecov-action@v5
+        if: ${{ success() && matrix.coverage == true && github.event.repository.fork == false }}
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true

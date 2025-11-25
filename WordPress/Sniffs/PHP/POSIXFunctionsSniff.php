@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Sniffs\PHP;
 
+use PHP_CodeSniffer\Sniffs\DeprecatedSniff;
 use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
 
 /**
@@ -22,8 +23,37 @@ use WordPressCS\WordPress\AbstractFunctionRestrictionsSniff;
  *               `WordPress.VIP.RestrictedFunctions` and the
  *               `WordPress.PHP.DiscouragedPHPFunctions` sniffs.
  * @since 0.13.0 Class name changed: this class is now namespaced.
+ *
+ * @deprecated 3.3.0 Use the PHPCompatibility standard instead.
  */
-final class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff {
+final class POSIXFunctionsSniff extends AbstractFunctionRestrictionsSniff implements DeprecatedSniff {
+
+	/**
+	 * Provide the version number in which the sniff was deprecated.
+	 *
+	 * @return string
+	 */
+	public function getDeprecationVersion() {
+		return 'WordPressCS v3.3.0';
+	}
+
+	/**
+	 * Provide the version number in which the sniff will be removed.
+	 *
+	 * @return string
+	 */
+	public function getRemovalVersion() {
+		return 'WordPressCS v4.0.0';
+	}
+
+	/**
+	 * Provide a custom message to display with the deprecation.
+	 *
+	 * @return string
+	 */
+	public function getDeprecationMessage() {
+		return 'To scan for PHP cross-version compatibility issues, use the PHPCompatibility standard instead.';
+	}
 
 	/**
 	 * Groups of functions to restrict.

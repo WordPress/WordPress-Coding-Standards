@@ -37,6 +37,7 @@ final class DiscouragedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
+			8  => 1,
 			9  => 1,
 			10 => 1,
 			12 => 1,

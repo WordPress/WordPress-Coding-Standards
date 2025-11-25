@@ -21,13 +21,13 @@ function bar() {
 
 function baz() {
 	global $wpdb;
-	$baz = wp_cache_get( 'baz' );
+	$baz = WP_CACHE_GET( 'baz' );
 	if ( false !== $baz ) {
 		$wpdb->query( 'ALTER TABLE TO ADD SOME FIELDS' ); // Warning x 2.
 		$wpdb->query( $wpdb->prepare( 'CREATE TABLE ' ) ); // Warning x 2.
 		$wpdb->query( 'SELECT QUERY' ); // Warning.
 		$baz = $wpdb->get_results( $wpdb->prepare( 'SELECT X FROM Y ' ) ); // Warning.
-		wp_cache_set( 'baz', $baz );
+		WP_cache_SET( 'baz', $baz );
 	}
 }
 
@@ -66,7 +66,7 @@ function cache_delete_only() {
 	$wpdb->get_row( 'SELECT X FROM Y' ); // Warning x 2.
 	$wpdb->get_col( 'SELECT X FROM Y' ); // Warning x 2.
 
-	wp_cache_delete( 'key', 'group' );
+	WP_CACHE_DELETE( 'key', 'group' );
 }
 
 // It is OK to use the wp_cache_add() function instead of wp_cache_set().
@@ -93,7 +93,7 @@ function cache_add_instead_of_set() {
 $b = function () {
 	global $wpdb;
 
-	if ( ! ( $listofthings = wp_cache_get( $foo ) ) ) {
+	if ( ! ( $listofthings = \Wp_Cache_Get( $foo ) ) ) {
 		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning.
 		wp_cache_set( 'foo', $listofthings );
 	}
@@ -333,6 +333,176 @@ function method_names_are_caseinsensitive() {
 	$autoload = $wpdb->Get_Var( $wpdb->Prepare( "SELECT autoload FROM $wpdb->options WHERE option_name = %s", $option_name ) ); // Warning x 2.
 }
 
-// Live coding/parse error test.
-// This must be the last test in the file.
-$wpdb->get_col( '
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[] MY_cacheget
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[] my_CACHESET
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[] MY_cachedel
+function cache_custom_mixed_case_A() {
+	global $wpdb;
+	$quux = my_cacheget( 'quux' );
+	if ( false !== $quux ) {
+		$wpdb->get_results( 'SELECT X FROM Y' ); // Warning direct DB call.
+		my_cacheset( 'key', 'group' );
+	}
+}
+
+function cache_custom_mixed_case_B() {
+	global $wpdb;
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	my_cachedel( 'key', 'group' );
+}
+
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheGetFunctions[]
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheSetFunctions[]
+// phpcs:set WordPress.DB.DirectDatabaseQuery customCacheDeleteFunctions[]
+
+// Protect against false negatives where the cache function names are used as the content
+// of a T_STRING token that is not a function call.
+function notCacheFunctionCalls() {
+    global $wpdb;
+
+    $bar->wp_cache_get = 'something';
+    $listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning x 2.
+    $foo = wp_cache_set;
+
+    return $listofthings;
+}
+
+// The sniff deliberately does not distinguish between calls to cache functions and calls to methods with the same name as the functions,
+// as those method calls are likely custom cache functions.
+function methodNamesSameAsCacheFunctions() {
+	global $wpdb, $bar;
+
+	if ( ! ( $listofthings = $bar->wp_cache_get( 'foo' ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		$bar->wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+/*
+ * Safeguard correct handling of namespaced function calls. The sniff deliberately does not distinguish between calls to
+ * WP global cache functions and calls to namespaced functions that mirror the name of the WP global cache functions as
+ * those are likely custom cache functions. This is consistent with the behavior for method calls (see the
+ * methodNamesSameAsCacheFunctions() test above).
+ */
+function callToFullyQualifiedCacheGetSet() {
+    global $wpdb;
+
+    if ( ! ( $listofthings = \wp_cache_get( $foo ) ) ) {
+        $listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+        \wp_cache_set( 'foo', $listofthings );
+    }
+
+    return $listofthings;
+}
+
+function callToQualifiedNamespacedCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = MyNamespace\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		MyNamespace\wp_cache_add( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToFullyQualifiedNamespacedCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = \MyNamespace\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		\MyNamespace\wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToRelativeNamespacedCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = namespace\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		namespace\wp_cache_add( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToMultiLevelNamespaceRelativeCacheGetSet() {
+	global $wpdb;
+
+	if ( ! ( $listofthings = namespace\Sub\wp_cache_get( $foo ) ) ) {
+		$listofthings = $wpdb->get_col( 'SELECT something FROM somewhere WHERE someotherthing = 1' ); // Warning direct DB call.
+		namespace\Sub\wp_cache_set( 'foo', $listofthings );
+	}
+
+	return $listofthings;
+}
+
+function callToFullyQualifiedCacheDelete() {
+    global $wpdb;
+
+    $wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+    \wp_cache_delete( 'key', 'group' );
+}
+
+function callToQualifiedNamespacedCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	MyNamespace\clean_attachment_cache( 1 );
+}
+
+function callToFullyQualifiedNamespacedCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	\MyNamespace\CLEAN_POST_CACHE( 1 );
+}
+
+function callToRelativeNamespacedCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	namespace\clean_user_cache( 1 );
+}
+
+function callToMultiLevelNamespaceRelativeCacheDelete() {
+	global $wpdb;
+
+	$wpdb->query( 'SELECT X FROM Y' ); // Warning direct DB call.
+	namespace\Sub\clean_blog_cache( 1 );
+}
+
+// Handle more caching functions.
+function cache_multiple() {
+	global $wpdb;
+	$data = wp_cache_get_multiple( ['keyA', 'keyB'] );
+	if ( false !== $data ) {
+		$data = $wpdb->get_results( $query ); // Warning direct DB call.
+		\wp_cache_add_multiple( $data );
+	}
+}
+
+function cache_multiple_salted() {
+	global $wpdb;
+	$data = \wp_cache_get_multiple_salted( ...$params );
+	if ( false !== $data ) {
+		$data = $wpdb->get_col( $query ); // Warning direct DB call.
+		wp_cache_set_multiple_salted( ...$params );
+	}
+}
+
+function cache_delete_multiple() {
+	global $wpdb;
+	$wpdb->replace( $query ); // Warning direct DB call.
+	WP_cache_delete_multiple( ['keyA', 'keyB'] );
+}
+
+function cache_flush_group() {
+	global $wpdb;
+	$wpdb->delete( $query ); // Warning direct DB call.
+	wp_cache_flush_group( 'group' );
+}

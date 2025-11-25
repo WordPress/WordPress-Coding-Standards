@@ -63,7 +63,7 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Source: {@link https://developer.wordpress.org/reference/functions/register_post_type/#reserved-post-types}
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 2.2.0
 	 *
@@ -172,8 +172,8 @@ final class ValidPostTypeSlugSniff extends AbstractFunctionParameterSniff {
 		);
 
 		// Warn for dynamic parts in the slug parameter.
-		if ( 'T_DOUBLE_QUOTED_STRING' === $this->tokens[ $string_pos ]['type']
-			|| ( 'T_HEREDOC' === $this->tokens[ $string_pos ]['type']
+		if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $string_pos ]['code']
+			|| ( \T_HEREDOC === $this->tokens[ $string_pos ]['code']
 			&& strpos( $this->tokens[ $string_pos ]['content'], '$' ) !== false )
 		) {
 			$this->phpcsFile->addWarning(

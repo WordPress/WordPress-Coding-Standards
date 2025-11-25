@@ -200,38 +200,51 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 				return parent::process_token( $stackPtr );
 
 			case \T_EXIT:
-				$next_non_empty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $stackPtr + 1 ), null, true );
-				if ( false === $next_non_empty
-					|| \T_OPEN_PARENTHESIS !== $this->tokens[ $next_non_empty ]['code']
-					|| isset( $this->tokens[ $next_non_empty ]['parenthesis_closer'] ) === false
-				) {
-					// Live coding/parse error or an exit/die which doesn't pass a status code. Ignore.
+				$params = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
+				if ( empty( $params ) ) {
+					// Live coding/parse error or an exit/die which doesn't pass a status. Ignore.
 					return;
 				}
 
-				// $end is not examined, so make sure the parentheses are balanced.
-				$start = $next_non_empty;
-				$end   = ( $this->tokens[ $next_non_empty ]['parenthesis_closer'] + 1 );
-				break;
+				// There should only be one parameter ($status), but just to be on the safe side.
+				foreach ( $params as $param ) {
+					$this->check_code_is_escaped( $param['start'], ( $param['end'] + 1 ) );
+				}
+
+				// Skip to the end of the last found parameter.
+				return ( $param['end'] + 1 );
 
 			case \T_THROW:
 				// Find the open parentheses, while stepping over the exception creation tokens.
-				$ignore  = Tokens::$emptyTokens;
-				$ignore += Collections::namespacedNameTokens();
-				$ignore += Collections::functionCallTokens();
-				$ignore += Collections::objectOperators();
+				$ignore                = Tokens::$emptyTokens;
+				$ignore               += Collections::namespacedNameTokens();
+				$ignore               += Collections::functionCallTokens();
+				$ignore               += Collections::objectOperators();
+				$ignore[ \T_READONLY ] = \T_READONLY;
 
-				$next_relevant = $this->phpcsFile->findNext( $ignore, ( $stackPtr + 1 ), null, true );
-				if ( false === $next_relevant ) {
-					return;
-				}
-
-				if ( \T_NEW === $this->tokens[ $next_relevant ]['code'] ) {
+				$next_relevant = $stackPtr;
+				do {
 					$next_relevant = $this->phpcsFile->findNext( $ignore, ( $next_relevant + 1 ), null, true );
 					if ( false === $next_relevant ) {
 						return;
 					}
-				}
+
+					if ( \T_NEW === $this->tokens[ $next_relevant ]['code'] ) {
+						continue;
+					}
+
+					// Skip over attribute declarations when searching for the open parenthesis.
+					if ( \T_ATTRIBUTE === $this->tokens[ $next_relevant ]['code'] ) {
+						if ( isset( $this->tokens[ $next_relevant ]['attribute_closer'] ) === false ) {
+							return;
+						}
+
+						$next_relevant = $this->tokens[ $next_relevant ]['attribute_closer'];
+						continue;
+					}
+
+					break;
+				} while ( $next_relevant < ( $this->phpcsFile->numTokens - 1 ) );
 
 				if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $next_relevant ]['code']
 					|| isset( $this->tokens[ $next_relevant ]['parenthesis_closer'] ) === false
@@ -602,8 +615,13 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			if ( \T_STRING === $this->tokens[ $i ]['code']
 				|| \T_VARIABLE === $this->tokens[ $i ]['code']
 				|| isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $i ]['code'] ] )
+				|| \T_NAMESPACE === $this->tokens[ $i ]['code']
 			) {
-				$double_colon = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				$skip_tokens                    = Tokens::$emptyTokens;
+				$skip_tokens[ \T_STRING ]       = \T_STRING;
+				$skip_tokens[ \T_NS_SEPARATOR ] = \T_NS_SEPARATOR;
+
+				$double_colon = $this->phpcsFile->findNext( $skip_tokens, ( $i + 1 ), $end, true );
 				if ( false !== $double_colon
 					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
 				) {

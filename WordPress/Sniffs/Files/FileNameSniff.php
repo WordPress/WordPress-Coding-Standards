@@ -10,8 +10,8 @@
 namespace WordPressCS\WordPress\Sniffs\Files;
 
 use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\FilePath;
 use PHPCSUtils\Utils\ObjectDeclarations;
-use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Helpers\IsUnitTestTrait;
 use WordPressCS\WordPress\Sniff;
 
@@ -151,8 +151,7 @@ final class FileNameSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function process_token( $stackPtr ) {
-		// Usage of `stripQuotes` is to ensure `stdin_path` passed by IDEs does not include quotes.
-		$file = TextStrings::stripQuotes( $this->phpcsFile->getFileName() );
+		$file = FilePath::getName( $this->phpcsFile );
 		if ( 'STDIN' === $file ) {
 			return $this->phpcsFile->numTokens;
 		}
@@ -197,7 +196,7 @@ final class FileNameSniff extends Sniff {
 			$this->check_filename_has_class_prefix( $class_ptr, $file_name );
 		}
 
-		if ( false !== strpos( $file, \DIRECTORY_SEPARATOR . 'wp-includes' . \DIRECTORY_SEPARATOR )
+		if ( false !== strpos( $file, '/wp-includes/' )
 			&& false === $class_ptr
 		) {
 			$this->check_filename_for_template_suffix( $stackPtr, $file_name );

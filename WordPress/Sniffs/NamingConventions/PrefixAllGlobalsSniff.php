@@ -149,7 +149,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
@@ -203,7 +203,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated functions should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0.
 	 *
@@ -342,7 +342,11 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'wp_cache_flush_group'                           => true,
 		'wp_cache_flush_runtime'                         => true,
 		'wp_cache_get_multiple'                          => true,
+		'wp_cache_get_multiple_salted'                   => true,
+		'wp_cache_get_salted'                            => true,
 		'wp_cache_set_multiple'                          => true,
+		'wp_cache_set_multiple_salted'                   => true,
+		'wp_cache_set_salted'                            => true,
 		'wp_cache_supports'                              => true,
 		'wp_check_password'                              => true,
 		'wp_clear_auth_cookie'                           => true,
@@ -392,7 +396,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated classes should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 3.0.0.
 	 *
@@ -407,6 +411,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'TwentyTwenty_Walker_Comment'      => true,
 		'TwentyTwenty_Walker_Page'         => true,
 		'Twenty_Twenty_One_Customize'      => true,
+		'WP_Block_Cloner'                  => true,
 		'WP_User_Search'                   => true,
 		'wp_atom_server'                   => true, // Deprecated.
 	);

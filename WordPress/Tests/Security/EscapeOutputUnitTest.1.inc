@@ -538,7 +538,7 @@ _deprecated_function( __METHOD__, 'x.x.x', ClassName::class ); // OK.
 die( self::CLASS . ' has been abandoned' ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', parent::Class ); // OK.
 _deprecated_function( __METHOD__, 'x.x.x', static::class ); // OK.
-echo 'Do not use ' . $object::class ); // OK.
+echo 'Do not use ' . $object::class; // OK.
 
 /*
  * Examine the parameters passed for exception creation via throw.
@@ -655,3 +655,35 @@ echo '<input type="search" value="' . get_search_query( false ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( 0 ) . '">'; // Bad.
 echo '<input type="search" value="' . get_search_query( escape: false ) . '">'; // OK, well not really, typo in param name, but that's not our concern.
 echo '<input type="search" value="' . get_search_query( escaped: false ) . '">'; // Bad.
+
+// PHP 8.4: exit/die using named parameters.
+exit( status: esc_html( $foo ) ); // Ok.
+die( status: esc_html( $foo ) ); // Ok.
+
+exit( status: $foo ); // Bad.
+die( status: $foo ); // Bad.
+
+/*
+ * Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/2552
+ * Ensure that readonly anonymous classes and anonymous classes with attributes are handled
+ * correctly when part of a throw statement.
+ */
+throw new #[MyAttribute] readonly class( esc_html( $message ) ) extends Exception {}; // Good.
+throw new readonly class( $unescaped ) {}; // Bad.
+throw new #[MyAttribute] class( $unescaped ) extends Exception {}; // Bad.
+throw new
+#[Attribute1]
+/* some comment */
+#[Attribute2('text', 10)]
+readonly class( $unescaped ) {}; // Bad.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls when *::class is used.
+ *
+ * Note: using ::class on fully qualified or namespace relative class names doesn't provide
+ * any real value in practice.
+ */
+_deprecated_function( __METHOD__, 'x.x.x', \ClassName::class ); // OK.
+die( \MyNamespace\ClassName::class . ' has been abandoned' ); // OK.
+echo 'Do not use ' . MyNamespace\ClassName::class; // OK.
+_deprecated_function( __METHOD__, 'x.x.x', namespace\ClassName::class ); // OK.

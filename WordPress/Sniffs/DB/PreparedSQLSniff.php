@@ -207,10 +207,11 @@ final class PreparedSQLSniff extends Sniff {
 			}
 
 			if ( \T_STRING === $this->tokens[ $this->i ]['code'] ) {
+				$content_lowercase = strtolower( $this->tokens[ $this->i ]['content'] );
 
 				if (
-					isset( $this->SQLEscapingFunctions[ $this->tokens[ $this->i ]['content'] ] )
-					|| isset( $this->SQLAutoEscapedFunctions[ $this->tokens[ $this->i ]['content'] ] )
+					isset( $this->SQLEscapingFunctions[ $content_lowercase ] )
+					|| isset( $this->SQLAutoEscapedFunctions[ $content_lowercase ] )
 				) {
 
 					// Find the opening parenthesis.

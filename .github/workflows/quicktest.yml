@@ -23,22 +23,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '5.4', 'latest' ]
+        php: [ '7.2', 'latest' ]
         dependencies: [ 'lowest', 'stable' ]
 
     name: QTest - PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
         with:
           php-version: ${{ matrix.php }}
           # With stable PHPCS dependencies, allow for PHP deprecation notices.
           # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
-          ini-values: error_reporting=-1, display_errors=On
+          ini-values: error_reporting=-1, display_errors=On, display_startup_errors=On
           coverage:  ${{ github.ref_name == 'develop' && 'xdebug' || 'none' }}
 
       - name: Enable creation of `composer.lock` file
@@ -46,7 +48,7 @@ jobs:
         run: composer config --unset lock
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520 # 3.1.1
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -64,16 +66,16 @@ jobs:
         run: composer lint
 
       - name: Run the unit tests without code coverage
-        if: ${{ github.repository_owner != 'WordPress' || github.ref_name != 'develop' }}
+        if: ${{ github.event.repository.fork == true || github.ref_name != 'develop' }}
         run: composer run-tests
 
       - name: Run the unit tests with code coverage
-        if: ${{ github.repository_owner == 'WordPress' && github.ref_name == 'develop' }}
+        if: ${{ github.event.repository.fork == false && github.ref_name == 'develop' }}
         run: composer coverage
 
       - name: Send coverage report to Codecov
-        if: ${{ success() && github.repository_owner == 'WordPress' && github.ref_name == 'develop' }}
-        uses: codecov/codecov-action@v5
+        if: ${{ success() && github.event.repository.fork == false && github.ref_name == 'develop' }}
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true

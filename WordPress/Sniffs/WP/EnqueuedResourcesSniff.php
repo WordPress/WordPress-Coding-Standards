@@ -9,16 +9,14 @@
 
 namespace WordPressCS\WordPress\Sniffs\WP;
 
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Exceptions\ValueError;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\Sniff;
 
 /**
  * Makes sure scripts and styles are enqueued and not explicitly echo'd.
- *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#inline-resources
  *
  * @since 0.3.0
  * @since 0.12.0 This class now extends the WordPressCS native `Sniff` class.
@@ -54,7 +52,7 @@ final class EnqueuedResourcesSniff extends Sniff {
 			try {
 				$end_ptr = TextStrings::getEndOfCompleteTextString( $this->phpcsFile, $stackPtr );
 				$content = TextStrings::getCompleteTextString( $this->phpcsFile, $stackPtr );
-			} catch ( RuntimeException $e ) {
+			} catch ( ValueError $e ) {
 				// Parse error/live coding.
 				return;
 			}

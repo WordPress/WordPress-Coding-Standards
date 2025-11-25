@@ -16,7 +16,7 @@ use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 /**
  * Flag returning high or infinite posts_per_page.
  *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#no-limit-queries
+ * @link https://docs.wpvip.com/php_codesniffer/warnings/#h-no-limit-queries
  *
  * @since 0.3.0
  * @since 0.13.0 Class name changed: this class is now namespaced.

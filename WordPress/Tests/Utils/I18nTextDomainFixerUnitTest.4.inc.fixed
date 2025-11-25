@@ -77,11 +77,11 @@ is_textdomain_loaded( 'some-other-plugin' );
  * Incorrect text domain, should be replaced.
  */
 load_textdomain( 'something-else', '/path/to/file.mo' );
-load_plugin_textdomain( 'something-else', false, '/languages/' );
+\load_plugin_textdomain( 'something-else', false, '/languages/' );
 load_muplugin_textdomain( 'something-else', '/languages/' );
 load_theme_textdomain( 'something-else', '/path/to/languages/' );
 load_child_theme_textdomain( 'something-else', '/path/to/languages/' );
-unload_textdomain( 'something-else' );
+unload_TEXTDOMAIN( 'something-else' );
 
 __( $text, 'something-else' );
 _e( $text, 'something-else' );
@@ -286,6 +286,14 @@ __ (
     $args,
     'something-else'
 );
+
+/*
+ * Safeguard correct handling of namespaced function calls (partially qualified is already tested above).
+ */
+\MyNamespace\load_textdomain( 'text-domain', '/path/to/file.mo' );
+namespace\__( $text, 'text-domain' );
+\ESC_HTML__( $text, 'something-else' );
+\get_translations_for_domain( 'something-else' );
 
 // phpcs:set WordPress.Utils.I18nTextDomainFixer old_text_domain[]
 // phpcs:set WordPress.Utils.I18nTextDomainFixer new_text_domain false

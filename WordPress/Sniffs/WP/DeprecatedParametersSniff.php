@@ -50,7 +50,7 @@ final class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * The functions are ordered alphabetically.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 0.12.0
 	 *
@@ -84,6 +84,13 @@ final class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 				'name'    => 'deprecated',
 				'value'   => null,
 				'version' => '5.9.0',
+			),
+		),
+		'_wp_can_use_pcre_u' => array(
+			1 => array(
+				'name'    => 'set',
+				'value'   => null,
+				'version' => '6.9.0',
 			),
 		),
 		'_wp_post_revision_fields' => array(
