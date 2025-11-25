@@ -32,7 +32,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] `$wp_time_constants` in `WordPress.WP.CronInterval` - PR #xxx
     - [ ] `$known_test_classes` in `IsUnitTestTrait` - PR #xxx
     - [ ] ...etc...
-- [ ] Verify there there has been no vandalism on the wiki (and if so, remove/fix it).
+- [ ] Verify there has been no vandalism on the wiki (and if so, remove/fix it).
 
 ### Release prep
 
@@ -69,7 +69,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] Optionally post in #plugin-review if a sniff was added in a release which was requested by the plugin review team.
     - [ ] Optionally post in #core-docs if significant updates were made to the documentation ruleset.
 - [ ] Create a Marketing team ["amplify request"][amplify-request].
-- [ ] Submit for the ["Monthy Dev Roundup"][dev-roundup].
+- [ ] Submit for the ["Monthly Dev Roundup"][dev-roundup].
 
 [phpcs-releases]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/releases
 [phpcsutils-releases]: https://github.com/PHPCSStandards/PHPCSUtils/releases
