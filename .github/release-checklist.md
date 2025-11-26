@@ -15,6 +15,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] PHPCSUtils: check if there have been [releases][phpcsutils-releases] since the last WordPressCS release and update WordPressCS code to take advantage of any new utilities - PR #xxx
 - [ ] PHPCSExtra: check if there have been [releases][phpcsextra-releases] since the last WordPressCS release and check through the changelog to see if there is anything WordPressCS could take advantage of - PR #xxx
 - [ ] Check if the minimum WP version property needs updating in `MinimumWPVersionTrait::$default_minimum_wp_version` and if so, action it - PR #xxx
+- [ ] Check if the `minimum_wp_version` and `testVersion` properties in `phpcs.xml.dist.sample` need updating and if so, action it - PR #xxx
 - [ ] Check if any of the list based sniffs need updating and if so, action it.
     :pencil2: Make sure the "last updated" annotation in the docblocks for these lists has also been updated!
     List based sniffs:
