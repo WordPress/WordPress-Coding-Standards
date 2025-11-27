@@ -89,6 +89,17 @@ final class AlternativeFunctionsUnitTest extends AbstractSniffUnitTest {
 			131 => 1,
 			142 => 1,
 			146 => 1,
+			154 => 1,
+			164 => 1,
+			165 => 1,
+			166 => 1,
+			167 => 1,
+			168 => 1,
+			169 => 1,
+			179 => 1,
+			180 => 1,
+			181 => 1,
+			182 => 1,
 		);
 	}
 }
