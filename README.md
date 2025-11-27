@@ -127,6 +127,8 @@ You can use the following as standard names when invoking `phpcs` to select snif
   - `WordPress-Extra` - extended ruleset with recommended best practices, not sufficiently covered in the WordPress core coding standards
     - includes `WordPress-Core`
 
+__Note:__ The `WordPress` standard includes some additional checks that are not included in any of the subsets, so running `WordPress-Core` + `WordPress-Docs` + `WordPress-Extra` subsets on their own will miss some checks that would be performed by running `WordPress`.
+
 ### Using a custom ruleset
 
 If you need to further customize the selection of sniffs for your project - you can create a custom ruleset file.
