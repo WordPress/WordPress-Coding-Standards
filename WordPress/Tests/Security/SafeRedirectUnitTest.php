@@ -36,8 +36,10 @@ final class SafeRedirectUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			3 => 1,
-			9 => 1,
+			3  => 1,
+			4  => 1,
+			10 => 1,
+			11 => 1,
 		);
 	}
 }
