@@ -31,7 +31,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # 2.36.0
         with:
           php-version: 'latest'
           coverage: none
@@ -162,7 +162,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # 2.36.0
         with:
           php-version: ${{ matrix.php }}
           # Allow for PHP deprecation notices.
@@ -245,7 +245,7 @@ jobs:
           persist-credentials: false
 
       - name: Install PHP
-        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # 2.36.0
         with:
           php-version: 'latest'
           coverage: none
@@ -275,4 +275,4 @@ jobs:
           persist-credentials: false
 
       - name: "Search for misspellings"
-        uses: "crate-ci/typos@626c4bedb751ce0b7f03262ca97ddda9a076ae1c" # v1.39.2
+        uses: "crate-ci/typos@2d0ce569feab1f8752f1dde43cc2f2aa53236e06" # v1.40.0
