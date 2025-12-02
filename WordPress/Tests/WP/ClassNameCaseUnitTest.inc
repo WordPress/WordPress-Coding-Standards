@@ -65,3 +65,21 @@ class NotYetDetected {
 	public function paramTypeDeclaration( wp_role $role ) {}
 	public function returnTypeDeclaration() : WP_TERM {}
 }
+
+/*
+ * Safeguard correct handling of namespaced class references (the namespace types not handled below are already handled
+ * in other tests above).
+ */
+$obj = new MyNamespace\atomEntry();
+$obj = new \MyNamespace\core_upgrader();
+$obj = new namespace\Sub\file_upload_upgrader();
+$obj = new namespace\pop3();
+class MyClass2 extends MyNamespace\twentytwenty_walker_page {}
+class MyClass3 extends \MyNamespace\TWENTY_ELEVEN_EPHEMERA_WIDGET {}
+class MyClass4 extends namespace\Sub\twenty_Twenty_One_SVG_icons {}
+class MyClass5 extends namespace\twentynineteen_SVG_icons {}
+\avifinfo\Box::prepare_query();
+MyNamespace\Avifinfo\CHAN_PROP::prepare_query();
+\MyNamespace\Avifinfo\features::prepare_query();
+namespace\Sub\AVIFINFO\parser::prepare_query();
+namespace\AVIFINFO\TILE::prepare_query();
