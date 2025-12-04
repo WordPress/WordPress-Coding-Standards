@@ -55,6 +55,6 @@ final class FormattingFunctionsHelper {
 	 * @return bool
 	 */
 	public static function is_formatting_function( $functionName ) {
-		return isset( self::$formattingFunctions[ strtolower( $functionName ) ] );
+		return isset( self::$formattingFunctions[ strtolower( ltrim( $functionName, '\\' ) ) ] );
 	}
 }
