@@ -75,6 +75,10 @@ final class IsEscapingFunctionUnitTest extends TestCase {
 				'functionName'   => 'eSc_AtTr',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name' => array(
+				'functionName'   => '\esc_url',
+				'expectedResult' => true,
+			),
 			'not_an_escaping_function' => array(
 				'functionName'   => 'printf',
 				'expectedResult' => false,

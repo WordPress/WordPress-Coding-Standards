@@ -75,6 +75,10 @@ final class IsAutoEscapedFunctionUnitTest extends TestCase {
 				'functionName'   => 'bOdY_ClAsS',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name' => array(
+				'functionName'   => '\allowed_tags',
+				'expectedResult' => true,
+			),
 			'not_an_auto_escaped_function' => array(
 				'functionName'   => 'esc_html',
 				'expectedResult' => false,
