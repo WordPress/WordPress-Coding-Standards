@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\SanitizationHelperTrait;
 
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\TestUtils\UtilityMethodTestCase;
 use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 
@@ -78,6 +79,9 @@ final class IsSanitizedUnitTest extends UtilityMethodTestCase {
 	 * @return array<string, array<string, bool|int|string>>
 	 */
 	public static function dataIsSanitized() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		return array(
 			// Cases where false should be returned.
 			'not_within_function_call' => array(
@@ -168,21 +172,23 @@ final class IsSanitizedUnitTest extends UtilityMethodTestCase {
 				'testMarker'     => '/* testFullyQualifiedGlobalUnslashSanitized */',
 				'expectedResult' => true,
 			),
+
+			// Namespaced inner unslash calls: true in PHPCS 3.x, false in 4.x. See the test case file and #2665.
 			'partially_qualified_unslash_sanitized' => array(
 				'testMarker'     => '/* testPartiallyQualifiedUnslashSanitized */',
-				'expectedResult' => true,
+				'expectedResult' => ( true === $is_phpcs_4 ) ? false : true,
 			),
 			'fully_qualified_namespaced_unslash_sanitized' => array(
 				'testMarker'     => '/* testFullyQualifiedNamespacedUnslashSanitized */',
-				'expectedResult' => true,
+				'expectedResult' => ( true === $is_phpcs_4 ) ? false : true,
 			),
 			'namespace_relative_unslash_sanitized' => array(
 				'testMarker'     => '/* testNamespaceRelativeUnslashSanitized */',
-				'expectedResult' => true,
+				'expectedResult' => ( true === $is_phpcs_4 ) ? false : true,
 			),
 			'namespace_relative_sub_unslash_sanitized' => array(
 				'testMarker'     => '/* testNamespaceRelativeSubUnslashSanitized */',
-				'expectedResult' => true,
+				'expectedResult' => ( true === $is_phpcs_4 ) ? false : true,
 			),
 		);
 	}

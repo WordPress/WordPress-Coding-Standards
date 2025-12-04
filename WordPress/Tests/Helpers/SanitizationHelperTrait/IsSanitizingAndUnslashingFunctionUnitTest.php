@@ -73,6 +73,10 @@ final class IsSanitizingAndUnslashingFunctionUnitTest extends TestCase {
 				'functionName'   => 'iNtVaL',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name' => array(
+				'functionName'   => '\boolval',
+				'expectedResult' => true,
+			),
 			'not_a_sanitizing_and_unslashing_function' => array(
 				'functionName'   => 'sanitize_text_field',
 				'expectedResult' => false,

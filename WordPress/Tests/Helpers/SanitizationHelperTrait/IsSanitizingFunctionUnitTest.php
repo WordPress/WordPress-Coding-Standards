@@ -73,6 +73,10 @@ final class IsSanitizingFunctionUnitTest extends TestCase {
 				'functionName'   => 'SaNiTiZe_EmAiL',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name' => array(
+				'functionName'   => '\sanitize_text_field',
+				'expectedResult' => true,
+			),
 			'not_a_sanitizing_function' => array(
 				'functionName'   => 'printf',
 				'expectedResult' => false,
