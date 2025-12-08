@@ -1,6 +1,6 @@
 <div aria-hidden="true">
 
-[![Latest Stable Version](https://poser.pugx.org/wp-coding-standards/wpcs/v/stable)](https://packagist.org/packages/wp-coding-standards/wpcs)
+[![Latest Stable Version](https://img.shields.io/packagist/v/wp-coding-standards/wpcs?label=stable)](https://packagist.org/packages/wp-coding-standards/wpcs)
 [![Release Date of the Latest Version](https://img.shields.io/github/release-date/WordPress/WordPress-Coding-Standards.svg?maxAge=1800)](https://github.com/WordPress/WordPress-Coding-Standards/releases)
 :construction:
 [![Latest Unstable Version](https://img.shields.io/badge/unstable-dev--develop-e68718.svg?maxAge=2419200)](https://packagist.org/packages/wp-coding-standards/wpcs#dev-develop)
@@ -12,8 +12,9 @@
 [![Minimum PHP Version](https://img.shields.io/packagist/php-v/wp-coding-standards/wpcs.svg?maxAge=3600)](https://packagist.org/packages/wp-coding-standards/wpcs)
 [![Tested on PHP 7.2 to 8.5](https://img.shields.io/badge/tested%20on-PHP%207.2%20|%207.3%20|%207.4%20|%208.0%20|%208.1%20|%208.2%20|%208.3%20|%208.4%20|%208.5-green.svg?maxAge=2419200)](https://github.com/WordPress/WordPress-Coding-Standards/actions/workflows/unit-tests.yml)
 
-[![License: MIT](https://poser.pugx.org/wp-coding-standards/wpcs/license)](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/LICENSE)
-[![Total Downloads](https://poser.pugx.org/wp-coding-standards/wpcs/downloads)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
+[![License: MIT](https://img.shields.io/github/license/WordPress/WordPress-Coding-Standards)](https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dt/wp-coding-standards/wpcs
+)](https://packagist.org/packages/wp-coding-standards/wpcs/stats)
 
 </div>
 
