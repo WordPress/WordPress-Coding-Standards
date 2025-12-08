@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Option Autoload"
+    >
+    <standard>
+    <![CDATA[
+    When using `add_option()`, `update_option()`, `wp_set_options_autoload()`,
+    `wp_set_option_autoload()`, or `wp_set_option_autoload_values()`, it is recommended to
+    explicitly set the autoload parameter to ensure predictable behavior.
+    The autoload flag determines whether the option is automatically loaded on every page load,
+    which can impact site performance.
+    ]]>
+    </standard>
+    <standard>
+    <![CDATA[
+    Even though the autoload parameter is optional for `add_option()` and `update_option()`, it is
+    strongly recommended to always explicitly set it.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Explicitly setting the autoload parameter.">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    '',
+    <em>true</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Autoload parameter missing.">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    ''
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    The following values should be used when setting the autoload parameter depending on the function:
+
+    - For `add_option()` and `update_option()`: `true`, `false`, or `null`.
+    - For `wp_set_option_autoload_values()`, `wp_set_option_autoload()`, and
+    `wp_set_options_autoload()`: `true` or `false`.
+
+    Using 'yes' or 'no' is deprecated since WordPress 6.6.0. Plugin/theme code should also not use
+    values for the parameter which are for WP core internal use only.
+
+    Any other values, including `null` for functions other than `add_option()` and `update_option()`,
+    are invalid.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using a boolean value or `null`">
+        <![CDATA[
+wp_set_options_autoload(
+    array('option1', 'option2'),
+    <em>true</em>
+);
+
+update_option(
+    'my_option',
+    'value',
+    <em>null</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using deprecated, internal-only, or invalid values">
+        <![CDATA[
+add_option(
+    'my_option',
+    'value',
+    '',
+    <em>'yes'</em>
+);
+
+wp_set_option_autoload(
+    'my_option',
+    <em>null</em>
+);
+
+wp_set_option_autoload_values(
+    array(
+        'option1' => <em>'auto-on'</em>,
+        'option2' => <em>'off'</em>
+    )
+);
+
+wp_set_options_autoload(
+    array('option1', 'option2'),
+    <em>1</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
