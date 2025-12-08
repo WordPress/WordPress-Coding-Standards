@@ -55,6 +55,10 @@ final class IsUnslashingFunctionUnitTest extends TestCase {
 				'functionName'   => 'sTrIpSlAsHeS_DeEp',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name'       => array(
+				'functionName'   => '\stripslashes_from_strings_only',
+				'expectedResult' => true,
+			),
 			'not_an_unslashing_function' => array(
 				'functionName'   => 'stripslashes',
 				'expectedResult' => false,
