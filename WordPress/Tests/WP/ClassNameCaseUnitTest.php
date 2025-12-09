@@ -45,6 +45,13 @@ final class ClassNameCaseUnitTest extends AbstractSniffUnitTest {
 			47 => 1,
 			48 => 1,
 			49 => 1,
+			70 => 1,
+			79 => 1,
+			83 => 1,
+			84 => 1,
+			88 => 1,
+			89 => 1,
+			93 => 1,
 		);
 	}
 }
