@@ -20,7 +20,7 @@ current_time( // Error.
 );
 
 current_time( 'timestamp', $gmt ); // Warning.
-current_time( 'timestamp', false ); // Warning.
+\Current_Time( 'timestamp', false ); // Warning.
 current_time( 'U', 0 ); // Warning.
 current_time( 'U' ); // Warning.
 
@@ -30,3 +30,12 @@ current_time( gmt: true, type: 'mysql', ); // OK.
 current_time( type: 'Y-m-d' ); // OK.
 current_time( gmt: true, type: 'timestamp' ); // Error.
 current_time( gmt: 0, type : 'U' ); // Warning.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\current_time( 'timestamp', true ); // Error.
+MyNamespace\current_time( 'timestamp', true );
+\MyNamespace\current_time( 'timestamp', true );
+namespace\current_time( 'timestamp', true ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\current_time( 'timestamp', true );

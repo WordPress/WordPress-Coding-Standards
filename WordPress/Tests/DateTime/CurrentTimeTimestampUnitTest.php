@@ -31,6 +31,7 @@ final class CurrentTimeTimestampUnitTest extends AbstractSniffUnitTest {
 			11 => 1,
 			17 => 1,
 			31 => 1,
+			37 => 1,
 		);
 	}
 
