@@ -10,7 +10,6 @@
 namespace WordPressCS\WordPress\Tests\Security;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
-use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the EscapeOutput sniff.
@@ -38,8 +37,6 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList( $testFile = '' ) {
 		switch ( $testFile ) {
 			case 'EscapeOutputUnitTest.1.inc':
-				$phpcs_version = Helper::getVersion();
-
 				return array(
 					17  => 1,
 					19  => 1,
@@ -163,9 +160,7 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 					655 => 1,
 					657 => 1,
 					663 => 1,
-					// PHPCS 3.13.3 changed the tokenization of FQN exit/die it impacts directly how this test case
-					// behaves (see https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/1201).
-					664 => version_compare( $phpcs_version, '3.13.3', '>=' ) ? 1 : 0,
+					664 => 1,
 					672 => 1,
 					673 => 1,
 					678 => 1,
@@ -200,6 +195,16 @@ final class EscapeOutputUnitTest extends AbstractSniffUnitTest {
 					766 => 1,
 					767 => 1,
 					768 => 1,
+					778 => 1,
+					779 => 1,
+					780 => 1,
+					781 => 1,
+					787 => 1,
+					788 => 1,
+					800 => 2,
+					801 => 1,
+					802 => 2,
+					803 => 1,
 				);
 
 			case 'EscapeOutputUnitTest.6.inc':

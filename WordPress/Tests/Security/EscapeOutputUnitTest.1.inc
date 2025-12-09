@@ -661,7 +661,7 @@ exit( status: esc_html( $foo ) ); // Ok.
 die( status: esc_html( $foo ) ); // Ok.
 
 exit( status: $foo ); // Bad.
-\die( status: $foo ); // Bad.
+\Die( status: $foo ); // Bad.
 
 /*
  * Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/2552
@@ -763,6 +763,41 @@ _deprecated_file( MyClass::basename( __FILE__ ), '1.3.0' ); // Bad.
 _deprecated_file( BASENAME, __FILE__ ); // Bad.
 _deprecated_file( MyNamespace\basename( __FILE__ ), '1.3.0' ); // Bad.
 _deprecated_file( \MyNamespace\basename( __FILE__ ), '1.3.0' ); // Bad.
-_deprecated_file( namespace\basename( __FILE__ ), '1.3.0' ); // Bad. We might want to update the regex so that the sniff stop flagging this once it can resolve relative namespaces.
+_deprecated_file( namespace\basename( __FILE__ ), '1.3.0' ); // Bad. We might want to update the regex so that the sniff stops flagging this once it can resolve relative namespaces.
 _deprecated_file( namespace\Sub\basename( __FILE__ ), '1.3.0' ); // Bad.
 _deprecated_file( basename(...), '1.3.0' ); // Bad.
+
+/*
+ * Safeguard correct handling of FQN true/false/null constants.
+ */
+echo \true, \False, \NULL; // Ok.
+
+/*
+ * Safeguard correct handling of namespaced constants that mirror the name of "safe" global PHP constants.
+ */
+echo MyNamespace\PHP_EOL; // Bad.
+echo \MyNamespace\PHP_VERSION_ID; // Bad.
+echo namespace\PHP_EXTRA_VERSION; // Bad. The sniff should stop flagging this once it can resolve relative namespaces.
+echo namespace\Sub\PHP_VERSION; // Bad.
+
+/*
+ * Safeguard correct handling of FQN functions with multiple PHP short echo tags.
+ */
+?>
+<a href="<?= \get_permalink(); // Bad. ?>" title="<?= \the_title_attribute( array( 'echo' => false ) ); ?>">
+    <?= \get_the_title(); // Bad. ?>
+</a>
+<?php
+
+/*
+ * Safeguard correct handling of array walking functions with namespaced name variations.
+ *
+ * Note: the number of errors triggered by the sniff in these tests is inconsistent due to a bug
+ * in how the sniff handles namespaced function calls. The calls to MyNamespace\array_map() and \MyNamespace\map_deep()
+ * should result in the same number of errors. See https://github.com/WordPress/WordPress-Coding-Standards/issues/2671.
+ */
+echo implode( '<br>', \array_map( 'esc_html', $items ) ); // Ok.
+echo implode( '<br>', MyNamespace\array_map( 'esc_html', $items ) ); // Bad x 2.
+echo implode( '<br>', \MyNamespace\map_deep( $items, 'esc_html' ) ); // Bad.
+echo implode( '<br>', namespace\array_map( 'esc_html', $items ) ); // Bad x 2. The sniff should stop flagging this once it can resolve relative namespaces.
+echo implode( '<br>', namespace\Sub\map_deep( $items, 'esc_html' ) ); // Bad.
