@@ -1,7 +1,7 @@
 <?php
 
 query_posts(); // Warning, use WP_Query instead.
-wp_reset_query(); // Warning, use wp_reset_postdata instead.
+WP_reset_QUERY(); // Warning, use wp_reset_postdata instead.
 
 /*
  * Tests which are more specifically for the AbstractFunctionRestrictionsSniff class and Helper methods.
@@ -12,12 +12,12 @@ $obj->query_posts(); // OK, not the global function.
 MyClass::wp_reset_query(); // OK, not the global function.
 $obj?->query_posts(); // OK, not the global function.
 
-// Ensure the sniff doesn't act on namespaced calls.
-MyNamespace\query_posts(); // OK, not the global function.
-\MyNamespace\query_posts(); // OK, not the global function.
-namespace\query_posts(); // OK, not the global function.
-// ... but does act on fully qualified function calls.
-\query_posts(); // Warning.
+
+
+
+
+
+
 
 // Ensure the sniff doesn't act on functions not listed in the target functions array.
 query_post(); // OK, not one of the target functions.
@@ -64,6 +64,11 @@ wp_reset_query(); // OK, excluded group.
 // Safeguard that a function used as a PHP 8.1+ first class callable is also flagged.
 call_user_func( query_posts(...), $param ); // Warning.
 
-// Live coding/parse error.
-// This has to be the last test in the file!!!
-\query_posts
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\query_POSTS(); // Warning.
+MyNamespace\wp_reset_query(); // OK, not the global function.
+\MyNamespace\query_posts(); // OK, not the global function.
+namespace\wp_reset_query(); // OK, not the global function.
+namespace\Sub\query_posts(); // OK, not the global function.
