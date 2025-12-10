@@ -801,3 +801,13 @@ echo implode( '<br>', MyNamespace\array_map( 'esc_html', $items ) ); // Bad x 2.
 echo implode( '<br>', \MyNamespace\map_deep( $items, 'esc_html' ) ); // Bad.
 echo implode( '<br>', namespace\array_map( 'esc_html', $items ) ); // Bad x 2. The sniff should stop flagging this once it can resolve relative namespaces.
 echo implode( '<br>', namespace\Sub\map_deep( $items, 'esc_html' ) ); // Bad.
+
+/*
+ * Safeguard correct handling of get_search_query() with FQN and non-standard case booleans for the $escaped parameter.
+ */
+echo \get_search_query( TRUE ); // Ok.
+echo \get_search_query( \true ); // Ok.
+echo \get_search_query( \True ); // Ok.
+echo \get_search_query( FaLsE ); // Bad.
+echo \get_search_query( \false ); // Bad.
+echo \get_search_query( \FALSE ); // Bad.
