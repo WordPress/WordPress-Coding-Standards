@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Type Casts"
+>
+    <standard>
+    <![CDATA[
+      Enforce normalized and safe type casts.
+
+      • Use (float) instead of legacy float casts.
+      • Do not use the (unset) cast. Use unset().
+      • Avoid the (binary) cast (discouraged).
+    ]]>
+    </standard>
+
+    <code_comparison>
+        <code title="Valid: Using normalized float casts.">
+        <![CDATA[
+$price = <em>(float)</em> $value;
+$size  = <em>(float)</em> $value;
+        ]]>
+        </code>
+        <code title="Invalid: Using legacy float casts.">
+        <![CDATA[
+$price = <em>(double)</em> $value;
+$size  = <em>(real)</em>   $value;
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Use unset().">
+        <![CDATA[
+unset( $value );
+        ]]>
+        </code>
+        <code title="Invalid: Using the (unset) cast.">
+        <![CDATA[
+result = <em>(unset)</em> $value;
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Valid: Prefer a clear alternative.">
+        <![CDATA[
+bytes = (string) $value;
+        ]]>
+        </code>
+        <code title="Invalid: Using the (binary) cast.">
+        <![CDATA[
+bytes = <em>(binary)</em> $value;
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
