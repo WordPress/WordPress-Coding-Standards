@@ -258,7 +258,7 @@ echo esc_html_x( $some_nasty_var, 'context' ); // Ok.
 	<input type="hidden" name="some-action" value="<?php echo esc_attr_x( 'none', 'context' ); ?>" /><!-- OK. -->
 <?php
 
-echo PHP_VERSION_ID, PHP_VERSION, PHP_EOL, PHP_EXTRA_VERSION; // OK.
+echo PHP_VERSION_ID, PHP_VERSION, \PHP_EOL, PHP_EXTRA_VERSION; // OK.
 
 trigger_error( 'DEBUG INFO - ' . __METHOD__ . '::internal_domains: domain = ' . $domain ); // Bad.
 Trigger_ERROR( $domain ); // Bad.
@@ -661,7 +661,7 @@ exit( status: esc_html( $foo ) ); // Ok.
 die( status: esc_html( $foo ) ); // Ok.
 
 exit( status: $foo ); // Bad.
-die( status: $foo ); // Bad.
+\Die( status: $foo ); // Bad.
 
 /*
  * Issue https://github.com/WordPress/WordPress-Coding-Standards/issues/2552
@@ -687,3 +687,127 @@ _deprecated_function( __METHOD__, 'x.x.x', \ClassName::class ); // OK.
 die( \MyNamespace\ClassName::class . ' has been abandoned' ); // OK.
 echo 'Do not use ' . MyNamespace\ClassName::class; // OK.
 _deprecated_function( __METHOD__, 'x.x.x', namespace\ClassName::class ); // OK.
+
+/*
+ * Safeguard correct handling of all types of namespaced escaping and printing function calls.
+ */
+\printf( 'Hello %s', $foo ); // Bad.
+MyNamespace\wp_die( $message ); // Ok.
+\MyNamespace\vprintf( 'Hello %s', array( $foo ) ); // Ok.
+namespace\wp_dropdown_pages( $args ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\_deprecated_function( __FUNCTION__, '1.3.0', $another_func ); // Ok.
+\printf( 'Hello %s', \esc_html( $foo ) ); // Ok.
+\wp_die( MyNamespace\number_format( $foo ) ); // Bad.
+\vprintf( 'Hello %s', array( \MyNamespace\sanitize_user_field( $foo ) ) ); // Bad.
+\wp_dropdown_pages( namespace\sanitize_key( $foo ) ); // Bad. The sniff should stop flagging this once it can resolve relative namespaces.
+\_deprecated_function( __FUNCTION__, '1.3.0', namespace\Sub\wp_kses( $another_func ) ); // Bad.
+
+/*
+ * Safeguard correct handling of namespaced auto-escaped functions.
+ */
+echo \bloginfo( $var ); // Ok.
+echo MyNamespace\count( $var ); // Bad.
+echo \MyNamespace\get_archives_link( $url, 'link' ); // Bad.
+echo namespace\get_search_form(); // Bad. The sniff should stop flagging this once it can resolve relative namespaces.
+echo namespace\Sub\the_author(); // Bad.
+
+/*
+ * Safeguard correct handling of namespaced unsafe printing functions.
+ */
+\_e( $text, 'my-domain' ); // Bad.
+MyNamespace\_ex( $text, 'context' ); // Ok.
+\MyNamespace\_e( $text, 'my-domain' ); // Ok.
+namespace\_ex( $text, 'context' ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\_e( $text, 'my-domain' ); // Ok.
+
+/*
+ * Safeguard correct handling of namespaced formatting functions.
+ */
+echo \sprintf( '%s', $var ); // Bad.
+echo \sprintf( '%s', esc_html( $var ) ); // Ok.
+echo MyNamespace\antispambot( esc_html( $email ) ); // Bad.
+echo \MyNamespace\ent2ncr( esc_html( $_data ) ); // Bad.
+echo namespace\vsprintf( 'Hello %s', array( esc_html( $foo ) ) ); // Bad. The sniff should stop flagging this once it can resolve relative namespaces.
+echo namespace\Sub\wp_sprintf( 'Hello %s', array( esc_html( $foo ) ) ); // Bad.
+
+/*
+ * Safeguard correct handling of get_search_query() as the sniff has special logic to check the $escaped parameter.
+ */
+echo \get_search_query( true ); // Ok.
+echo \get_search_query( false ); // Bad.
+echo MyNamespace\get_search_query( true ); // Bad.
+echo \MyNamespace\get_search_query( true ); // Bad.
+echo namespace\get_search_query( true ); // Bad. The sniff should stop flagging this once it can resolve relative namespaces.
+echo namespace\Sub\get_search_query( true ); // Bad.
+
+/*
+ * Safeguard correct handling of fully qualified and namespace relative functions with special parameter handling.
+ */
+\trigger_error( esc_html( $message ), $second_param_should_be_ignored ); // Ok.
+\User_Error( $message ); // Bad.
+namespace\trigger_error( $message ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\user_error( $message ); // Ok.
+\_deprecated_file( basename( __FILE__ ), '1.3.0' ); // Ok.
+\_deprecated_file( $file, '1.3.0' ); // Error.
+namespace\_deprecated_file( basename( __FILE__ ), '1.3.0' ); // Ok.
+namespace\_DEPRECATED_FILE( $file, '1.3.0' ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\_deprecated_file( $file, '1.3.0' ); // Ok.
+
+/*
+ * Safeguard that the basename( __FILE__ ) pattern recognition in _deprecated_file() only applies to
+ * the global basename() function and not to other constructs.
+ */
+_deprecated_file( $obj->basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( $obj?->basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( MyClass::basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( BASENAME, __FILE__ ); // Bad.
+_deprecated_file( MyNamespace\basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( \MyNamespace\basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( namespace\basename( __FILE__ ), '1.3.0' ); // Bad. We might want to update the regex so that the sniff stops flagging this once it can resolve relative namespaces.
+_deprecated_file( namespace\Sub\basename( __FILE__ ), '1.3.0' ); // Bad.
+_deprecated_file( basename(...), '1.3.0' ); // Bad.
+
+/*
+ * Safeguard correct handling of FQN true/false/null constants.
+ */
+echo \true, \False, \NULL; // Ok.
+
+/*
+ * Safeguard correct handling of namespaced constants that mirror the name of "safe" global PHP constants.
+ */
+echo MyNamespace\PHP_EOL; // Bad.
+echo \MyNamespace\PHP_VERSION_ID; // Bad.
+echo namespace\PHP_EXTRA_VERSION; // Bad. The sniff should stop flagging this once it can resolve relative namespaces.
+echo namespace\Sub\PHP_VERSION; // Bad.
+
+/*
+ * Safeguard correct handling of FQN functions with multiple PHP short echo tags.
+ */
+?>
+<a href="<?= \get_permalink(); // Bad. ?>" title="<?= \the_title_attribute( array( 'echo' => false ) ); ?>">
+    <?= \get_the_title(); // Bad. ?>
+</a>
+<?php
+
+/*
+ * Safeguard correct handling of array walking functions with namespaced name variations.
+ *
+ * Note: the number of errors triggered by the sniff in these tests is inconsistent due to a bug
+ * in how the sniff handles namespaced function calls. The calls to MyNamespace\array_map() and \MyNamespace\map_deep()
+ * should result in the same number of errors. See https://github.com/WordPress/WordPress-Coding-Standards/issues/2671.
+ */
+echo implode( '<br>', \array_map( 'esc_html', $items ) ); // Ok.
+echo implode( '<br>', MyNamespace\array_map( 'esc_html', $items ) ); // Bad x 2.
+echo implode( '<br>', \MyNamespace\map_deep( $items, 'esc_html' ) ); // Bad.
+echo implode( '<br>', namespace\array_map( 'esc_html', $items ) ); // Bad x 2. The sniff should stop flagging this once it can resolve relative namespaces.
+echo implode( '<br>', namespace\Sub\map_deep( $items, 'esc_html' ) ); // Bad.
+
+/*
+ * Safeguard correct handling of get_search_query() with FQN and non-standard case booleans for the $escaped parameter.
+ */
+echo \get_search_query( TRUE ); // Ok.
+echo \get_search_query( \true ); // Ok.
+echo \get_search_query( \True ); // Ok.
+echo \get_search_query( FaLsE ); // Bad.
+echo \get_search_query( \false ); // Bad.
+echo \get_search_query( \FALSE ); // Bad.
