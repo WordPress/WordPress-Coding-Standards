@@ -61,7 +61,7 @@ echo BACKGROUND_COLOR;
 echo BACKGROUND_IMAGE;
 
 use const STYLESHEETPATH as SSP;
-use const ABC as STYLESHEETPATH;
+use const ABC as STYLESHEETPATH; // This is ok, as `STYLESHEETPATH` is not a global constant here.
 
 switch(	STYLESHEETPATH ) {
 	case STYLESHEETPATH:
