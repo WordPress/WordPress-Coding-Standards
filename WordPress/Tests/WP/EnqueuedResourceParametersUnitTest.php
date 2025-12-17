@@ -82,6 +82,8 @@ final class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 					100 => 1,
 					107 => 1,
 					108 => 1,
+					115 => 1,
+					116 => 1,
 				);
 
 			default:

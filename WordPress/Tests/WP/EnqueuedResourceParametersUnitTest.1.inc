@@ -42,7 +42,7 @@ wp_register_style( 'script-name', 'https://example.com/someScript.js', false, '1
 wp_register_style( 'script-name', 'https://example.com/someScript.js' ); // Warning - missing $ver.
 
 wp_enqueue_style( 'script-name', 'https://example.com/someScript.js', false, '1.0.0'); // OK.
-wp_enqueue_style( 'script-name', 'https://example.com/someScript.js' ); // Warning - missing $ver.
+WP_ENQUEUE_style( 'script-name', 'https://example.com/someScript.js' ); // Warning - missing $ver.
 
 wp_register_script( 'someScript-js' ); // OK.
 wp_enqueue_script( 'someScript-js' ); // OK.
@@ -108,3 +108,13 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \Null, true ); // Warning - 0, false or NULL are not allowed.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \true, \False ); // Ok.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \get_version(), \null ); // OK.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\wp_enqueue_script( 'script-name', 'https://example.com/someScript.js', false, '1.1.0' ); // Warning - missing $in_footer.
+\wp_REGISTER_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // Warning - missing $in_footer.
+MyNamespace\wp_register_style( 'style-name', 'https://example.com/style.css' ); // Ok.
+\MyNamespace\wp_enqueue_style( 'style-name', 'https://example.com/style.css' ); // Ok.
+namespace\wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\wp_enqueue_style( 'style-name', 'https://example.com/style.css' ); // Ok.
