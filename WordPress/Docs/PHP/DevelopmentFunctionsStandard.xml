@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Development Functions"
+    >
+    <standard>
+    <![CDATA[
+    Debug code should not normally be used in production.
+
+    Typically, this rule verifies if function calls to the PHP native `error_log()`, `var_dump()`, `var_export()`, `print_r()`, `trigger_error()`, `set_error_handler()`, `debug_backtrace`, `debug_print_backtrace` and `wp_debug_backtrace_summary()` functions are present in the code.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: (Not) using var_dump().">
+        <![CDATA[
+// var_dump() should not be used.
+        ]]>
+        </code>
+        <code title="Invalid: Calling the PHP native `var_dump()` function.">
+        <![CDATA[
+<em>var_dump( $bar );</em>
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Please refrain from using functions that can lead to full path disclosure.
+
+    Typically, this rule verifies if function calls to the PHP native `error_reporting()` and `phpinfo()` functions are present in the code.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: (Not) using `phpinfo()`.">
+        <![CDATA[
+// php_info() should not be used.
+        ]]>
+        </code>
+        <code title="Invalid: Calling the PHP native `phpinfo()` function.">
+        <![CDATA[
+<em>phpinfo();</em>
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
