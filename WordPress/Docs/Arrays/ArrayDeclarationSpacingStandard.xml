@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Array Declaration Spacing"
+    >
+    <standard>
+    <![CDATA[
+    When an array uses keys, each key/value pair must start on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: There is only one key/value pair per line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id'  => 22</em>,
+    <em>'category' => 1</em>,
+);
+        ]]>
+        </code>
+        <code title="Invalid: More than one key/value pair per line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id' => 22, 'category' => 1</em>,
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Each item in a multi-line array must be on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Only one array item per line.">
+        <![CDATA[
+$args = array(
+    <em>'post_id'</em>,
+    <em>'comment_count'</em>,
+    <em>'post_type'</em>,
+);
+        ]]>
+        </code>
+        <code title="Invalid: More than one item per line in a multi-line array.">
+        <![CDATA[
+$args = array(
+    <em>'post_id', 'comment_count', 'post_type'</em>,
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Associative arrays with multiple key-value pairs must also follow this rule.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Each key-value pair on its own line.">
+        <![CDATA[
+$settings = array(
+    <em>'width'  => 300</em>,
+    <em>'height' => 200</em>,
+    <em>'color'  => 'blue'</em>,
+);
+        ]]>
+        </code>
+        <code title="Invalid: Multiple key-value pairs on the same line in a multi-line array.">
+        <![CDATA[
+$settings = array(
+    <em>'width' => 300, 'height' => 200</em>,
+    <em>'color' => 'blue'</em>,
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
