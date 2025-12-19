@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd" 
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
     title="Assignment In Ternary Condition"
     >
     <standard>
     <![CDATA[
-    Variables should not be assigned in conditional statement of ternary. 
-    Condition must be in parentheses to be checked; ternaries lacking parentheses around condition are skipped. 
+    Variables should not be assigned in the condition of a ternary expression.
+    The condition must be in parentheses to be checked; ternaries lacking parentheses around the condition are skipped.
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Conditional statement in parentheses and does not include variable assignment.">
         <![CDATA[
-        $mode = ( $a <em>==</em> 'a' ) ? 'b' : 'c';
+$mode = ( $a <em>===</em> 'a' ) ? 'b' : 'c';
         ]]>
         </code>
         <code title="Invalid: Conditional statement in parentheses but includes variable assignment instead of comparison.">
         <![CDATA[
-        $mode = ( $a <em>=</em> 'a' ) ? 'b' : 'c';
+$mode = ( $a <em>=</em> 'a' ) ? 'b' : 'c';
         ]]>
         </code>
     </code_comparison>
