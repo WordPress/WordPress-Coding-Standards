@@ -5,17 +5,18 @@
     >
     <standard>
     <![CDATA[
-    Variables should not be assigned in the condition of a ternary expression.
-    The condition must be in parentheses to be checked; ternaries lacking parentheses around the condition are skipped.
+    Variables should not be assigned in the condition of a ternary expression. This is likely a mistake, as more often than not a comparison was intended.
+
+    Note: This sniff can only detect assignments when the ternary condition is wrapped in parentheses.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Conditional statement in parentheses and does not include variable assignment.">
+        <code title="Valid: Comparison operator used in ternary condition.">
         <![CDATA[
 $mode = ( $a <em>===</em> 'a' ) ? 'b' : 'c';
         ]]>
         </code>
-        <code title="Invalid: Conditional statement in parentheses but includes variable assignment instead of comparison.">
+        <code title="Invalid: Assignment in parenthesized ternary condition.">
         <![CDATA[
 $mode = ( $a <em>=</em> 'a' ) ? 'b' : 'c';
         ]]>
