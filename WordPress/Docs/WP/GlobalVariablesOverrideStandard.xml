@@ -7,25 +7,25 @@
     <![CDATA[
     WordPress global variables should not be overridden.
 
-    Two WordPress global variables, `$content_width` and `$wp_cockneyreplace`, are 
+    Two WordPress global variables, `$content_width` and `$wp_cockneyreplace`, are
     specifically intended to be overridden by themes/plugins and are exempt from this rule.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Different variable name.">
+        <code title="Valid: Using non-WordPress global names.">
         <![CDATA[
 <em>$my_query</em> = new WP_Query( $args );
 
 
-<em>$GLOBALS['my_data']</em> = "some data";
+<em>$GLOBALS['my_data']</em> = 'some data';
         ]]>
         </code>
-        <code title="Invalid: Global variable overridden.">
+        <code title="Invalid: WordPress global variable overridden.">
         <![CDATA[
 <em>global $wp_query;</em>
 <em>$wp_query</em> = new WP_Query( $args );
 
-<em>$GLOBALS['wp_query']</em> = new WP_Query( $args );
+<em>$GLOBALS['post']</em> = get_post( 1 );
         ]]>
         </code>
     </code_comparison>
