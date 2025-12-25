@@ -5,35 +5,41 @@
     >
     <standard>
     <![CDATA[
-    The use of certain WordPress constants is discouraged. Examples include `TEMPLATEPATH` and `STYLESHEETPATH`.
+    The use of certain WordPress native constants is discouraged. Use the recommended alternatives instead.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Function used instead of constant.">
+        <code title="Valid: Function used instead of discouraged WP constant.">
         <![CDATA[
-$subdir = <em>get_template_directory()</em> . '/subdir';
+$dir = <em>get_stylesheet_directory()</em>;
         ]]>
         </code>
-        <code title="Invalid: The TEMPLATEPATH constant is used in the code.">
+        <code title="Invalid: Discouraged WP constant is used.">
         <![CDATA[
-$subdir = <em>TEMPLATEPATH</em> . '/subdir';
+$dir = <em>STYLESHEETPATH</em>;
         ]]>
         </code>
     </code_comparison>
     <standard>
     <![CDATA[
-    The use of certain WordPress constants is discouraged. Examples include `TEMPLATEPATH` and `STYLESHEETPATH`.
+    The (re-)declaration of certain WordPress native constants is discouraged. Use the recommended alternatives instead.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Function used instead of constant.">
+        <code title="Valid: Using recommended alternative instead of (re-)declaring WP constant.">
         <![CDATA[
-$dir = <em>get_stylesheet_directory()</em>;
+<em>add_theme_support</em>(
+    <em>'custom-header'</em>,
+    array( 'width' => 200 )
+);
         ]]>
         </code>
-        <code title="Invalid: The STYLESHEETPATH constant is used in the code.">
+        <code title="Invalid: (Re-)declaring a WP constant.">
         <![CDATA[
-$dir = <em>STYLESHEETPATH</em>;
+define(
+    <em>'HEADER_IMAGE_WIDTH'</em>,
+    200
+);
         ]]>
         </code>
     </code_comparison>
