@@ -5,23 +5,21 @@
     >
     <standard>
     <![CDATA[
-    When an array uses keys, each key/value pair must start on a new line.
+    When a multi-item array uses keys, each key/value pair must start on a new line.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: There is only one key/value pair per line.">
+        <code title="Valid: Only one key/value pair per line on a multi-item array.">
         <![CDATA[
 $args = array(
-    <em>'post_id'  => 22</em>,
-    <em>'category' => 1</em>,
+    <em>'cat'   => 1</em>,
+    <em>'paged' => 2</em>,
 );
         ]]>
         </code>
-        <code title="Invalid: More than one key/value pair per line.">
+        <code title="Invalid: Single line multi-item array using keys.">
         <![CDATA[
-$args = array(
-    <em>'post_id' => 22, 'category' => 1</em>,
-);
+$args = array( <em>'cat' => 1, 'paged' => 2</em> );
         ]]>
         </code>
     </code_comparison>
@@ -33,41 +31,26 @@ $args = array(
     <code_comparison>
         <code title="Valid: Only one array item per line.">
         <![CDATA[
+$post_types = array(
+    <em>'post'</em>,
+    <em>'page'</em>,
+);
+
 $args = array(
-    <em>'post_id'</em>,
-    <em>'comment_count'</em>,
-    <em>'post_type'</em>,
+    <em>'cat'   => 1</em>,
+    <em>'paged' => 2</em>,
 );
         ]]>
         </code>
         <code title="Invalid: More than one item per line in a multi-line array.">
         <![CDATA[
+$post_types = array(
+    <em>'post', 'page'</em>,
+);
+
+
 $args = array(
-    <em>'post_id', 'comment_count', 'post_type'</em>,
-);
-        ]]>
-        </code>
-    </code_comparison>
-    <standard>
-    <![CDATA[
-    Associative arrays with multiple key-value pairs must also follow this rule.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: Each key-value pair on its own line.">
-        <![CDATA[
-$settings = array(
-    <em>'width'  => 300</em>,
-    <em>'height' => 200</em>,
-    <em>'color'  => 'blue'</em>,
-);
-        ]]>
-        </code>
-        <code title="Invalid: Multiple key-value pairs on the same line in a multi-line array.">
-        <![CDATA[
-$settings = array(
-    <em>'width' => 300, 'height' => 200</em>,
-    <em>'color' => 'blue'</em>,
+    <em>'cat' => 1, 'paged' => 2</em>,
 );
         ]]>
         </code>
