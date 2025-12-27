@@ -17,7 +17,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 use WordPressCS\WordPress\Helpers\ConstantsHelper;
 
 /**
- * Warns against usage of discouraged WP CONSTANTS and recommends alternatives.
+ * Warns against usage and (re-)declaration of discouraged WP constants and recommends alternatives.
  *
  * @since 0.14.0
  */
