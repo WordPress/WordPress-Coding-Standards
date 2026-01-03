@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Discouraged Constants"
+    >
+    <standard>
+    <![CDATA[
+    The use of certain WordPress constants is discouraged. Examples include `TEMPLATEPATH` and `STYLESHEETPATH`.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Function used instead of constant.">
+        <![CDATA[
+$subdir = <em>get_template_directory()</em> . '/subdir';
+        ]]>
+        </code>
+        <code title="Invalid: The TEMPLATEPATH constant is used in the code.">
+        <![CDATA[
+$subdir = <em>TEMPLATEPATH</em> . '/subdir';
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    The use of certain WordPress constants is discouraged. Examples include `TEMPLATEPATH` and `STYLESHEETPATH`.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Function used instead of constant.">
+        <![CDATA[
+$dir = <em>get_stylesheet_directory()</em>;
+        ]]>
+        </code>
+        <code title="Invalid: The STYLESHEETPATH constant is used in the code.">
+        <![CDATA[
+$dir = <em>STYLESHEETPATH</em>;
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
