@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Array Declaration Spacing"
+    >
+    <standard>
+    <![CDATA[
+    When a multi-item array uses keys, each key/value pair must start on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Only one key/value pair per line on a multi-item array.">
+        <![CDATA[
+$args = array(
+    <em>'cat'   => 1</em>,
+    <em>'paged' => 2</em>,
+);
+        ]]>
+        </code>
+        <code title="Invalid: Single line multi-item array using keys.">
+        <![CDATA[
+$args = array( <em>'cat' => 1, 'paged' => 2</em> );
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Each item in a multi-line array must be on a new line.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Only one array item per line.">
+        <![CDATA[
+$post_types = array(
+    <em>'post'</em>,
+    <em>'page'</em>,
+);
+
+$args = array(
+    <em>'cat'   => 1</em>,
+    <em>'paged' => 2</em>,
+);
+        ]]>
+        </code>
+        <code title="Invalid: More than one item per line in a multi-line array.">
+        <![CDATA[
+$post_types = array(
+    <em>'post', 'page'</em>,
+);
+
+
+$args = array(
+    <em>'cat' => 1, 'paged' => 2</em>,
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
