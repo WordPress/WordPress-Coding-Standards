@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Discouraged Constants"
+    >
+    <standard>
+    <![CDATA[
+    The usage of WordPress Constants is discouraged.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: A function is used in the code to retrieve the theme directory.">
+        <![CDATA[
+<img src="
+<?php echo <em>get_template_directory_uri()</em>; ?>
+/img/logo.svg" />
+        ]]>
+        </code>
+        <code title="Invalid: The TEMPLATEPATH constant is used in the code.">
+        <![CDATA[
+<img src="
+<?php echo <em>TEMPLATEPATH</em>;?>
+/img/logo.svg" />
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Defining WordPress Constants is discouraged.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: A function is used in the code to retrieve the theme directory.">
+        <![CDATA[
+<img src="
+<?php echo <em>get_template_directory_uri()</em>; ?>
+/img/logo.svg" />
+        ]]>
+        </code>
+        <code title="Invalid: The TEMPLATEPATH constant is set by a theme.">
+        <![CDATA[
+<em>define("TEMPLATEPATH", "foo");</em>
+<img src="
+<?php echo <em>$foo</em>; ?>
+/img/logo.svg" />
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
