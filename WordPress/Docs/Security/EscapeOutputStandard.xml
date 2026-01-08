@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<documentation title="Escape Output">
+    <standard>
+    <![CDATA[
+      Dynamic output must be escaped.
+
+      This sniff checks that any dynamic data sent to the browser
+      is escaped using a WordPress escaping function, such as
+      esc_html(), esc_attr(), or wp_kses_post(). Escaping prevents
+      cross-site scripting (XSS) vulnerabilities and ensures
+      output is safe.
+    ]]>
+    </standard>
+
+    <code_comparison>
+        <code title="Invalid: unescaped echo">
+        <![CDATA[
+<?php
+$name = $_GET['name'];
+echo <em>$name</em>;
+        ]]>
+        </code>
+        <code title="Valid: escaped echo">
+        <![CDATA[
+<?php
+$name = $_GET['name'];
+echo <em>esc_html( $name )</em>;
+        ]]>
+        </code>
+    </code_comparison>
+
+    <code_comparison>
+        <code title="Invalid: unescaped printf">
+        <![CDATA[
+<?php
+printf( 'Hello %s', <em>$name</em> );
+        ]]>
+        </code>
+        <code title="Valid: escaped printf">
+        <![CDATA[
+<?php
+printf( 'Hello %s', <em>esc_html( $name )</em> );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
