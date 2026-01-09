@@ -88,8 +88,9 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	protected $prefix_blocklist = array(
 		'wordpress' => true,
 		'wp'        => true,
+		'wporg'     => true,
 		'_'         => true,
-		'php'       => true, // See #1728, the 'php' prefix is reserved by PHP itself.
+		'php'       => true,// See #1728, the 'php' prefix is reserved by PHP itself.
 	);
 
 	/**
