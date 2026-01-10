@@ -5,7 +5,7 @@ register_post_type( 'my_own_post_type', array() ); // OK.
 register_post_type( 'my-own-post-type-too-long', array() ); // Bad.
 register_post_type( 'author', array() ); // Bad. Reserved slug name.
 register_post_type( 'My-Own-Post-Type', array() ); // Bad. Invalid chars: uppercase.
-register_post_type( 'my/own/post/type', array() ); // Bad. Invalid chars: "/".
+register_POST_TYPE( 'my/own/post/type', array() ); // Bad. Invalid chars: "/".
 
 register_post_type( <<<EOD
 my_own_post_type
@@ -33,7 +33,7 @@ register_post_type( $this->get_post_type_id() ); // Non string literal. Warning 
 register_post_type( null, array() ); // Non string literal. Warning with severity: 3
 register_post_type( 1000, array() ); // Non string literal. Warning with severity: 3
 
-register_post_type( 'wp_', array() ); // Bad. Reserved prefix.
+\REGISTER_post_TYPE( 'wp_', array() ); // Bad. Reserved prefix.
 register_post_type( 'wp_post_type', array() ); // Bad. Reserved prefix.
 
 register_post_type( '', array() ); // Bad. Empty post type slug.
@@ -68,3 +68,12 @@ register_post_type(
 	// Post type name.
 	$name,// Non string literal. Warning with severity: 3
 );
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\register_post_type( 'my-own-post-type-too-long', array() ); // Bad.
+MyNamespace\register_post_type( 'my-own-post-type-too-long', array() ); // Ok.
+\MyNamespace\register_post_type( 'my-own-post-type-too-long', array() ); // Ok.
+namespace\register_post_type( 'my-own-post-type-too-long', array() ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\register_post_type( 'my-own-post-type-too-long', array() ); // Ok.

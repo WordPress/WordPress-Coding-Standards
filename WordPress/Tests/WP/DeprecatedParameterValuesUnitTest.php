@@ -23,47 +23,64 @@ final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
-	public function getErrorList() {
-		return array(
-			5  => 1,
-			6  => 1,
-			7  => 1,
-			8  => 1,
-			9  => 1,
-			10 => 1,
-			11 => 1,
-			12 => 1,
-			13 => 1,
-			14 => 1,
-			15 => 1,
-			16 => 1,
-			17 => 1,
-			18 => 1,
-			35 => 1,
-			40 => 1,
-			43 => 1,
-			44 => 1,
-			45 => 1,
-			46 => 1,
-			47 => 1,
-			48 => 1,
-			49 => 1,
-			50 => 1,
-			51 => 1,
-		);
+	public function getErrorList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'DeprecatedParameterValuesUnitTest.1.inc':
+				return array(
+					5  => 1,
+					6  => 1,
+					7  => 1,
+					8  => 1,
+					9  => 1,
+					10 => 1,
+					11 => 1,
+					12 => 1,
+					13 => 1,
+					14 => 1,
+					15 => 1,
+					16 => 1,
+					17 => 1,
+					18 => 1,
+					35 => 1,
+					40 => 1,
+					43 => 1,
+					44 => 1,
+					45 => 1,
+					46 => 1,
+					47 => 1,
+					48 => 1,
+					49 => 1,
+					50 => 1,
+					51 => 1,
+					61 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the file being tested.
+	 *
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
-	public function getWarningList() {
-		return array(
-			55 => 1,
-			56 => 1,
-		);
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'DeprecatedParameterValuesUnitTest.1.inc':
+				return array(
+					55 => 1,
+					56 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 }
