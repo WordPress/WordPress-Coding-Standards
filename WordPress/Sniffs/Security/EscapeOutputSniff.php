@@ -615,8 +615,13 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 			if ( \T_STRING === $this->tokens[ $i ]['code']
 				|| \T_VARIABLE === $this->tokens[ $i ]['code']
 				|| isset( Collections::ooHierarchyKeywords()[ $this->tokens[ $i ]['code'] ] )
+				|| \T_NAMESPACE === $this->tokens[ $i ]['code']
 			) {
-				$double_colon = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), $end, true );
+				$skip_tokens                    = Tokens::$emptyTokens;
+				$skip_tokens[ \T_STRING ]       = \T_STRING;
+				$skip_tokens[ \T_NS_SEPARATOR ] = \T_NS_SEPARATOR;
+
+				$double_colon = $this->phpcsFile->findNext( $skip_tokens, ( $i + 1 ), $end, true );
 				if ( false !== $double_colon
 					&& \T_DOUBLE_COLON === $this->tokens[ $double_colon ]['code']
 				) {
@@ -736,7 +741,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					// Special case get_search_query() which is unsafe if $escaped = false.
 					if ( 'get_search_query' === strtolower( $functionName ) ) {
 						$escaped_param = PassedParameters::getParameter( $this->phpcsFile, $ptr, 1, 'escaped' );
-						if ( false !== $escaped_param && 'true' !== $escaped_param['clean'] ) {
+						if ( false !== $escaped_param && 'true' !== strtolower( ltrim( $escaped_param['clean'], '\\' ) ) ) {
 							$this->phpcsFile->addError(
 								'Output from get_search_query() is unsafe due to $escaped parameter being set to "false".',
 								$ptr,

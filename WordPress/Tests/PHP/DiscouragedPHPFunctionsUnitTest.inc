@@ -1,12 +1,12 @@
 <?php
 
-
-
-
-
-
+// Safeguard against false positives on namespaced function calls.
+MyNamespace\serialize( $value );
+\MyNamespace\serialize( $value );
+namespace\serialize( $value ); // The sniff should start flagging this once it can resolve relative namespaces.
 
 serialize(); // Warning.
+\serialize( $value ); // Warning.
 unserialize(); // Warning.
 
 urlencode(); // Warning.

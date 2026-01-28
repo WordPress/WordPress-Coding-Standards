@@ -69,6 +69,10 @@ final class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
 					204 => 1,
 					205 => 1,
 					224 => 1,
+					252 => 1,
+					253 => 1,
+					254 => 1,
+					255 => 1,
 				);
 
 			case 'CapitalPDangitUnitTest.2.inc':

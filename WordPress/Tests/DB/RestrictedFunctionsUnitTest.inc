@@ -94,3 +94,11 @@ WP_Date_Query::build_mysql_datetime(); // Ok.
 myFictionFunction(); // Bad.
 myFictional(); // OK.
 Myfictional(); // OK.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\mysql_connect();
+MyNamespace\mysql_connect();
+\MyNamespace\mysql_connect();
+namespace\mysql_connect(); // The sniff should start flagging this once it can resolve relative namespaces.

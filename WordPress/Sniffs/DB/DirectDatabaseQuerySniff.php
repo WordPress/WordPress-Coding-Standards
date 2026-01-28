@@ -19,7 +19,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag Database direct queries.
  *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#direct-database-queries
+ * @link https://docs.wpvip.com/php_codesniffer/warnings/#h-direct-database-queries
  *
  * @since 0.3.0
  * @since 0.6.0  Removed the add_unique_message() function as it is no longer needed.
@@ -82,7 +82,10 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $cacheGetFunctions = array(
-		'wp_cache_get' => true,
+		'wp_cache_get'                 => true,
+		'wp_cache_get_multiple'        => true,
+		'wp_cache_get_multiple_salted' => true,
+		'wp_cache_get_salted'          => true,
 	);
 
 	/**
@@ -95,8 +98,12 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $cacheSetFunctions = array(
-		'wp_cache_set' => true,
-		'wp_cache_add' => true,
+		'wp_cache_add'                 => true,
+		'wp_cache_add_multiple'        => true,
+		'wp_cache_set'                 => true,
+		'wp_cache_set_multiple'        => true,
+		'wp_cache_set_multiple_salted' => true,
+		'wp_cache_set_salted'          => true,
 	);
 
 	/**
@@ -109,18 +116,21 @@ final class DirectDatabaseQuerySniff extends Sniff {
 	 * @var array
 	 */
 	protected $cacheDeleteFunctions = array(
-		'wp_cache_delete'         => true,
-		'clean_attachment_cache'  => true,
-		'clean_blog_cache'        => true,
-		'clean_bookmark_cache'    => true,
-		'clean_category_cache'    => true,
-		'clean_comment_cache'     => true,
-		'clean_network_cache'     => true,
-		'clean_object_term_cache' => true,
-		'clean_page_cache'        => true,
-		'clean_post_cache'        => true,
-		'clean_term_cache'        => true,
-		'clean_user_cache'        => true,
+		'wp_cache_delete'          => true,
+		'wp_cache_delete_multiple' => true,
+		'wp_cache_flush_group'     => true,
+		'wp_cache_flush_runtime'   => true,
+		'clean_attachment_cache'   => true,
+		'clean_blog_cache'         => true,
+		'clean_bookmark_cache'     => true,
+		'clean_category_cache'     => true,
+		'clean_comment_cache'      => true,
+		'clean_network_cache'      => true,
+		'clean_object_term_cache'  => true,
+		'clean_page_cache'         => true,
+		'clean_post_cache'         => true,
+		'clean_term_cache'         => true,
+		'clean_user_cache'         => true,
 	);
 
 	/**
@@ -229,18 +239,25 @@ final class DirectDatabaseQuerySniff extends Sniff {
 
 			for ( $i = ( $scopeStart + 1 ); $i < $scopeEnd; $i++ ) {
 				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+					$nextNonEmpty = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
 
-					if ( isset( $this->cacheDeleteFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					if ( \T_OPEN_PARENTHESIS !== $this->tokens[ $nextNonEmpty ]['code'] ) {
+						continue;
+					}
+
+					$content = strtolower( $this->tokens[ $i ]['content'] );
+
+					if ( isset( $this->cacheDeleteFunctions[ $content ] ) ) {
 
 						if ( \in_array( $method, array( 'query', 'update', 'replace', 'delete' ), true ) ) {
 							$cached = true;
 							break;
 						}
-					} elseif ( isset( $this->cacheGetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheGetFunctions[ $content ] ) ) {
 
 						$wp_cache_get = true;
 
-					} elseif ( isset( $this->cacheSetFunctions[ $this->tokens[ $i ]['content'] ] ) ) {
+					} elseif ( isset( $this->cacheSetFunctions[ $content ] ) ) {
 
 						if ( $wp_cache_get ) {
 							$cached = true;
@@ -277,6 +294,8 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				$this->cacheGetFunctions
 			);
 
+			$this->cacheGetFunctions = array_change_key_case( $this->cacheGetFunctions );
+
 			$this->addedCustomFunctions['cacheget'] = $this->customCacheGetFunctions;
 		}
 
@@ -286,6 +305,8 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				$this->cacheSetFunctions
 			);
 
+			$this->cacheSetFunctions = array_change_key_case( $this->cacheSetFunctions );
+
 			$this->addedCustomFunctions['cacheset'] = $this->customCacheSetFunctions;
 		}
 
@@ -294,6 +315,8 @@ final class DirectDatabaseQuerySniff extends Sniff {
 				$this->customCacheDeleteFunctions,
 				$this->cacheDeleteFunctions
 			);
+
+			$this->cacheDeleteFunctions = array_change_key_case( $this->cacheDeleteFunctions );
 
 			$this->addedCustomFunctions['cachedelete'] = $this->customCacheDeleteFunctions;
 		}

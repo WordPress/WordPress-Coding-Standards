@@ -34,6 +34,48 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	const METRIC_NAME = 'get_*meta() function called with $single parameter';
 
 	/**
+	 * Relevant signature structure for generic meta functions.
+	 *
+	 * These functions use 'meta_key' as the parameter name at position 3 and
+	 * 'single' as the parameter name at position 4.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var array<string, array<string, int|string>>
+	 */
+	private const GENERIC_META_FUNCTIONS_FORMAT = array(
+		'condition'   => array(
+			'param_name' => 'meta_key',
+			'position'   => 3,
+		),
+		'recommended' => array(
+			'param_name' => 'single',
+			'position'   => 4,
+		),
+	);
+
+	/**
+	 * Relevant signature structure for specific meta functions.
+	 *
+	 * These functions use 'key' as the parameter name at position 2 and
+	 * 'single' as the parameter name at position 3.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var array<string, array<string, int|string>>
+	 */
+	private const SPECIFIC_META_FUNCTIONS_FORMAT = array(
+		'condition'   => array(
+			'param_name' => 'key',
+			'position'   => 2,
+		),
+		'recommended' => array(
+			'param_name' => 'single',
+			'position'   => 3,
+		),
+	);
+
+	/**
 	 * The group name for this group of functions.
 	 *
 	 * @since 3.2.0
@@ -44,10 +86,6 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * List of functions this sniff should examine.
-	 *
-	 * {@internal Once support for PHP < 5.6 is dropped, it is possible to create two class constants
-	 * representing the two different signatures of get meta functions to remove the duplication
-	 * of the name and position of the parameters.}
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/get_comment_meta/
 	 * @link https://developer.wordpress.org/reference/functions/get_metadata/
@@ -66,86 +104,14 @@ final class GetMetaSingleSniff extends AbstractFunctionParameterSniff {
 	 *                                                              the relevant parameters.
 	 */
 	protected $target_functions = array(
-		'get_comment_meta'     => array(
-			'condition'   => array(
-				'param_name' => 'key',
-				'position'   => 2,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 3,
-			),
-		),
-		'get_metadata'         => array(
-			'condition'   => array(
-				'param_name' => 'meta_key',
-				'position'   => 3,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 4,
-			),
-		),
-		'get_metadata_default' => array(
-			'condition'   => array(
-				'param_name' => 'meta_key',
-				'position'   => 3,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 4,
-			),
-		),
-		'get_metadata_raw'     => array(
-			'condition'   => array(
-				'param_name' => 'meta_key',
-				'position'   => 3,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 4,
-			),
-		),
-		'get_post_meta'        => array(
-			'condition'   => array(
-				'param_name' => 'key',
-				'position'   => 2,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 3,
-			),
-		),
-		'get_site_meta'        => array(
-			'condition'   => array(
-				'param_name' => 'key',
-				'position'   => 2,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 3,
-			),
-		),
-		'get_term_meta'        => array(
-			'condition'   => array(
-				'param_name' => 'key',
-				'position'   => 2,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 3,
-			),
-		),
-		'get_user_meta'        => array(
-			'condition'   => array(
-				'param_name' => 'key',
-				'position'   => 2,
-			),
-			'recommended' => array(
-				'param_name' => 'single',
-				'position'   => 3,
-			),
-		),
+		'get_comment_meta'     => self::SPECIFIC_META_FUNCTIONS_FORMAT,
+		'get_metadata'         => self::GENERIC_META_FUNCTIONS_FORMAT,
+		'get_metadata_default' => self::GENERIC_META_FUNCTIONS_FORMAT,
+		'get_metadata_raw'     => self::GENERIC_META_FUNCTIONS_FORMAT,
+		'get_post_meta'        => self::SPECIFIC_META_FUNCTIONS_FORMAT,
+		'get_site_meta'        => self::SPECIFIC_META_FUNCTIONS_FORMAT,
+		'get_term_meta'        => self::SPECIFIC_META_FUNCTIONS_FORMAT,
+		'get_user_meta'        => self::SPECIFIC_META_FUNCTIONS_FORMAT,
 	);
 
 	/**

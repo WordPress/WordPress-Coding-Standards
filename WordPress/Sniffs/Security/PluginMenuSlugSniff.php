@@ -15,7 +15,7 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 /**
  * Warn about __FILE__ for page registration.
  *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#using-__file__-for-page-registration
+ * @link https://docs.wpvip.com/php_codesniffer/warnings/#h-using-file-for-page-registration
  *
  * @since 0.3.0
  * @since 0.11.0 Refactored to extend the new WordPressCS native

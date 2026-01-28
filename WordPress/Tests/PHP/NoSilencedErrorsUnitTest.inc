@@ -12,7 +12,7 @@ if (@in_array($array, $needle)) { // Bad.
 }
 
 // File extension.
-if ( @&file_exists( $filename ) && @ /*comment*/ is_readable( $filename ) ) {
+if ( @&file_exists( $filename ) && @ /*comment*/ IS_READABLE( $filename ) ) {
 	$file = @ \file( $filename );
 }
 
@@ -22,7 +22,7 @@ $fp = @fopen('https://www.example.com', 'r', false);
 
 // Directory extension.
 if (@is_dir($dir)) {
-    if ($dh = @\opendir($dir)) {
+    if ($dh = @\OPENDIR($dir)) {
         while (($file = @readdir($dh)) !== false) { // Bad.
             echo "filename: $file : filetype: " . @\filetype($dir . $file) . "\n";
         }
@@ -84,3 +84,11 @@ $decoded = @hex2bin( $data );
 // phpcs:set WordPress.PHP.NoSilencedErrors context_length 0
 echo @some_userland_function( $param ); // Bad.
 // phpcs:set WordPress.PHP.NoSilencedErrors context_length 6
+
+/*
+ * Safeguard correct handling of namespaced function calls (fully qualified is already tested above).
+ */
+$file = @MyNS\MyClass::file_get_contents( $file ); // Bad.
+$file = @MyNS\MyClass\file_exists( $file ); // Bad.
+$file = @namespace\MyNS\MyClass::file( $file ); // Bad.
+$file = @namespace\is_dir( $dir ); // The sniff should stop flagging this once it can resolve relative namespaces.

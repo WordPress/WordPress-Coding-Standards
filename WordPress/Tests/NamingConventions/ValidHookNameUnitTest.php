@@ -75,6 +75,7 @@ final class ValidHookNameUnitTest extends AbstractSniffUnitTest {
 					114 => 1,
 					115 => 1,
 					123 => 1,
+					128 => 1,
 				);
 
 			case 'ValidHookNameUnitTest.2.inc':

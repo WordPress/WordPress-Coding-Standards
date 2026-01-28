@@ -27,8 +27,9 @@ final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		return array(
-			3 => 1,
-			8 => 2,
+			3  => 1,
+			8  => 2,
+			14 => 1,
 		);
 	}
 

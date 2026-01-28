@@ -14,7 +14,7 @@ use WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff;
 /**
  * Flag potentially slow queries.
  *
- * @link https://vip.wordpress.com/documentation/vip-go/code-review-blockers-warnings-notices/#uncached-pageload
+ * @link https://docs.wpvip.com/php_codesniffer/warnings/#h-functions-that-use-joins-taxonomy-relation-queries-cat-tax-queries-subselects-or-api-calls
  *
  * @since 0.3.0
  * @since 0.13.0 Class name changed: this class is now namespaced.

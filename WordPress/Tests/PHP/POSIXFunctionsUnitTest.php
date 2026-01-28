@@ -35,6 +35,7 @@ final class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
 			22 => 1,
 			24 => 1,
 			26 => 1,
+			31 => 1,
 		);
 	}
 

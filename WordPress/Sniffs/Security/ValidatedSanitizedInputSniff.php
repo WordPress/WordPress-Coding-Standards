@@ -23,7 +23,7 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Flag any non-validated/sanitized input ( _GET / _POST / etc. ).
  *
- * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/69
+ * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/72
  *
  * @since 0.3.0
  * @since 0.4.0  This class now extends the WordPressCS native `Sniff` class.
@@ -175,7 +175,7 @@ class ValidatedSanitizedInputSniff extends Sniff {
 
 		if ( false === $validated ) {
 			$this->phpcsFile->addError(
-				'Detected usage of a possibly undefined superglobal array index: %s. Use isset() or empty() to check the index exists before using it',
+				'Detected usage of a possibly undefined superglobal array index: %s. Check that the array index exists before using it.',
 				$stackPtr,
 				'InputNotValidated',
 				$error_data

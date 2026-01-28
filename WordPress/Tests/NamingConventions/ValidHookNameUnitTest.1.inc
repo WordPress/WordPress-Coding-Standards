@@ -6,9 +6,9 @@ prefix_do_action( 'someAction' ); // Ok - not WP do_action.
 
 // Check for incorrect word separators.
 do_action( "admin_head-$hook_suffix" ); // Warning - use underscore.
-do_action( 'admin_head.media.upload_popup' ); // Warning - use underscore.
+DO_ACTION( 'admin_head.media.upload_popup' ); // Warning - use underscore.
 apply_filters( "bulk_actions {$this->screen->id}", $this->_actions ); // Warning - use underscore.
-apply_filters( "current_theme/supports-{$feature}", true, $args, $_wp_theme_features[$feature] ); // Warning - use underscore.
+\Apply_Filters( "current_theme/supports-{$feature}", true, $args, $_wp_theme_features[$feature] ); // Warning - use underscore.
 
 // Simple strings.
 do_action( "adminHead" ); // Error - use lowercase.
@@ -121,3 +121,14 @@ do_action( 'admin_head_' .  $fn( 'UPPERCASE', 'wrong-delimiter' ) . '_action' );
 do_action_ref_array( hook: 'My-Hook', args: $args ); // OK. Well, not really, but using the wrong parameter name, so not our concern.
 do_action_ref_array( args: $args, hook_name: 'my_hook', ); // OK.
 do_action_ref_array( args: $args, hook_name: 'My-Hook', ); // Error - use lowercase + warning about dash.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\apply_filters( 'adminHead', $variable ); // Error.
+MyNamespace\do_action( 'adminHead' ); // Ok.
+\MyNamespace\do_action_ref_array( 'adminHead', array( $variable ) ); // Ok.
+namespace\apply_filters_ref_array( 'adminHead', array( $variable ) ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
+apply_filters( 'admin_head_' .  MyNamespace\my_function('UPPERCASE') . '_action', $variable ); // Ok.
+do_action( 'admin_head_' .  \MyNamespace\my_function('UPPERCASE') . '_action' ); // Ok.
+do_action_ref_array( 'admin_head_' .  namespace\my_function('UPPERCASE') . '_action', array( $variable ) ); // Ok.

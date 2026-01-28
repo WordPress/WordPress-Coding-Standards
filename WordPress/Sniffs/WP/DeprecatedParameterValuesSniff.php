@@ -43,7 +43,7 @@ final class DeprecatedParameterValuesSniff extends AbstractFunctionParameterSnif
 	 * looking for `_deprecated_argument()`.
 	 * The list is sorted alphabetically by function name.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.8.1.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 The format of the value has changed to support function calls

@@ -29,7 +29,7 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), function() { }, true ); // OK.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), $version, true ); // OK.
 
-wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // Warning - In Footer is set to a falsy (default) value.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // Warning - $in_footer is not explicitly set.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0', false ); // OK.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0', null ); // OK.
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0', 0 ); // OK.
@@ -95,3 +95,16 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (double) 0, true ); // Error - 0, false or NULL are not allowed.
 
 wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), (binary) 0, true ); // Error - 0, false or NULL are not allowed.
+
+// Safeguard handling of non-lowercase `null`.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), NULL, true ); // Warning - 0, false or NULL are not allowed.
+
+/*
+ * Safeguard handling of fully qualified \true, \false and \null.
+ * Also safeguard that adding T_NS_SEPARATOR to $false_tokens doesn't cause false positives due to problems in is_falsy().
+ */
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \FALSE, \true ); // Error - 0, false or NULL are not allowed.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \null, \TRUE ); // Warning - 0, false or NULL are not allowed.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \Null, true ); // Warning - 0, false or NULL are not allowed.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \true, \False ); // Ok.
+wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), \get_version(), \null ); // OK.
