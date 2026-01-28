@@ -17,13 +17,17 @@
 <em>$prefix_query</em> = new WP_Query( $args );
 
 
+
+
 <em>$GLOBALS['prefix_data']</em> = 'some data';
         ]]>
         </code>
         <code title="Invalid: Overriding a WordPress defined global variable.">
         <![CDATA[
-<em>global $wp_query;</em>
-<em>$wp_query</em> = new WP_Query( $args );
+function prefix_custom_query( $args ) {
+    <em>global $wp_query;</em>
+    <em>$wp_query</em> = new WP_Query( $args );
+}
 
 <em>$GLOBALS['post']</em> = get_post( 1 );
         ]]>
