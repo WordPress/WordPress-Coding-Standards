@@ -12,7 +12,7 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using non-WordPress global names.">
+        <code title="Valid: Declaring global variables with names not reserved for use by WordPress itself.">
         <![CDATA[
 <em>$prefix_query</em> = new WP_Query( $args );
 
