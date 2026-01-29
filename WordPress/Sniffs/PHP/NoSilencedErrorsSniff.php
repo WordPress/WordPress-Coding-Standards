@@ -185,6 +185,9 @@ final class NoSilencedErrorsSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		// Handle the user-defined custom function list.
 		$this->customAllowedFunctionsList = RulesetPropertyHelper::merge_custom_array( $this->customAllowedFunctionsList, array(), false );
+		// PHPCS >= 4.0 converts empty string values in array properties to null.
+		// Filter out null values to avoid passing them to strtolower().
+		$this->customAllowedFunctionsList = array_filter( $this->customAllowedFunctionsList );
 		$this->customAllowedFunctionsList = array_map( 'strtolower', $this->customAllowedFunctionsList );
 
 		/*

@@ -92,3 +92,11 @@ $file = @MyNS\MyClass::file_get_contents( $file ); // Bad.
 $file = @MyNS\MyClass\file_exists( $file ); // Bad.
 $file = @namespace\MyNS\MyClass::file( $file ); // Bad.
 $file = @namespace\is_dir( $dir ); // The sniff should stop flagging this once it can resolve relative namespaces.
+
+/*
+ * Safeguard handling of empty values in the custom allowed functions list (PHPCS 4.x compatibility).
+ * PHPCS >= 4.0 converts empty string values in array properties to null.
+ */
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[] ,
+$unserialized = @unserialize( $str );
+// phpcs:set WordPress.PHP.NoSilencedErrors customAllowedFunctionsList[]

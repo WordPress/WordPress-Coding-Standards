@@ -138,7 +138,9 @@ trait IsUnitTestTrait {
 			 */
 			$custom_test_classes = array();
 			if ( ! empty( $this->custom_test_classes ) ) {
-				foreach ( $this->custom_test_classes as $v ) {
+				// PHPCS >= 4.0 converts empty string values in array properties to null.
+				// Filter out null values to avoid passing them to ltrim().
+				foreach ( array_filter( $this->custom_test_classes ) as $v ) {
 					$custom_test_classes[] = ltrim( $v, '\\' );
 				}
 			}

@@ -1236,6 +1236,9 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$prefixes    = array();
 		$ns_prefixes = array();
 		foreach ( $this->prefixes as $key => $prefix ) {
+			// PHPCS >= 4.0 converts empty string values in array properties to null.
+			// Convert null back to empty string to preserve the "prefix too short" error.
+			$prefix   = $prefix ?? '';
 			$prefixLC = strtolower( $prefix );
 
 			if ( isset( $this->prefix_blocklist[ $prefixLC ] ) ) {
