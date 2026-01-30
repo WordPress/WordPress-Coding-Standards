@@ -1,74 +1,32 @@
 <?xml version="1.0"?>
 <documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
-    title="WordPress Alternative Functions"
+    title="Alternative Functions"
     >
     <standard>
     <![CDATA[
-    Use WordPress functions instead of native PHP functions to maintain compatibility and benefit from WordPress's additional security and performance improvements.
+    Use WordPress functions instead of certain native PHP functions.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using wp_json_encode() to encode JSON data.">
+        <code title="Valid: Using the WordPress alternatives.">
         <![CDATA[
-        <em>wp_json_encode( $data );</em>
+$response = <em>wp_remote_get</em>( $url );
+$json = <em>wp_json_encode</em>( $data );
+$parts = <em>wp_parse_url</em>( $url );
+$text = <em>wp_strip_all_tags</em>( $html );
+$number = <em>wp_rand</em>( 1, 100 );
+$deleted = <em>wp_delete_file</em>( $file );
         ]]>
         </code>
-        <code title="Invalid: Using PHP's json_encode() to encode JSON data.">
+        <code title="Invalid: Using the discouraged PHP functions.">
         <![CDATA[
-        <em>json_encode( $data );</em>
-        ]]>
-        </code>
-    </code_comparison>
-    <standard>
-    <![CDATA[
-    WordPress provides the wp_remote_* functions for making HTTP requests. Avoid using file_get_contents() or cURL directly.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: Using wp_remote_get() for HTTP requests.">
-        <![CDATA[
-        $response = <em>wp_remote_get( $url );</em>
-        ]]>
-        </code>
-        <code title="Invalid: Using file_get_contents() for HTTP requests.">
-        <![CDATA[
-        $response = <em>file_get_contents( $url );</em>
-        ]]>
-        </code>
-    </code_comparison>
-    <standard>
-    <![CDATA[
-    Use WordPress's translation functions to ensure text is translatable and localized.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: Using _e() or __() for translatable text.">
-        <![CDATA[
-<em>_e( 'Hello, World!', 'text-domain' );</em>
-$hello = <em>__( 'Hello, World!', 'text-domain' );</em>
-        ]]>
-        </code>
-        <code title="Invalid: Echoing plain text strings.">
-        <![CDATA[
-        <em>echo 'Hello, World!';</em>
-        ]]>
-        </code>
-    </code_comparison>
-    <standard>
-    <![CDATA[
-    Always use WordPress functions for escaping output to prevent XSS vulnerabilities.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: Using esc_html() to escape HTML output.">
-        <![CDATA[
-        <em>echo esc_html( $user_input );</em>
-        ]]>
-        </code>
-        <code title="Invalid: Outputting user input without escaping.">
-        <![CDATA[
-        <em>echo $user_input;</em>
+$response = <em>file_get_contents</em>( $url );
+$json = <em>json_encode</em>( $data );
+$parts = <em>parse_url</em>( $url );
+$text = <em>strip_tags</em>( $html );
+$number = <em>rand</em>( 1, 100 );
+$deleted = <em>unlink</em>( $file );
         ]]>
         </code>
     </code_comparison>
