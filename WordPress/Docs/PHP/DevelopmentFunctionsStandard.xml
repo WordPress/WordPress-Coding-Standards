@@ -5,18 +5,16 @@
     >
     <standard>
     <![CDATA[
-    Debug code should not normally be used in production.
-
-    Typically, this rule verifies if function calls to the PHP native `error_log()`, `var_dump()`, `var_export()`, `print_r()`, `trigger_error()`, `set_error_handler()`, `debug_backtrace`, `debug_print_backtrace` and `wp_debug_backtrace_summary()` functions are present in the code.
+    Debug functions should not be used in production code.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: (Not) using var_dump().">
+        <code title="Valid: Not using debug functions.">
         <![CDATA[
-// var_dump() should not be used.
+// Code without debug functions.
         ]]>
         </code>
-        <code title="Invalid: Calling the PHP native `var_dump()` function.">
+        <code title="Invalid: Calling a debug function.">
         <![CDATA[
 <em>var_dump( $bar );</em>
         ]]>
@@ -24,18 +22,16 @@
     </code_comparison>
     <standard>
     <![CDATA[
-    Please refrain from using functions that can lead to full path disclosure.
-
-    Typically, this rule verifies if function calls to the PHP native `error_reporting()` and `phpinfo()` functions are present in the code.
+    Functions that can lead to full path disclosure should not be used.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: (Not) using `phpinfo()`.">
+        <code title="Valid: Not using functions that can lead to full path disclosure.">
         <![CDATA[
-// php_info() should not be used.
+// No full path disclosure functions.
         ]]>
         </code>
-        <code title="Invalid: Calling the PHP native `phpinfo()` function.">
+        <code title="Invalid: Using a function that can lead to full path disclosure.">
         <![CDATA[
 <em>phpinfo();</em>
         ]]>
