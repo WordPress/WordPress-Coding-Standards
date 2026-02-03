@@ -5,36 +5,12 @@
     >
     <standard>
     <![CDATA[
-    Debug functions should not be used in production code.
+    Debug functions, like var_dump() and print_r(), should not be used in production code.
     ]]>
     </standard>
-    <code_comparison>
-        <code title="Valid: Not using debug functions.">
-        <![CDATA[
-// Code without debug functions.
-        ]]>
-        </code>
-        <code title="Invalid: Calling a debug function.">
-        <![CDATA[
-<em>var_dump( $bar );</em>
-        ]]>
-        </code>
-    </code_comparison>
     <standard>
     <![CDATA[
-    Functions that can lead to full path disclosure should not be used.
+    Functions that can lead to full path disclosure, like phpinfo(), should not be used.
     ]]>
     </standard>
-    <code_comparison>
-        <code title="Valid: Not using functions that can lead to full path disclosure.">
-        <![CDATA[
-// No full path disclosure functions.
-        ]]>
-        </code>
-        <code title="Invalid: Using a function that can lead to full path disclosure.">
-        <![CDATA[
-<em>phpinfo();</em>
-        ]]>
-        </code>
-    </code_comparison>
 </documentation>
