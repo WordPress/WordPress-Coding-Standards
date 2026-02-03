@@ -5,12 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Debug functions, like var_dump() and print_r(), should not be used in production code.
-    ]]>
-    </standard>
-    <standard>
-    <![CDATA[
-    Functions that can lead to full path disclosure, like phpinfo(), should not be used.
+    Certain development functions should not be used. This includes debug functions like var_dump() and print_r(), as well as functions that can lead to full path disclosure like phpinfo().
     ]]>
     </standard>
 </documentation>
