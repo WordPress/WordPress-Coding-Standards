@@ -137,9 +137,9 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 		if ( false === $array_has_keys ) {
 			return;
 		}
-		$error = 'When an array has explicit keys, each value should start on %s.';
+		$error = 'When an array is declared with explicit keys, each value should start on %s.';
 		if ( true === $this->allow_single_item_single_line_associative_arrays ) {
-			$error = 'When a multi-item array has explicit keys, each value should start on %s.';
+			$error = 'When a multi-item array is declared with explicit keys, each value should start on %s.';
 		}
 
 		/*
