@@ -9,24 +9,14 @@
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using the WordPress alternatives.">
+        <code title="Valid: Using a WordPress alternative function.">
         <![CDATA[
 $response = <em>wp_remote_get</em>( $url );
-$json = <em>wp_json_encode</em>( $data );
-$parts = <em>wp_parse_url</em>( $url );
-$text = <em>wp_strip_all_tags</em>( $html );
-$number = <em>wp_rand</em>( 1, 100 );
-$deleted = <em>wp_delete_file</em>( $file );
         ]]>
         </code>
-        <code title="Invalid: Using the discouraged PHP functions.">
+        <code title="Invalid: Using a discouraged PHP function.">
         <![CDATA[
 $response = <em>file_get_contents</em>( $url );
-$json = <em>json_encode</em>( $data );
-$parts = <em>parse_url</em>( $url );
-$text = <em>strip_tags</em>( $html );
-$number = <em>rand</em>( 1, 100 );
-$deleted = <em>unlink</em>( $file );
         ]]>
         </code>
     </code_comparison>
