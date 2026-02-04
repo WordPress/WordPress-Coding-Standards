@@ -19,21 +19,21 @@ use WordPressCS\WordPress\Sniff;
 /**
  * Enforces WordPress array spacing format.
  *
- * - Checks that associative arrays are multi-line.
+ * - Checks that arrays with explicit keys are multi-line.
  * - Checks that each array item in a multi-line array starts on a new line.
  *
  * @link https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#indentation
  *
  * @since 0.11.0 - The WordPress specific additional checks have now been split off
  *                 from the `WordPress.Arrays.ArrayDeclaration` sniff into this sniff.
- *               - Added sniffing & fixing for associative arrays.
+ *               - Added sniffing & fixing for arrays with explicit keys.
  * @since 0.12.0 Decoupled this sniff from the upstream sniff completely.
  *               This sniff now extends the WordPressCS native `Sniff` class instead.
  * @since 0.13.0 Added the last remaining checks from the `WordPress.Arrays.ArrayDeclaration`
  *               sniff which were not covered elsewhere.
  *               The `WordPress.Arrays.ArrayDeclaration` sniff has now been deprecated.
  * @since 0.13.0 Class name changed: this class is now namespaced.
- * @since 0.14.0 Single item associative arrays are now by default exempt from the
+ * @since 0.14.0 Single item arrays with explicit keys are now by default exempt from the
  *               "must be multi-line" rule. This behavior can be changed using the
  *               `allow_single_item_single_line_associative_arrays` property.
  * @since 3.0.0  Removed various whitespace related checks and fixers in favor of the PHPCSExtra
@@ -42,7 +42,7 @@ use WordPressCS\WordPress\Sniff;
 final class ArrayDeclarationSpacingSniff extends Sniff {
 
 	/**
-	 * Whether or not to allow single item associative arrays to be single line.
+	 * Whether or not to allow single item arrays with explicit keys to be single line.
 	 *
 	 * @since 0.14.0
 	 *
@@ -102,7 +102,7 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	}
 
 	/**
-	 * Check that associative arrays are always multi-line.
+	 * Check that arrays with explicit keys are always multi-line.
 	 *
 	 * @since 0.13.0 The actual checks contained in this method used to
 	 *               be in the `process()` method.
@@ -137,9 +137,9 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 		if ( false === $array_has_keys ) {
 			return;
 		}
-		$error = 'When an array uses associative keys, each value should start on %s.';
+		$error = 'When an array is declared with explicit keys, each value should start on %s.';
 		if ( true === $this->allow_single_item_single_line_associative_arrays ) {
-			$error = 'When a multi-item array uses associative keys, each value should start on %s.';
+			$error = 'When a multi-item array is declared with explicit keys, each value should start on %s.';
 		}
 
 		/*
