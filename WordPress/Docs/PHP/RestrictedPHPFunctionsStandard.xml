@@ -5,24 +5,23 @@
     >
     <standard>
     <![CDATA[
-    The restricted function create_function() should not be used.
-
-    create_function() is deprecated as of PHP 7.2 and removed in PHP 8.0. Please use declared named or anonymous functions instead.
+    Certain PHP functions must not be used. Use the recommended alternatives instead.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using anonymous function (closure).">
+        <code title="Valid: Using an anonymous function.">
         <![CDATA[
-add_action( 'init', function() {
+$function = <em>function ()</em> {
     return foo( 'bar' );
-} );
+};
         ]]>
         </code>
         <code title="Invalid: Using create_function().">
         <![CDATA[
-add_action( 'init', <em>create_function( '',
+$function = <em>create_function</em>(
+    '',
     'return foo( "bar" );'
-)</em> );
+);
         ]]>
         </code>
     </code_comparison>
