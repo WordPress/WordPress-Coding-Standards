@@ -107,3 +107,10 @@ $bad = [
 
 // Don't confuse list arrows with array arrows.
 $okay = [ $item1, [ 'key1' => $a, 'key2' => $b ] = $array, $item3 ];
+
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_explicit_key_arrays false
+
+$bad = [ 'key' => 'value' ]; // Bad.
+$bad = [ 'key1' => 'value1', 'key2' => 'value2' ]; // Bad.
+
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_explicit_key_arrays true

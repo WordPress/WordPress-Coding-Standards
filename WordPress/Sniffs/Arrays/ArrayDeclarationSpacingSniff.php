@@ -38,13 +38,25 @@ use WordPressCS\WordPress\Sniff;
  *               `allow_single_item_single_line_associative_arrays` property.
  * @since 3.0.0  Removed various whitespace related checks and fixers in favor of the PHPCSExtra
  *               `NormalizedArrays.Arrays.ArrayBraceSpacing` sniff.
+ * @since 3.4.0  The `allow_single_item_single_line_associative_arrays` property has been
+ *               deprecated in favor of the new `allow_single_item_single_line_explicit_key_arrays` property.
  */
 final class ArrayDeclarationSpacingSniff extends Sniff {
+
+	/**
+	 * Whether to allow single item arrays with explicit keys to be single line.
+	 *
+	 * @since 3.4.0
+	 *
+	 * @var bool Defaults to true.
+	 */
+	public $allow_single_item_single_line_explicit_key_arrays = true;
 
 	/**
 	 * Whether or not to allow single item arrays with explicit keys to be single line.
 	 *
 	 * @since 0.14.0
+	 * @deprecated 3.4.0 Use $allow_single_item_single_line_explicit_key_arrays instead.
 	 *
 	 * @var bool Defaults to true.
 	 */
@@ -114,10 +126,19 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 	 * @return void
 	 */
 	protected function process_single_line_array( $stackPtr, $opener, $closer ) {
+		// For now, if the new property has not been changed from its default value and the deprecated property has, use
+		// the deprecated property's value.
+		$allow_single_item = $this->allow_single_item_single_line_explicit_key_arrays;
+		if ( true === $allow_single_item
+			&& false === $this->allow_single_item_single_line_associative_arrays
+		) {
+			$allow_single_item = false;
+		}
+
 		$array_items = PassedParameters::getParameters( $this->phpcsFile, $stackPtr );
-		if ( ( false === $this->allow_single_item_single_line_associative_arrays
+		if ( ( false === $allow_single_item
 				&& empty( $array_items ) )
-			|| ( true === $this->allow_single_item_single_line_associative_arrays
+			|| ( true === $allow_single_item
 				&& \count( $array_items ) === 1 )
 		) {
 			return;
@@ -138,7 +159,7 @@ final class ArrayDeclarationSpacingSniff extends Sniff {
 			return;
 		}
 		$error = 'When an array is declared with explicit keys, each value should start on %s.';
-		if ( true === $this->allow_single_item_single_line_associative_arrays ) {
+		if ( true === $allow_single_item ) {
 			$error = 'When a multi-item array is declared with explicit keys, each value should start on %s.';
 		}
 
