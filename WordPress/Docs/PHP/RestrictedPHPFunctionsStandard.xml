@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Certain PHP functions must not be used. Use the recommended alternatives instead.
+    Certain PHP functions must not be used, as they have been deprecated and removed from PHP or pose security risks. Use the recommended alternatives instead.
     ]]>
     </standard>
     <code_comparison>
