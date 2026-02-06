@@ -5,7 +5,9 @@
     >
     <standard>
     <![CDATA[
-    The error silencing operator (@) should not be used. As an exception, the operator is allowed for certain functions where errors cannot be prevented through error checking.
+    The error silencing operator (@) should not be used. It suppresses errors instead of handling them properly, making debugging more difficult.
+
+    As an exception, the operator is allowed for certain functions where errors cannot be prevented through error checking.
     ]]>
     </standard>
     <code_comparison>
