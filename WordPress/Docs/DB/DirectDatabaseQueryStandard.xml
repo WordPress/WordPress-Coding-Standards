@@ -5,115 +5,105 @@
     >
     <standard>
     <![CDATA[
-    You should not make direct database queries, but instead use abstractions such as WP_Query.
+    Direct database queries using $wpdb methods should be avoided. WordPress database abstraction layers handle caching, data integrity, and firing of hooks, which direct queries bypass.
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Using WP_Query to retrieve data.">
         <![CDATA[
-$my_query = new WP_Query(
-    [
-        'post_type' => 'foo',
-    ]
+$page_query = new <em>WP_Query</em>(
+    array(
+        'post_type' => 'page',
+    )
 );
         ]]>
         </code>
         <code title="Invalid: Using a direct query to retrieve data.">
         <![CDATA[
-$results = $wpdb->get_results(
+$results = <em>$wpdb->get_results</em>(
     $wpdb->prepare(
-        "SELECT * FROM x WHERE y = %s",
-        'foo',
-    ),
+        "SELECT * FROM %i
+            WHERE post_type = %s",
+        $wpdb->posts,
+        'page'
+    )
 );
         ]]>
         </code>
     </code_comparison>
-
     <standard>
     <![CDATA[
-    You should not make direct database queries without caching.
+    When a direct database call is necessary, it should be paired with caching. For read queries, this avoids running expensive queries multiple times. For write queries, invalidating relevant caches prevents stale data.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: The results of a direct database query are stored in the object cache.">
+        <code title="Valid: Direct query results are cached and retrieved from cache when available.">
         <![CDATA[
-function foo() {
-    global $wpdb;
-    
-    $cached = wp_cache_get( 'foo' );
+function get_draft_ids() {
+    $key = 'my_plugin_draft_ids';
+    $cached = <em>wp_cache_get</em>( $key );
+
     if ( false !== $cached ) {
         return $cached;
     }
 
-    $results = $wpdb->query(
-        'SELECT x FROM foo'
+    $results = $wpdb->get_col(
+        "SELECT ID FROM $wpdb->posts
+            WHERE post_status = 'draft'"
     );
 
-    wp_cache_set( 'foo', $results );
+    <em>wp_cache_set</em>( $key, $results );
+
     return $results;
 }
         ]]>
         </code>
-        <code title="Invalid: Direct database query is made without leveraging the object cache.">
+        <code title="Invalid: Direct query without caching.">
         <![CDATA[
-function foo() {
-    global $wpdb;
-    return $wpdb->query( 'SELECT x FROM foo' );
+function get_draft_ids() {
+    $results = $wpdb->get_col(
+        "SELECT ID FROM $wpdb->posts
+            WHERE post_status = 'draft'"
+    );
+
+    return $results;
 }
         ]]>
         </code>
     </code_comparison>
     <code_comparison>
-        <code title="Valid: The results of a direct database query are stored in the object cache.">
+        <code title="Valid: Cache is invalidated after a write query.">
         <![CDATA[
-function foo() {
+function update_post_title() {
     global $wpdb;
 
-    $cached = wp_cache_get( 'foo' );
-    if ( false !== $cached ) {
-        return $cached;
-    }
-
-    $results = $wpdb->query(
-        'SELECT x FROM foo'
+    $wpdb->update(
+        $wpdb->posts,
+        array( 'post_title' => $title ),
+        array( 'ID' => $post_id )
     );
 
-    wp_cache_set( 'foo', $results );
-    return $results;
+    <em>clean_post_cache</em>( $post_id );
 }
         ]]>
         </code>
-        <code title="Invalid: Incorrect implementation of caching with a direct database query.">
+        <code title="Invalid: Write query without cache invalidation.">
         <![CDATA[
-function foo() {
+function update_post_title() {
     global $wpdb;
-    $results = $wpdb->query(
-        'SELECT * from foo'
-    );
 
-    wp_cache_set( 'foo', $results );
-    return $results;
+    $wpdb->update(
+        $wpdb->posts,
+        array( 'post_title' => $title ),
+        array( 'ID' => $post_id )
+    );
 }
         ]]>
         </code>
     </code_comparison>
-
     <standard>
     <![CDATA[
-    You should not make direct database queries to alter the database schema.
+    Altering the database schema is discouraged, as it can break WordPress core, plugins, or themes that depend on the existing schema.
     ]]>
     </standard>
-    <code_comparison>
-        <code title="Valid: Altering database schema using the dbDelta function.">
-        <![CDATA[
-dbDelta( 'CREATE TABLE foo' );
-        ]]>
-        </code>
-        <code title="Invalid: Altering database schema using a direct database query.">
-        <![CDATA[
-$wpdb->query( 'CREATE TABLE foo' );
-        ]]>
-        </code>
-    </code_comparison>
 </documentation>
