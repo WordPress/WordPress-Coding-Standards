@@ -5,18 +5,18 @@
     >
     <standard>
     <![CDATA[
-    The error silencing operator (@) should not be used. It suppresses errors instead of handling them properly, making debugging more difficult.
+    The error silencing operator (@) should not be used. Errors should be addressed through proper checking rather than being silenced.
 
-    As an exception, the operator is allowed for certain functions where errors cannot be prevented through error checking.
+    As an exception, the operator is allowed for certain functions where warnings cannot be prevented through error checking.
     ]]>
     </standard>
     <code_comparison>
         <code title="Valid: Calling a function without error silencing.">
         <![CDATA[
-$connection = <em></em>ftp_connect( $ftp_server );
+$connection = <em>ftp_connect</em>( $ftp_server );
         ]]>
         </code>
-        <code title="Invalid: Using the @ operator to silence errors.">
+        <code title="Invalid: Using the @ operator to silence warnings and errors.">
         <![CDATA[
 $connection = <em>@</em>ftp_connect( $ftp_server );
         ]]>
