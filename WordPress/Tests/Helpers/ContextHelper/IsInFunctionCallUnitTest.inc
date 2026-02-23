@@ -8,7 +8,7 @@
 $a = /* testPlainAssignment */ 'foo';
 another_function( /* testDifferentFunction */ 123 );
 $anon_func = function() {
-    /* testInsideClosure */ $a = 'foo';
+	/* testInsideClosure */ $a = 'foo';
 };
 $my_function( /* testVariableFunction */ $a );
 if ( /* testIfCondition */ true ) {}
