@@ -131,9 +131,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$testMarker,
 			$tokenType,
-			$expectedResults,
+			$expectedResults['global_only'],
 			$expectedFunctionMarker,
-			'global_only'
+			self::PARAMETER_MAP['global_only']
 		);
 	}
 
@@ -158,9 +158,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$testMarker,
 			$tokenType,
-			$expectedResults,
+			$expectedResults['non_global_only'],
 			$expectedFunctionMarker,
-			'non_global_only'
+			self::PARAMETER_MAP['non_global_only']
 		);
 	}
 
@@ -185,9 +185,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$testMarker,
 			$tokenType,
-			$expectedResults,
+			$expectedResults['global_nested'],
 			$expectedFunctionMarker,
-			'global_nested'
+			self::PARAMETER_MAP['global_nested']
 		);
 	}
 
@@ -212,9 +212,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$testMarker,
 			$tokenType,
-			$expectedResults,
+			$expectedResults['non_global_nested'],
 			$expectedFunctionMarker,
-			'non_global_nested'
+			self::PARAMETER_MAP['non_global_nested']
 		);
 	}
 
@@ -239,22 +239,19 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 *
 	 * @param string              $testMarker             The comment which prefaces the target token.
 	 * @param int|string          $tokenType              The token type to search for.
-	 * @param array<string, bool> $expectedResults        Which parameter combinations should match.
+	 * @param bool                $shouldMatch            Whether the test case should match.
 	 * @param string|null         $expectedFunctionMarker The comment for the expected function (if match expected).
-	 * @param string              $expectedKey            Which key in expectedResults to check.
+	 * @param array<string, bool> $params                 The is_in_function_call() parameter values.
 	 *
 	 * @return void
 	 */
 	private function runIsInFunctionCallTest(
 		$testMarker,
 		$tokenType,
-		$expectedResults,
+		$shouldMatch,
 		$expectedFunctionMarker,
-		$expectedKey
+		$params
 	) {
-		$globalFunction = self::PARAMETER_MAP[ $expectedKey ]['global_function'];
-		$allowNested    = self::PARAMETER_MAP[ $expectedKey ]['allow_nested'];
-
 		$insideFunctionPtr = $this->getTargetToken( $testMarker, $tokenType );
 		$result            = ContextHelper::is_in_function_call(
 			self::$phpcsFile,
@@ -263,15 +260,15 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 				'valid_function1' => true,
 				'valid_function2' => true,
 			),
-			$globalFunction,
-			$allowNested
+			$params['global_function'],
+			$params['allow_nested']
 		);
 
-		$expected = $expectedResults[ $expectedKey ]
+		$expected = $shouldMatch
 			? $this->getTargetToken( $expectedFunctionMarker, \T_STRING )
 			: false;
 
-		$this->assertSame( $expected, $result, "Failed for: $testMarker with $expectedKey" );
+		$this->assertSame( $expected, $result );
 	}
 
 	/**
