@@ -13,12 +13,12 @@
     <code_comparison>
         <code title="Valid: Using a WordPress alternative function.">
         <![CDATA[
-$response = <em>wp_remote_get</em>( $url );
+$number = <em>wp_rand</em>( 1, 100 );
         ]]>
         </code>
         <code title="Invalid: Using a discouraged PHP function.">
         <![CDATA[
-$response = <em>file_get_contents</em>( $url );
+$number = <em>mt_rand</em>( 1, 100 );
         ]]>
         </code>
     </code_comparison>
