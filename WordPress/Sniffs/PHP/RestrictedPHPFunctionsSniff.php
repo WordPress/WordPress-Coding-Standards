@@ -35,7 +35,7 @@ final class RestrictedPHPFunctionsSniff extends AbstractFunctionRestrictionsSnif
 		return array(
 			'create_function' => array(
 				'type'      => 'error',
-				'message'   => '%s() is deprecated as of PHP 7.2 and removed in PHP 8.0. Please use declared named or anonymous functions instead.',
+				'message'   => '%s() must not be used as it can pose a security risk. Use a declared function or an anonymous function (closure) instead.',
 				'functions' => array(
 					'create_function',
 				),
