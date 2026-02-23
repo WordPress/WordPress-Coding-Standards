@@ -5,22 +5,28 @@
     >
     <standard>
     <![CDATA[
-    Certain PHP functions must not be used, as they have been deprecated and removed from PHP or pose security risks. Use the recommended alternatives instead.
+    Certain PHP functions must not be used, as they pose security risks. Use the recommended alternatives instead.
     ]]>
     </standard>
     <code_comparison>
-        <code title="Valid: Using an anonymous function.">
+        <code title="Valid: Using an anonymous function (closure).">
         <![CDATA[
-$function = <em>function ()</em> {
-    return foo( 'bar' );
-};
+add_action(
+    'init',
+    <em>function () {
+        return foo( 'bar' );
+    }</em>
+);
         ]]>
         </code>
         <code title="Invalid: Using create_function().">
         <![CDATA[
-$function = <em>create_function</em>(
-    '',
-    'return foo( "bar" );'
+add_action(
+    'init',
+    <em>create_function(
+        '',
+        'return foo( "bar" );'
+    )</em>
 );
         ]]>
         </code>
