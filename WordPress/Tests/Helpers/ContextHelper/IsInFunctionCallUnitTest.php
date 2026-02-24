@@ -292,7 +292,8 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	}
 
 	/**
-	 * Data provider for all is_in_function_call() tests.
+	 * Data provider for the testIsInFunctionCallWithDefaultParams(), testIsInFunctionCallWithGlobalFalse(),
+	 * testIsInFunctionCallWithNestedTrue(), and testIsInFunctionCallWithGlobalFalseNestedTrue() test methods.
 	 *
 	 * @return array<string, array<string, int|string|array<string, bool>>>
 	 */
