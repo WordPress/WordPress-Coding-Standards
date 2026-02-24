@@ -19,15 +19,16 @@ if ( /* testIfCondition */ true ) {}
  */
 
 /* testLowercaseName */
-valid_function1( /* testLowercaseNameInsideCall */ );
+valid_function1( /* testLowercaseNameInsideCall */ $var );
 /* testUppercaseName */
 VALID_FUNCTION2( /* testUppercaseNameInsideCall */ 'string' );
 /* testFullyQualified */
 \valid_function2( /* testFullyQualifiedInsideCall */ 42 );
+another_function( /* testNestedInner */ valid_function1( /* testNestedInnerInsideCall */ true ) );
 
 /*
- * The below might be recognized as inside a function call to one of the valid functions or not depending on the values
- * passed to the optional parameters (`$global_function` and `$allow_nested`).
+ * The below should only be recognized as inside a function call to one of the valid functions when `$global_function`
+ * is `false`.
  */
 
 MyNamespace\/* testNamespacedFunction */valid_function1( /* testNamespacedFunctionInsideCall */ some_function() );
@@ -44,11 +45,22 @@ MyClass::/* testStaticMethod */valid_function2(
 $obj->valid_function1( /* testObjectMethodInsideCall */ array() );
 /* testNullsafeObjectMethod */
 $obj?->valid_function1( /* testNullsafeObjectMethodInsideCall */ [ 1, 2, 3 ] );
+
+/*
+ * The below should only be recognized as inside a function call to one of the valid functions when `$allow_nested`
+ * is `true`.
+ */
+
 /* testNestedOuter */
 valid_function1( another_function( /* testNestedOuterInsideCall */ 'param' ) );
-another_function( /* testNestedInner */ valid_function1( /* testNestedInnerInsideCall */ true ) );
 /* testNestedMultipleLevels */
 valid_function1( middle_function( inner_function( /* testNestedMultipleLevelsInsideCall */ 999 ) ) );
+
+/*
+ * The below should only be recognized as inside a function call to one of the valid functions when both
+ * `$global_function` is `false` and `$allow_nested` is `true`.
+ */
+
 MyNamespace\/* testNestedBothNamespacedOuter */ valid_function1(
 	MyNamespace\other_function(
 		/* testNestedBothNamespacedOuterInsideCall */ 'value' . $var

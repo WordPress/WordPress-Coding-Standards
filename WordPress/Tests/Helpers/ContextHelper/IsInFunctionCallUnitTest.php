@@ -204,7 +204,7 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @return void
 	 */
 	public function testIsInFunctionCallShouldReturnFalseWhenEmptyValidFunctions() {
-		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_WHITESPACE );
+		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
 		$result            = ContextHelper::is_in_function_call(
 			self::$phpcsFile,
 			$insideFunctionPtr,
@@ -282,7 +282,7 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 			// Cases that should always match (regardless of parameters).
 			'lowercase_name' => array(
 				'marker'         => '/* testLowercaseNameInsideCall */',
-				'tokenType'      => \T_WHITESPACE,
+				'tokenType'      => \T_VARIABLE,
 				'expected'       => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testLowercaseName */',
 			),
@@ -297,6 +297,12 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 				'tokenType'      => \T_LNUMBER,
 				'expected'       => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testFullyQualified */',
+			),
+			'nested_inner' => array(
+				'marker'         => '/* testNestedInnerInsideCall */',
+				'tokenType'      => \T_TRUE,
+				'expected'       => self::EXPECT_ALWAYS_MATCH,
+				'expectedMarker' => '/* testNestedInner */',
 			),
 
 			// Cases that match only when `$global_function` is `false`.
@@ -343,12 +349,6 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 				'tokenType'      => \T_CONSTANT_ENCAPSED_STRING,
 				'expected'       => self::EXPECT_NESTED_ONLY,
 				'expectedMarker' => '/* testNestedOuter */',
-			),
-			'nested_inner' => array(
-				'marker'         => '/* testNestedInnerInsideCall */',
-				'tokenType'      => \T_TRUE,
-				'expected'       => self::EXPECT_ALWAYS_MATCH,
-				'expectedMarker' => '/* testNestedInner */',
 			),
 			'nested_multiple_levels' => array(
 				'marker'         => '/* testNestedMultipleLevelsInsideCall */',
