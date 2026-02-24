@@ -215,6 +215,24 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	}
 
 	/**
+	 * Test to document that is_in_function_call() does not match when $valid_functions keys are not lowercase.
+	 *
+	 * @return void
+	 */
+	public function testIsInFunctionCallShouldReturnFalseWhenValidFunctionsKeysAreNotLowercase() {
+		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
+		$result            = ContextHelper::is_in_function_call(
+			self::$phpcsFile,
+			$insideFunctionPtr,
+			array(
+				'Valid_Function1' => true,
+			)
+		);
+
+		$this->assertFalse( $result );
+	}
+
+	/**
 	 * Helper method to test is_in_function_call() with specific parameters.
 	 *
 	 * @param string              $marker         The comment which prefaces the target token.
