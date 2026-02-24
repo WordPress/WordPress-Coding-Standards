@@ -9,15 +9,15 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\ContextHelper;
 
-use WordPressCS\WordPress\Helpers\ContextHelper;
 use PHPCSUtils\TestUtils\UtilityMethodTestCase;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 
 /**
  * Tests for the `ContextHelper::is_in_function_call()` utility method.
  *
- * @since 3.3.0
+ * @since 3.4.0
  *
- * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_function_call()
+ * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_in_function_call
  */
 final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 
@@ -173,155 +173,12 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	}
 
 	/**
-	 * Test is_in_function_call() with $global_function=true (default) and $allow_nested=false (default).
+	 * Test is_in_function_call() with specific parameters.
 	 *
 	 * @dataProvider dataIsInFunctionCallWithDefaultParams
-	 *
-	 * @param string              $marker         The comment which prefaces the target token in the test file.
-	 * @param int|string          $tokenType      The token type to search for.
-	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
-	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
-	 *                                            in the test file (if a match is expected).
-	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
-	 *
-	 * @return void
-	 */
-	public function testIsInFunctionCallWithDefaultParams( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
-		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
-	}
-
-	/**
-	 * Data provider.
-	 *
-	 * @see testIsInFunctionCallWithDefaultParams()
-	 *
-	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
-	 */
-	public static function dataIsInFunctionCallWithDefaultParams() {
-		$data = self::dataIsInFunctionCall();
-
-		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
-		foreach ( $data as $key => $dataset ) {
-			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::GLOBAL_ONLY ];
-			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::GLOBAL_ONLY ];
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Test is_in_function_call() with $global_function=false and $allow_nested=false (default).
-	 *
 	 * @dataProvider dataIsInFunctionCallWithGlobalFalse
-	 *
-	 * @param string              $marker         The comment which prefaces the target token in the test file.
-	 * @param int|string          $tokenType      The token type to search for.
-	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
-	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
-	 *                                            in the test file (if a match is expected).
-	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
-	 *
-	 * @return void
-	 */
-	public function testIsInFunctionCallWithGlobalFalse( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
-		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
-	}
-
-	/**
-	 * Data provider.
-	 *
-	 * @see testIsInFunctionCallWithGlobalFalse()
-	 *
-	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
-	 */
-	public static function dataIsInFunctionCallWithGlobalFalse() {
-		$data = self::dataIsInFunctionCall();
-
-		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
-		foreach ( $data as $key => $dataset ) {
-			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::NON_GLOBAL_ONLY ];
-			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::NON_GLOBAL_ONLY ];
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Test is_in_function_call() with $global_function=true (default) and $allow_nested=true.
-	 *
 	 * @dataProvider dataIsInFunctionCallWithNestedTrue
-	 *
-	 * @param string              $marker         The comment which prefaces the target token in the test file.
-	 * @param int|string          $tokenType      The token type to search for.
-	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
-	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
-	 *                                            in the test file (if a match is expected).
-	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
-	 *
-	 * @return void
-	 */
-	public function testIsInFunctionCallWithNestedTrue( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
-		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
-	}
-
-	/**
-	 * Data provider.
-	 *
-	 * @see testIsInFunctionCallWithNestedTrue()
-	 *
-	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
-	 */
-	public static function dataIsInFunctionCallWithNestedTrue() {
-		$data = self::dataIsInFunctionCall();
-
-		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
-		foreach ( $data as $key => $dataset ) {
-			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::GLOBAL_NESTED ];
-			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::GLOBAL_NESTED ];
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Test is_in_function_call() with $global_function=false and $allow_nested=true.
-	 *
 	 * @dataProvider dataIsInFunctionCallWithGlobalFalseNestedTrue
-	 *
-	 * @param string              $marker         The comment which prefaces the target token in the test file.
-	 * @param int|string          $tokenType      The token type to search for.
-	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
-	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
-	 *                                            in the test file (if a match is expected).
-	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
-	 *
-	 * @return void
-	 */
-	public function testIsInFunctionCallWithGlobalFalseNestedTrue( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
-		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
-	}
-
-	/**
-	 * Data provider.
-	 *
-	 * @see testIsInFunctionCallWithGlobalFalseNestedTrue()
-	 *
-	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
-	 */
-	public static function dataIsInFunctionCallWithGlobalFalseNestedTrue() {
-		$data = self::dataIsInFunctionCall();
-
-		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
-		foreach ( $data as $key => $dataset ) {
-			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::NON_GLOBAL_NESTED ];
-			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::NON_GLOBAL_NESTED ];
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Helper method to test is_in_function_call() with specific parameters.
 	 *
 	 * @param string              $marker         The comment which prefaces the target token.
 	 * @param int|string          $tokenType      The token type to search for.
@@ -332,7 +189,7 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 *
 	 * @return void
 	 */
-	private function runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
+	public function testIsInFunctionCall( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
 		$insideFunctionPtr = $this->getTargetToken( $marker, $tokenType );
 		$result            = ContextHelper::is_in_function_call(
 			self::$phpcsFile,
@@ -351,6 +208,94 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		}
 
 		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCall()
+	 *
+	 * @return array<string, array<string, int|string|bool|array<string, bool>|null>>
+	 */
+	public static function dataIsInFunctionCallWithDefaultParams() {
+		$data    = self::dataIsInFunctionCall();
+		$newData = array();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$key                            = self::GLOBAL_ONLY . ' | ' . $key;
+			$newData[ $key ]                = $dataset;
+			$newData[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::GLOBAL_ONLY ];
+			$newData[ $key ]['params']      = self::PARAMETER_MAP[ self::GLOBAL_ONLY ];
+		}
+
+		return $newData;
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCall()
+	 *
+	 * @return array<string, array<string, int|string|bool|array<string, bool>|null>>
+	 */
+	public static function dataIsInFunctionCallWithGlobalFalse() {
+		$data    = self::dataIsInFunctionCall();
+		$newData = array();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$key                            = self::NON_GLOBAL_ONLY . ' | ' . $key;
+			$newData[ $key ]                = $dataset;
+			$newData[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::NON_GLOBAL_ONLY ];
+			$newData[ $key ]['params']      = self::PARAMETER_MAP[ self::NON_GLOBAL_ONLY ];
+		}
+
+		return $newData;
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCall()
+	 *
+	 * @return array<string, array<string, int|string|bool|array<string, bool>|null>>
+	 */
+	public static function dataIsInFunctionCallWithNestedTrue() {
+		$data    = self::dataIsInFunctionCall();
+		$newData = array();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$key                            = self::GLOBAL_NESTED . ' | ' . $key;
+			$newData[ $key ]                = $dataset;
+			$newData[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::GLOBAL_NESTED ];
+			$newData[ $key ]['params']      = self::PARAMETER_MAP[ self::GLOBAL_NESTED ];
+		}
+
+		return $newData;
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCall()
+	 *
+	 * @return array<string, array<string, int|string|bool|array<string, bool>|null>>
+	 */
+	public static function dataIsInFunctionCallWithGlobalFalseNestedTrue() {
+		$data    = self::dataIsInFunctionCall();
+		$newData = array();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$key                            = self::NON_GLOBAL_NESTED . ' | ' . $key;
+			$newData[ $key ]                = $dataset;
+			$newData[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::NON_GLOBAL_NESTED ];
+			$newData[ $key ]['params']      = self::PARAMETER_MAP[ self::NON_GLOBAL_NESTED ];
+		}
+
+		return $newData;
 	}
 
 	/**
