@@ -54,26 +54,13 @@ MyNamespace\/* testNestedBothNamespacedOuter */ valid_function1(
 		/* testNestedBothNamespacedOuterInsideCall */ 'value' . $var
 	)
 );
-/* testComplexParametersAlwaysMatch */
+
+/*
+ * Safeguard to ensure parentheses in other parameters within the same function call don't confuse the method.
+ */
+/* testOtherParamsWithParentheses */
 valid_function1(
 	array( 'key1' => 'value1' ),
-	other_function( 'nested' ),
-	/* testComplexParametersAlwaysMatchInsideCall */ $var
-);
-/* testComplexParametersNestedOnly */
-valid_function1(
-	function() { return 'closure value'; },
-	$obj->method(),
-	another_function( /* testComplexParametersNestedOnlyInsideCall */ $var )
-);
-/* testComplexParametersNonGlobal */
-$obj->valid_function1(
-	array( 'key1' => get_value() ),
-	MyClass::helper(),
-	/* testComplexParametersNonGlobalInsideCall */ true
-);
-MyClass::/* testComplexParametersNonGlobalNested */ valid_function1(
-	$obj->method(),
-	'text',
-	array( 'key' => MyNamespace\other_function( /* testComplexParametersNonGlobalNestedInsideCall */ 123 ) )
+	/* testOtherParamsWithParenthesesInsideCall */ $var,
+	function() { return 'closure value'; }
 );

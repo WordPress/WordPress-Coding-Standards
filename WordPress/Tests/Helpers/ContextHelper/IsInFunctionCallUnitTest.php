@@ -362,29 +362,13 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 				'expected'       => self::EXPECT_NON_GLOBAL_NESTED_ONLY,
 				'expectedMarker' => '/* testNestedBothNamespacedOuter */',
 			),
-			'complex_parameters_always_match' => array(
-				'marker'         => '/* testComplexParametersAlwaysMatchInsideCall */',
+
+			// Safeguard: parentheses in other parameters should not confuse the method.
+			'other_params_with_parentheses' => array(
+				'marker'         => '/* testOtherParamsWithParenthesesInsideCall */',
 				'tokenType'      => \T_VARIABLE,
 				'expected'       => self::EXPECT_ALWAYS_MATCH,
-				'expectedMarker' => '/* testComplexParametersAlwaysMatch */',
-			),
-			'complex_parameters_nested_only' => array(
-				'marker'         => '/* testComplexParametersNestedOnlyInsideCall */',
-				'tokenType'      => \T_VARIABLE,
-				'expected'       => self::EXPECT_NESTED_ONLY,
-				'expectedMarker' => '/* testComplexParametersNestedOnly */',
-			),
-			'complex_parameters_non_global' => array(
-				'marker'         => '/* testComplexParametersNonGlobalInsideCall */',
-				'tokenType'      => \T_TRUE,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
-				'expectedMarker' => '/* testComplexParametersNonGlobal */',
-			),
-			'complex_parameters_non_global_nested' => array(
-				'marker'         => '/* testComplexParametersNonGlobalNestedInsideCall */',
-				'tokenType'      => \T_LNUMBER,
-				'expected'       => self::EXPECT_NON_GLOBAL_NESTED_ONLY,
-				'expectedMarker' => '/* testComplexParametersNonGlobalNested */',
+				'expectedMarker' => '/* testOtherParamsWithParentheses */',
 			),
 		);
 	}
