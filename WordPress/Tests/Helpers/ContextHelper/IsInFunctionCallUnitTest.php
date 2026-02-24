@@ -50,6 +50,30 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	private const NON_GLOBAL_NESTED = 'non_global_nested';
 
 	/**
+	 * Maps expected result keys to their corresponding is_in_function_call() parameter values.
+	 *
+	 * @var array<string, array<string, bool>>
+	 */
+	private const PARAMETER_MAP = array(
+		self::GLOBAL_ONLY       => array(
+			'global_function' => true,
+			'allow_nested'    => false,
+		),
+		self::GLOBAL_NESTED     => array(
+			'global_function' => true,
+			'allow_nested'    => true,
+		),
+		self::NON_GLOBAL_ONLY   => array(
+			'global_function' => false,
+			'allow_nested'    => false,
+		),
+		self::NON_GLOBAL_NESTED => array(
+			'global_function' => false,
+			'allow_nested'    => true,
+		),
+	);
+
+	/**
 	 * Expected results: when a test case uses this constant, `is_in_function_call()` should return `false` regardless
 	 * of the value of the parameters `$global_function` and `$allow_nested`.
 	 *
@@ -112,30 +136,6 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		self::GLOBAL_NESTED     => false,
 		self::NON_GLOBAL_ONLY   => false,
 		self::NON_GLOBAL_NESTED => true,
-	);
-
-	/**
-	 * Maps expected result keys to their corresponding is_in_function_call() parameter values.
-	 *
-	 * @var array<string, array<string, bool>>
-	 */
-	private const PARAMETER_MAP = array(
-		self::GLOBAL_ONLY       => array(
-			'global_function' => true,
-			'allow_nested'    => false,
-		),
-		self::GLOBAL_NESTED     => array(
-			'global_function' => true,
-			'allow_nested'    => true,
-		),
-		self::NON_GLOBAL_ONLY   => array(
-			'global_function' => false,
-			'allow_nested'    => false,
-		),
-		self::NON_GLOBAL_NESTED => array(
-			'global_function' => false,
-			'allow_nested'    => true,
-		),
 	);
 
 	/**
