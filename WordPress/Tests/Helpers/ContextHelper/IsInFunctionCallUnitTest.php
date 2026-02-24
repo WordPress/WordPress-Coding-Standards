@@ -22,16 +22,44 @@ use PHPCSUtils\TestUtils\UtilityMethodTestCase;
 final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 
 	/**
+	 * Identifier for the `$global_function=true, $allow_nested=false` parameter combination.
+	 *
+	 * @var string
+	 */
+	private const GLOBAL_ONLY = 'global_only';
+
+	/**
+	 * Identifier for the `$global_function=true, $allow_nested=true` parameter combination.
+	 *
+	 * @var string
+	 */
+	private const GLOBAL_NESTED = 'global_nested';
+
+	/**
+	 * Identifier for the `$global_function=false, $allow_nested=false` parameter combination.
+	 *
+	 * @var string
+	 */
+	private const NON_GLOBAL_ONLY = 'non_global_only';
+
+	/**
+	 * Identifier for the `$global_function=false, $allow_nested=true` parameter combination.
+	 *
+	 * @var string
+	 */
+	private const NON_GLOBAL_NESTED = 'non_global_nested';
+
+	/**
 	 * Expected results: when a test case uses this constant, `is_in_function_call()` should return `false` regardless
 	 * of the value of the parameters `$global_function` and `$allow_nested`.
 	 *
 	 * @var array<string, bool>
 	 */
 	private const EXPECT_NO_MATCH = array(
-		'global_only'       => false,
-		'global_nested'     => false,
-		'non_global_only'   => false,
-		'non_global_nested' => false,
+		self::GLOBAL_ONLY       => false,
+		self::GLOBAL_NESTED     => false,
+		self::NON_GLOBAL_ONLY   => false,
+		self::NON_GLOBAL_NESTED => false,
 	);
 
 	/**
@@ -41,10 +69,10 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @var array<string, bool>
 	 */
 	private const EXPECT_ALWAYS_MATCH = array(
-		'global_only'       => true,
-		'global_nested'     => true,
-		'non_global_only'   => true,
-		'non_global_nested' => true,
+		self::GLOBAL_ONLY       => true,
+		self::GLOBAL_NESTED     => true,
+		self::NON_GLOBAL_ONLY   => true,
+		self::NON_GLOBAL_NESTED => true,
 	);
 
 	/**
@@ -54,10 +82,10 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @var array<string, bool>
 	 */
 	private const EXPECT_NON_GLOBAL_ONLY = array(
-		'global_only'       => false,
-		'global_nested'     => false,
-		'non_global_only'   => true,
-		'non_global_nested' => true,
+		self::GLOBAL_ONLY       => false,
+		self::GLOBAL_NESTED     => false,
+		self::NON_GLOBAL_ONLY   => true,
+		self::NON_GLOBAL_NESTED => true,
 	);
 
 	/**
@@ -67,10 +95,10 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @var array<string, bool>
 	 */
 	private const EXPECT_NESTED_ONLY = array(
-		'global_only'       => false,
-		'global_nested'     => true,
-		'non_global_only'   => false,
-		'non_global_nested' => true,
+		self::GLOBAL_ONLY       => false,
+		self::GLOBAL_NESTED     => true,
+		self::NON_GLOBAL_ONLY   => false,
+		self::NON_GLOBAL_NESTED => true,
 	);
 
 	/**
@@ -80,10 +108,10 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @var array<string, bool>
 	 */
 	private const EXPECT_NON_GLOBAL_NESTED_ONLY = array(
-		'global_only'       => false,
-		'global_nested'     => false,
-		'non_global_only'   => false,
-		'non_global_nested' => true,
+		self::GLOBAL_ONLY       => false,
+		self::GLOBAL_NESTED     => false,
+		self::NON_GLOBAL_ONLY   => false,
+		self::NON_GLOBAL_NESTED => true,
 	);
 
 	/**
@@ -92,19 +120,19 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @var array<string, array<string, bool>>
 	 */
 	private const PARAMETER_MAP = array(
-		'global_only'       => array(
+		self::GLOBAL_ONLY       => array(
 			'global_function' => true,
 			'allow_nested'    => false,
 		),
-		'global_nested'     => array(
+		self::GLOBAL_NESTED     => array(
 			'global_function' => true,
 			'allow_nested'    => true,
 		),
-		'non_global_only'   => array(
+		self::NON_GLOBAL_ONLY   => array(
 			'global_function' => false,
 			'allow_nested'    => false,
 		),
-		'non_global_nested' => array(
+		self::NON_GLOBAL_NESTED => array(
 			'global_function' => false,
 			'allow_nested'    => true,
 		),
@@ -126,9 +154,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$marker,
 			$tokenType,
-			$expected['global_only'],
+			$expected[ self::GLOBAL_ONLY ],
 			$expectedMarker,
-			self::PARAMETER_MAP['global_only']
+			self::PARAMETER_MAP[ self::GLOBAL_ONLY ]
 		);
 	}
 
@@ -148,9 +176,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$marker,
 			$tokenType,
-			$expected['non_global_only'],
+			$expected[ self::NON_GLOBAL_ONLY ],
 			$expectedMarker,
-			self::PARAMETER_MAP['non_global_only']
+			self::PARAMETER_MAP[ self::NON_GLOBAL_ONLY ]
 		);
 	}
 
@@ -170,9 +198,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$marker,
 			$tokenType,
-			$expected['global_nested'],
+			$expected[ self::GLOBAL_NESTED ],
 			$expectedMarker,
-			self::PARAMETER_MAP['global_nested']
+			self::PARAMETER_MAP[ self::GLOBAL_NESTED ]
 		);
 	}
 
@@ -192,9 +220,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		$this->runIsInFunctionCallTest(
 			$marker,
 			$tokenType,
-			$expected['non_global_nested'],
+			$expected[ self::NON_GLOBAL_NESTED ],
 			$expectedMarker,
-			self::PARAMETER_MAP['non_global_nested']
+			self::PARAMETER_MAP[ self::NON_GLOBAL_NESTED ]
 		);
 	}
 
