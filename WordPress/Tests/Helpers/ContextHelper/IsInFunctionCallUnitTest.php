@@ -284,16 +284,16 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 			$params['allow_nested']
 		);
 
-		$expected = $shouldMatch
-			? $this->getTargetToken( $expectedMarker, \T_STRING )
-			: false;
+		$expected = false;
+		if ( true === $shouldMatch ) {
+			$expected = $this->getTargetToken( $expectedMarker, \T_STRING );
+		}
 
 		$this->assertSame( $expected, $result );
 	}
 
 	/**
-	 * Data provider for the testIsInFunctionCallWithDefaultParams(), testIsInFunctionCallWithGlobalFalse(),
-	 * testIsInFunctionCallWithNestedTrue(), and testIsInFunctionCallWithGlobalFalseNestedTrue() test methods.
+	 * Data provider for most test methods.
 	 *
 	 * @return array<string, array<string, int|string|array<string, bool>>>
 	 */
