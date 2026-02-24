@@ -175,89 +175,149 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	/**
 	 * Test is_in_function_call() with $global_function=true (default) and $allow_nested=false (default).
 	 *
-	 * @dataProvider dataIsInFunctionCall
+	 * @dataProvider dataIsInFunctionCallWithDefaultParams
 	 *
 	 * @param string              $marker         The comment which prefaces the target token in the test file.
 	 * @param int|string          $tokenType      The token type to search for.
-	 * @param array<string, bool> $expected       Which parameter combinations should match.
-	 * @param string|null         $expectedMarker Optional. The comment for the expected function (if match expected).
+	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
+	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
+	 *                                            in the test file (if a match is expected).
+	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
 	 *
 	 * @return void
 	 */
-	public function testIsInFunctionCallWithDefaultParams( $marker, $tokenType, $expected, $expectedMarker = null ) {
-		$this->runIsInFunctionCallTest(
-			$marker,
-			$tokenType,
-			$expected[ self::GLOBAL_ONLY ],
-			$expectedMarker,
-			self::PARAMETER_MAP[ self::GLOBAL_ONLY ]
-		);
+	public function testIsInFunctionCallWithDefaultParams( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
+		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCallWithDefaultParams()
+	 *
+	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
+	 */
+	public static function dataIsInFunctionCallWithDefaultParams() {
+		$data = self::dataIsInFunctionCall();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::GLOBAL_ONLY ];
+			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::GLOBAL_ONLY ];
+		}
+
+		return $data;
 	}
 
 	/**
 	 * Test is_in_function_call() with $global_function=false and $allow_nested=false (default).
 	 *
-	 * @dataProvider dataIsInFunctionCall
+	 * @dataProvider dataIsInFunctionCallWithGlobalFalse
 	 *
 	 * @param string              $marker         The comment which prefaces the target token in the test file.
 	 * @param int|string          $tokenType      The token type to search for.
-	 * @param array<string, bool> $expected       Which parameter combinations should match.
-	 * @param string|null         $expectedMarker Optional. The comment for the expected function (if match expected).
+	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
+	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
+	 *                                            in the test file (if a match is expected).
+	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
 	 *
 	 * @return void
 	 */
-	public function testIsInFunctionCallWithGlobalFalse( $marker, $tokenType, $expected, $expectedMarker = null ) {
-		$this->runIsInFunctionCallTest(
-			$marker,
-			$tokenType,
-			$expected[ self::NON_GLOBAL_ONLY ],
-			$expectedMarker,
-			self::PARAMETER_MAP[ self::NON_GLOBAL_ONLY ]
-		);
+	public function testIsInFunctionCallWithGlobalFalse( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
+		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCallWithGlobalFalse()
+	 *
+	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
+	 */
+	public static function dataIsInFunctionCallWithGlobalFalse() {
+		$data = self::dataIsInFunctionCall();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::NON_GLOBAL_ONLY ];
+			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::NON_GLOBAL_ONLY ];
+		}
+
+		return $data;
 	}
 
 	/**
 	 * Test is_in_function_call() with $global_function=true (default) and $allow_nested=true.
 	 *
-	 * @dataProvider dataIsInFunctionCall
+	 * @dataProvider dataIsInFunctionCallWithNestedTrue
 	 *
 	 * @param string              $marker         The comment which prefaces the target token in the test file.
 	 * @param int|string          $tokenType      The token type to search for.
-	 * @param array<string, bool> $expected       Which parameter combinations should match.
-	 * @param string|null         $expectedMarker Optional. The comment for the expected function (if match expected).
+	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
+	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
+	 *                                            in the test file (if a match is expected).
+	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
 	 *
 	 * @return void
 	 */
-	public function testIsInFunctionCallWithNestedTrue( $marker, $tokenType, $expected, $expectedMarker = null ) {
-		$this->runIsInFunctionCallTest(
-			$marker,
-			$tokenType,
-			$expected[ self::GLOBAL_NESTED ],
-			$expectedMarker,
-			self::PARAMETER_MAP[ self::GLOBAL_NESTED ]
-		);
+	public function testIsInFunctionCallWithNestedTrue( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
+		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCallWithNestedTrue()
+	 *
+	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
+	 */
+	public static function dataIsInFunctionCallWithNestedTrue() {
+		$data = self::dataIsInFunctionCall();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::GLOBAL_NESTED ];
+			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::GLOBAL_NESTED ];
+		}
+
+		return $data;
 	}
 
 	/**
 	 * Test is_in_function_call() with $global_function=false and $allow_nested=true.
 	 *
-	 * @dataProvider dataIsInFunctionCall
+	 * @dataProvider dataIsInFunctionCallWithGlobalFalseNestedTrue
 	 *
 	 * @param string              $marker         The comment which prefaces the target token in the test file.
 	 * @param int|string          $tokenType      The token type to search for.
-	 * @param array<string, bool> $expected       Which parameter combinations should match.
-	 * @param string|null         $expectedMarker Optional. The comment for the expected function (if match expected).
+	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
+	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
+	 *                                            in the test file (if a match is expected).
+	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
 	 *
 	 * @return void
 	 */
-	public function testIsInFunctionCallWithGlobalFalseNestedTrue( $marker, $tokenType, $expected, $expectedMarker = null ) {
-		$this->runIsInFunctionCallTest(
-			$marker,
-			$tokenType,
-			$expected[ self::NON_GLOBAL_NESTED ],
-			$expectedMarker,
-			self::PARAMETER_MAP[ self::NON_GLOBAL_NESTED ]
-		);
+	public function testIsInFunctionCallWithGlobalFalseNestedTrue( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
+		$this->runIsInFunctionCallTest( $marker, $tokenType, $shouldMatch, $expectedMarker, $params );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCallWithGlobalFalseNestedTrue()
+	 *
+	 * @return array<string, array<string, int|string|bool|null|array<string, bool>>>
+	 */
+	public static function dataIsInFunctionCallWithGlobalFalseNestedTrue() {
+		$data = self::dataIsInFunctionCall();
+
+		// Update 'shouldMatch' and 'params' to only contain the values relevant for this test.
+		foreach ( $data as $key => $dataset ) {
+			$data[ $key ]['shouldMatch'] = $dataset['shouldMatch'][ self::NON_GLOBAL_NESTED ];
+			$data[ $key ]['params']      = self::PARAMETER_MAP[ self::NON_GLOBAL_NESTED ];
+		}
+
+		return $data;
 	}
 
 	/**
@@ -265,8 +325,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 *
 	 * @param string              $marker         The comment which prefaces the target token.
 	 * @param int|string          $tokenType      The token type to search for.
-	 * @param bool                $shouldMatch    Whether the test case should match.
-	 * @param string|null         $expectedMarker The comment for the expected function (if match expected).
+	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
+	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
+	 *                                            in the test file (if a match is expected).
 	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
 	 *
 	 * @return void
@@ -293,62 +354,62 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	}
 
 	/**
-	 * Data provider for most test methods.
+	 * Base data provider. Wrapper data providers adapt this data for their specific parameter combination.
 	 *
 	 * @return array<string, array<string, int|string|array<string, bool>>>
 	 */
 	public static function dataIsInFunctionCall() {
-		return array(
+		$data = array(
 			// Cases that should never match (regardless of parameters).
 			'plain_assignment' => array(
-				'marker'    => '/* testPlainAssignment */',
-				'tokenType' => \T_CONSTANT_ENCAPSED_STRING,
-				'expected'  => self::EXPECT_NO_MATCH,
+				'marker'      => '/* testPlainAssignment */',
+				'tokenType'   => \T_CONSTANT_ENCAPSED_STRING,
+				'shouldMatch' => self::EXPECT_NO_MATCH,
 			),
 			'different_function' => array(
-				'marker'    => '/* testDifferentFunction */',
-				'tokenType' => \T_LNUMBER,
-				'expected'  => self::EXPECT_NO_MATCH,
+				'marker'      => '/* testDifferentFunction */',
+				'tokenType'   => \T_LNUMBER,
+				'shouldMatch' => self::EXPECT_NO_MATCH,
 			),
 			'inside_closure' => array(
-				'marker'    => '/* testInsideClosure */',
-				'tokenType' => \T_VARIABLE,
-				'expected'  => self::EXPECT_NO_MATCH,
+				'marker'      => '/* testInsideClosure */',
+				'tokenType'   => \T_VARIABLE,
+				'shouldMatch' => self::EXPECT_NO_MATCH,
 			),
 			'variable_function' => array(
-				'marker'    => '/* testVariableFunction */',
-				'tokenType' => \T_VARIABLE,
-				'expected'  => self::EXPECT_NO_MATCH,
+				'marker'      => '/* testVariableFunction */',
+				'tokenType'   => \T_VARIABLE,
+				'shouldMatch' => self::EXPECT_NO_MATCH,
 			),
 			'if_condition' => array(
-				'marker'    => '/* testIfCondition */',
-				'tokenType' => \T_TRUE,
-				'expected'  => self::EXPECT_NO_MATCH,
+				'marker'      => '/* testIfCondition */',
+				'tokenType'   => \T_TRUE,
+				'shouldMatch' => self::EXPECT_NO_MATCH,
 			),
 
 			// Cases that should always match (regardless of parameters).
 			'lowercase_name' => array(
 				'marker'         => '/* testLowercaseNameInsideCall */',
 				'tokenType'      => \T_VARIABLE,
-				'expected'       => self::EXPECT_ALWAYS_MATCH,
+				'shouldMatch'    => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testLowercaseName */',
 			),
 			'uppercase_name' => array(
 				'marker'         => '/* testUppercaseNameInsideCall */',
 				'tokenType'      => \T_CONSTANT_ENCAPSED_STRING,
-				'expected'       => self::EXPECT_ALWAYS_MATCH,
+				'shouldMatch'    => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testUppercaseName */',
 			),
 			'fully_qualified' => array(
 				'marker'         => '/* testFullyQualifiedInsideCall */',
 				'tokenType'      => \T_LNUMBER,
-				'expected'       => self::EXPECT_ALWAYS_MATCH,
+				'shouldMatch'    => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testFullyQualified */',
 			),
 			'nested_inner' => array(
 				'marker'         => '/* testNestedInnerInsideCall */',
 				'tokenType'      => \T_TRUE,
-				'expected'       => self::EXPECT_ALWAYS_MATCH,
+				'shouldMatch'    => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testNestedInner */',
 			),
 
@@ -356,37 +417,37 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 			'namespaced_function' => array(
 				'marker'         => '/* testNamespacedFunctionInsideCall */',
 				'tokenType'      => \T_STRING,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
 				'expectedMarker' => '/* testNamespacedFunction */',
 			),
 			'fully_qualified_namespaced_function' => array(
 				'marker'         => '/* testFullyQualifiedNamespacedFunctionInsideCall */',
 				'tokenType'      => \T_NULL,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
 				'expectedMarker' => '/* testFullyQualifiedNamespacedFunction */',
 			),
 			'namespace_relative_function' => array(
 				'marker'         => '/* testNamespaceRelativeFunctionInsideCall */',
 				'tokenType'      => \T_DNUMBER,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
 				'expectedMarker' => '/* testNamespaceRelativeFunction */',
 			),
 			'static_method' => array(
 				'marker'         => '/* testStaticMethodInsideCall */',
 				'tokenType'      => \T_CONSTANT_ENCAPSED_STRING,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
 				'expectedMarker' => '/* testStaticMethod */',
 			),
 			'object_method' => array(
 				'marker'         => '/* testObjectMethodInsideCall */',
 				'tokenType'      => \T_ARRAY,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
 				'expectedMarker' => '/* testObjectMethod */',
 			),
 			'nullsafe_object_method' => array(
 				'marker'         => '/* testNullsafeObjectMethodInsideCall */',
 				'tokenType'      => \T_OPEN_SHORT_ARRAY,
-				'expected'       => self::EXPECT_NON_GLOBAL_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
 				'expectedMarker' => '/* testNullsafeObjectMethod */',
 			),
 
@@ -394,19 +455,19 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 			'nested_outer' => array(
 				'marker'         => '/* testNestedOuterInsideCall */',
 				'tokenType'      => \T_CONSTANT_ENCAPSED_STRING,
-				'expected'       => self::EXPECT_NESTED_ONLY,
+				'shouldMatch'    => self::EXPECT_NESTED_ONLY,
 				'expectedMarker' => '/* testNestedOuter */',
 			),
 			'nested_multiple_levels' => array(
 				'marker'         => '/* testNestedMultipleLevelsInsideCall */',
 				'tokenType'      => \T_LNUMBER,
-				'expected'       => self::EXPECT_NESTED_ONLY,
+				'shouldMatch'    => self::EXPECT_NESTED_ONLY,
 				'expectedMarker' => '/* testNestedMultipleLevels */',
 			),
 			'nested_both_namespaced_outer' => array(
 				'marker'         => '/* testNestedBothNamespacedOuterInsideCall */',
 				'tokenType'      => \T_STRING_CONCAT,
-				'expected'       => self::EXPECT_NON_GLOBAL_NESTED_ONLY,
+				'shouldMatch'    => self::EXPECT_NON_GLOBAL_NESTED_ONLY,
 				'expectedMarker' => '/* testNestedBothNamespacedOuter */',
 			),
 
@@ -414,9 +475,17 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 			'other_params_with_parentheses' => array(
 				'marker'         => '/* testOtherParamsWithParenthesesInsideCall */',
 				'tokenType'      => \T_VARIABLE,
-				'expected'       => self::EXPECT_ALWAYS_MATCH,
+				'shouldMatch'    => self::EXPECT_ALWAYS_MATCH,
 				'expectedMarker' => '/* testOtherParamsWithParentheses */',
 			),
 		);
+
+		foreach ( $data as $key => $dataset ) {
+			if ( isset( $dataset['expectedMarker'] ) === false ) {
+				$data[ $key ]['expectedMarker'] = null;
+			}
+		}
+
+		return $data;
 	}
 }
