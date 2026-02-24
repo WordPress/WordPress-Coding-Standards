@@ -139,6 +139,40 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	);
 
 	/**
+	 * Test is_in_function_call() when $valid_functions is an empty array.
+	 *
+	 * @return void
+	 */
+	public function testIsInFunctionCallShouldReturnFalseWhenEmptyValidFunctions() {
+		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
+		$result            = ContextHelper::is_in_function_call(
+			self::$phpcsFile,
+			$insideFunctionPtr,
+			array()
+		);
+
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * Test to document that is_in_function_call() does not match when $valid_functions keys are not lowercase.
+	 *
+	 * @return void
+	 */
+	public function testIsInFunctionCallShouldReturnFalseWhenValidFunctionsKeysAreNotLowercase() {
+		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
+		$result            = ContextHelper::is_in_function_call(
+			self::$phpcsFile,
+			$insideFunctionPtr,
+			array(
+				'Valid_Function1' => true,
+			)
+		);
+
+		$this->assertFalse( $result );
+	}
+
+	/**
 	 * Test is_in_function_call() with $global_function=true (default) and $allow_nested=false (default).
 	 *
 	 * @dataProvider dataIsInFunctionCall
@@ -224,40 +258,6 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 			$expectedMarker,
 			self::PARAMETER_MAP[ self::NON_GLOBAL_NESTED ]
 		);
-	}
-
-	/**
-	 * Test is_in_function_call() when $valid_functions is an empty array.
-	 *
-	 * @return void
-	 */
-	public function testIsInFunctionCallShouldReturnFalseWhenEmptyValidFunctions() {
-		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
-		$result            = ContextHelper::is_in_function_call(
-			self::$phpcsFile,
-			$insideFunctionPtr,
-			array()
-		);
-
-		$this->assertFalse( $result );
-	}
-
-	/**
-	 * Test to document that is_in_function_call() does not match when $valid_functions keys are not lowercase.
-	 *
-	 * @return void
-	 */
-	public function testIsInFunctionCallShouldReturnFalseWhenValidFunctionsKeysAreNotLowercase() {
-		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
-		$result            = ContextHelper::is_in_function_call(
-			self::$phpcsFile,
-			$insideFunctionPtr,
-			array(
-				'Valid_Function1' => true,
-			)
-		);
-
-		$this->assertFalse( $result );
 	}
 
 	/**
