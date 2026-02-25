@@ -155,21 +155,47 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	}
 
 	/**
-	 * Test to document that is_in_function_call() does not match when $valid_functions keys are not lowercase.
+	 * Test that is_in_function_call() matches regardless of the case of $valid_functions keys.
+	 *
+	 * @dataProvider dataIsInFunctionCallShouldMatchRegardlessOfValidFunctionsKeyCase
+	 *
+	 * @param string $functionName The function name to use as a key in $valid_functions.
 	 *
 	 * @return void
 	 */
-	public function testIsInFunctionCallShouldReturnFalseWhenValidFunctionsKeysAreNotLowercase() {
+	public function testIsInFunctionCallShouldMatchRegardlessOfValidFunctionsKeyCase( $functionName ) {
 		$insideFunctionPtr = $this->getTargetToken( '/* testLowercaseNameInsideCall */', \T_VARIABLE );
+		$expected          = $this->getTargetToken( '/* testLowercaseName */', \T_STRING );
 		$result            = ContextHelper::is_in_function_call(
 			self::$phpcsFile,
 			$insideFunctionPtr,
 			array(
-				'Valid_Function1' => true,
+				$functionName => true,
 			)
 		);
 
-		$this->assertFalse( $result );
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @see testIsInFunctionCallShouldMatchRegardlessOfValidFunctionsKeyCase()
+	 *
+	 * @return array<string, array<string, string>>
+	 */
+	public static function dataIsInFunctionCallShouldMatchRegardlessOfValidFunctionsKeyCase() {
+		return array(
+			'lowercase key' => array(
+				'functionName' => 'valid_function1',
+			),
+			'uppercase key' => array(
+				'functionName' => 'VALID_FUNCTION1',
+			),
+			'mixed case key' => array(
+				'functionName' => 'Valid_Function1',
+			),
+		);
 	}
 
 	/**

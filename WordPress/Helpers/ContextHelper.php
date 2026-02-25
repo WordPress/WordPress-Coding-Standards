@@ -199,8 +199,9 @@ final class ContextHelper {
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile       The file being scanned.
 	 * @param int                         $stackPtr        The index of the token in the stack.
 	 * @param array                       $valid_functions List of valid function names.
-	 *                                                     Note: The keys to this array should be the function names
-	 *                                                     in lowercase. Values are irrelevant.
+	 *                                                     Note: The keys to this array should be the function names.
+	 *                                                     Values are irrelevant. The matching of function names found in
+	 *                                                     the code against the keys in this array is done case-insensitively.
 	 * @param bool                        $global_function Optional. Whether to make sure that the function call is
 	 *                                                     to a global function. If `false`, calls to methods, be it static
 	 *                                                     `Class::method()` or via an object `$obj->method()`, and
@@ -217,6 +218,8 @@ final class ContextHelper {
 	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
 	 */
 	public static function is_in_function_call( File $phpcsFile, $stackPtr, array $valid_functions, $global_function = true, $allow_nested = false ) {
+		$valid_functions = array_change_key_case( $valid_functions, \CASE_LOWER );
+
 		$tokens = $phpcsFile->getTokens();
 		if ( ! isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ) {
 			return false;
