@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="No Silenced Errors"
+    >
+    <standard>
+    <![CDATA[
+    The error silencing operator (@) should not be used. In the vast majority of cases, there is no need for the error silencing operator if the parameters passed to a function are checked ahead of the call.
+
+    As an exception, the operator is allowed for certain functions where warnings cannot be prevented.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Calling a function without error silencing.">
+        <![CDATA[
+if ( isset( $replace_pairs[''] ) ) {
+    unset( $replace_pairs[''] );
+}
+
+$result = <em></em>strtr( $str, $replace_pairs );
+        ]]>
+        </code>
+        <code title="Invalid: Using the @ operator to silence warnings.">
+        <![CDATA[
+$result = <em>@</em>strtr( $str, $replace_pairs );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
