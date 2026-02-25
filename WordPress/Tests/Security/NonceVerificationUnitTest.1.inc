@@ -291,7 +291,7 @@ function function_containing_nested_closure() {
 	};
 }
 
-// Tests specifically for the ContextHelper::is_in_function_call().
+
 function disallow_custom_unslash_before_noncecheck_via_method() {
 	$var = MyClass::stripslashes_from_strings_only( $_POST['foo'] ); // Bad.
 	wp_verify_nonce( $var );
