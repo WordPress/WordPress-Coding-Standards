@@ -5,7 +5,7 @@
     >
     <standard>
     <![CDATA[
-    Direct database queries using $wpdb methods should be avoided. WordPress database abstraction layers handle caching, data integrity, and firing of hooks, which direct queries bypass.
+    Direct database queries using WPDB class methods should be avoided. WordPress database abstraction layers handle caching, data integrity, and firing of hooks, which direct queries bypass.
     ]]>
     </standard>
     <code_comparison>
@@ -103,7 +103,22 @@ function update_post_title() {
     </code_comparison>
     <standard>
     <![CDATA[
-    Altering the database schema is discouraged, as it can break WordPress core, plugins, or themes that depend on the existing schema.
+    Altering the database schema using ALTER, CREATE, or DROP statements is discouraged, as it can break WordPress core, plugins, or themes that depend on the existing schema.
     ]]>
     </standard>
+    <code_comparison>
+        <code title="Valid: Not altering the database schema.">
+        <![CDATA[
+// Do not use ALTER, CREATE, or DROP.
+        ]]>
+        </code>
+        <code title="Invalid: Altering the database schema.">
+        <![CDATA[
+$wpdb->query(
+    "<em>ALTER</em> TABLE {$wpdb->posts}
+        ADD COLUMN rating int"
+);
+        ]]>
+        </code>
+    </code_comparison>
 </documentation>
