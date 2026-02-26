@@ -11,9 +11,9 @@
     <code_comparison>
         <code title="Valid: No potentially slow query keys.">
         <![CDATA[
-$args = array(
+$query = new WP_Query( array(
     'post_type' => 'post',
-);
+) );
 
 
 $query = 'post_type=post&orderby=date';
@@ -21,10 +21,10 @@ $query = 'post_type=post&orderby=date';
         </code>
         <code title="Invalid: Using potentially slow query keys.">
         <![CDATA[
-$args = array(
+$query = new WP_Query( array(
     '<em>meta_key</em>'   => 'color',
     '<em>meta_value</em>' => 'blue',
-);
+) );
 
 $query = 'post_type=post&<em>meta_key</em>=featured';
         ]]>
