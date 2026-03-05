@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Direct Database Query"
+    >
+    <standard>
+    <![CDATA[
+    Direct database queries using WPDB class methods should be avoided. WordPress database abstraction layers handle caching, data integrity, and firing of hooks, which direct queries bypass.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using WP_Query to retrieve data.">
+        <![CDATA[
+$page_query = new <em>WP_Query</em>(
+    array(
+        'post_type' => 'page',
+    )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using a direct query to retrieve data.">
+        <![CDATA[
+$results = <em>$wpdb->get_results</em>(
+    $wpdb->prepare(
+        "SELECT * FROM %i
+            WHERE post_type = %s",
+        $wpdb->posts,
+        'page'
+    )
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    When a direct database call is necessary, it should be paired with caching. For read queries, this avoids running expensive queries multiple times. For write queries, invalidating relevant caches prevents stale data.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Direct query results are cached and retrieved from cache when available.">
+        <![CDATA[
+function get_draft_ids() {
+    $key = 'my_plugin_draft_ids';
+    $cached = <em>wp_cache_get</em>( $key );
+
+    if ( false !== $cached ) {
+        return $cached;
+    }
+
+    $results = $wpdb->get_col(
+        "SELECT ID FROM $wpdb->posts
+            WHERE post_status = 'draft'"
+    );
+
+    <em>wp_cache_set</em>( $key, $results );
+
+    return $results;
+}
+        ]]>
+        </code>
+        <code title="Invalid: Direct query without caching.">
+        <![CDATA[
+function get_draft_ids() {
+    $results = $wpdb->get_col(
+        "SELECT ID FROM $wpdb->posts
+            WHERE post_status = 'draft'"
+    );
+
+    return $results;
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Cache is invalidated after a write query.">
+        <![CDATA[
+function update_post_title() {
+    global $wpdb;
+
+    $wpdb->update(
+        $wpdb->posts,
+        array( 'post_title' => $title ),
+        array( 'ID' => $post_id )
+    );
+
+    <em>clean_post_cache</em>( $post_id );
+}
+        ]]>
+        </code>
+        <code title="Invalid: Write query without cache invalidation.">
+        <![CDATA[
+function update_post_title() {
+    global $wpdb;
+
+    $wpdb->update(
+        $wpdb->posts,
+        array( 'post_title' => $title ),
+        array( 'ID' => $post_id )
+    );
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Altering the database schema using ALTER, CREATE, or DROP statements is discouraged, as it can break WordPress core, plugins, or themes that depend on the existing schema.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Not altering the database schema.">
+        <![CDATA[
+// Do not use ALTER, CREATE, or DROP.
+        ]]>
+        </code>
+        <code title="Invalid: Altering the database schema.">
+        <![CDATA[
+$wpdb->query(
+    "<em>ALTER</em> TABLE {$wpdb->posts}
+        ADD COLUMN rating int"
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
