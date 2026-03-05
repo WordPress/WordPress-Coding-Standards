@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Slow DB Query"
+    >
+    <standard>
+    <![CDATA[
+    Usage of the meta_query, meta_key, meta_value, and tax_query keys in array assignments and query-parameter strings is discouraged and should be carefully evaluated. When passed to WordPress database query APIs, these keys can lead to slow queries, especially on large datasets.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: No potentially slow query keys.">
+        <![CDATA[
+$query = new WP_Query( array(
+    'post_type' => 'post',
+) );
+
+
+$args = 'post_type=post&orderby=date';
+        ]]>
+        </code>
+        <code title="Invalid: Using potentially slow query keys.">
+        <![CDATA[
+$query = new WP_Query( array(
+    '<em>meta_key</em>'   => 'color',
+    '<em>meta_value</em>' => 'blue',
+) );
+
+$args = 'post_type=post&<em>meta_key</em>=featured';
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
