@@ -16,7 +16,7 @@ $query = new WP_Query( array(
 ) );
 
 
-$query = 'post_type=post&orderby=date';
+$args = 'post_type=post&orderby=date';
         ]]>
         </code>
         <code title="Invalid: Using potentially slow query keys.">
@@ -26,7 +26,7 @@ $query = new WP_Query( array(
     '<em>meta_value</em>' => 'blue',
 ) );
 
-$query = 'post_type=post&<em>meta_key</em>=featured';
+$args = 'post_type=post&<em>meta_key</em>=featured';
         ]]>
         </code>
     </code_comparison>
