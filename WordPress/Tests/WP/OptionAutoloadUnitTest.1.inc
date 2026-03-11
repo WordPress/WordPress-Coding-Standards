@@ -3,7 +3,10 @@
 /*
  * Not the sniff target.
  */
-my\ns\add_option($a, $b);
+MyNamespace\add_option( 'my_option' );
+\MyNamespace\update_option( 'my_option', 'new_value' );
+namespace\wp_set_options_autoload( array( 'option1', 'option2' ), 'invalid_value' ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\wp_set_option_autoload_values( ['option1' => null] );
 $this->add_option($a, $b);
 MyClass::add_option($a, $b);
 echo ADD_OPTION;
@@ -68,15 +71,18 @@ $ignored = wp_set_options_autoload( array( 'option1', 'option2' ), $some_variabl
 $ignored = wp_set_OPTION_autoload( 'option1', $some_variable );
 $ignored = wp_set_option_autoload_values(
     array(
-        'option1' => $some_variable,
-        'option2' => $obj->yes,
-        'option3' => $some_variable ? 'yes' : 'no',
-        'option4' => 'ye' . 's',
-        'option5' => (function () { return 'yes'; })(),
-        'option6' => yes,
-        'option7' => \my_function(),
-        'option8' => \SOME_CONSTANT,
-        'option9' => \YES,
+        'option1'  => $some_variable,
+        'option2'  => $obj->yes,
+        'option3'  => $some_variable ? 'yes' : 'no',
+        'option4'  => 'ye' . 's',
+        'option5'  => (function () { return 'yes'; })(),
+        'option6'  => yes,
+	    'option7'  => \SOME_CONSTANT,
+	    'option8'  => \YES,
+	    'option9'  => \my_function(),
+	    'option10' => MyNamespace\my_function(),
+	    'option11' => \MyNamespace\my_function(),
+	    'option12' => namespace\my_function(),
     )
 );
 
@@ -126,7 +132,7 @@ $warning = add_option( value: 'my_value', deprecated: '', option: 'my_option' );
 $warning = add_option( value: 'my_value', deprecated: '', autoload: 'auto', option: 'my_option' );
 $warning = add_option( 'my_option', 'my_value', '', 'YES' ); // the uppercase versions of the valid values are not supported.
 $warning = update_option( 'my_option', 'new_value' );
-$warning = update_option( 'my_option', 'new_value', 'auto' );
+$warning = \Update_Option( 'my_option', 'new_value', 'auto' );
 $warning = update_option( 'my_option', 'new_value', 'auto-on' );
 $warning = update_option(
     /* option name */ 'my_option',
