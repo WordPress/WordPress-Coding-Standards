@@ -24,14 +24,14 @@ use WordPressCS\WordPress\AbstractFunctionParameterSniff;
  * @link https://github.com/WordPress/WordPress-Coding-Standards/issues/2473
  * @link https://felix-arntz.me/blog/autoloading-wordpress-options-efficiently-and-responsibly/ For more information on how to use the autoload flag.
  *
- * @since 3.2.0
+ * @since 3.4.0
  */
 final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 
 	/**
 	 * The phrase to use for the metric recorded by this sniff.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var string
 	 */
@@ -40,7 +40,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Valid values for the `$autoload` parameter in the `add_option()` and `update_option()` functions.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, string>
 	 */
@@ -54,7 +54,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 * Valid values for the `$autoload` parameter in the `wp_set_options_autoload()`,
 	 * `wp_set_option_autoload()`, and `wp_set_option_autoload_values()` functions.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, string>
 	 */
@@ -66,7 +66,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Deprecated values for the `$autoload` parameter.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, true> The key is the name of the deprecated value. The array value is irrelevant.
 	 */
@@ -78,7 +78,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Internal-use only values for `$autoload` that cannot be fixed automatically by the sniff.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, true> The key is the non-fixable value. The array value is irrelevant.
 	 */
@@ -91,7 +91,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Internal-use only values for `$autoload` that can be fixed automatically by the sniff.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, true> The key is the fixable value. The array value is irrelevant.
 	 */
@@ -103,7 +103,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Replacements for fixable values.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, string>
 	 */
@@ -117,7 +117,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Functions for which the `$autoload` parameter is optional.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, true> The key is the function name. The value is irrelevant.
 	 */
@@ -129,7 +129,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * The group name for this group of functions.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var string
 	 */
@@ -144,7 +144,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 * @link https://developer.wordpress.org/reference/functions/wp_set_option_autoload_values/
 	 * @link https://developer.wordpress.org/reference/functions/wp_set_options_autoload/
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @var array<string, array<string, string|int>> Key is the function name, value is an array
 	 *                                               containing the name and the position of the
@@ -177,7 +177,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the parameters of a matched function.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @param int                                   $stackPtr      The position of the current token in the stack.
 	 * @param string                                $group_name    The name of the group which was matched.
@@ -212,7 +212,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Process the function if no parameters were found.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @param int    $stackPtr      The position of the current token in the stack.
 	 * @param string $group_name    The name of the group which was matched.
@@ -230,7 +230,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 * takes an array of option names and autoload values instead of the autoload value of a single
 	 * option as a separate parameter.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @param array<string, int|string> $options_param Options parameter information.
 	 *
@@ -284,7 +284,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	 * Adds a PHPCS warning when autoload parameter is missing for the functions where
 	 * this parameter is optional.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @param int    $stackPtr      The position of the current token in the stack.
 	 * @param string $function_name The token content (function name) which was matched
@@ -309,7 +309,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	/**
 	 * Check the autoload value for possible violations.
 	 *
-	 * @since 3.2.0
+	 * @since 3.4.0
 	 *
 	 * @param array<string, int|string> $autoload_info Information about the autoload value (start and end tokens, the
 	 *                                                 clean value and potentially the "raw" value - which isn't used).
