@@ -76,7 +76,7 @@ final class OptionAutoloadSniff extends AbstractFunctionParameterSniff {
 	);
 
 	/**
-	 * Internal-use only values for `$autoload` that cannot be fixed automatically by the sniff.
+	 * Internal-use only values for `$autoload` that will not be fixed automatically by the sniff.
 	 *
 	 * @since 3.4.0
 	 *

@@ -8,7 +8,7 @@
     When using `add_option()`, `update_option()`, `wp_set_options_autoload()`,
     `wp_set_option_autoload()`, or `wp_set_option_autoload_values()`, it is recommended to
     explicitly set the autoload parameter to ensure predictable behavior.
-    The autoload flag determines whether the option is automatically loaded on every page load,
+    The autoload value determines whether the option is automatically loaded on every page load,
     which can impact site performance.
     ]]>
     </standard>
