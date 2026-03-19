@@ -116,5 +116,5 @@ wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array
 \wp_REGISTER_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // Warning - missing $in_footer.
 MyNamespace\wp_register_style( 'style-name', 'https://example.com/style.css' ); // Ok.
 \MyNamespace\wp_enqueue_style( 'style-name', 'https://example.com/style.css' ); // Ok.
-namespace\wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\wp_register_script( 'someScript-js', 'https://example.com/someScript.js' , array( 'jquery' ), '1.1.0' ); // The sniff should start flagging this once it can resolve relative namespaces (once it does, it should be "Warning - missing $in_footer").
 namespace\Sub\wp_enqueue_style( 'style-name', 'https://example.com/style.css' ); // Ok.
