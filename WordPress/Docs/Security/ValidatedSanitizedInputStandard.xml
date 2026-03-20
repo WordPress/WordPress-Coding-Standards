@@ -5,26 +5,9 @@
     >
     <standard>
     <![CDATA[
-    Superglobals ($_COOKIE, $_ENV, $_FILES, $_GET, $_POST, $_REQUEST, $_SERVER, $_SESSION) must be properly handled before use: array keys must be checked for existence and values must be sanitized.
+    Superglobals ($_COOKIE, $_ENV, $_FILES, $_GET, $_POST, $_REQUEST, $_SERVER, $_SESSION) must be properly handled before use: array keys must be checked for existence and values must be sanitized. Failing to do so can lead to security vulnerabilities such as SQL injection and CSRF attacks.
     ]]>
     </standard>
-    <standard>
-    <![CDATA[
-    Superglobals must not be used directly in string interpolation or heredocs. The array key might not exist, or its value could contain malicious content that gets included in the string without sanitization.
-    ]]>
-    </standard>
-    <code_comparison>
-        <code title="Valid: No superglobal in string interpolation.">
-        <![CDATA[
-// No superglobal in string interpolation.
-        ]]>
-        </code>
-        <code title="Invalid: Superglobal used in string interpolation.">
-        <![CDATA[
-echo "Hello <em>{$_GET['name']}</em>";
-        ]]>
-        </code>
-    </code_comparison>
     <standard>
     <![CDATA[
     Superglobal array keys must be checked for existence before use. Accessing a key that does not exist can lead to unexpected behavior.
@@ -35,7 +18,7 @@ echo "Hello <em>{$_GET['name']}</em>";
         <![CDATA[
 if ( <em>isset( $_POST['name'] )</em> ) {
     $name = sanitize_text_field(
-        wp_unslash( <em>$_POST['name']</em> )
+        wp_unslash( $_POST['name'] )
     );
 }
         ]]>
@@ -56,6 +39,12 @@ $name = sanitize_text_field(
     <code_comparison>
         <code title="Valid: Input is sanitized.">
         <![CDATA[
+if ( isset( $_FILES['upload']['name'] ) ) {
+    $filename = <em>sanitize_file_name</em>(
+        $_FILES['upload']['name']
+    );
+}
+
 if ( isset( $_POST['email'] ) ) {
     $email = <em>sanitize_email</em>(
         wp_unslash( $_POST['email'] )
@@ -65,6 +54,12 @@ if ( isset( $_POST['email'] ) ) {
         </code>
         <code title="Invalid: Input used without sanitization.">
         <![CDATA[
+if ( isset( $_FILES['upload']['name'] ) ) {
+    $filename = <em>$_FILES['upload']['name']</em>;
+}
+
+
+
 if ( isset( $_POST['email'] ) ) {
     $email = wp_unslash(
         <em>$_POST['email']</em>
@@ -95,6 +90,28 @@ if ( isset( $_SERVER['REQUEST_URI'] ) ) {
         <em>$_SERVER['REQUEST_URI']</em>
     );
 }
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Superglobals must not be used directly in string interpolation or heredocs. The array key might not exist, or its value could contain malicious content that gets included in the string without sanitization.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Use a sanitized variable in the string.">
+        <![CDATA[
+if ( isset( $_GET['name'] ) ) {
+    $name = sanitize_text_field(
+        wp_unslash( $_GET['name'] )
+    );
+    echo "Hello <em>$name</em>";
+}
+        ]]>
+        </code>
+        <code title="Invalid: Superglobal used in string interpolation.">
+        <![CDATA[
+echo "Hello <em>{$_GET['name']}</em>";
         ]]>
         </code>
     </code_comparison>
