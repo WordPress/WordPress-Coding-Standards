@@ -22,3 +22,6 @@ aPpLy_FiLtErS( 'my_filter', $value );
 
 /* testNamedParameter */
 do_action_deprecated( args: $args, hook_name: 'my_action' );
+
+/* testFullyQualifiedName */
+\apply_filters( 'my_action', $value );
