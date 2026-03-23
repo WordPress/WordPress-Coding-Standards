@@ -117,6 +117,6 @@ trait PrintingFunctionsTrait {
 	 * @return bool
 	 */
 	final public function is_printing_function( $functionName ) {
-		return isset( $this->get_printing_functions()[ strtolower( $functionName ) ] );
+		return isset( $this->get_printing_functions()[ strtolower( ltrim( $functionName, '\\' ) ) ] );
 	}
 }

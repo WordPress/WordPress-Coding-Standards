@@ -75,6 +75,10 @@ final class IsPrintingFunctionUnitTest extends TestCase {
 				'functionName'   => 'vPrInTf',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name'    => array(
+				'functionName'   => '\wp_die',
+				'expectedResult' => true,
+			),
 			'not_a_printing_function' => array(
 				'functionName'   => 'echo',
 				'expectedResult' => false,
