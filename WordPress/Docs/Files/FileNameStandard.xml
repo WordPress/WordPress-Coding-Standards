@@ -47,7 +47,7 @@ class-<em>update-in-bulk</em>.php // `Bulk_Updater`.
     </code_comparison>
     <standard>
     <![CDATA[
-    Non-class files in the directory `wp-includes` with a "@subpackage Template" tag should use the `-template` suffix.
+    WP Core only: Non-class files in the directory `wp-includes` with a "@subpackage Template" tag should use the `-template` suffix.
     ]]>
     </standard>
     <code_comparison>
