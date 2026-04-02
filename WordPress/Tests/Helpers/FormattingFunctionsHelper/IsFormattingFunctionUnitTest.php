@@ -17,7 +17,7 @@ use WordPressCS\WordPress\Helpers\FormattingFunctionsHelper;
  *
  * @since 3.4.0
  *
- * @covers \WordPressCS\WordPress\Helpers\FormattingFunctionsHelper::is_formatting_function()
+ * @covers \WordPressCS\WordPress\Helpers\FormattingFunctionsHelper::is_formatting_function
  */
 final class IsFormattingFunctionUnitTest extends TestCase {
 
@@ -41,8 +41,9 @@ final class IsFormattingFunctionUnitTest extends TestCase {
 	/**
 	 * Data provider.
 	 *
-	 * @return array<string, array<string, bool|string>>
 	 * @see testIsFormattingFunction()
+	 *
+	 * @return array<string, array<string, bool|string>>
 	 */
 	public static function dataIsFormattingFunction() {
 		return array(
