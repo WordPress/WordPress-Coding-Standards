@@ -17,7 +17,7 @@ use WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper;
  *
  * @since 3.4.0
  *
- * @covers \WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper::is_unslashing_function()
+ * @covers \WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper::is_unslashing_function
  */
 final class IsUnslashingFunctionUnitTest extends TestCase {
 
@@ -41,8 +41,9 @@ final class IsUnslashingFunctionUnitTest extends TestCase {
 	/**
 	 * Data provider.
 	 *
-	 * @return array<string, array<string, bool|string>>
 	 * @see testIsUnslashingFunction()
+	 *
+	 * @return array<string, array<string, bool|string>>
 	 */
 	public static function dataIsUnslashingFunction() {
 		return array(
