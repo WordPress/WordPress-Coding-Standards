@@ -19,6 +19,12 @@ If the error message in question doesn't come from a sniff whose name starts wit
 * Bugs for sniffs starting with `Generic`, `PEAR`, `PSR1`, `PSR2`, `PSR12`, `Squiz` or `Zend` should be [reported to PHPCS](https://github.com/PHPCSStandards/PHP_CodeSniffer/issues).
 * Bugs for sniffs starting with `Modernize`, `NormalizedArrays` or `Universal` should be [reported to PHPCSExtra](https://github.com/PHPCSStandards/PHPCSExtra/issues).
 
+## Use of AI Tools
+
+You are free to use artificial intelligence (AI) tooling to contribute, but we ask that you disclose what tooling you are using and to what extent a pull request has been authored by AI. Are you using AI just as a code reviewer? Or, for the other extreme, are you using AI to write everything (e.g. "vibe coding")? It is your responsibility to review and take responsibility for what AI generates.
+
+For more, please see the [WordPress AI Guidelines](https://make.wordpress.org/ai/handbook/ai-guidelines/).
+
 ## Contributing patches and new features
 
 ### Tips for Successful PRs
@@ -27,9 +33,6 @@ We welcome contributions from everyone, and want your PR to have the best chance
 
 * **Respect copyright and licensing.**
   Only submit code that you have written yourself or that comes from sources where the license clearly allows inclusion. Submitting code that infringes on copyright or licensing terms puts both you and the project at legal risk, and such contributions cannot be accepted.
-
-* **Do not submit AI-generated code.**
-  Pull requests containing AI-generated code are not acceptable. Beyond copyright and licensing uncertainties, AI-generated contributions consistently require disproportionate amounts of maintainer time to review, correct, or rewrite. This wastes limited project resources and slows progress for everyone. Submitting AI-generated code may be treated as a violation of our [Code of Conduct](../CODE_OF_CONDUCT.md).
 
 * **Focus on quality and clarity.**
   Take time to explain *why* the change is needed, and include tests or examples where appropriate. Clear, self-written explanations make it more straightforward for reviewers to understand what you are trying to achieve.
