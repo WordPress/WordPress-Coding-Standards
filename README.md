@@ -253,10 +253,6 @@ At this moment, WordPressCS offer the following tools:
 
 See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit testing](.github/CONTRIBUTING.md#unit-testing) the standard.
 
-## Funding
-
-If you want to sponsor the work on WordPressCS, you can do so by donating to the [PHP_CodeSniffer Open Collective](https://opencollective.com/php_codesniffer).
-
 ## License
 
 See [LICENSE](LICENSE) (MIT).
