@@ -500,3 +500,25 @@ function test_in_match_condition_is_regarded_as_comparison() {
 		};
 	}
 }
+
+/*
+ * Type casts (int, float, bool) sanitize the enclosed value even when
+ * separated from the superglobal by grouping parentheses — e.g. the
+ * common `(int) ( $_GET['id'] ?? 0 )` idiom. Ref issue #2210.
+ */
+function test_cast_around_grouping_parens() {
+	$a = (int) ( $_POST['foo']    ?? 0 );     // OK.
+	$b = (int) ( $_GET['bar']     ?? 0 );     // OK.
+	$c = (bool) ( $_POST['flag']  ?? false ); // OK.
+	$d = (float) ( $_POST['rate'] ?? 0.0 );   // OK.
+	$e = (int) ( ( $_POST['n']    ?? 0 ) );   // OK — nested grouping parens.
+
+	// (string) is not in the safe-cast list, so this is still unsanitised.
+	$g = (string) ( $_POST['s'] ?? '' );      // Bad x 2 - unslash + sanitize.
+
+	// Array cast isn't treated as safe either.
+	$h = (array) ( $_POST['arr'] ?? array() ); // Bad x 2 - unslash + sanitize.
+
+	// Non-cast leading token: no rescue from the paren-walk.
+	$i = abs( $_POST['foo'] ?? 0 );           // Bad x 2 - unslash + sanitize.
+}

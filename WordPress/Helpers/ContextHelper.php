@@ -355,9 +355,27 @@ final class ContextHelper {
 			return false;
 		}
 
-		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-
-		return isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] );
+		// Walk outward through surrounding grouping parentheses. A leading
+		// cast sanitizes the enclosed value whether or not there are
+		// intermediate parens / coalesce operators — e.g. both
+		// `(int) $_GET['x']` and `(int) ( $_GET['x'] ?? 0 )` yield an int.
+		// Stop at the first non-empty token that isn't an open parenthesis;
+		// function-call parens (preceded by T_STRING) fall through to the
+		// not-a-cast branch correctly.
+		$check = $stackPtr;
+		do {
+			$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $check - 1 ), null, true );
+			if ( false === $prev ) {
+				return false;
+			}
+			if ( isset( self::$safe_casts[ $tokens[ $prev ]['code'] ] ) ) {
+				return true;
+			}
+			if ( \T_OPEN_PARENTHESIS !== $tokens[ $prev ]['code'] ) {
+				return false;
+			}
+			$check = $prev;
+		} while ( true );
 	}
 
 	/**
