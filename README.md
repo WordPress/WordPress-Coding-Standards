@@ -253,6 +253,8 @@ At this moment, WordPressCS offer the following tools:
 
 See [CONTRIBUTING](.github/CONTRIBUTING.md), including information about [unit testing](.github/CONTRIBUTING.md#unit-testing) the standard.
 
+Anyone contributing to the WordPress Coding Standards is expected to conduct themselves in accordance with the WordPress project's [Code of Conduct](https://github.com/WordPress/.github/blob/trunk/CODE_OF_CONDUCT.md).
+
 ## Funding
 
 If you want to sponsor the work on WordPressCS, you can do so by donating to the [PHP_CodeSniffer Open Collective](https://opencollective.com/php_codesniffer).
