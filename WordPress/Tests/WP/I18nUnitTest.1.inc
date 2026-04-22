@@ -373,5 +373,11 @@ string', 'my-slug' ); // Bad: two leading new lines.
 __( 'string
 
 ', 'my-slug' ); // Bad: two trailing new lines.
+__( '	 string', 'my-slug' ); // Bad: leading tab + space (1 leading whitespace error).
+__( 'string 	', 'my-slug' ); // Bad: trailing space + tab (1 trailing whitespace error).
+__( ' 	string	 ', 'my-slug' ); // Bad: mixed leading and trailing whitespace (2 errors).
+__( '
+	string
+', 'my-slug' ); // Bad: leading newline+tab and trailing tab+newline (2 errors).
 
 // phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
