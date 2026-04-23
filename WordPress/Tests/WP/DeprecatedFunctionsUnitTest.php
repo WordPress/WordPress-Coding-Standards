@@ -92,7 +92,9 @@ final class DeprecatedFunctionsUnitTest extends AbstractSniffUnitTest {
 
 			case 'DeprecatedFunctionsUnitTest.2.inc':
 				return array(
-					6 => 1,
+					6  => 1,
+					7  => 1,
+					16 => 1,
 				);
 
 			default:
