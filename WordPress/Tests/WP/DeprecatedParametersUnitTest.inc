@@ -37,14 +37,23 @@ wp_install( user_name: '', deprecated: '', user_email: '', blog_title: '', is_pu
 // Error: Parameter is passed with incorrect default, unconventional order.
 wp_install( is_public: '', user_name: '', user_email: '', deprecated: 'should be empty', blog_title: '' );
 
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\add_option( '', '', [] ); // Bad.
+MyNamespace\get_blog_list( $foo, $bar, 'deprecated' ); // Ok.
+\MyNamespace\get_wp_title_rss( 'deprecated' ); // Ok.
+namespace\the_author( 'deprecated', 'deprecated' ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\wp_title_rss( 'deprecated' ); // Ok.
+
 // All will give an ERROR. The functions are ordered alphabetically.
 
 _future_post_hook( 10, $post );
 _load_remote_block_patterns( $value );
 _wp_post_revision_fields( $foo, 'deprecated' );
 add_option( '', '', [] );
-add_option( '', '', 1.23 );
-add_option( '', '', 10 );
+\Add_Option( '', '', 1.23 );
+ADD_OPTION( '', '', 10 );
 add_option( '', '', false );
 add_option( '', '', 'deprecated' );
 comments_link( 'deprecated', 'deprecated' );

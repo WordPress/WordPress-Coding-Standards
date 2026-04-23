@@ -36,9 +36,10 @@ final class EscapedNotTranslatedUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			6 => 1,
-			7 => 1,
-			8 => 1,
+			6  => 1,
+			7  => 1,
+			8  => 1,
+			16 => 1,
 		);
 	}
 }
