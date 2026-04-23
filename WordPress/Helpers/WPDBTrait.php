@@ -23,21 +23,23 @@ use PHPCSUtils\Tokens\Collections;
 trait WPDBTrait {
 
 	/**
-	 * Checks whether this is a call to a $wpdb method.
+	 * Checks whether this is a call to one of a specific group of $wpdb method(s).
 	 *
 	 * Supports both instance method calls (e.g., `$wpdb->prepare()`) and static
 	 * method calls (e.g., `wpdb::esc_like()`).
 	 *
 	 * Note: Static calls to wpdb methods trigger a deprecation notice in PHP 7.0+
-	 * and result in a fatal error in PHP 8.0+ as wpdb methods are not declared static.
+	 * and result in a fatal error in PHP 8.0+ as wpdb methods are not declared static,
+	 * but that's not our concern.
 	 *
-	 * If available in the class using this trait, the following properties are automatically set:
-	 * - $methodPtr: Stack pointer to the method name.
-	 * - $i: Stack pointer to the opening parenthesis of the method call.
-	 * - $end: Stack pointer to the comma after the first parameter, or to one
-	 *         past the last token of the first parameter if there is no comma.
+	 * If the following properties are explicitly declared in the class using this trait,
+	 * they will be automatically set:
+	 * - `$methodPtr`: Stack pointer to the method name.
+	 * - `$i`:         Stack pointer to the opening parenthesis of the method call.
+	 * - `$end`:       Stack pointer to the comma after the first parameter, or to the
+	 *                 token directly after the first parameter if there is no comma.
 	 *
-	 * The $methodPtr and $i properties may be set even when this method returns false
+	 * The `$methodPtr` and `$i` properties may be set even when this method returns `false`
 	 * (e.g., for property access like `$wpdb->show_errors`).
 	 *
 	 * @since 0.8.0
@@ -51,7 +53,7 @@ trait WPDBTrait {
 	 *            for properties in the sniff class(es) using it.}}
 	 *
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile      The file being scanned.
-	 * @param int                         $stackPtr       The index of the $wpdb variable or wpdb class name token.
+	 * @param int                         $stackPtr       The index of the $wpdb variable or wpdb (class) name token.
 	 * @param array                       $target_methods Array of methods. Key(s) should be method name
 	 *                                                    in lowercase.
 	 *
