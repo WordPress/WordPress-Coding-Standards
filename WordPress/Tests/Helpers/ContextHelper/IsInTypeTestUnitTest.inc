@@ -4,6 +4,7 @@
  * The below should NOT be recognized as being inside a type test function call.
  */
 
+/* testBareVariable */ $value;
 some_function( /* testOtherFunctionCall */ $value );
 MyNamespace\is_numeric( /* testPartiallyQualifiedFunction */ $value );
 \MyNamespace\is_array( /* testFullyQualifiedNamespacedFunction */ $value );
