@@ -80,8 +80,8 @@ final class IsInTypeTestUnitTest extends UtilityMethodTestCase {
 				'testMarker'     => '/* testStaticMethod */',
 				'expectedResult' => false,
 			),
-			'nested_function_call' => array(
-				'testMarker'     => '/* testNestedFunctionCall */',
+			'nested_non_target_function_call' => array(
+				'testMarker'     => '/* testNestedNonTargetFunctionCall */',
 				'expectedResult' => false,
 			),
 
@@ -100,6 +100,10 @@ final class IsInTypeTestUnitTest extends UtilityMethodTestCase {
 			),
 			'fully_qualified_upper_case_function' => array(
 				'testMarker'     => '/* testFullyQualifiedUpperCaseFunction */',
+				'expectedResult' => true,
+			),
+			'nested_type_test_call' => array(
+				'testMarker'     => '/* testNestedTypeTestCall */',
 				'expectedResult' => true,
 			),
 		);
