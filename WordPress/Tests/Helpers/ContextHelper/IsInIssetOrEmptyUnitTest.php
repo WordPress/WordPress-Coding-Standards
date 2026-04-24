@@ -48,6 +48,10 @@ final class IsInIssetOrEmptyUnitTest extends UtilityMethodTestCase {
 	public static function dataIsInIssetOrEmpty() {
 		return array(
 			// Cases that should return false.
+			'bare_variable' => array(
+				'testMarker'     => '/* testBareVariable */',
+				'expectedResult' => false,
+			),
 			'other_function_call' => array(
 				'testMarker'     => '/* testOtherFunctionCall */',
 				'expectedResult' => false,
@@ -88,8 +92,8 @@ final class IsInIssetOrEmptyUnitTest extends UtilityMethodTestCase {
 				'testMarker'     => '/* testStaticMethod */',
 				'expectedResult' => false,
 			),
-			'nested_function_call' => array(
-				'testMarker'     => '/* testNestedFunctionCall */',
+			'nested_non_target_function_call' => array(
+				'testMarker'     => '/* testNestedNonTargetFunctionCall */',
 				'expectedResult' => false,
 			),
 
@@ -120,6 +124,10 @@ final class IsInIssetOrEmptyUnitTest extends UtilityMethodTestCase {
 			),
 			'named_param_reversed_order' => array(
 				'testMarker'     => '/* testNamedParamReversedOrder */',
+				'expectedResult' => true,
+			),
+			'nested_valid_function_call' => array(
+				'testMarker'     => '/* testNestedValidFunctionCall */',
 				'expectedResult' => true,
 			),
 		);

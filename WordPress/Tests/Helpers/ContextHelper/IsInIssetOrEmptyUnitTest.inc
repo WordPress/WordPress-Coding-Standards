@@ -4,6 +4,7 @@
  * The below should NOT be recognized as being inside an isset/empty check.
  */
 
+/* testBareVariable */ $value;
 some_function( /* testOtherFunctionCall */ $value );
 array_key_exists( /* testMissingArrayParam */ $key );
 key_exists( /* testKeyParamNotArrayParam */ $value, $array );
@@ -14,7 +15,7 @@ namespace\Sub\key_exists( 'key', /* testNamespaceRelativeSubFunction */ $array )
 $obj->array_key_exists( 'key', /* testObjectMethod */ $array );
 $obj?->key_exists( 'key', /* testNullsafeObjectMethod */ $array );
 MyClass::array_key_exists( 'key', /* testStaticMethod */ $array );
-key_exists( 'key', my_function( /* testNestedFunctionCall */ $array ) );
+key_exists( 'key', my_function( /* testNestedNonTargetFunctionCall */ $array ) );
 
 /*
  * The below should be recognized as being inside an isset/empty check.
@@ -27,3 +28,4 @@ Key_Exists( 'key', /* testMixedCaseFunction */ $array );
 \array_key_exists( 'key', /* testFullyQualifiedFunction */ $array );
 \KEY_EXISTS( 'key', /* testFullyQualifiedUpperCaseFunction */ $array );
 array_key_exists( array: /* testNamedParamReversedOrder */ $array, key: 'foo' );
+array_key_exists( 'key', \key_exists( 'key', /* testNestedValidFunctionCall */ $array ) );
