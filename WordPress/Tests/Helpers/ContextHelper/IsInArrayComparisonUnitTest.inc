@@ -4,6 +4,7 @@
  * The below should NOT be recognized as being inside an array comparison function call.
  */
 
+/* testBareVariable */ $value;
 some_function( /* testOtherFunctionCall */ $value );
 MyNamespace\in_array( /* testPartiallyQualifiedFunction */ $value, $haystack );
 \MyNamespace\array_search( /* testFullyQualifiedNamespacedFunction */ $value, $haystack );

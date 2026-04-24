@@ -48,6 +48,10 @@ final class IsInArrayComparisonUnitTest extends UtilityMethodTestCase {
 	public static function dataIsInArrayComparison() {
 		return array(
 			// Cases that should return false.
+			'bare_variable' => array(
+				'testMarker'     => '/* testBareVariable */',
+				'expectedResult' => false,
+			),
 			'other_function_call' => array(
 				'testMarker'     => '/* testOtherFunctionCall */',
 				'expectedResult' => false,
