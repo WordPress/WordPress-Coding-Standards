@@ -57,7 +57,7 @@ final class GetPrintingFunctionsUnitTest extends TestCase {
 		$result = $this->testClass->get_printing_functions();
 
 		$this->assertIsArray( $result, 'Function list is not an array' );
-		$this->assertCount( $this->testClass->get_default_function_count(), $result, 'Number of default printing functions does not match' );
+		$this->assertCount( $this->testClass->get_default_function_count(), $result, 'Number of printing functions does not match expectation' );
 		$this->assertArrayHasKey( 'printf', $result, 'printf() is not in the function list' );
 		$this->assertTrue( $result['printf'], 'printf() value should be true, indicating a default function' );
 	}
@@ -72,7 +72,8 @@ final class GetPrintingFunctionsUnitTest extends TestCase {
 
 		$result = $this->testClass->get_printing_functions();
 
-		$this->assertCount( $this->testClass->get_default_function_count() + 1, $result, 'Total count should be default functions + 1 custom function' );
+		$expectedCount = $this->testClass->get_default_function_count() + 1;
+		$this->assertCount( $expectedCount, $result, 'Total count should be default functions + 1 custom function' );
 		$this->assertArrayHasKey( 'my_custom_print', $result, 'Custom function is not in the function list' );
 		$this->assertFalse( $result['my_custom_print'], 'my_custom_print() value should be false, indicating a custom function' );
 	}
