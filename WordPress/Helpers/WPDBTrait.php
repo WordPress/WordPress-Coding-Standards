@@ -28,9 +28,8 @@ trait WPDBTrait {
 	 * Supports both instance method calls (e.g., `$wpdb->prepare()`) and static
 	 * method calls (e.g., `wpdb::esc_like()`).
 	 *
-	 * Note: Static calls to wpdb methods trigger a deprecation notice in PHP 7.0+
-	 * and result in a fatal error in PHP 8.0+ as wpdb methods are not declared static,
-	 * but that's not our concern.
+	 * Note: Static calls on non-static wpdb methods are problematic at runtime, but this
+	 * helper still matches them so sniffs can flag them in the code under scan.
 	 *
 	 * If the following properties are explicitly declared in the class using this trait,
 	 * they will be automatically set:
