@@ -16,6 +16,9 @@ $obj->array_key_exists( 'key', /* testObjectMethod */ $array );
 $obj?->key_exists( 'key', /* testNullsafeObjectMethod */ $array );
 MyClass::array_key_exists( 'key', /* testStaticMethod */ $array );
 key_exists( 'key', my_function( /* testNestedNonTargetFunctionCall */ $array ) );
+$obj->isset( /* testIssetObjectMethod */ $value );
+Foo::empty( /* testEmptyStaticMethod */ $value );
+MyNamespace\isset( /* testIssetNamespacedFunction */ $value );
 
 /*
  * The below should be recognized as being inside an isset/empty check.

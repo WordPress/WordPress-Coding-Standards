@@ -96,6 +96,18 @@ final class IsInIssetOrEmptyUnitTest extends UtilityMethodTestCase {
 				'testMarker'     => '/* testNestedNonTargetFunctionCall */',
 				'expectedResult' => false,
 			),
+			'isset_object_method' => array(
+				'testMarker'     => '/* testIssetObjectMethod */',
+				'expectedResult' => false,
+			),
+			'empty_static_method' => array(
+				'testMarker'     => '/* testEmptyStaticMethod */',
+				'expectedResult' => false,
+			),
+			'isset_namespaced_function' => array(
+				'testMarker'     => '/* testIssetNamespacedFunction */',
+				'expectedResult' => false,
+			),
 
 			// Cases that should return true.
 			'isset' => array(
