@@ -34,9 +34,10 @@ final class IsPrintingFunctionUnitTest extends TestCase {
 	 * @return void
 	 */
 	public static function setUpBeforeClass(): void {
-		self::$testClass = new class() {
+		self::$testClass                          = new class() {
 			use PrintingFunctionsTrait;
 		};
+		self::$testClass->customPrintingFunctions = array( 'my_custom_function' );
 	}
 
 	/**
@@ -65,17 +66,21 @@ final class IsPrintingFunctionUnitTest extends TestCase {
 	 */
 	public static function dataIsPrintingFunction() {
 		return array(
-			'lowercase_name'          => array(
-				'functionName'   => 'printf',
-				'expectedResult' => true,
-			),
-			'mixedcase_name'          => array(
-				'functionName'   => 'vPrInTf',
-				'expectedResult' => true,
-			),
 			'not_a_printing_function' => array(
 				'functionName'   => 'echo',
 				'expectedResult' => false,
+			),
+			'lowercase_name' => array(
+				'functionName'   => 'printf',
+				'expectedResult' => true,
+			),
+			'mixedcase_name' => array(
+				'functionName'   => 'vPrInTf',
+				'expectedResult' => true,
+			),
+			'custom_printing_function' => array(
+				'functionName'   => 'my_custom_function',
+				'expectedResult' => true,
 			),
 		);
 	}
