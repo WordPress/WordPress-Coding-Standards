@@ -275,4 +275,4 @@ jobs:
           persist-credentials: false
 
       - name: "Search for misspellings"
-        uses: "crate-ci/typos@02ea592e44b3a53c302f697cddca7641cd051c3d" # v1.45.0
+        uses: "crate-ci/typos@bbaefadf97b0ec5fdc942684b647f1a6ab250274" # v1.46.0
