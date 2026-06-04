@@ -2,54 +2,58 @@
 <documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
     title="Type Casts"
->
+    >
     <standard>
     <![CDATA[
-      Enforce normalized and safe type casts.
-
-      • Use (float) instead of legacy float casts.
-      • Do not use the (unset) cast. Use unset().
-      • Avoid the (binary) cast (discouraged).
+    The (float) cast must be used instead of the (double) and (real) casts. The (real) cast was deprecated in PHP 7.4 and removed in PHP 8.0. The (double) cast was deprecated in PHP 8.5.
     ]]>
     </standard>
-
     <code_comparison>
-        <code title="Valid: Using normalized float casts.">
+        <code title="Valid: Using the normalized (float) cast.">
         <![CDATA[
 $price = <em>(float)</em> $value;
-$size  = <em>(float)</em> $value;
         ]]>
         </code>
         <code title="Invalid: Using legacy float casts.">
         <![CDATA[
 $price = <em>(double)</em> $value;
-$size  = <em>(real)</em>   $value;
+$size  = <em>(real)</em> $value;
         ]]>
         </code>
     </code_comparison>
-
+    <standard>
+    <![CDATA[
+    The (unset) cast must not be used. It was deprecated in PHP 7.2 and removed in PHP 8.0. Use unset() to unset a variable instead.
+    ]]>
+    </standard>
     <code_comparison>
-        <code title="Valid: Use unset().">
+        <code title="Valid: Using the unset() language construct.">
         <![CDATA[
-unset( $value );
+<em>unset</em>( $value );
         ]]>
         </code>
         <code title="Invalid: Using the (unset) cast.">
         <![CDATA[
-result = <em>(unset)</em> $value;
+$result = <em>(unset)</em> $value;
         ]]>
         </code>
     </code_comparison>
-
+    <standard>
+    <![CDATA[
+    Using the (binary) cast or the b prefix is discouraged. The (binary) cast was deprecated in PHP 8.5. Use the (string) cast or a regular string literal instead.
+    ]]>
+    </standard>
     <code_comparison>
-        <code title="Valid: Prefer a clear alternative.">
+        <code title="Valid: Using (string) and a string literal.">
         <![CDATA[
-bytes = (string) $value;
+$bytes = <em>(string)</em> $value;
+$text  = <em>'hello'</em>;
         ]]>
         </code>
-        <code title="Invalid: Using the (binary) cast.">
+        <code title="Invalid: Using (binary) and the b prefix.">
         <![CDATA[
-bytes = <em>(binary)</em> $value;
+$bytes = <em>(binary)</em> $value;
+$text  = <em>b</em>'hello';
         ]]>
         </code>
     </code_comparison>
