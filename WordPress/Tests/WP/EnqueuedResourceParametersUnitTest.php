@@ -38,16 +38,15 @@ final class EnqueuedResourceParametersUnitTest extends AbstractSniffUnitTest {
 					13  => 1,
 					14  => 1,
 					22  => 1,
-					54  => 1,
-					57  => 1,
 					61  => 1,
 					82  => 1,
 					85  => 1,
-					89  => 1,
-					92  => 1,
-					95  => 1,
-					97  => 1,
 					106 => 1,
+					126 => 1,
+					127 => 1,
+					141 => 1,
+					144 => 1,
+					150 => 1,
 				);
 
 			case 'EnqueuedResourceParametersUnitTest.2.inc':
