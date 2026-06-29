@@ -9,7 +9,8 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\WPHookHelper;
 
-use PHPUnit\Framework\TestCase;
+use PHPCSUtils\TestUtils\UtilityMethodTestCase;
+use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\Helpers\WPHookHelper;
 
 /**
@@ -19,24 +20,33 @@ use WordPressCS\WordPress\Helpers\WPHookHelper;
  *
  * @covers \WordPressCS\WordPress\Helpers\WPHookHelper::get_hook_name_param
  */
-final class GetHookNameParamUnitTest extends TestCase {
+final class GetHookNameParamUnitTest extends UtilityMethodTestCase {
 
 	/**
 	 * Test get_hook_name_param().
 	 *
 	 * @dataProvider dataGetHookNameParam
 	 *
-	 * @param string                  $functionName   The function name to test.
-	 * @param array<int, mixed>       $parameters     The parameters array to pass to the method.
-	 * @param array<int, mixed>|false $expectedResult The expected return value.
+	 * @param string       $testMarker     The comment which prefaces the target token in the test file.
+	 * @param string|false $expectedResult The raw content of the expected hook name parameter,
+	 *                                     or `false` when no hook name parameter is expected.
 	 *
 	 * @return void
 	 */
-	public function testGetHookNameParam( $functionName, $parameters, $expectedResult ) {
-		$this->assertSame(
-			$expectedResult,
-			WPHookHelper::get_hook_name_param( $functionName, $parameters )
-		);
+	public function testGetHookNameParam( $testMarker, $expectedResult ) {
+		$stackPtr     = $this->getTargetToken( $testMarker, \T_STRING );
+		$functionName = self::$phpcsFile->getTokens()[ $stackPtr ]['content'];
+		$parameters   = PassedParameters::getParameters( self::$phpcsFile, $stackPtr );
+
+		$result = WPHookHelper::get_hook_name_param( $functionName, $parameters );
+
+		if ( is_array( $result ) ) {
+			// The details of the parameter are populated by PassedParameters::getParameters().
+			// Here we only verify which parameter was selected.
+			$result = $result['raw'];
+		}
+
+		$this->assertSame( $expectedResult, $result );
 	}
 
 	/**
@@ -44,42 +54,29 @@ final class GetHookNameParamUnitTest extends TestCase {
 	 *
 	 * @see testGetHookNameParam()
 	 *
-	 * @return array<string, array<string, array<int, mixed>|false|string>>
+	 * @return array<string, array<string, string|false>>
 	 */
 	public static function dataGetHookNameParam() {
-		// Note: The parameter arrays use a simplified format instead of the real PassedParameters::getParameters()
-		// output as most of the array entries are not relevant for the method under test.
 		return array(
 			'not_a_hook_function' => array(
-				'functionName'   => 'printf',
-				'parameters'     => array( 1 => array( 'my_action' ) ),
+				'testMarker'     => '/* testNotAHookFunction */',
 				'expectedResult' => false,
 			),
 			'hook_name_param_missing' => array(
-				'functionName'   => 'apply_filters_ref_array',
-				'parameters'     => array( 2 => array( '$arg' ) ),
+				'testMarker'     => '/* testHookNameParamMissing */',
 				'expectedResult' => false,
 			),
 			'lowercase_name' => array(
-				'functionName'   => 'do_action',
-				'parameters'     => array( 1 => array( 'my_action' ) ),
-				'expectedResult' => array( 'my_action' ),
+				'testMarker'     => '/* testLowercaseName */',
+				'expectedResult' => "'my_action'",
 			),
 			'mixedcase_name' => array(
-				'functionName'   => 'aPpLy_FiLtErS',
-				'parameters'     => array(
-					1 => array( 'my_filter' ),
-					2 => array( '$value' ),
-				),
-				'expectedResult' => array( 'my_filter' ),
+				'testMarker'     => '/* testMixedCaseName */',
+				'expectedResult' => "'my_filter'",
 			),
 			'named_parameter' => array(
-				'functionName'   => 'do_action_deprecated',
-				'parameters'     => array(
-					'args'      => array( '$args' ),
-					'hook_name' => array( 'my_action' ),
-				),
-				'expectedResult' => array( 'my_action' ),
+				'testMarker'     => '/* testNamedParameter */',
+				'expectedResult' => "'my_action'",
 			),
 		);
 	}
