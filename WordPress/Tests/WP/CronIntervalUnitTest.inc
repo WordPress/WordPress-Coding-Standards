@@ -164,9 +164,9 @@ add_filter( 'cron_schedules', function ( $schedules ) {
 // Correctly handle fully qualified WP time constants.
 class FQNConstants {
 	public function add_schedules() {
-		add_filter( 'cron_schedules', array( $this, 'ADD_WEEKLY_SCHEDULE' ) ); // Ok: > 15 min.
+		add_filter( 'cron_schedules', array( $this, 'add_weekly_schedule' ) ); // Ok: > 15 min.
 		\add_filter( 'cron_schedules', array( $this, 'add_eight_minute_schedule' ) ); // Warning: 8 min.
-		ADD_FILTER( 'cron_schedules', array( $this, 'add_hundred_minute_schedule' ) ); // Warning: time undetermined.
+		ADD_FILTER( 'cron_schedules', array( $this, 'ADD_HUNDRED_MINUTE_SCHEDULE' ) ); // Warning: time undetermined.
 		\Add_Filter( 'cron_schedules', array( $this, 'sneaky_fake_wp_constant_schedule' ) ); // Warning: time undetermined.
 	}
 
