@@ -444,3 +444,7 @@ wp_add_editor_classic_theme_styles();
 /* ============ WP 6.9 ============ */
 seems_utf8();
 wp_print_auto_sizes_contain_css_fix();
+/* ============ WP 7.0 ============ */
+addslashes_gpc();
+block_core_navigation_block_contains_core_navigation();
+wp_sanitize_script_attributes();
