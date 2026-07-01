@@ -91,3 +91,11 @@ MyNamespace\Avifinfo\CHAN_PROP::prepare_query();
 \MyNamespace\Avifinfo\features::prepare_query();
 namespace\Sub\AVIFINFO\parser::prepare_query();
 namespace\AVIFINFO\TILE::prepare_query(); // Warning.
+
+/*
+ * AI Client classes.
+ */
+$obj = new WP_AI_Client_Cache();
+$obj = new \WP_ai_client_cache(); // Warning.
+$obj = new \WordPress\AiClient\AiClient();
+$obj = new WordPress\AiClient\aiclient(); // Warning.
