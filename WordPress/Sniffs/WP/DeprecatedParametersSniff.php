@@ -50,7 +50,7 @@ final class DeprecatedParametersSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * The functions are ordered alphabetically.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 0.12.0
 	 *
