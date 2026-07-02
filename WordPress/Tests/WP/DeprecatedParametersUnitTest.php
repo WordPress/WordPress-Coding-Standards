@@ -28,7 +28,7 @@ final class DeprecatedParametersUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getErrorList() {
 		$start_line = 51;
-		$end_line   = 107;
+		$end_line   = 108;
 		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
 		$errors[22] = 1;
@@ -55,7 +55,6 @@ final class DeprecatedParametersUnitTest extends AbstractSniffUnitTest {
 	 */
 	public function getWarningList() {
 		return array(
-			110 => 1,
 			111 => 1,
 		);
 	}

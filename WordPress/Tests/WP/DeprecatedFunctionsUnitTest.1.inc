@@ -422,13 +422,13 @@ wp_update_https_detection_errors();
 block_core_file_ensure_interactivity_dependency();
 block_core_image_ensure_interactivity_dependency();
 block_core_query_ensure_interactivity_dependency();
+/* ============ WP 6.6 ============ */
+wp_interactivity_process_directives_of_interactive_blocks();
+wp_render_elements_support();
 
 /*
  * Warning.
  */
-/* ============ WP 6.6 ============ */
-wp_interactivity_process_directives_of_interactive_blocks();
-wp_render_elements_support();
 /* ============ WP 6.7 ============ */
 current_user_can_for_blog();
 wp_create_block_style_variation_instance_name();

@@ -105,7 +105,7 @@ wp_upload_bits( '', 'deprecated' );
 xfn_check( '', '', 'deprecated' );
 global_terms( $foo, 'deprecated' );
 inject_ignored_hooked_blocks_metadata_attributes('', 'deprecated');
-
-// All will give an WARNING as they have been deprecated after WP 6.6.
 wp_render_elements_support_styles('deprecated');
+
+// All will give an WARNING as they have been deprecated after WP 6.7.
 _wp_can_use_pcre_u('deprecated');
