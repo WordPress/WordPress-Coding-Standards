@@ -826,7 +826,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	/**
 	 * List of all GetID3 classes in lowercase.
 	 *
-	 * This array is automatically generated in the class constructor based on the $phpmailer_classes property.
+	 * This array is automatically generated in the class constructor based on the $getid3_classes property.
 	 *
 	 * @since 3.0.0
 	 *
