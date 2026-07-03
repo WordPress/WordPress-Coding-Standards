@@ -43,7 +43,7 @@ final class GetHookNameParamUnitTest extends UtilityMethodTestCase {
 		if ( is_array( $result ) ) {
 			// The details of the parameter are populated by PassedParameters::getParameters().
 			// Here we only verify which parameter was selected.
-			$result = $result['raw'];
+			$result = $result['clean'];
 		}
 
 		$this->assertSame( $expectedResult, $result );
