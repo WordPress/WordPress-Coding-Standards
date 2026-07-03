@@ -8,7 +8,7 @@
 /.gitignore         export-ignore
 /.codecov.yml       export-ignore
 /.phpcs.xml.dist    export-ignore
-/CODE_OF_CONDUCT.md export-ignore
+/_typos.toml        export-ignore
 /phpstan.neon.dist  export-ignore
 /phpunit.xml.dist   export-ignore
 /.github            export-ignore
