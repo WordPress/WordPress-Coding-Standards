@@ -142,3 +142,18 @@ echo $wpdb::CONSTANT_NAME;
 
 // Not an identifiable method call.
 $wpdb->{$methodName}('query');
+
+/*
+ * Safeguard correct handling of all types of namespaced calls to the wpdb::prepare() method.
+ *
+ * Note that calling wpdb::prepare() statically will result in an error. Still, the tests are included here since the
+ * sniff handles those calls.
+ *
+ * Related to: https://github.com/WordPress/WordPress-Coding-Standards/issues/2710.
+ */
+\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+\WPDB::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Bad.
+MyNamespace\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok.
+\MyNamespace\WPDB::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok.
+namespace\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok. The sniff should start flagging this once it can resolve relative namespaces as this test file is not namespaced.
+namespace\Sub\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok.

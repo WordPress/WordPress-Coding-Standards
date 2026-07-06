@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\BCFile;
 use PHPCSUtils\Tokens\Collections;
+use WordPressCS\WordPress\Helpers\ContextHelper;
 
 /**
  * Helper utilities for sniffs which examine WPDB method calls.
@@ -76,6 +77,11 @@ trait WPDBTrait {
 		if ( false === $is_object_call
 			|| isset( Collections::objectOperators()[ $tokens[ $is_object_call ]['code'] ] ) === false
 		) {
+			return false;
+		}
+
+		// If calling the method statically, ensure we are calling the global wpdb class.
+		if ( \T_STRING === $tokens[ $stackPtr ]['code'] && ContextHelper::is_token_namespaced( $phpcsFile, $stackPtr ) ) {
 			return false;
 		}
 

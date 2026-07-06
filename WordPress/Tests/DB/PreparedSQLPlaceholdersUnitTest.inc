@@ -518,3 +518,17 @@ $where = $wpdb->prepare(
  */
 $callback = $wpdb->prepare(...); // OK.
 
+/*
+ * Safeguard correct handling of all types of namespaced calls to the wpdb::prepare() method.
+ *
+ * Note that calling wpdb::prepare() statically will result in an error. Still, the tests are included here since the
+ * sniff handles those calls.
+ *
+ * Related to: https://github.com/WordPress/WordPress-Coding-Standards/issues/2710.
+ */
+$sql = \wpdb::prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s" ); // Error.
+$sql = \WPDB::prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s" ); // Error.
+$sql = MyNamespace\wpdb::prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s" ); // OK.
+$sql = \MyNamespace\WPDB::prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s" ); // OK.
+$sql = namespace\wpdb::prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s" ); // Ok. The sniff should start flagging this once it can resolve relative namespaces as this test file is not namespaced.
+$sql = namespace\Sub\wpdb::prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s" ); // OK.

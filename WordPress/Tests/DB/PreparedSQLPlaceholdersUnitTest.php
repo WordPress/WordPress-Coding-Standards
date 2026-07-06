@@ -106,6 +106,10 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 
 			// Named parameter support.
 			418 => 1,
+
+			// Fully qualified calls to the global class wpdb.
+			529 => 1,
+			530 => 1,
 		);
 	}
 
