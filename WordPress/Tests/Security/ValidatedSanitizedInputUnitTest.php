@@ -19,7 +19,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since 1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  *
  * @covers \WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper
- * @covers \WordPressCS\WordPress\Helpers\SanitizationHelperTrait
  * @covers \WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper
  * @covers \WordPressCS\WordPress\Helpers\VariableHelper
  * @covers \WordPressCS\WordPress\Sniffs\Security\ValidatedSanitizedInputSniff
