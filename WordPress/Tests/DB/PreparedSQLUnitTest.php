@@ -20,7 +20,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Helpers\ContextHelper::is_safe_casted
  * @covers \WordPressCS\WordPress\Helpers\FormattingFunctionsHelper
- * @covers \WordPressCS\WordPress\Helpers\WPDBTrait
  * @covers \WordPressCS\WordPress\Sniffs\DB\PreparedSQLSniff
  */
 final class PreparedSQLUnitTest extends AbstractSniffUnitTest {
