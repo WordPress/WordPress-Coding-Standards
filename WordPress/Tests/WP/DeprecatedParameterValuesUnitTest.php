@@ -56,6 +56,8 @@ final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 					49 => 1,
 					50 => 1,
 					51 => 1,
+					55 => 1,
+					56 => 1,
 					61 => 1,
 				);
 
@@ -67,20 +69,9 @@ final class DeprecatedParameterValuesUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
-	 * @param string $testFile The name of the file being tested.
-	 *
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
-	public function getWarningList( $testFile = '' ) {
-		switch ( $testFile ) {
-			case 'DeprecatedParameterValuesUnitTest.1.inc':
-				return array(
-					55 => 1,
-					56 => 1,
-				);
-
-			default:
-				return array();
-		}
+	public function getWarningList() {
+		return array();
 	}
 }
