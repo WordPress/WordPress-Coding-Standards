@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted Database Functions"
+    >
+    <standard>
+    <![CDATA[
+    Avoid touching the database directly with PHP library functions. Use the $wpdb object and associated functions instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using a WordPress function to fetch posts.">
+        <![CDATA[
+$results = <em>get_posts()</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Using the MySQLi library to fetch posts.">
+        <![CDATA[
+$results = <em>mysqli_query</em>(
+    $mysql,
+    "SELECT * FROM wp_posts LIMIT 5"
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Using WordPress functions to insert a post.">
+        <![CDATA[
+<em>wp_insert_post</em>(
+    array( 'post_title' => 'Title' )
+);
+
+// or...
+
+global $wpdb;
+<em>$wpdb->insert</em>(
+    $wpdb->posts,
+    array( 'post_title' => 'Title' ),
+    array( '%s' )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using MySQLi library to insert a post.">
+        <![CDATA[
+<em>mysqli_query</em>(
+    $mysql,
+    "INSERT INTO wp_posts (post_title)
+    VALUES ('Title')"
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

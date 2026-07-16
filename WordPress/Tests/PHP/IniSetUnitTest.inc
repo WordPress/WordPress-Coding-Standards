@@ -14,8 +14,8 @@ ini_set('short_open_tag', 'On'); // Ok.
 ini_set('short_open_tag', 'on'); // Ok.
 
 ini_set('bcmath.scale', 0); // Error.
-ini_set( 'bcmath.scale' ,0 ); // Error.
-ini_set('display_errors', 0); // Error.
+\ini_SET( 'bcmath.scale' ,0 ); // Error.
+INI_set('display_errors', 0); // Error.
 ini_set('error_reporting', 0); // Error.
 ini_set('filter.default', 'full_special_chars'); // Error.
 ini_set('filter.default_flags', 0); // Error.
@@ -58,3 +58,12 @@ ini_set(
 	// Set the number of decimals.
 	0
 ); // Error.
+
+/*
+ * Safeguard correct handling of all types of namespaced function calls.
+ */
+\ini_set( 'bcmath.scale', 0 ); // Error.
+MyNamespace\ini_alter( 'bcmath.scale', 0 ); // Ok.
+\MyNamespace\ini_set( 'bcmath.scale', 0 ); // Ok.
+namespace\ini_alter( 'bcmath.scale', 0 ); // The sniff should start flagging this once it can resolve relative namespaces.
+namespace\Sub\ini_set( 'bcmath.scale', 0 ); // Ok.

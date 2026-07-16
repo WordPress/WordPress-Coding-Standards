@@ -114,6 +114,35 @@ final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 					497 => 1,
 					498 => 1,
 					499 => 3,
+					510 => 1,
+					513 => 1,
+					516 => 1,
+					525 => 2,
+					526 => 2,
+					527 => 2,
+					528 => 2,
+					536 => 2,
+					537 => 2,
+					538 => 2,
+					539 => 2,
+
+					// The error counts below differ depending on whether running PHPCS 3.x or PHPCS 4.x. See the comment in the test case file.
+					554 => 1,
+					557 => 1,
+					560 => 1,
+					563 => 1,
+
+					575 => 1,
+					578 => 1,
+					581 => 1,
+					584 => 1,
+					597 => 1,
+					600 => 1,
+					603 => 1,
+					615 => 2,
+					618 => 2,
+					621 => 2,
+					624 => 2,
 				);
 
 			case 'ValidatedSanitizedInputUnitTest.2.inc':

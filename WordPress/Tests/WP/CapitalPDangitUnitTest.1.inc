@@ -244,3 +244,12 @@ class TypeClassConstants {
 	// Ensures no false positives on incorrect casing in a class constant type name.
     public const (\Fully\Qualified\MyClass&wordPRESS)|string ANOTHER_WORDPRESS = 'wordpress';
 }
+
+/*
+ * Safeguard correct handling of all types of namespaced calls to the define() function.
+ */
+\DEFINE( 'WORDPRESS_SOMETHING', 'wordpress' ); // OK.
+MyNamespace\define( 'WORDPRESS_SOMETHING', 'wordpress' ); // Bad.
+\MyNamespace\Define( 'WORDPRESS_SOMETHING', 'wordpress' ); // Bad.
+namespace\Sub\define( 'WORDPRESS_SOMETHING', 'wordpress' ); // Bad.
+namespace\define( 'WORDPRESS_SOMETHING', 'wordpress' ); // The sniff should stop flagging this once it can resolve relative namespaces.

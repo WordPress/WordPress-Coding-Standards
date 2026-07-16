@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Discouraged Constants"
+    >
+    <standard>
+    <![CDATA[
+    The use of certain WordPress native constants is discouraged. Use the recommended alternatives instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Function used instead of discouraged WP constant.">
+        <![CDATA[
+$dir = <em>get_stylesheet_directory()</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Discouraged WP constant is used.">
+        <![CDATA[
+$dir = <em>STYLESHEETPATH</em>;
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    The (re-)declaration of certain WordPress native constants is discouraged. Use the recommended alternatives instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using recommended alternative instead of (re-)declaring WP constant.">
+        <![CDATA[
+<em>add_theme_support</em>(
+    <em>'custom-header'</em>,
+    array( 'width' => 200 )
+);
+        ]]>
+        </code>
+        <code title="Invalid: (Re-)declaring a WP constant.">
+        <![CDATA[
+define(
+    <em>'HEADER_IMAGE_WIDTH'</em>,
+    200
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

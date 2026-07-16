@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted PHP Functions"
+    >
+    <standard>
+    <![CDATA[
+    Certain PHP functions must not be used. Use the recommended alternatives instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using an anonymous function (closure).">
+        <![CDATA[
+add_action(
+    'init',
+    <em>function () {
+        return foo( 'bar' );
+    }</em>
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using create_function().">
+        <![CDATA[
+add_action(
+    'init',
+    <em>create_function(
+        '',
+        'return foo( "bar" );'
+    )</em>
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

@@ -24,17 +24,35 @@ final class DeprecatedClassesUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where errors should occur.
 	 *
+	 * @param string $testFile The test file to check for errors.
+	 *
 	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
-	public function getErrorList() {
-		$start_line = 9;
-		$end_line   = 28;
-		$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
+	public function getErrorList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'DeprecatedClassesUnitTest.1.inc':
+				$start_line = 9;
+				$end_line   = 28;
+				$errors     = array_fill( $start_line, ( ( $end_line - $start_line ) + 1 ), 1 );
 
-		// Unset the lines related to version comments.
-		unset( $errors[16], $errors[18], $errors[21], $errors[26] );
+				// Unset the lines related to version comments.
+				unset( $errors[16], $errors[18], $errors[21], $errors[26] );
 
-		return $errors;
+				return $errors;
+
+			case 'DeprecatedClassesUnitTest.2.inc':
+				return array(
+					9  => 1,
+					13 => 1,
+					14 => 1,
+					18 => 1,
+					19 => 1,
+					23 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 
 	/**

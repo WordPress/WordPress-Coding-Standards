@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Alternative Functions"
+    >
+    <standard>
+    <![CDATA[
+    Use WordPress functions instead of certain native PHP functions.
+
+    These WordPress functions typically improve consistency across different PHP versions, operating systems, and server configurations, and/or provide a more comprehensive or robust version of the PHP native function. Using them can make the code more portable and reliable.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using a WordPress alternative function.">
+        <![CDATA[
+$number = <em>wp_rand</em>( 1, 100 );
+        ]]>
+        </code>
+        <code title="Invalid: Using a discouraged PHP function.">
+        <![CDATA[
+$number = <em>mt_rand</em>( 1, 100 );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

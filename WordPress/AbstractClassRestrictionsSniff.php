@@ -134,7 +134,7 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_PARENTHESIS, \T_WHITESPACE, \T_SEMICOLON, \T_CLOSE_PARENTHESIS, \T_CLOSE_TAG ), ( $stackPtr + 2 ) ) - 1 );
 			} else {
-				$nameEnd = ( $this->phpcsFile->findNext( array( \T_CLOSE_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
+				$nameEnd = ( $this->phpcsFile->findNext( array( \T_OPEN_CURLY_BRACKET, \T_WHITESPACE ), ( $stackPtr + 2 ) ) - 1 );
 			}
 
 			if ( isset( $this->tokens[ $stackPtr + 2 ] ) && false !== $nameEnd ) {

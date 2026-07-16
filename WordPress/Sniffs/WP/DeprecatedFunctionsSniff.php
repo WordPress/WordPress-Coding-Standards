@@ -43,7 +43,7 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 	 * To retrieve a function list for comparison, the following tool is available:
 	 * https://github.com/JDGrimes/wp-deprecated-code-scanner
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @var array
 	 */
@@ -1719,6 +1719,20 @@ final class DeprecatedFunctionsSniff extends AbstractFunctionRestrictionsSniff {
 		'wp_print_auto_sizes_contain_css_fix' => array(
 			'alt'     => 'wp_enqueue_img_auto_sizes_contain_css_fix()',
 			'version' => '6.9.0',
+		),
+
+		// WP 7.0.0.
+		'addslashes_gpc' => array(
+			'alt'     => 'wp_slash()',
+			'version' => '7.0.0',
+		),
+		'block_core_navigation_block_contains_core_navigation' => array(
+			'alt'     => 'block_core_navigation_block_tree_has_block_type()',
+			'version' => '7.0.0',
+		),
+		'wp_sanitize_script_attributes' => array(
+			'alt'     => 'wp_get_script_tag() or wp_get_inline_script_tag()',
+			'version' => '7.0.0',
 		),
 	);
 

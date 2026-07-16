@@ -19,6 +19,7 @@ extend-ignore-identifiers-re = [
     # These are search targets for sniffs, can't be helped.
     'avail_post_stati',
     'url_is_accessable_via_ssl',
+    'is_writeable',
 ]
 
 [default.extend-words]

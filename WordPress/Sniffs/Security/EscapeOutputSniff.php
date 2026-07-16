@@ -438,7 +438,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 
 			if ( false !== $file_param ) {
 				// Check for a particular code pattern which can safely be ignored.
-				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`', $file_param['clean'] ) === 1 ) {
+				if ( preg_match( '`^[\\\\]?basename\s*\(\s*__FILE__\s*\)$`i', $file_param['clean'] ) === 1 ) {
 					unset( $params[1], $params['file'] ); // Remove the param, whether passed positionally or named.
 				}
 			}
@@ -741,7 +741,7 @@ class EscapeOutputSniff extends AbstractFunctionRestrictionsSniff {
 					// Special case get_search_query() which is unsafe if $escaped = false.
 					if ( 'get_search_query' === strtolower( $functionName ) ) {
 						$escaped_param = PassedParameters::getParameter( $this->phpcsFile, $ptr, 1, 'escaped' );
-						if ( false !== $escaped_param && 'true' !== $escaped_param['clean'] ) {
+						if ( false !== $escaped_param && 'true' !== strtolower( ltrim( $escaped_param['clean'], '\\' ) ) ) {
 							$this->phpcsFile->addError(
 								'Output from get_search_query() is unsafe due to $escaped parameter being set to "false".',
 								$ptr,

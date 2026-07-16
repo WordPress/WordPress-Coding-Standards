@@ -30,7 +30,9 @@ final class DontExtractUnitTest extends AbstractSniffUnitTest {
 	public function getErrorList() {
 		return array(
 			3  => 1,
-			14 => 1,
+			4  => 1,
+			15 => 1,
+			16 => 1,
 		);
 	}
 

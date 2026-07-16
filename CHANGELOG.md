@@ -2,11 +2,93 @@
 
 All notable changes to this project will be documented in this file.
 
-This projects adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/).
+This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/).
 
 ## [Unreleased]
 
 _No documentation available about unreleased changes as of yet._
+
+## [3.4.0] - 2026-07-16
+
+We're happy to welcome [@rodrigoprimo] as co-maintainer of WordPressCS as of this release.
+
+### Added
+- `WordPress.Arrays.ArrayDeclarationSpacing`: new `allow_single_item_single_line_explicit_key_arrays` property to replace the, now deprecated, `allow_single_item_single_line_associative_arrays` property. [#2696]
+- End-user documentation to the following existing sniffs: `WordPress.Arrays.ArrayDeclarationSpacing` (props [@RafaelFunchal], [@mattgaldino] and [@rodrigoprimo], [#2489], [#2593], [#2682]), `WordPress.CodeAnalysis.AssignmentInTernaryCondition` (props [@Nic-Sevic] and [@rodrigoprimo], [#2488], [#2678]), `WordPress.DB.RestrictedClasses` (props [@paulgibbs] and [@rodrigoprimo], [#2455], [#2689]), `WordPress.DB.DirectDatabaseQuery` (props [@jaymcp] and [@rodrigoprimo], [#2458], [#2697]), `WordPress.DB.RestrictedFunctions` (props [@paulgibbs] and [@rodrigoprimo], [#2453], [#2676]), `WordPress.DB.SlowDBQuery` (props [@petitphp] and [@rodrigoprimo], [#2464], [#2699]), `WordPress.PHP.DevelopmentFunctions` (props [@gogdzl] and [@rodrigoprimo], [#2490], [#2690]), `WordPress.PHP.NoSilencedErrors` (props [@gogdzl] and [@rodrigoprimo], [#2495], [#2694]), `WordPress.PHP.PregQuoteDelimiter` (props [@tikifez] and [@rodrigoprimo], [#2487], [#2677]), `WordPress.PHP.RestrictedPHPFunctions` (props [@gogdzl] and [@rodrigoprimo], [#2491], [#2693]), `WordPress.Security.PluginMenuSlug` (props [@jasonkenison], [#2592]), `WordPress.WP.AlternativeFunctions` (props [@pamprn09], [@bhubbard] and [@rodrigoprimo], [#2496], [#2588], [#2687]), `WordPress.WP.DiscouragedConstants` (props [@RafaelFunchal], [@paulopmt1] and [@rodrigoprimo], [#2493], [#2589], [#2680]), `WordPress.WP.GlobalVariablesOverride` (props [@paulopmt1] and [@rodrigoprimo], [#2586], [#2679]).
+    This documentation can be exposed via the [`PHP_CodeSniffer` `--generator=...` command-line argument](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Usage).
+
+### Changed
+- The minimum required `PHP_CodeSniffer` version to 3.13.5 (was 3.13.4). [#2761]
+- The minimum required `PHPCSUtils` version to 1.2.2 (was 1.1.0). [#2761]
+- The default value for `minimum_wp_version`, as used by a [number of sniffs detecting usage of deprecated WP features](https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#various-sniffs-set-the-minimum-supported-wp-version), has been updated to `6.7`. [#2757]
+- `WordPress.NamingConventions.PrefixAllGlobals` has been updated to recognize pluggable functions introduced in WP up to WP 7.0.0. [#2747]
+- `WordPress.WP.ClassNameCase` has been updated to recognize classes introduced in WP up to WP 7.0.0. [#2747]
+- `WordPress.WP.DeprecatedFunctions` now detects functions deprecated in WordPress up to WP 7.0.0. [#2747]
+- The `ConstantsHelper::is_use_of_global_constant()` method will no longer flag a constant alias created via an import `use` statement as it were the use of a global constant. [#2579]
+- The `ConstantsHelper::is_in_function_call()` method will now act fully case-agnostic for the function names being checked. [#2706]
+    Previously, the `$valid_functions` parameter would need to be passed with the function names as keys in lowercase.
+- `WordPress.PHP.NoSilencedErrors`: error silencing is no longer accepted for the `parse_url()` function. [#2701]
+- Improved the wording of the error message for `WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound`. [#2688]
+- Improved the wording of the error message for `WordPress.PHP.RestrictedPHPFunctions`. [#2702]
+- Various housekeeping, including documentation and test improvements. Includes a contribution by [@dd32].
+
+### Deprecated
+- `WordPress.Arrays.ArrayDeclarationSpacing`: the `allow_single_item_single_line_associative_arrays` property has been deprecated in favor of the new `allow_single_item_single_line_explicit_key_arrays` property. [#2696]
+    This is a name change only. The functionality of these properties is the same.
+
+### Fixed
+- `WordPress.DB.PreparedSQL` and `WordPress.DB.PreparedSQLPlaceholders`: false positive for static method calls to a non-global class named `wpdb`. [#2753]
+- `WordPress.Security.EscapeOutput`: false positive for `get_search_query()` when the `$escaped` parameter was passed as fully qualified or non-lowercase `true`. [#2618]
+- `WordPress.Security.EscapeOutput`: false negative for `_deprecated_file()` calls when the `basename( __FILE__ )` pattern used non-standard casing for either `basename()` and/or `__FILE__`. [#2729]
+- `WordPress.WP.AlternativeFunctions`: false negative when class functions/constants/properties use the same name as select global WP constants/functions. [#2617]
+- `WordPress.WP.AlternativeFunctions`: false positive for fully qualified references to the global PHP stream constants \STDIN, \STDOUT, and \STDERR. [#2617]
+- `WordPress.WP.CronInterval`: false positive when the callback function reference used a different case than the function declaration, even though they are in the same file. [#2730]
+
+[#2453]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2453
+[#2455]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2455
+[#2458]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2458
+[#2464]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2464
+[#2487]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2487
+[#2488]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2488
+[#2489]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2489
+[#2490]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2490
+[#2491]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2491
+[#2493]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2493
+[#2495]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2495
+[#2496]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2496
+[#2579]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2579
+[#2586]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2586
+[#2588]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2588
+[#2589]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2589
+[#2592]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2592
+[#2593]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2593
+[#2617]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2617
+[#2618]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2618
+[#2676]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2676
+[#2677]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2677
+[#2678]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2678
+[#2679]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2679
+[#2680]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2680
+[#2682]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2682
+[#2687]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2687
+[#2688]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2688
+[#2689]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2689
+[#2690]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2690
+[#2693]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2693
+[#2694]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2694
+[#2696]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2696
+[#2697]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2697
+[#2699]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2699
+[#2701]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2701
+[#2702]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2702
+[#2706]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2706
+[#2729]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2729
+[#2730]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2730
+[#2747]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2747
+[#2753]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2753
+[#2757]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2757
+[#2761]: https://github.com/WordPress/WordPress-Coding-Standards/pull/2761
+
 
 ## [3.3.0] - 2025-11-25
 
@@ -1715,6 +1797,7 @@ Initial tagged release.
 [PHPCompatibility]:      https://github.com/PHPCompatibility/PHPCompatibility
 
 [Unreleased]: https://github.com/WordPress/WordPress-Coding-Standards/compare/main...HEAD
+[3.4.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.2.0...3.3.0
 [3.2.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/WordPress/WordPress-Coding-Standards/compare/3.0.1...3.1.0
@@ -1750,17 +1833,21 @@ Initial tagged release.
 
 [@anomiex]:         https://github.com/anomiex
 [@aiolachiara]:     https://github.com/aiolachiara
+[@bhubbard]:        https://github.com/bhubbard
 [@Chouby]:          https://github.com/Chouby
 [@ckanitz]:         https://github.com/ckanitz
 [@craigfrancis]:    https://github.com/craigfrancis
 [@davidperezgar]:   https://github.com/davidperezgar
 [@dawidurbanski]:   https://github.com/dawidurbanski
+[@dd32]:            https://github.com/dd32
 [@desrosj]:         https://github.com/desrosj
 [@dingo-d]:         https://github.com/dingo-d
 [@fredden]:         https://github.com/fredden
 [@GaryJones]:       https://github.com/GaryJones
+[@gogdzl]:          https://github.com/gogdzl
 [@grappler]:        https://github.com/grappler
 [@Ipstenu]:         https://github.com/Ipstenu
+[@jasonkenison]:    https://github.com/jasonkenison
 [@jaymcp]:          https://github.com/jaymcp
 [@JDGrimes]:        https://github.com/JDGrimes
 [@johnjago]:        https://github.com/johnjago
@@ -1768,10 +1855,18 @@ Initial tagged release.
 [@khacoder]:        https://github.com/khacoder
 [@Luc45]:           https://github.com/Luc45
 [@marconmartins]:   https://github.com/marconmartins
+[@mattgaldino]:     https://github.com/mattgaldino
+[@Nic-Sevic]:       https://github.com/Nic-Sevic
 [@NielsdeBlaauw]:   https://github.com/NielsdeBlaauw
+[@pamprn09]:        https://github.com/pamprn09
+[@paulgibbs]:       https://github.com/paulgibbs
+[@paulopmt1]:       https://github.com/paulopmt1
+[@petitphp]:        https://github.com/petitphp
+[@RafaelFunchal]:   https://github.com/RafaelFunchal
 [@richardkorthuis]: https://github.com/richardkorthuis
 [@rodrigoprimo]:    https://github.com/rodrigoprimo
 [@slaFFik]:         https://github.com/slaFFik
 [@sandeshjangam]:   https://github.com/sandeshjangam
 [@szepeviktor]:     https://github.com/szepeviktor
+[@tikifez]:         https://github.com/tikifez
 [@westonruter]:     https://github.com/westonruter

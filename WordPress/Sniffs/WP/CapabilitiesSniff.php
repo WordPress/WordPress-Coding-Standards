@@ -173,7 +173,7 @@ final class CapabilitiesSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * List is sorted alphabetically.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *

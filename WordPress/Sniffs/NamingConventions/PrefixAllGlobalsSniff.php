@@ -149,7 +149,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 * Only overrulable constants are listed, i.e. those defined within core within
 	 * a `if ( ! defined() ) {}` wrapper.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 1.0.0
 	 * @since 3.0.0 Renamed from `$whitelisted_core_constants` to `$allowed_core_constants`.
@@ -203,7 +203,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated functions should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0.
 	 *
@@ -337,6 +337,11 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'twentytwentytwo_styles'                         => true,
 		'twentytwentytwo_support'                        => true,
 		'wp_authenticate'                                => true,
+
+		/*
+		 * The wp_cache_* functions below are conditionally (re)declared as pluggable in wp-includes/cache-compat.php,
+		 * allowing a persistent object cache drop-in to override them. Their primary declarations are in wp-includes/cache.php.
+		 */
 		'wp_cache_add_multiple'                          => true,
 		'wp_cache_delete_multiple'                       => true,
 		'wp_cache_flush_group'                           => true,
@@ -348,6 +353,8 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		'wp_cache_set_multiple_salted'                   => true,
 		'wp_cache_set_salted'                            => true,
 		'wp_cache_supports'                              => true,
+		'wp_cache_switch_to_blog'                        => true,
+
 		'wp_check_password'                              => true,
 		'wp_clear_auth_cookie'                           => true,
 		'wp_clearcookie'                                 => true, // Deprecated.
@@ -396,7 +403,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 	 *
 	 * Note: deprecated classes should still be included in this list as plugins may support older WP versions.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0.
 	 *

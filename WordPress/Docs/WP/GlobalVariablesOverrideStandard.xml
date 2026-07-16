@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Global Variables Override"
+    >
+    <standard>
+    <![CDATA[
+    Variables declared by WordPress in the global namespace should not be overridden by code extending WordPress.
+
+    Two WordPress global variables, `$content_width` and `$wp_cockneyreplace`, are
+    specifically intended to be overridden by themes/plugins and are exempt from this rule.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Declaring global variables with names not reserved for use by WordPress itself.">
+        <![CDATA[
+<em>$prefix_query</em> = new WP_Query( $args );
+
+<em>$GLOBALS['prefix_data']</em> = 'some data';
+
+foreach ( $selected_posts as <em>$prefix_post</em> ) {
+    // Do something.
+}
+        ]]>
+        </code>
+        <code title="Invalid: Overriding a WordPress defined global variable.">
+        <![CDATA[
+function prefix_custom_query( $args ) {
+    <em>global $wp_query;</em>
+    <em>$wp_query</em> = new WP_Query( $args );
+
+    <em>$GLOBALS['post']</em> = get_post( 1 );
+}
+
+foreach ( $selected_posts as <em>$post</em> ) {
+    // Do something.
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Development Functions"
+    >
+    <standard>
+    <![CDATA[
+    Certain development functions should not be used. This includes debug functions like var_dump() and print_r(), as well as functions that can lead to full path disclosure like phpinfo().
+    ]]>
+    </standard>
+</documentation>

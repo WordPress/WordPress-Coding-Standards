@@ -135,6 +135,20 @@ $bad = array(
 // Don't confuse list arrows with array arrows.
 $okay = array( $item1, list( 'key1' => $a, 'key2' => $b ) = $array, $item3 );
 
-// Live coding/parse error.
-// This must be the last test in the file!
-$ignore = array( $item1, 'key' => 'value',
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_explicit_key_arrays false
+
+$bad = array(
+'key' => 'value'
+); // Bad.
+$bad = array(
+'key1' => 'value1',
+'key2' => 'value2'
+); // Bad.
+
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_explicit_key_arrays true
+
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays null
+
+$ok = array( 'key' => 'value' ); // OK, invalid value for deprecated property should be ignored.
+
+// phpcs:set WordPress.Arrays.ArrayDeclarationSpacing allow_single_item_single_line_associative_arrays true

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Assignment In Ternary Condition"
+    >
+    <standard>
+    <![CDATA[
+    Variables should not be assigned in the condition of a ternary expression. This is likely a mistake, as more often than not, a comparison was intended.
+
+    Side-note: This sniff can only detect assignments in ternary conditions when parentheses are used around either the ternary expression or its condition.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Comparison operator used in ternary condition.">
+        <![CDATA[
+echo ( $a <em>===</em> 'a' ) ? 'b' : 'c';
+        ]]>
+        </code>
+        <code title="Invalid: Assignment in ternary condition.">
+        <![CDATA[
+echo ( $a <em>=</em> 'a' ) ? 'b' : 'c';
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

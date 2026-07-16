@@ -29,7 +29,7 @@ We welcome contributions from everyone, and want your PR to have the best chance
   Only submit code that you have written yourself or that comes from sources where the license clearly allows inclusion. Submitting code that infringes on copyright or licensing terms puts both you and the project at legal risk, and such contributions cannot be accepted.
 
 * **Do not submit AI-generated code.**
-  Pull requests containing AI-generated code are not acceptable. Beyond copyright and licensing uncertainties, AI-generated contributions consistently require disproportionate amounts of maintainer time to review, correct, or rewrite. This wastes limited project resources and slows progress for everyone. Submitting AI-generated code may be treated as a violation of our [Code of Conduct](../CODE_OF_CONDUCT.md).
+  Pull requests containing AI-generated code are not acceptable. Beyond copyright and licensing uncertainties, AI-generated contributions consistently require disproportionate amounts of maintainer time to review, correct, or rewrite. This wastes limited project resources and slows progress for everyone. Submitting AI-generated code may be treated as a violation of our [Code of Conduct](https://github.com/WordPress/.github/blob/trunk/CODE_OF_CONDUCT.md).
 
 * **Focus on quality and clarity.**
   Take time to explain *why* the change is needed, and include tests or examples where appropriate. Clear, self-written explanations make it more straightforward for reviewers to understand what you are trying to achieve.
@@ -62,8 +62,8 @@ When you introduce new `public` sniff properties, or your sniff extends a class 
 
 ### Pre-requisites
 * WordPress-Coding-Standards
-* PHP_CodeSniffer 3.13.4 or higher
-* PHPCSUtils 1.1.0 or higher
+* PHP_CodeSniffer 3.13.5 or higher
+* PHPCSUtils 1.2.2 or higher
 * PHPCSExtra 1.5.0 or higher
 * PHPUnit 8.x - 9.x
 

@@ -15,6 +15,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] PHPCSUtils: check if there have been [releases][phpcsutils-releases] since the last WordPressCS release and update WordPressCS code to take advantage of any new utilities - PR #xxx
 - [ ] PHPCSExtra: check if there have been [releases][phpcsextra-releases] since the last WordPressCS release and check through the changelog to see if there is anything WordPressCS could take advantage of - PR #xxx
 - [ ] Check if the minimum WP version property needs updating in `MinimumWPVersionTrait::$default_minimum_wp_version` and if so, action it - PR #xxx
+- [ ] Check if the `minimum_wp_version` and `testVersion` properties in `phpcs.xml.dist.sample` need updating and if so, action it - PR #xxx
 - [ ] Check if any of the list based sniffs need updating and if so, action it.
     :pencil2: Make sure the "last updated" annotation in the docblocks for these lists has also been updated!
     List based sniffs:
@@ -32,7 +33,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] `$wp_time_constants` in `WordPress.WP.CronInterval` - PR #xxx
     - [ ] `$known_test_classes` in `IsUnitTestTrait` - PR #xxx
     - [ ] ...etc...
-- [ ] Verify there there has been no vandalism on the wiki (and if so, remove/fix it).
+- [ ] Verify there has been no vandalism on the wiki (and if so, remove/fix it).
 
 ### Release prep
 
@@ -69,7 +70,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     - [ ] Optionally post in #plugin-review if a sniff was added in a release which was requested by the plugin review team.
     - [ ] Optionally post in #core-docs if significant updates were made to the documentation ruleset.
 - [ ] Create a Marketing team ["amplify request"][amplify-request].
-- [ ] Submit for the ["Monthy Dev Roundup"][dev-roundup].
+- [ ] Submit for the ["Monthly Dev Roundup"][dev-roundup].
 
 [phpcs-releases]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/releases
 [phpcsutils-releases]: https://github.com/PHPCSStandards/PHPCSUtils/releases

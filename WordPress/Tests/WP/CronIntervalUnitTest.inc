@@ -166,7 +166,7 @@ class FQNConstants {
 	public function add_schedules() {
 		add_filter( 'cron_schedules', array( $this, 'add_weekly_schedule' ) ); // Ok: > 15 min.
 		\add_filter( 'cron_schedules', array( $this, 'add_eight_minute_schedule' ) ); // Warning: 8 min.
-		ADD_FILTER( 'cron_schedules', array( $this, 'add_hundred_minute_schedule' ) ); // Warning: time undetermined.
+		ADD_FILTER( 'cron_schedules', array( $this, 'ADD_HUNDRED_MINUTE_SCHEDULE' ) ); // Warning: time undetermined.
 		\Add_Filter( 'cron_schedules', array( $this, 'sneaky_fake_wp_constant_schedule' ) ); // Warning: time undetermined.
 	}
 
@@ -284,7 +284,7 @@ class FirstClassCallables {
 	public function add_schedules() {
 		add_filter( 'cron_schedules', $this->cron_weekly_schedule(...) ); // Ok: > 15 min.
 		add_filter( 'cron_schedules', $this->cron_eight_minute_schedule(...) ); // Warning: 8 min.
-		add_filter( 'cron_schedules', self::cron_weekly_schedule(...) ); // Ok: > 15 min.
+		add_filter( 'cron_schedules', self::Cron_Weekly_Schedule(...) ); // Ok: > 15 min.
 		add_filter( 'cron_schedules', static::cron_eight_minute_schedule(...) ); // Warning: 8 min.
 		add_filter( 'cron_schedules', [$this, 'cron_weekly_schedule'](...) ); // Ok: > 15 min.
 		add_filter( 'cron_schedules', array($this, 'cron_eight_minute_schedule')(...) ); // Warning: 8 min.
@@ -328,6 +328,7 @@ function first_class_six_min_schedule( $schedules ) {
 add_filter( 'cron_schedules', first_class_six_min_schedule(...)); // Warning: 6 min.
 add_filter( 'cron_schedules', 'first_class_six_min_schedule'(...)); // Warning: 6 min.
 add_filter( 'cron_schedules', \first_class_six_min_schedule(...)); // Warning: 6 min.
+add_filter( 'cron_schedules', \FIRST_CLASS_SIX_MIN_SCHEDULE(...)); // Warning: 6 min.
 add_filter( 'cron_schedules', namespace\first_class_six_min_schedule(...)); // Warning: 6 min.
 
 /*

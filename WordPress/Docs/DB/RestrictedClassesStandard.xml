@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Restricted Database Classes"
+    >
+    <standard>
+    <![CDATA[
+    Avoid touching the database directly. Use the $wpdb object and associated functions instead of using classes from PHP database extensions.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Using a WordPress function to fetch posts.">
+        <![CDATA[
+$results = <em>get_posts()</em>;
+        ]]>
+        </code>
+        <code title="Invalid: Using the mysqli class to fetch posts.">
+        <![CDATA[
+$mysqli = <em>new mysqli</em>(
+    'localhost',
+    $user,
+    $pass,
+    $db
+);
+
+$results = $mysqli->query(
+    "SELECT * FROM wp_posts LIMIT 5"
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <code_comparison>
+        <code title="Valid: Using WordPress functions to insert a post.">
+        <![CDATA[
+<em>wp_insert_post</em>(
+    array( 'post_title' => 'Title' )
+);
+
+// or...
+
+global $wpdb;
+<em>$wpdb->insert</em>(
+    $wpdb->posts,
+    array( 'post_title' => 'Title' ),
+    array( '%s' )
+);
+        ]]>
+        </code>
+        <code title="Invalid: Using PDO class to insert a post.">
+        <![CDATA[
+$pdo = <em>new PDO</em>(
+    $dsn,
+    $user,
+    $pass
+);
+
+$stmt = $pdo->prepare(
+    "INSERT INTO wp_posts (post_title)
+    VALUES (?)"
+);
+
+$stmt->execute( array( 'Title' ) );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

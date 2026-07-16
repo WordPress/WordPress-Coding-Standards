@@ -25,7 +25,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -115,6 +115,12 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'Walker_Page',
 		'Walker_PageDropdown',
 		'WP',
+		'WP_AI_Client_Ability_Function_Resolver',
+		'WP_AI_Client_Cache',
+		'WP_AI_Client_Discovery_Strategy',
+		'WP_AI_Client_Event_Dispatcher',
+		'WP_AI_Client_HTTP_Client',
+		'WP_AI_Client_Prompt_Builder',
 		'WP_Abilities_Registry',
 		'WP_Ability',
 		'WP_Ability_Categories_Registry',
@@ -149,6 +155,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Comment_Query',
 		'WP_Comments_List_Table',
 		'WP_Community_Events',
+		'WP_Connector_Registry',
 		'WP_Customize_Background_Image_Control',
 		'WP_Customize_Background_Image_Setting',
 		'WP_Customize_Background_Position_Control',
@@ -234,6 +241,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_Http_Curl',
 		'WP_Http_Encoding',
 		'WP_Http_Streams',
+		'WP_Icons_Registry',
 		'WP_Image_Editor',
 		'WP_Image_Editor_GD',
 		'WP_Image_Editor_Imagick',
@@ -296,6 +304,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 		'WP_REST_Font_Families_Controller',
 		'WP_REST_Global_Styles_Controller',
 		'WP_REST_Global_Styles_Revisions_Controller',
+		'WP_REST_Icons_Controller',
 		'WP_REST_Menu_Items_Controller',
 		'WP_REST_Menu_Locations_Controller',
 		'WP_REST_Menus_Controller',
@@ -432,7 +441,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -460,11 +469,178 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	);
 
 	/**
+	 * List of all AI Client classes included in WP Core.
+	 *
+	 * Includes both the WP AI Client classes and the bundled dependencies.
+	 *
+	 * Note: this list will be enhanced in the class constructor.
+	 *
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
+	 *
+	 * @since 3.4.0
+	 *
+	 * @var string[] The class names in their "proper" case.
+	 *               The constructor will add the lowercased class name as a key to each entry.
+	 */
+	private $aiclient_classes = array(
+		// Classes.
+		'WordPress\AiClientDependencies\Http\Discovery\ClassDiscovery',
+		'WordPress\AiClientDependencies\Http\Discovery\Exception\ClassInstantiationFailedException',
+		'WordPress\AiClientDependencies\Http\Discovery\Exception\DiscoveryFailedException',
+		'WordPress\AiClientDependencies\Http\Discovery\Exception\NoCandidateFoundException',
+		'WordPress\AiClientDependencies\Http\Discovery\Exception\NotFoundException',
+		'WordPress\AiClientDependencies\Http\Discovery\Exception\PuliUnavailableException',
+		'WordPress\AiClientDependencies\Http\Discovery\Exception\StrategyUnavailableException',
+		'WordPress\AiClientDependencies\Http\Discovery\Psr17FactoryDiscovery',
+		'WordPress\AiClientDependencies\Http\Discovery\Psr18ClientDiscovery',
+		'WordPress\AiClientDependencies\Http\Discovery\Strategy\CommonClassesStrategy',
+		'WordPress\AiClientDependencies\Http\Discovery\Strategy\CommonPsr17ClassesStrategy',
+		'WordPress\AiClientDependencies\Http\Discovery\Strategy\PuliBetaStrategy',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\Factory\HttplugFactory',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\Factory\Psr17Factory',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\Request',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\Response',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\ServerRequest',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\Stream',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\UploadedFile',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\Uri',
+		'WordPress\AiClient\AiClient',
+		'WordPress\AiClient\Builders\MessageBuilder',
+		'WordPress\AiClient\Builders\PromptBuilder',
+		'WordPress\AiClient\Common\AbstractDataTransferObject',
+		'WordPress\AiClient\Common\AbstractEnum',
+		'WordPress\AiClient\Common\Exception\InvalidArgumentException',
+		'WordPress\AiClient\Common\Exception\RuntimeException',
+		'WordPress\AiClient\Common\Exception\TokenLimitReachedException',
+		'WordPress\AiClient\Events\AfterGenerateResultEvent',
+		'WordPress\AiClient\Events\BeforeGenerateResultEvent',
+		'WordPress\AiClient\Files\DTO\File',
+		'WordPress\AiClient\Files\Enums\FileTypeEnum',
+		'WordPress\AiClient\Files\Enums\MediaOrientationEnum',
+		'WordPress\AiClient\Files\ValueObjects\MimeType',
+		'WordPress\AiClient\Messages\DTO\Message',
+		'WordPress\AiClient\Messages\DTO\MessagePart',
+		'WordPress\AiClient\Messages\DTO\ModelMessage',
+		'WordPress\AiClient\Messages\DTO\UserMessage',
+		'WordPress\AiClient\Messages\Enums\MessagePartChannelEnum',
+		'WordPress\AiClient\Messages\Enums\MessagePartTypeEnum',
+		'WordPress\AiClient\Messages\Enums\MessageRoleEnum',
+		'WordPress\AiClient\Messages\Enums\ModalityEnum',
+		'WordPress\AiClient\Operations\DTO\GenerativeAiOperation',
+		'WordPress\AiClient\Operations\Enums\OperationStateEnum',
+		'WordPress\AiClient\Providers\AbstractProvider',
+		'WordPress\AiClient\Providers\ApiBasedImplementation\AbstractApiBasedModel',
+		'WordPress\AiClient\Providers\ApiBasedImplementation\AbstractApiBasedModelMetadataDirectory',
+		'WordPress\AiClient\Providers\ApiBasedImplementation\AbstractApiProvider',
+		'WordPress\AiClient\Providers\ApiBasedImplementation\GenerateTextApiBasedProviderAvailability',
+		'WordPress\AiClient\Providers\ApiBasedImplementation\ListModelsApiBasedProviderAvailability',
+		'WordPress\AiClient\Providers\DTO\ProviderMetadata',
+		'WordPress\AiClient\Providers\DTO\ProviderModelsMetadata',
+		'WordPress\AiClient\Providers\Enums\ProviderTypeEnum',
+		'WordPress\AiClient\Providers\Enums\ToolTypeEnum',
+		'WordPress\AiClient\Providers\Http\Abstracts\AbstractClientDiscoveryStrategy',
+		'WordPress\AiClient\Providers\Http\Collections\HeadersCollection',
+		'WordPress\AiClient\Providers\Http\DTO\ApiKeyRequestAuthentication',
+		'WordPress\AiClient\Providers\Http\DTO\Request',
+		'WordPress\AiClient\Providers\Http\DTO\RequestOptions',
+		'WordPress\AiClient\Providers\Http\DTO\Response',
+		'WordPress\AiClient\Providers\Http\Enums\HttpMethodEnum',
+		'WordPress\AiClient\Providers\Http\Enums\RequestAuthenticationMethod',
+		'WordPress\AiClient\Providers\Http\Exception\ClientException',
+		'WordPress\AiClient\Providers\Http\Exception\NetworkException',
+		'WordPress\AiClient\Providers\Http\Exception\RedirectException',
+		'WordPress\AiClient\Providers\Http\Exception\ResponseException',
+		'WordPress\AiClient\Providers\Http\Exception\ServerException',
+		'WordPress\AiClient\Providers\Http\HttpTransporter',
+		'WordPress\AiClient\Providers\Http\HttpTransporterFactory',
+		'WordPress\AiClient\Providers\Http\Util\ErrorMessageExtractor',
+		'WordPress\AiClient\Providers\Http\Util\ResponseUtil',
+		'WordPress\AiClient\Providers\Models\DTO\ModelConfig',
+		'WordPress\AiClient\Providers\Models\DTO\ModelMetadata',
+		'WordPress\AiClient\Providers\Models\DTO\ModelRequirements',
+		'WordPress\AiClient\Providers\Models\DTO\RequiredOption',
+		'WordPress\AiClient\Providers\Models\DTO\SupportedOption',
+		'WordPress\AiClient\Providers\Models\Enums\CapabilityEnum',
+		'WordPress\AiClient\Providers\Models\Enums\OptionEnum',
+		'WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCompatibleImageGenerationModel',
+		'WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCompatibleModelMetadataDirectory',
+		'WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCompatibleTextGenerationModel',
+		'WordPress\AiClient\Providers\ProviderRegistry',
+		'WordPress\AiClient\Results\DTO\Candidate',
+		'WordPress\AiClient\Results\DTO\GenerativeAiResult',
+		'WordPress\AiClient\Results\DTO\TokenUsage',
+		'WordPress\AiClient\Results\Enums\FinishReasonEnum',
+		'WordPress\AiClient\Tools\DTO\FunctionCall',
+		'WordPress\AiClient\Tools\DTO\FunctionDeclaration',
+		'WordPress\AiClient\Tools\DTO\FunctionResponse',
+		'WordPress\AiClient\Tools\DTO\WebSearch',
+
+		// Interfaces.
+		'WordPress\AiClientDependencies\Http\Discovery\Exception',
+		'WordPress\AiClientDependencies\Http\Discovery\Strategy\DiscoveryStrategy',
+		'WordPress\AiClientDependencies\Psr\EventDispatcher\EventDispatcherInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Client\ClientExceptionInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Client\ClientInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Client\NetworkExceptionInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Client\RequestExceptionInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\MessageInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\RequestFactoryInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\RequestInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\ResponseFactoryInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\ResponseInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\ServerRequestFactoryInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\ServerRequestInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\StreamFactoryInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\StreamInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\UploadedFileFactoryInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\UploadedFileInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\UriFactoryInterface',
+		'WordPress\AiClientDependencies\Psr\Http\Message\UriInterface',
+		'WordPress\AiClientDependencies\Psr\SimpleCache\CacheInterface',
+		'WordPress\AiClient\Common\Contracts\AiClientExceptionInterface',
+		'WordPress\AiClient\Common\Contracts\CachesDataInterface',
+		'WordPress\AiClient\Common\Contracts\WithArrayTransformationInterface',
+		'WordPress\AiClient\Common\Contracts\WithJsonSchemaInterface',
+		'WordPress\AiClient\Operations\Contracts\OperationInterface',
+		'WordPress\AiClient\Providers\ApiBasedImplementation\Contracts\ApiBasedModelInterface',
+		'WordPress\AiClient\Providers\Contracts\ModelMetadataDirectoryInterface',
+		'WordPress\AiClient\Providers\Contracts\ProviderAvailabilityInterface',
+		'WordPress\AiClient\Providers\Contracts\ProviderInterface',
+		'WordPress\AiClient\Providers\Contracts\ProviderOperationsHandlerInterface',
+		'WordPress\AiClient\Providers\Contracts\ProviderWithOperationsHandlerInterface',
+		'WordPress\AiClient\Providers\Http\Contracts\ClientWithOptionsInterface',
+		'WordPress\AiClient\Providers\Http\Contracts\HttpTransporterInterface',
+		'WordPress\AiClient\Providers\Http\Contracts\RequestAuthenticationInterface',
+		'WordPress\AiClient\Providers\Http\Contracts\WithHttpTransporterInterface',
+		'WordPress\AiClient\Providers\Http\Contracts\WithRequestAuthenticationInterface',
+		'WordPress\AiClient\Providers\Models\Contracts\ModelInterface',
+		'WordPress\AiClient\Providers\Models\ImageGeneration\Contracts\ImageGenerationModelInterface',
+		'WordPress\AiClient\Providers\Models\ImageGeneration\Contracts\ImageGenerationOperationModelInterface',
+		'WordPress\AiClient\Providers\Models\SpeechGeneration\Contracts\SpeechGenerationModelInterface',
+		'WordPress\AiClient\Providers\Models\SpeechGeneration\Contracts\SpeechGenerationOperationModelInterface',
+		'WordPress\AiClient\Providers\Models\TextGeneration\Contracts\TextGenerationModelInterface',
+		'WordPress\AiClient\Providers\Models\TextGeneration\Contracts\TextGenerationOperationModelInterface',
+		'WordPress\AiClient\Providers\Models\TextToSpeechConversion\Contracts\TextToSpeechConversionModelInterface',
+		'WordPress\AiClient\Providers\Models\TextToSpeechConversion\Contracts\TextToSpeechConversionOperationModelInterface',
+		'WordPress\AiClient\Providers\Models\VideoGeneration\Contracts\VideoGenerationModelInterface',
+		'WordPress\AiClient\Providers\Models\VideoGeneration\Contracts\VideoGenerationOperationModelInterface',
+		'WordPress\AiClient\Results\Contracts\ResultInterface',
+
+		// Traits.
+		'WordPress\AiClientDependencies\Nyholm\Psr7\MessageTrait',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\RequestTrait',
+		'WordPress\AiClientDependencies\Nyholm\Psr7\StreamTrait',
+		'WordPress\AiClient\Common\Traits\WithDataCachingTrait',
+		'WordPress\AiClient\Providers\Http\Traits\WithHttpTransporterTrait',
+		'WordPress\AiClient\Providers\Http\Traits\WithRequestAuthenticationTrait',
+	);
+
+	/**
 	 * List of all AVIF classes included in WP Core.
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.1.0
 	 *
@@ -486,7 +662,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -522,7 +698,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -547,7 +723,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -691,7 +867,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	 *
 	 * Note: this list will be enhanced in the class constructor.
 	 *
-	 * {@internal To be updated after every major release. Last updated for WordPress 6.9.0-RC2.}
+	 * {@internal To be updated after every major release. Last updated for WordPress 7.0.0.}
 	 *
 	 * @since 3.0.0
 	 *
@@ -813,6 +989,17 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	private $wp_themes_classes_lc = array();
 
 	/**
+	 * List of all AI Client classes in lowercase.
+	 *
+	 * This array is automatically generated in the class constructor based on the $aiclient_classes property.
+	 *
+	 * @since 3.4.0
+	 *
+	 * @var string[] The class names in lowercase.
+	 */
+	private $aiclient_classes_lc = array();
+
+	/**
 	 * List of all AVIF classes in lowercase.
 	 *
 	 * This array is automatically generated in the class constructor based on the $avif_classes property.
@@ -826,7 +1013,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	/**
 	 * List of all GetID3 classes in lowercase.
 	 *
-	 * This array is automatically generated in the class constructor based on the $phpmailer_classes property.
+	 * This array is automatically generated in the class constructor based on the $getid3_classes property.
 	 *
 	 * @since 3.0.0
 	 *
@@ -879,6 +1066,7 @@ final class ClassNameCaseSniff extends AbstractClassRestrictionsSniff {
 	private $class_groups = array(
 		'wp_classes',
 		'wp_themes_classes',
+		'aiclient_classes',
 		'avif_classes',
 		'getid3_classes',
 		'phpmailer_classes',

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Plugin Menu Slug"
+    >
+    <standard>
+    <![CDATA[
+    WordPress functions that can be used to add pages to the WP Admin menu should not include `__FILE__` for the menu slug (or parent menu slug) parameter to avoid revealing system paths.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Slug does not include `__FILE__`.">
+        <![CDATA[
+add_menu_page(
+    'My Plugin Main Page',
+    'My Plugin',
+    'manage_options',
+    <em>'my-plugin-main'</em>,
+    'my_plugin_main_page'
+);
+
+add_submenu_page(
+    <em>'my_plugin_main_page'</em>,
+    'My Plugin Subpage',
+    'Subpage',
+    'manage_options',
+    'my-plugin-subpage',
+    'my_plugin_subpage'
+);
+        ]]>
+        </code>
+        <code title="Invalid: Slug includes `__FILE__`.">
+        <![CDATA[
+add_menu_page(
+    'My Plugin Main Page',
+    'My Plugin',
+    'manage_options',
+    <em>__FILE__</em>,
+    'my_plugin_main_page'
+);
+
+add_submenu_page(
+    <em>__FILE__</em> . 'my_plugin_main_page',
+    'My Plugin Subpage',
+    'Subpage',
+    'manage_options',
+    'my-plugin-subpage',
+    'my_plugin_subpage'
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

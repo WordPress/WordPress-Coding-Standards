@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Preg Quote Delimiter"
+    >
+    <standard>
+    <![CDATA[
+    Passing the $delimiter parameter to `preg_quote()` is strongly recommended to ensure the regular expression delimiter is properly escaped if it occurs in the input string.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: The delimiter parameter is passed.">
+        <![CDATA[
+// $input = 'my #1 fan!';
+$quoted_input = preg_quote( $input, <em>'#'</em> );
+preg_match(
+    <em>'#^' . $quoted_input . '#i'</em>,
+    $post_content,
+    $matches
+);
+        ]]>
+        </code>
+        <code title="Invalid: The delimiter parameter is missing.">
+        <![CDATA[
+// $input = 'my #1 fan!';
+$quoted_input = preg_quote( $input<em></em> );
+preg_match(
+    <em>'#^' . $quoted_input . '#i'</em>,
+    $post_content,
+    $matches
+);
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>

@@ -36,18 +36,26 @@ final class DiscouragedFunctionsUnitTest extends AbstractSniffUnitTest {
 	/**
 	 * Returns the lines where warnings should occur.
 	 *
+	 * @param string $testFile The name of the test file being run.
+	 *
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
-	public function getWarningList() {
-		return array(
-			3  => 1,
-			4  => 1,
-			20 => 1,
-			33 => 1,
-			34 => 1,
-			53 => 1,
-			62 => 1,
-			65 => 1,
-		);
+	public function getWarningList( $testFile = '' ) {
+		switch ( $testFile ) {
+			case 'DiscouragedFunctionsUnitTest.1.inc':
+				return array(
+					3  => 1,
+					4  => 1,
+					33 => 1,
+					34 => 1,
+					53 => 1,
+					62 => 1,
+					65 => 1,
+					70 => 1,
+				);
+
+			default:
+				return array();
+		}
 	}
 }

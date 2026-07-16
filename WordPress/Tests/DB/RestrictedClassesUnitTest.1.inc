@@ -30,7 +30,7 @@ class MyMysqli extends mysqli {}
 class YourMysqli extends \mysqli {}
 
 class OurMysqli implements mysqli {}
-class TheirMysqli implements \mysqli {}
+class TheirMysqli implements \MYSQLI {}
 
 $db5 = new PDO();
 $db6 = ( new PDO() )->exec();
@@ -115,3 +115,24 @@ $anon = new readonly class {
 $anon = new readonly class() extends PDOStatement {}; // Error.
 
 $anon = new #[MyAttribute] readonly class {};
+
+/*
+ * Safeguard correct handling of namespaced class references (the namespace types not handled below are already handled
+ * in other tests above).
+ */
+$obj = new MyNamespace\PDO();
+$obj = new \MyNamespace\PDOStatement();
+$obj = new namespace\Sub\mysqli();
+$obj = new namespace\PDO(); // Error.
+class MyClass1 extends MyNamespace\mysqli {}
+class MyClass2 extends \MyNamespace\PDO {}
+class MyClass3 extends namespace\Sub\PDOStatement {}
+class MyClass4 extends namespace\mysqli {} // Error.
+class MyClass5 implements MyNamespace\mysqli {}
+class MyClass6 implements \MyNamespace\PDO {}
+class MyClass7 implements namespace\Sub\PDOStatement {}
+class MyClass8 implements namespace\mysqli {} // Error.
+MyNamespace\mysqli::do_something();
+\MyNamespace\PDO::do_something();
+namespace\Sub\PDOStatement::do_something();
+namespace\MYSQLI::do_something(); // Error.
