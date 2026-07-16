@@ -158,7 +158,7 @@ abstract class AbstractArrayAssignmentRestrictionsSniff extends Sniff {
 		$inst = array();
 
 		/*
-		 * Covers array assignments:
+		 * Covers following forms of array assignments:
 		 * `$foo = array( 'bar' => 'taz' );`
 		 * `$foo['bar'] = $taz;`
 		 */
