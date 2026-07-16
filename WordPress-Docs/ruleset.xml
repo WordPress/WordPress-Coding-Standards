@@ -82,8 +82,15 @@
 
 		<!-- WP prefers int and bool instead of integer and boolean -->
 		<exclude name="Squiz.Commenting.VariableComment.IncorrectVarType"/>
+
 		<!-- WP demands a @since tag for class variables -->
+		<!-- PHPCS 3.x uses a single genereci TagNotAllowed error code. -->
 		<exclude name="Squiz.Commenting.VariableComment.TagNotAllowed"/>
+		<!-- PHPCS 4.x split the generic TagNotAllowed error code into per-tag [TagName]TagNotAllowed codes. -->
+		<exclude name="Squiz.Commenting.VariableComment.SinceTagNotAllowed"/>
+
+		<exclude name="Squiz.Commenting.VariableComment.LinkTagNotAllowed"/>
+		<exclude name="Squiz.Commenting.VariableComment.DeprecatedTagNotAllowed"/>
 		<!-- WP prefers @since first -->
 		<exclude name="Squiz.Commenting.VariableComment.VarOrder"/>
 	</rule>
