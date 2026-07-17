@@ -16,6 +16,8 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] PHPCSExtra: check if there have been [releases][phpcsextra-releases] since the last WordPressCS release and check through the changelog to see if there is anything WordPressCS could take advantage of - PR #xxx
 - [ ] Check if the minimum WP version property needs updating in `MinimumWPVersionTrait::$default_minimum_wp_version` and if so, action it - PR #xxx
 - [ ] Check if the `minimum_wp_version` and `testVersion` properties in `phpcs.xml.dist.sample` need updating and if so, action it - PR #xxx
+- [ ] Check if the PHPCompatibility `testVersion` mentioned in the README needs updating and if so, action it - PR #xxx  
+    :pencil2: Rule of thumb: stay in line with the "support three versions of WP below the current version" guideline, as also applied for the `minimum_wp_version`.
 - [ ] Check if any of the list based sniffs need updating and if so, action it.
     :pencil2: Make sure the "last updated" annotation in the docblocks for these lists has also been updated!
     List based sniffs:
@@ -48,6 +50,7 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] Merge this PR.
 - [ ] Make sure all CI builds are green.
 - [ ] Tag and create a release against `main` (careful, GH defaults to `develop`!) & copy & paste the changelog to it.  
+    _From within the GH interface: Code tab -> Releases -> "Draft a new release" button at the top of the page._  
     :pencil2: Check if anything from the link collection at the bottom of the changelog needs to be copied in!
     - Remove square brackets from all ticket links or make them proper full links (as GH markdown parser doesn't parse these correctly).
     - Change all contributor links to full inline links (as GH markdown parser on the Releases page doesn't parse these correctly).
@@ -55,7 +58,8 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
 - [ ] Close the milestone.
 - [ ] Open a new milestone for the next release.
 - [ ] If any open PRs/issues which were milestoned for this release did not make it into the release, update their milestone.
-- [ ] Fast-forward `develop` to be equal to `main`.
+- [ ] Fast-forward `develop` to be equal to `main` (`git checkout develop && git pull upstream/develop && git merge main`).  
+    :pencil: Branch protection may need to get a temporary exception to allow for pushing the `develop` branch. Please remember to remove the exception once the push has gone through!
 
 ### After release
 
@@ -69,7 +73,8 @@ PR for tracking changes for the x.x.x release. Target release date: **DOW MONTH 
     :pencil2: No need to post in the #core-coding-standard channel as that gets an automated release notification anyway.
     - [ ] Optionally post in #plugin-review if a sniff was added in a release which was requested by the plugin review team.
     - [ ] Optionally post in #core-docs if significant updates were made to the documentation ruleset.
-- [ ] Create a Marketing team ["amplify request"][amplify-request].
+- [ ] Create a Marketing team ["amplify request"][amplify-request].  
+    Example post: https://github.com/WordPress/marketing/issues/746
 - [ ] Submit for the ["Monthly Dev Roundup"][dev-roundup].
 
 [phpcs-releases]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/releases
