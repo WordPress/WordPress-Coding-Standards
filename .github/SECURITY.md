@@ -21,7 +21,8 @@ Issues can be reported privately to the maintainers by opening a [Security vulne
 * Please provide detailed reports with reproducible steps and a clearly defined impact.
 * Include the version number of the vulnerable package in your report.
 * Fixes are most welcome.
-    A private PR can be created from the security report to work on and discuss the patch.
+
+A private PR can be created from the security report to work on and discuss the patch.
 
 [Security vulnerability report]: https://github.com/WordPress/WordPress-Coding-Standards/security/advisories/new
 [WordPress HackerOne]:           https://hackerone.com/wordpress
