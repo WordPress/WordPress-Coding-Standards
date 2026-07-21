@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\PHP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the POSIXFunctions sniff.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\POSIXFunctionsSniff
  */
-final class POSIXFunctionsUnitTest extends AbstractSniffUnitTest {
+final class POSIXFunctionsUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

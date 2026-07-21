@@ -239,7 +239,7 @@ trait SanitizationHelperTrait {
 	 * @return bool
 	 */
 	final public function is_sanitizing_function( $functionName ) {
-		return isset( $this->get_sanitizing_functions()[ strtolower( $functionName ) ] );
+		return isset( $this->get_sanitizing_functions()[ strtolower( ltrim( $functionName, '\\' ) ) ] );
 	}
 
 	/**
@@ -252,7 +252,7 @@ trait SanitizationHelperTrait {
 	 * @return bool
 	 */
 	final public function is_sanitizing_and_unslashing_function( $functionName ) {
-		return isset( $this->get_sanitizing_and_unslashing_functions()[ strtolower( $functionName ) ] );
+		return isset( $this->get_sanitizing_and_unslashing_functions()[ strtolower( ltrim( $functionName, '\\' ) ) ] );
 	}
 
 	/**

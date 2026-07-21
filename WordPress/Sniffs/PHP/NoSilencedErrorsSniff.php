@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Sniffs\PHP;
 
 use PHP_CodeSniffer\Util\Tokens;
 use PHPCSUtils\BackCompat\BCFile;
+use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\GetTokensAsString;
 use WordPressCS\WordPress\Helpers\RulesetPropertyHelper;
 use WordPressCS\WordPress\Sniff;
@@ -184,6 +185,9 @@ final class NoSilencedErrorsSniff extends Sniff {
 	public function process_token( $stackPtr ) {
 		// Handle the user-defined custom function list.
 		$this->customAllowedFunctionsList = RulesetPropertyHelper::merge_custom_array( $this->customAllowedFunctionsList, array(), false );
+		// PHPCS >= 4.0 converts empty string values in array properties to null.
+		// Filter out null values to avoid passing them to strtolower().
+		$this->customAllowedFunctionsList = array_filter( $this->customAllowedFunctionsList );
 		$this->customAllowedFunctionsList = array_map( 'strtolower', $this->customAllowedFunctionsList );
 
 		/*
@@ -193,10 +197,15 @@ final class NoSilencedErrorsSniff extends Sniff {
 		 * to allow the metrics to be more informative.
 		 */
 		$next_non_empty = $this->phpcsFile->findNext( $this->empty_tokens, ( $stackPtr + 1 ), null, true, null, true );
-		if ( false !== $next_non_empty && \T_STRING === $this->tokens[ $next_non_empty ]['code'] ) {
+		if ( false !== $next_non_empty && isset( Collections::nameTokens()[ $this->tokens[ $next_non_empty ]['code'] ] ) === true ) {
 			$has_parenthesis = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $next_non_empty + 1 ), null, true, null, true );
 			if ( false !== $has_parenthesis && \T_OPEN_PARENTHESIS === $this->tokens[ $has_parenthesis ]['code'] ) {
 				$function_name = strtolower( $this->tokens[ $next_non_empty ]['content'] );
+
+				if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $next_non_empty ]['code'] ) {
+					$function_name = \ltrim( $function_name, '\\' );
+				}
+
 				if ( ( true === $this->usePHPFunctionsList
 					&& isset( $this->allowedFunctionsList[ $function_name ] ) === true )
 					|| ( ! empty( $this->customAllowedFunctionsList )

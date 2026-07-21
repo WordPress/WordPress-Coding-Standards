@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WhiteSpace;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ObjectOperatorSpacing sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\WhiteSpace\ObjectOperatorSpacingSniff
  */
-final class ObjectOperatorSpacingUnitTest extends AbstractSniffUnitTest {
+final class ObjectOperatorSpacingUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -468,6 +468,7 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$parent = parent::register();
 		if ( ! empty( $parent ) ) {
 			$targets[] = \T_STRING;
+			$targets[] = \T_NAME_FULLY_QUALIFIED;
 		}
 
 		return $targets;
@@ -560,7 +561,9 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 			return $this->tokens[ $stackPtr ]['scope_closer'];
 		}
 
-		if ( \T_STRING === $this->tokens[ $stackPtr ]['code'] ) {
+		if ( \T_STRING === $this->tokens[ $stackPtr ]['code']
+			|| \T_NAME_FULLY_QUALIFIED === $this->tokens[ $stackPtr ]['code']
+		) {
 			// Disallow excluding function groups for this sniff.
 			$this->exclude = array();
 
@@ -1233,6 +1236,9 @@ final class PrefixAllGlobalsSniff extends AbstractFunctionParameterSniff {
 		$prefixes    = array();
 		$ns_prefixes = array();
 		foreach ( $this->prefixes as $key => $prefix ) {
+			// PHPCS >= 4.0 converts empty string values in array properties to null.
+			// Convert null back to empty string to preserve the "prefix too short" error.
+			$prefix   = $prefix ?? '';
 			$prefixLC = strtolower( $prefix );
 
 			if ( isset( $this->prefix_blocklist[ $prefixLC ] ) ) {

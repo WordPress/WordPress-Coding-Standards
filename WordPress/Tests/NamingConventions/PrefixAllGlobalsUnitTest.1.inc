@@ -696,3 +696,13 @@ MyNamespace\do_action( 'plugin_action' ); // Ok.
 namespace\do_action_ref_array( 'plugin_action', array( $variable ) ); // Ok. The sniff should start flagging this once it can resolve relative namespaces.
 
 // phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]
+
+/*
+ * Safeguard handling of empty custom test class values (PHPCS 4.x compatibility).
+ * PHPCS >= 4.0 converts empty string values in array properties to null.
+ */
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[] acronym
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_classes[] ,
+class Test_Empty_Custom_Test_Class extends WP_UnitTestCase {}
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals custom_test_classes[]
+// phpcs:set WordPress.NamingConventions.PrefixAllGlobals prefixes[]

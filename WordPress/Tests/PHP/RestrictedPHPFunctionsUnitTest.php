@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\PHP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PHP_DiscouragedPHPFunctions sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\RestrictedPHPFunctionsSniff
  */
-final class RestrictedPHPFunctionsUnitTest extends AbstractSniffUnitTest {
+final class RestrictedPHPFunctionsUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

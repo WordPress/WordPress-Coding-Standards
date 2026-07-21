@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\PHP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PregQuoteDelimiter sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\PregQuoteDelimiterSniff
  */
-final class PregQuoteDelimiterUnitTest extends AbstractSniffUnitTest {
+final class PregQuoteDelimiterUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

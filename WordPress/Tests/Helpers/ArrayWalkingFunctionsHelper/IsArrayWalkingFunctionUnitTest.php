@@ -55,6 +55,14 @@ final class IsArrayWalkingFunctionUnitTest extends TestCase {
 				'functionName'   => 'mAp_DeEp',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name' => array(
+				'functionName'   => '\array_map',
+				'expectedResult' => true,
+			),
+			'fully_qualified_name_uppercase' => array(
+				'functionName'   => '\MAP_DEEP',
+				'expectedResult' => true,
+			),
 			'not_an_array_walking_function' => array(
 				'functionName'   => 'array_filter',
 				'expectedResult' => false,

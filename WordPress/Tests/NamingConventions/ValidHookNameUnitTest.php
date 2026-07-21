@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\NamingConventions;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ValidHookName sniff.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\WPHookHelper::get_functions
  * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidHookNameSniff
  */
-final class ValidHookNameUnitTest extends AbstractSniffUnitTest {
+final class ValidHookNameUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

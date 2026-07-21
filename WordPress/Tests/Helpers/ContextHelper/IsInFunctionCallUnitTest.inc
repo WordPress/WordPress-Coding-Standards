@@ -31,11 +31,14 @@ another_function( /* testNestedInner */ valid_function1( /* testNestedInnerInsid
  * is `false`.
  */
 
-MyNamespace\/* testNamespacedFunction */valid_function1( /* testNamespacedFunctionInsideCall */ some_function() );
-\MyNamespace\/* testFullyQualifiedNamespacedFunction */valid_function1(
+/* testNamespacedFunction */
+MyNamespace\valid_function1( /* testNamespacedFunctionInsideCall */ some_function() );
+/* testFullyQualifiedNamespacedFunction */
+\MyNamespace\valid_function1(
 	/* testFullyQualifiedNamespacedFunctionInsideCall */ null
 );
-namespace\MyNamespace\/* testNamespaceRelativeFunction */valid_function2(
+/* testNamespaceRelativeFunction */
+namespace\MyNamespace\valid_function2(
 	/* testNamespaceRelativeFunctionInsideCall */ 3.14
 );
 MyClass::/* testStaticMethod */valid_function2(
@@ -61,7 +64,8 @@ valid_function1( middle_function( inner_function( /* testNestedMultipleLevelsIns
  * `$global_function` is `false` and `$allow_nested` is `true`.
  */
 
-MyNamespace\/* testNestedBothNamespacedOuter */ valid_function1(
+/* testNestedBothNamespacedOuter */
+MyNamespace\valid_function1(
 	MyNamespace\other_function(
 		/* testNestedBothNamespacedOuterInsideCall */ 'value' . $var
 	)

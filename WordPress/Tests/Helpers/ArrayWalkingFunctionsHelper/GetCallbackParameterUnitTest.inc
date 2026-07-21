@@ -19,3 +19,9 @@ array_map( 'sanitize_text_field', $array );
 
 /* testMapDeepMixedCase */
 Map_Deep( $array, 'esc_html' );
+
+/* testArrayMapFullyQualified */
+\array_map( 'esc_attr', $array );
+
+/* testMapDeepFullyQualifiedUppercase */
+\MAP_DEEP( $array, 'wp_kses_post' );

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\NamingConventions;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PostType sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidPostTypeSlugSniff
  */
-final class ValidPostTypeSlugUnitTest extends AbstractSniffUnitTest {
+final class ValidPostTypeSlugUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Set warnings level to 3 to trigger suggestions as warnings.

@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\DateTime;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the DateTime.RestrictedFunctions sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\DateTime\RestrictedFunctionsSniff
  */
-final class RestrictedFunctionsUnitTest extends AbstractSniffUnitTest {
+final class RestrictedFunctionsUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

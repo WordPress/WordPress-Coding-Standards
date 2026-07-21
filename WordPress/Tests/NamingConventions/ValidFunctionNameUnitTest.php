@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\NamingConventions;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ValidFunctionName sniff.
@@ -20,7 +20,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\DeprecationHelper
  * @covers \WordPressCS\WordPress\Sniffs\NamingConventions\ValidFunctionNameSniff
  */
-final class ValidFunctionNameUnitTest extends AbstractSniffUnitTest {
+final class ValidFunctionNameUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

@@ -11,7 +11,7 @@ namespace WordPressCS\WordPress\Tests\Utils;
 
 use PHP_CodeSniffer\Files\DummyFile;
 use PHP_CodeSniffer\Ruleset;
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\TestUtils\ConfigDouble;
 
@@ -23,7 +23,7 @@ use PHPCSUtils\TestUtils\ConfigDouble;
  * @covers \WordPressCS\WordPress\AbstractFunctionParameterSniff::is_targetted_token
  * @covers \WordPressCS\WordPress\Sniffs\Utils\I18nTextDomainFixerSniff
  */
-final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
+final class I18nTextDomainFixerUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * The tab width to use during testing.
@@ -214,8 +214,7 @@ final class I18nTextDomainFixerUnitTest extends AbstractSniffUnitTest {
 	public function testStdIn() {
 		$config = new ConfigDouble();
 		Helper::setConfigData( 'installed_paths', dirname( dirname( __DIR__ ) ), true, $config );
-		$config->standards = array( 'WordPress' );
-		$config->sniffs    = array( 'WordPress.Utils.I18nTextDomainFixer' );
+		$config->standards = array( __DIR__ . '/I18nTextDomainFixerStdInTest.xml' );
 
 		$ruleset = new Ruleset( $config );
 

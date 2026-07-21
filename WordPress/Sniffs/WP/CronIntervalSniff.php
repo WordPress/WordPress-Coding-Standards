@@ -152,9 +152,20 @@ final class CronIntervalSniff extends Sniff {
 				&& ( false !== $after && \T_CLOSE_PARENTHESIS === $this->tokens[ $after ]['code'] )
 			) {
 				// Ok, now see if we can find the function name.
-				$beforeOpen = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $before - 1 ), null, true );
-				if ( false !== $beforeOpen && \T_STRING === $this->tokens[ $beforeOpen ]['code'] ) {
-					$found_function = $this->find_function_by_name( $this->tokens[ $beforeOpen ]['content'] );
+				$beforeOpen             = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $before - 1 ), null, true );
+				$global_function_tokens = array(
+					\T_STRING               => true,
+					\T_NAME_FULLY_QUALIFIED => true,
+				);
+
+				if ( false !== $beforeOpen && isset( $global_function_tokens[ $this->tokens[ $beforeOpen ]['code'] ] ) ) {
+					$function_name = $this->tokens[ $beforeOpen ]['content'];
+
+					if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $beforeOpen ]['code'] ) {
+						$function_name = \ltrim( $function_name, '\\' );
+					}
+
+					$found_function = $this->find_function_by_name( $function_name );
 					if ( false !== $found_function ) {
 						$functionPtr = $found_function;
 					}
@@ -233,7 +244,13 @@ final class CronIntervalSniff extends Sniff {
 							continue;
 						}
 
-						$value .= $this->tokens[ $j ]['content'];
+						$content = $this->tokens[ $j ]['content'];
+
+						if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $j ]['code'] ) {
+							$content = \ltrim( $content, '\\' );
+						}
+
+						$value .= $content;
 					}
 
 					if ( $parentheses_count > 0 ) {

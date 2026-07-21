@@ -15,7 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PHPCS_DEV: '3.x-dev'
+  PHPCS_3_DEV: '3.x-dev'
+  PHPCS_4_DEV: '4.x-dev'
   UTILS_DEV: 'dev-develop'
   EXTRA_DEV: 'dev-develop'
 
@@ -52,17 +53,30 @@ jobs:
 
           # Test against dev versions of all dependencies with select PHP versions for early detection of issues.
           - php: '7.2'
-            dependencies: 'dev'
+            dependencies: 'phpcs-3-dev'
+            extensions: ''
+            coverage: false
+          - php: '7.2'
+            dependencies: 'phpcs-4-dev'
             extensions: ''
             coverage: false
           - php: '8.1'
-            dependencies: 'dev'
+            dependencies: 'phpcs-3-dev'
+            extensions: ''
+            coverage: false
+          - php: '8.1'
+            dependencies: 'phpcs-4-dev'
+            extensions: ''
+            coverage: false
+          - php: '8.4'
+            dependencies: 'phpcs-3-dev'
             extensions: ''
             coverage: false
           - php: '8.5'
-            dependencies: 'dev'
+            dependencies: 'phpcs-4-dev'
             extensions: ''
             coverage: false
+
 
           # Add extra build to test against PHPCS 4.
           #- php: '7.4'
@@ -83,7 +97,7 @@ jobs:
       - name: Setup ini config
         id: set_ini
         run: |
-          if [ "${{ matrix.dependencies }}" != "dev" ]; then
+          if [ "${{ matrix.dependencies }}" != "phpcs-3-dev" ] && [ "${{ matrix.dependencies }}" != "phpcs-4-dev" ]; then
             echo 'PHP_INI=error_reporting=E_ALL & ~E_DEPRECATED, display_errors=On, display_startup_errors=On' >> "$GITHUB_OUTPUT"
           else
             echo 'PHP_INI=error_reporting=-1, display_errors=On, display_startup_errors=On' >> "$GITHUB_OUTPUT"
@@ -98,10 +112,10 @@ jobs:
           tools: cs2pr
 
       - name: "Composer: set PHPCS dependencies for tests (dev)"
-        if: ${{ matrix.dependencies == 'dev' }}
+        if: ${{ matrix.dependencies == 'phpcs-3-dev' || matrix.dependencies == 'phpcs-4-dev' }}
         run: >
           composer require --no-update --no-scripts --no-interaction
-          squizlabs/php_codesniffer:"${{ env.PHPCS_DEV }}"
+          squizlabs/php_codesniffer:"${{ matrix.dependencies == 'phpcs-3-dev' && env.PHPCS_3_DEV || env.PHPCS_4_DEV }}"
           phpcsstandards/phpcsutils:"${{ env.UTILS_DEV }}"
           phpcsstandards/phpcsextra:"${{ env.EXTRA_DEV }}"
 
@@ -127,13 +141,25 @@ jobs:
         if: ${{ matrix.dependencies == 'stable' }}
         run: composer lint -- --checkstyle | cs2pr
 
-      - name: Run the unit tests without code coverage
-        if: ${{ matrix.coverage == false || github.event.repository.fork == true }}
-        run: composer run-tests
+      - name: Grab PHPCS version
+        id: phpcs_version
+        run: echo "VERSION=$(vendor/bin/phpcs --version | grep --only-matching --max-count=1 --extended-regexp '\b[0-9]+\.[0-9]+')" >> "$GITHUB_OUTPUT"
 
-      - name: Run the unit tests with code coverage
-        if: ${{ matrix.coverage == true && github.event.repository.fork == false }}
-        run: composer coverage
+      - name: Run the unit tests without code coverage (PHPCS 3.x)
+        if: ${{ startsWith( steps.phpcs_version.outputs.VERSION, '3.' ) && (matrix.coverage == false || github.event.repository.fork == true) }}
+        run: composer run-tests-phpcs3
+
+      - name: Run the unit tests without code coverage (PHPCS 4.x)
+        if: ${{ startsWith( steps.phpcs_version.outputs.VERSION, '4.' ) && (matrix.coverage == false || github.event.repository.fork == true) }}
+        run: composer run-tests-phpcs4
+
+      - name: Run the unit tests with code coverage (PHPCS 3.x)
+        if: ${{ startsWith( steps.phpcs_version.outputs.VERSION, '3.' ) && matrix.coverage == true && github.event.repository.fork == false }}
+        run: composer coverage-phpcs3
+
+      - name: Run the unit tests with code coverage (PHPCS 4.x)
+        if: ${{ startsWith( steps.phpcs_version.outputs.VERSION, '4.' ) && matrix.coverage == true && github.event.repository.fork == false }}
+        run: composer coverage-phpcs4
 
       - name: Send coverage report to Codecov
         if: ${{ success() && matrix.coverage == true && github.event.repository.fork == false }}

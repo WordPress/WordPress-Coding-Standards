@@ -99,7 +99,7 @@ final class WPHookHelper {
 	 *                     for the format of the returned (single-dimensional) array.
 	 */
 	public static function get_hook_name_param( $function_name, array $parameters ) {
-		$function_lc = strtolower( $function_name );
+		$function_lc = strtolower( ltrim( $function_name, '\\' ) );
 		if ( isset( self::$hookInvokeFunctions[ $function_lc ] ) === false ) {
 			return false;
 		}

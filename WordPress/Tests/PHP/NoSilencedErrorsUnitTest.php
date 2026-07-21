@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\PHP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PHP.NoSilencedErrors sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\PHP\NoSilencedErrorsSniff
  */
-final class NoSilencedErrorsUnitTest extends AbstractSniffUnitTest {
+final class NoSilencedErrorsUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

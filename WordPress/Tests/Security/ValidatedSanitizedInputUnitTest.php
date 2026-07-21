@@ -9,7 +9,8 @@
 
 namespace WordPressCS\WordPress\Tests\Security;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the ValidatedSanitizedInput sniff.
@@ -19,13 +20,11 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @since 1.0.0  This sniff has been moved from the `VIP` category to the `Security` category.
  *
  * @covers \WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper
- * @covers \WordPressCS\WordPress\Helpers\SanitizationHelperTrait
  * @covers \WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper
- * @covers \WordPressCS\WordPress\Helpers\ValidationHelper
  * @covers \WordPressCS\WordPress\Helpers\VariableHelper
  * @covers \WordPressCS\WordPress\Sniffs\Security\ValidatedSanitizedInputSniff
  */
-final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
+final class ValidatedSanitizedInputUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -35,6 +34,9 @@ final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, int> Key is the line number, value is the number of expected errors.
 	 */
 	public function getErrorList( $testFile = '' ) {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		switch ( $testFile ) {
 			case 'ValidatedSanitizedInputUnitTest.1.inc':
 				return array(
@@ -127,10 +129,10 @@ final class ValidatedSanitizedInputUnitTest extends AbstractSniffUnitTest {
 					539 => 2,
 
 					// The error counts below differ depending on whether running PHPCS 3.x or PHPCS 4.x. See the comment in the test case file.
-					554 => 1,
-					557 => 1,
-					560 => 1,
-					563 => 1,
+					554 => ( true === $is_phpcs_4 ) ? 2 : 1,
+					557 => ( true === $is_phpcs_4 ) ? 2 : 1,
+					560 => ( true === $is_phpcs_4 ) ? 2 : 1,
+					563 => ( true === $is_phpcs_4 ) ? 2 : 1,
 
 					575 => 1,
 					578 => 1,

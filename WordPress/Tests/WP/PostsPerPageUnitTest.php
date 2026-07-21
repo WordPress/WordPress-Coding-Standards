@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the PostsPerPage sniff.
@@ -23,7 +23,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff
  * @covers \WordPressCS\WordPress\Sniffs\WP\PostsPerPageSniff
  */
-final class PostsPerPageUnitTest extends AbstractSniffUnitTest {
+final class PostsPerPageUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

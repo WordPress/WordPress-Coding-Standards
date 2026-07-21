@@ -305,11 +305,15 @@ class NonceVerificationSniff extends Sniff {
 			}
 
 			// If this isn't a function name, skip it.
-			if ( \T_STRING !== $this->tokens[ $i ]['code'] ) {
+			if ( \T_STRING !== $this->tokens[ $i ]['code'] && \T_NAME_FULLY_QUALIFIED !== $this->tokens[ $i ]['code'] ) {
 				continue;
 			}
 
 			$content_lc = \strtolower( $this->tokens[ $i ]['content'] );
+
+			if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $i ]['code'] ) {
+				$content_lc = \ltrim( $content_lc, '\\' );
+			}
 
 			// If this is one of the nonce verification functions, we can bail out.
 			if ( isset( $this->nonceVerificationFunctions[ $content_lc ] ) ) {

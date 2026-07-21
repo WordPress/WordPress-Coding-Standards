@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\ContextHelper;
 
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\TestUtils\UtilityMethodTestCase;
 use WordPressCS\WordPress\Helpers\ContextHelper;
 
@@ -206,16 +207,18 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @dataProvider dataIsInFunctionCallWithNestedTrue
 	 * @dataProvider dataIsInFunctionCallWithGlobalFalseNestedTrue
 	 *
-	 * @param string              $marker         The comment which prefaces the target token.
-	 * @param int|string          $tokenType      The token type to search for.
-	 * @param bool                $shouldMatch    Whether `is_in_function_call()` should find a match.
-	 * @param string|null         $expectedMarker The comment which prefaces the expected function name
-	 *                                            in the test file (if a match is expected).
-	 * @param array<string, bool> $params         The is_in_function_call() parameter values.
+	 * @param string              $marker                    The comment which prefaces the target token.
+	 * @param int|string          $tokenType                 The token type to search for.
+	 * @param bool                $shouldMatch               Whether `is_in_function_call()` should find a match.
+	 * @param string|null         $expectedMarker            The comment which prefaces the expected function name
+	 *                                                       in the test file (if a match is expected).
+	 * @param int|string          $expectedFunctionTokenType The token type for the expected function token.
+	 * @param string|null         $expectedFunctionContent   The content for the expected function token.
+	 * @param array<string, bool> $params                    The is_in_function_call() parameter values.
 	 *
 	 * @return void
 	 */
-	public function testIsInFunctionCall( $marker, $tokenType, $shouldMatch, $expectedMarker, $params ) {
+	public function testIsInFunctionCall( $marker, $tokenType, $shouldMatch, $expectedMarker, $expectedFunctionTokenType, $expectedFunctionContent, $params ) {
 		$insideFunctionPtr = $this->getTargetToken( $marker, $tokenType );
 		$result            = ContextHelper::is_in_function_call(
 			self::$phpcsFile,
@@ -230,7 +233,7 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 
 		$expected = false;
 		if ( true === $shouldMatch ) {
-			$expected = $this->getTargetToken( $expectedMarker, \T_STRING );
+			$expected = $this->getTargetToken( $expectedMarker, $expectedFunctionTokenType, $expectedFunctionContent );
 		}
 
 		$this->assertSame( $expected, $result );
@@ -330,6 +333,9 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 	 * @return array<string, array<string, int|string|array<string, bool>>>
 	 */
 	public static function dataIsInFunctionCall() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		$data = array(
 			// Cases that should never match (regardless of parameters).
 			'plain_assignment' => array(
@@ -372,10 +378,12 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 				'expectedMarker' => '/* testUppercaseName */',
 			),
 			'fully_qualified' => array(
-				'marker'         => '/* testFullyQualifiedInsideCall */',
-				'tokenType'      => \T_LNUMBER,
-				'shouldMatch'    => self::EXPECT_ALWAYS_MATCH,
-				'expectedMarker' => '/* testFullyQualified */',
+				'marker'                    => '/* testFullyQualifiedInsideCall */',
+				'tokenType'                 => \T_LNUMBER,
+				'shouldMatch'               => self::EXPECT_ALWAYS_MATCH,
+				'expectedMarker'            => '/* testFullyQualified */',
+				'expectedFunctionTokenType' => ( true === $is_phpcs_4 ? \T_NAME_FULLY_QUALIFIED : \T_STRING ),
+				'expectedFunctionContent'   => ( true === $is_phpcs_4 ? '\valid_function2' : null ),
 			),
 			'nested_inner' => array(
 				'marker'         => '/* testNestedInnerInsideCall */',
@@ -386,22 +394,28 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 
 			// Cases that match only when `$global_function` is `false`.
 			'namespaced_function' => array(
-				'marker'         => '/* testNamespacedFunctionInsideCall */',
-				'tokenType'      => \T_STRING,
-				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
-				'expectedMarker' => '/* testNamespacedFunction */',
+				'marker'                    => '/* testNamespacedFunctionInsideCall */',
+				'tokenType'                 => \T_STRING,
+				'shouldMatch'               => self::EXPECT_NON_GLOBAL_ONLY,
+				'expectedMarker'            => '/* testNamespacedFunction */',
+				'expectedFunctionTokenType' => ( true === $is_phpcs_4 ? \T_NAME_QUALIFIED : \T_STRING ),
+				'expectedFunctionContent'   => ( true === $is_phpcs_4 ? 'MyNamespace\valid_function1' : 'valid_function1' ),
 			),
 			'fully_qualified_namespaced_function' => array(
-				'marker'         => '/* testFullyQualifiedNamespacedFunctionInsideCall */',
-				'tokenType'      => \T_NULL,
-				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
-				'expectedMarker' => '/* testFullyQualifiedNamespacedFunction */',
+				'marker'                    => '/* testFullyQualifiedNamespacedFunctionInsideCall */',
+				'tokenType'                 => \T_NULL,
+				'shouldMatch'               => self::EXPECT_NON_GLOBAL_ONLY,
+				'expectedMarker'            => '/* testFullyQualifiedNamespacedFunction */',
+				'expectedFunctionTokenType' => ( true === $is_phpcs_4 ? \T_NAME_FULLY_QUALIFIED : \T_STRING ),
+				'expectedFunctionContent'   => ( true === $is_phpcs_4 ? '\MyNamespace\valid_function1' : 'valid_function1' ),
 			),
 			'namespace_relative_function' => array(
-				'marker'         => '/* testNamespaceRelativeFunctionInsideCall */',
-				'tokenType'      => \T_DNUMBER,
-				'shouldMatch'    => self::EXPECT_NON_GLOBAL_ONLY,
-				'expectedMarker' => '/* testNamespaceRelativeFunction */',
+				'marker'                    => '/* testNamespaceRelativeFunctionInsideCall */',
+				'tokenType'                 => \T_DNUMBER,
+				'shouldMatch'               => self::EXPECT_NON_GLOBAL_ONLY,
+				'expectedMarker'            => '/* testNamespaceRelativeFunction */',
+				'expectedFunctionTokenType' => ( true === $is_phpcs_4 ? \T_NAME_RELATIVE : \T_STRING ),
+				'expectedFunctionContent'   => ( true === $is_phpcs_4 ? 'namespace\MyNamespace\valid_function2' : 'valid_function2' ),
 			),
 			'static_method' => array(
 				'marker'         => '/* testStaticMethodInsideCall */',
@@ -436,10 +450,12 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 				'expectedMarker' => '/* testNestedMultipleLevels */',
 			),
 			'nested_both_namespaced_outer' => array(
-				'marker'         => '/* testNestedBothNamespacedOuterInsideCall */',
-				'tokenType'      => \T_STRING_CONCAT,
-				'shouldMatch'    => self::EXPECT_NON_GLOBAL_NESTED_ONLY,
-				'expectedMarker' => '/* testNestedBothNamespacedOuter */',
+				'marker'                    => '/* testNestedBothNamespacedOuterInsideCall */',
+				'tokenType'                 => \T_STRING_CONCAT,
+				'shouldMatch'               => self::EXPECT_NON_GLOBAL_NESTED_ONLY,
+				'expectedMarker'            => '/* testNestedBothNamespacedOuter */',
+				'expectedFunctionTokenType' => ( true === $is_phpcs_4 ? \T_NAME_QUALIFIED : \T_STRING ),
+				'expectedFunctionContent'   => ( true === $is_phpcs_4 ? 'MyNamespace\valid_function1' : 'valid_function1' ),
 			),
 
 			// Safeguard: parentheses in other parameters should not confuse the method.
@@ -454,6 +470,12 @@ final class IsInFunctionCallUnitTest extends UtilityMethodTestCase {
 		foreach ( $data as $key => $dataset ) {
 			if ( isset( $dataset['expectedMarker'] ) === false ) {
 				$data[ $key ]['expectedMarker'] = null;
+			}
+			if ( isset( $dataset['expectedFunctionTokenType'] ) === false ) {
+				$data[ $key ]['expectedFunctionTokenType'] = \T_STRING;
+			}
+			if ( isset( $dataset['expectedFunctionContent'] ) === false ) {
+				$data[ $key ]['expectedFunctionContent'] = null;
 			}
 		}
 

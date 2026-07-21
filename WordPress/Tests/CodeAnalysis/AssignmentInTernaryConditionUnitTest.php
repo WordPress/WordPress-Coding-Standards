@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\CodeAnalysis;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the AssignmentInTernaryCondition sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\CodeAnalysis\AssignmentInTernaryConditionSniff
  */
-final class AssignmentInTernaryConditionUnitTest extends AbstractSniffUnitTest {
+final class AssignmentInTernaryConditionUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

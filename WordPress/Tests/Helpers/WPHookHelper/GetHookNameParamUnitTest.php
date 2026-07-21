@@ -9,6 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\Helpers\WPHookHelper;
 
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\TestUtils\UtilityMethodTestCase;
 use PHPCSUtils\Utils\PassedParameters;
 use WordPressCS\WordPress\Helpers\WPHookHelper;
@@ -30,11 +31,12 @@ final class GetHookNameParamUnitTest extends UtilityMethodTestCase {
 	 * @param string       $testMarker     The comment which prefaces the target token in the test file.
 	 * @param string|false $expectedResult The raw content of the expected hook name parameter,
 	 *                                     or `false` when no hook name parameter is expected.
+	 * @param int|string   $tokenType      Optional. The token type to search for. Defaults to `T_STRING`.
 	 *
 	 * @return void
 	 */
-	public function testGetHookNameParam( $testMarker, $expectedResult ) {
-		$stackPtr     = $this->getTargetToken( $testMarker, \T_STRING );
+	public function testGetHookNameParam( $testMarker, $expectedResult, $tokenType = \T_STRING ) {
+		$stackPtr     = $this->getTargetToken( $testMarker, $tokenType );
 		$functionName = self::$phpcsFile->getTokens()[ $stackPtr ]['content'];
 		$parameters   = PassedParameters::getParameters( self::$phpcsFile, $stackPtr );
 
@@ -54,9 +56,12 @@ final class GetHookNameParamUnitTest extends UtilityMethodTestCase {
 	 *
 	 * @see testGetHookNameParam()
 	 *
-	 * @return array<string, array<string, string|false>>
+	 * @return array<string, array<string, int|string|false>>
 	 */
 	public static function dataGetHookNameParam() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		return array(
 			'not_a_hook_function' => array(
 				'testMarker'     => '/* testNotAHookFunction */',
@@ -77,6 +82,11 @@ final class GetHookNameParamUnitTest extends UtilityMethodTestCase {
 			'named_parameter' => array(
 				'testMarker'     => '/* testNamedParameter */',
 				'expectedResult' => "'my_action'",
+			),
+			'fully_qualified_name' => array(
+				'testMarker'     => '/* testFullyQualifiedName */',
+				'expectedResult' => "'my_action'",
+				'tokenType'      => ( true === $is_phpcs_4 ? \T_NAME_FULLY_QUALIFIED : \T_STRING ),
 			),
 		);
 	}

@@ -11,6 +11,7 @@ namespace WordPressCS\WordPress\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\Parentheses;
 use PHPCSUtils\Utils\PassedParameters;
@@ -114,6 +115,19 @@ final class ContextHelper {
 	);
 
 	/**
+	 * List of tokens representing qualified names.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @var array<int|string, bool>
+	 */
+	private static $qualifiedNameTokens = array(
+		\T_NAME_FULLY_QUALIFIED => true,
+		\T_NAME_QUALIFIED       => true,
+		\T_NAME_RELATIVE        => true,
+	);
+
+	/**
 	 * Check if a particular token acts - statically or non-statically - on an object.
 	 *
 	 * {@internal Note: this may still mistake a namespaced function imported via a `use` statement for
@@ -163,6 +177,28 @@ final class ContextHelper {
 			return false;
 		}
 
+		$isPhpcs3 = version_compare( Helper::getVersion(), '3.99.99', '<=' );
+
+		if ( true === $isPhpcs3 ) {
+			return self::is_token_namespaced_phpcs3( $phpcsFile, $stackPtr );
+		}
+
+		return self::is_token_namespaced_phpcs4( $phpcsFile, $stackPtr );
+	}
+
+	/**
+	 * Check if a particular token is prefixed with a namespace when running PHPCS 3. Different
+	 * methods are necessary because the tokenization of namespaced names changed between PHPCS 3
+	 * and 4.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	private static function is_token_namespaced_phpcs3( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
 		$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
 
 		if ( \T_NS_SEPARATOR !== $tokens[ $prev ]['code'] ) {
@@ -180,13 +216,42 @@ final class ContextHelper {
 	}
 
 	/**
+	 * Check if a particular token is prefixed with a namespace when running PHPCS 4. Different
+	 * methods are necessary because the tokenization of namespaced names changed between PHPCS 3
+	 * and 4.
+	 *
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param int                         $stackPtr  The index of the token in the stack.
+	 *
+	 * @return bool
+	 */
+	private static function is_token_namespaced_phpcs4( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( \T_NAME_QUALIFIED === $tokens[ $stackPtr ]['code']
+			|| \T_NAME_RELATIVE === $tokens[ $stackPtr ]['code']
+		) {
+			return true;
+		}
+
+		// If the token is a fully qualified name, consider it as namespaced if it contains
+		// more than one namespace separator (i.e., not in the global namespace).
+		if ( \T_NAME_FULLY_QUALIFIED === $tokens[ $stackPtr ]['code']
+			&& \substr_count( $tokens[ $stackPtr ]['content'], '\\' ) > 1 ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check if a token is (part of) a parameter for a function call to a select list of functions.
 	 *
 	 * This is useful, for instance, when trying to determine the context a variable is used in.
 	 *
 	 * For example: this function could be used to determine if the variable `$foo` is used
 	 * in a global function call to the function `is_foo()`.
-	 * In that case, a call to this function would return the stackPtr to the T_STRING `is_foo`
+	 * In that case, a call to this function would return the stackPtr to the name token `is_foo`
 	 * for code like: `is_foo( $foo, 'some_other_param' )`, while it would return `false` for
 	 * the following code `is_bar( $foo, 'some_other_param' )`.
 	 *
@@ -215,7 +280,7 @@ final class ContextHelper {
 	 *                                                     or only `strtolower( $var )`.
 	 *                                                     Defaults to `false`.
 	 *
-	 * @return int|bool Stack pointer to the function call T_STRING token or false otherwise.
+	 * @return int|bool Stack pointer to the function call name token or false otherwise.
 	 */
 	public static function is_in_function_call( File $phpcsFile, $stackPtr, array $valid_functions, $global_function = true, $allow_nested = false ) {
 		$valid_functions = array_change_key_case( $valid_functions, \CASE_LOWER );
@@ -232,11 +297,25 @@ final class ContextHelper {
 
 		foreach ( $nested_parenthesis as $open => $close ) {
 			$prev_non_empty = $phpcsFile->findPrevious( Tokens::$emptyTokens, ( $open - 1 ), null, true );
-			if ( false === $prev_non_empty || \T_STRING !== $tokens[ $prev_non_empty ]['code'] ) {
+			if ( false === $prev_non_empty || isset( Collections::nameTokens()[ $tokens[ $prev_non_empty ]['code'] ] ) === false ) {
 				continue;
 			}
 
-			if ( isset( $valid_functions[ strtolower( $tokens[ $prev_non_empty ]['content'] ) ] ) === false ) {
+			$functionNameLC = \strtolower( $tokens[ $prev_non_empty ]['content'] );
+
+			if ( true === $global_function
+				&& \T_NAME_FULLY_QUALIFIED === $tokens[ $prev_non_empty ]['code']
+			) {
+				$functionNameLC = \ltrim( $functionNameLC, '\\' );
+			}
+
+			if ( false === $global_function
+				&& isset( self::$qualifiedNameTokens[ $tokens[ $prev_non_empty ]['code'] ] ) === true
+			) {
+				$functionNameLC = \substr( $functionNameLC, \strrpos( $functionNameLC, '\\' ) + 1 );
+			}
+
+			if ( isset( $valid_functions[ $functionNameLC ] ) === false ) {
 				if ( false === $allow_nested ) {
 					// Function call encountered, but not to one of the allowed functions.
 					return false;
@@ -382,6 +461,11 @@ final class ContextHelper {
 
 		$tokens        = $phpcsFile->getTokens();
 		$function_name = strtolower( $tokens[ $function_ptr ]['content'] );
+
+		if ( \T_NAME_FULLY_QUALIFIED === $tokens[ $function_ptr ]['code'] ) {
+			$function_name = \ltrim( $function_name, '\\' );
+		}
+
 		if ( true === self::$arrayCompareFunctions[ $function_name ] ) {
 			return true;
 		}

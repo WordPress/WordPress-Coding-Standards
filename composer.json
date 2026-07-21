@@ -21,13 +21,13 @@
 		"ext-libxml": "*",
 		"ext-tokenizer": "*",
 		"ext-xmlreader": "*",
-		"squizlabs/php_codesniffer": "^3.13.5",
+		"squizlabs/php_codesniffer": "^3.13.5 || ^4.0.1",
 		"phpcsstandards/phpcsutils": "^1.2.2",
 		"phpcsstandards/phpcsextra": "^1.5.0"
 	},
 	"require-dev": {
 		"phpcompatibility/php-compatibility": "^10.0.0@dev",
-		"phpunit/phpunit": "^8.0 || ^9.0",
+		"phpunit/phpunit": "^8.0 || ^9.3.4",
 		"phpcsstandards/phpcsdevtools": "^1.2.0",
 		"php-parallel-lint/php-parallel-lint": "^1.4.0",
 		"php-parallel-lint/php-console-highlighter": "^1.0.0"
@@ -54,11 +54,17 @@
 		"fix-cs": [
 			"@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
 		],
-		"run-tests": [
+		"run-tests-phpcs3": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php --no-coverage"
 		],
-		"coverage": [
+		"run-tests-phpcs4": [
+			"@php ./vendor/phpunit/phpunit/phpunit --no-coverage"
+		],
+		"coverage-phpcs3": [
 			"@php ./vendor/phpunit/phpunit/phpunit --filter WordPress ./vendor/squizlabs/php_codesniffer/tests/AllTests.php"
+		],
+		"coverage-phpcs4": [
+			"@php ./vendor/phpunit/phpunit/phpunit"
 		],
 		"check-complete": [
 			"@php ./vendor/phpcsstandards/phpcsdevtools/bin/phpcs-check-feature-completeness -q ./WordPress"
@@ -69,7 +75,7 @@
 		"check-all": [
 			"@lint",
 			"@check-cs",
-			"@run-tests",
+			"if [ -f ./vendor/squizlabs/php_codesniffer/tests/AllTests.php ]; then composer run-tests-phpcs3; else composer run-tests-phpcs4; fi",
 			"@check-complete-strict"
 		]
 	},
@@ -77,8 +83,10 @@
 		"lint": "Lint PHP files against parse errors.",
 		"check-cs": "Run the PHPCS script against the entire codebase.",
 		"fix-cs": "Run the PHPCBF script to fix all the autofixable violations on the codebase.",
-		"run-tests": "Run all the unit tests for the WordPress Coding Standards sniffs without code coverage.",
-		"coverage": "Run all the unit tests for the WordPress Coding Standards sniffs with code coverage.",
+		"run-tests-phpcs3": "Run all the unit tests for the WordPress Coding Standards sniffs without code coverage (PHPCS 3.x).",
+		"run-tests-phpcs4": "Run all the unit tests for the WordPress Coding Standards sniffs without code coverage (PHPCS 4.x).",
+		"coverage-phpcs3": "Run all the unit tests for the WordPress Coding Standards sniffs with code coverage (PHPCS 3.x).",
+		"coverage-phpcs4": "Run all the unit tests for the WordPress Coding Standards sniffs with code coverage (PHPCS 4.x).",
 		"check-complete": "Check if all the sniffs have tests.",
 		"check-complete-strict": "Check if all the sniffs have unit tests and XML documentation.",
 		"check-all": "Run all checks (lint, phpcs, feature completeness) and tests."

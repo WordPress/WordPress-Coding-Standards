@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the CapitalPDangit sniff.
@@ -19,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\WP\CapitalPDangitSniff
  */
-final class CapitalPDangitUnitTest extends AbstractSniffUnitTest {
+final class CapitalPDangitUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

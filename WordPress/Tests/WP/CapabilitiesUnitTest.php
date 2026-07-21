@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 use PHPCSUtils\BackCompat\Helper;
 
 /**
@@ -19,7 +19,7 @@ use PHPCSUtils\BackCompat\Helper;
  *
  * @covers \WordPressCS\WordPress\Sniffs\WP\CapabilitiesSniff
  */
-final class CapabilitiesUnitTest extends AbstractSniffUnitTest {
+final class CapabilitiesUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Adjust the config to allow for testing with specific CLI arguments.

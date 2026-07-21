@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\DB;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the SlowDBQuery sniff.
@@ -21,7 +21,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\AbstractArrayAssignmentRestrictionsSniff
  * @covers \WordPressCS\WordPress\Sniffs\DB\SlowDBQuerySniff
  */
-final class SlowDBQueryUnitTest extends AbstractSniffUnitTest {
+final class SlowDBQueryUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

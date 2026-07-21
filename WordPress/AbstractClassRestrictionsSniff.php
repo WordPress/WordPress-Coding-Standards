@@ -10,6 +10,7 @@
 namespace WordPressCS\WordPress;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\BackCompat\Helper;
 use PHPCSUtils\Tokens\Collections;
 use PHPCSUtils\Utils\GetTokensAsString;
 use PHPCSUtils\Utils\Namespaces;
@@ -145,13 +146,20 @@ abstract class AbstractClassRestrictionsSniff extends AbstractFunctionRestrictio
 
 		if ( \T_DOUBLE_COLON === $token['code'] ) {
 			$nameEnd = $this->phpcsFile->findPrevious( Tokens::$emptyTokens, ( $stackPtr - 1 ), null, true );
-			if ( \T_STRING !== $this->tokens[ $nameEnd ]['code'] ) {
+			if ( isset( Collections::nameTokens()[ $this->tokens[ $nameEnd ]['code'] ] ) === false ) {
 				// Hierarchy keyword or object stored in variable.
 				return false;
 			}
 
-			$nameStart = ( $this->phpcsFile->findPrevious( Collections::namespacedNameTokens(), ( $nameEnd - 1 ), null, true ) + 1 );
-			$classname = GetTokensAsString::noEmpties( $this->phpcsFile, $nameStart, $nameEnd );
+			$classname = $this->tokens[ $nameEnd ]['content'];
+			$nameStart = $nameEnd;
+
+			if ( \version_compare( Helper::getVersion(), '3.99.99', '<=' ) === true ) {
+				// For PHPCS 3.x, a namespaced class name is split over multiple tokens so it is necessary to combine then to get the class name.
+				$nameStart = ( $this->phpcsFile->findPrevious( Collections::namespacedNameTokens(), ( $nameEnd - 1 ), null, true ) + 1 );
+				$classname = GetTokensAsString::noEmpties( $this->phpcsFile, $nameStart, $nameEnd );
+			}
+
 			$classname = $this->get_namespaced_classname( $classname, ( $nameStart - 1 ) );
 		}
 

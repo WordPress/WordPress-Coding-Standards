@@ -9,7 +9,8 @@
 
 namespace WordPressCS\WordPress\Tests\DB;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
+use PHPCSUtils\BackCompat\Helper;
 
 /**
  * Unit test class for the PreparedSQLPlaceholders sniff.
@@ -18,7 +19,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\DB\PreparedSQLPlaceholdersSniff
  */
-final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
+final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.
@@ -119,6 +120,9 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 	 * @return array<int, int> Key is the line number, value is the number of expected warnings.
 	 */
 	public function getWarningList() {
+		$phpcs_version = Helper::getVersion();
+		$is_phpcs_4    = version_compare( $phpcs_version, '3.99.99', '>' );
+
 		return array(
 			12  => 1,
 			16  => 1,
@@ -165,6 +169,49 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			482 => 1,
 			490 => 1,
 			498 => 1,
+
+			// Namespaced sprintf/implode/array_fill calls.
+			540 => 1,
+			547 => 1,
+			554 => 1,
+			561 => 1,
+			573 => 1,
+			580 => 1,
+			587 => 1,
+			594 => 1,
+			606 => 1,
+			612 => 1,
+			618 => 1,
+			624 => 1,
+			635 => 1,
+			641 => 1,
+			647 => 1,
+			653 => 1,
+
+			/*
+			 * Namespaced sprintf() calls.
+			 *
+			 * False negatives on PHPCS 3.x. Flagged on PHPCS 4.x due to the changed tokenization of
+			 * namespaced names. See https://github.com/WordPress/WordPress-Coding-Standards/issues/2720.
+			 */
+			668 => ( true === $is_phpcs_4 ? 1 : 0 ),
+			675 => ( true === $is_phpcs_4 ? 1 : 0 ),
+			682 => ( true === $is_phpcs_4 ? 1 : 0 ),
+			689 => ( true === $is_phpcs_4 ? 1 : 0 ),
+
+			// Method sprintf/implode/array_fill calls.
+			728 => 1,
+			735 => 1,
+			742 => 1,
+			751 => 1,
+			757 => 1,
+			763 => 1,
+			771 => 1,
+			778 => 1,
+			785 => 1,
+			794 => 1,
+			800 => 1,
+			806 => 1,
 		);
 	}
 }

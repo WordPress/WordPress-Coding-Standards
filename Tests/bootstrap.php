@@ -57,6 +57,16 @@ for that PHPCS install.
 	die( 1 );
 }
 
+// Alias the PHPCS 3.x test case to the PHPCS 4.x name.
+if ( class_exists( 'PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest' ) === true
+	&& class_exists( 'PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase' ) === false
+) {
+	class_alias(
+		'PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest',
+		'PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase'
+	);
+}
+
 /*
  * Set the PHPCS_IGNORE_TEST environment variable to ignore tests from other standards.
  */

@@ -125,6 +125,7 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 
 		return array(
 			\T_STRING,
+			\T_NAME_FULLY_QUALIFIED,
 		);
 	}
 
@@ -201,10 +202,16 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 			return;
 		}
 
-		// Preliminary check. If the content of the T_STRING is not one of the functions we're
+		$content = $this->tokens[ $stackPtr ]['content'];
+
+		if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $stackPtr ]['code'] ) {
+			$content = \ltrim( $content, '\\' );
+		}
+
+		// Preliminary check. If the content of the name token is not one of the functions we're
 		// looking for, we can bow out before doing the heavy lifting of checking whether
 		// this is a function call.
-		if ( preg_match( $this->prelim_check_regex, $this->tokens[ $stackPtr ]['content'] ) !== 1 ) {
+		if ( preg_match( $this->prelim_check_regex, $content ) !== 1 ) {
 			return;
 		}
 
@@ -286,7 +293,13 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 *                  normal file processing.
 	 */
 	public function check_for_matches( $stackPtr ) {
-		$token_content = strtolower( $this->tokens[ $stackPtr ]['content'] );
+		$content = $this->tokens[ $stackPtr ]['content'];
+
+		if ( \T_NAME_FULLY_QUALIFIED === $this->tokens[ $stackPtr ]['code'] ) {
+			$content = \ltrim( $content, '\\' );
+		}
+
+		$token_content = strtolower( $content );
 		$skip_to       = array();
 
 		foreach ( $this->groups as $groupName => $group ) {
@@ -319,7 +332,8 @@ abstract class AbstractFunctionRestrictionsSniff extends Sniff {
 	 * @param int    $stackPtr        The position of the current token in the stack.
 	 * @param string $group_name      The name of the group which was matched.
 	 * @param string $matched_content The token content (function name) which was matched
-	 *                                in lowercase.
+	 *                                in lowercase. For T_NAME_FULLY_QUALIFIED tokens,
+	 *                                the leading backslash is removed.
 	 *
 	 * @return int|void Integer stack pointer to skip forward or void to continue
 	 *                  normal file processing.

@@ -165,6 +165,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		return array(
 			\T_VARIABLE,
 			\T_STRING,
+			\T_NAME_FULLY_QUALIFIED,
 		);
 	}
 
@@ -224,26 +225,77 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				}
 
 				// Detect a specific pattern for variable replacements in combination with `IN`.
-				if ( \T_STRING === $this->tokens[ $i ]['code'] ) {
+				if ( $this->is_global_function_call( $i, 'sprintf' ) ) {
+					$sprintf_parameters = PassedParameters::getParameters( $this->phpcsFile, $i );
 
-					if ( 'sprintf' === strtolower( $this->tokens[ $i ]['content'] ) ) {
-						$sprintf_parameters = PassedParameters::getParameters( $this->phpcsFile, $i );
+					if ( ! empty( $sprintf_parameters ) ) {
+						/*
+						 * Check for named params. sprintf() does not support this due to its variadic nature,
+						 * and we cannot analyze the code correctly if it is used, so skip the whole sprintf()
+						 * in that case.
+						 */
+						$valid_sprintf = true;
+						foreach ( $sprintf_parameters as $param ) {
+							if ( isset( $param['name'] ) ) {
+								$valid_sprintf = false;
+								break;
+							}
+						}
 
-						if ( ! empty( $sprintf_parameters ) ) {
-							/*
-							 * Check for named params. sprintf() does not support this due to its variadic nature,
-							 * and we cannot analyze the code correctly if it is used, so skip the whole sprintf()
-							 * in that case.
-							 */
-							$valid_sprintf = true;
-							foreach ( $sprintf_parameters as $param ) {
-								if ( isset( $param['name'] ) ) {
-									$valid_sprintf = false;
-									break;
-								}
+						if ( false === $valid_sprintf ) {
+							$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
+							if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
+								&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
+							) {
+								$skip_from = ( $i + 1 );
+								$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
 							}
 
-							if ( false === $valid_sprintf ) {
+							continue;
+						}
+
+						// We know for sure this sprintf() uses positional parameters, so this will be fine.
+						$skip_from  = ( $sprintf_parameters[1]['end'] + 1 );
+						$last_param = end( $sprintf_parameters );
+						$skip_to    = ( $last_param['end'] + 1 );
+
+						$valid_in_clauses['implode_fill']     += $this->analyse_sprintf( $sprintf_parameters );
+						$valid_in_clauses['adjustment_count'] += ( \count( $sprintf_parameters ) - 1 );
+					}
+					unset( $sprintf_parameters, $valid_sprintf, $last_param );
+
+				} elseif ( $this->is_global_function_call( $i, 'implode' ) ) {
+					$ignore_tokens = Tokens::$emptyTokens + array(
+						\T_STRING_CONCAT => \T_STRING_CONCAT,
+						\T_NS_SEPARATOR  => \T_NS_SEPARATOR,
+					);
+
+					$prev = $this->phpcsFile->findPrevious(
+						$ignore_tokens,
+						( $i - 1 ),
+						$query['start'],
+						true
+					);
+
+					if ( isset( Tokens::$textStringTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
+						$prev_content = TextStrings::stripQuotes( $this->tokens[ $prev ]['content'] );
+						$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
+
+						// Only examine the implode if preceded by an ` IN (`.
+						if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
+
+							if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
+								$this->phpcsFile->addError(
+									'Dynamic placeholder generation should not have surrounding quotes.',
+									$prev,
+									'QuotedDynamicPlaceholderGeneration'
+								);
+							}
+
+							if ( $this->analyse_implode( $i ) === true ) {
+								++$valid_in_clauses['uses_in'];
+								++$valid_in_clauses['implode_fill'];
+
 								$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
 								if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
 									&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
@@ -251,65 +303,11 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 									$skip_from = ( $i + 1 );
 									$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
 								}
-
-								continue;
 							}
-
-							// We know for sure this sprintf() uses positional parameters, so this will be fine.
-							$skip_from  = ( $sprintf_parameters[1]['end'] + 1 );
-							$last_param = end( $sprintf_parameters );
-							$skip_to    = ( $last_param['end'] + 1 );
-
-							$valid_in_clauses['implode_fill']     += $this->analyse_sprintf( $sprintf_parameters );
-							$valid_in_clauses['adjustment_count'] += ( \count( $sprintf_parameters ) - 1 );
 						}
-						unset( $sprintf_parameters, $valid_sprintf, $last_param );
-
-					} elseif ( 'implode' === strtolower( $this->tokens[ $i ]['content'] ) ) {
-						$ignore_tokens = Tokens::$emptyTokens + array(
-							\T_STRING_CONCAT => \T_STRING_CONCAT,
-							\T_NS_SEPARATOR  => \T_NS_SEPARATOR,
-						);
-
-						$prev = $this->phpcsFile->findPrevious(
-							$ignore_tokens,
-							( $i - 1 ),
-							$query['start'],
-							true
-						);
-
-						if ( isset( Tokens::$textStringTokens[ $this->tokens[ $prev ]['code'] ] ) ) {
-							$prev_content = TextStrings::stripQuotes( $this->tokens[ $prev ]['content'] );
-							$regex_quote  = $this->get_regex_quote_snippet( $prev_content, $this->tokens[ $prev ]['content'] );
-
-							// Only examine the implode if preceded by an ` IN (`.
-							if ( preg_match( '`\s+IN\s*\(\s*(' . $regex_quote . ')?$`i', $prev_content, $match ) > 0 ) {
-
-								if ( isset( $match[1] ) && $regex_quote !== $this->regex_quote ) {
-									$this->phpcsFile->addError(
-										'Dynamic placeholder generation should not have surrounding quotes.',
-										$prev,
-										'QuotedDynamicPlaceholderGeneration'
-									);
-								}
-
-								if ( $this->analyse_implode( $i ) === true ) {
-									++$valid_in_clauses['uses_in'];
-									++$valid_in_clauses['implode_fill'];
-
-									$next = $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $i + 1 ), null, true );
-									if ( \T_OPEN_PARENTHESIS === $this->tokens[ $next ]['code']
-										&& isset( $this->tokens[ $next ]['parenthesis_closer'] )
-									) {
-										$skip_from = ( $i + 1 );
-										$skip_to   = $this->tokens[ $next ]['parenthesis_closer'];
-									}
-								}
-							}
-							unset( $next, $prev_content, $regex_quote, $match );
-						}
-						unset( $prev );
+						unset( $next, $prev_content, $regex_quote, $match );
 					}
+					unset( $prev );
 				}
 
 				continue;
@@ -679,9 +677,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 				$sprintf_param['end'],
 				true
 			);
-			if ( \T_STRING === $this->tokens[ $implode ]['code']
-				&& 'implode' === strtolower( $this->tokens[ $implode ]['content'] )
-			) {
+			if ( $this->is_global_function_call( $implode, 'implode' ) ) {
 				if ( $this->analyse_implode( $implode ) === true ) {
 					++$found;
 				}
@@ -737,9 +733,7 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 			true
 		);
 
-		if ( \T_STRING !== $this->tokens[ $array_fill ]['code']
-			|| 'array_fill' !== strtolower( $this->tokens[ $array_fill ]['content'] )
-		) {
+		if ( ! $this->is_global_function_call( $array_fill, 'array_fill' ) ) {
 			return false;
 		}
 
@@ -762,5 +756,29 @@ final class PreparedSQLPlaceholdersSniff extends Sniff {
 		}
 
 		return (bool) preg_match( '`^(["\'])%[dfFs]\1$`', $array_fill_value_param['clean'] );
+	}
+
+	/**
+	 * Check whether a token is an unqualified or fully qualified call to a given global function.
+	 *
+	 * Temporary, simplified helper: it only checks the token type and the normalized function name,
+	 * reproducing this sniff's existing behavior. It does not verify call context, nor exclude method
+	 * calls or partially qualified / namespace-relative names.
+	 *
+	 * As part of fixing https://github.com/WordPress/WordPress-Coding-Standards/issues/2720, this
+	 * method should be replaced with a more robust and generic alternative.
+	 *
+	 * @param int    $token_ptr      The position of the token to examine.
+	 * @param string $function_name The lowercase name of the global function to check for.
+	 *
+	 * @return bool
+	 */
+	private function is_global_function_call( $token_ptr, $function_name ) {
+		$code = $this->tokens[ $token_ptr ]['code'];
+		if ( \T_STRING !== $code && \T_NAME_FULLY_QUALIFIED !== $code ) {
+			return false;
+		}
+
+		return ltrim( strtolower( $this->tokens[ $token_ptr ]['content'] ), '\\' ) === $function_name;
 	}
 }

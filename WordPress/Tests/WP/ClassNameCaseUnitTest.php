@@ -9,7 +9,7 @@
 
 namespace WordPressCS\WordPress\Tests\WP;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffTestCase;
 
 /**
  * Unit test class for the ClassNameCase sniff.
@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  *
  * @covers \WordPressCS\WordPress\Sniffs\WP\ClassNameCaseSniff
  */
-final class ClassNameCaseUnitTest extends AbstractSniffUnitTest {
+final class ClassNameCaseUnitTest extends AbstractSniffTestCase {
 
 	/**
 	 * Returns the lines where errors should occur.

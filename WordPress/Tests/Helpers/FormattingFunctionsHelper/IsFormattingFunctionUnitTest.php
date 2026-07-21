@@ -55,6 +55,10 @@ final class IsFormattingFunctionUnitTest extends TestCase {
 				'functionName'   => 'iMpLoDe',
 				'expectedResult' => true,
 			),
+			'fully_qualified_name'      => array(
+				'functionName'   => '\sprintf',
+				'expectedResult' => true,
+			),
 			'not_a_formatting_function' => array(
 				'functionName'   => 'printf',
 				'expectedResult' => false,

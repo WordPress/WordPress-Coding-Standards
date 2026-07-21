@@ -66,19 +66,27 @@ final class GetCallbackParameterUnitTest extends UtilityMethodTestCase {
 				'testMarker'      => '/* testNotArrayWalkingFunction */',
 				'expectedContent' => false,
 			),
-			'callback_param_missing'     => array(
+			'callback_param_missing' => array(
 				'testMarker'      => '/* testCallbackParamMissing */',
 				'expectedContent' => false,
 			),
 
 			// Cases where the callback parameter should be returned.
-			'array_map_callback'         => array(
+			'array_map_callback' => array(
 				'testMarker'      => '/* testArrayMapCallback */',
 				'expectedContent' => "'sanitize_text_field'",
 			),
-			'map_deep_mixed_case'        => array(
+			'map_deep_mixed_case'                => array(
 				'testMarker'      => '/* testMapDeepMixedCase */',
 				'expectedContent' => "'esc_html'",
+			),
+			'array_map_fully_qualified'          => array(
+				'testMarker'      => '/* testArrayMapFullyQualified */',
+				'expectedContent' => "'esc_attr'",
+			),
+			'map_deep_fully_qualified_uppercase' => array(
+				'testMarker'      => '/* testMapDeepFullyQualifiedUppercase */',
+				'expectedContent' => "'wp_kses_post'",
 			),
 		);
 	}
