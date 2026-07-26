@@ -96,6 +96,8 @@ jobs:
           ini-values: ${{ steps.set_ini.outputs.PHP_INI }}
           coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
           tools: cs2pr
+        env:
+          fail-fast: true
 
       - name: "Composer: set PHPCS dependencies for tests (dev)"
         if: ${{ matrix.dependencies == 'dev' }}

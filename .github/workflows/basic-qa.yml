@@ -168,6 +168,8 @@ jobs:
           # Allow for PHP deprecation notices.
           ini-values: error_reporting = E_ALL & ~E_DEPRECATED
           coverage: none
+        env:
+          fail-fast: true
 
       - name: "Composer: set PHPCS dependencies for tests (dev)"
         if: ${{ matrix.dependencies == 'dev' }}
@@ -250,6 +252,8 @@ jobs:
           php-version: 'latest'
           coverage: none
           tools: phpstan:1.x
+        env:
+          fail-fast: true
 
       # Install dependencies and handle caching in one go.
       # Dependencies need to be installed to make sure the PHPCS and PHPUnit classes are recognized.
