@@ -10,8 +10,11 @@
 namespace WordPressCS\WordPress\Sniffs\WP;
 
 use PHP_CodeSniffer\Util\Tokens;
+use PHPCSUtils\Tokens\Collections;
+use PHPCSUtils\Utils\Arrays;
 use PHPCSUtils\Utils\Numbers;
 use PHPCSUtils\Utils\PassedParameters;
+use PHPCSUtils\Utils\TextStrings;
 use WordPressCS\WordPress\AbstractFunctionParameterSniff;
 
 /**
@@ -66,44 +69,15 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	);
 
 	/**
-	 * Token codes which are "safe" to accept to determine whether a version would evaluate to `false`.
-	 *
-	 * This array is enriched with several of the PHPCS token arrays in the register() method.
-	 *
-	 * @var array<int|string, int|string>
-	 */
-	private $safe_tokens = array(
-		\T_NULL                     => \T_NULL,
-		\T_FALSE                    => \T_FALSE,
-		\T_TRUE                     => \T_TRUE,
-		\T_LNUMBER                  => \T_LNUMBER,
-		\T_DNUMBER                  => \T_DNUMBER,
-		\T_CONSTANT_ENCAPSED_STRING => \T_CONSTANT_ENCAPSED_STRING,
-		\T_START_NOWDOC             => \T_START_NOWDOC,
-		\T_NOWDOC                   => \T_NOWDOC,
-		\T_END_NOWDOC               => \T_END_NOWDOC,
-		\T_OPEN_PARENTHESIS         => \T_OPEN_PARENTHESIS,
-		\T_CLOSE_PARENTHESIS        => \T_CLOSE_PARENTHESIS,
-		\T_STRING_CONCAT            => \T_STRING_CONCAT,
-	);
-
-	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * Overloads and calls the parent method to allow for adding additional tokens to the
-	 * $false_tokens and $safe_tokens properties.
+	 * $false_tokens property.
 	 *
 	 * @return array
 	 */
 	public function register() {
 		$this->false_tokens += Tokens::$emptyTokens;
-
-		$this->safe_tokens += Tokens::$emptyTokens;
-		$this->safe_tokens += Tokens::$assignmentTokens;
-		$this->safe_tokens += Tokens::$comparisonTokens;
-		$this->safe_tokens += Tokens::$operators;
-		$this->safe_tokens += Tokens::$booleanOperators;
-		$this->safe_tokens += Tokens::$castTokens;
 
 		return parent::register();
 	}
@@ -194,6 +168,12 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	/**
 	 * Determine if a range has a falsy value.
 	 *
+	 * Only a limited set of values is recognized as falsy:
+	 *   - Boolean false.
+	 *   - An integer or float equal to zero.
+	 *   - A text string with the content `'0'` or `''` (single or double-quoted, heredoc, or nowdoc).
+	 *   - An empty array.
+	 *
 	 * @param int $start The position to start looking from.
 	 * @param int $end   The position to stop looking (inclusive).
 	 *
@@ -202,7 +182,6 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 	 *              couldn't be reliably determined.
 	 */
 	protected function is_falsy( $start, $end ) {
-
 		// Find anything excluding the false tokens.
 		$has_non_false = $this->phpcsFile->findNext( $this->false_tokens, $start, ( $end + 1 ), true );
 		// If no non-false tokens are found, we are good.
@@ -210,59 +189,69 @@ final class EnqueuedResourceParametersSniff extends AbstractFunctionParameterSni
 			return true;
 		}
 
-		$code_string = '';
-		for ( $i = $start; $i <= $end; $i++ ) {
-			if ( isset( $this->safe_tokens[ $this->tokens[ $i ]['code'] ] ) === false ) {
-				// Function call/variable or other token which makes it neigh impossible
-				// to determine whether the actual value would evaluate to false.
+		$target_ptr = $this->phpcsFile->findNext( Tokens::$emptyTokens, $start, ( $end + 1 ), true );
+
+		// An array only evaluates to false when it is empty.
+		if ( isset( Collections::arrayOpenTokensBC()[ $this->tokens[ $target_ptr ]['code'] ] ) ) {
+			$open_close = Arrays::getOpenClose( $this->phpcsFile, $target_ptr );
+			if ( false === $open_close ) {
+				// Short list assignment, not an array.
 				return false;
 			}
 
-			if ( isset( Tokens::$emptyTokens[ $this->tokens[ $i ]['code'] ] ) === true ) {
-				continue;
+			// Bail if there is any non-empty token in the $ver parameter after the array, as that's a more complex
+			// expression which can't be reliably evaluated.
+			$next_after_array = $this->phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				( $open_close['closer'] + 1 ),
+				( $end + 1 ),
+				true
+			);
+
+			if ( false !== $next_after_array ) {
+				return false;
 			}
 
-			// Make sure that PHP 7.4 numeric literals and PHP 8.1 explicit octals don't cause problems.
-			if ( \T_LNUMBER === $this->tokens[ $i ]['code'] || \T_DNUMBER === $this->tokens[ $i ]['code'] ) {
-				$number_info  = Numbers::getCompleteNumber( $this->phpcsFile, $i );
-				$code_string .= $number_info['decimal'];
-				$i            = $number_info['last_token'];
-				continue;
-			}
+			$first_non_empty_in_array = $this->phpcsFile->findNext(
+				Tokens::$emptyTokens,
+				( $open_close['opener'] + 1 ),
+				$open_close['closer'],
+				true
+			);
 
-			// Make sure that when deprecated casts are used in the code under scan and the sniff is run on PHP 8.5,
-			// the eval() won't cause a deprecation notice, borking the scan of the file.
-			if ( \PHP_VERSION_ID >= 80500 ) {
-				if ( \T_INT_CAST === $this->tokens[ $i ]['code'] ) {
-					$code_string .= '(int)';
-					continue;
-				}
-
-				if ( \T_DOUBLE_CAST === $this->tokens[ $i ]['code'] ) {
-					$code_string .= '(float)';
-					continue;
-				}
-
-				if ( \T_BOOL_CAST === $this->tokens[ $i ]['code'] ) {
-					$code_string .= '(bool)';
-					continue;
-				}
-
-				if ( \T_BINARY_CAST === $this->tokens[ $i ]['code'] ) {
-					$code_string .= '(string)';
-					continue;
-				}
-			}
-
-			$code_string .= $this->tokens[ $i ]['content'];
+			return ( false === $first_non_empty_in_array );
 		}
 
-		if ( '' === $code_string ) {
+		// Check if it is a '0' or '' string.
+		if ( isset( Collections::textStringStartTokens()[ $this->tokens[ $target_ptr ]['code'] ] ) ) {
+			if ( \T_DOUBLE_QUOTED_STRING === $this->tokens[ $target_ptr ]['code'] ) {
+				// No need to examine as it will never match/can't be determined.
+				return false;
+			}
+
+			$valid_tokens = array( \T_CONSTANT_ENCAPSED_STRING ) + Tokens::$heredocTokens + Tokens::$emptyTokens;
+			if ( false !== $this->phpcsFile->findNext( $valid_tokens, $start, ( $end + 1 ), true ) ) {
+				// Bail if the $ver parameter is more than a single text string.
+				return false;
+			}
+
+			$content = TextStrings::getCompleteTextString( $this->phpcsFile, $target_ptr );
+
+			return '0' === $content || '' === $content;
+		}
+
+		// The int/float check below only handles a single literal token, so bail if there is more than one non-empty token.
+		if ( false !== $this->phpcsFile->findNext( Tokens::$emptyTokens, ( $target_ptr + 1 ), ( $end + 1 ), true ) ) {
 			return false;
 		}
 
-		// Evaluate the argument to figure out the outcome is false or not.
-		// phpcs:ignore Squiz.PHP.Eval -- No harm here.
-		return ( false === eval( "return (bool) $code_string;" ) );
+		// Check if it is an int or float equal to zero.
+		if ( \T_LNUMBER === $this->tokens[ $target_ptr ]['code'] || \T_DNUMBER === $this->tokens[ $target_ptr ]['code'] ) {
+			$number_info = Numbers::getCompleteNumber( $this->phpcsFile, $target_ptr );
+
+			return 0.0 === (float) $number_info['decimal'];
+		}
+
+		return false;
 	}
 }
