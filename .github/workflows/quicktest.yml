@@ -42,6 +42,8 @@ jobs:
           # Unit tests don't need to fail on those for stable releases where those issues won't get fixed anymore.
           ini-values: error_reporting=-1, display_errors=On, display_startup_errors=On
           coverage:  ${{ github.ref_name == 'develop' && 'xdebug' || 'none' }}
+        env:
+          fail-fast: true
 
       - name: Enable creation of `composer.lock` file
         if: ${{ matrix.dependencies == 'lowest' }}
