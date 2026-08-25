@@ -68,6 +68,18 @@ final class PreparedSQLUnitTest extends AbstractSniffUnitTest {
 					132 => 2,
 					154 => 1,
 					155 => 1,
+					175 => 1,
+					176 => 1,
+					177 => 1,
+					178 => 2,
+					187 => 1,
+					188 => 1,
+					189 => 1,
+					190 => 2,
+					198 => 1,
+					199 => 1,
+					200 => 1,
+					201 => 2,
 				);
 
 			case 'PreparedSQLUnitTest.2.inc':
