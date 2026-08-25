@@ -624,3 +624,43 @@ function test_namespaced_unslashing_sanitizing_functions() {
 		$key = namespace\Sub\sanitize_key( $_POST['unslash_sanitize5'] ); // Bad.
 	}
 }
+
+/*
+ * Safeguard that sanitizing functions which implicitly unslash their input do not
+ * require an additional call to a dedicated unslashing function like wp_unslash().
+ *
+ * See https://github.com/WordPress/WordPress-Coding-Standards/issues/2516
+ */
+function test_sanitizing_functions_which_implicitly_unslash() {
+	if ( ! isset(
+		$_POST['esc_url_raw'],
+		$_POST['sanitize_email'],
+		$_POST['sanitize_file_name'],
+		$_POST['sanitize_hex_color'],
+		$_POST['sanitize_hex_color_no_hash'],
+		$_POST['sanitize_html_class'],
+		$_POST['sanitize_mime_type'],
+		$_POST['sanitize_sql_orderby'],
+		$_POST['sanitize_title'],
+		$_POST['sanitize_title_for_query'],
+		$_POST['sanitize_title_with_dashes'],
+		$_POST['sanitize_url'],
+		$_POST['wp_sanitize_redirect']
+	) ) {
+		return;
+	}
+
+	echo esc_url_raw( $_POST['esc_url_raw'] ); // OK.
+	echo sanitize_email( $_POST['sanitize_email'] ); // OK.
+	echo sanitize_file_name( $_POST['sanitize_file_name'] ); // OK.
+	echo sanitize_hex_color( $_POST['sanitize_hex_color'] ); // OK.
+	echo sanitize_hex_color_no_hash( $_POST['sanitize_hex_color_no_hash'] ); // OK.
+	echo sanitize_html_class( $_POST['sanitize_html_class'] ); // OK.
+	echo sanitize_mime_type( $_POST['sanitize_mime_type'] ); // OK.
+	echo sanitize_sql_orderby( $_POST['sanitize_sql_orderby'] ); // OK.
+	echo sanitize_title( $_POST['sanitize_title'] ); // OK.
+	echo sanitize_title_for_query( $_POST['sanitize_title_for_query'] ); // OK.
+	echo sanitize_title_with_dashes( $_POST['sanitize_title_with_dashes'] ); // OK.
+	echo sanitize_url( $_POST['sanitize_url'] ); // OK.
+	echo wp_sanitize_redirect( $_POST['wp_sanitize_redirect'] ); // OK.
+}
