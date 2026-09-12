@@ -380,6 +380,7 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				$has_content = $this->check_string_has_translatable_content( $matched_content, $param_name, $param_info );
 				if ( true === $has_content ) {
 					$this->check_string_has_no_html_wrapper( $matched_content, $param_name, $param_info );
+					$this->check_string_has_no_leading_trailing_whitespace( $matched_content, $param_name, $param_info );
 				}
 			}
 		}
@@ -799,6 +800,42 @@ final class I18nSniff extends AbstractFunctionParameterSniff {
 				'Translatable string should not be wrapped in HTML. Found: %s',
 				$first_non_empty,
 				'NoHtmlWrappedStrings',
+				array( $param_info['clean'] )
+			);
+		}
+	}
+
+	/**
+	 * Check if a translatable string has leading or trailing whitespace.
+	 *
+	 * @since 3.4.0
+	 *
+	 * @param string      $matched_content The token content (function name) which was matched
+	 *                                     in lowercase.
+	 * @param string      $param_name      The name of the parameter being examined.
+	 * @param array|false $param_info      Parameter info array for an individual parameter,
+	 *                                     as received from the PassedParameters class.
+	 *
+	 * @return void
+	 */
+	private function check_string_has_no_leading_trailing_whitespace( $matched_content, $param_name, $param_info ) {
+		$content_without_quotes = TextStrings::stripQuotes( $param_info['clean'] );
+		$first_non_empty        = $this->phpcsFile->findNext( Tokens::$emptyTokens, $param_info['start'], ( $param_info['end'] + 1 ), true );
+
+		if ( preg_match( '/^\s+/u', $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have leading whitespace. Found: %s',
+				$first_non_empty,
+				'LeadingWhiteSpace',
+				array( $param_info['clean'] )
+			);
+		}
+
+		if ( preg_match( '/\s+$/u', $content_without_quotes ) ) {
+			$this->phpcsFile->addError(
+				'Translatable string should not have trailing whitespace. Found: %s',
+				$first_non_empty,
+				'TrailingWhiteSpace',
 				array( $param_info['clean'] )
 			);
 		}
