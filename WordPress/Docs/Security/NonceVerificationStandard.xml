@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Nonce Verification"
+    >
+    <standard>
+    <![CDATA[
+    When processing form data, the nonce value must be verified before processing the form data. Nonce verification will protect your website from Cross-Site Request Forgery (CSRF) attacks.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: The nonce value is verified before processing the form data.">
+        <![CDATA[
+if (
+    <em>wp_verify_nonce</em>(
+        $_POST['foo_nonce'],
+        'foo_action'
+    )
+) {
+    $foo = sanitize_text_field(
+        wp_unslash( $_POST['foo'] )
+    );
+}
+        ]]>
+        </code>
+        <code title="Invalid: The form data is processed without verifying the nonce value.">
+        <![CDATA[
+if ( isset( $_POST['foo'] ) ) {
+    $foo = sanitize_text_field(
+        wp_unslash( $_POST['foo'] )
+    );
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
