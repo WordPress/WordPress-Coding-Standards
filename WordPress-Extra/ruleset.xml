@@ -208,4 +208,7 @@
 	<!-- Forbid parentheses for attribute instantiations without parameters. -->
 	<rule ref="Universal.Attributes.DisallowAttributeParentheses"/>
 
+	<!-- Require parentheses when calling exit/die. -->
+	<rule ref="Universal.PHP.RequireExitDieParentheses"/>
+
 </ruleset>
