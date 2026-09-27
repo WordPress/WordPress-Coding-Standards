@@ -116,6 +116,7 @@ trait EscapingFunctionsTrait {
 		'comment_class'           => true,
 		'count'                   => true,
 		'disabled'                => true,
+		'do_blocks'               => true,
 		'do_shortcode'            => true,
 		'do_shortcode_tag'        => true,
 		'get_archives_link'       => true,
