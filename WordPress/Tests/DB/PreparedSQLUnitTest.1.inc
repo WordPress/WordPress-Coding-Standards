@@ -33,7 +33,7 @@ $wpdb->query( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . esc_sql( $f
 $wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . ABSINT( $foo ) . ";" ); // Ok.
 
 // Test multi-line strings.
-$all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
+$all_post_meta = $wpdb->get_results( $wpdb->prepare( \SPRINTF(
 	'SELECT `post_id`, `meta_value`
 	FROM `%s`
 	WHERE `meta_key` = "sort_order"
@@ -45,7 +45,7 @@ $all_post_meta = $wpdb->get_results( $wpdb->prepare( sprintf(
 $wpdb->query( "
 	SELECT *
 	FROM $wpdb->posts
-	WHERE post_title LIKE '" . esc_sql( $foo ) . "';"
+	WHERE post_title LIKE '" . \esc_SQL( $foo ) . "';"
 ); // Ok.
 
 $wpdb->query( $wpdb->prepare( "
@@ -157,3 +157,45 @@ MyNamespace\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" 
 \MyNamespace\WPDB::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok.
 namespace\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok. The sniff should start flagging this once it can resolve relative namespaces as this test file is not namespaced.
 namespace\Sub\wpdb::prepare( "SELECT * FROM $wpdb->posts WHERE post_title LIKE '" . foo() . "';" ); // Ok.
+
+/*
+ * Safeguard correct handling of all types of namespaced calls to PreparedSQLSniff::$SQLEscapingFunctions.
+ *
+ * Note: The sniff currently has a limitation in how it identifies and counts errors for namespaced function calls that
+ * match function names in $SQLEscapingFunctions, $SQLAutoEscapedFunctions, or
+ * FormattingFunctionsHelper::$formattingFunctions. When it encounters such a call, it treats the function name as if it
+ * were a global function call and skips checking the contents. For example, `MyNamespace\absint( $foo )` should trigger
+ * two errors (one for MyNamespace\absint, one for $foo), but currently only triggers one error for "MyNamespace"
+ * because the sniff incorrectly treats "absint" as a valid global escaping function and skips its contents.
+ * Additionally, multi-level namespace calls like `namespace\Sub\count( $foo )` generate multiple errors (one for
+ * "namespace", one for "Sub") instead of recognizing it as a single namespaced function call. This will be easier to
+ * fix once only PHPCS 4 is supported. Reported in https://github.com/WordPress/WordPress-Coding-Standards/issues/2648.
+ */
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \absint( $foo ) ); // Ok.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . MyNamespace\esc_sql( $foo ) ); // Bad.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \MyNamespace\intval( $foo ) ); // Bad.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . namespace\floatval( $foo ) ); // Bad. This should NOT be flagged in the future once the sniff is able to resolve relative namespaces as this test file is not namespaced.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . namespace\Sub\like_escape( $foo ) ); // Bad.
+
+/*
+ * Safeguard correct handling of all types of namespaced calls to PreparedSQLSniff::$SQLAutoEscapedFunctions.
+ *
+ * Note: See the comment above the $SQLEscapingFunctions tests for details about the sniff's current limitations.
+ */
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \count( $foo ) ); // Ok.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \Count( $foo ) ); // Ok.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . MyNamespace\count( $foo ) ); // Bad.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . \MyNamespace\count( $foo ) ); // Bad.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . namespace\count( $foo ) ); // Bad. This should NOT be flagged in the future once the sniff is able to resolve relative namespaces as this test file is not namespaced.
+$wpdb->query( "SELECT * FROM $wpdb->posts WHERE ID = " . namespace\Sub\count( $foo ) ); // Bad.
+
+/*
+ * Safeguard correct handling of all types of namespaced calls to FormattingFunctionsHelper::$formattingFunctions.
+ *
+ * Note: See the comment above the $SQLEscapingFunctions tests for details about the sniff's current limitations.
+ */
+$wpdb->get_results( \sprintf( "SELECT * FROM $wpdb->posts WHERE ID = %s", intval( $id ) ) ); // Ok.
+$wpdb->get_results( MyNamespace\wp_sprintf( "SELECT * FROM $wpdb->posts WHERE ID = %s", intval( $id ) ) ); // Bad.
+$wpdb->get_results( \MyNamespace\sprintf( "SELECT * FROM $wpdb->posts WHERE ID = %s", intval( $id ) ) ); // Bad.
+$wpdb->get_results( namespace\wp_sprintf( "SELECT * FROM $wpdb->posts WHERE ID = %s", intval( $id ) ) ); // Bad. This should NOT be flagged in the future once the sniff is able to resolve relative namespaces as this test file is not namespaced.
+$wpdb->get_results( namespace\Sub\sprintf( "SELECT * FROM $wpdb->posts WHERE ID = %s", intval( $id ) ) ); // Bad.
