@@ -15,7 +15,7 @@ use WordPressCS\WordPress\Helpers\EscapingFunctionsTrait;
 /**
  * Tests for the `EscapingFunctionsTrait::is_escaping_function()` method.
  *
- * @since 3.4.0
+ * @since 3.4.2
  *
  * @covers \WordPressCS\WordPress\Helpers\EscapingFunctionsTrait::is_escaping_function
  */
