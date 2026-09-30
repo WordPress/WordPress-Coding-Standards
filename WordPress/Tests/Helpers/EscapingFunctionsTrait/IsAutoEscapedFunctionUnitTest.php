@@ -127,4 +127,32 @@ final class IsAutoEscapedFunctionUnitTest extends TestCase {
 			'Custom auto-escaped function is still recognized while it should have been removed (first)'
 		);
 	}
+
+	/**
+	 * Safeguard the strict boundaries between escaping functions and auto-escaped functions.
+	 *
+	 * @return void
+	 */
+	public function testIsAutoEscapedFunctionDoesNotRecognizeEscapingFunctions() {
+		$this->testClass->customEscapingFunctions    = array( 'custom_escape' );
+		$this->testClass->customAutoEscapedFunctions = array( 'custom_autoescape' );
+
+		$this->assertTrue(
+			$this->testClass->is_auto_escaped_function( 'custom_autoescape' ),
+			'Custom auto-escaped function is not recognized when set'
+		);
+		$this->assertTrue(
+			$this->testClass->is_auto_escaped_function( 'the_author' ),
+			'WP native auto-escaped function is not recognized'
+		);
+
+		$this->assertFalse(
+			$this->testClass->is_auto_escaped_function( 'custom_escape' ),
+			'Custom escaping function is recognized as auto-escaped function'
+		);
+		$this->assertFalse(
+			$this->testClass->is_auto_escaped_function( 'number_format' ),
+			'WP (PHP) native escaping function is recognized as auto-escaped function'
+		);
+	}
 }
