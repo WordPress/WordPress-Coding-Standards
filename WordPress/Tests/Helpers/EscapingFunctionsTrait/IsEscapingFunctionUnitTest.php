@@ -88,10 +88,20 @@ final class IsEscapingFunctionUnitTest extends TestCase {
 	 * @return void
 	 */
 	public function testCustomEscapingFunctionIsRecognized() {
-		$this->assertFalse( $this->testClass->is_escaping_function( 'my_custom_escape' ) );
+		$this->assertFalse(
+			$this->testClass->is_escaping_function( 'my_custom_escape' ),
+			'Custom escaping function is recognized even though not set'
+		);
+
 		$this->testClass->customEscapingFunctions = array( 'my_custom_escape' );
-		$this->assertTrue( $this->testClass->is_escaping_function( 'my_custom_escape' ) );
-		$this->assertTrue( $this->testClass->is_escaping_function( 'esc_html' ) );
+		$this->assertTrue(
+			$this->testClass->is_escaping_function( 'my_custom_escape' ),
+			'Custom escaping function is not recognized when set'
+		);
+		$this->assertTrue(
+			$this->testClass->is_escaping_function( 'esc_html' ),
+			'WP native escaping function is not recognized when custom functions are set'
+		);
 	}
 
 	/**
@@ -102,10 +112,19 @@ final class IsEscapingFunctionUnitTest extends TestCase {
 	 */
 	public function testIsEscapingFunctionUpdatesWhenCustomFunctionsChange() {
 		$this->testClass->customEscapingFunctions = array( 'first_custom' );
-		$this->assertTrue( $this->testClass->is_escaping_function( 'first_custom' ) );
+		$this->assertTrue(
+			$this->testClass->is_escaping_function( 'first_custom' ),
+			'Custom escaping function is not recognized when set (first)'
+		);
 
 		$this->testClass->customEscapingFunctions = array( 'second_custom' );
-		$this->assertTrue( $this->testClass->is_escaping_function( 'second_custom' ) );
-		$this->assertFalse( $this->testClass->is_escaping_function( 'first_custom' ) );
+		$this->assertTrue(
+			$this->testClass->is_escaping_function( 'second_custom' ),
+			'Custom escaping function is not recognized when set (second)'
+		);
+		$this->assertFalse(
+			$this->testClass->is_escaping_function( 'first_custom' ),
+			'Custom escaping function is still recognized while it should have been removed (first)'
+		);
 	}
 }

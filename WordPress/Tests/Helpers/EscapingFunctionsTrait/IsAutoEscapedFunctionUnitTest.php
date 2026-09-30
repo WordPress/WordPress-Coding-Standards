@@ -88,10 +88,20 @@ final class IsAutoEscapedFunctionUnitTest extends TestCase {
 	 * @return void
 	 */
 	public function testCustomAutoEscapedFunctionIsRecognized() {
-		$this->assertFalse( $this->testClass->is_auto_escaped_function( 'my_custom_auto_escaped' ) );
+		$this->assertFalse(
+			$this->testClass->is_auto_escaped_function( 'my_custom_auto_escaped' ),
+			'Custom auto-escaped function is recognized even though not set'
+		);
+
 		$this->testClass->customAutoEscapedFunctions = array( 'my_custom_auto_escaped' );
-		$this->assertTrue( $this->testClass->is_auto_escaped_function( 'my_custom_auto_escaped' ) );
-		$this->assertTrue( $this->testClass->is_auto_escaped_function( 'bloginfo' ) );
+		$this->assertTrue(
+			$this->testClass->is_auto_escaped_function( 'my_custom_auto_escaped' ),
+			'Custom auto-escaped function is not recognized when set'
+		);
+		$this->assertTrue(
+			$this->testClass->is_auto_escaped_function( 'bloginfo' ),
+			'WP native auto-escaped function is not recognized when custom functions are set'
+		);
 	}
 
 	/**
@@ -102,10 +112,19 @@ final class IsAutoEscapedFunctionUnitTest extends TestCase {
 	 */
 	public function testIsAutoEscapedFunctionUpdatesWhenCustomFunctionsChange() {
 		$this->testClass->customAutoEscapedFunctions = array( 'first_custom' );
-		$this->assertTrue( $this->testClass->is_auto_escaped_function( 'first_custom' ) );
+		$this->assertTrue(
+			$this->testClass->is_auto_escaped_function( 'first_custom' ),
+			'Custom auto-escaped function is not recognized when set (first)'
+		);
 
 		$this->testClass->customAutoEscapedFunctions = array( 'second_custom' );
-		$this->assertTrue( $this->testClass->is_auto_escaped_function( 'second_custom' ) );
-		$this->assertFalse( $this->testClass->is_auto_escaped_function( 'first_custom' ) );
+		$this->assertTrue(
+			$this->testClass->is_auto_escaped_function( 'second_custom' ),
+			'Custom auto-escaped function is not recognized when set (second)'
+		);
+		$this->assertFalse(
+			$this->testClass->is_auto_escaped_function( 'first_custom' ),
+			'Custom auto-escaped function is still recognized while it should have been removed (first)'
+		);
 	}
 }
