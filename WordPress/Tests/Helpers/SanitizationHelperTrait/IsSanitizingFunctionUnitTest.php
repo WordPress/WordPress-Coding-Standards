@@ -15,7 +15,7 @@ use WordPressCS\WordPress\Helpers\SanitizationHelperTrait;
 /**
  * Tests for the `SanitizationHelperTrait::is_sanitizing_function()` utility method.
  *
- * @since 3.4.0
+ * @since 3.4.2
  *
  * @covers \WordPressCS\WordPress\Helpers\SanitizationHelperTrait::is_sanitizing_function
  */
