@@ -87,4 +87,22 @@ final class GetSanitizingFunctionsUnitTest extends TestCase {
 		$this->assertFalse( $result['second_custom'] );
 		$this->assertArrayNotHasKey( 'first_custom', $result );
 	}
+
+	/**
+	 * Safeguard the strict boundaries between "sanitizing" functions and "sanitizing and unslashing" functions.
+	 *
+	 * @return void
+	 */
+	public function testtGetSanitizingFunctionDoesNotRecognizeSanitizingAndUnslashingFunctions() {
+		$this->testClass->customSanitizingFunctions           = array( 'custom_sanitize' );
+		$this->testClass->customUnslashingSanitizingFunctions = array( 'custom_unslash_and_sanitize' );
+
+		$result = $this->testClass->get_sanitizing_functions();
+
+		$this->assertArrayHasKey( 'custom_sanitize', $result, 'Custom sanitize function not recognized when set' );
+		$this->assertArrayHasKey( 'sanitize_mime_type', $result, 'WP native sanitize function not recognized' );
+
+		$this->assertArrayNotHasKey( 'custom_unslash_and_sanitize', $result, 'Custom unslash and sanitize function recognized as sanitization only' );
+		$this->assertArrayNotHasKey( 'intval', $result, 'WP (PHP) native unslash and sanitize function recognized as sanitization only' );
+	}
 }
