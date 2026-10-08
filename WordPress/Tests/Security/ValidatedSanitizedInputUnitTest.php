@@ -21,7 +21,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * @covers \WordPressCS\WordPress\Helpers\ArrayWalkingFunctionsHelper
  * @covers \WordPressCS\WordPress\Helpers\SanitizationHelperTrait
  * @covers \WordPressCS\WordPress\Helpers\UnslashingFunctionsHelper
- * @covers \WordPressCS\WordPress\Helpers\ValidationHelper
  * @covers \WordPressCS\WordPress\Helpers\VariableHelper
  * @covers \WordPressCS\WordPress\Sniffs\Security\ValidatedSanitizedInputSniff
  */
