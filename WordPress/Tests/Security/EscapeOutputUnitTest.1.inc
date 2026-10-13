@@ -811,3 +811,10 @@ echo \get_search_query( \True ); // Ok.
 echo \get_search_query( FaLsE ); // Bad.
 echo \get_search_query( \false ); // Bad.
 echo \get_search_query( \FALSE ); // Bad.
+
+/*
+ * Safeguard that apply_shortcodes(), the preferred alias of do_shortcode(), is treated as auto-escaped.
+ */
+echo do_shortcode( $content ); // Ok.
+echo apply_shortcodes( $content ); // Ok.
+echo \Apply_Shortcodes( $content ); // Ok.
