@@ -108,6 +108,7 @@ trait EscapingFunctionsTrait {
 	 */
 	private $autoEscapedFunctions = array(
 		'allowed_tags'            => true,
+		'apply_shortcodes'        => true,
 		'bloginfo'                => true,
 		'body_class'              => true,
 		'calendar_week_mod'       => true,
