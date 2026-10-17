@@ -155,6 +155,7 @@ trait EscapingFunctionsTrait {
 		'wp_get_archives'                   => true,
 		'wp_get_attachment_image'           => true,
 		'wp_get_attachment_link'            => true,
+		'wp_interactivity_data_wp_context'  => true,
 		'wp_link_pages'                     => true,
 		'wp_list_authors'                   => true,
 		'wp_list_bookmarks'                 => true,
