@@ -121,7 +121,6 @@ trait EscapingFunctionsTrait {
 		'get_archives_link'                 => true,
 		'get_attachment_link'               => true,
 		'get_avatar'                        => true,
-		'get_block_wrapper_attributes'.     => true,
 		'get_bookmark_field'                => true,
 		'get_calendar'                      => true,
 		'get_comment_author_link'           => true,
