@@ -344,3 +344,28 @@ jobs:
       - name: Pipe Yamllint results on to GH for inline display
         if: ${{ failure() }}
         run: yamllint . --format github --strict
+
+  actionlint:
+    permissions:
+      contents: read # To clone the repo.
+
+    name: 'Check GHA workflows'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Add problem matcher
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          curl -o actionlint-matcher.json https://raw.githubusercontent.com/rhysd/actionlint/main/.github/actionlint-matcher.json
+          echo "::add-matcher::actionlint-matcher.json"
+
+      - name: Check workflow files
+        uses: docker://rhysd/actionlint:latest
+        with:
+          args: -color
