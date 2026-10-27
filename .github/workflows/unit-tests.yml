@@ -31,7 +31,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.6']
+        php: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.7']
         dependencies: ['lowest', 'stable']
         extensions: ['']
         coverage: [false]
@@ -46,11 +46,11 @@ jobs:
             dependencies: 'lowest'
             extensions: ''
             coverage: true
-          - php: '8.5'
+          - php: '8.6'
             dependencies: 'stable'
             extensions: ''
             coverage: true
-          - php: '8.5'
+          - php: '8.6'
             dependencies: 'lowest'
             extensions: ''
             coverage: true
@@ -60,11 +60,11 @@ jobs:
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '8.1'
+          - php: '8.2'
             dependencies: 'dev'
             extensions: ''
             coverage: false
-          - php: '8.5'
+          - php: '8.6'
             dependencies: 'dev'
             extensions: ''
             coverage: false
@@ -73,7 +73,7 @@ jobs:
             # - php: '7.4'
             # dependencies: '4.0.x-dev as 3.99.99'
 
-    continue-on-error: ${{ matrix.php == '8.6' }}
+    continue-on-error: ${{ matrix.php == '8.7' }}
 
     name: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}
     runs-on: ubuntu-latest
