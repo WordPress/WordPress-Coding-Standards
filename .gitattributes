@@ -8,12 +8,14 @@
 /.gitignore         export-ignore
 /.codecov.yml       export-ignore
 /.phpcs.xml.dist    export-ignore
+/.pinact.yaml       export-ignore
+/.yamllint.yml      export-ignore
 /_typos.toml        export-ignore
 /phpstan.neon.dist  export-ignore
 /phpunit.xml.dist   export-ignore
-/.github            export-ignore
-/Tests              export-ignore
-/WordPress/Tests    export-ignore
+/.github/           export-ignore
+/Tests/             export-ignore
+/WordPress/Tests/   export-ignore
 
 #
 # Auto detect text files and perform LF normalization

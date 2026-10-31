@@ -161,8 +161,8 @@ jobs:
 
     strategy:
       matrix:
-        php: [ 'latest' ]
-        dependencies: [ 'lowest', 'stable', 'dev' ]
+        php: ['latest']
+        dependencies: ['lowest', 'stable', 'dev']
 
     name: "Ruleset test: PHP ${{ matrix.php }} on PHPCS ${{ matrix.dependencies }}"
     runs-on: ubuntu-latest
@@ -211,22 +211,22 @@ jobs:
           phpcsstandards/phpcsextra
 
       - name: Test the WordPress-Core ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
+        run: vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Core
 
       - name: Test the WordPress-Docs ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
+        run: vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Docs
 
       - name: Test the WordPress-Extra ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
+        run: vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress-Extra
 
       - name: Test the WordPress ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
+        run: vendor/bin/phpcs -ps ./Tests/RulesetCheck/class-ruleset-test.inc --standard=WordPress
 
       - name: Rename the example ruleset to one which can be used for a ruleset
         run:  cp phpcs.xml.dist.sample sample.xml
 
       - name: Test the example ruleset
-        run: $(pwd)/vendor/bin/phpcs -ps ./Tests/RulesetCheck/example-ruleset-test.inc --standard=./sample.xml
+        run: vendor/bin/phpcs -ps ./Tests/RulesetCheck/example-ruleset-test.inc --standard=./sample.xml
 
       # Test for fixer conflicts by running the auto-fixers of the complete WPCS over the test case files.
       # This is not an exhaustive test, but should give an early indication for typical fixer conflicts.
@@ -236,16 +236,21 @@ jobs:
         if: ${{ matrix.dependencies == 'dev' }}
         id: phpcbf
         continue-on-error: true
+        # yamllint disable rule:line-length
         run: |
           set +e
-          $(pwd)/vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
+          vendor/bin/phpcbf -pq ./WordPress/Tests/ --standard=WordPress --extensions=inc --exclude=Generic.PHP.Syntax --report=summary --ignore=/WordPress/Tests/WP/GlobalVariablesOverrideUnitTest.7.inc
           exitcode="$?"
           echo "EXITCODE=$exitcode" >> "$GITHUB_OUTPUT"
           exit "$exitcode"
 
+        # yamllint enable rule:line-length
+
       - name: Fail the build on fixer conflicts and other errors
         if: ${{ steps.phpcbf.outputs.EXITCODE != 0 && steps.phpcbf.outputs.EXITCODE != 1 }}
-        run: exit ${{ steps.phpcbf.outputs.EXITCODE }}
+        run: |
+          # shellcheck disable=SC2242 # Exit code will result in either 0 or 1, this is fine.
+          exit "${{ steps.phpcbf.outputs.EXITCODE }}"
 
   phpstan:
     permissions:
@@ -296,3 +301,76 @@ jobs:
 
       - name: "Search for misspellings"
         uses: "crate-ci/typos@7f9d0819ca1c008ade73f4b41fa9d258d48f605b" # v1.51.1
+
+  pinact:
+    permissions:
+      contents: read # To clone the repo.
+
+    name: 'Run Pinact'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # See: https://github.com/suzuki-shunsuke/pinact/blob/main/README.md
+      # See: https://github.com/suzuki-shunsuke/pinact/blob/main/docs/codes/001.md
+      - name: Verify action runners are pinned
+        uses: suzuki-shunsuke/pinact-action@896d595f299e71d65b9d28349d6956abe144390a # v3.0.0
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          skip_push: "true"
+          update: "true"
+          fix: "true"
+          verify: "true" # = verify trailing version comments
+          verify_min_age: "true" # verify base on cooldown period
+          review: ${{ github.event_name == 'pull_request' }}
+          reviewdog_level: "error"
+
+  yamllint:
+    permissions:
+      contents: read # To clone the repo.
+
+    name: 'Lint Yaml'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Ref: https://yamllint.readthedocs.io/en/stable/
+      - name: Run Yamllint on all yaml files in repo
+        run: yamllint . --format colored --strict
+
+      - name: Pipe Yamllint results on to GH for inline display
+        if: ${{ failure() }}
+        run: yamllint . --format github --strict
+
+  actionlint:
+    permissions:
+      contents: read # To clone the repo.
+
+    name: 'Check GHA workflows'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Add problem matcher
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          curl -o actionlint-matcher.json https://raw.githubusercontent.com/rhysd/actionlint/main/.github/actionlint-matcher.json
+          echo "::add-matcher::actionlint-matcher.json"
+
+      - name: Check workflow files
+        uses: docker://rhysd/actionlint:latest
+        with:
+          args: -color
