@@ -165,6 +165,38 @@ final class PreparedSQLPlaceholdersUnitTest extends AbstractSniffUnitTest {
 			482 => 1,
 			490 => 1,
 			498 => 1,
+
+			// Namespaced sprintf/implode/array_fill calls.
+			540 => 1,
+			547 => 1,
+			554 => 1,
+			561 => 1,
+			573 => 1,
+			580 => 1,
+			587 => 1,
+			594 => 1,
+			606 => 1,
+			612 => 1,
+			618 => 1,
+			624 => 1,
+			635 => 1,
+			641 => 1,
+			647 => 1,
+			653 => 1,
+
+			// Method sprintf/implode/array_fill calls.
+			728 => 1,
+			735 => 1,
+			742 => 1,
+			751 => 1,
+			757 => 1,
+			763 => 1,
+			771 => 1,
+			778 => 1,
+			785 => 1,
+			794 => 1,
+			800 => 1,
+			806 => 1,
 		);
 	}
 }
