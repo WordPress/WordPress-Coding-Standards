@@ -31,9 +31,9 @@ jobs:
 
     strategy:
       matrix:
-        php: [ '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.6' ]
-        dependencies: [ 'lowest', 'stable' ]
-        extensions: [ '' ]
+        php: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.6']
+        dependencies: ['lowest', 'stable']
+        extensions: ['']
         coverage: [false]
 
         include:
@@ -69,9 +69,9 @@ jobs:
             extensions: ''
             coverage: false
 
-          # Add extra build to test against PHPCS 4.
-          #- php: '7.4'
-          #  dependencies: '4.0.x-dev as 3.99.99'
+            # Add extra build to test against PHPCS 4.
+            # - php: '7.4'
+            # dependencies: '4.0.x-dev as 3.99.99'
 
     continue-on-error: ${{ matrix.php == '8.6' }}
 
