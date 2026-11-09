@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="POSIX Functions"
+    >
+    <standard>
+    <![CDATA[
+    POSIX regular expression (regex) functions are deprecated in PHP 5.3, and removed completely in PHP 7.0. Perl compatible regular expression (PCRE) functions (preg_*) should be used instead.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Regex operations performed using PCRE functions.">
+        <![CDATA[
+preg_match( '/[A-Za-z]+/', $title, $matches );
+preg_match( '/[a-z]+/i', $title, $matches );
+preg_replace( '/Foo/', 'Bar', $string );
+preg_replace( '/Foo/i', 'Bar', $string );
+list( $h, $m ) = preg_split( '/:/', $time );
+$words = explode( ' ', $string, 4 );
+preg_match( '/Foo/i', $title, $matches );
+        ]]>
+        </code>
+        <code title="Invalid: Regex operations performed using deprecated POSIX functions.">
+        <![CDATA[
+ereg( '[A-Za-z]+', $title, $matches );
+eregi( '[a-z]+', $title, $matches );
+ereg_replace( 'Foo', 'Bar', $string );
+eregi_replace( 'Foo', 'Bar', $string );
+list( $h, $m ) = split( ':', $time );
+$words = spliti( ' ', $string, 4 );
+ereg( sql_regcase( 'Foo' ), $title, $matches );
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
