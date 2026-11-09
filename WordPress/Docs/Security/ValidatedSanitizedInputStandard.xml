@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://phpcsstandards.github.io/PHPCSDevTools/phpcsdocs.xsd"
+    title="Validated Sanitized Input"
+    >
+    <standard>
+    <![CDATA[
+    Superglobals ($_COOKIE, $_ENV, $_FILES, $_GET, $_POST, $_REQUEST, $_SERVER, $_SESSION) must be properly handled before use: array keys must be checked for existence and values must be sanitized. Failing to do so can lead to security vulnerabilities such as SQL injection and CSRF attacks.
+    ]]>
+    </standard>
+    <standard>
+    <![CDATA[
+    Superglobal array keys must be checked for existence before use. Accessing a key that does not exist can lead to unexpected behavior.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Input is validated before use.">
+        <![CDATA[
+if ( <em>isset( $_POST['name'] )</em> ) {
+    $name = sanitize_text_field(
+        wp_unslash( $_POST['name'] )
+    );
+}
+        ]]>
+        </code>
+        <code title="Invalid: Input used without validation.">
+        <![CDATA[
+$name = sanitize_text_field(
+    wp_unslash( <em>$_POST['name']</em> )
+);
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    All input must be sanitized to remove potentially malicious content before it is used.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Input is sanitized.">
+        <![CDATA[
+if ( isset( $_FILES['upload']['name'] ) ) {
+    $filename = <em>sanitize_file_name</em>(
+        $_FILES['upload']['name']
+    );
+}
+
+if ( isset( $_POST['email'] ) ) {
+    $email = <em>sanitize_email</em>(
+        wp_unslash( $_POST['email'] )
+    );
+}
+        ]]>
+        </code>
+        <code title="Invalid: Input used without sanitization.">
+        <![CDATA[
+if ( isset( $_FILES['upload']['name'] ) ) {
+    $filename = <em>$_FILES['upload']['name']</em>;
+}
+
+
+
+if ( isset( $_POST['email'] ) ) {
+    $email = wp_unslash(
+        <em>$_POST['email']</em>
+    );
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    WordPress adds slashes to $_COOKIE, $_GET, $_POST, $_REQUEST, and $_SERVER elements. These must be passed through an unslashing function before sanitization to ensure the data is processed correctly.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Input is unslashed before sanitization.">
+        <![CDATA[
+if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+    $url = sanitize_url(
+        <em>wp_unslash</em>( $_SERVER['REQUEST_URI'] )
+    );
+}
+        ]]>
+        </code>
+        <code title="Invalid: Missing unslashing before sanitization.">
+        <![CDATA[
+if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+    $url = sanitize_url(
+        <em>$_SERVER['REQUEST_URI']</em>
+    );
+}
+        ]]>
+        </code>
+    </code_comparison>
+    <standard>
+    <![CDATA[
+    Superglobals must not be used directly in string interpolation or heredocs. The array key might not exist, or its value could contain malicious content that gets included in the string without sanitization.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Use a sanitized variable in the string.">
+        <![CDATA[
+if ( isset( $_GET['name'] ) ) {
+    $name = sanitize_text_field(
+        wp_unslash( $_GET['name'] )
+    );
+    echo "Hello <em>$name</em>";
+}
+        ]]>
+        </code>
+        <code title="Invalid: Superglobal used in string interpolation.">
+        <![CDATA[
+echo "Hello <em>{$_GET['name']}</em>";
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
