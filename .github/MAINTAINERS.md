@@ -29,7 +29,7 @@ There is a tension here. The handbook says the standards are meant for the whole
 ## Code of conduct and moderation
 
 - Follow and uphold the [WordPress Code of Conduct](https://github.com/WordPress/.github/blob/trunk/CODE_OF_CONDUCT.md).
-- **Never delete a comment, issue or pull request.** This is a WordPress-organization-wide rule. If a comment needs to be removed from view, hide it with an appropriate reason rather than deleting it, so the record is preserved.
+- **Never delete a comment, issue or pull request.** This is a WordPress-organization-wide rule. If a comment needs to be removed from view, hide it with an appropriate reason rather than deleting it, so the record is preserved. The exception is blatant spam or malicious content (GitHub usually removes this itself), which may be deleted outright.
 
 ## Reviewing and merging pull requests
 
