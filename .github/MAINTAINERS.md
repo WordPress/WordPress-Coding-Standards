@@ -86,7 +86,7 @@ Dependabot PRs are treated as trivial (one approval, then merge) when CI passes 
 
 ## Releases
 
-The full release procedure lives in [`release-checklist.md`](release-checklist.md), the template used for the release PR from `develop` to `main`. Follow that checklist rather than restating its steps here, so the two cannot drift out of sync. As noted above, a release PR gathers its approvals ahead of time but is merged on the planned release date by whomever is running the release.
+The full release procedure lives in [`release-checklist.md`](release-checklist.md), the template used for the release PR from `develop` to `main`. As noted above, a release PR gathers its approvals ahead of time but is merged on the planned release date by whomever is running the release.
 
 ## Becoming a maintainer
 
