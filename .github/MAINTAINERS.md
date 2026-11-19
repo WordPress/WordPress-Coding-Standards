@@ -72,7 +72,7 @@ For PRs from external contributors, **always favor the original poster (OP) maki
 
 The `develop` and `main` branches are protected through **Settings → Branches** (the classic branch protection rules), rather than the newer **Settings → Rules → Rulesets**. This is a deliberate choice.
 
-<!-- TODO(maintainers): document *why* we deliberately still use classic branch protection rules instead of Rulesets, rather than leaving this as an unexplained assertion. -->
+Rulesets don't offer the same level of control as the classic rules. They also carry a risk specific to our branching model: if "delete branch after merge" is enabled and an admin merges `develop` into `main`, the protected `develop` branch can be deleted.
 
 When a PR adds or renames a CI job that should block merging, the matching required status check has to be added or updated in these rules by hand. Make that change just before merging the PR: a check that is newly required but does not yet exist on other branches will block every other open PR until they are rebased.
 
